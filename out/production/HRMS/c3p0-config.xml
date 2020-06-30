@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<c3p0-config>
+	<named-config name="myc3p0_recruit">
+		<property name="driverClass">com.mysql.jdbc.Driver</property>
+		<property name="jdbcUrl">jdbc:mysql://localhost:3306/hrms</property>
+		<property name="user">root</property>
+		<property name="password">123</property>
+		<!-- 如果池中数据连接不够时一次增长多少个 -->
+		<property name="acquireIncrement">5</property>
+		<property name="initialPoolSize">20</property>
+		<property name="minPoolSize">10</property>
+		<property name="maxPoolSize">40</property>
+		<property name="maxStatements">0</property>
+		<property name="maxStatementsPerConnection">5</property>
+	</named-config>
+</c3p0-config>

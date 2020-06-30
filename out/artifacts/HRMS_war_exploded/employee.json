@@ -1,0 +1,50 @@
+{
+  "code": 0
+  ,"msg": ""
+  ,"count": 3000000
+  ,"data": [{
+    "id": "1"
+    ,"username": "杜甫"
+    ,"contract_signed": "2016-10-14"
+    ,"contract_expired": "2016-10-14"
+    ,"retirement-time ": "2016-10-14"
+    ,"unit": "泰盛纸业"
+    ,"tel": "1868888888"
+  }, {
+    "code": 0
+    ,"msg": ""
+    ,"count": 3000000
+    ,"data": [{
+      "id": "2"
+      ,"username": "杜甫"
+      ,"contract_signed": "2016-10-14"
+      ,"contract_expired": "2016-10-14"
+      ,"retirement-time ": "2016-10-14"
+      ,"unit": "泰盛纸业"
+      ,"tel": "1868888888"
+    }, {
+      "code": 0
+      ,"msg": ""
+      ,"count": 3000000
+      ,"data": [{
+        "id": "3"
+        ,"username": "杜甫"
+        ,"contract_signed": "2016-10-14"
+        ,"contract_expired": "2016-10-14"
+        ,"retirement_time ": "2016-10-14"
+        ,"unit": "泰盛纸业"
+        ,"tel": "1868888888"
+      },{
+        "code": 0
+        ,"msg": ""
+        ,"count": 3000000
+        ,"data": [{
+          "id": "4"
+          ,"username": "杜甫"
+          ,"contract_signed": "2016-10-14"
+          ,"contract_expired": "2016-10-14"
+          ,"retirement-time ": "2016-10-14"
+          ,"unit": "泰盛纸业"
+          ,"tel": "1868888888"
+    }]
+}
