@@ -107,18 +107,22 @@ public class DbUtil {
      */
     public static DaoQueryListResult getList(Connection conn, String table, QueryParameter param, Class c){
         String sql1 = String.format("select * from %s where ",table);
+        System.out.println("getList===sql=="+sql1);
         String sql2 = String.format("select count(*) from %s where ",table);
 
         String condition = param.conditions.toString();
         sql1 += condition;
         sql2 += condition;
 
+        //是否需要排序
         if(param.order.need){
             sql1 += (" order by "+param.order.field);
             sql1 += param.order.direction?" asc":" desc";
         }
 
+        //是否需要分页
         if(param.pagination.need){
+            //page第几页   size每页大小
             sql1 += String.format(" limit %d,%d",(param.pagination.page-1)*param.pagination.size,param.pagination.size);
         }
 

@@ -4,7 +4,22 @@
     <root id="root">
       <element id="javaee-facet-resources" facet="HRMS/web/Web" />
       <element id="directory" name="WEB-INF">
-        <element id="directory" name="classes" />
+        <element id="directory" name="classes">
+          <element id="module-output" name="HRMS" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="file-copy" path="$PROJECT_DIR$/jar/comm/dom4j-1.6.1.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/jar/comm/servlet-api.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/jar/comm/xmlpull_1_0_5.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/jar/comm/xstream-1.4.8.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/jar/comm/mchange-commons-java-0.2.11.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/jar/db/jxl.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/jar/db/c3p0-0.9.5.2.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/jar/db/javadbf-1.5.0.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/jar/db/commons-dbutils-1.7.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/jar/db/mysql-connector-java-5.1.37-bin.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/jar/fastJSON/fastjson-1.2.41.jar" />
+        </element>
       </element>
     </root>
   </artifact>
