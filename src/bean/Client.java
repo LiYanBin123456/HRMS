@@ -1,7 +1,7 @@
 package bean;
 
 public class Client {
-    private int id;
+    private long id;
     private String name;
     /**
      * 客户类型
@@ -37,11 +37,11 @@ public class Client {
     private String qq;
     private String intro;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -128,7 +128,7 @@ public class Client {
     public Client() {
     }
 
-    public Client(int id, String name, int type, int status, int category, String address, String contact, String phone, String wx, String qq, String intro) {
+    public Client(long id, String name, int type, int status, int category, String address, String contact, String phone, String wx, String qq, String intro) {
         this.id = id;
         this.name = name;
         this.type = type;

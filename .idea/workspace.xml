@@ -6,22 +6,9 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5d83316-56ab-45ad-8caf-f6eb14ab1932" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/bean/Client.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/c3p0-config.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/dao/ClientDao.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/service/ClientService.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/servlet/ClientServlet.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/HRMS/dao/CandidateDAO.class" afterPath="$PROJECT_DIR$/out/production/HRMS/dao/CandidateDAO.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/HRMS/database/DbUtil.class" afterPath="$PROJECT_DIR$/out/production/HRMS/database/DbUtil.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/HRMS/database/QueryParameter.class" afterPath="$PROJECT_DIR$/out/production/HRMS/database/QueryParameter.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/production/HRMS/servlet/CandidateServlet.class" afterPath="$PROJECT_DIR$/out/production/HRMS/servlet/CandidateServlet.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/artifacts/HRMS_war_exploded.xml" afterPath="$PROJECT_DIR$/.idea/artifacts/HRMS_war_exploded.xml" />
+    <list default="true" id="c5d83316-56ab-45ad-8caf-f6eb14ab1932" name="Default" comment="增加了client的实体类，以及完成对clients的查找">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/web.xml" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/web.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/database/DbUtil.java" afterPath="$PROJECT_DIR$/src/database/DbUtil.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/filter/EncodingFilter.java" afterPath="$PROJECT_DIR$/src/filter/EncodingFilter.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/web/WEB-INF/web.xml" afterPath="$PROJECT_DIR$/web/WEB-INF/web.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/bean/Client.java" afterPath="$PROJECT_DIR$/src/bean/Client.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -69,11 +56,31 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="c3p0-config.xml" pinned="false" current-in-tab="true">
+      <file leaf-file-name="c3p0-config.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/c3p0-config.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="135">
               <caret line="5" column="45" lean-forward="true" selection-start-line="5" selection-start-column="45" selection-end-line="5" selection-end-column="45" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Candidate.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/bean/Candidate.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="81">
+              <caret line="35" column="13" lean-forward="true" selection-start-line="35" selection-start-column="13" selection-end-line="35" selection-end-column="13" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Client.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/bean/Client.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="81">
+              <caret line="3" column="20" lean-forward="true" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -108,16 +115,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="162">
               <caret line="6" column="0" lean-forward="false" selection-start-line="6" selection-start-column="0" selection-end-line="6" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="EncodingFilter.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/filter/EncodingFilter.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="14" column="30" lean-forward="false" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
               <folding />
             </state>
           </provider>
@@ -159,7 +156,6 @@
       <list>
         <option value="$PROJECT_DIR$/web/index.html" />
         <option value="$PROJECT_DIR$/src/database/ConnUtil.java" />
-        <option value="$PROJECT_DIR$/src/bean/Candidate.java" />
         <option value="$PROJECT_DIR$/src/servlet/CurriculumServlet.java" />
         <option value="$PROJECT_DIR$/jar/db/commons-dbutils-1.7.jar!/org/apache/commons/dbutils/QueryRunner.class" />
         <option value="$PROJECT_DIR$/src/servlet/CandidateServlet.java" />
@@ -167,7 +163,6 @@
         <option value="$PROJECT_DIR$/src/dao/CandidateDAO.java" />
         <option value="$PROJECT_DIR$/src/filter/GetRequest.java" />
         <option value="$PROJECT_DIR$/src/bean/client.java" />
-        <option value="$PROJECT_DIR$/src/bean/Client.java" />
         <option value="$PROJECT_DIR$/src/service/ClientService.java" />
         <option value="$PROJECT_DIR$/src/dao/ClientDao.java" />
         <option value="$PROJECT_DIR$/src/database/DbUtil.java" />
@@ -175,6 +170,8 @@
         <option value="$PROJECT_DIR$/src/filter/EncodingFilter.java" />
         <option value="$PROJECT_DIR$/src/servlet/ClientServlet.java" />
         <option value="$PROJECT_DIR$/src/c3p0-config.xml" />
+        <option value="$PROJECT_DIR$/src/bean/Candidate.java" />
+        <option value="$PROJECT_DIR$/src/bean/Client.java" />
       </list>
     </option>
   </component>
@@ -222,6 +219,17 @@
               <item name="HRMS" type="b2602c69:ProjectViewProjectNode" />
               <item name="HRMS" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="HRMS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="HRMS" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="bean" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="HRMS" type="b2602c69:ProjectViewProjectNode" />
+              <item name="HRMS" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -593,7 +601,7 @@
       <workItem from="1593073922257" duration="9136000" />
       <workItem from="1593410595578" duration="3153000" />
       <workItem from="1593480317773" duration="13314000" />
-      <workItem from="1593506922693" duration="1915000" />
+      <workItem from="1593506922693" duration="4142000" />
     </task>
     <task id="LOCAL-00001" summary="项目的初始版本">
       <created>1593004337566</created>
@@ -609,11 +617,18 @@
       <option name="project" value="LOCAL" />
       <updated>1593487067884</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="增加了client的实体类，以及完成对clients的查找">
+      <created>1593509820643</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1593509820643</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="38530000" />
+    <option name="totallyTimeSpent" value="40757000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -658,7 +673,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="项目的初始版本" />
-    <option name="LAST_COMMIT_MESSAGE" value="项目的初始版本" />
+    <MESSAGE value="增加了client的实体类，以及完成对clients的查找" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加了client的实体类，以及完成对clients的查找" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -678,6 +694,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="459">
           <caret line="19" column="36" lean-forward="true" selection-start-line="19" selection-start-column="29" selection-end-line="19" selection-end-column="36" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -735,6 +752,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1809">
           <caret line="85" column="5" lean-forward="false" selection-start-line="85" selection-start-column="5" selection-end-line="85" selection-end-column="5" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -742,6 +760,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1323">
           <caret line="52" column="5" lean-forward="false" selection-start-line="52" selection-start-column="5" selection-end-line="52" selection-end-column="5" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -829,13 +850,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/bean/Candidate.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="5" column="13" lean-forward="false" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/js/city.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1620">
@@ -868,6 +882,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
           <caret line="2" column="41" lean-forward="false" selection-start-line="2" selection-start-column="41" selection-end-line="2" selection-end-column="41" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -875,6 +890,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="81">
           <caret line="3" column="19" lean-forward="false" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -882,6 +898,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="81">
           <caret line="3" column="30" lean-forward="false" selection-start-line="3" selection-start-column="4" selection-end-line="3" selection-end-column="30" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -889,6 +906,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="81">
           <caret line="3" column="18" lean-forward="false" selection-start-line="3" selection-start-column="18" selection-end-line="5" selection-end-column="23" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -896,6 +914,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="54">
           <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -917,13 +936,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="108">
           <caret line="4" column="23" lean-forward="false" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/bean/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3429">
-          <caret line="143" column="0" lean-forward="false" selection-start-line="143" selection-start-column="0" selection-end-line="143" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -938,6 +951,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
           <caret line="52" column="26" lean-forward="false" selection-start-line="52" selection-start-column="26" selection-end-line="52" selection-end-column="26" />
+          <folding>
+            <element signature="imports" expanded="false" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1043,6 +1059,22 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="5" column="45" lean-forward="true" selection-start-line="5" selection-start-column="45" selection-end-line="5" selection-end-column="45" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/bean/Candidate.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="81">
+          <caret line="35" column="13" lean-forward="true" selection-start-line="35" selection-start-column="13" selection-end-line="35" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/bean/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="81">
+          <caret line="3" column="20" lean-forward="true" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
           <folding />
         </state>
       </provider>
