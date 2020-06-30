@@ -15,7 +15,7 @@ public class CandidateDAO {
     public static DaoUpdateResult insert(Connection conn, Candidate c){
         String sql = "insert into candidate(id,name,sex,birthday,degree,phone,years,modtime)values(?,?,?,?,?,?,?,now())";
         Object []params = {c.getId(),c.getName(),c.getSex(),c.getBirthday(),c.getDegree(),c.getPhone(),c.getYears()};
-        return DbUtil.update(conn,sql,params);
+        return DbUtil.insert(conn,sql,params);
     }
 
     /**
@@ -27,6 +27,7 @@ public class CandidateDAO {
     public static DaoUpdateResult update(Connection conn, Candidate c){
         String sql = "update candidate set name=?,sex=?,birthday=?,origin=?,address=?,degree=?,phone=?,years=?,mail=?,prepare=?,state=? where id=?";
         Object []params = {c.getName(),c.getSex(), c.getBirthday(), c.getOrigin(),c.getAddress(),c.getDegree(),c.getPhone(),c.getYears(),c.getMail(),c.getPrepare(),c.getState(),c.getId()};
+        //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
     }
 

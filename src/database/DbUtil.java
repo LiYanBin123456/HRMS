@@ -63,9 +63,11 @@ public class DbUtil {
      * @return 更新结果
      */
     public static DaoUpdateResult update(Connection conn, String sql, Object []params){
+        //DaoUpdateResult 封装了记录数，成功信息，以及附加信息
         DaoUpdateResult result = new DaoUpdateResult();
         QueryRunner qr = new QueryRunner();
         try {
+            //这里调用QueryRunner的修改方法，返回值是修改的条数
             result.effects = qr.update(conn,sql,params);
             result.success = true;
         } catch (SQLException e) {
@@ -95,6 +97,14 @@ public class DbUtil {
         return result;
     }
 
+    /**
+     *
+     * @param conn
+     * @param table
+     * @param param 参数集合
+     * @param c
+     * @return
+     */
     public static DaoQueryListResult getList(Connection conn, String table, QueryParameter param, Class c){
         String sql1 = String.format("select * from %s where ",table);
         String sql2 = String.format("select count(*) from %s where ",table);

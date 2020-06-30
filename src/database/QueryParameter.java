@@ -25,6 +25,12 @@ public class QueryParameter {
         this.pagination.set(false);
     }
 
+    /**
+     *  添加键值对参数 如｛k：“age”,o:"=",v：“20”｝，表示查询参数为年龄＝20
+     * @param k
+     * @param o
+     * @param v
+     */
     public void addCondition(String k, String o, Object v){
         conditions.add(k,o,v);
     }

@@ -50,7 +50,9 @@ public class CandidateServlet extends HttpServlet {
 
     //修改求职者信息
     private String updateCandidate(Connection conn,HttpServletRequest request) {
+        //获取前台传过来的求职者的信息封装成对象candidate
         Candidate candidate = JSON.parseObject(request.getParameter("candidate"), Candidate.class);
+        //调用dao层的update方法
         DaoUpdateResult res = CandidateDAO.update(conn, candidate);
 
         return JSONObject.toJSONString(res);
