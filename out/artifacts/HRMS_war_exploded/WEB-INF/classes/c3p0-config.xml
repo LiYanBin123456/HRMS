@@ -2,7 +2,11 @@
 <c3p0-config>
 	<named-config name="myc3p0_recruit">
 		<property name="driverClass">com.mysql.jdbc.Driver</property>
-		<property name="jdbcUrl">jdbc:mysql://localhost:3306/hrms</property>
+		<property name="jdbcUrl">
+			<![CDATA[
+				jdbc:mysql://localhost:3306/hrms?useUnicode=true&characterEncoding=UTF8&useServerPrepStmts=true&prepStmtCacheSqlLimit=256&cachePrepStmts=true&prepStmtCacheSize=256&rewriteBatchedStatements=true
+			]]>
+		</property>
 		<property name="user">root</property>
 		<property name="password">123</property>
 		<!-- 如果池中数据连接不够时一次增长多少个 -->
