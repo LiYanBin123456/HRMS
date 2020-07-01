@@ -2,1102 +2,42 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="67a4cab7-04aa-460d-8a03-b3ac68fb2972" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/bean/Candidate.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/bean/Client.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/c3p0-config.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/dao/CandidateDAO.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/dao/ClientDao.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/database/ConnUtil.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/database/DaoExistResult.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/database/DaoQueryListResult.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/database/DaoQueryResult.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/database/DaoResult.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/database/DaoUpdateResult.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/database/DbUtil.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/database/Pagination.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/database/QueryConditions.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/database/QueryKey.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/database/QueryOrder.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/database/QueryParameter.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/filter/EncodingFilter.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/filter/GetRequest.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/service/CandidateService.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/service/ClientService.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/servlet/CandidateServlet.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/WEB-INF/classes/servlet/ClientServlet.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/admin-accumulationedit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/admin-add.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/admin-cate.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/admin-contract.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/admin-contractedit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/admin-edit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/admin-edit2.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/admin-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/admin-list2.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/admin-medicaledit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/admin-role.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/admin-rule.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/admin-socialedit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/cardinal-base-ruler.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/cate.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/city.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/com-notice.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/css/font.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/css/login.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/css/theme1.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/css/theme2.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/css/theme3.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/css/theme4.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/css/theme5.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/css/xadmin.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/custemer-add.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/custemer-contractadd.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/customer-contract.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/customer-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/customer-potential-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/customer-supplier-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/demo.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/department-managing.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/echarts1.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/echarts2.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/echarts3.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/echarts4.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/echarts5.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/echarts6.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/echarts7.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/echarts8.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/employee-contract.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/employee-dimission.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/employee-turnover.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/employee.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/error.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/fonts/iconfont.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/fonts/iconfont.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/fonts/iconfont.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/fonts/iconfont.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/js/xadmin.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/css/layui.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/css/layui.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/css/layui.mobile.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/css/modules/code.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/css/modules/laydate/default/laydate.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/css/modules/layer/default/layer.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/font/iconfont.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/font/iconfont.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/font/iconfont.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/font/iconfont.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/carousel.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/code.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/colorpicker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/element.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/flow.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/form.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/jquery.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/laydate.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/layedit.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/layer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/laypage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/laytpl.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/mobile.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/rate.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/slider.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/table.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/tree.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/upload.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/lay/modules/util.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/layui.all.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/layui.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/css/layui.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/css/modules/layer/default/icon-ext.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/css/modules/layer/default/icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/css/modules/layer/default/loading-0.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/css/modules/layer/default/loading-1.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/css/modules/layer/default/loading-2.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/0.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/1.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/10.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/11.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/12.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/13.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/14.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/15.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/16.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/17.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/18.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/19.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/2.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/20.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/21.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/22.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/23.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/24.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/25.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/26.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/27.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/28.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/29.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/3.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/30.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/31.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/32.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/33.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/34.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/35.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/36.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/37.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/38.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/39.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/4.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/40.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/41.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/42.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/43.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/44.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/45.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/46.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/47.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/48.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/49.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/5.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/50.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/51.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/52.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/53.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/54.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/55.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/56.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/57.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/58.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/59.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/6.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/60.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/61.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/62.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/63.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/64.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/65.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/66.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/67.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/68.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/69.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/7.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/70.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/71.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/8.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/images/face/9.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/文档与示例/GitHub.url" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/文档与示例/Gitee 码云.url" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/文档与示例/在线示例.url" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/文档与示例/快速上手.url" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/更新日志.url" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/log.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/medicalins-accumulation-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/medicalins-accumulationadd.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/medicalins-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/medicalins-medicaladd.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/medicalins-social-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/medicalins-socialadd.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/member-add.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/member-del.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/member-edit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/member-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/member-password.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/notice-add.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/notice-edit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/notice-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/order-add.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/order-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/order-list1.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/personal-cardinal-base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/personal-tax-deduct.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/personer-tax-ruler.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/role-add.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/shebao-edit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/shebao-set.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/staff-notice.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/test.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/unicode.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/user.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/welcome.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/welcome1.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/welcome2.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/HRMS/bean/Client.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/HRMS/c3p0-config.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/HRMS/dao/ClientDao.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/HRMS/filter/EncodingFilter.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/HRMS/filter/GetRequest.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/HRMS/service/CandidateService.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/HRMS/service/ClientService.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/out/production/HRMS/servlet/ClientServlet.class" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/admin-accumulationedit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/admin-add.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/admin-cate.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/admin-contract.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/admin-contractedit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/admin-edit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/admin-edit2.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/admin-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/admin-list2.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/admin-medicaledit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/admin-role.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/admin-rule.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/admin-socialedit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/cardinal-base-ruler.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/cate.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/city.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/com-notice.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/css/font.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/css/login.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/css/theme1.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/css/theme2.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/css/theme3.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/css/theme4.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/css/theme5.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/css/xadmin.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/custemer-add.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/custemer-contractadd.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/customer-contract.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/customer-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/customer-potential-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/customer-supplier-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/demo.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/department-managing.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/echarts1.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/echarts2.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/echarts3.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/echarts4.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/echarts5.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/echarts6.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/echarts7.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/echarts8.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/employee-contract.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/employee-dimission.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/employee-turnover.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/employee.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/error.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/fonts/iconfont.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/fonts/iconfont.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/fonts/iconfont.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/fonts/iconfont.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/js/xadmin.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/css/layui.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/css/layui.mobile.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/css/modules/code.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/css/modules/laydate/default/laydate.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/css/modules/layer/default/icon-ext.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/css/modules/layer/default/icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/css/modules/layer/default/layer.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/css/modules/layer/default/loading-0.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/css/modules/layer/default/loading-1.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/css/modules/layer/default/loading-2.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/font/iconfont.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/font/iconfont.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/font/iconfont.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/font/iconfont.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/0.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/1.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/10.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/11.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/12.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/13.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/14.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/15.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/16.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/17.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/18.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/19.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/2.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/20.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/21.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/22.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/23.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/24.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/25.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/26.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/27.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/28.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/29.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/3.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/30.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/31.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/32.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/33.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/34.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/35.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/36.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/37.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/38.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/39.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/4.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/40.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/41.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/42.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/43.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/44.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/45.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/46.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/47.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/48.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/49.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/5.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/50.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/51.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/52.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/53.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/54.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/55.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/56.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/57.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/58.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/59.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/6.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/60.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/61.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/62.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/63.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/64.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/65.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/66.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/67.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/68.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/69.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/7.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/70.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/71.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/8.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/images/face/9.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/carousel.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/code.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/colorpicker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/element.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/flow.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/form.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/jquery.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/laydate.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/layedit.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/layer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/laypage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/laytpl.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/mobile.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/rate.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/slider.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/table.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/tree.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/upload.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/lay/modules/util.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/layui.all.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.2/layui.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/css/layui.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/css/layui.mobile.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/css/modules/code.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/css/modules/laydate/default/laydate.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/css/modules/layer/default/icon-ext.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/css/modules/layer/default/icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/css/modules/layer/default/layer.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/css/modules/layer/default/loading-0.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/css/modules/layer/default/loading-1.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/css/modules/layer/default/loading-2.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/font/iconfont.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/font/iconfont.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/font/iconfont.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/font/iconfont.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/font/iconfont.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/0.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/1.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/10.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/11.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/12.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/13.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/14.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/15.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/16.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/17.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/18.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/19.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/2.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/20.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/21.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/22.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/23.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/24.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/25.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/26.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/27.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/28.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/29.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/3.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/30.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/31.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/32.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/33.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/34.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/35.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/36.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/37.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/38.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/39.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/4.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/40.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/41.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/42.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/43.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/44.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/45.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/46.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/47.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/48.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/49.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/5.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/50.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/51.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/52.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/53.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/54.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/55.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/56.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/57.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/58.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/59.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/6.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/60.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/61.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/62.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/63.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/64.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/65.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/66.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/67.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/68.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/69.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/7.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/70.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/71.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/8.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/images/face/9.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/carousel.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/code.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/colorpicker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/element.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/flow.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/form.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/jquery.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/laydate.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/layedit.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/layer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/laypage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/laytpl.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/mobile.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/rate.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/slider.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/table.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/transfer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/tree.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/upload.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/lay/modules/util.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/layui.all.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/layui/layui.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/文档与示例/GitHub.url" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/文档与示例/Gitee 码云.url" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/文档与示例/在线示例.url" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/文档与示例/快速上手.url" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/layui2.5/更新日志.url" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/css/layui.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/css/layui.mobile.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/css/modules/code.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/css/modules/laydate/default/laydate.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/css/modules/layer/default/icon-ext.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/css/modules/layer/default/icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/css/modules/layer/default/layer.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/css/modules/layer/default/loading-0.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/css/modules/layer/default/loading-1.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/css/modules/layer/default/loading-2.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/font/iconfont.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/font/iconfont.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/font/iconfont.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/font/iconfont.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/font/iconfont.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/0.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/1.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/10.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/11.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/12.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/13.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/14.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/15.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/16.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/17.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/18.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/19.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/2.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/20.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/21.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/22.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/23.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/24.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/25.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/26.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/27.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/28.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/29.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/3.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/30.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/31.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/32.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/33.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/34.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/35.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/36.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/37.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/38.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/39.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/4.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/40.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/41.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/42.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/43.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/44.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/45.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/46.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/47.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/48.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/49.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/5.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/50.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/51.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/52.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/53.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/54.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/55.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/56.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/57.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/58.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/59.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/6.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/60.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/61.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/62.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/63.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/64.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/65.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/66.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/67.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/68.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/69.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/7.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/70.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/71.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/8.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/images/face/9.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/carousel.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/code.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/colorpicker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/element.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/flow.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/form.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/jquery.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/laydate.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/layedit.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/layer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/laypage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/laytpl.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/mobile.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/rate.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/slider.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/table.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/transfer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/tree.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/upload.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/lay/modules/util.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/layui.all.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui/layui.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/css/layui.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/css/layui.mobile.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/css/modules/code.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/css/modules/laydate/default/laydate.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/css/modules/layer/default/icon-ext.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/css/modules/layer/default/icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/css/modules/layer/default/layer.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/css/modules/layer/default/loading-0.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/css/modules/layer/default/loading-1.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/css/modules/layer/default/loading-2.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/font/iconfont.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/font/iconfont.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/font/iconfont.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/font/iconfont.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/0.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/1.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/10.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/11.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/12.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/13.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/14.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/15.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/16.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/17.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/18.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/19.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/2.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/20.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/21.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/22.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/23.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/24.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/25.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/26.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/27.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/28.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/29.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/3.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/30.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/31.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/32.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/33.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/34.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/35.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/36.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/37.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/38.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/39.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/4.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/40.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/41.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/42.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/43.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/44.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/45.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/46.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/47.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/48.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/49.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/5.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/50.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/51.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/52.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/53.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/54.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/55.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/56.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/57.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/58.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/59.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/6.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/60.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/61.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/62.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/63.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/64.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/65.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/66.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/67.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/68.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/69.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/7.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/70.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/71.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/8.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/images/face/9.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/carousel.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/code.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/colorpicker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/element.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/flow.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/form.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/jquery.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/laydate.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/layedit.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/layer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/laypage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/laytpl.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/mobile.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/rate.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/slider.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/table.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/tree.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/upload.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/lay/modules/util.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/layui.all.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.2/layui.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/css/layui.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/css/layui.mobile.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/css/modules/code.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/css/modules/laydate/default/laydate.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/css/modules/layer/default/icon-ext.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/css/modules/layer/default/icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/css/modules/layer/default/layer.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/css/modules/layer/default/loading-0.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/css/modules/layer/default/loading-1.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/css/modules/layer/default/loading-2.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/font/iconfont.eot" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/font/iconfont.svg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/font/iconfont.ttf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/font/iconfont.woff" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/font/iconfont.woff2" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/0.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/1.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/10.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/11.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/12.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/13.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/14.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/15.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/16.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/17.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/18.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/19.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/2.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/20.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/21.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/22.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/23.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/24.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/25.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/26.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/27.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/28.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/29.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/3.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/30.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/31.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/32.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/33.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/34.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/35.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/36.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/37.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/38.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/39.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/4.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/40.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/41.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/42.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/43.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/44.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/45.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/46.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/47.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/48.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/49.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/5.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/50.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/51.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/52.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/53.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/54.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/55.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/56.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/57.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/58.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/59.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/6.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/60.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/61.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/62.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/63.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/64.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/65.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/66.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/67.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/68.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/69.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/7.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/70.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/71.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/8.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/images/face/9.gif" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/carousel.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/code.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/colorpicker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/element.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/flow.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/form.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/jquery.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/laydate.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/layedit.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/layer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/laypage.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/laytpl.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/mobile.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/rate.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/slider.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/table.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/transfer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/tree.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/upload.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/lay/modules/util.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/layui.all.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/layui/layui.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/文档与示例/GitHub.url" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/文档与示例/Gitee 码云.url" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/文档与示例/在线示例.url" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/文档与示例/快速上手.url" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/lib/layui2.5/更新日志.url" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/log.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/medicalins-accumulation-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/medicalins-accumulationadd.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/medicalins-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/medicalins-medicaladd.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/medicalins-social-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/medicalins-socialadd.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/member-add.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/member-del.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/member-edit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/member-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/member-password.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/notice-add.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/notice-edit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/notice-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/order-add.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/order-list.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/order-list1.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/personal-cardinal-base.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/personal-tax-deduct.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/personer-tax-ruler.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/role-add.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/shebao-edit.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/shebao-set.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/staff-notice.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/test.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/unicode.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/user.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/welcome.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/welcome1.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/web/welcome2.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/enterprise/jobs.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/css/layui.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/css/layui.mobile.css" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/css/layui.mobile.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/css/modules/code.css" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/css/modules/code.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/css/modules/laydate/default/laydate.css" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/css/modules/laydate/default/laydate.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/css/modules/layer/default/icon-ext.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/css/modules/layer/default/icon-ext.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/css/modules/layer/default/icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/css/modules/layer/default/icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/css/modules/layer/default/layer.css" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/css/modules/layer/default/layer.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/css/modules/layer/default/loading-0.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/css/modules/layer/default/loading-0.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/css/modules/layer/default/loading-1.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/css/modules/layer/default/loading-1.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/css/modules/layer/default/loading-2.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/css/modules/layer/default/loading-2.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/font/iconfont.eot" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/font/iconfont.eot" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/font/iconfont.svg" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/font/iconfont.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/font/iconfont.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/font/iconfont.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/font/iconfont.woff" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/font/iconfont.woff" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/font/iconfont.woff2" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/font/iconfont.woff2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/0.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/0.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/1.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/1.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/10.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/10.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/11.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/11.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/12.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/12.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/13.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/13.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/14.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/14.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/15.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/15.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/16.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/16.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/17.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/17.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/18.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/18.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/19.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/19.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/2.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/2.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/20.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/20.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/21.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/21.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/22.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/22.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/23.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/23.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/24.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/24.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/25.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/25.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/26.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/26.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/27.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/27.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/28.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/28.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/29.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/29.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/3.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/3.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/30.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/30.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/31.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/31.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/32.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/32.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/33.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/33.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/34.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/34.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/35.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/35.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/36.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/36.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/37.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/37.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/38.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/38.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/39.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/39.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/4.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/4.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/40.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/40.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/41.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/41.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/42.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/42.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/43.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/43.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/44.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/44.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/45.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/45.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/46.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/46.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/47.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/47.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/48.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/48.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/49.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/49.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/5.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/5.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/50.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/50.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/51.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/51.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/52.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/52.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/53.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/53.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/54.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/54.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/55.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/55.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/56.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/56.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/57.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/57.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/58.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/58.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/59.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/59.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/6.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/6.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/60.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/60.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/61.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/61.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/62.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/62.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/63.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/63.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/64.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/64.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/65.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/65.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/66.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/66.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/67.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/67.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/68.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/68.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/69.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/69.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/7.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/7.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/70.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/70.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/71.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/71.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/8.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/8.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/images/face/9.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/images/face/9.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/carousel.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/carousel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/code.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/code.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/colorpicker.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/colorpicker.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/element.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/element.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/flow.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/flow.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/form.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/form.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/jquery.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/jquery.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/laydate.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/laydate.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/layedit.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/layedit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/layer.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/layer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/laypage.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/laypage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/laytpl.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/laytpl.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/mobile.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/mobile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/rate.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/rate.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/slider.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/slider.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/table.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/table.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/transfer.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/transfer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/tree.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/tree.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/upload.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/upload.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/lay/modules/util.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/lay/modules/util.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/layui.all.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/layui.all.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/layui/layui.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui/layui.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/enterprise/jobs.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/admin-accumulationedit.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/admin-contract.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/admin-contractedit.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/admin-edit.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/admin-edit2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/admin-list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/admin-list2.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/admin-medicaledit.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/admin-socialedit.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/custemer-add.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/custemer-contractadd.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/customer-contract.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/customer-list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/customer-potential-list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/customer-supplier-list.html" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/web/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/index.jsp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/css/layui.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/css/layui.mobile.css" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/css/layui.mobile.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/css/modules/code.css" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/css/modules/code.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/css/modules/laydate/default/laydate.css" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/css/modules/laydate/default/laydate.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/css/modules/layer/default/icon-ext.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/css/modules/layer/default/icon-ext.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/css/modules/layer/default/icon.png" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/css/modules/layer/default/icon.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/css/modules/layer/default/layer.css" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/css/modules/layer/default/layer.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/css/modules/layer/default/loading-0.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/css/modules/layer/default/loading-0.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/css/modules/layer/default/loading-1.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/css/modules/layer/default/loading-1.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/css/modules/layer/default/loading-2.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/css/modules/layer/default/loading-2.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/font/iconfont.eot" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/font/iconfont.eot" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/font/iconfont.svg" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/font/iconfont.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/font/iconfont.ttf" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/font/iconfont.ttf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/font/iconfont.woff" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/font/iconfont.woff" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/font/iconfont.woff2" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/font/iconfont.woff2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/0.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/0.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/1.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/1.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/10.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/10.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/11.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/11.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/12.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/12.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/13.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/13.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/14.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/14.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/15.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/15.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/16.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/16.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/17.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/17.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/18.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/18.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/19.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/19.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/2.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/2.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/20.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/20.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/21.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/21.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/22.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/22.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/23.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/23.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/24.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/24.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/25.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/25.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/26.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/26.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/27.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/27.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/28.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/28.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/29.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/29.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/3.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/3.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/30.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/30.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/31.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/31.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/32.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/32.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/33.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/33.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/34.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/34.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/35.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/35.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/36.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/36.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/37.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/37.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/38.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/38.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/39.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/39.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/4.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/4.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/40.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/40.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/41.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/41.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/42.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/42.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/43.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/43.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/44.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/44.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/45.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/45.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/46.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/46.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/47.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/47.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/48.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/48.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/49.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/49.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/5.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/5.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/50.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/50.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/51.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/51.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/52.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/52.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/53.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/53.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/54.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/54.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/55.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/55.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/56.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/56.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/57.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/57.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/58.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/58.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/59.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/59.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/6.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/6.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/60.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/60.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/61.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/61.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/62.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/62.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/63.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/63.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/64.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/64.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/65.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/65.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/66.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/66.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/67.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/67.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/68.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/68.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/69.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/69.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/7.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/7.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/70.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/70.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/71.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/71.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/8.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/8.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/images/face/9.gif" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.2/images/face/9.gif" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/carousel.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/carousel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/code.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/code.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/colorpicker.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/colorpicker.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/element.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/element.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/flow.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/flow.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/form.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/form.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/jquery.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/jquery.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/laydate.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/laydate.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/layedit.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/layedit.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/layer.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/layer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/laypage.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/laypage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/laytpl.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/laytpl.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/mobile.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/mobile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/rate.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/rate.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/slider.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/slider.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/table.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/table.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/transfer.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/transfer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/tree.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/tree.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/upload.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/upload.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/lay/modules/util.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/lay/modules/util.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/layui.all.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/layui.all.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/layui/layui.js" beforeDir="false" afterPath="$PROJECT_DIR$/out/artifacts/HRMS_war_exploded/lib/layui2.5/layui/layui.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/medicalins-accumulation-list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/medicalins-accumulationadd.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/medicalins-list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/medicalins-medicaladd.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/medicalins-social-list.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/medicalins-socialadd.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/notice-add.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/notice-edit.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/notice-list.html" beforeDir="false" />
     </list>
+    <ignored path="$PROJECT_DIR$/out/" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -1110,6 +50,11 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="335" />
+    <option name="width" value="1039" />
+    <option name="height" value="775" />
+  </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="2" id="Add" />
   </component>
@@ -1118,13 +63,15 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1593514898796" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1593515057598" />
   </component>
   <component name="RunDashboard">
     <option name="ruleStates">
@@ -1404,7 +351,7 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="c5d83316-56ab-45ad-8caf-f6eb14ab1932" name="Default" comment="" />
+      <changelist id="67a4cab7-04aa-460d-8a03-b3ac68fb2972" name="Default Changelist" comment="" />
       <created>1592903588596</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -1415,31 +362,33 @@
       <workItem from="1593410595578" duration="3153000" />
       <workItem from="1593480317773" duration="13314000" />
       <workItem from="1593506922693" duration="1915000" />
-      <workItem from="1593514487512" duration="363000" />
+      <workItem from="1593514487512" duration="799000" />
+      <workItem from="1593568733080" duration="40000" />
     </task>
     <task id="LOCAL-00001" summary="项目的初始版本">
-      <created>1593004337566</created>
+      <created>1593514897030</created>
       <option name="number" value="00001" />
       <option name="presentableId" value="LOCAL-00001" />
       <option name="project" value="LOCAL" />
-      <updated>1593004337566</updated>
+      <updated>1593514897030</updated>
     </task>
     <task id="LOCAL-00002" summary="项目的初始版本">
-      <created>1593487067884</created>
+      <created>1593514984612</created>
       <option name="number" value="00002" />
       <option name="presentableId" value="LOCAL-00002" />
       <option name="project" value="LOCAL" />
-      <updated>1593487067884</updated>
+      <updated>1593514984612</updated>
     </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="189000" />
+    <option name="totallyTimeSpent" value="665000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2419571" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24530831" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -1447,8 +396,6 @@
       <window_info id="Favorites" order="5" side_tool="true" />
       <window_info id="Capture Tool" order="6" />
       <window_info id="Web" order="7" side_tool="true" />
-      <window_info anchor="bottom" id="Database Changes" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32924962" />
       <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.18070444" />
@@ -1462,7 +409,8 @@
       <window_info anchor="bottom" id="Messages" order="10" weight="0.53372437" />
       <window_info anchor="bottom" id="Java Enterprise" order="11" />
       <window_info anchor="bottom" id="Version Control" order="12" weight="0.2633997" />
-      <window_info anchor="right" id="Maven" />
+      <window_info anchor="bottom" id="Docker" order="13" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="14" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -1472,7 +420,11 @@
       <window_info anchor="right" id="Database" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info anchor="right" id="Theme Preview" order="8" />
+      <window_info anchor="right" id="Maven" order="9" />
     </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="项目的初始版本" />
