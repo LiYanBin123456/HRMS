@@ -11,6 +11,45 @@
         <link rel="stylesheet" href="../css/xadmin.css">
         <script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
+        <style type="text/css">
+
+.frm-layout{
+
+    width: 100%;
+
+    border-collapse: separate;
+
+    border-spacing: 10px;
+
+}
+
+.frm-layout td.title{
+
+    text-align: right;
+
+    padding-right: 10px;
+
+    width: 85px;
+
+}
+
+/* 防止下拉框的下拉列表被隐藏---必须设置--- */
+
+.frm-layout .layui-table-cell { overflow: visible !important; }
+
+/* 使得下拉框与单元格刚好合适 */
+
+.frm-layout td .layui-form-select{
+
+    margin-top: 0px;
+
+    margin-left: 0px;
+
+    margin-right: 0px;
+
+}
+
+</style>
         <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
         <!--[if lt IE 9]>
             <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -18,13 +57,18 @@
         <![endif]-->
     </head>
     <body>
-        <div class="layui-fluid">
-            <div class="layui-row">
-                <form class="layui-form">
-                    <div class="layui-form-item">
-                        <label for="L_city" class="layui-form-label">
-                        <span class="x-red">*</span>地市</label>
-                            <div class="layui-input-inline">
+        <form id="frmEdit" class="layui-form" lay-filter="frm">
+
+    <input type="hidden" name="id" lay-verify="" placeholder=""
+
+                    autocomplete="off" class="layui-input" value="">
+
+    <table class="frm-layout" >
+
+            <tr>    
+                
+                 <td class="title">地市</td>
+                            <td class="layui-input-inline">
                                 <select name="city" lay-verify="required">
                                     <option value=""></option>
                                     <option value="0">北京</option>
@@ -33,44 +77,50 @@
                                     <option value="3">深圳</option>
                                     <option value="4">杭州</option>
                             </select>
+                    </td>
                     </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_time" class="layui-form-label">
-                            <span class="x-red">*</span>生效时间</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="L_time" name="time" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_address" class="layui-form-label">
-                            <span class="x-red">*</span>公积金最小值</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="L_address" name="address" required="" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_weixin" class="layui-form-label">
-                            <span class="x-red">*</span>公积金最大值</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="L_weixin" name="weixin" required="" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_qq" class="layui-form-label">
-                            <span class="x-red">*</span>单位比例</label>
-                        <div class="layui-input-inline">
-                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" id="L_qq" name="qq" required="" autocomplete="off" class="layui-input"></div>
-                        </div>
-                    <div class="layui-form-item">
-                        <label for="L_weixin" class="layui-form-label">
-                            <span class="x-red">*</span>个人比例</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="L_weixin" name="weixin" required="" autocomplete="off" class="layui-input"></div>
-                    </div>
-               <div class="layui-form-item">
-                        <label for="L_repass" class="layui-form-label"></label>
+
+
+                 <td class="title">生效时间</td>
+
+                 <td style="width: 180px;"><input type="text" name="receiptDate" lay-verify="" placeholder=""
+
+                    autocomplete="off" class="layui-input date " value=""></td>
+            </tr>
+            <tr>
+                    <td class="title">公积金下限</td>
+
+            <td><input type="text" name="unit" lay-verify="" placeholder=""
+
+                    autocomplete="off" class="layui-input " value=""></td>
+
+            <td class="title">公积金上限</td>
+
+            <td style="width: 180px;"><input type="text" name="receiptDate" lay-verify="" placeholder=""
+
+                    autocomplete="off" class="layui-input date " value=""></td>
+            </tr>
+            <tr>
+                    <td class="title">单位比例</td>
+
+            <td><input type="text" name="unit" lay-verify="" placeholder=""
+
+                    autocomplete="off" class="layui-input " value=""></td>
+
+            <td class="title">个人比例</td>
+
+            <td style="width: 180px;"><input type="text" name="receiptDate" lay-verify="" placeholder=""
+
+                    autocomplete="off" class="layui-input date " value=""></td>
+            </tr>
+            <tr>
+               <td colspan="4" style="text-align: center;">
                         <button class="layui-btn" lay-filter="add" lay-submit="">添加</button></div>
+                        </tr>
+                </table>
                 </form>
-            </div>
-        </div>
+            
+        
         <script>layui.use(['form', 'layer','jquery'],
             function() {
                 $ = layui.jquery;
