@@ -1,7 +1,10 @@
 package servlet;
 
 
+import bean.Candidate;
+import bean.Client;
 import com.alibaba.fastjson.*;
+import dao.CandidateDAO;
 import database.*;
 import service.ClientService;
 
@@ -10,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -33,6 +37,12 @@ public class ClientServlet extends HttpServlet {
             case "getClients"://获取所有客户清单
                 result = getClients(conn,request);
                 break;
+            case "getClient"://获取一个客户清单
+                result = getClient(conn,request);
+                break;
+            case "updateClient"://修改一个客户
+                result = updateClient(conn,request);
+                break;
         }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
@@ -41,11 +51,30 @@ public class ClientServlet extends HttpServlet {
         out.close();
     }
 
-    //获取求职者列表
+    //获取客户列表
     private String getClients(Connection conn,HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
 
         DaoQueryListResult res =clientService.getClientList(conn,parameter);
+        return JSONObject.toJSONString(res);
+    }
+
+    //获取客户基本信息
+    private String getClient(Connection conn,HttpServletRequest request){
+        long id = Long.parseLong(request.getParameter("id"));
+        System.out.println("客户id="+id);
+        DaoQueryResult res = clientService.getClient(conn,id);
+        return  JSONObject.toJSONString(res);
+    }
+
+    //修改客户信息
+    private String updateClient(Connection conn,HttpServletRequest request) {
+        //获取前台传过来的求职者的信息封装成对象Client
+        Client client = JSON.parseObject(request.getParameter("client"), Client.class);
+        System.out.println(client);
+        //调用dao层的update方法
+        DaoUpdateResult res = clientService.updateClient(conn, client);
+
         return JSONObject.toJSONString(res);
     }
 }

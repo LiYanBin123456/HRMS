@@ -107,7 +107,7 @@ public class DbUtil {
      */
     public static DaoQueryListResult getList(Connection conn, String table, QueryParameter param, Class c){
         String sql1 = String.format("select * from %s where ",table);
-        System.out.println("getList===sql=="+sql1);
+
         String sql2 = String.format("select count(*) from %s where ",table);
 
         String condition = param.conditions.toString();
@@ -135,6 +135,8 @@ public class DbUtil {
             if(param.pagination.need) {
                 result.total = qr.query(conn, sql2, new ScalarHandler<Long>(), values);
             }
+            System.out.println("getList===sql=="+sql1);
+            System.out.println("getList===sql=="+sql2);
         }catch (SQLException e){
             result.success = false;
             result.msg = "数据库操作错误";
@@ -172,6 +174,9 @@ public class DbUtil {
             List<Object> values = conditions.extraValues();
             result.data = qr.query(conn, sql, new BeanHandler<>(c),values.toArray());
             result.success = true;
+
+            System.out.println(result.data);
+            System.out.println("get==sql=="+sql);
         }catch (SQLException e){
             result.success = false;
             result.msg = "数据库操作错误";
