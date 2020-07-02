@@ -23,9 +23,9 @@
         <div class="x-nav">
             <span class="layui-breadcrumb">
                 <a href="">首页</a>
-                <a href="">保单规则管理</a>
+                <a href="">规则设置</a>
                 <a>
-                    <cite>医保规则</cite></a>
+                    <cite>公积金规则</cite></a>
             </span>
             <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
                 <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
@@ -36,9 +36,7 @@
                 <div class="layui-col-md12">
                     <div class="layui-card">
                         <div class="layui-card-header">
-                          <button class="layui-btn" onclick="xadmin.open('添加新客户','./medicalins-accumulationadd.html',600,400)"><i class="layui-icon"></i>添加</button>
-                          <button class="layui-btn layui-btn-normal" onclick="xadmin.open('显示全部','./member-add.html',600,400)"><i class="layui-icon layui-icon-list"></i>显示全部</button>
-                          <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>其他操作</button>
+                          <button class="layui-btn" onclick="xadmin.open('添加公积金规则','./medicalins-accumulationadd.html',600,400)"><i class="layui-icon"></i>添加</button>
                         </div>
                         <div class="layui-card-body ">
                             <form class="layui-form layui-col-space15">
@@ -54,7 +52,6 @@
                             <table class="layui-table layui-form">
                               <thead>
                                 <tr cate-id='0' fid='0' >
-                                  <th width="5">序号</th>
                                   <th width="100">地市</th>
                                   <th width="20">生效时间</th>
                                   <th width="20">上限</th>
@@ -65,7 +62,6 @@
                               </thead>
                               <tbody class="x-cate">
                                 <tr cate-id='1' fid='0' >
-                                  <td>1</td>
                                   <td>九江市</td>
                                   <td>2019-06</td>
                                   <td>2000</td>
@@ -78,7 +74,6 @@
                                   </td>
                                 </tr>
                                 <tr cate-id='1' fid='0' >
-                                  <td>1</td>
                                   <td>九江市</td>
                                   <td>2019-06</td>
                                   <td>1800</td>

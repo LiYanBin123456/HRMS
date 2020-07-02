@@ -2,13 +2,13 @@
 <html class="x-admin-sm">
     <head>
         <meta charset="UTF-8">
-        <title>详情界面</title>
+        <title>合同界面</title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
         <link rel="stylesheet" href="../css/font.css">
         <link rel="stylesheet" href="../css/xadmin.css">
-        <script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+        <script src="../lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
         <!--[if lt IE 9]>
           <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -16,38 +16,44 @@
         <![endif]-->
     </head>
     <body>
-<div class="layui-fluid">
+        <div class="layui-fluid">
             <div class="layui-row">
                 <form class="layui-form">
                     <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-item ">
-                            <span class="x-red"></span>客户名称：朝阳机械厂（6301）</label>
+                        <label for="L_username" class="layui-form-label">
+                            <span class="x-red">*</span>合同生效时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename"  autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="L_contacts" class="layui-form-label">
+                            <span class="x-red">*</span>合同终止时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="L_contacts" name="contacts" required="" lay-verify="nikename"  autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="L_phone" class="layui-form-label">
+                            <span class="x-red">*</span>合同签订时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" id="L_phone" name="phone" required=""  autocomplete="off" class="layui-input"></div>
+                        </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label  for="L_remark" class="layui-form-label">
+                            <span class="x-red">*</span>备注</label>
+                        <div class="layui-input-block">
+                            <textarea placeholder="" class="layui-textarea"></textarea>
+                        </div>
+                        </div>
+                     </form>
+                </div>
+                <div class="layui-card-body ">
+                            <div class="layui-card-header">
+                          <button class="layui-btn" onclick="xadmin.open('添加新合同','./custemer-contractadd.html',600,400)"><i class="layui-icon"></i>签订</button>
+                        </div>
+                        </div>
+                
                         
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_contacts" class="layui-form-item">
-                            <span class="x-red"></span>联系人：方部长</label>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_phone" class="layui-form-item">
-                            <span class="x-red"></span>联系电话：15986345868</label>
-                        </div>
-                    <div class="layui-form-item">
-                        <label for="L_address" class="layui-form-item">
-                            <span class="x-red"></span>地址：黑龙江省哈尔滨市</label>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_weixin" class="layui-form-item">
-                            <span class="x-red"></span>微信号：15986345868</label>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_qq" class="layui-form-item">
-                            <span class="x-red"></span>QQ号：159535455</label>
-                        </div>
-                    <div class="layui-form-item layui-form-text ">
-                        <label  for="L_brief" class="layui-form-item">
-                          <span class="x-red"></span>单位简介：重型机械加工</label>
-                        </div>
+           </div> 
                 </form>
             </div>
         </div>
