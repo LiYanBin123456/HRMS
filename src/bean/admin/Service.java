@@ -1,4 +1,4 @@
-package bean;
+package bean.admin;
 
 public class Service {
     private long id;//服务项目id

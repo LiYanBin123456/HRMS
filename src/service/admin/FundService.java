@@ -1,6 +1,6 @@
-package service;
+package service.admin;
 
-import dao.FundDao;
+import dao.admin.FundDao;
 import database.DaoQueryListResult;
 import database.QueryParameter;
 

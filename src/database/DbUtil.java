@@ -146,6 +146,56 @@ public class DbUtil {
         return result;
     }
 
+    /**
+     *
+     * @param conn
+     * @param sql  可以自定义要查询的字段
+     * @param table
+     * @param param
+     * @param c
+     * @return
+     */
+    public static DaoQueryListResult getList(Connection conn, String sql,String table, QueryParameter param, Class c){
+        String sql1 = String.format("select %s from %s where ",sql,table);;
+
+        String sql2 = String.format("select count(*) from %s where ",table);
+
+        String condition = param.conditions.toString();
+        sql1 += condition;
+        sql2 += condition;
+
+        //是否需要排序
+        if(param.order.need){
+            sql1 += (" order by "+param.order.field);
+            sql1 += param.order.direction?" asc":" desc";
+        }
+
+        //是否需要分页
+        if(param.pagination.need){
+            //page第几页   size每页大小
+            sql1 += String.format(" limit %d,%d",(param.pagination.page-1)*param.pagination.size,param.pagination.size);
+        }
+
+        QueryRunner qr = new QueryRunner();
+        DaoQueryListResult result = new DaoQueryListResult();
+        try {
+            Object[] values = param.conditions.extraValues().toArray();
+            result.success = true;
+            result.rows = qr.query(conn, sql1, new BeanListHandler<>(c), values);
+            if(param.pagination.need) {
+                result.total = qr.query(conn, sql2, new ScalarHandler<Long>(), values);
+            }
+            System.out.println("getList===sql=="+sql1);
+            System.out.println("getList===sql=="+sql2);
+        }catch (SQLException e){
+            result.success = false;
+            result.msg = "数据库操作错误";
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
     public static DaoQueryListResult getArray(Connection conn, String table, String ids, Class c){
         String sql = String.format("select * from %s where id in (%s)",table,ids);
 

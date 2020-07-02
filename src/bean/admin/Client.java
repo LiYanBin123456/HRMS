@@ -1,4 +1,4 @@
-package bean;
+package bean.admin;
 
 public class Client {
     private long id;

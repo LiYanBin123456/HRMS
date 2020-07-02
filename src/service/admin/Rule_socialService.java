@@ -1,6 +1,6 @@
-package service;
+package service.admin;
 
-import dao.Rule_socialDao;
+import dao.admin.Rule_socialDao;
 import database.DaoQueryListResult;
 import database.QueryParameter;
 

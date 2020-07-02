@@ -1,19 +1,16 @@
-package servlet;
+package servlet.admin;
 
 
-import bean.Candidate;
-import bean.Client;
+import bean.admin.Client;
 import com.alibaba.fastjson.*;
-import dao.CandidateDAO;
 import database.*;
-import service.ClientService;
+import service.admin.ClientService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -42,6 +39,9 @@ public class ClientServlet extends HttpServlet {
                 break;
             case "updateClient"://修改一个客户
                 result = updateClient(conn,request);
+                break;
+            case "insertClient"://添加一个客户
+                result = insertClient(conn,request);
                 break;
         }
         ConnUtil.closeConnection(conn);
@@ -74,6 +74,17 @@ public class ClientServlet extends HttpServlet {
         System.out.println(client);
         //调用dao层的update方法
         DaoUpdateResult res = clientService.updateClient(conn, client);
+
+        return JSONObject.toJSONString(res);
+    }
+
+    //添加
+    private String insertClient(Connection conn,HttpServletRequest request) {
+        //获取前台传过来的求职者的信息封装成对象Client
+        Client client = JSON.parseObject(request.getParameter("client"), Client.class);
+        System.out.println(client);
+        //调用dao层的update方法
+        DaoUpdateResult res = clientService.insertClient(conn, client);
 
         return JSONObject.toJSONString(res);
     }

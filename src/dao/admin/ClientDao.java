@@ -1,9 +1,9 @@
-package dao;
+package dao.admin;
 
 
 
 
-import bean.Client;
+import bean.admin.Client;
 import database.*;
 import java.sql.Connection;
 
@@ -36,5 +36,11 @@ public class ClientDao {
         Object []params = {c.getName(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getIntro(),c.getId()};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
+    }
+
+    public DaoUpdateResult insertClient(Connection conn, Client c) {
+        String sql = "insert into client (name,address,contact,phone,wx,qq,intro,status,type) values (?,?,?,?,?,?,?,?,?)";
+        Object []params = {c.getName(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getIntro(),0,0};
+        return DbUtil.insert(conn,sql,params);
     }
 }

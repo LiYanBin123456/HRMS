@@ -1,4 +1,4 @@
-package bean;
+package bean.admin;
 
 public class Contract {
     private String id;//合同id（规则为类型+年份+四位编号，如“A20200001”）

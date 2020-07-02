@@ -1,20 +1,20 @@
-package dao;
+package dao.admin;
 
-import bean.Notice;
+import bean.admin.Fund;
 import database.DaoQueryListResult;
 import database.DbUtil;
 import database.QueryParameter;
 
 import java.sql.Connection;
 
-public class NoticeDao {
+public class FundDao {
     /**
-     * 获取公告列表
+     * 获取公积金列表
      * @param conn 数据库连接
      *@param param 查询参数
      * @return 检索结果，格式："{success:true,msg:"",effects:1}"
      */
-    public DaoQueryListResult getNoticeList(Connection conn, QueryParameter param){
-        return DbUtil.getList(conn,"notice",param, Notice.class);
+    public DaoQueryListResult getFundList(Connection conn, QueryParameter param){
+        return DbUtil.getList(conn,"fund",param, Fund.class);
     }
 }

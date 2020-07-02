@@ -1,27 +1,35 @@
-package bean;
+package bean.admin;
 
-public class Fund {
+public class Rule_medical {
     private long id;
-    private String city;
-    private String start;//生效时间
+    private String city;//地市代码
+    private String start;//开始日期
     private int base;//基数
-    private int min;//公积金下限
-    private int max;//公积金上限
-    private float per1;//单位比例
-    private float per2;//个人比例
+    private float per1;//医疗单位比例
+    private float per2;//医疗个人比例
+    private float per3;//生育单位比例
+    private float per4;//生育个人比例
 
-    public Fund() {
+    public Rule_medical() {
     }
 
-    public Fund(long id, String city, String start, int base, int min, int max, float per1, float per2) {
+    public Rule_medical(long id, String city, String start, int base, float per1, float per2, float per3, float per4) {
         this.id = id;
         this.city = city;
         this.start = start;
         this.base = base;
-        this.min = min;
-        this.max = max;
         this.per1 = per1;
         this.per2 = per2;
+        this.per3 = per3;
+        this.per4 = per4;
+    }
+
+    public String getStart() {
+        return start;
+    }
+
+    public void setStart(String start) {
+        this.start = start;
     }
 
     public long getId() {
@@ -40,13 +48,6 @@ public class Fund {
         this.city = city;
     }
 
-    public String getStart() {
-        return start;
-    }
-
-    public void setStart(String start) {
-        this.start = start;
-    }
 
     public int getBase() {
         return base;
@@ -54,22 +55,6 @@ public class Fund {
 
     public void setBase(int base) {
         this.base = base;
-    }
-
-    public int getMin() {
-        return min;
-    }
-
-    public void setMin(int min) {
-        this.min = min;
-    }
-
-    public int getMax() {
-        return max;
-    }
-
-    public void setMax(int max) {
-        this.max = max;
     }
 
     public float getPer1() {
@@ -88,17 +73,33 @@ public class Fund {
         this.per2 = per2;
     }
 
+    public float getPer3() {
+        return per3;
+    }
+
+    public void setPer3(float per3) {
+        this.per3 = per3;
+    }
+
+    public float getPer4() {
+        return per4;
+    }
+
+    public void setPer4(float per4) {
+        this.per4 = per4;
+    }
+
     @Override
     public String toString() {
-        return "Fund{" +
+        return "Rule_medical{" +
                 "id=" + id +
                 ", city='" + city + '\'' +
                 ", start='" + start + '\'' +
                 ", base=" + base +
-                ", min=" + min +
-                ", max=" + max +
                 ", per1=" + per1 +
                 ", per2=" + per2 +
+                ", per3=" + per3 +
+                ", per4=" + per4 +
                 '}';
     }
 }

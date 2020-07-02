@@ -1,20 +1,21 @@
-package dao;
+package dao.admin;
 
-import bean.Fund;
+import bean.admin.Rule_social;
 import database.DaoQueryListResult;
 import database.DbUtil;
 import database.QueryParameter;
 
 import java.sql.Connection;
 
-public class FundDao {
+public class Rule_socialDao {
+
     /**
-     * 获取公积金列表
+     * 获取社保列表
      * @param conn 数据库连接
      *@param param 查询参数
      * @return 检索结果，格式："{success:true,msg:"",effects:1}"
      */
-    public DaoQueryListResult getFundList(Connection conn, QueryParameter param){
-        return DbUtil.getList(conn,"fund",param, Fund.class);
+    public DaoQueryListResult getRule_socialList(Connection conn, QueryParameter param){
+        return DbUtil.getList(conn,"rule_social",param, Rule_social.class);
     }
 }

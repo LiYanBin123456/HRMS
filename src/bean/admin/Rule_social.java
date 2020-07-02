@@ -1,4 +1,4 @@
-package bean;
+package bean.admin;
 
 public class Rule_social {
     private long id;

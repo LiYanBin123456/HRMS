@@ -1,10 +1,10 @@
-package servlet;
+package servlet.admin;
 
 import com.alibaba.fastjson.JSONObject;
 import database.ConnUtil;
 import database.DaoQueryListResult;
 import database.QueryParameter;
-import service.NoticeService;
+import service.admin.FundService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -15,9 +15,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 
-@WebServlet(urlPatterns ="/notice")
-public class NoticeServlet extends HttpServlet {
-    private NoticeService noticeService = new NoticeService();
+@WebServlet(urlPatterns = "/fund")
+public class FundServlet extends HttpServlet {
+    private FundService fundService = new FundService();
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         request.setCharacterEncoding("utf-8");
@@ -28,8 +28,8 @@ public class NoticeServlet extends HttpServlet {
         String op = request.getParameter("op");
 
         switch (op) {
-            case "getNotices"://获取所有公积金清单
-                result = getNotices(conn,request);
+            case "getFunds"://获取所有公积金清单
+                result = getFunds(conn,request);
                 break;
         }
         ConnUtil.closeConnection(conn);
@@ -37,18 +37,17 @@ public class NoticeServlet extends HttpServlet {
         out.print(result);
         out.flush();
         out.close();
-
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
     }
 
-    //
-    private String getNotices(Connection conn,HttpServletRequest request) {
+    //获取求职者列表
+    private String getFunds(Connection conn,HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
 
-        DaoQueryListResult res =noticeService.getNoticeList(conn,parameter);
+        DaoQueryListResult res =fundService.getFundList(conn,parameter);
         return JSONObject.toJSONString(res);
     }
 }

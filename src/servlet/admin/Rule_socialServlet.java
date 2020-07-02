@@ -1,10 +1,10 @@
-package servlet;
+package servlet.admin;
 
 import com.alibaba.fastjson.JSONObject;
 import database.ConnUtil;
 import database.DaoQueryListResult;
 import database.QueryParameter;
-import service.Rule_socialService;
+import service.admin.Rule_socialService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

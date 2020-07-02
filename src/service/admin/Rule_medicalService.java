@@ -1,6 +1,6 @@
-package service;
+package service.admin;
 
-import dao.Rule_medicalDao;
+import dao.admin.Rule_medicalDao;
 import database.DaoQueryListResult;
 import database.QueryParameter;
 

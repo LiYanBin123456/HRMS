@@ -1,10 +1,11 @@
-package servlet;
+package servlet.admin;
 
+import bean.admin.Rule_medical;
 import com.alibaba.fastjson.JSONObject;
 import database.ConnUtil;
 import database.DaoQueryListResult;
 import database.QueryParameter;
-import service.Rule_medicalService;
+import service.admin.Rule_medicalService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -47,6 +48,7 @@ public class Rule_medicalServlet extends HttpServlet {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
 
         DaoQueryListResult res =medicalService.getRule_medicalList(conn,parameter);
+        System.out.println(res);
         return JSONObject.toJSONString(res);
     }
 }

@@ -1,7 +1,7 @@
-package service;
+package service.admin;
 
-import bean.Client;
-import dao.ClientDao;
+import bean.admin.Client;
+import dao.admin.ClientDao;
 import database.DaoQueryListResult;
 import database.DaoQueryResult;
 import database.DaoUpdateResult;
@@ -23,5 +23,9 @@ public class ClientService {
 
     public DaoUpdateResult updateClient(Connection conn, Client client) {
         return clientDao.updateClient(conn,client);
+    }
+
+    public DaoUpdateResult insertClient(Connection conn, Client client) {
+        return clientDao.insertClient(conn,client);
     }
 }
