@@ -25,30 +25,20 @@
                             <table class="layui-table layui-form">
                               <thead>
                                 <tr cate-id='0' fid='0' >
+                                  <th width="100">合同编号</th>
                                   <th width="100">合同生效时间</th>
-                                  <th width="20">合同终止时间</th>
-                                  <th width="20">合同签订时间</th>
-                                  <th width="20">备注</th>
-                                  <th width="200">操作</th>
+                                  <th width="20">合同到期时间</th>
                               </thead>
                               <tbody class="x-cate">
                                 <tr cate-id='1' fid='0' >
+                                  <td>A2020000001</td>
                                   <td>2020.06.30</td>
                                   <td>2024.06.30</td>
-                                  <td>2020.06.30</td>
-                                  <td>无备注</td>
-                                  <td class="td-manage">
-                                    <button class="layui-btn  layui-btn-danger layui-btn-xs"  onclick="xadmin.open('删除','admin-edit.html')" ><i class="layui-icon">&#xe69d;</i>删除</button>
-                                  </td>
                                 </tr>
                                 <tr cate-id='1' fid='0' >
+                                  <td>A2020000001</td>
                                   <td>2020.06.30</td>
                                   <td>2024.06.30</td>
-                                  <td>2020.06.30</td>
-                                  <td>无备注</td>
-                                  <td class="td-manage">
-                                    <button class="layui-btn  layui-btn-danger layui-btn-xs"  onclick="xadmin.open('删除','admin-edit.html')" ><i class="layui-icon">&#xe69d;</i>删除</button>
-                                  </td>
                                 </tr>
                               </tbody>
                             </table>
@@ -74,14 +64,6 @@
 
           });
 
-           /*用户-删除*/
-          function member_del(obj,id){
-              layer.confirm('确认要删除吗？',function(index){
-                  //发异步删除数据
-                  $(obj).parents("tr").remove();
-                  layer.msg('已删除!',{icon:1,time:1000});
-              });
-          }
 
           // 分类展开收起的分类的逻辑
           //

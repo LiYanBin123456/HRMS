@@ -25,32 +25,38 @@
                         <label for="L_username" class="layui-form-label">
                             <span class="x-red">*</span>主题</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="Job直聘系统上线"  autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="L_contacts" class="layui-form-label">
                             <span class="x-red">*</span>发布人</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="L_contacts" name="contacts" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                            <input type="text" id="L_contacts" name="contacts" required="" lay-verify="nikename" placeholder="王杰" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
                         <label for="L_phone" class="layui-form-label">
                             <span class="x-red">*</span>发布时间</label>
                         <div class="layui-input-inline">
-                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" id="L_phone" name="phone" required="" autocomplete="off" class="layui-input"></div>
+                            <input type="text"  required="" placeholder="2020-06-30" autocomplete="off" class="layui-input"></div>
                         </div>
                     <div class="layui-form-item layui-form-text">
                         <label  for="L_brief" class="layui-form-label">
                           <span class="x-red">*</span>摘要信息</label>
                         <div class="layui-input-block">
-                            <textarea placeholder="请输入内容" class="layui-textarea"></textarea>
+                            <textarea placeholder="无" class="layui-textarea"></textarea>
                         </div>
                         </div>
                         <div class="layui-form-item layui-form-text">
                         <label  for="L_brief" class="layui-form-label">
                           <span class="x-red">*</span>正文</label>
                         <div class="layui-input-block">
-                            <textarea placeholder="请输入内容" class="layui-textarea"></textarea>
+                            <textarea placeholder="请输入内容" id="demo" style="display: none;"  class="layui-textarea"></textarea>
+                            <script>
+                               layui.use('layedit', function(){
+                               var layedit = layui.layedit;
+                               layedit.build('demo'); //建立编辑器
+                               });
+                        </script>
                         </div>
                         </div>
                   <div class="layui-form-item">

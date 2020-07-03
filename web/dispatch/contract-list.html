@@ -3,11 +3,11 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>医保规则</title>
+        <title>合同管理</title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
-        <link rel="stylesheet" href="../css/font.css">
+        <link rel="stylesheet" href="..css/font.css">
         <link rel="stylesheet" href="../css/xadmin.css">
         <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
         <script src="../lib/layui/layui.js" charset="utf-8"></script>
@@ -23,9 +23,10 @@
         <div class="x-nav">
             <span class="layui-breadcrumb">
                 <a href="">首页</a>
-                <a href="">规则设置</a>
+                <a href="">客户管理</a>
                 <a>
-                    <cite>社保规则</cite></a>
+                    <cite>合同管理</cite></a>
+                   
             </span>
             <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
                 <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
@@ -36,12 +37,12 @@
                 <div class="layui-col-md12">
                     <div class="layui-card">
                         <div class="layui-card-header">
-                          <button class="layui-btn" onclick="xadmin.open('添加社保规则','./medicalins-socialadd.html',600,400)"><i class="layui-icon"></i>添加</button>
+                          <button class="layui-btn" onclick="xadmin.open('添加合同','contract-add.html',600,400)"><i class="layui-icon"></i>添加</button>
                         </div>
                         <div class="layui-card-body ">
                             <form class="layui-form layui-col-space15">
                                 <div class="layui-input-inline layui-show-xs-block" style="align: center;">
-                                    <input class="layui-input" style="width:300px;" placeholder="按地市过滤" name=""></div>
+                                    <input class="layui-input" style="width:300px;" placeholder="输入要查找的合作客户" name=""></div>
                                     <div class="layui-inline layui-show-xs-block">
                                         <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
                                     </div>
@@ -52,61 +53,31 @@
                             <table class="layui-table layui-form">
                               <thead>
                                 <tr cate-id='0' fid='0' >
-                                  <th width="100">地市</th>
-                                  <th width="20">生效时间</th>
-                                  <th width="20">基数</th>
-                                  <th width="20">养老单位比例</th>
-                                  <th width="20">养老个人比例</th>
-                                  <th width="20">工伤单位比例</th>
-                                  <th width="20">工伤补充</th>
-                                  <th width="20">失业单位比例</th>
-                                  <th width="20">失业个人比例</th>
+                                  <th width="100">合作客户</th>
+                                  <th width="100">生效时间</th>
+                                  <th width="100">到期时间</th>
+                                  <th width="20">业务类型</th>
                                   <th width="200">操作</th>
                               </thead>
                               <tbody class="x-cate">
                                 <tr cate-id='1' fid='0' >
-                                  <td>九江市</td>
-                                  <td>2019-06</td>
-                                  <td>2500</td>
-                                  <td>3%</td>
-                                  <td>1%</td>
-                                  <td>3%</td>
-                                  <td>4元</td>
-                                  <td>3%</td>
-                                  <td>1%</td>
+                                  <td>科技中专</td>
+                                  <td>2019-1-29</td>
+                                  <td>2020-6-29</td>
+                                  <td>劳务派遣</td>
                                   <td class="td-manage">
-                                    <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('编辑','admin-socialedit.html')" ><i class="layui-icon">&#xe642;</i>编辑</button>
-                                    <button class="layui-btn  layui-btn-danger layui-btn-xs"  onclick="xadmin.open('删除','admin-socialedit.html')" ><i class="layui-icon">&#xe69d;</i>删除</button>
+                                    <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('详情','contract-edit.html')" ><i class="layui-icon">&#xe642;</i>详情</button>
+                                    <button class="layui-btn  layui-btn-danger layui-btn-xs"  onclick="xadmin.open('删除','admin-edit.html')" ><i class="layui-icon">&#xe69d;</i>删除</button>
                                   </td>
                                 </tr>
                                 <tr cate-id='1' fid='0' >
-                                  <td>九江市</td>
-                                  <td>2019-06</td>
-                                  <td>2500</td>
-                                  <td>3%</td>
-                                  <td>1%</td>
-                                  <td>3%</td>
-                                  <td>4元</td>
-                                  <td>3%</td>
-                                  <td>1%</td>
+                                  <td>国棉四厂</td>
+                                  <td>2017-2-12</td>
+                                  <td>2020-2-30</td>
+                                  <td>劳务外包</td>
                                   <td class="td-manage">
-                                    <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('编辑','admin-socialedit.html')" ><i class="layui-icon">&#xe642;</i>编辑</button>
-                                    <button class="layui-btn  layui-btn-danger layui-btn-xs"  onclick="xadmin.open('删除','admin-socialedit.html')" ><i class="layui-icon">&#xe69d;</i>删除</button>
-                                  </td>
-                                </tr>
-                                <tr cate-id='1' fid='0' >
-                                  <td>九江市</td>
-                                  <td>2019-06</td>
-                                  <td>2500</td>
-                                  <td>3%</td>
-                                  <td>1%</td>
-                                  <td>3%</td>
-                                  <td>4元</td>
-                                  <td>3%</td>
-                                  <td>1%</td>
-                                  <td class="td-manage">
-                                    <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('编辑','admin-socialedit.html')" ><i class="layui-icon">&#xe642;</i>编辑</button>
-                                    <button class="layui-btn  layui-btn-danger layui-btn-xs"  onclick="xadmin.open('删除','admin-socialedit.html')" ><i class="layui-icon">&#xe69d;</i>删除</button>
+                                    <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('详情','contract-edit.html')" ><i class="layui-icon">&#xe642;</i>详情</button>
+                                    <button class="layui-btn  layui-btn-danger layui-btn-xs"  onclick="xadmin.open('删除','admin-edit.html')" ><i class="layui-icon">&#xe69d;</i>删除</button>
                                   </td>
                                 </tr>
                               </tbody>

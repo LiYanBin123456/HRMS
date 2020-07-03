@@ -18,6 +18,21 @@
         <![endif]-->
     </head>
     <body>
+        <ul class="layui-nav" lay-filter="">
+            <li class="layui-nav-item "><a href="cooperativeclient-add.html">基础信息</a></li>
+            <li class="layui-nav-item"><a href="cooperativeclient-add1.html">财务信息</a></li>
+            <li class="layui-nav-item"><a href="cooperativeclient-add2.html">部门</a></li>
+            <li class="layui-nav-item"><a href="cooperativeclient-add3.html">工资定义</a></li>
+        </ul>
+ 
+        <script>
+           //注意：导航 依赖 element 模块，否则无法进行功能性操作
+           layui.use('element', function(){
+           var element = layui.element;
+  
+           //…
+           });
+        </script>
         <div class="layui-fluid">
             <div class="layui-row">
                 <form class="layui-form">
@@ -34,10 +49,24 @@
                             <input type="text" id="L_username" name="username" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-label">
-                            <span class="x-red">*</span>简称</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                        <label for="L_city" class="layui-form-label">
+                        <span class="x-red">*</span>客户性质</label>
+                            <div class="layui-input-inline">
+                                <select name="nature" lay-verify="required">
+                                    <option value=""></option>
+                                    <option value="0">政府部门</option>
+                                    <option value="1">事业单位</option>
+                                    <option value="2">人才市场</option>
+                                    <option value="3">学校</option>
+                                    <option value="4">内资企业</option>
+                                    <option value="5">外资企业</option>
+                                    <option value="6">港澳台企业</option>
+                                    <option value="7">内资工厂</option>
+                                    <option value="8">外资工厂</option>
+                                    <option value="9">港澳台工厂</option>
+                                    <option value="10">其他</option>
+                            </select>
+                    </div>
                     </div>
                     <div class="layui-form-item">
                         <label for="L_contacts" class="layui-form-label">
@@ -52,12 +81,6 @@
                             <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" id="L_phone" name="phone" required="" autocomplete="off" class="layui-input"></div>
                         </div>
                     <div class="layui-form-item">
-                        <label for="L_address" class="layui-form-label">
-                            <span class="x-red">*</span>地址</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="L_address" name="address" required="" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
                         <label for="L_weixin" class="layui-form-label">
                             <span class="x-red">*</span>微信号</label>
                         <div class="layui-input-inline">
@@ -71,13 +94,13 @@
                         </div>
                         <div class="layui-form-item">
                         <label for="L_username" class="layui-form-label">
-                            <span class="x-red">*</span>邮箱</label>
+                            <span class="x-red">*</span>地址</label>
                         <div class="layui-input-inline">
                             <input type="text" id="L_username" name="username" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item layui-form-text">
                         <label  for="L_brief" class="layui-form-label">
-                        	<span class="x-red">*</span>单位简介</label>
+                        	<span class="x-red">*</span>客户简介</label>
                         <div class="layui-input-block">
                             <textarea placeholder="请输入内容" class="layui-textarea"></textarea>
                         </div>

@@ -20,79 +20,53 @@
     </head>
 
     <body>
-        <div class="x-nav">
-            <span class="layui-breadcrumb">
-                <a href="">首页</a>
-                <a href="">客户管理</a>
-                <a>
-                    <cite>合作客户</cite></a>
-                   
-            </span>
-            <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
-                <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i>
-            </a>
-        </div>
+        <ul class="layui-nav" lay-filter="">
+            <li class="layui-nav-item "><a href="cooperativeclient-add.html">基础信息</a></li>
+            <li class="layui-nav-item"><a href="cooperativeclient-add1.html">财务信息</a></li>
+            <li class="layui-nav-item"><a href="cooperativeclient-add2.html">部门</a></li>
+            <li class="layui-nav-item"><a href="cooperativeclient-add3.html">工资定义</a></li>
+        </ul>
+ 
+        <script>
+           //注意：导航 依赖 element 模块，否则无法进行功能性操作
+           layui.use('element', function(){
+           var element = layui.element;
+  
+           //…
+           });
+        </script>
         <div class="layui-fluid">
             <div class="layui-row layui-col-space15">
                 <div class="layui-col-md12">
                     <div class="layui-card">
                         <div class="layui-card-header">
-                          <button class="layui-btn" onclick="xadmin.open('添加新客户','custemer-add.html',600,400)"><i class="layui-icon"></i>添加</button>
-                          <button class="layui-btn" onclick="xadmin.open('合作客户',,600,400)"><i class="layui-icon layui-icon-radio"></i>合作中</button>
-                          <button class="layui-btn" onclick="xadmin.open('潜在客户','customer-potential-list.html',1000,500)"><i class="layui-icon layui-icon-radio"></i>潜在</button>
-
-                        </div>
-                        <div class="layui-card-body ">
-                            <form class="layui-form layui-col-space15">
-                                <div class="layui-input-inline layui-show-xs-block" style="align: center;">
-                                    <input class="layui-input" style="width:300px;" placeholder="输入要查找的客户名称或联系人" name=""></div>
-                                    <div class="layui-inline layui-show-xs-block">
-                                        <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
-                                    </div>
-                            </form>
-                            <hr>
+                          <button class="layui-btn" onclick="xadmin.open('添加新部门','cooperativeclient-add.html',600,400)"><i class="layui-icon"></i>添加</button>
                         </div>
                         <div class="layui-card-body ">
                             <table class="layui-table layui-form">
                               <thead>
                                 <tr cate-id='0' fid='0' >
-                                  <th width="5">序号</th>
-                                  <th width="100">客户名称</th>
+                                  <th width="100">部门名称</th>
                                   <th width="20">联系人</th>
                                   <th width="20">联系电话</th>
                                   <th width="200">操作</th>
                               </thead>
                               <tbody class="x-cate">
                                 <tr cate-id='1' fid='0' >
-                                  <td>1</td>
-                                  <td>朝阳机械厂（6301）</td>
+                                  <td>第一分公司</td>
                                   <td>方部长</td>
                                   <td>15986345868</td>
                                   <td class="td-manage">
                                     <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('详情','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>详情</button>
-                                    <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('合同','admin-contract.html')" ><i class="layui-icon">&#xe642;</i>合同</button>
                                     <button class="layui-btn  layui-btn-danger layui-btn-xs"  onclick="xadmin.open('删除','admin-edit.html')" ><i class="layui-icon">&#xe69d;</i>删除</button>
                                   </td>
                                 </tr>
                                 <tr cate-id='1' fid='0' >
-                                  <td>1</td>
-                                  <td>朝阳机械厂（6301）</td>
-                                  <td>方部长</td>
-                                  <td>15986345868</td>
+                                  <td>第二分公司</td>
+                                  <td>李经理</td>
+                                  <td>15986358956</td>
                                   <td class="td-manage">
                                     <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('详情','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>详情</button>
-                                    <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('合同','admin-contract.html')" ><i class="layui-icon">&#xe642;</i>合同</button>
-                                    <button class="layui-btn  layui-btn-danger layui-btn-xs"  onclick="xadmin.open('删除','admin-edit.html')" ><i class="layui-icon">&#xe69d;</i>删除</button>
-                                  </td>
-                                </tr>
-                                <tr cate-id='1' fid='0' >
-                                  <td>1</td>
-                                  <td>朝阳机械厂（6301）</td>
-                                  <td>方部长</td>
-                                  <td>15986345868</td>
-                                  <td class="td-manage">
-                                    <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('详情','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>详情</button>
-                                    <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('合同','admin-contract.html')" ><i class="layui-icon">&#xe642;</i>合同</button>
                                     <button class="layui-btn  layui-btn-danger layui-btn-xs"  onclick="xadmin.open('删除','admin-edit.html')" ><i class="layui-icon">&#xe69d;</i>删除</button>
                                   </td>
                                 </tr>
