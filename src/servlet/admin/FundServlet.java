@@ -1,9 +1,8 @@
 package servlet.admin;
 
+import bean.admin.Fund;
 import com.alibaba.fastjson.JSONObject;
-import database.ConnUtil;
-import database.DaoQueryListResult;
-import database.QueryParameter;
+import database.*;
 import service.admin.FundService;
 
 import javax.servlet.ServletException;
@@ -31,6 +30,15 @@ public class FundServlet extends HttpServlet {
             case "getFunds"://获取所有公积金清单
                 result = getFunds(conn,request);
                 break;
+            case "getFund"://获取所有公积金清单
+                result = getFund(conn,request);
+                break;
+            case "updateFund"://获取所有公积金清单
+                result = updateFund(conn,request);
+                break;
+            case "insertFund"://获取所有公积金清单
+                result = insertFund(conn,request);
+                break;
         }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
@@ -48,6 +56,23 @@ public class FundServlet extends HttpServlet {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
 
         DaoQueryListResult res =fundService.getFundList(conn,parameter);
+        return JSONObject.toJSONString(res);
+    }
+
+    private String getFund(Connection conn,HttpServletRequest request){
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoQueryResult res =fundService.getFund(conn,id);
+        return JSONObject.toJSONString(res);
+    }
+
+    private String updateFund(Connection conn,HttpServletRequest request){
+        Fund fund = JSONObject.parseObject(request.getParameter("fund"), Fund.class);
+        DaoUpdateResult res = fundService.updateFund(conn,fund);
+        return JSONObject.toJSONString(res);
+    }
+    private String insertFund(Connection conn,HttpServletRequest request){
+        Fund fund = JSONObject.parseObject(request.getParameter("fund"), Fund.class);
+        DaoUpdateResult res=fundService.insertFund(conn,fund);
         return JSONObject.toJSONString(res);
     }
 }

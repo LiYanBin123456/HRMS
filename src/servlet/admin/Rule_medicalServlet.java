@@ -2,9 +2,7 @@ package servlet.admin;
 
 import bean.admin.Rule_medical;
 import com.alibaba.fastjson.JSONObject;
-import database.ConnUtil;
-import database.DaoQueryListResult;
-import database.QueryParameter;
+import database.*;
 import service.admin.Rule_medicalService;
 
 import javax.servlet.ServletException;
@@ -32,6 +30,15 @@ public class Rule_medicalServlet extends HttpServlet {
             case "getMedicals"://获取所有公积金清单
                 result = getMedicals(conn,request);
                 break;
+            case "getMedical"://获取所有公积金清单
+                result = getMedical(conn,request);
+                break;
+            case "updateMedical"://获取所有公积金清单
+                result = updateMedical(conn,request);
+                break;
+            case "insertMedical"://获取所有公积金清单
+                result = insertMedical(conn,request);
+                break;
         }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
@@ -49,6 +56,24 @@ public class Rule_medicalServlet extends HttpServlet {
 
         DaoQueryListResult res =medicalService.getRule_medicalList(conn,parameter);
         System.out.println(res);
+        return JSONObject.toJSONString(res);
+    }
+
+    private String getMedical(Connection conn, HttpServletRequest request) {
+        long id = Long.parseLong(request.getParameter("id"));
+       DaoQueryResult res= medicalService.getMedical(conn,id);
+       return JSONObject.toJSONString(res);
+    }
+
+    private String updateMedical(Connection conn, HttpServletRequest request) {
+        Rule_medical medical = JSONObject.parseObject(request.getParameter("rule_medical"), Rule_medical.class);
+        DaoUpdateResult res = medicalService.updateMedical(conn,medical);
+        return JSONObject.toJSONString(res);
+    }
+
+    private String insertMedical(Connection conn, HttpServletRequest request) {
+        Rule_medical medical = JSONObject.parseObject(request.getParameter("rule_medical"), Rule_medical.class);
+        DaoUpdateResult res = medicalService.insertMedical(conn,medical);
         return JSONObject.toJSONString(res);
     }
 }

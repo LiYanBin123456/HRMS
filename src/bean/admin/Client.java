@@ -31,11 +31,11 @@ public class Client {
      */
     private int category;
     private String address;
-    private String contact;
-    private String phone;
+    private String contact;//地址
+    private String phone;//电话
     private String wx;
     private String qq;
-    private String intro;
+    private String intro;//介绍
 
     public long getId() {
         return id;
