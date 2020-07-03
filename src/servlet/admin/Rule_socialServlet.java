@@ -1,9 +1,9 @@
 package servlet.admin;
 
+import bean.admin.Rule_medical;
+import bean.admin.Rule_social;
 import com.alibaba.fastjson.JSONObject;
-import database.ConnUtil;
-import database.DaoQueryListResult;
-import database.QueryParameter;
+import database.*;
 import service.admin.Rule_socialService;
 
 import javax.servlet.ServletException;
@@ -31,6 +31,15 @@ public class Rule_socialServlet extends HttpServlet {
             case "getSocials"://获取所有公积金清单
                 result = getSocials(conn,request);
                 break;
+            case "getSocial"://获取所有公积金清单
+                result = getSocial(conn,request);
+                break;
+            case "updateSocial"://获取所有公积金清单
+                result = updateSocial(conn,request);
+                break;
+            case "insertSocial"://获取所有公积金清单
+                result = insertSocial(conn,request);
+                break;
         }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
@@ -47,6 +56,24 @@ public class Rule_socialServlet extends HttpServlet {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
 
         DaoQueryListResult res =socialService.getRule_socialList(conn,parameter);
+        return JSONObject.toJSONString(res);
+    }
+
+    private String getSocial(Connection conn, HttpServletRequest request) {
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoQueryResult res= socialService.getSocial(conn,id);
+        return JSONObject.toJSONString(res);
+    }
+
+    private String updateSocial(Connection conn, HttpServletRequest request) {
+        Rule_social social = JSONObject.parseObject(request.getParameter("rule_social"), Rule_social.class);
+        DaoUpdateResult res = socialService.updateSocial(conn,social);
+        return JSONObject.toJSONString(res);
+    }
+
+    private String insertSocial(Connection conn, HttpServletRequest request) {
+        Rule_social social = JSONObject.parseObject(request.getParameter("rule_social"), Rule_social.class);
+        DaoUpdateResult res = socialService.insertSocial(conn,social);
         return JSONObject.toJSONString(res);
     }
 }

@@ -38,6 +38,12 @@ public class ClientDao {
         return DbUtil.update(conn,sql,params);
     }
 
+    /**
+     * 插入潜在客户
+     * @param conn
+     * @param c
+     * @return
+     */
     public DaoUpdateResult insertClient(Connection conn, Client c) {
         String sql = "insert into client (name,address,contact,phone,wx,qq,intro,status,type) values (?,?,?,?,?,?,?,?,?)";
         Object []params = {c.getName(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getIntro(),0,0};
