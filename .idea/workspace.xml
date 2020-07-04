@@ -6,7 +6,19 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5d83316-56ab-45ad-8caf-f6eb14ab1932" name="Default" comment="完成实体类，部分类的列表查询，客户的修改，查询" />
+    <list default="true" id="c5d83316-56ab-45ad-8caf-f6eb14ab1932" name="Default" comment="劳务派遣合同与员工">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/css/xadmin.css" beforeDir="false" afterPath="$PROJECT_DIR$/web/css/xadmin.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dispatch/contract-add1.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/contract-add1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dispatch/contract-edit1.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/contract-edit1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dispatch/contract-list.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/contract-list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dispatch/expatriates-add1.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/expatriates-add1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dispatch/expatriates-edit1.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/expatriates-edit1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dispatch/expatriates-list.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/expatriates-list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dispatch/internalstaff-add1.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/internalstaff-add1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dispatch/internalstaff-edit1.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/internalstaff-edit1.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/dispatch/supplier-add.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/supplier-add.html" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,7 +27,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300" />
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -81,7 +93,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="336" />
+    <option name="x" value="335" />
     <option name="y" value="50" />
     <option name="width" value="1145" />
     <option name="height" value="735" />
@@ -94,21 +106,32 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane" />
-      <pane id="PackagesPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="hrm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hrm" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="settings.editor.selected.configurable" value="vcs.Git" />
-    <property name="last_opened_file_path" value="E:/A1711实验班/shopping_parent" />
+    <property name="ChangesTree.GroupingKeys" value="directory&#10;module" />
+    <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1593857437314" />
+    <property name="last_opened_file_path" value="E:/A1711实验班/shopping_parent" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
-    <property name="ChangesBrowser.SHOW_FLATTEN" value="false" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -410,6 +433,9 @@
       <workItem from="1593600467575" duration="105000" />
       <workItem from="1593658402152" duration="10068000" />
       <workItem from="1593739824055" duration="68000" />
+      <workItem from="1593777613841" duration="226000" />
+      <workItem from="1593851479892" duration="45000" />
+      <workItem from="1593857360137" duration="254000" />
     </task>
     <task id="LOCAL-00001" summary="项目的初始版本">
       <created>1593004337566</created>
@@ -432,25 +458,30 @@
       <option name="project" value="LOCAL" />
       <updated>1593509820643</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="劳务派遣中客户管理和员工管理">
+      <created>1593777742115</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1593777742115</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="29292000" />
+    <option name="totallyTimeSpent" value="29817000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.88123167" visible="true" weight="0.22050938" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.8754647" visible="true" weight="0.22855228" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
       <window_info id="UI Designer" order="4" />
       <window_info id="Favorites" order="5" side_tool="true" />
       <window_info id="Capture Tool" order="6" />
-      <window_info id="Web" order="7" sideWeight="0.11876833" side_tool="true" visible="true" weight="0.22050938" />
-      <window_info anchor="bottom" id="Database Changes" />
-      <window_info anchor="bottom" id="Docker" show_stripe_button="false" />
+      <window_info id="Web" order="7" sideWeight="0.124535315" side_tool="true" visible="true" weight="0.22855228" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.34456354" />
       <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.143951" />
@@ -463,8 +494,9 @@
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.40888208" />
       <window_info anchor="bottom" id="Java Enterprise" order="11" />
-      <window_info anchor="bottom" id="Version Control" order="12" weight="0.2113323" />
-      <window_info anchor="right" id="Maven" />
+      <window_info anchor="bottom" id="Version Control" order="12" visible="true" weight="0.2111437" />
+      <window_info anchor="bottom" id="Docker" order="13" show_stripe_button="false" />
+      <window_info anchor="bottom" id="Database Changes" order="14" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -474,6 +506,7 @@
       <window_info anchor="right" id="Database" order="6" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info anchor="right" id="Theme Preview" order="8" />
+      <window_info anchor="right" id="Maven" order="9" />
     </layout>
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -483,7 +516,8 @@
     <MESSAGE value="项目的初始版本" />
     <MESSAGE value="增加了client的实体类，以及完成对clients的查找" />
     <MESSAGE value="完成实体类，部分类的列表查询，客户的修改，查询" />
-    <option name="LAST_COMMIT_MESSAGE" value="完成实体类，部分类的列表查询，客户的修改，查询" />
+    <MESSAGE value="劳务派遣中客户管理和员工管理" />
+    <option name="LAST_COMMIT_MESSAGE" value="劳务派遣中客户管理和员工管理" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/out/production/HRMS/c3p0-config.xml">

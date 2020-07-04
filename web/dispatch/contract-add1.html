@@ -35,43 +35,48 @@
             <div class="layui-row">
                 <form class="layui-form">
                     <div class="layui-form-item">
-                        <label for="L_city" class="layui-form-label">
-                        <span class="x-red">*</span>服务项目</label>
-                         <div class="layui-input-inline">
-                                <input type="checkbox"  title="发放工资" checked>
+                        <label for="L_city" class="layui-form-item">
+                        <span class="x-blue">服务项目-------------------</span></label>
+                         <div class="layui-form-item">
+                            <div class="layui-form-item">
+                                <div class="layui-inline"><input type="checkbox"  title="发放工资" checked></div>
+                                <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="工资发放日" autocomplete="off" class="layui-input"></div>
+                            </div>
+                            <div class="layui-input-inline">
                                 <input type="checkbox"  title="缴纳社保" checked>
                                 <input type="checkbox"  title="代缴社保" checked>
                                 <input type="checkbox"  title="缴纳公积金" checked>
                                 <input type="checkbox"  title="代缴公积金" checked>
                                 <input type="checkbox"  title="商业保险" checked>
+                            </div>
                          </div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_city" class="layui-form-label">
-                        <span class="x-red">*</span>服务费结算</label>
-                         <div class="layui-input-inline">
-                                <input type="checkbox"  title="按人数收取" checked>
-                                <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="50元/人/月" autocomplete="off" class="layui-input">
-                                <input type="checkbox"  title="按费用总额比例" checked>
-                                <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="2%" autocomplete="off" class="layui-input">
-                                <input type="checkbox"  title="小时工" checked>
-                                <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="60元/小时" autocomplete="off" class="layui-input">
-                                <input type="checkbox"  title="外包整体核算" checked>
-                                <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="5000元" autocomplete="off" class="layui-input">
+                        <label for="L_city" class="layui-form-item">
+                        <span class="x-blue">服务费结算----------------</span></label>
+                         <div class="layui-form-item">
+                            <div class="layui-form-item">
+                                <div class="layui-inline"><input type="radio" name="se" value="按人数收取" title="按人数收取" ></div>
+                                <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="50元/人/月" autocomplete="off" class="layui-input"></div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline"><input type="radio" name="se" value="按费用总额比例" title="按费用总额比例" checked></div>
+                                <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="2%" autocomplete="off" class="layui-input"></div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline"><input type="radio" name="se" value="小时工" title="小时工" ></div>
+                                <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="60元/小时" autocomplete="off" class="layui-input"></div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline"><input type="radio" name="se" value="外包整体核算" title="外包整体核算" ></div>
+                                <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="5000元" autocomplete="off" class="layui-input"></div>
+                            </div>
                          </div>
                     </div>
-                    <div class="layui-form-item">
-                        <label for="L_contacts" class="layui-form-label">
-                            <span class="x-red">*</span>结算日</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_contacts" class="layui-form-label">
-                            <span class="x-red">*</span>回款日</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="" autocomplete="off" class="layui-input"></div>
-                    </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="结算日" autocomplete="off" class="layui-input"></div>
+                                <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="回款日" autocomplete="off" class="layui-input"></div>
+                            </div>
                <div class="layui-form-item">
                         <label for="L_repass" class="layui-form-label"></label>
                         <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>

@@ -36,38 +36,35 @@
             <div class="layui-row">
                 <form class="layui-form">
                     <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-label">
-                            <span class="x-red">*</span>医保</label>
-                        <div class="layui-input-inline">
-                             <input type="radio" name="sex" value="最低标准" title="最低标准" checked>
-                             <input type="radio" name="sex" value="实际工资" title="实际工资" >
-                             <input type="radio" name="sex" value="自定义基数" title="自定义基数">
-                             <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="自定义基数" autocomplete="off" class="layui-input">
+                        <label for="L_username" class="layui-form-item">
+                            <span class="x-blue">医保-------------------------</span></label>
+                        <div class="layui-form-item">
+                             <div class="layui-inline"><input type="radio" name="sex" value="最低标准" title="最低标准" checked></div>
+                             <div class="layui-inline"><input type="radio" name="sex" value="实际工资" title="实际工资" ></div>
+                             <div class="layui-inline"><input type="radio" name="sex" value="自定义基数" title="自定义基数"></div>
+                             <div class="layui-inline"><input type="text" name="username" required=""  placeholder="自定义基数" autocomplete="off" class="layui-input" ></div>
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-label">
-                            <span class="x-red">*</span>社保基数</label>
-                        <div class="layui-input-inline">
-                             <input type="radio" name="se" value="最低标准" title="最低标准" checked>
-                             <input type="radio" name="se" value="实际工资" title="实际工资" >
-                             <input type="radio" name="se" value="自定义基数" title="自定义基数">
-                             <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="自定义基数" autocomplete="off" class="layui-input">
-                             <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="工伤比例" autocomplete="off" class="layui-input">
+                        <label for="L_username" class="layui-form-item" >
+                            <span class="x-blue">社保基数--------------------</span></label>
+                        <div class="layui-form-item">
+                             <div class="layui-inline"><input type="radio" name="se" value="最低标准" title="最低标准" checked></div>
+                             <div class="layui-inline"><input type="radio" name="se" value="实际工资" title="实际工资" ></div>
+                             <div class="layui-inline"><input type="radio" name="se" value="自定义基数" title="自定义基数"></div>
+                             <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="自定义基数" autocomplete="off" class="layui-input"></div>
+                             <div class="layui-input-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="工伤比例" placeholder="" autocomplete="off" class="layui-input"></div>
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-label">
-                            <span class="x-red">*</span>公积金</label>
-                        <div class="layui-input-inline">
+                        <label for="L_username" class="layui-form-item">
+                            <span class="x-blue">公积金-----------------------</span></label>
+                        <div class="layui-form-item">
+                        <div class="layui-inline">
                             <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="基数" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-label">
-                            <span class="x-red">*</span>公积金</label>
-                        <div class="layui-input-inline">
+                        <div class="layui-inline">
                             <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="比例" autocomplete="off" class="layui-input"></div>
-                    </div>
+                        </div>
                <div class="layui-form-item">
                         <label for="L_repass" class="layui-form-label"></label>
                         <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
