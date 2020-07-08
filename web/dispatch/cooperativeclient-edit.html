@@ -18,22 +18,16 @@
         <![endif]-->
     </head>
     <body>
-        <ul class="layui-nav" lay-filter="">
-            <li class="layui-nav-item "><a href="cooperativeclient-edit.html">基础信息</a></li>
-            <li class="layui-nav-item"><a href="cooperativeclient-edit1.html">财务信息</a></li>
-            <li class="layui-nav-item"><a href="cooperativeclient-edit2.html">部门</a></li>
-            <li class="layui-nav-item"><a href="cooperativeclient-edit3.html">工资定义</a></li>
-        </ul>
- 
-        <script>
-           //注意：导航 依赖 element 模块，否则无法进行功能性操作
-           layui.use('element', function(){
-           var element = layui.element;
-  
-           //…
-           });
-        </script>
-        <div class="layui-fluid">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+           <ul class="layui-tab-title">
+            <li class="layui-this">基础信息</li>
+            <li>财务信息</li>
+            <li>部门</li>
+            <li>工资定义</li>
+           </ul>
+           <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-fluid">
             <div class="layui-row">
                 <form class="layui-form">
                     <div class="layui-form-item">
@@ -94,7 +88,7 @@
                     </div>
                     <div class="layui-form-item layui-form-text">
                         <label  for="L_brief" class="layui-form-label">
-                        	<span class="x-red">*</span>客户简介</label>
+                            <span class="x-red">*</span>客户简介</label>
                         <div class="layui-input-block">
                             <textarea placeholder="暂无简介" class="layui-textarea"></textarea>
                         </div>
@@ -103,8 +97,113 @@
                         <label for="L_repass" class="layui-form-label"></label>
                         <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
                 </form>
+              </div>
+             </div>
             </div>
-        </div>
+            <div class="layui-tab-item">
+                <div class="layui-fluid">
+            <div class="layui-row">
+                <form class="layui-form">
+                    <div class="layui-form-item">
+                        <label for="L_username" class="layui-form-label">
+                            <span class="x-red">*</span>信用代码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="2566423548145882554" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="L_username" class="layui-form-label">
+                            <span class="x-red">*</span>开户行</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="建设银行" autocomplete="off" class="layui-input"></div>
+                    </div>
+                     <div class="layui-form-item">
+                        <label for="L_phone" class="layui-form-label">
+                            <span class="x-red">*</span>银行账户</label>
+                        <div class="layui-input-inline">
+                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" id="L_phone" name="phone" required="" placeholder="68539844528953641" autocomplete="off" class="layui-input"></div>
+                        </div>
+                    <div class="layui-form-item">
+                        <label for="L_contacts" class="layui-form-label">
+                            <span class="x-red">*</span>联系人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="L_contacts" name="contacts" required="" lay-verify="nikename" placeholder="方部长" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="L_phone" class="layui-form-label">
+                            <span class="x-red">*</span>联系电话</label>
+                        <div class="layui-input-inline">
+                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" id="L_phone" name="phone" required="" placeholder="15986345868" autocomplete="off" class="layui-input"></div>
+                        </div>
+                    <div class="layui-form-item">
+                        <label for="L_weixin" class="layui-form-label">
+                            <span class="x-red">*</span>公司地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="L_weixin" name="weixin" required="" placeholder="黑龙江省哈尔滨市" autocomplete="off" class="layui-input"></div>
+                    </div>
+               <div class="layui-form-item">
+                        <label for="L_repass" class="layui-form-label"></label>
+                        <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
+                </form>
+              </div>
+             </div>
+            </div>
+            <div class="layui-tab-item">
+                 <div class="layui-fluid">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">
+                          <button class="layui-btn" onclick="xadmin.open('添加新部门','cooperativeclient-add.html',600,400)"><i class="layui-icon"></i>添加</button>
+                        </div>
+                        <div class="layui-card-body ">
+                            <table class="layui-table layui-form">
+                              <thead>
+                                <tr cate-id='0' fid='0' >
+                                  <th width="100">部门名称</th>
+                                  <th width="20">联系人</th>
+                                  <th width="20">联系电话</th>
+                                  <th width="200">操作</th>
+                              </thead>
+                              <tbody class="x-cate">
+                                <tr cate-id='1' fid='0' >
+                                  <td>第一分公司</td>
+                                  <td>方部长</td>
+                                  <td>15986345868</td>
+                                  <td class="td-manage">
+                                    <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('详情','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>详情</button>
+                                    <button class="layui-btn  layui-btn-danger layui-btn-xs"  onclick="xadmin.open('删除','admin-edit.html')" ><i class="layui-icon">&#xe69d;</i>删除</button>
+                                  </td>
+                                </tr>
+                                <tr cate-id='1' fid='0' >
+                                  <td>第二分公司</td>
+                                  <td>李经理</td>
+                                  <td>15986358956</td>
+                                  <td class="td-manage">
+                                    <button class="layui-btn layui-btn layui-btn-xs"  onclick="xadmin.open('详情','admin-edit.html')" ><i class="layui-icon">&#xe642;</i>详情</button>
+                                    <button class="layui-btn  layui-btn-danger layui-btn-xs"  onclick="xadmin.open('删除','admin-edit.html')" ><i class="layui-icon">&#xe69d;</i>删除</button>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                        </div>
+                        <div class="layui-card-body ">
+                            <div class="page">
+                                <div>
+                                    <a class="prev" href="">&lt;&lt;</a>
+                                    <a class="num" href="">1</a>
+                                    <span class="current">2</span>
+                                    <a class="num" href="">3</a>
+                                    <a class="num" href="">489</a>
+                                    <a class="next" href="">&gt;&gt;</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+             </div>
+            </div>
+            <div class="layui-tab-item">工资定义</div>
+           </div>
         <script>layui.use(['form', 'layer','jquery'],
             function() {
                 $ = layui.jquery;
