@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>添加合同</title>
+        <title>修改合同</title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -18,20 +18,14 @@
         <![endif]-->
     </head>
     <body>
-        <ul class="layui-nav" lay-filter="">
-            <li class="layui-nav-item "><a href="contract-edit.html">基础信息</a></li>
-            <li class="layui-nav-item"><a href="contract-edit1.html">服务项目</a></li>
-        </ul>
- 
-        <script>
-           //注意：导航 依赖 element 模块，否则无法进行功能性操作
-           layui.use('element', function(){
-           var element = layui.element;
-  
-           //…
-           });
-        </script>
-        <div class="layui-fluid">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+           <ul class="layui-tab-title">
+            <li class="layui-this">基础信息</li>
+            <li>服务项目</li>
+           </ul>
+           <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <div class="layui-fluid">
             <div class="layui-row">
                 <form class="layui-form">
                     <div class="layui-form-item">
@@ -78,7 +72,7 @@
                     </div>
                     <div class="layui-form-item layui-form-text">
                         <label  for="L_brief" class="layui-form-label">
-                        	<span class="x-red">*</span>备注</label>
+                            <span class="x-red">*</span>备注</label>
                         <div class="layui-input-block">
                             <textarea placeholder="请输入内容" class="layui-textarea"></textarea>
                         </div>
@@ -92,8 +86,64 @@
                         <label for="L_repass" class="layui-form-label"></label>
                         <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
                 </form>
+              </div>
+             </div>
             </div>
-        </div>
+            <div class="layui-tab-item">
+                <div class="layui-fluid">
+            <div class="layui-row">
+                <form class="layui-form">
+                    <div class="layui-form-item">
+                        <label for="L_city" class="layui-form-item">
+                        <span class="x-blue">服务项目-------------------</span></label>
+                         <div class="layui-form-item">
+                            <div class="layui-form-item">
+                                <div class="layui-inline"><input type="checkbox"  title="发放工资" checked></div>
+                                <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="工资发放日" autocomplete="off" class="layui-input"></div>
+                            </div>
+                            <div class="layui-input-inline">
+                                <input type="checkbox"  title="缴纳社保" checked>
+                                <input type="checkbox"  title="代缴社保" checked>
+                                <input type="checkbox"  title="缴纳公积金" checked>
+                                <input type="checkbox"  title="代缴公积金" checked>
+                                <input type="checkbox"  title="商业保险" checked>
+                            </div>
+                         </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="L_city" class="layui-form-item">
+                        <span class="x-blue">服务费结算----------------</span></label>
+                         <div class="layui-form-item">
+                            <div class="layui-form-item">
+                                <div class="layui-inline"><input type="radio" name="se" value="按人数收取" title="按人数收取" ></div>
+                                <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="50元/人/月" autocomplete="off" class="layui-input"></div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline"><input type="radio" name="se" value="按费用总额比例" title="按费用总额比例" checked></div>
+                                <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="2%" autocomplete="off" class="layui-input"></div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline"><input type="radio" name="se" value="小时工" title="小时工" ></div>
+                                <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="60元/小时" autocomplete="off" class="layui-input"></div>
+                            </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline"><input type="radio" name="se" value="外包整体核算" title="外包整体核算" ></div>
+                                <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="5000元" autocomplete="off" class="layui-input"></div>
+                            </div>
+                         </div>
+                    </div>
+                            <div class="layui-form-item">
+                                <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="结算日" autocomplete="off" class="layui-input"></div>
+                                <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="回款日" autocomplete="off" class="layui-input"></div>
+                            </div>
+               <div class="layui-form-item">
+                        <label for="L_repass" class="layui-form-label"></label>
+                        <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
+                </form>
+              </div>
+             </div>
+            </div>
+           </div>
         <script>layui.use(['form', 'layer','jquery'],
             function() {
                 $ = layui.jquery;

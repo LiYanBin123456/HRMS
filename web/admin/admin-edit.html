@@ -18,21 +18,14 @@
         <![endif]-->
     </head>
     <body>
-        <ul class="layui-nav" lay-filter="">
-  <li class="layui-nav-item "><a href="admin-edit.html">基本信息</a></li>
-  <li class="layui-nav-item"><a href="admin-edit1.html">财务信息</a></li>
- 
-</ul>
- 
-<script>
-//注意：导航 依赖 element 模块，否则无法进行功能性操作
-layui.use('element', function(){
-  var element = layui.element;
-  
-  //…
-});
-</script>
-        <div class="layui-fluid">
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+           <ul class="layui-tab-title">
+            <li class="layui-this">基本信息</li>
+            <li>财务信息</li>
+           </ul>
+           <div class="layui-tab-content">
+             <div class="layui-tab-item layui-show">
+               <div class="layui-fluid">
             <div class="layui-row">
                 <form class="layui-form">
                     <div class="layui-form-item">
@@ -99,7 +92,62 @@ layui.use('element', function(){
                   </div>
               </form>
             </div>
+        </div> 
+             </div>
+             <div class="layui-tab-item">
+                <div class="layui-fluid">
+            <div class="layui-row">
+                <form class="layui-form">
+                    <div class="layui-form-item">
+                        <label for="L_username" class="layui-form-label">
+                            <span class="x-red">*</span>信用代码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="1233010078828217X8" autocomplete="off" class="layui-input"></div>
+                    </div>
+                   <div class="layui-form-item">
+                        <label for="L_username" class="layui-form-label">
+                            <span class="x-red">*</span>开户行</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="建设银行" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="L_contacts" class="layui-form-label">
+                            <span class="x-red">*</span>银行账户</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="L_contacts" name="contacts" required="" lay-verify="nikename" placeholder="62536525512341241354" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="L_address" class="layui-form-label">
+                            <span class="x-red">*</span>联系人</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="L_address" name="address" required="" placeholder="方部长" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="L_phone" class="layui-form-label">
+                            <span class="x-red">*</span>联系电话</label>
+                        <div class="layui-input-inline">
+                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" id="L_phone" name="phone" required="" placeholder="15986345868"  autocomplete="off" class="layui-input"></div>
+                        </div>
+                    <div class="layui-form-item">
+                        <label for="L_address" class="layui-form-label">
+                            <span class="x-red">*</span>公司地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="L_address" name="address" required="" placeholder="黑龙江省哈尔滨市" autocomplete="off" class="layui-input"></div>
+                    </div>
+                  <div class="layui-form-item">
+                      <label for="L_repass" class="layui-form-label">
+                      </label>
+                      <button  class="layui-btn" lay-filter="add" lay-submit="">
+                          修改
+                      </button>
+                  </div>
+              </form>
+            </div>
         </div>
+             </div>
+           </div>
+</div>
+       
         <script>layui.use(['form', 'layer'],
 
                 //监听提交
