@@ -70,16 +70,11 @@ var works_enterprise = [
 
 //----------------------------------------------------------------字段集合-----------------------
 //简历字段集合
-var columns_curriculum = [[
-    {fixed: 'left', type: 'checkbox'},
-    {field:'name', title: '姓名',width:100},
-    {field:'sex', title: '性别',width:100,templet:templet_sex},
-    {field:'birthday', title: '出生年月',width:130},
-    {field:'degree', title: '学历',width:100,templet:templet_degree},
-    {field:'phone', title: '电话',width:130},
-    {field:'positions', title: '期望职位'},
-    {field:'salary', title: '期望薪资',width:130,templet:templet_salary},
-    {fixed: 'right', title: '操作', toolbar: '#bar_curriculum',width:300}
+var columns_notice = [[
+    {field:'title', title: '主题'},
+    {field:'publisher', title: '发布人',width:100},
+    {field:'date', title: '发布时间',width:130},
+    {fixed: 'right', title: '操作', toolbar: '#bar_notice',width:200}
 ]];
 
 //简历字段集合
