@@ -69,7 +69,7 @@
                         <label for="L_city" class="layui-form-label">
                         <span class="x-red">*</span>地市</label>
                             <div class="layui-input-inline">
-                                <select name="city" lay-verify="required">
+                                <select name="city" lay-verify="required" lay-filter="city">
                                     <option value=""></option>
                                     <option value="0">北京</option>
                                     <option value="1">上海</option>
@@ -141,8 +141,7 @@
                 $ = layui.jquery;
                 var form = layui.form,
                 layer = layui.layer;
-
-
+                 
                 //监听提交
                 form.on('submit(add)',
                 function(data) {

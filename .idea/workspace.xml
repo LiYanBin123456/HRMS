@@ -6,18 +6,8 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5d83316-56ab-45ad-8caf-f6eb14ab1932" name="Default" comment="劳务派遣合同与员工">
+    <list default="true" id="c5d83316-56ab-45ad-8caf-f6eb14ab1932" name="Default" comment="劳务派遣合同与员工添加界面的改进">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/css/xadmin.css" beforeDir="false" afterPath="$PROJECT_DIR$/web/css/xadmin.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dispatch/contract-add1.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/contract-add1.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dispatch/contract-edit1.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/contract-edit1.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dispatch/contract-list.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/contract-list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dispatch/expatriates-add1.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/expatriates-add1.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dispatch/expatriates-edit1.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/expatriates-edit1.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dispatch/expatriates-list.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/expatriates-list.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dispatch/internalstaff-add1.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/internalstaff-add1.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dispatch/internalstaff-edit1.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/internalstaff-edit1.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/web/dispatch/supplier-add.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/dispatch/supplier-add.html" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -106,6 +96,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -113,12 +104,29 @@
               <item name="hrm" type="b2602c69:ProjectViewProjectNode" />
               <item name="hrm" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="hrm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hrm" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hrm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hrm" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="hrm" type="b2602c69:ProjectViewProjectNode" />
+              <item name="hrm" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="lib" type="462c0819:PsiDirectoryNode" />
+              <item name="layui" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -126,7 +134,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1593857437314" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1594169612697" />
     <property name="last_opened_file_path" value="E:/A1711实验班/shopping_parent" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
@@ -435,7 +443,8 @@
       <workItem from="1593739824055" duration="68000" />
       <workItem from="1593777613841" duration="226000" />
       <workItem from="1593851479892" duration="45000" />
-      <workItem from="1593857360137" duration="254000" />
+      <workItem from="1593857360137" duration="326000" />
+      <workItem from="1594108451810" duration="1262000" />
     </task>
     <task id="LOCAL-00001" summary="项目的初始版本">
       <created>1593004337566</created>
@@ -465,23 +474,30 @@
       <option name="project" value="LOCAL" />
       <updated>1593777742115</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="劳务派遣合同与员工添加界面的改进">
+      <created>1593857661359</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1593857661359</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="29817000" />
+    <option name="totallyTimeSpent" value="31151000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.8754647" visible="true" weight="0.22855228" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.87360597" visible="true" weight="0.23190348" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
       <window_info id="UI Designer" order="4" />
       <window_info id="Favorites" order="5" side_tool="true" />
       <window_info id="Capture Tool" order="6" />
-      <window_info id="Web" order="7" sideWeight="0.124535315" side_tool="true" visible="true" weight="0.22855228" />
+      <window_info id="Web" order="7" sideWeight="0.12639405" side_tool="true" visible="true" weight="0.23190348" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.34456354" />
       <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.143951" />
@@ -517,12 +533,10 @@
     <MESSAGE value="增加了client的实体类，以及完成对clients的查找" />
     <MESSAGE value="完成实体类，部分类的列表查询，客户的修改，查询" />
     <MESSAGE value="劳务派遣中客户管理和员工管理" />
-    <option name="LAST_COMMIT_MESSAGE" value="劳务派遣中客户管理和员工管理" />
+    <MESSAGE value="劳务派遣合同与员工添加界面的改进" />
+    <option name="LAST_COMMIT_MESSAGE" value="劳务派遣合同与员工添加界面的改进" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/out/production/HRMS/c3p0-config.xml">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/web/WEB-INF/web.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="162">
@@ -731,6 +745,27 @@
           <caret line="15" column="22" selection-start-line="15" selection-start-column="22" selection-end-line="15" selection-end-column="22" />
         </state>
       </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/css/theme1.css">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/js/xadmin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-8214">
+          <caret line="131" lean-forward="true" selection-start-line="131" selection-end-line="131" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/js/util.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/js/jquery.params.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3863" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/web/lib/layui/layui.js">
+      <provider selected="true" editor-type-id="text-editor" />
     </entry>
   </component>
 </project>
