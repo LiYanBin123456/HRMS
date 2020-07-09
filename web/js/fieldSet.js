@@ -86,6 +86,15 @@ var columns_pool = [[
     {fixed: 'right', title: '操作', toolbar: '#bar_pool',width:300}
 ]];
 
+//合作客户管理字段集合
+var columns_cooperativeclient = [[
+    {field:'name', title: '客户名称'},
+    {field:'nature', title: '客户性质',width:200},
+    {field:'linkman', title: '联系人',width:230},
+    {field:'phone', title: '联系电话',width:230},
+    {fixed: 'right', title: '操作', toolbar: '#bar_cooperativeclient',width:300}
+]];
+
 //劳务派遣客户合同字段集合
 var columns_contract = [[
     {field:'client', title: '合作客户'},
@@ -113,6 +122,15 @@ var columns_expatriate = [[
     {field:'phone', title: '联系电话',width:230},
     {field:'unit', title: '派遣单位',width:130},
     {fixed: 'right', title: '操作', toolbar: '#bar_expatriate',width:450}
+]];
+
+//员工合同字段集合
+var columns_staffcontract  = [[
+    {field:'name', title: '姓名'},
+    {field:'time', title: '生效时间',width:200},
+    {field:'finishtime', title: '到期时间',width:230},
+    {field:'number', title: '签订次数',width:230},
+    {fixed: 'right', title: '操作', toolbar: '#bar_staffcontract',width:300}
 ]];
 
 //简历字段集合
