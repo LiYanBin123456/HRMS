@@ -26,38 +26,36 @@
            </ul>
            <div class="layui-tab-content">
             <div class="layui-tab-item layui-show">
-              <div class="layui-fluid">
-               <div class="layui-row">
-                <form class="layui-form">
+                <form lay-filter="form_expatriate" class="layui-form">
                     <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-label">
+                        <label  class="layui-form-label">
                             <span class="x-red">*</span>档案编号</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                            <input type="text" " name="serial" required=""  autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-label">
+                        <label  class="layui-form-label">
                             <span class="x-red">*</span>身份证号</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                            <input type="text"  name="ID" required=""  autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-label">
+                        <label  class="layui-form-label">
                             <span class="x-red">*</span>姓名</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                            <input type="text"  name="name" required=""  autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_phone" class="layui-form-label">
+                        <label  class="layui-form-label">
                             <span class="x-red">*</span>联系电话</label>
                         <div class="layui-input-inline">
-                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" id="L_phone" name="phone" required="" autocomplete="off" class="layui-input"></div>
+                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');"  name="phone" required="" autocomplete="off" class="layui-input"></div>
                         </div>
                     <div class="layui-form-item">
                         <label for="L_city" class="layui-form-label">
                         <span class="x-red">*</span>学历</label>
                             <div class="layui-input-inline">
-                                <select name="nature" lay-verify="required">
+                                <select name="education" lay-verify="required">
                                     <option value=""></option>
                                     <option value="0">本科</option>
                                     <option value="1">大专</option>
@@ -66,28 +64,46 @@
                     </div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_contacts" class="layui-form-label">
+                        <label  class="layui-form-label">
                             <span class="x-red">*</span>毕业学校</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="L_contacts" name="contacts" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                            <input type="text"  name="school" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_phone" class="layui-form-label">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>毕业专业</label>
+                        <div class="layui-input-inline">
+                            <input type="text"  name="major" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
                             <span class="x-red">*</span>毕业时间</label>
                         <div class="layui-input-inline">
-                            <input type="text"  id="L_phone" name="phone" required="" autocomplete="off" class="layui-input"></div>
+                            <input type="text"   name="time" required="" autocomplete="off" class="layui-input"></div>
                         </div>
                     <div class="layui-form-item">
-                        <label for="L_weixin" class="layui-form-label">
+                        <label  class="layui-form-label">
                             <span class="x-red">*</span>入职时间</label>
                         <div class="layui-input-inline">
-                            <input type="text"  required="" autocomplete="off" class="layui-input"></div>
+                            <input type="text"  name="entrytime" required="" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_city" class="layui-form-label">
-                        <span class="x-red">*</span>在职状态</label>
+                        <label  class="layui-form-label">
+                        <span class="x-red">*</span>用工性质</label>
                             <div class="layui-input-inline">
                                 <select name="nature" lay-verify="required">
+                                    <option value=""></option>
+                                    <option value="0">派遣</option>
+                                    <option value="1">外包</option>
+                                    <option value="2">小时工</option>
+                            </select>
+                    </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                        <span class="x-red">*</span>在职状态</label>
+                            <div class="layui-input-inline">
+                                <select name="state" lay-verify="required">
                                     <option value=""></option>
                                     <option value="0">在职</option>
                                     <option value="1">离职</option>
@@ -96,23 +112,28 @@
                             </select>
                     </div>
                     </div>
-                     <div class="layui-form-item">
-                        <label for="L_city" class="layui-form-label">
-                        <span class="x-red">*</span>部门</label>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                        <span class="x-red">*</span>外派单位</label>
                             <div class="layui-input-inline">
-                                <select name="nature" lay-verify="required">
-                                    <option value=""></option>
-                                    <option value="0">客户一部</option>
-                                    <option value="1">财务部</option>
+                                <select name="unit" lay-verify="required">
                             </select>
                     </div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_weixin" class="layui-form-label">
+                        <label  class="layui-form-label">
+                        <span class="x-red">*</span>外派部门</label>
+                            <div class="layui-input-inline">
+                                <select name="department" lay-verify="required">
+                            </select>
+                    </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
                             <span class="x-red">*</span>岗位</label>
                         <div class="layui-input-inline">
-                            <input type="text"  required="" autocomplete="off" class="layui-input"></div>
-                    </div>
+                            <input type="text"  name="post" required="" autocomplete="off" class="layui-input"></div>
+                        </div>
                     <div class="layui-form-item">
                         <label for="L_uploading" class="layui-form-label"></label>
                         <button type="button" class="layui-btn" id="test1">
@@ -123,12 +144,8 @@
                         <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
                 </form>
               </div>
-             </div>
-            </div>
             <div class="layui-tab-item">
-              <div class="layui-fluid">
-                <div class="layui-row">
-                <form class="layui-form">
+                <form lay-filter="form_expatriate" class="layui-form">
                     <div class="layui-form-item">
                         <label for="L_username" class="layui-form-item">
                             <span class="x-blue">医保-------------------------</span></label>
@@ -165,89 +182,106 @@
                         <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
                 </form>
               </div>
-             </div>
-            </div>
             <div class="layui-tab-item">
-                <div class="layui-fluid">
-                <div class="layui-row">
-                <form class="layui-form">
+                <form lay-filter="form_expatriate" class="layui-form">
                     <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-label">
+                        <label  class="layui-form-label">
                             <span class="x-red">*</span>子女教育扣除额</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                            <input type="text"  name="children" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-label">
+                        <label  class="layui-form-label">
                             <span class="x-red">*</span>赡养老人</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                            <input type="text"  name="oldman" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-label">
+                        <label  class="layui-form-label">
                             <span class="x-red">*</span>继续教育</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                            <input type="text"  name="continue" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_phone" class="layui-form-label">
+                        <label  class="layui-form-label">
                             <span class="x-red">*</span>大病医疗</label>
                         <div class="layui-input-inline">
-                            <input type="text"  id="L_phone" name="phone" required="" autocomplete="off" class="layui-input"></div>
+                            <input type="text"   name="medical" required="" autocomplete="off" class="layui-input"></div>
                         </div>
                     <div class="layui-form-item">
-                        <label for="L_contacts" class="layui-form-label">
+                        <label  class="layui-form-label">
                             <span class="x-red">*</span>住院贷款利息</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="L_contacts" name="contacts" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                            <input type="text"  name="interest" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_phone" class="layui-form-label">
+                        <label  class="layui-form-label">
                             <span class="x-red">*</span>住房租金</label>
                         <div class="layui-input-inline">
-                            <input type="text"  id="L_phone" name="phone" required="" autocomplete="off" class="layui-input"></div>
+                            <input type="text"  name="rent" required="" autocomplete="off" class="layui-input"></div>
                         </div>
                <div class="layui-form-item">
                         <label for="L_repass" class="layui-form-label"></label>
                         <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
                 </form>
               </div>
-             </div>
-            </div>
            </div>
        </div>
-        <script>layui.use(['form', 'layer','jquery'],
-            function() {
-                $ = layui.jquery;
-                var form = layui.form,
-                layer = layui.layer;
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.params.js"></script>
+<script src="../js/interface.js"></script>
+<script>
+    var op = "insert";
+    var form;//表单对象
+    var editer;
 
+    loadLayuiModule();
 
-                //监听提交
-                form.on('submit(add)',
-                function(data) {
-                    console.log(data);
-                    //发异步，把数据提交给php
-                    layer.alert("增加成功", {
-                        icon: 6
-                    },
-                    function() {
-                        //关闭当前frame
-                        xadmin.close();
+    function loadLayuiModule() {
+        layui.use(['form', 'layedit','jquery'], function () {
+            form = layui.form;
+            layedit = layui.layedit;
+            editer = layedit.build('content'); //建立编辑器
+            initData();
+        });
+    }
 
-                        // 可以对父窗口进行刷新
-                        xadmin.father_reload();
-                    });
-                    return false;
-                });
+    function initData() {
+        var param = $.query.get("expatriate");
+        if (param) {
+            var expatriate = JSON.parse(param);
+            form.val('form_expatriate', expatriate);
+            layedit.setContent(editer, expatriate.content, false);
+            op = "update";
+        }
+    }
 
-            });</script>
-        <script>var _hmt = _hmt || []; (function() {
-                var hm = document.createElement("script");
-                hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-                var s = document.getElementsByTagName("script")[0];
-                s.parentNode.insertBefore(hm, s);
-            })();</script>
-    </body>
+    function save() {
+        var notice = form.val('form_expatriate');
+        if(op == "insert") {
+            iExpatriate.insert(expatriate, onInsertSuccess);
+        }else{
+            iExpatriate.update(expatriate,onUpdateSuccess);
+        }
+
+        function onInsertSuccess() {
+            layer.alert("添加成功", {icon: 6}, refresh());
+        }
+
+        function onUpdateSuccess() {
+            layer.alert("修改成功", {icon: 6}, refresh());
+        }
+
+        function refresh() {
+            // 获得frame索引
+            var index = parent.layer.getFrameIndex(window.name);
+            //关闭当前frame
+            parent.layer.close(index);
+            //修改成功后刷新父界面
+            window.parent.location.reload();
+        }
+    }
+</script>
 
 </html>

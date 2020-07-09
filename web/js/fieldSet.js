@@ -77,6 +77,44 @@ var columns_notice = [[
     {fixed: 'right', title: '操作', toolbar: '#bar_notice',width:200}
 ]];
 
+//人才字段集合
+var columns_pool = [[
+    {field:'ID', title: '身份证号'},
+    {field:'name', title: '姓名',width:200},
+    {field:'education', title: '学历',width:230},
+    {field:'phone', title: '联系电话',width:230},
+    {fixed: 'right', title: '操作', toolbar: '#bar_pool',width:300}
+]];
+
+//劳务派遣客户合同字段集合
+var columns_contract = [[
+    {field:'client', title: '合作客户'},
+    {field:'time', title: '生效时间',width:200},
+    {field:'expirationtime', title: '到期时间',width:230},
+    {field:'businesstype', title: '业务类型',width:230},
+    {fixed: 'right', title: '操作', toolbar: '#bar_contract',width:300}
+]];
+
+//内部员工管理字段集合
+var columns_internalstaff = [[
+    {field:'ID', title: '身份证号'},
+    {field:'name', title: '姓名',width:200},
+    {field:'education', title: '学历',width:130},
+    {field:'phone', title: '联系电话',width:230},
+    {field:'department', title: '所属部门',width:130},
+    {fixed: 'right', title: '操作', toolbar: '#bar_internalstaff',width:400}
+]];
+
+//外派员工管理字段集合
+var columns_expatriate = [[
+    {field:'ID', title: '身份证号'},
+    {field:'name', title: '姓名',width:200},
+    {field:'education', title: '学历',width:130},
+    {field:'phone', title: '联系电话',width:230},
+    {field:'unit', title: '派遣单位',width:130},
+    {fixed: 'right', title: '操作', toolbar: '#bar_expatriate',width:450}
+]];
+
 //简历字段集合
 var columns_collection = [[
     {fixed: 'left', type: 'checkbox'},

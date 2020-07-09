@@ -29,20 +29,20 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_notice">
-                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 发布公告</button>
+            <div class="layui-hide" id="top_bar_pool">
+                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加人才</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入要查找的主题">
+                        <input name="keyword" class="layui-input" placeholder="请输入要查找的人员">
                     </div>
                     <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                 </form>
             </div>
-            <table id="tbl_notice" lay-filter="filter_tb_notice"></table>
+            <table id="tbl_pool" lay-filter="filter_tb_pool"></table>
             <div id="pager"></div>
 
             <!--行内工具栏-->
-            <script type="text/html" id="bar_notice">
+            <script type="text/html" id="bar_pool">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
@@ -97,17 +97,17 @@
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_notice',
-                    toolbar: '#top_bar_notice', //开启头部工具栏，并为其绑定左侧模板
+                    elem: '#tbl_pool',
+                    toolbar: '#top_bar_pool', //开启头部工具栏，并为其绑定左侧模板
                     defaultToolbar: ['filter', 'exports', 'print'],//自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
-                    title: '职位列表',
+                    title: '人才列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_notice,
-                    id: 'tbl_notice'
+                    cols: columns_pool,
+                    id: 'tbl_pool'
                 });
 
                 //行内工具栏事件响应
-                table.on('tool(filter_tb_notice)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                table.on('tool(filter_tb_pool)', function(obj){ //注：tool 是工具条事件名，filter_tb_talentpool是table原始容器的属性lay-filter="对应的值"
                     var data = obj.data; //获得当前行数据
                     switch (obj.event){
                         case "detail":
@@ -120,7 +120,7 @@
                 });
 
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_notice)', function(obj){
+                table.on('toolbar(filter_tb_pool)', function(obj){
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
@@ -131,12 +131,12 @@
                     };
                 });
 
-                getNotices();
+                getTalentpool();
             }
 
-            function getNotices() {
-                var result = {total:100,rows:[{title:"主题1",publisher:"张三",date:"2020-6-21",brief:"摘要1",content:"正文1"},{title:"主题2",publisher:"李四",date:"2020-6-22",brief:"摘要2",content:"正文2"}]};
-                table.reload('tbl_notice', {
+            function getTalentpool() {
+                var result = {total:100,rows:[{ID:"360402197701233645",name:"赵阳",education:"大专",phone:"15986888888",school:"科技大专",major:"机械专业"},{ID:"360402197701233645",name:"李斌",education:"本科",phone:"15368425987",school:"科技大学",major:"土木工程专业"}]};
+                table.reload('tbl_pool', {
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
@@ -150,14 +150,14 @@
             //模糊查找
             function search(keyword) {
                 param_query.conditions.extra = keyword;
-                getNotices();
+                getTalentpool();
             }
 
             //打开详情对话框
-            function showDetailDlg(notice) {
-                var content = "../dialog/notice.html?notice="+encodeURIComponent(JSON.stringify(notice));
+            function showDetailDlg(pool) {
+                var content = "../dialog/pool.html?pool="+encodeURIComponent(JSON.stringify(pool));
                 layer.open({
-                    title:"公告详情",
+                    title:"人才详情",
                     type: 2,
                     area: ['800px', '600px'],
                     content: content
@@ -166,9 +166,9 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/notice.html";
+                var content = "../dialog/pool.html";
                 layer.open({
-                    title:"发布公告",
+                    title:"添加人才",
                     type: 2,
                     area: ['800px', '600px'],
                     content: content
@@ -176,11 +176,11 @@
             }
 
             //删除公告
-            function del(notice) {
-                layer.confirm('确定删除'+notice.title, {icon: 3, title:'删除公告'}, function(index){
-                    iNotice.delete(notice.id,function () {
+            function del(pool) {
+                layer.confirm('确定删除'+pool.title, {icon: 3, title:'删除公告'}, function(index){
+                    iPool.delete(pool.id,function () {
                         layer.close(index);
-                        getNotices();
+                        getTalentpool();
                         layer.msg('删除成功');
                     });
                 });
