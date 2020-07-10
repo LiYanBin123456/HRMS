@@ -57,7 +57,7 @@
         <![endif]-->
     </head>
     <body>
-        <form id="frmEdit" class="layui-form" lay-filter="frm">
+    <form id="frmEdit" lay-filter="form_medicalinsurance" class="layui-form" lay-filter="frm">
 
     <input type="hidden" name="id" lay-verify="" placeholder=""
 
@@ -66,7 +66,7 @@
     <table class="frm-layout" >
             <tr>
                     <div class="layui-form-item">
-                        <label for="L_city" class="layui-form-label">
+                        <label  class="layui-form-label">
                         <span class="x-red">*</span>地市</label>
                             <div class="layui-input-inline">
                                 <select name="city" lay-verify="required" lay-filter="city">
@@ -85,88 +85,110 @@
             <tr>    
                 <td class="title">生效时间</td>
 
-            <td><input type="text" name="unit" lay-verify="" placeholder=""
+            <td><input type="text" name="time" lay-verify="" placeholder=""
 
                     autocomplete="off" class="layui-input " value=""></td>
 
             <td class="title">基数</td>
 
-            <td style="width: 180px;"><input type="text" name="receiptDate" lay-verify="" placeholder=""
+            <td style="width: 180px;"><input type="text" name="cardinal" lay-verify="" placeholder=""
 
                     autocomplete="off" class="layui-input date " value=""></td>
             </tr>
             <tr>
                     <td class="title">医疗单位比例</td>
 
-            <td><input type="text" name="unit" lay-verify="" placeholder="%"
+            <td><input type="text" name="yiliaodanwei" lay-verify="" placeholder="%"
 
                     autocomplete="off" class="layui-input " value=""></td>
 
             <td class="title">医疗个人比例</td>
 
-            <td style="width: 180px;"><input type="text" name="receiptDate" lay-verify="" placeholder="%"
+            <td style="width: 180px;"><input type="text" name="yiliaogeren" lay-verify="" placeholder="%"
 
                     autocomplete="off" class="layui-input date " value=""></td>
             </tr>
             <tr>
                     <td class="title">大病单位</td>
 
-            <td><input type="text" name="unit" lay-verify="" placeholder="元"
+            <td><input type="text" name="dabingdanwei" lay-verify="" placeholder="元"
 
                     autocomplete="off" class="layui-input " value=""></td>
 
             <td class="title">大病个人</td>
 
-            <td style="width: 180px;"><input type="text" name="receiptDate" lay-verify="" placeholder="元"
+            <td style="width: 180px;"><input type="text" name="dabinggeren" lay-verify="" placeholder="元"
 
                     autocomplete="off" class="layui-input date " value=""></td>
             </tr>
             <tr>
                     <td class="title">生育单位比例</td>
 
-            <td><input type="text" name="unit" lay-verify="" placeholder="%"
+            <td><input type="text" name="shengyudanwei" lay-verify="" placeholder="%"
 
                     autocomplete="off" class="layui-input " value=""></td>
             </tr>
             <tr>
                <td colspan="4" style="text-align: center;">
-                        <button class="layui-btn" lay-filter="add" lay-submit="">添加</button></div>
-                        </tr>
-                </table>
-                </form>
-            
-        
-        <script>layui.use(['form', 'layer','jquery'],
-            function() {
-                $ = layui.jquery;
-                var form = layui.form,
-                layer = layui.layer;
-                 
-                //监听提交
-                form.on('submit(add)',
-                function(data) {
-                    console.log(data);
-                    //发异步，把数据提交给php
-                    layer.alert("增加成功", {
-                        icon: 6
-                    },
-                    function() {
-                        //关闭当前frame
-                        xadmin.close();
+                        <button class="layui-btn" lay-filter="add" lay-submit="" onclick="save()">修改</button></td>
+            </tr>
+    </table>
+    </form>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.params.js"></script>
+<script src="../js/interface.js"></script>
+<script>
+    var op = "insert";
+    var form;//表单对象
+    var editer;
 
-                        // 可以对父窗口进行刷新
-                        xadmin.father_reload();
-                    });
-                    return false;
-                });
+    loadLayuiModule();
 
-            });</script>
-        <script>var _hmt = _hmt || []; (function() {
-                var hm = document.createElement("script");
-                hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-                var s = document.getElementsByTagName("script")[0];
-                s.parentNode.insertBefore(hm, s);
-            })();</script>
-    </body>
+    function loadLayuiModule() {
+        layui.use(['form', 'layedit','jquery'], function () {
+            form = layui.form;
+            layedit = layui.layedit;
+            editer = layedit.build('content'); //建立编辑器
+            initData();
+        });
+    }
+
+    function initData() {
+        var param = $.query.get("medicalinsurance");
+        if (param) {
+            var medicalinsurance = JSON.parse(param);
+            form.val('form_medicalinsurance', medicalinsurance);
+            layedit.setContent(editer, medicalinsurance.content, false);
+            op = "update";
+        }
+    }
+
+    function save() {
+        var notice = form.val('form_medicalinsurance');
+        if(op == "insert") {
+            iMedicalinsurance.insert(medicalinsurance, onInsertSuccess);
+        }else{
+            iMedicalinsurance.update(medicalinsurance,onUpdateSuccess);
+        }
+
+        function onInsertSuccess() {
+            layer.alert("添加成功", {icon: 6}, refresh());
+        }
+
+        function onUpdateSuccess() {
+            layer.alert("修改成功", {icon: 6}, refresh());
+        }
+
+        function refresh() {
+            // 获得frame索引
+            var index = parent.layer.getFrameIndex(window.name);
+            //关闭当前frame
+            parent.layer.close(index);
+            //修改成功后刷新父界面
+            window.parent.location.reload();
+        }
+    }
+</script>
 
 </html>

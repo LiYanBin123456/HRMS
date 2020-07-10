@@ -69,7 +69,54 @@ var works_enterprise = [
 ]
 
 //----------------------------------------------------------------字段集合-----------------------
-//简历字段集合
+
+//管理员合作客户管理字段集合
+var columns_custemer = [[
+    {field:'name', title: '客户名称'},
+    {field:'linkman', title: '联系人',width:250},
+    {field:'phone', title: '联系电话',width:250},
+    {fixed: 'right', title: '操作', toolbar: '#bar_custemer',width:300}
+]];
+
+//医保规则字段集合
+var columns_medicalinsurance = [[
+    {field:'city', title: '所属城市'},
+    {field:'time', title: '生效时间',width:100},
+    {field:'cardinal', title: '基数',width:130},
+    {field:'yiliaodanwei', title: '医疗单位比例',width:150},
+    {field:'yiliaogeren', title: '医疗个人比例',width:150},
+    {field:'dabingdanwei', title: '大病单位',width:150},
+    {field:'dabinggeren', title: '大病个人',width:150},
+    {field:'shengyudanwei', title: '生育单位比例',width:150},
+    {fixed: 'right', title: '操作', toolbar: '#bar_medicalinsurance',width:200}
+]];
+
+//社保规则字段集合
+var columns_socialsecurity = [[
+    {field:'city', title: '所属城市'},
+    {field:'time', title: '生效时间',width:100},
+    {field:'cardinal', title: '基数',width:100},
+    {field:'yanglaodanwei', title: '养老单位比例',width:130},
+    {field:'yanglaogeren', title: '养老个人比例',width:130},
+    {field:'gongshangdanwei', title: '工伤单位比例',width:130},
+    {field:'gongshangbuchong', title: '工伤补充',width:130},
+    {field:'shiyedanwei', title: '失业单位比例',width:130},
+    {field:'shiyegeren', title: '失业个人比例',width:130},
+    {fixed: 'right', title: '操作', toolbar: '#bar_socialsecurity',width:200}
+]];
+
+//公积金规则字段集合
+var columns_accumulation = [[
+    {field:'city', title: '所属城市'},
+    {field:'time', title: '生效时间',width:170},
+    {field:'floor', title: '下限',width:170},
+    {field:'upper', title: '上限',width:170},
+    {field:'danweibili', title: '单位比例',width:170},
+    {field:'gerenbili', title: '个人比例',width:170},
+    {fixed: 'right', title: '操作', toolbar: '#bar_accumulation',width:200}
+]];
+
+//公告字段集合
 var columns_notice = [[
     {field:'title', title: '主题'},
     {field:'publisher', title: '发布人',width:100},
@@ -93,6 +140,14 @@ var columns_cooperativeclient = [[
     {field:'linkman', title: '联系人',width:230},
     {field:'phone', title: '联系电话',width:230},
     {fixed: 'right', title: '操作', toolbar: '#bar_cooperativeclient',width:300}
+]];
+
+//合作客户详情部门管理字段集合
+var columns_section = [[
+    {field:'name', title: '部门名称'},
+    {field:'linkman', title: '联系人',width:100},
+    {field:'phone', title: '联系电话',width:130},
+    {fixed: 'right', title: '操作', toolbar: '#bar_section',width:200}
 ]];
 
 //劳务派遣客户合同字段集合

@@ -27,31 +27,24 @@
     </head>
 
     <body class="layui-layout-body">
-        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-           <ul class="layui-tab-title">
-            <li class="layui-this">合作客户</li>
-            <li>供应商</li>
-            <li>潜在客户</li>
-           </ul>
-           <div class="layui-tab-content">
-            <div class="layui-tab-item layui-show">
-              <div style="padding: 5px;">
+        <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_cooperativeclient">
+            <div class="layui-hide" id="top_bar_custemer">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入要查找的主题">
+                        <input name="keyword" class="layui-input" placeholder="请输入要查找的客户名称或者联系人">
                     </div>
                     <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                 </form>
             </div>
-            <table id="tbl_cooperativeclient" lay-filter="filter_tb_cooperativeclient"></table>
+            <table id="tbl_custemer" lay-filter="filter_tb_custemer"></table>
             <div id="pager"></div>
 
             <!--行内工具栏-->
-            <script type="text/html" id="bar_cooperativeclient">
+            <script type="text/html" id="bar_custemer">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="contract"><i class="layui-icon layui-icon-edit"></i>合同</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
         </div>
@@ -98,28 +91,31 @@
                         if(!first){
                             param_query.pagination.page = obj.curr;
                             param_query.pagination.size = obj.limit;
-                            getNotices();
+                            getCustemers();
                         }
                     }
                 });
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_cooperativeclient',
-                    toolbar: '#top_bar_cooperativeclient', //开启头部工具栏，并为其绑定左侧模板
+                    elem: '#tbl_custemer',
+                    toolbar: '#top_bar_custemer', //开启头部工具栏，并为其绑定左侧模板
                     defaultToolbar: ['filter', 'exports', 'print'],//自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
-                    title: '合作客户列表',
+                    title: '客户列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_cooperativeclient,
-                    id: 'tbl_cooperativeclient'
+                    cols: columns_custemer,
+                    id: 'tbl_custemer'
                 });
 
                 //行内工具栏事件响应
-                table.on('tool(filter_tb_cooperativeclient)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                table.on('tool(filter_tb_custemer)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
                     var data = obj.data; //获得当前行数据
                     switch (obj.event){
                         case "detail":
                             showDetailDlg(data);
+                            break;
+                        case "contract":
+                            showContractDlg(data);
                             break;
                         case "del":
                             del(data);
@@ -128,7 +124,7 @@
                 });
 
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_cooperativeclient)', function(obj){
+                table.on('toolbar(filter_tb_custemer)', function(obj){
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
@@ -139,12 +135,12 @@
                     };
                 });
 
-                getCooperativeclients();
+                getCustemers();
             }
 
-            function getCooperativeclients() {
-                var result = {total:100,rows:[{ID:"1",name:"朝阳机械厂（6301）",nature:"内资企业",linkman:"方部长",phone:"15986345868",weixin:"15986345868",qq:"15264555528",site:"黑龙江省哈尔滨市",concise:"暂无简介",credit:"2566423548145882554",bank:"建设银行",account:"68539844528953641"},{ID:"2",name:"西江典展(3325)",nature:"外资企业",linkman:"李经理",phone:"15986358956",weixin:"15986358956",qq:"15264555528",site:"黑龙江省哈尔滨市",concise:"暂无简介",credit:"2566423548145882554",bank:"建设银行",account:"68539844528953641"}]};
-                table.reload('tbl_cooperativeclient', {
+            function getCustemers() {
+                var result = {total:100,rows:[{name:"九江市鲲鹏人力资源有限用丝（5614）",username:"鲲鹏人力",linkman:"方部长",phone:"15986345868",site:"黑龙江省哈尔滨市",weixin:"15986345868",qq:"159535455",mailbox:"159535455@qq.com",brief:"人力资源",credit:"1233010078828217X8",bank:"建设银行",account:"62536525512341241354"},{name:"江西国盛人力资源有限公司（2241）",username:"国盛人力",linkman:"李经理",phone:"15986345868",site:"黑龙江省哈尔滨市",weixin:"15986345868",qq:"159535455",mailbox:"159535455@qq.com",brief:"人力资源",credit:"1233010078828217X8",bank:"建设银行",account:"62536525512341241354"}]};
+                table.reload('tbl_custemer', {
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
@@ -158,14 +154,25 @@
             //模糊查找
             function search(keyword) {
                 param_query.conditions.extra = keyword;
-                getCooperativeclients();
+                getNotices();
             }
 
             //打开详情对话框
-            function showDetailDlg(cooperativeclient) {
-                var content = "../dialog/cooperativeclient.html?cooperativeclient="+encodeURIComponent(JSON.stringify(cooperativeclient));
+            function showDetailDlg(custemer) {
+                var content = "../dialog/custemer.html?custemer="+encodeURIComponent(JSON.stringify(custemer));
                 layer.open({
-                    title:"详情合作客户",
+                    title:"详情",
+                    type: 2,
+                    area: ['800px', '600px'],
+                    content: content
+                });
+            }
+
+            //打开合同对话框
+            function showContractDlg() {
+                var content = "admin-contract.html";
+                layer.open({
+                    title:"合同",
                     type: 2,
                     area: ['800px', '600px'],
                     content: content
@@ -174,9 +181,9 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/cooperativeclient.html";
+                var content = "../dialog/custemer.html";
                 layer.open({
-                    title:"添加合作客户",
+                    title:"添加新客户",
                     type: 2,
                     area: ['800px', '600px'],
                     content: content
@@ -184,23 +191,16 @@
             }
 
             //删除公告
-            function del(cooperativeclient) {
-                layer.confirm('确定删除'+notice.title, {icon: 3, title:'删除公告'}, function(index){
-                    iNotice.delete(notice.id,function () {
+            function del(custemer) {
+                layer.confirm('确定删除'+custemer.title, {icon: 3, title:'删除'}, function(index){
+                    iCustemer.delete(custemer.id,function () {
                         layer.close(index);
-                        getCooperativeclients();
+                        getCustemers();
                         layer.msg('删除成功');
                     });
                 });
             }
+
         </script>
-            </div>
-            <div class="layui-tab-item">
-              2
-            </div>
-            <div class="layui-tab-item">
-              3
-            </div>
-           </div>
     </body>
 </html>

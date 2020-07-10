@@ -57,7 +57,7 @@
         <![endif]-->
     </head>
     <body>
-        <form id="frmEdit" class="layui-form" lay-filter="frm">
+        <form id="frmEdit" lay-filter="form_accumulation" class="layui-form" lay-filter="frm">
 
     <input type="hidden" name="id" lay-verify="" placeholder=""
 
@@ -76,82 +76,104 @@
                                     <option value="2">广州</option>
                                     <option value="3">深圳</option>
                                     <option value="4">杭州</option>
+                                    <option value="5">九江</option>
                             </select>
                     </td>
 
 
                  <td class="title">生效时间</td>
 
-                 <td style="width: 180px;"><input type="text" name="receiptDate" lay-verify="" placeholder=""
+                 <td style="width: 180px;"><input type="text" name="time" lay-verify="" placeholder=""
 
                     autocomplete="off" class="layui-input date " value=""></td>
             </tr>
             <tr>
                     <td class="title">公积金下限</td>
 
-            <td><input type="text" name="unit" lay-verify="" placeholder=""
+            <td><input type="text" name="floor" lay-verify="" placeholder=""
 
                     autocomplete="off" class="layui-input " value=""></td>
 
             <td class="title">公积金上限</td>
 
-            <td style="width: 180px;"><input type="text" name="receiptDate" lay-verify="" placeholder=""
+            <td style="width: 180px;"><input type="text" name="upper" lay-verify="" placeholder=""
 
                     autocomplete="off" class="layui-input date " value=""></td>
             </tr>
             <tr>
                     <td class="title">单位比例</td>
 
-            <td><input type="text" name="unit" lay-verify="" placeholder="%"
+            <td><input type="text" name="danweibili" lay-verify="" placeholder="%"
 
                     autocomplete="off" class="layui-input " value=""></td>
 
             <td class="title">个人比例</td>
 
-            <td style="width: 180px;"><input type="text" name="receiptDate" lay-verify="" placeholder="%"
+            <td style="width: 180px;"><input type="text" name="gerenbili" lay-verify="" placeholder="%"
 
                     autocomplete="off" class="layui-input date " value=""></td>
             </tr>
             <tr>
                <td colspan="4" style="text-align: center;">
-                        <button class="layui-btn" lay-filter="add" lay-submit="">添加</button></div>
-                        </tr>
-                </table>
-                </form>
-            
-        
-        <script>layui.use(['form', 'layer','jquery'],
-            function() {
-                $ = layui.jquery;
-                var form = layui.form,
-                layer = layui.layer;
+                        <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button></td>
+            </tr>
+    </table>
+    </form>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.params.js"></script>
+<script src="../js/interface.js"></script>
+<script>
+    var op = "insert";
+    var form;//表单对象
+    var editer;
 
+    loadLayuiModule();
 
-                //监听提交
-                form.on('submit(add)',
-                function(data) {
-                    console.log(data);
-                    //发异步，把数据提交给php
-                    layer.alert("增加成功", {
-                        icon: 6
-                    },
-                    function() {
-                        //关闭当前frame
-                        xadmin.close();
+    function loadLayuiModule() {
+        layui.use(['form', 'layedit','jquery'], function () {
+            form = layui.form;
+            layedit = layui.layedit;
+            editer = layedit.build('content'); //建立编辑器
+            initData();
+        });
+    }
 
-                        // 可以对父窗口进行刷新
-                        xadmin.father_reload();
-                    });
-                    return false;
-                });
+    function initData() {
+        var param = $.query.get("accumulation");
+        if (param) {
+            var accumulation = JSON.parse(param);
+            form.val('form_accumulation', accumulation);
+            layedit.setContent(editer, accumulation.content, false);
+            op = "update";
+        }
+    }
 
-            });</script>
-        <script>var _hmt = _hmt || []; (function() {
-                var hm = document.createElement("script");
-                hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-                var s = document.getElementsByTagName("script")[0];
-                s.parentNode.insertBefore(hm, s);
-            })();</script>
-    </body>
+    function save() {
+        var accumulation = form.val('form_accumulation');
+        if(op == "insert") {
+            iAccumulation.insert(accumulation, onInsertSuccess);
+        }else{
+            iAccumulation.update(accumulation,onUpdateSuccess);
+        }
+
+        function onInsertSuccess() {
+            layer.alert("添加成功", {icon: 6}, refresh());
+        }
+
+        function onUpdateSuccess() {
+            layer.alert("修改成功", {icon: 6}, refresh());
+        }
+
+        function refresh() {
+            // 获得frame索引
+            var index = parent.layer.getFrameIndex(window.name);
+            //关闭当前frame
+            parent.layer.close(index);
+            //修改成功后刷新父界面
+            window.parent.location.reload();
+        }
+    }
+</script>
 
 </html>

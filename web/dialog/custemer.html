@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+    
+    <head>
+        <meta charset="UTF-8">
+        <title>详情</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+        <link rel="stylesheet" href="../css/font.css">
+        <link rel="stylesheet" href="../css/xadmin.css">
+        <script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../js/xadmin.js"></script>
+        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+        <!--[if lt IE 9]>
+            <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+            <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+           <ul class="layui-tab-title">
+            <li class="layui-this">基本信息</li>
+            <li>财务信息</li>
+           </ul>
+           <div class="layui-tab-content">
+             <div class="layui-tab-item layui-show">
+                <form lay-filter="form_custemer" class="layui-form">
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>客户名称</label>
+                        <div class="layui-input-inline">
+                            <input type="text"  name="name" required="" lay-verify="nikename" placeholder="" autocomplete="off" class="layui-input"></div>
+                    </div>
+                   <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>简称</label>
+                        <div class="layui-input-inline">
+                            <input type="text"  name="username" required="" lay-verify="nikename" placeholder="" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>联系人</label>
+                        <div class="layui-input-inline">
+                            <input type="text"  name="linkman" required="" lay-verify="nikename" placeholder="" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>联系电话</label>
+                        <div class="layui-input-inline">
+                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');"  name="phone" required="" placeholder=""  autocomplete="off" class="layui-input"></div>
+                        </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text"  name="site" required="" placeholder="" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>微信号</label>
+                        <div class="layui-input-inline">
+                            <input type="text"  name="weixin" required="" placeholder="" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>QQ号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="qq" required="" placeholder="" autocomplete="off" class="layui-input"></div>
+                        </div>
+                        <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>邮箱</label>
+                        <div class="layui-input-inline">
+                            <input type="text"  name="mailbox" required="" lay-verify="nikename" placeholder="" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label  class="layui-form-label">
+                          <span class="x-red">*</span>单位简介</label>
+                        <div class="layui-input-block">
+                            <textarea name="brief" placeholder="" class="layui-textarea"></textarea>
+                        </div>
+                        </div>
+                  <div class="layui-form-item">
+                      <label  class="layui-form-label">
+                      </label>
+                      <button  class="layui-btn" onclick="save()" lay-filter="add" lay-submit="">
+                          保存
+                      </button>
+                  </div>
+              </form> 
+             </div>
+             <div class="layui-tab-item">
+                <form lay-filter="form_custemer" class="layui-form">
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>信用代码</label>
+                        <div class="layui-input-inline">
+                            <input type="text"  name="credit" required=""  placeholder="" autocomplete="off" class="layui-input"></div>
+                    </div>
+                   <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>开户行</label>
+                        <div class="layui-input-inline">
+                            <input type="text"  name="bank" required="" lay-verify="nikename" placeholder="" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>银行账户</label>
+                        <div class="layui-input-inline">
+                            <input type="text"  name="account" required="" lay-verify="nikename" placeholder="" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>联系人</label>
+                        <div class="layui-input-inline">
+                            <input type="text"  name="linkman" required="" placeholder="" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>联系电话</label>
+                        <div class="layui-input-inline">
+                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');"  name="phone" required="" placeholder=""  autocomplete="off" class="layui-input"></div>
+                        </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>公司地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text"  name="site" required="" placeholder="" autocomplete="off" class="layui-input"></div>
+                    </div>
+                  <div class="layui-form-item">
+                      <label for="L_repass" class="layui-form-label">
+                      </label>
+                      <button  class="layui-btn" onclick="save()" lay-filter="add" lay-submit="">
+                          保存
+                      </button>
+                  </div>
+              </form>
+             </div>
+           </div>
+        </div>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.params.js"></script>
+<script src="../js/interface.js"></script>
+<script>
+    var op = "insert";
+    var form;//表单对象
+    var editer;
+
+    loadLayuiModule();
+
+    function loadLayuiModule() {
+        layui.use(['form', 'layedit','jquery'], function () {
+            form = layui.form;
+            layedit = layui.layedit;
+            editer = layedit.build('content'); //建立编辑器
+            initData();
+        });
+    }
+
+    function initData() {
+        var param = $.query.get("custemer");
+        if (param) {
+            var custemer = JSON.parse(param);
+            form.val('form_custemer', custemer);
+            layedit.setContent(editer, custemer.content, false);
+            op = "update";
+        }
+    }
+
+    function save() {
+        var custemer = form.val('form_custemer');
+        if(op == "insert") {
+            iCustemer.insert(custemer, onInsertSuccess);
+        }else{
+            iCustemer.update(custemer,onUpdateSuccess);
+        }
+
+        function onInsertSuccess() {
+            layer.alert("添加成功", {icon: 6}, refresh());
+        }
+
+        function onUpdateSuccess() {
+            layer.alert("修改成功", {icon: 6}, refresh());
+        }
+
+        function refresh() {
+            // 获得frame索引
+            var index = parent.layer.getFrameIndex(window.name);
+            //关闭当前frame
+            parent.layer.close(index);
+            //修改成功后刷新父界面
+            window.parent.location.reload();
+        }
+    }
+</script>
+
+</html>
