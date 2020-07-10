@@ -6,7 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5d83316-56ab-45ad-8caf-f6eb14ab1932" name="Default" comment="修改：员工合同管理，部分客户资料管理">
+    <list default="true" id="c5d83316-56ab-45ad-8caf-f6eb14ab1932" name="Default" comment="管理员">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -97,6 +97,7 @@
     </navigator>
     <panes>
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -131,7 +132,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -139,7 +139,7 @@
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1594291355178" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1594366426281" />
     <property name="last_opened_file_path" value="E:/A1711实验班/shopping_parent" />
     <property name="project.structure.last.edited" value="Artifacts" />
     <property name="project.structure.proportion" value="0.15" />
@@ -458,6 +458,7 @@
       <workItem from="1594268766934" duration="225000" />
       <workItem from="1594291314079" duration="125000" />
       <workItem from="1594344594891" duration="44000" />
+      <workItem from="1594366292923" duration="256000" />
     </task>
     <task id="LOCAL-00001" summary="项目的初始版本">
       <created>1593004337566</created>
@@ -522,23 +523,30 @@
       <option name="project" value="LOCAL" />
       <updated>1594291421268</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="管理员">
+      <created>1594366502719</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1594366502719</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32918000" />
+    <option name="totallyTimeSpent" value="33174000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.8589981" visible="true" weight="0.25871313" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.85714287" visible="true" weight="0.26206434" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
       <window_info id="UI Designer" order="4" />
       <window_info id="Favorites" order="5" side_tool="true" />
       <window_info id="Capture Tool" order="6" />
-      <window_info id="Web" order="7" sideWeight="0.14100185" side_tool="true" visible="true" weight="0.25871313" />
+      <window_info id="Web" order="7" sideWeight="0.14285715" side_tool="true" visible="true" weight="0.26206434" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.34456354" />
       <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.143951" />
@@ -548,10 +556,10 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Application Servers" order="7" weight="0.32903227" />
       <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50402147" side_tool="true" visible="true" weight="0.20967741" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50469166" side_tool="true" visible="true" weight="0.20967741" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.40888208" />
       <window_info anchor="bottom" id="Java Enterprise" order="11" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="12" sideWeight="0.49597856" visible="true" weight="0.20967741" />
+      <window_info active="true" anchor="bottom" id="Version Control" order="12" sideWeight="0.4953083" visible="true" weight="0.20967741" />
       <window_info anchor="bottom" id="Docker" order="13" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="14" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
@@ -579,7 +587,8 @@
     <MESSAGE value="页面调整" />
     <MESSAGE value="修改：人才库，客户合同管理，内部员工管理，外派员工管理" />
     <MESSAGE value="修改：员工合同管理，部分客户资料管理" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改：员工合同管理，部分客户资料管理" />
+    <MESSAGE value="管理员" />
+    <option name="LAST_COMMIT_MESSAGE" value="管理员" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/database/QueryParameter.java">

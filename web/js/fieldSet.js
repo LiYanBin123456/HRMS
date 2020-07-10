@@ -142,6 +142,16 @@ var columns_cooperativeclient = [[
     {fixed: 'right', title: '操作', toolbar: '#bar_cooperativeclient',width:300}
 ]];
 
+//供应商管理字段集合
+var columns_supplier = [[
+    {field:'name', title: '名称',width:300},
+    {field:'nature', title: '性质',width:200},
+    {field:'sort', title: '业务类别',width:178},
+    {field:'linkman', title: '联系人',width:200},
+    {field:'phone', title: '联系电话',width:200},
+    {fixed: 'right', title: '操作', toolbar: '#bar_supplier',width:200}
+]];
+
 //合作客户详情部门管理字段集合
 var columns_section = [[
     {field:'name', title: '部门名称'},

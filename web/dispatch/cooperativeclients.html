@@ -41,7 +41,7 @@
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入要查找的主题">
+                        <input name="keyword" class="layui-input" placeholder="请输入要查找的合作客户">
                     </div>
                     <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                 </form>
@@ -185,8 +185,8 @@
 
             //删除公告
             function del(cooperativeclient) {
-                layer.confirm('确定删除'+notice.title, {icon: 3, title:'删除公告'}, function(index){
-                    iNotice.delete(notice.id,function () {
+                layer.confirm('确定删除'+cooperativeclient.title, {icon: 3, title:'删除'}, function(index){
+                    iNotice.delete(cooperativeclient.id,function () {
                         layer.close(index);
                         getCooperativeclients();
                         layer.msg('删除成功');
@@ -196,7 +196,165 @@
         </script>
             </div>
             <div class="layui-tab-item">
-              2
+              <div style="padding: 5px;">
+            <!--顶部工具栏-->
+            <div class="layui-hide" id="top_bar_supplier">
+                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
+                <form class="layui-form searchbox">
+                    <div class="layui-input-inline">
+                        <input name="keyword" class="layui-input" placeholder="请输入要查找的供应商">
+                    </div>
+                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                </form>
+            </div>
+            <table id="tbl_supplier" lay-filter="filter_tb_supplier"></table>
+            <div id="pager1"></div>
+
+            <!--行内工具栏-->
+            <script type="text/html" id="bar_supplier">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+            </script>
+        </div>
+        <script src="../js/fieldSet.js"></script>
+        <script src="../js/interface.js"></script>
+        <script>
+            var table;//数据表格对象
+            var laypage;//分页对象
+            var form;//分页对象
+            var layer;//弹出窗口
+            var element;
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            $(function () {
+                loadLayuiModule1();
+            });
+
+            function loadLayuiModule1() {
+                layui.use(['table','form','element','layer','laypage'], function() {
+                    table = layui.table;
+                    layer = layui.layer;
+                    element = layui.element;
+                    laypage = layui.laypage;
+                    form = layui.form;
+                    initPage1();
+                });
+            }
+
+            function initPage1() {
+                initTable1();
+                form.on('submit(search)', function (data) {
+                    var keyword = data.field.keyword;
+                    search(keyword);
+                });
+            }
+
+            function initTable1() {
+                //初始化分页
+                laypage.render({
+                    elem: 'pager1'
+                    ,count: 10 //数据总数
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+                    ,jump: function(obj,first){
+                        //首次不执行
+                        if(!first){
+                            param_query.pagination.page = obj.curr;
+                            param_query.pagination.size = obj.limit;
+                            getSuppliers();
+                        }
+                    }
+                });
+
+                //初始化数据表格
+                table.render({
+                    elem: '#tbl_supplier',
+                    toolbar: '#top_bar_supplier', //开启头部工具栏，并为其绑定左侧模板
+                    defaultToolbar: ['filter', 'exports', 'print'],//自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                    title: '供应商列表',
+                    cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                    cols: columns_supplier,
+                    id: 'tbl_supplier'
+                });
+
+                //行内工具栏事件响应
+                table.on('tool(filter_tb_supplier)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                    var data = obj.data; //获得当前行数据
+                    switch (obj.event){
+                        case "detail":
+                            showDetailDlg1(data);
+                            break;
+                        case "del":
+                            del(data);
+                            break;
+                    }
+                });
+
+                //顶部工具栏事件处理
+                table.on('toolbar(filter_tb_supplier)', function(obj){
+                    switch(obj.event){
+                        case 'insert':
+                            showInsertDlg1();
+                            break;
+                        case 'search':
+                            search();
+                            break;
+                    };
+                });
+
+                getSuppliers();
+            }
+
+            function getSuppliers() {
+                var result = {total:100,rows:[{name:"科技中专",nature:"学校",sort:"顶岗实习",linkman:"赵老师",phone:"18966666633",site:"江西九江",weixin:"18966666633",qq:"122565458",business:"教育",remark:"暂无备注"},{name:"国棉四厂",nature:"工厂",sort:"就业安置",linkman:"李科长",phone:"18966666633",site:"江西九江",weixin:"18966666633",qq:"122565458",business:"棉花",remark:"暂无备注"}]};
+                table.reload('tbl_supplier', {
+                    data:result.rows
+                });
+                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
+                /*iNotice.getList(param_query,function (result) {
+                    table.reload('tbl_notice', {
+                        data:result.rows
+                    });
+                });*/
+            }
+
+            //模糊查找
+            function search(keyword) {
+                param_query.conditions.extra = keyword;
+                getNotices();
+            }
+
+            //打开详情对话框
+            function showDetailDlg1(supplier) {
+                var content = "../dialog/supplier.html?supplier="+encodeURIComponent(JSON.stringify(supplier));
+                layer.open({
+                    title:"详情",
+                    type: 2,
+                    area: ['800px', '600px'],
+                    content: content
+                });
+            }
+
+            //打开添加对话框
+            function showInsertDlg1() {
+                var content = "../dialog/supplier.html";
+                layer.open({
+                    title:"添加",
+                    type: 2,
+                    area: ['800px', '600px'],
+                    content: content
+                });
+            }
+
+            //删除公告
+            function del(supplier) {
+                layer.confirm('确定删除'+supplier.title, {icon: 3, title:'删除'}, function(index){
+                    iSupplier.delete(supplier.id,function () {
+                        layer.close(index);
+                        getSuppliers();
+                        layer.msg('删除成功');
+                    });
+                });
+            }
+        </script>
             </div>
             <div class="layui-tab-item">
               3
