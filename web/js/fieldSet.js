@@ -148,16 +148,8 @@ var columns_supplier = [[
     {field:'nature', title: '性质',width:80},
     {field:'sort', title: '业务类别',width:90},
     {field:'linkman', title: '联系人',width:100},
-    {field:'phone', title: '联系电话',width:100},
+    {field:'phone', title: '联系电话',width:150},
     {fixed: 'right', title: '操作', toolbar: '#bar_supplier',width:200}
-]];
-
-//合作客户详情部门管理字段集合
-var columns_section = [[
-    {field:'name', title: '部门名称'},
-    {field:'linkman', title: '联系人',width:100},
-    {field:'phone', title: '联系电话',width:130},
-    {fixed: 'right', title: '操作', toolbar: '#bar_section',width:200}
 ]];
 
 //劳务派遣客户合同字段集合

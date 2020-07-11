@@ -35,42 +35,56 @@
                     </div>
                <div class="layui-form-item">
                         <label for="L_repass" class="layui-form-label"></label>
-                        <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
+                        <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button></div>
                 </form>
             </div>
         </div>
-        <script>layui.use(['form', 'layer','jquery'],
-            function() {
-                $ = layui.jquery;
-                var form = layui.form,
-                layer = layui.layer;
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.params.js"></script>
+<script src="../js/interface.js"></script>
+<script>
+    var op = "insert";
+    var form;//表单对象
+    var editer;
+
+    loadLayuiModule();
+
+    function loadLayuiModule() {
+        layui.use(['form', 'layedit','jquery'], function () {
+            form = layui.form;
+            layedit = layui.layedit;
+            editer = layedit.build('content'); //建立编辑器
+            initData();
+        });
+    }
 
 
-                //监听提交
-                form.on('submit(add)',
-                function(data) {
-                    console.log(data);
-                    //发异步，把数据提交给php
-                    layer.alert("增加成功", {
-                        icon: 6
-                    },
-                    function() {
-                        //关闭当前frame
-                        xadmin.close();
+    function save() {
+        var notice = form.val('form_expatriate');
+        if(op == "insert") {
+            iExpatriate.insert(expatriate, onInsertSuccess);
+        }else{
+            iExpatriate.update(expatriate,onUpdateSuccess);
+        }
 
-                        // 可以对父窗口进行刷新
-                        xadmin.father_reload();
-                    });
-                    return false;
-                });
+        function onInsertSuccess() {
+            layer.alert("添加成功", {icon: 6}, refresh());
+        }
 
-            });</script>
-        <script>var _hmt = _hmt || []; (function() {
-                var hm = document.createElement("script");
-                hm.src = "https://hm.baidu.com/hm.js?b393d153aeb26b46e9431fabaf0f6190";
-                var s = document.getElementsByTagName("script")[0];
-                s.parentNode.insertBefore(hm, s);
-            })();</script>
-    </body>
+        function onUpdateSuccess() {
+            layer.alert("修改成功", {icon: 6}, refresh());
+        }
+
+        function refresh() {
+            // 获得frame索引
+            var index = parent.layer.getFrameIndex(window.name);
+            //关闭当前frame
+            parent.layer.close(index);
+            //修改成功后刷新父界面
+            window.parent.location.reload();
+        }
+    }
+</script>
 
 </html>

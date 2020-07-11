@@ -77,12 +77,6 @@
                     </div>
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
-                            <span class="x-red">*</span>毕业时间</label>
-                        <div class="layui-input-inline">
-                            <input type="text"   name="time" required="" autocomplete="off" class="layui-input"></div>
-                        </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
                             <span class="x-red">*</span>入职时间</label>
                         <div class="layui-input-inline">
                             <input type="text"  name="entrytime" required="" autocomplete="off" class="layui-input"></div>
@@ -123,14 +117,6 @@
                         <span class="x-red">*</span>外派单位</label>
                             <div class="layui-input-inline">
                                 <select name="unit" lay-verify="required">
-                            </select>
-                    </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                        <span class="x-red">*</span>外派部门</label>
-                            <div class="layui-input-inline">
-                                <select name="department" lay-verify="required">
                             </select>
                     </div>
                     </div>
@@ -228,7 +214,7 @@
                         </div>
                <div class="layui-form-item">
                         <label for="L_repass" class="layui-form-label"></label>
-                        <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
+                        <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button></div>
                 </form>
               </div>
            </div>

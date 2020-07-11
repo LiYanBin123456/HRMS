@@ -37,6 +37,11 @@
                     </div>
                     <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                 </form>
+                <div class="layui-form searchbox" >
+                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon layui-icon-radio" ></i> 全部</button>
+                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon layui-icon-radio"></i> 合作中</button>
+                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon layui-icon-radio"></i> 潜在</button>
+                </div>
             </div>
             <table id="tbl_custemer" lay-filter="filter_tb_custemer"></table>
             <div id="pager"></div>
