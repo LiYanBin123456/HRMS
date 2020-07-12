@@ -190,6 +190,21 @@ var columns_staffcontract  = [[
     {fixed: 'right', title: '操作', toolbar: '#bar_staffcontract',width:300}
 ]];
 
+//工资管理字段集合
+var columns_salsry  = [[
+    {field:'unit', title: '客户单位'},
+    {field:'month', title: '月份',width:200},
+    {field:'sort', title: '类别',width:200},
+    {fixed: 'right', title: '操作', toolbar: '#bar_salsry',width:300}
+]];
+
+//账号管理字段集合
+var columns_account  = [[
+    {field:'name', title: '姓名'},
+    {field:'ID', title: '登录账号',width:200},
+    {fixed: 'right', title: '操作', toolbar: '#bar_account',width:200}
+]];
+
 //简历字段集合
 var columns_collection = [[
     {fixed: 'left', type: 'checkbox'},
