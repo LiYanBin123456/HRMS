@@ -25,8 +25,8 @@ public class DbUtil {
         QueryRunner qr = new QueryRunner();
         try {
             result.success = true;
-            long id = qr.insert(conn,sql,new ScalarHandler<>(),params);
-            result.extra = id;
+            result.extra= qr.insert(conn,sql,new ScalarHandler<>(),params);
+
         } catch (SQLException e) {
             e.printStackTrace();
             result.success = false;
@@ -77,6 +77,7 @@ public class DbUtil {
         }
         return result;
     }
+
 
     public static DaoUpdateResult batch(Connection conn, String sql, Object [][]params){
         DaoUpdateResult result = new DaoUpdateResult();
@@ -137,6 +138,32 @@ public class DbUtil {
             }
             System.out.println("getList===sql=="+sql1);
             System.out.println("getList===sql=="+sql2);
+        }catch (SQLException e){
+            result.success = false;
+            result.msg = "数据库操作错误";
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    /**
+     * 获取某个数据库列表的总数
+     * @param conn
+     * @param table
+     * @param conditions
+     * @return
+     */
+    public static DaoQueryListResult getCounts(Connection conn,String table,QueryConditions conditions){
+        String sql = String.format("select count(*) from %s where 1=1 and ",table);
+        String condition = conditions.toString();
+        sql +=condition;
+        System.out.println(sql);
+        QueryRunner qr = new QueryRunner();
+        DaoQueryListResult result = new DaoQueryListResult();
+        try {
+            Object[] values = conditions.extraValues().toArray();
+            result.total = qr.query(conn, sql, new ScalarHandler<Long>(), values);
         }catch (SQLException e){
             result.success = false;
             result.msg = "数据库操作错误";
@@ -227,6 +254,32 @@ public class DbUtil {
 
             System.out.println(result.data);
             System.out.println("get==sql=="+sql);
+        }catch (SQLException e){
+            result.success = false;
+            result.msg = "数据库操作错误";
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
+    /**
+     * 删除
+     * @param conn
+     * @param table
+     * @param conditions
+     * @return
+     */
+    public static DaoUpdateResult delete(Connection conn, String table,QueryConditions conditions){
+        String sql = String.format("delete  from %s where ",table);
+        String condition = conditions.toString();
+        sql += condition;
+        DaoUpdateResult result = new DaoUpdateResult();
+        QueryRunner qr = new QueryRunner();
+        try {
+            List<Object> values = conditions.extraValues();
+            result.effects = qr.update(conn, sql, values.toArray());
+            result.success = true;
         }catch (SQLException e){
             result.success = false;
             result.msg = "数据库操作错误";

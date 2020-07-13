@@ -1,7 +1,7 @@
 package bean.admin;
 
 public class Contract {
-    private String id;//合同id（规则为类型+年份+四位编号，如“A20200001”）
+    private String id;//合同id（规则为类型+年份+四位编号，如“A2020000001”）
     private long cid;//外键  客户id
     private String sign;//合同签订的时间
     private String start;//合同生效时间
@@ -11,6 +11,16 @@ public class Contract {
     private int status;//状态：0-正常；1-过期
 
     public Contract() {
+    }
+
+    public Contract(long cid, String sign, String start, String end, String type, String accessory, int status) {
+        this.cid = cid;
+        this.sign = sign;
+        this.start = start;
+        this.end = end;
+        this.type = type;
+        this.accessory = accessory;
+        this.status = status;
     }
 
     public Contract(String id, long cid, String sign, String start, String end, String type, String accessory, int status) {

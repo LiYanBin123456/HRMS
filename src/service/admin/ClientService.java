@@ -28,4 +28,11 @@ public class ClientService {
     public DaoUpdateResult insertClient(Connection conn, Client client) {
         return clientDao.insertClient(conn,client);
     }
+
+    public DaoUpdateResult deleteClient1(Connection conn, long id) {
+        return clientDao.deleteClient1(conn,id);
+    }
+    public DaoUpdateResult deleteClient2(Connection conn, long id) {
+        return clientDao.deleteClient2(conn,id);
+    }
 }

@@ -27,4 +27,8 @@ public class Rule_medicalService {
     public DaoUpdateResult insertMedical(Connection conn, Rule_medical medical) {
         return rule_medicalDao.insertMedical(conn,medical);
     }
+
+    public DaoUpdateResult deleteMedical(Connection conn, long id) {
+        return rule_medicalDao.deleteMedical(conn,id);
+    }
 }

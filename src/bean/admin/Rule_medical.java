@@ -8,12 +8,13 @@ public class Rule_medical {
     private float per1;//医疗单位比例
     private float per2;//医疗个人比例
     private float per3;//生育单位比例
-    private float per4;//生育个人比例
+    private float per4;//大病单位
+    private float per5;//大病个人
 
     public Rule_medical() {
     }
 
-    public Rule_medical(long id, String city, String start, int base, float per1, float per2, float per3, float per4) {
+    public Rule_medical(long id, String city, String start, int base, float per1, float per2, float per3, float per4, float per5) {
         this.id = id;
         this.city = city;
         this.start = start;
@@ -22,6 +23,15 @@ public class Rule_medical {
         this.per2 = per2;
         this.per3 = per3;
         this.per4 = per4;
+        this.per5 = per5;
+    }
+
+    public float getPer5() {
+        return per5;
+    }
+
+    public void setPer5(float per5) {
+        this.per5 = per5;
     }
 
     public String getStart() {
@@ -100,6 +110,7 @@ public class Rule_medical {
                 ", per2=" + per2 +
                 ", per3=" + per3 +
                 ", per4=" + per4 +
+                ", per5=" + per5 +
                 '}';
     }
 }

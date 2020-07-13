@@ -40,6 +40,9 @@ public class Rule_socialServlet extends HttpServlet {
             case "insertSocial"://获取所有公积金清单
                 result = insertSocial(conn,request);
                 break;
+            case "deleteSocial"://获取所有公积金清单
+                result = deleteSocial(conn,request);
+                break;
         }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
@@ -48,13 +51,14 @@ public class Rule_socialServlet extends HttpServlet {
         out.close();
     }
 
+
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
 
     private String getSocials(Connection conn,HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
-
         DaoQueryListResult res =socialService.getRule_socialList(conn,parameter);
         return JSONObject.toJSONString(res);
     }
@@ -74,6 +78,12 @@ public class Rule_socialServlet extends HttpServlet {
     private String insertSocial(Connection conn, HttpServletRequest request) {
         Rule_social social = JSONObject.parseObject(request.getParameter("rule_social"), Rule_social.class);
         DaoUpdateResult res = socialService.insertSocial(conn,social);
+        return JSONObject.toJSONString(res);
+    }
+
+    private String deleteSocial(Connection conn, HttpServletRequest request) {
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoUpdateResult res= socialService.deleteSocial(conn,id);
         return JSONObject.toJSONString(res);
     }
 }

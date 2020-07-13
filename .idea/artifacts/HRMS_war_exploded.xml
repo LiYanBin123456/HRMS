@@ -2,7 +2,6 @@
   <artifact type="exploded-war" name="HRMS:war exploded">
     <output-path>$PROJECT_DIR$/out/artifacts/HRMS_war_exploded</output-path>
     <root id="root">
-      <element id="javaee-facet-resources" facet="HRMS/web/Web" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="HRMS" />
@@ -12,6 +11,8 @@
           <element id="file-copy" path="$PROJECT_DIR$/jar/comm/servlet-api.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/jar/comm/xmlpull_1_0_5.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/jar/comm/xstream-1.4.8.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/jar/comm/commons-io-1.4.jar" />
+          <element id="file-copy" path="$PROJECT_DIR$/jar/comm/commons-fileupload-1.2.2.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/jar/comm/mchange-commons-java-0.2.11.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/jar/db/jxl.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/jar/db/c3p0-0.9.5.2.jar" />
@@ -19,8 +20,10 @@
           <element id="file-copy" path="$PROJECT_DIR$/jar/db/commons-dbutils-1.7.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/jar/db/mysql-connector-java-5.1.37-bin.jar" />
           <element id="file-copy" path="$PROJECT_DIR$/jar/fastJSON/fastjson-1.2.41.jar" />
+          <element id="library" level="project" name="commons-fileupload-1.2.2" />
         </element>
       </element>
+      <element id="javaee-facet-resources" facet="HRMS/web/Web" />
     </root>
   </artifact>
 </component>

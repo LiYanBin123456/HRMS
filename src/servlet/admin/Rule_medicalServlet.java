@@ -39,6 +39,9 @@ public class Rule_medicalServlet extends HttpServlet {
             case "insertMedical"://获取所有公积金清单
                 result = insertMedical(conn,request);
                 break;
+            case "deleteMedical"://获取所有公积金清单
+                result = deleteMedical(conn,request);
+                break;
         }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
@@ -46,6 +49,8 @@ public class Rule_medicalServlet extends HttpServlet {
         out.flush();
         out.close();
     }
+
+
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -74,6 +79,11 @@ public class Rule_medicalServlet extends HttpServlet {
     private String insertMedical(Connection conn, HttpServletRequest request) {
         Rule_medical medical = JSONObject.parseObject(request.getParameter("rule_medical"), Rule_medical.class);
         DaoUpdateResult res = medicalService.insertMedical(conn,medical);
+        return JSONObject.toJSONString(res);
+    }
+    private String deleteMedical(Connection conn, HttpServletRequest request) {
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoUpdateResult res= medicalService.deleteMedical(conn,id);
         return JSONObject.toJSONString(res);
     }
 }

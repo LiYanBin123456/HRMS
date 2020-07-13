@@ -27,4 +27,8 @@ public class Rule_socialService {
     public DaoUpdateResult insertSocial(Connection conn, Rule_social social) {
         return rule_socialDao.insertSocial(conn,social);
     }
+
+    public DaoUpdateResult deleteSocial(Connection conn, long id) {
+        return rule_socialDao.deleteSocial(conn,id);
+    }
 }

@@ -52,4 +52,10 @@ public class NoticeDao {
         Object []params = {n.getTitle(),n.getBrief(),n.getContent(),n.getPublisher(),n.getDate()};
         return  DbUtil.insert(conn,sql,params);
     }
+
+    public DaoUpdateResult deleteNotice(Connection conn, long id) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id","=",id);
+        return DbUtil.delete(conn,"notice",conditions);
+    }
 }

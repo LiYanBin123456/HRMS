@@ -36,4 +36,10 @@ public class Rule_medicalDao {
         Object []param ={m.getCity(),m.getStart(),m.getBase(),m.getPer1(),m.getPer2(),m.getPer3(),m.getPer4()};
         return  DbUtil.insert(conn,sql,param);
     }
+
+    public DaoUpdateResult deleteMedical(Connection conn, long id) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id","=",id);
+        return DbUtil.delete(conn,"rule_medical",conditions);
+    }
 }

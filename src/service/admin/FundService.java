@@ -27,4 +27,8 @@ public class FundService {
     public DaoUpdateResult insertFund(Connection conn, Fund fund) {
         return fundDao.insertFund(conn,fund);
     }
+
+    public DaoUpdateResult deleteFund(Connection conn, long id) {
+        return  fundDao.deleteFund(conn,id);
+    }
 }

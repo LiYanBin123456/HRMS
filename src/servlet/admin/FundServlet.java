@@ -39,6 +39,9 @@ public class FundServlet extends HttpServlet {
             case "insertFund"://获取所有公积金清单
                 result = insertFund(conn,request);
                 break;
+            case "deleteFund"://获取所有公积金清单
+                result = deleteFund(conn,request);
+                break;
         }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
@@ -46,6 +49,8 @@ public class FundServlet extends HttpServlet {
         out.flush();
         out.close();
     }
+
+
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
@@ -73,6 +78,12 @@ public class FundServlet extends HttpServlet {
     private String insertFund(Connection conn,HttpServletRequest request){
         Fund fund = JSONObject.parseObject(request.getParameter("fund"), Fund.class);
         DaoUpdateResult res=fundService.insertFund(conn,fund);
+        return JSONObject.toJSONString(res);
+    }
+
+    private String deleteFund(Connection conn, HttpServletRequest request) {
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoUpdateResult res= fundService.deleteFund(conn,id);
         return JSONObject.toJSONString(res);
     }
 }

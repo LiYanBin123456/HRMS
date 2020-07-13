@@ -9,10 +9,6 @@
         <webroots>
           <root url="file://$MODULE_DIR$/web" relative="/" />
         </webroots>
-        <sourceRoots>
-            <root url="file://$MODULE_DIR$/src" />
-            <root url="file://$MODULE_DIR$/src/main/java" />
-        </sourceRoots>
       </configuration>
     </facet>
   </component>
@@ -23,7 +19,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
           <root url="file://$MODULE_DIR$/jar/comm" />
@@ -33,7 +29,7 @@
         <jarDirectory url="file://$MODULE_DIR$/jar/comm" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
           <root url="file://$MODULE_DIR$/jar/db" />
@@ -43,7 +39,7 @@
         <jarDirectory url="file://$MODULE_DIR$/jar/db" recursive="false" />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
+    <orderEntry type="module-library" exported="">
       <library>
         <CLASSES>
           <root url="file://$MODULE_DIR$/jar/fastJSON" />
@@ -53,5 +49,6 @@
         <jarDirectory url="file://$MODULE_DIR$/jar/fastJSON" recursive="false" />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="commons-fileupload-1.2.2" level="project" />
   </component>
 </module>

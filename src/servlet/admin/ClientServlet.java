@@ -43,6 +43,12 @@ public class ClientServlet extends HttpServlet {
             case "insertClient"://添加一个客户
                 result = insertClient(conn,request);
                 break;
+            case "deleteClient1"://删除潜在客户
+                result = deleteClient1(conn,request);
+                break;
+            case "deleteClient2"://删除合作客户
+                result = deleteClient2(conn,request);
+                break;
         }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
@@ -51,11 +57,25 @@ public class ClientServlet extends HttpServlet {
         out.close();
     }
 
+    private String deleteClient2(Connection conn, HttpServletRequest request) {
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoUpdateResult res = clientService.deleteClient2(conn,id);
+        return JSONObject.toJSONString(res);
+    }
+
+    //删除潜在客户
+    private String deleteClient1(Connection conn, HttpServletRequest request) {
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoUpdateResult res = clientService.deleteClient1(conn,id);
+        return JSONObject.toJSONString(res);
+    }
+
     //获取客户列表
     private String getClients(Connection conn,HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
 
         DaoQueryListResult res =clientService.getClientList(conn,parameter);
+        System.out.println(res);
         return JSONObject.toJSONString(res);
     }
 

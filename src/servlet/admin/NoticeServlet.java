@@ -1,6 +1,5 @@
 package servlet.admin;
 
-import bean.admin.Client;
 import bean.admin.Notice;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -48,6 +47,11 @@ public class NoticeServlet extends HttpServlet {
                 result = insertNotice(conn,request);
                 break;
         }
+        switch (op) {
+            case "deleteNotice"://获取所有公积金清单
+                result = deleteNotice(conn,request);
+                break;
+        }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
         out.print(result);
@@ -55,6 +59,8 @@ public class NoticeServlet extends HttpServlet {
         out.close();
 
     }
+
+
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
@@ -96,5 +102,12 @@ public class NoticeServlet extends HttpServlet {
         DaoUpdateResult res = noticeService.insertNotice(conn, notice);
 
         return JSONObject.toJSONString(res);
+    }
+
+    private String deleteNotice(Connection conn, HttpServletRequest request) {
+        long id = Long.parseLong(request.getParameter("id"));
+
+        DaoUpdateResult res = noticeService.deleteNotice(conn,id);
+        return  JSONObject.toJSONString(res);
     }
 }

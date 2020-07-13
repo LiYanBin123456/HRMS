@@ -37,4 +37,10 @@ public class Rule_socialDao {
         Object[] param = {s.getCity(), s.getStart(), s.getBase(), s.getPer1(), s.getPer2(), s.getPer3(), s.getExtra(),s.getPer4(),s.getPer5()};
         return DbUtil.insert(conn, sql, param);
     }
+
+    public DaoUpdateResult deleteSocial(Connection conn, long id) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id", "=", id);
+        return DbUtil.delete(conn,"rule_social",conditions);
+    }
 }

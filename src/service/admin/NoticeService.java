@@ -1,6 +1,6 @@
 package service.admin;
 
-import bean.admin.Client;
+
 import bean.admin.Notice;
 import dao.admin.NoticeDao;
 import database.DaoQueryListResult;
@@ -27,5 +27,9 @@ public class NoticeService {
 
     public DaoUpdateResult insertNotice(Connection conn, Notice notice) {
         return noticeDao.insertNotice(conn,notice);
+    }
+
+    public DaoUpdateResult deleteNotice(Connection conn, long id) {
+        return  noticeDao.deleteNotice(conn,id);
     }
 }

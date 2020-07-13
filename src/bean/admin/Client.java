@@ -2,19 +2,27 @@ package bean.admin;
 
 public class Client {
     private long id;
-    private String name;
+    private String rid;//档案编号
+    private String name;//全称
+    private String nickname;//昵称
+
     /**
      * 客户类型
       0_平台管理员管理劳务派遣单位
       1_劳务派遣单位管理合作单位
      */
     private int type;
+
     /**
      *是否为合作客户
-     1_ 合作客户
      0_ 潜在客户
+     1_合作客户
+     2_供应商(劳务派遣单位才有)
+
      */
     private int status;
+
+
     /**
      * 客户性质，只有派遣单位才有
      0_政府部门
@@ -31,11 +39,11 @@ public class Client {
      */
     private int category;
     private String address;
-    private String contact;//地址
-    private String phone;//电话
+    private String contact;
+    private String phone;
     private String wx;
     private String qq;
-    private String intro;//介绍
+    private String intro;
 
     public long getId() {
         return id;
@@ -125,12 +133,32 @@ public class Client {
         this.intro = intro;
     }
 
+
+    public String getRid() {
+
+        return rid;
+    }
+
+    public void setRid(String rid) {
+        this.rid = rid;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     public Client() {
     }
 
-    public Client(long id, String name, int type, int status, int category, String address, String contact, String phone, String wx, String qq, String intro) {
+    public Client(long id, String rid, String name, String nickname, int type, int status, int category, String address, String contact, String phone, String wx, String qq, String intro) {
         this.id = id;
+        this.rid = rid;
         this.name = name;
+        this.nickname = nickname;
         this.type = type;
         this.status = status;
         this.category = category;
@@ -141,6 +169,7 @@ public class Client {
         this.qq = qq;
         this.intro = intro;
     }
+
 
     @Override
     public String toString() {

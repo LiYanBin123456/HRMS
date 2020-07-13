@@ -1,6 +1,8 @@
 package bean.admin;
 
-public class Service {
+//合同服务项目
+public class C_Service {
+
     private long id;//服务项目id
     private String cid;//外键  合同id
     private int project;//位运算，每一位表示一种服务项目的有无  第0位 发放工资  第1位  代缴社保   第2位 代缴公积金  例如（010 代表  代缴社保）
@@ -10,10 +12,10 @@ public class Service {
     private int settlement;//结算日
     private int receipt;//回款日
 
-    public Service() {
+    public C_Service() {
     }
 
-    public Service(long id, String cid, int project, int category, float value, int payment, int settlement, int receipt) {
+    public C_Service(long id, String cid, int project, int category, float value, int payment, int settlement, int receipt) {
         this.id = id;
         this.cid = cid;
         this.project = project;
@@ -90,7 +92,7 @@ public class Service {
 
     @Override
     public String toString() {
-        return "Service{" +
+        return "C_Service{" +
                 "id=" + id +
                 ", cid='" + cid + '\'' +
                 ", project=" + project +

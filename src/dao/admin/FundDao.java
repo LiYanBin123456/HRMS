@@ -28,6 +28,12 @@ public class FundDao {
         return DbUtil.get(conn,"fund",conditions,Fund.class);
     }
 
+    public DaoUpdateResult deleteFund(Connection conn, long id){
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id","=",id);
+        return DbUtil.delete(conn,"fund",conditions);
+    }
+
     public DaoUpdateResult updateFund(Connection conn, Fund f) {
         String sql = "update fund set city=?,start=?,base=?,min=?,max=?,per1=?,per2=? where id=?";
         Object []params = { f.getCity(),f.getStart(),f.getBase(),f.getMin(),f.getMax(),f.getPer1(),f.getPer2(),f.getId()};
