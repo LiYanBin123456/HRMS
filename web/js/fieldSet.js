@@ -173,12 +173,12 @@ var columns_internalstaff = [[
 
 //外派员工管理字段集合
 var columns_expatriate = [[
-    {field:'ID', title: '身份证号'},
-    {field:'name', title: '姓名',width:200},
-    {field:'education', title: '学历',width:130},
-    {field:'phone', title: '联系电话',width:230},
-    {field:'unit', title: '派遣单位',width:130},
-    {fixed: 'right', title: '操作', toolbar: '#bar_expatriate',width:450}
+    {field:'ID', title: '身份证号',width:180},
+    {field:'name', title: '姓名',width:80},
+    {field:'education', title: '学历',width:100},
+    {field:'phone', title: '联系电话',width:120},
+    {field:'unit', title: '派遣单位',width:150},
+    {fixed: 'right', title: '操作', toolbar: '#bar_expatriate'}
 ]];
 
 //员工合同字段集合
@@ -194,8 +194,61 @@ var columns_staffcontract  = [[
 var columns_salsry  = [[
     {field:'unit', title: '客户单位'},
     {field:'month', title: '月份',width:200},
+    {field:'money', title: '金额',width:200},
+    {field:'state', title: '状态',width:200},
     {field:'sort', title: '类别',width:200},
     {fixed: 'right', title: '操作', toolbar: '#bar_salsry',width:300}
+]];
+
+//工资管理明细字段集合
+var columns_detail  = [[
+    {field:'ID', title: '身份证号',edit: 'text'},
+    {field:'name', title: '张晓国',width:80,edit: 'text'},
+    {field:'money', title: '基本工资',width:80,edit: 'text'},
+    {field:'post', title: '岗位补贴',width:80,edit: 'text'},
+    {field:'house', title: '住房补助',width:80,edit: 'text'},
+    {field:'traffic', title: '交通补助',width:80,edit: 'text'},
+    {field:'shebao', title: '社保',width:80,edit: 'text'},
+    {field:'gongjijin', title: '公积金',width:80,edit: 'text'},
+    {field:'geshui', title: '个税',width:80,edit: 'text'},
+    {field:'kaoqin', title: '考勤扣款',width:80,edit: 'text'},
+    {field:'shifa', title: '实发',width:80,edit: 'text'},
+    {fixed: 'right', title: '操作', toolbar: '#bar_detail',width:80}
+]];
+
+//工资明细添加字段集合
+var columns_staff  = [[
+    {type:'checkbox'},
+    {field:'ID', title: '身份证号',width:400},
+    {field:'name', title: '姓名',width:100},
+    {field:'unit', title: '派遣单位',width:200},
+]];
+
+//工资查看日志字段集合
+var columns_log  = [[
+    {field:'time', title: '日期'},
+    {field:'executor', title: '执行人',width:100},
+    {field:'content', title: '操作内容',width:200},
+]];
+
+//工资结算待审核字段集合
+var columns_audit  = [[
+    {field:'unit', title: '客户单位'},
+    {field:'month', title: '月份',width:100},
+    {field:'money', title: '金额',width:100},
+    {field:'state', title: '状态',width:100},
+    {field:'sort', title: '类别',width:100},
+    {fixed: 'right', title: '操作', toolbar: '#bar_audit',width:200}
+]];
+
+//工资结算到账确认字段集合
+var columns_confirm  = [[
+    {field:'unit', title: '客户单位'},
+    {field:'month', title: '月份',width:100},
+    {field:'money', title: '金额',width:100},
+    {field:'state', title: '状态',width:100},
+    {field:'sort', title: '类别',width:100},
+    {fixed: 'right', title: '操作', toolbar: '#bar_confirm',width:100}
 ]];
 
 //账号管理字段集合
