@@ -29,24 +29,16 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_internalstaff">
-                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加员工</button>
-                <form class="layui-form searchbox">
-                    <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
-                    </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-                </form>
+            <div class="layui-hide" id="top_bar_account">
+                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
             </div>
-            <table id="tbl_internalstaff" lay-filter="filter_tb_internalstaff"></table>
+            <table id="tbl_account" lay-filter="filter_tb_account"></table>
             <div id="pager"></div>
 
             <!--行内工具栏-->
-            <script type="text/html" id="bar_internalstaff">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dimission"><i class="layui-icon layui-icon-edit"></i> 离职</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="retire"><i class="layui-icon layui-icon-edit"></i> 退休</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 移入人才库</a>
+            <script type="text/html" id="bar_account">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
         </div>
         <script src="../js/fieldSet.js"></script>
@@ -69,17 +61,10 @@
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
-                    initPage();
+                    initTable();
                 });
             }
 
-            function initPage() {
-                initTable();
-                form.on('submit(search)', function (data) {
-                    var keyword = data.field.keyword;
-                    search(keyword);
-                });
-            }
 
             function initTable() {
                 //初始化分页
@@ -92,34 +77,28 @@
                         if(!first){
                             param_query.pagination.page = obj.curr;
                             param_query.pagination.size = obj.limit;
-                            getNotices();
+                            getAccounts();
                         }
                     }
                 });
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_internalstaff',
-                    toolbar: '#top_bar_internalstaff', //开启头部工具栏，并为其绑定左侧模板
+                    elem: '#tbl_account',
+                    toolbar: '#top_bar_account', //开启头部工具栏，并为其绑定左侧模板
                     defaultToolbar: ['filter', 'exports', 'print'],//自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
-                    title: '内部员工列表',
+                    title: '列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_internalstaff,
-                    id: 'tbl_internalstaff'
+                    cols: columns_account,
+                    id: 'tbl_account'
                 });
 
                 //行内工具栏事件响应
-                table.on('tool(filter_tb_internalstaff)', function(obj){ //注：tool 是工具条事件名，filter_tb_internalstaff是table原始容器的属性lay-filter="对应的值"
+                table.on('tool(filter_tb_account)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
                     var data = obj.data; //获得当前行数据
                     switch (obj.event){
                         case "detail":
                             showDetailDlg(data);
-                            break;
-                        case "dimission":
-                            showDimissionDlg(data);
-                            break;
-                        case "retire":
-                            showRetireDlg(data);
                             break;
                         case "del":
                             del(data);
@@ -128,23 +107,20 @@
                 });
 
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_internalstaff)', function(obj){
+                table.on('toolbar(filter_tb_account)', function(obj){
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
                             break;
-                        case 'search':
-                            search();
-                            break;
                     };
                 });
 
-                getInternalstaffs();
+                getAccounts();
             }
 
-            function getInternalstaffs() {
-                var result = {total:100,rows:[{serial:"1",ID:"360402197701233645",name:"赵阳",phone:"15986888888",education:"大专",school:"科技中专",time:"2017-8-10",entrytime:"2017-12-10",state:"在职",department:"客户一部",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"200",rent:"1000元"},{serial:"2",ID:"360402197701233645",name:"李斌",phone:"15368425987",education:"本科",school:"科技大学",time:"2017-8-10",entrytime:"2017-12-10",state:"在职",department:"财务部",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"200",rent:"1000元"}]};
-                table.reload('tbl_internalstaff', {
+            function getAccounts() {
+                var result = {total:100,rows:[{ID:"stuff001",name:"赵斌"},{ID:"stuff002",name:"李晓刚"}]};
+                table.reload('tbl_account', {
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
@@ -155,50 +131,23 @@
                 });*/
             }
 
-            //模糊查找
-            function search(keyword) {
-                param_query.conditions.extra = keyword;
-                getInternalstaffs();
-            }
 
-            //打开详情对话框
-            function showDetailDlg(internalstaff) {
-                var content = "../dialog/internalstaff.html?internalstaff="+encodeURIComponent(JSON.stringify(internalstaff));
+            //打开编辑对话框
+            function showDetailDlg(account) {
+                var content = "../dialog/account.html?account="+encodeURIComponent(JSON.stringify(account));
                 layer.open({
-                    title:"内部员工详情",
+                    title:"详情",
                     type: 2,
                     area: ['800px', '600px'],
                     content: content
                 });
             }
 
-            //打开离职对话框
-            function showDimissionDlg() {
-                var content = "internalstaff-dimission.html";
-                layer.open({
-                    title:"离职",
-                    type: 2,
-                    area: ['400px', '300px'],
-                    content: content
-                });
-            }
-
-            //打开退休对话框
-            function showRetireDlg() {
-                var content = "internalstaff-retire.html";
-                layer.open({
-                    title:"离职",
-                    type: 2,
-                    area: ['400px', '300px'],
-                    content: content
-                });
-            }
-
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/internalstaff.html";
+                var content = "../dialog/account.html";
                 layer.open({
-                    title:"添加员工",
+                    title:"",
                     type: 2,
                     area: ['800px', '600px'],
                     content: content
@@ -206,11 +155,11 @@
             }
 
             //删除公告
-            function del(internalstaff) {
-                layer.confirm('确定删除'+internalstaff.title, {icon: 3, title:'删除员工'}, function(index){
-                    iInternalstaff.delete(internalstaff.id,function () {
+            function del(account) {
+                layer.confirm('确定删除'+account.title, {icon: 3, title:'删除'}, function(index){
+                    iNotice.delete(account.id,function () {
                         layer.close(index);
-                        getInternalstaffs();
+                        getAccounts();
                         layer.msg('删除成功');
                     });
                 });

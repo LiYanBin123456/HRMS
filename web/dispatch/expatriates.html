@@ -19,7 +19,7 @@
         <![endif]-->
         <style>
             .searchbox{
-                margin-left:100px;
+                margin-left:50px;
                 display:inline;
                 width:300px;
             }
@@ -31,11 +31,16 @@
             <!--顶部工具栏-->
             <div class="layui-hide" id="top_bar_expatriate">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加外派员工</button>
+                <button class="layui-btn layui-btn-sm" lay-event="dispatch"><i class="layui-icon "></i> 批量派遣</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
                     </div>
                     <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                    <div class="layui-input-inline">
+                        <input name="keyword1" class="layui-input" placeholder="按派遣单位过滤">
+                    </div>
+                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search1"><i class="layui-icon layui-icon-search"></i></button>
                 </form>
             </div>
             <table id="tbl_expatriate" lay-filter="filter_tb_expatriate"></table>
@@ -46,7 +51,6 @@
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dimission"><i class="layui-icon layui-icon-edit"></i> 离职</a>
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="retire"><i class="layui-icon layui-icon-edit"></i> 退休</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dispatch"><i class="layui-icon layui-icon-edit"></i> 派遣</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 移入人才库</a>
             </script>
         </div>
@@ -79,6 +83,14 @@
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
                     search(keyword);
+                });
+            }
+
+            function initPage() {
+                initTable();
+                form.on('submit(search1)', function (data) {
+                    var keyword1 = data.field.keyword1;
+                    search(keyword1);
                 });
             }
 
@@ -122,9 +134,6 @@
                         case "retire":
                             showRetireDlg(data);
                             break;
-                        case "dispatch":
-                            showDispatchDlg(data);
-                            break;
                         case "del":
                             del(data);
                             break;
@@ -139,6 +148,11 @@
                             break;
                         case 'search':
                             search();
+                        case 'search1':
+                            search();
+                            break;
+                        case "dispatch":
+                            showDispatchDlg();
                             break;
                     };
                 });
@@ -147,7 +161,7 @@
             }
 
             function getExpatriates() {
-                var result = {total:100,rows:[{serial:"1",ID:"360402197701233645",name:"赵阳",phone:"15986888888",education:"大专",school:"科技中专",major:"土木工程",time:"2017-8-10",entrytime:"2017-12-10",nature:"派遣",state:"在职",unit:"江西制氧机械",department:"客户一部",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"2%",rent:"1000元"},{serial:"2",ID:"360402197701233645",name:"李斌",phone:"15368425987",education:"本科",school:"科技大学",major:"土木工程",time:"2017-8-10",entrytime:"2017-12-10",nature:"派遣",state:"在职",unit:"九江石化",department:"财务部",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"2%",rent:"1000元"}]};
+                var result = {total:100,rows:[{serial:"1",ID:"360402197701233645",name:"赵阳",phone:"15986888888",education:"大专",school:"科技中专",major:"土木工程",entrytime:"2017-12-10",nature:"派遣",state:"在职",unit:"江西制氧机械",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"200",rent:"1000元"},{serial:"2",ID:"360402197701233645",name:"李斌",phone:"15368425987",education:"本科",school:"科技大学",major:"土木工程",entrytime:"2017-12-10",nature:"小时工",reward:"200元/小时",state:"在职",unit:"九江石化",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"200",rent:"1000元"}]};
                 table.reload('tbl_expatriate', {
                     data:result.rows
                 });
@@ -162,6 +176,11 @@
             //模糊查找
             function search(keyword) {
                 param_query.conditions.extra = keyword;
+                getExpatriates();
+            }
+
+            function search1(keyword1) {
+                param_query.conditions.extra = keyword1;
                 getExpatriates();
             }
 
@@ -182,7 +201,7 @@
                 layer.open({
                     title:"离职",
                     type: 2,
-                    area: ['500px', '400px'],
+                    area: ['400px', '300px'],
                     content: content
                 });
             }
@@ -193,7 +212,7 @@
                 layer.open({
                     title:"退休",
                     type: 2,
-                    area: ['500px', '400px'],
+                    area: ['400px', '300px'],
                     content: content
                 });
             }
@@ -204,7 +223,7 @@
                 layer.open({
                     title:"派遣",
                     type: 2,
-                    area: ['500px', '400px'],
+                    area: ['300px', '200px'],
                     content: content
                 });
             }
