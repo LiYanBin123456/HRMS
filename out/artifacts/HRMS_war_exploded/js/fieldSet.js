@@ -82,12 +82,12 @@ var columns_custemer = [[
 var columns_medicalinsurance = [[
     {field:'city', title: '所属城市'},
     {field:'time', title: '生效时间',width:100},
-    {field:'cardinal', title: '基数',width:130},
-    {field:'yiliaodanwei', title: '医疗单位比例',width:150},
-    {field:'yiliaogeren', title: '医疗个人比例',width:150},
-    {field:'dabingdanwei', title: '大病单位',width:150},
-    {field:'dabinggeren', title: '大病个人',width:150},
-    {field:'shengyudanwei', title: '生育单位比例',width:150},
+    {field:'cardinal', title: '基数',width:80},
+    {field:'yiliaodanwei', title: '医疗单位比例',width:105},
+    {field:'yiliaogeren', title: '医疗个人比例',width:105},
+    {field:'dabingdanwei', title: '大病单位',width:90},
+    {field:'dabinggeren', title: '大病个人',width:90},
+    {field:'shengyudanwei', title: '生育单位比例',width:105},
     {fixed: 'right', title: '操作', toolbar: '#bar_medicalinsurance',width:200}
 ]];
 
@@ -95,24 +95,24 @@ var columns_medicalinsurance = [[
 var columns_socialsecurity = [[
     {field:'city', title: '所属城市'},
     {field:'time', title: '生效时间',width:100},
-    {field:'cardinal', title: '基数',width:100},
-    {field:'yanglaodanwei', title: '养老单位比例',width:130},
-    {field:'yanglaogeren', title: '养老个人比例',width:130},
-    {field:'gongshangdanwei', title: '工伤单位比例',width:130},
-    {field:'gongshangbuchong', title: '工伤补充',width:130},
-    {field:'shiyedanwei', title: '失业单位比例',width:130},
-    {field:'shiyegeren', title: '失业个人比例',width:130},
+    {field:'cardinal', title: '基数',width:80},
+    {field:'yanglaodanwei', title: '养老单位比例',width:105},
+    {field:'yanglaogeren', title: '养老个人比例',width:105},
+    {field:'gongshangdanwei', title: '工伤单位比例',width:105},
+    {field:'gongshangbuchong', title: '工伤补充',width:95},
+    {field:'shiyedanwei', title: '失业单位比例',width:105},
+    {field:'shiyegeren', title: '失业个人比例',width:105},
     {fixed: 'right', title: '操作', toolbar: '#bar_socialsecurity',width:200}
 ]];
 
 //公积金规则字段集合
 var columns_accumulation = [[
     {field:'city', title: '所属城市'},
-    {field:'time', title: '生效时间',width:170},
-    {field:'floor', title: '下限',width:170},
-    {field:'upper', title: '上限',width:170},
-    {field:'danweibili', title: '单位比例',width:170},
-    {field:'gerenbili', title: '个人比例',width:170},
+    {field:'time', title: '生效时间',width:100},
+    {field:'floor', title: '下限',width:80},
+    {field:'upper', title: '上限',width:80},
+    {field:'danweibili', title: '单位比例',width:90},
+    {field:'gerenbili', title: '个人比例',width:90},
     {fixed: 'right', title: '操作', toolbar: '#bar_accumulation',width:200}
 ]];
 
@@ -144,29 +144,21 @@ var columns_cooperativeclient = [[
 
 //供应商管理字段集合
 var columns_supplier = [[
-    {field:'name', title: '名称',width:300},
-    {field:'nature', title: '性质',width:200},
-    {field:'sort', title: '业务类别',width:178},
-    {field:'linkman', title: '联系人',width:200},
-    {field:'phone', title: '联系电话',width:200},
-    {fixed: 'right', title: '操作', toolbar: '#bar_supplier',width:200}
-]];
-
-//合作客户详情部门管理字段集合
-var columns_section = [[
-    {field:'name', title: '部门名称'},
+    {field:'name', title: '名称'},
+    {field:'nature', title: '性质',width:80},
+    {field:'sort', title: '业务类别',width:90},
     {field:'linkman', title: '联系人',width:100},
-    {field:'phone', title: '联系电话',width:130},
-    {fixed: 'right', title: '操作', toolbar: '#bar_section',width:200}
+    {field:'phone', title: '联系电话',width:150},
+    {fixed: 'right', title: '操作', toolbar: '#bar_supplier',width:200}
 ]];
 
 //劳务派遣客户合同字段集合
 var columns_contract = [[
     {field:'client', title: '合作客户'},
-    {field:'time', title: '生效时间',width:200},
-    {field:'expirationtime', title: '到期时间',width:230},
-    {field:'businesstype', title: '业务类型',width:230},
-    {fixed: 'right', title: '操作', toolbar: '#bar_contract',width:300}
+    {field:'time', title: '生效时间',width:130},
+    {field:'expirationtime', title: '到期时间',width:130},
+    {field:'businesstype', title: '业务类型',width:130},
+    {fixed: 'right', title: '操作', toolbar: '#bar_contract',width:200}
 ]];
 
 //内部员工管理字段集合
@@ -181,12 +173,12 @@ var columns_internalstaff = [[
 
 //外派员工管理字段集合
 var columns_expatriate = [[
-    {field:'ID', title: '身份证号'},
-    {field:'name', title: '姓名',width:200},
-    {field:'education', title: '学历',width:130},
-    {field:'phone', title: '联系电话',width:230},
-    {field:'unit', title: '派遣单位',width:130},
-    {fixed: 'right', title: '操作', toolbar: '#bar_expatriate',width:450}
+    {field:'ID', title: '身份证号',width:180},
+    {field:'name', title: '姓名',width:80},
+    {field:'education', title: '学历',width:100},
+    {field:'phone', title: '联系电话',width:120},
+    {field:'unit', title: '派遣单位',width:150},
+    {fixed: 'right', title: '操作', toolbar: '#bar_expatriate'}
 ]];
 
 //员工合同字段集合
@@ -196,6 +188,74 @@ var columns_staffcontract  = [[
     {field:'finishtime', title: '到期时间',width:230},
     {field:'number', title: '签订次数',width:230},
     {fixed: 'right', title: '操作', toolbar: '#bar_staffcontract',width:300}
+]];
+
+//工资管理字段集合
+var columns_salsry  = [[
+    {field:'unit', title: '客户单位'},
+    {field:'month', title: '月份',width:200},
+    {field:'money', title: '金额',width:200},
+    {field:'state', title: '状态',width:200},
+    {field:'sort', title: '类别',width:200},
+    {fixed: 'right', title: '操作', toolbar: '#bar_salsry',width:300}
+]];
+
+//工资管理明细字段集合
+var columns_detail  = [[
+    {field:'ID', title: '身份证号',edit: 'text'},
+    {field:'name', title: '张晓国',width:80,edit: 'text'},
+    {field:'money', title: '基本工资',width:80,edit: 'text'},
+    {field:'post', title: '岗位补贴',width:80,edit: 'text'},
+    {field:'house', title: '住房补助',width:80,edit: 'text'},
+    {field:'traffic', title: '交通补助',width:80,edit: 'text'},
+    {field:'shebao', title: '社保',width:80,edit: 'text'},
+    {field:'gongjijin', title: '公积金',width:80,edit: 'text'},
+    {field:'geshui', title: '个税',width:80,edit: 'text'},
+    {field:'kaoqin', title: '考勤扣款',width:80,edit: 'text'},
+    {field:'shifa', title: '实发',width:80,edit: 'text'},
+    {fixed: 'right', title: '操作', toolbar: '#bar_detail',width:80}
+]];
+
+//工资明细添加字段集合
+var columns_staff  = [[
+    {type:'checkbox'},
+    {field:'ID', title: '身份证号',width:400},
+    {field:'name', title: '姓名',width:100},
+    {field:'unit', title: '派遣单位',width:200},
+]];
+
+//工资查看日志字段集合
+var columns_log  = [[
+    {field:'time', title: '日期'},
+    {field:'executor', title: '执行人',width:100},
+    {field:'content', title: '操作内容',width:200},
+]];
+
+//工资结算待审核字段集合
+var columns_audit  = [[
+    {field:'unit', title: '客户单位'},
+    {field:'month', title: '月份',width:100},
+    {field:'money', title: '金额',width:100},
+    {field:'state', title: '状态',width:100},
+    {field:'sort', title: '类别',width:100},
+    {fixed: 'right', title: '操作', toolbar: '#bar_audit',width:200}
+]];
+
+//工资结算到账确认字段集合
+var columns_confirm  = [[
+    {field:'unit', title: '客户单位'},
+    {field:'month', title: '月份',width:100},
+    {field:'money', title: '金额',width:100},
+    {field:'state', title: '状态',width:100},
+    {field:'sort', title: '类别',width:100},
+    {fixed: 'right', title: '操作', toolbar: '#bar_confirm',width:100}
+]];
+
+//账号管理字段集合
+var columns_account  = [[
+    {field:'name', title: '姓名'},
+    {field:'ID', title: '登录账号',width:200},
+    {fixed: 'right', title: '操作', toolbar: '#bar_account',width:200}
 ]];
 
 //简历字段集合

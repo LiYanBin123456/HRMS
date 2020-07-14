@@ -1,10 +1,8 @@
 package database;
 
 import org.apache.commons.dbutils.QueryRunner;
-import org.apache.commons.dbutils.handlers.ArrayListHandler;
-import org.apache.commons.dbutils.handlers.BeanHandler;
-import org.apache.commons.dbutils.handlers.BeanListHandler;
-import org.apache.commons.dbutils.handlers.ScalarHandler;
+import org.apache.commons.dbutils.handlers.*;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
@@ -174,6 +172,30 @@ public class DbUtil {
     }
 
     /**
+     * 获取单列数据
+     * @param conn
+     * @param sql
+     * @return
+     */
+    public static List<String> getColumns(Connection conn, String sql, String table,QueryParameter param){
+        String sql1 = String.format("select %s from %s where ",sql,table);
+
+        String condition = param.conditions.toString();
+        System.out.println(condition);
+        sql1 += condition;
+
+        QueryRunner qr = new QueryRunner();
+        List<String> Columns = null;
+        try {
+            Object[] values = param.conditions.extraValues().toArray();
+            Columns = qr.query(conn,sql1, new ColumnListHandler<String>(sql),values);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+      return Columns;
+    }
+
+    /**
      *
      * @param conn
      * @param sql  可以自定义要查询的字段
@@ -244,16 +266,17 @@ public class DbUtil {
         String sql = String.format("select * from %s where ",table);
         String condition = conditions.toString();
         sql += condition;
-        sql += " limit 1";
+        sql += " limit 1 ";
         DaoQueryResult result = new DaoQueryResult();
         QueryRunner qr = new QueryRunner();
         try {
             List<Object> values = conditions.extraValues();
+            System.out.println("get==sql=="+sql);
             result.data = qr.query(conn, sql, new BeanHandler<>(c),values.toArray());
             result.success = true;
 
             System.out.println(result.data);
-            System.out.println("get==sql=="+sql);
+
         }catch (SQLException e){
             result.success = false;
             result.msg = "数据库操作错误";
@@ -263,6 +286,37 @@ public class DbUtil {
         return result;
     }
 
+    /**
+     * 根据条件获取一条最新插入的数据
+     * @param conn
+     * @param table
+     * @param conditions
+     * @param c
+     * @return
+     */
+    public static DaoQueryResult getLast(Connection conn, String table, QueryConditions conditions, Class c){
+        String sql = String.format("select * from %s where ",table);
+        String condition = conditions.toString();
+        sql += condition;
+        sql += " ORDER BY id DESC limit 1 ";
+        DaoQueryResult result = new DaoQueryResult();
+        QueryRunner qr = new QueryRunner();
+        try {
+            List<Object> values = conditions.extraValues();
+            System.out.println("get==sql=="+sql);
+            result.data = qr.query(conn, sql, new BeanHandler<>(c),values.toArray());
+            result.success = true;
+
+            System.out.println(result.data);
+
+        }catch (SQLException e){
+            result.success = false;
+            result.msg = "数据库操作错误";
+            e.printStackTrace();
+        }
+
+        return result;
+    }
     /**
      * 删除
      * @param conn

@@ -30,16 +30,16 @@ public class FundServlet extends HttpServlet {
             case "getFunds"://获取所有公积金清单
                 result = getFunds(conn,request);
                 break;
-            case "getFund"://获取所有公积金清单
+            case "getFund"://获取一个公积金清单
                 result = getFund(conn,request);
                 break;
-            case "updateFund"://获取所有公积金清单
+            case "updateFund"://修改公积金清单
                 result = updateFund(conn,request);
                 break;
-            case "insertFund"://获取所有公积金清单
+            case "insertFund"://插入公积金清单
                 result = insertFund(conn,request);
                 break;
-            case "deleteFund"://获取所有公积金清单
+            case "deleteFund"://删除公积金清单
                 result = deleteFund(conn,request);
                 break;
         }

@@ -30,16 +30,16 @@ public class Rule_medicalServlet extends HttpServlet {
             case "getMedicals"://获取所有公积金清单
                 result = getMedicals(conn,request);
                 break;
-            case "getMedical"://获取所有公积金清单
+            case "getMedical"://获取一个公积金清单
                 result = getMedical(conn,request);
                 break;
-            case "updateMedical"://获取所有公积金清单
+            case "updateMedical"://修改公积金清单
                 result = updateMedical(conn,request);
                 break;
-            case "insertMedical"://获取所有公积金清单
+            case "insertMedical"://插入所有公积金清单
                 result = insertMedical(conn,request);
                 break;
-            case "deleteMedical"://获取所有公积金清单
+            case "deleteMedical"://删除所有公积金清单
                 result = deleteMedical(conn,request);
                 break;
         }

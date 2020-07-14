@@ -33,22 +33,22 @@ public class NoticeServlet extends HttpServlet {
                 break;
         }
         switch (op) {
-            case "getNotice"://获取一个公积金清单
+            case "getNotice"://获取一个清单
                 result = getNotice(conn,request);
                 break;
         }
         switch (op) {
-            case "updateNotice"://修改公积金清单
+            case "updateNotice"://修改清单
                 result = updateNotice(conn,request);
                 break;
         }
         switch (op) {
-            case "insertNotice"://获取所有公积金清单
+            case "insertNotice"://插入清单
                 result = insertNotice(conn,request);
                 break;
         }
         switch (op) {
-            case "deleteNotice"://获取所有公积金清单
+            case "deleteNotice"://删除所有公积金清单
                 result = deleteNotice(conn,request);
                 break;
         }

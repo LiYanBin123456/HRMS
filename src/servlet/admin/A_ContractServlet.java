@@ -32,15 +32,21 @@ public class A_ContractServlet extends HttpServlet {
         String op = request.getParameter("op");
 
         switch (op) {
-//            case "getContracts"://获取所有合同清单
-//                result = getContracts(conn,request);
-//                break;
-//            case "getContract"://根据客户id获取合同
-//                result = getContract(conn,request);
-//                break;
-            case "insertContract"://插入合同
+            case "getContracts"://根据客户获取历史合同清单
+                result = getContracts(conn,request);
+                break;
+            case "getContract"://根据客户id获取合同
+                result = getContract(conn,request);
+                break;
+            case "insertContract"://合作客户插入合同
                 result = insertContract(conn,request);
                 break;
+            case "insertContract2"://潜在客户插入合同
+                result = insertContract2(conn,request);
+                break;
+//            case "deleteContract"://删除合同
+//                result = deleteContract(conn,request);
+//                break;
 
         }
         ConnUtil.closeConnection(conn);
@@ -50,10 +56,24 @@ public class A_ContractServlet extends HttpServlet {
         out.close();
     }
 
+
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     }
-
+    //删除文件
+//    private String deleteContract(Connection conn, HttpServletRequest request) {
+//        //获取文件的真实路径
+//        String url = request.getServletContext().getRealPath("/upload");
+//        File file = new File(url+"/A2020000007"+".jpg");
+//
+//        if (file.exists()) {
+//            file.delete();
+//            System.out.println("指定文件删除成功!!");
+//        }
+//        return null;
+//    }
+    //合作客户插入合同
     private String insertContract(Connection conn, HttpServletRequest request) throws IOException, ServletException {
         DaoUpdateResult res ;
 
@@ -125,5 +145,99 @@ public class A_ContractServlet extends HttpServlet {
             }
         }
         return  JSONObject.toJSONString(res);
+    }
+
+    //潜在客户插入合同
+    private String insertContract2(Connection conn, HttpServletRequest request) throws IOException, ServletException{
+        DaoUpdateResult res ;
+
+        long cid = Long.parseLong(request.getParameter("cid"));
+        String start = request.getParameter("start");
+        String end = request.getParameter("end");
+        int status = Integer.parseInt(request.getParameter("status"));
+        String intro = request.getParameter("intro");
+
+        contract.setCid(cid);
+        contract.setStart(start);
+        contract.setEnd(end);
+        contract.setStatus(status);
+        contract.setIntro(intro);
+
+        //自定义自增id
+        QueryConditions conditions = new QueryConditions();
+        String type ="A" ;
+        System.out.println(type);
+        type += "%";
+        System.out.println(type);
+        conditions.add("id","like",type);
+
+        //通过模糊查找各种类型id的条数
+        DaoQueryListResult counts = DbUtil.getCounts(conn, "a_contract", conditions);
+        long total = counts.total;
+        String id = CreateGetNextId.NextId(total, "A");
+        contract.setId(id);
+
+        res = contractService.insert2(conn,contract);
+
+        //先判断是否成功插入，否则会出现数据库插入失败，但是文件却已经上传的现象
+        if(res.success){
+            //将文件上传到服务器并且以合同id命名
+            String file = null;
+            Part part = request.getPart("file");
+            if(part!=null){
+                //获取文件的名称
+                String header = part.getHeader("content-disposition");
+                //截取字符串获取文件名称
+                String headername = header.substring(header.indexOf("filename")+10, header.length()-1);
+                //获取文件名后缀
+                String suffixName=headername.substring(headername.indexOf(".")+1);
+
+                //获取文件流
+                InputStream put = part.getInputStream();
+                //获取文件的真实路径
+                String url = request.getServletContext().getRealPath("/upload");
+
+                File uploadDir = new File(url);
+
+                // 如果该文件夹不存在则创建
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
+
+                file = id+"."+suffixName;
+
+                //建立对拷流
+                FileOutputStream fos = new FileOutputStream(new File(url, file));
+
+                IOUtils.copy(put, fos);
+                put.close();
+                fos.close();
+                //删除临时文件
+                part.delete();
+            }else {
+                res.msg+= "合同文件未插入";
+            }
+        }
+        return  JSONObject.toJSONString(res);
+    }
+
+    private String getContract(Connection conn, HttpServletRequest request) {
+
+        String cid = (request.getParameter("cid"));
+        System.out.println("客户id="+cid);
+        DaoQueryResult res = contractService.getContract(conn,cid);
+        if(res.data == null){
+           res.msg="该客户暂时未签订合同";
+        }else {
+            res.msg="已经查询出该客户最新的合同";
+        }
+        return JSONObject.toJSONString(res);
+    }
+
+
+    private String getContracts(Connection conn, HttpServletRequest request) {
+        QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
+        DaoQueryListResult res =contractService.getContracts(conn,parameter);
+        return JSONObject.toJSONString(res);
     }
 }

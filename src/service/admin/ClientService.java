@@ -11,8 +11,6 @@ import java.sql.Connection;
 
 public class ClientService {
     private ClientDao clientDao = new ClientDao();
-
-
     public  DaoQueryListResult getClientList(Connection conn, QueryParameter param){
         return clientDao.getClientList(conn,param);
     }
@@ -32,7 +30,10 @@ public class ClientService {
     public DaoUpdateResult deleteClient1(Connection conn, long id) {
         return clientDao.deleteClient1(conn,id);
     }
+
     public DaoUpdateResult deleteClient2(Connection conn, long id) {
-        return clientDao.deleteClient2(conn,id);
+
+        int status = 0;
+        return clientDao.updateStatus(conn,id,status);
     }
 }

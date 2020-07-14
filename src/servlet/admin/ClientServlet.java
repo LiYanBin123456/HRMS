@@ -3,6 +3,7 @@ package servlet.admin;
 
 import bean.admin.Client;
 import com.alibaba.fastjson.*;
+import dao.admin.A_ContractDao;
 import database.*;
 import service.admin.ClientService;
 
@@ -11,13 +12,16 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.util.List;
 
 @WebServlet(urlPatterns = "/client")
 public class ClientServlet extends HttpServlet {
     private ClientService clientService = new ClientService();
+    private A_ContractDao contractDao = new A_ContractDao();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
     }
@@ -57,8 +61,31 @@ public class ClientServlet extends HttpServlet {
         out.close();
     }
 
+    /**
+     * 删除流程
+     * 先查出该用户所签订的合同文件名字，删除存储的文件
+     * 在删除合同
+     * 最后修改合作客户为潜在客户
+     *
+     * @param conn
+     * @param request
+     * @return
+     */
     private String deleteClient2(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
+        List<String> list = contractDao.deleteContract(conn, id);
+        if(list!=null){
+           for(String filename:list){
+               String url = request.getServletContext().getRealPath("/upload");
+               File file = new File(url+"/"+filename+".jpg");
+               if (file.exists()) {
+                   file.delete();
+                   System.out.println(filename+"文件删除成功!!");
+               }else {
+                   System.out.println("文件不存在!!");
+               }
+           }
+        }
         DaoUpdateResult res = clientService.deleteClient2(conn,id);
         return JSONObject.toJSONString(res);
     }

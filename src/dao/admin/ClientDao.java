@@ -32,7 +32,7 @@ public class ClientDao {
      * @param c 求职者信息
      * @return 更新结果，格式："{success:true,msg:"",effects:1}"
      */
-    public static DaoUpdateResult updateClient(Connection conn, Client c){
+    public  DaoUpdateResult updateClient(Connection conn, Client c){
         String sql = "update client set rid=?,name=?,nickname=?,address=?,contact=?,phone=?,wx=?,qq=?,intro=? where id=?";
         Object []params = {c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getIntro(),c.getId()};
         //调用DbUtil封装的update方法
@@ -59,10 +59,10 @@ public class ClientDao {
     }
 
 
-    //删除合作客户 实质是修改合作客户为潜在客户
-    public static DaoUpdateResult deleteClient2(Connection conn, long id){
+    //修改客户状态 合作或者潜在 0_潜在，1_合作
+    public  DaoUpdateResult updateStatus(Connection conn, long id,int status){
         String sql = "update client set status=? where id=?";
-        Object []params = {0,id};
+        Object []params = {status,id};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
     }
