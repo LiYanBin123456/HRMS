@@ -190,14 +190,18 @@ var columns_staffcontract  = [[
     {fixed: 'right', title: '操作', toolbar: '#bar_staffcontract',width:300}
 ]];
 
-//工资管理字段集合
-var columns_salsry  = [[
+//普通结算单字段集合
+var columns_settlement1  = [[
+    {type:'checkbox',width:30},
     {field:'unit', title: '客户单位'},
-    {field:'month', title: '月份',width:200},
-    {field:'money', title: '金额',width:200},
-    {field:'state', title: '状态',width:200},
-    {field:'sort', title: '类别',width:200},
-    {fixed: 'right', title: '操作', toolbar: '#bar_salsry',width:300}
+    {field:'month', title: '月份',width:80},
+    {field:'money', title: '工资',width:70},
+    {field:'money', title: '社保',width:70},
+    {field:'money', title: '管理费',width:70},
+    {field:'money', title: '税费',width:70},
+    {field:'money', title: '总额',width:80},
+    {field:'state', title: '状态',width:70},
+    {title: '操作', toolbar: '#bar_settlement',width:400}
 ]];
 
 //工资管理明细字段集合
