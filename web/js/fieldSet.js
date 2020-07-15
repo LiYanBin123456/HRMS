@@ -201,7 +201,7 @@ var columns_settlement1  = [[
     {field:'money', title: '税费',width:70},
     {field:'money', title: '总额',width:80},
     {field:'state', title: '状态',width:70},
-    {title: '操作', toolbar: '#bar_settlement',width:400}
+    {title: '操作', toolbar: '#bar_settlement',width:350}
 ]];
 
 //工资管理明细字段集合
