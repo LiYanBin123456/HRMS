@@ -123,6 +123,9 @@
                         case "log":
                             showLogDlg();
                             break;
+                        case "edit":
+                            showEditDlg(data);
+                            break;
                         case "del":
                             del(data);
                             break;
@@ -148,7 +151,7 @@
             }
 
             function getSalsrys() {
-                var result = {total:100,rows:[{unit:"科技中专",month:"2020-06",sort:"",money:"5000",state:"申报中"},{unit:"国棉四厂",month:"2020-06",sort:"",money:"12000",state:"已审核"}]};
+                var result = {total:100,rows:[{unit:"科技中专",month:"2020-06",salary:"5000",social:"5000",manager:"5000",tax:"5000",summary:"5000",state:"申报中"},{unit:"国棉四厂",month:"2020-06",salary:"12000",social:"12000",manager:"12000",tax:"12000",summary:"12000",state:"已审核"}]};
                 table.reload('tbl_settlement', {
                     data:result.rows
                 });
@@ -191,6 +194,16 @@
             //打开新建对话框
             function showInsertDlg() {
                 var content = "../dialog/settlement1.html";
+                layer.open({
+                    title:"新建",
+                    type: 2,
+                    area: ['400px', '520px'],
+                    content: content
+                });
+            }
+
+            function showEditDlg(settlement1) {
+                var content = "../dialog/settlement1.html?settlement1="+encodeURIComponent(JSON.stringify(settlement1));
                 layer.open({
                     title:"新建",
                     type: 2,

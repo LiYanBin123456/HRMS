@@ -195,11 +195,11 @@ var columns_settlement1  = [[
     {type:'checkbox',width:30},
     {field:'unit', title: '客户单位'},
     {field:'month', title: '月份',width:80},
-    {field:'money', title: '工资',width:70},
-    {field:'money', title: '社保',width:70},
-    {field:'money', title: '管理费',width:70},
-    {field:'money', title: '税费',width:70},
-    {field:'money', title: '总额',width:80},
+    {field:'salary', title: '工资',width:70},
+    {field:'social', title: '社保',width:70},
+    {field:'manager', title: '管理费',width:70},
+    {field:'tax', title: '税费',width:70},
+    {field:'summary', title: '总额',width:80},
     {field:'state', title: '状态',width:70},
     {title: '操作', toolbar: '#bar_settlement',width:350}
 ]];
@@ -253,6 +253,17 @@ var columns_confirm  = [[
     {field:'state', title: '状态',width:100},
     {field:'sort', title: '类别',width:100},
     {fixed: 'right', title: '操作', toolbar: '#bar_confirm',width:100}
+]];
+
+//保险产品字段集合
+var columns_insurance = [[
+    {field:'name', title: '产品名称'},
+    {field:'coverage', title: '产品保额',width:80},
+    {field:'yiliao', title: '医疗保额',width:80},
+    {field:'allowance', title: '住院津贴',width:80},
+    {field:'time', title: '保险时间',width:100},
+    {field:'personnel', title: '可参保人员',width:130},
+    {fixed: 'right', title: '操作', toolbar: '#bar_insurance',width:200}
 ]];
 
 //账号管理字段集合

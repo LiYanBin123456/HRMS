@@ -6,9 +6,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c5d83316-56ab-45ad-8caf-f6eb14ab1932" name="Default" comment="管理员">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="c5d83316-56ab-45ad-8caf-f6eb14ab1932" name="Default" comment="管理员" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -96,7 +94,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
@@ -110,28 +107,11 @@
               <item name="hrm" type="462c0819:PsiDirectoryNode" />
               <item name="web" type="462c0819:PsiDirectoryNode" />
             </path>
-            <path>
-              <item name="hrm" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hrm" type="462c0819:PsiDirectoryNode" />
-              <item name="web" type="462c0819:PsiDirectoryNode" />
-              <item name="dialog" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hrm" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hrm" type="462c0819:PsiDirectoryNode" />
-              <item name="web" type="462c0819:PsiDirectoryNode" />
-              <item name="dispatch" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="hrm" type="b2602c69:ProjectViewProjectNode" />
-              <item name="hrm" type="462c0819:PsiDirectoryNode" />
-              <item name="web" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
-            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -534,19 +514,19 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="33174000" />
+    <option name="totallyTimeSpent" value="33446000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.85714287" visible="true" weight="0.26206434" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.8460111" visible="true" weight="0.28351206" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
       <window_info id="UI Designer" order="4" />
       <window_info id="Favorites" order="5" side_tool="true" />
       <window_info id="Capture Tool" order="6" />
-      <window_info id="Web" order="7" sideWeight="0.14285715" side_tool="true" visible="true" weight="0.26206434" />
+      <window_info id="Web" order="7" sideWeight="0.15398887" side_tool="true" visible="true" weight="0.28351206" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.34456354" />
       <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.143951" />
@@ -556,10 +536,10 @@
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Application Servers" order="7" weight="0.32903227" />
       <window_info anchor="bottom" id="Terminal" order="8" />
-      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.50469166" side_tool="true" visible="true" weight="0.20967741" />
+      <window_info anchor="bottom" id="Event Log" order="9" sideWeight="0.5087131" side_tool="true" visible="true" weight="0.20967741" />
       <window_info anchor="bottom" id="Messages" order="10" weight="0.40888208" />
       <window_info anchor="bottom" id="Java Enterprise" order="11" />
-      <window_info active="true" anchor="bottom" id="Version Control" order="12" sideWeight="0.4953083" visible="true" weight="0.20967741" />
+      <window_info anchor="bottom" id="Version Control" order="12" sideWeight="0.49128687" visible="true" weight="0.20967741" />
       <window_info anchor="bottom" id="Docker" order="13" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="14" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />

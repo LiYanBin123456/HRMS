@@ -99,9 +99,19 @@
         });
     }
 
+    function initData() {
+        var param = $.query.get("settlement1");
+        if (param) {
+            var settlement1 = JSON.parse(param);
+            form.val('form_settlement', settlement1);
+            layedit.setContent(editer, settlement1.content, false);
+            op = "update";
+        }
+    }
+
 
     function save() {
-        var notice = form.val('form_settlement');
+        var settlement1 = form.val('form_settlement');
         if (op == "insert") {
             iSalarynew.insert(salarynew, onInsertSuccess);
         } else {
