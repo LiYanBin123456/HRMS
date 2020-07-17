@@ -193,7 +193,7 @@ var columns_staffcontract  = [[
 //普通结算单字段集合
 var columns_settlement1  = [[
     {type:'checkbox',width:30},
-    {field:'unit', title: '客户单位'},
+    {field:'unit', title: '用工企业'},
     {field:'month', title: '月份',width:80},
     {field:'salary', title: '工资',width:70},
     {field:'social', title: '社保',width:70},
@@ -207,7 +207,7 @@ var columns_settlement1  = [[
 //工资管理明细字段集合
 var columns_detail  = [[
     {field:'ID', title: '身份证号',edit: 'text'},
-    {field:'name', title: '张晓国',width:80,edit: 'text'},
+    {field:'name', title: '姓名',width:80,edit: 'text'},
     {field:'money', title: '基本工资',width:80,edit: 'text'},
     {field:'post', title: '岗位补贴',width:80,edit: 'text'},
     {field:'house', title: '住房补助',width:80,edit: 'text'},
@@ -225,7 +225,16 @@ var columns_staff  = [[
     {type:'checkbox'},
     {field:'ID', title: '身份证号',width:400},
     {field:'name', title: '姓名',width:100},
-    {field:'unit', title: '派遣单位',width:200},
+    {field:'unit', title: '派遣单位',width:200}
+]];
+
+//工资明细补录字段集合
+var columns_addrecord  = [[
+    {type:'checkbox'},
+    {field:'ID', title: '身份证号',width:400},
+    {field:'name', title: '姓名',width:100},
+    {field:'shebao', title: '社保基数',width:100},
+    {field:'yibao', title: '医保基数',width:100},
 ]];
 
 //工资查看日志字段集合
@@ -252,7 +261,73 @@ var columns_confirm  = [[
     {field:'money', title: '金额',width:100},
     {field:'state', title: '状态',width:100},
     {field:'sort', title: '类别',width:100},
-    {fixed: 'right', title: '操作', toolbar: '#bar_confirm',width:100}
+    {fixed: 'right', title: '操作', toolbar: '#bar_confirm',width:200}
+]];
+
+//小时工结算单字段集合
+var columns_settlements2  = [[
+    {type:'checkbox',width:30},
+    {field:'unit', title: '客户单位'},
+    {field:'month', title: '月份',width:80},
+    {field:'salary', title: '工资',width:70},
+    {field:'manager', title: '管理费',width:70},
+    {field:'tax', title: '税费',width:70},
+    {field:'summary', title: '总额',width:80},
+    {field:'state', title: '状态',width:70},
+    {title: '操作', toolbar: '#bar_settlements2',width:300}
+]];
+
+//小时工工资管理明细字段集合
+var columns_detail2  = [[
+    {field:'ID', title: '身份证号',edit: 'text'},
+    {field:'name', title: '姓名',width:80,edit: 'text'},
+    {field:'time', title: '工时',width:80,edit: 'text'},
+    {field:'up', title: '单价',width:80,edit: 'text'},
+    {field:'mealbuzhu', title: '餐费补助',width:80,edit: 'text'},
+    {field:'mealkoukuan', title: '餐费扣款',width:80,edit: 'text'},
+    {field:'zhushu', title: '住宿费',width:80,edit: 'text'},
+    {field:'shuidian', title: '水电费',width:80,edit: 'text'},
+    {field:'baoxian', title: '保险',width:80,edit: 'text'},
+    {field:'geshui', title: '个税',width:80,edit: 'text'},
+    {field:'qita', title: '其他扣款',width:80,edit: 'text'},
+    {field:'yingfu', title: '应付金额',width:80,edit: 'text'},
+    {field:'shifa', title: '实发金额',width:80,edit: 'text'},
+    {fixed: 'right', title: '操作', toolbar: '#bar_detail2',width:80}
+]];
+
+//小时工工资明细添加字段集合
+var columns_staff2  = [[
+    {type:'checkbox'},
+    {field:'ID', title: '身份证号',width:400},
+    {field:'name', title: '姓名',width:200},
+]];
+
+//商业保险结算单字段集合
+var columns_settlements3  = [[
+    {type:'checkbox',width:30},
+    {field:'unit', title: '用工企业'},
+    {field:'month', title: '月份',width:80},
+    {field:'premium', title: '保费',width:70},
+    {field:'state', title: '状态',width:70},
+    {title: '操作', toolbar: '#bar_settlements3',width:200}
+]];
+
+//商业保险工资管理明细字段集合
+var columns_detail3  = [[
+    {field:'ID', title: '身份证号',edit: 'text'},
+    {field:'name', title: '姓名',width:80,edit: 'text'},
+    {field:'site', title: '工作地点',width:80,edit: 'text'},
+    {field:'post', title: '工作岗位',width:80,edit: 'text'},
+    {field:'product', title: '保险产品',width:100,edit: 'text'},
+    {field:'premium', title: '保费',width:80,edit: 'text'},
+    {fixed: 'right', title: '操作', toolbar: '#bar_detail3',width:80}
+]];
+
+//小时工工资明细添加字段集合
+var columns_staff3 = [[
+    {type:'checkbox'},
+    {field:'ID', title: '身份证号',width:400},
+    {field:'name', title: '姓名',width:200},
 ]];
 
 //保险产品字段集合

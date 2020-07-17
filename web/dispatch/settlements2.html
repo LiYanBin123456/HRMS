@@ -29,10 +29,9 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_settlement">
+            <div class="layui-hide" id="top_bar_settlements2">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 复制</button>
-                <button class="layui-btn layui-btn-sm" lay-event="derive"><i class="layui-icon "></i> 导出工资发放表</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
@@ -40,15 +39,14 @@
                     <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                 </form>
             </div>
-            <table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>
+            <table id="tbl_settlements2" lay-filter="filter_tb_settlements2"></table>
             <div id="pager"></div>
 
             <!--行内工具栏-->
-            <script type="text/html" id="bar_settlement">
+            <script type="text/html" id="bar_settlements2">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="pay"><i class="layui-icon layui-icon-edit"></i>扣款</a>
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>明细</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log"><i class="layui-icon layui-icon-edit"></i>日志</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
             </script>
         </div>
         <script src="../js/fieldSet.js"></script>
@@ -94,23 +92,23 @@
                         if(!first){
                             param_query.pagination.page = obj.curr;
                             param_query.pagination.size = obj.limit;
-                            getSalsrys();
+                            getSettlements2();
                         }
                     }
                 });
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_settlement',
-                    toolbar: '#top_bar_settlement', //开启头部工具栏，并为其绑定左侧模板
+                    elem: '#tbl_settlements2',
+                    toolbar: '#top_bar_settlements2', //开启头部工具栏，并为其绑定左侧模板
                     defaultToolbar: ['filter', 'exports', 'print'],//自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                     title: '列表',
-                    cols: columns_settlement1,
-                    id: 'tbl_settlement'
+                    cols: columns_settlements2,
+                    id: 'tbl_settlements2'
                 });
 
                 //行内工具栏事件响应
-                table.on('tool(filter_tb_settlement)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                table.on('tool(filter_tb_settlements2)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
                     var data = obj.data; //获得当前行数据
                     switch (obj.event){
                         case "detail":
@@ -129,7 +127,7 @@
                 });
 
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_settlement)', function(obj){
+                table.on('toolbar(filter_tb_settlements2)', function(obj){
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
@@ -143,12 +141,12 @@
                     };
                 });
 
-                getSalsrys();
+                getSettlements2();
             }
 
-            function getSalsrys() {
-                var result = {total:100,rows:[{unit:"科技中专",month:"2020-06",salary:"5000",social:"5000",manager:"5000",tax:"5000",summary:"5000",state:"申报中"},{unit:"国棉四厂",month:"2020-06",salary:"12000",social:"12000",manager:"12000",tax:"12000",summary:"12000",state:"已审核"}]};
-                table.reload('tbl_settlement', {
+            function getSettlements2() {
+                var result = {total:100,rows:[{unit:"科技中专",month:"2020-06",salary:"5000",manager:"5000",tax:"5000",summary:"5000",state:"申报中"},{unit:"国棉四厂",month:"2020-06",salary:"12000",manager:"12000",tax:"12000",summary:"12000",state:"已审核"}]};
+                table.reload('tbl_settlements2', {
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
@@ -167,7 +165,7 @@
 
             //打开明细对话框
             function showDetailDlg() {
-                var content = "../dialog/dispatch/detail.html";
+                var content = "../dialog/dispatch/detail2.html";
                 layer.open({
                     title:"明细",
                     type: 2,
@@ -176,20 +174,10 @@
                 });
             }
 
-            //打开查看日志对话框
-            function showLogDlg() {
-                var content = "log.html";
-                layer.open({
-                    title:"操作日志",
-                    type: 2,
-                    area: ['800px', '500px'],
-                    content: content
-                });
-            }
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/settlement1.html";
+                var content = "../dialog/dispatch/settlement2.html";
                 layer.open({
                     title:"添加",
                     type: 2,
@@ -198,10 +186,10 @@
                 });
             }
 
-            function showEditDlg(settlement1) {
-                var content = "../dialog/settlement1.html?settlement1="+encodeURIComponent(JSON.stringify(settlement1));
+            function showEditDlg(settlement2) {
+                var content = "../dialog/dispatch/settlement2.html?settlement2="+encodeURIComponent(JSON.stringify(settlement2));
                 layer.open({
-                    title:"编辑",
+                    title:"新建",
                     type: 2,
                     area: ['400px', '520px'],
                     content: content
@@ -220,11 +208,11 @@
             }
 
             //删除公告
-            function del(settlement) {
-                layer.confirm('确定删除'+settlement.title, {icon: 3, title:'删除'}, function(index){
-                    iSalsry.delete(settlement.id,function () {
+            function del(settlements2) {
+                layer.confirm('确定删除'+settlements2.title, {icon: 3, title:'删除'}, function(index){
+                    iSalsry.delete(settlements2.id,function () {
                         layer.close(index);
-                        getNotices();
+                        getSettlements2();
                         layer.msg('删除成功');
                     });
                 });
