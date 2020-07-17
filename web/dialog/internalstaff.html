@@ -23,6 +23,7 @@
             <li class="layui-this">基础信息</li>
             <li>社保设置</li>
             <li>个人专项扣除</li>
+            <li>工资卡</li>
            </ul>
            <div class="layui-tab-content">
             <div class="layui-tab-item layui-show">
@@ -141,7 +142,6 @@
                              <div class="layui-inline"><input type="radio" name="se" value="实际工资" title="实际工资" ></div>
                              <div class="layui-inline"><input type="radio" name="se" value="自定义基数" title="自定义基数"></div>
                              <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="自定义基数" autocomplete="off" class="layui-input"></div>
-                             <div class="layui-input-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="工伤比例" placeholder="%" autocomplete="off" class="layui-input"></div>
                         </div>
                     </div>
                     <div class="layui-form-item">
@@ -202,6 +202,28 @@
                         <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button></div>
                 </form>
               </div>
+            <div class="layui-tab-item">
+                <form lay-filter="form_internalstaff" class="layui-form">
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>发卡银行</label>
+                        <div class="layui-input-inline">
+                            <input type="text"  name="bank" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>行号</label>
+                        <div class="layui-input-inline">
+                            <input type="text"  name="number" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>账号</label>
+                        <div class="layui-input-inline">
+                            <input type="text"  name="account" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                    </div>
+                </form>
+            </div>
            </div>
        </div>
 </body>
