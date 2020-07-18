@@ -31,7 +31,7 @@
             <!--顶部工具栏-->
             <div class="layui-hide" id="top_bar_settlements3">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
-                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 复制</button>
+                <button class="layui-btn layui-btn-sm" lay-event="copy"><i class="layui-icon "></i> 复制</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
@@ -125,8 +125,8 @@
                         case 'insert':
                             showInsertDlg();
                             break;
-                        case 'derive':
-                            showDeriveDlg();
+                        case 'copy':
+                            showCopyDlg();
                             break;
                         case 'search':
                             search();
@@ -167,6 +167,16 @@
                 });
             }
 
+            //打开复制对话框
+            function showCopyDlg() {
+                var content = "../dialog/dispatch/copy3.html";
+                layer.open({
+                    title:"复制",
+                    type: 2,
+                    area: ['400px', '300px'],
+                    content: content
+                });
+            }
 
             //打开添加对话框
             function showInsertDlg() {

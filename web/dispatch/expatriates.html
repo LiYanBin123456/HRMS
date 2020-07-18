@@ -186,7 +186,7 @@
 
             //打开详情对话框
             function showDetailDlg(expatriate) {
-                var content = "../dialog/expatriate.html?expatriate="+encodeURIComponent(JSON.stringify(expatriate));
+                var content = "../dialog/dispatch/expatriate.html?expatriate="+encodeURIComponent(JSON.stringify(expatriate));
                 layer.open({
                     title:"外派员工详情",
                     type: 2,
@@ -197,7 +197,7 @@
 
             //打开离职对话框
             function showDimissionDlg() {
-                var content = "expatriates-dimission.html";
+                var content = "../dialog/dispatch/expatriates-dimission.html";
                 layer.open({
                     title:"离职",
                     type: 2,
@@ -208,7 +208,7 @@
 
             //打开退休对话框
             function showRetireDlg() {
-                var content = "expatriates-retire.html";
+                var content = "../dialog/dispatch/expatriates-retire.html";
                 layer.open({
                     title:"退休",
                     type: 2,
@@ -219,7 +219,7 @@
 
             //打开派遣对话框
             function showDispatchDlg() {
-                var content = "expatriates-dispatch.html";
+                var content = "../dialog/dispatch/expatriates-dispatch.html";
                 layer.open({
                     title:"派遣",
                     type: 2,
@@ -230,7 +230,7 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/expatriate.html";
+                var content = "../dialog/dispatch/expatriate.html";
                 layer.open({
                     title:"添加员工",
                     type: 2,

@@ -33,6 +33,13 @@
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导入工资表</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 下载模板</button>
+                <form class="layui-form searchbox">
+                    <div class="layui-input-inline">
+                             <div class="layui-inline"><input type="radio" name="se" value="录入模式" title="录入模式" checked></div>
+                             <div class="layui-inline"><input type="radio" name="se" value="结算模式" title="结算模式" ></div>
+                             <div class="layui-inline"><input type="radio" name="se" value="完整模式" title="完整模式"></div>
+                    </div>
+                </form>
             </div>
             <table id="tbl_detail2" lay-filter="filter_tb_detail2"></table>
             <div id="pager"></div>

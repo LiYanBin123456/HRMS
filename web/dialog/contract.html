@@ -54,18 +54,6 @@
                     </div>
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
-                        <span class="x-red">*</span>业务类型</label>
-                            <div class="layui-input-inline">
-                                <select name="businesstype" lay-verify="required">
-                                    <option value=""></option>
-                                    <option value="0">劳务外包</option>
-                                    <option value="1">劳务派遣</option>
-                                    <option value="2">社保代理</option>
-                            </select>
-                    </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
                         <span class="x-red">*</span>发票类型</label>
                             <div class="layui-input-inline">
                                 <select name="type" lay-verify="required">
@@ -97,7 +85,7 @@
             <div class="layui-tab-item">
                 <form lay-filter="form_contract" class="layui-form">
                     <div class="layui-form-item">
-                                <div class="layui-inline"><input type="checkbox" name="" lay-skin="primary" title="劳务外包/派遣" checked=""></div>
+                                <div class="layui-inline"><input type="radio" name="serve" lay-skin="primary" value="劳务外包/派遣" title="劳务外包/派遣" checked=""></div>
                                 <div class="layui-inline"><input type="text"  name="" required=""  placeholder="工资发放日" autocomplete="off" class="layui-input"></div>
                                 <div class="layui-inline"><input type="text"  name="" required=""  placeholder="结算日" autocomplete="off" class="layui-input"></div>
                                 <div class="layui-inline"><input type="text"  name="" required=""  placeholder="回款日" autocomplete="off" class="layui-input"></div>
@@ -121,7 +109,22 @@
                          </div>
                     </div>
                     <div class="layui-form-item">
-                                <div class="layui-inline"><input type="checkbox" name="" lay-skin="primary" title="小时工" checked=""></div>
+                                <div class="layui-inline"><input type="radio" name="serve" lay-skin="primary" value="商业保险" title="商业保险" checked=""></div>
+                    </div>
+                    <div class="layui-form-item searchbox ">
+                        <label for="L_city" class="layui-form-item">
+                        <span class="x-blue">商业保险产品----------------</span></label>
+                         <div class="layui-form-item">
+                            <div class="layui-form-item searchbox">
+                                <div class="layui-inline"><input type="radio" name="see" value="团队意外险" title="团队意外险" ></div>
+                            </div>
+                            <div class="layui-form-item searchbox">
+                                <div class="layui-inline"><input type="radio" name="see" value="雇主责任险" title="雇主责任险" checked></div>
+                            </div>
+                         </div>
+                    </div>
+                    <div class="layui-form-item">
+                                <div class="layui-inline"><input type="radio" name="serve" lay-skin="primary" value="小时工" title="小时工" checked=""></div>
                                 <div class="layui-inline"><input type="text"  name="e" required=""  placeholder="60元/小时" autocomplete="off" class="layui-input"></div>
                     </div>
                <div class="layui-form-item">

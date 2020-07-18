@@ -19,7 +19,7 @@
         <![endif]-->
         <style>
             .searchbox{
-                margin-left:570px;
+                margin-left:470px;
                 display:inline;
                 width:300px;
             }
@@ -34,6 +34,7 @@
                 <button class="layui-btn layui-btn-sm" lay-event="addrecord"><i class="layui-icon "></i> 补录</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导入工资表</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 下载模板</button>
+                <button class="layui-btn layui-btn-sm" lay-event="derive"><i class="layui-icon "></i> 导出工资发放表</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
                              <div class="layui-inline"><input type="radio" name="se" value="录入" title="录入" checked></div>
@@ -128,6 +129,9 @@
                         case 'insert':
                             showInsertDlg();
                             break;
+                        case 'derive':
+                            showDeriveDlg();
+                            break;
                         case 'addrecord':
                             showAddrecordDlg();
                             break;
@@ -171,6 +175,17 @@
                     title:"补录",
                     type: 2,
                     area: ['800px', '500px'],
+                    content: content
+                });
+            }
+
+            //打开导出工资发放表对话框
+            function showDeriveDlg() {
+                var content = "payroll.html";
+                layer.open({
+                    title:"导出工资发放表",
+                    type: 2,
+                    area: ['200px', '360px'],
                     content: content
                 });
             }

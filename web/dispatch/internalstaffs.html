@@ -143,7 +143,7 @@
             }
 
             function getInternalstaffs() {
-                var result = {total:100,rows:[{serial:"1",ID:"360402197701233645",name:"赵阳",phone:"15986888888",education:"大专",school:"科技中专",time:"2017-8-10",entrytime:"2017-12-10",state:"在职",department:"客户一部",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"200",rent:"1000元",bank:"建设银行",number:"365982546525",account:"6259536541526524"},{serial:"2",ID:"360402197701233645",name:"李斌",phone:"15368425987",education:"本科",school:"科技大学",time:"2017-8-10",entrytime:"2017-12-10",state:"在职",department:"财务部",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"200",rent:"1000元",bank:"建设银行",number:"365982546525",account:"6259536541526524"}]};
+                var result = {total:100,rows:[{serial:"1",ID:"360402197701233645",name:"赵阳",phone:"15986888888",education:"大专",school:"科技中专",time:"2017-8-10",rpr:"本地城镇",pra:"江西省九江市湖口镇",entrytime:"2017-12-10",state:"在职",department:"客户一部",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"200",rent:"1000元",bank:"建设银行",number:"365982546525",account:"6259536541526524"},{serial:"2",ID:"360402197701233645",name:"李斌",phone:"15368425987",education:"本科",school:"科技大学",time:"2017-8-10",rpr:"本地城镇",pra:"江西省九江市湖口镇",entrytime:"2017-12-10",state:"在职",department:"财务部",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"200",rent:"1000元",bank:"建设银行",number:"365982546525",account:"6259536541526524"}]};
                 table.reload('tbl_internalstaff', {
                     data:result.rows
                 });
@@ -163,7 +163,7 @@
 
             //打开详情对话框
             function showDetailDlg(internalstaff) {
-                var content = "../dialog/internalstaff.html?internalstaff="+encodeURIComponent(JSON.stringify(internalstaff));
+                var content = "../dialog/dispatch/internalstaff.html?internalstaff="+encodeURIComponent(JSON.stringify(internalstaff));
                 layer.open({
                     title:"内部员工详情",
                     type: 2,
@@ -174,7 +174,7 @@
 
             //打开离职对话框
             function showDimissionDlg() {
-                var content = "internalstaff-dimission.html";
+                var content = "../dialog/dispatch/internalstaff-dimission.html";
                 layer.open({
                     title:"离职",
                     type: 2,
@@ -185,9 +185,9 @@
 
             //打开退休对话框
             function showRetireDlg() {
-                var content = "internalstaff-retire.html";
+                var content = "../dialog/dispatch/internalstaff-retire.html";
                 layer.open({
-                    title:"离职",
+                    title:"退休",
                     type: 2,
                     area: ['400px', '300px'],
                     content: content
@@ -196,7 +196,7 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/internalstaff.html";
+                var content = "../dialog/dispatch/internalstaff.html";
                 layer.open({
                     title:"添加员工",
                     type: 2,

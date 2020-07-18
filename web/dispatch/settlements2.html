@@ -31,7 +31,7 @@
             <!--顶部工具栏-->
             <div class="layui-hide" id="top_bar_settlements2">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
-                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 复制</button>
+                <button class="layui-btn layui-btn-sm" lay-event="copy"><i class="layui-icon "></i> 复制</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
@@ -132,8 +132,8 @@
                         case 'insert':
                             showInsertDlg();
                             break;
-                        case 'derive':
-                            showDeriveDlg();
+                        case 'copy':
+                            showCopyDlg();
                             break;
                         case 'search':
                             search();
@@ -145,7 +145,7 @@
             }
 
             function getSettlements2() {
-                var result = {total:100,rows:[{unit:"科技中专",month:"2020-06",salary:"5000",manager:"5000",tax:"5000",summary:"5000",state:"申报中"},{unit:"国棉四厂",month:"2020-06",salary:"12000",manager:"12000",tax:"12000",summary:"12000",state:"已审核"}]};
+                var result = {total:100,rows:[{unit:"科技中专",month:"2020-06",time:"500",price:"20",tax:"600",add:"0",summary:"5000",state:"申报中"},{unit:"国棉四厂",month:"2020-06",time:"600",price:"18",tax:"0",add:"0",summary:"12000",state:"已审核"}]};
                 table.reload('tbl_settlements2', {
                     data:result.rows
                 });
@@ -189,20 +189,20 @@
             function showEditDlg(settlement2) {
                 var content = "../dialog/dispatch/settlement2.html?settlement2="+encodeURIComponent(JSON.stringify(settlement2));
                 layer.open({
-                    title:"新建",
+                    title:"编辑",
                     type: 2,
                     area: ['400px', '520px'],
                     content: content
                 });
             }
 
-            //打开导出工资发放表对话框
-            function showDeriveDlg() {
-                var content = "payroll.html";
+            //打开复制对话框
+            function showCopyDlg() {
+                var content = "../dialog/dispatch/copy2.html";
                 layer.open({
-                    title:"导出工资发放表",
+                    title:"复制",
                     type: 2,
-                    area: ['200px', '360px'],
+                    area: ['400px', '300px'],
                     content: content
                 });
             }

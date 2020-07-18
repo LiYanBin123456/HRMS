@@ -157,7 +157,6 @@ var columns_contract = [[
     {field:'client', title: '合作客户'},
     {field:'time', title: '生效时间',width:130},
     {field:'expirationtime', title: '到期时间',width:130},
-    {field:'businesstype', title: '业务类型',width:130},
     {fixed: 'right', title: '操作', toolbar: '#bar_contract',width:200}
 ]];
 
@@ -197,6 +196,7 @@ var columns_settlement1  = [[
     {field:'month', title: '月份',width:80},
     {field:'salary', title: '工资',width:70},
     {field:'social', title: '社保',width:70},
+    {field:'accumulation', title: '公积金',width:80},
     {field:'manager', title: '管理费',width:70},
     {field:'tax', title: '税费',width:70},
     {field:'summary', title: '总额',width:80},
@@ -246,32 +246,36 @@ var columns_log  = [[
 
 //工资结算待审核字段集合
 var columns_audit  = [[
-    {field:'unit', title: '客户单位'},
+    {field:'unit', title: '用工企业'},
     {field:'month', title: '月份',width:100},
     {field:'money', title: '金额',width:100},
     {field:'state', title: '状态',width:100},
-    {field:'sort', title: '类别',width:100},
     {fixed: 'right', title: '操作', toolbar: '#bar_audit',width:200}
 ]];
 
 //工资结算到账确认字段集合
 var columns_confirm  = [[
-    {field:'unit', title: '客户单位'},
-    {field:'month', title: '月份',width:100},
-    {field:'money', title: '金额',width:100},
-    {field:'state', title: '状态',width:100},
-    {field:'sort', title: '类别',width:100},
+    {field:'unit', title: '用工企业'},
+    {field:'money', title: '账户余额',width:100},
     {fixed: 'right', title: '操作', toolbar: '#bar_confirm',width:200}
+]];
+
+//工资结算到账确认明细字段集合
+var columns_detail4  = [[
+    {field:'time', title: '日期'},
+    {field:'money', title: '金额',width:100},
+    {field:'matter', title: '事项',width:200},
 ]];
 
 //小时工结算单字段集合
 var columns_settlements2  = [[
     {type:'checkbox',width:30},
-    {field:'unit', title: '客户单位'},
+    {field:'unit', title: '用工企业'},
     {field:'month', title: '月份',width:80},
-    {field:'salary', title: '工资',width:70},
-    {field:'manager', title: '管理费',width:70},
-    {field:'tax', title: '税费',width:70},
+    {field:'time', title: '总工时',width:70},
+    {field:'price', title: '单价',width:70},
+    {field:'tax', title: '交通费',width:70},
+    {field:'add', title: '附加',width:70},
     {field:'summary', title: '总额',width:80},
     {field:'state', title: '状态',width:70},
     {title: '操作', toolbar: '#bar_settlements2',width:300}
