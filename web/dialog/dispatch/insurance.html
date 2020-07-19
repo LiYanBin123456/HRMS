@@ -45,7 +45,7 @@
     </div>
     <div class="layui-form-item">
                         <label  class="layui-form-label">
-                        <span class="x-red">*</span>选择保险时间</label>
+                        <span class="x-red">*</span>选择保险时段</label>
                             <div class="layui-input-inline">
                                 <select name="time" lay-verify="required">
                                     <option value=""></option>
@@ -55,12 +55,30 @@
                             </select>
                     </div>
                     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="x-red">*</span>年龄下限</label>
+        <div class="layui-input-inline">
+            <input type="text" name="restrict" required="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="x-red">*</span>年龄上限</label>
+        <div class="layui-input-inline">
+            <input type="text" name="restrict" required="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
     <div class="layui-form-item" pane="">
     <div class="layui-input-block">
       <input type="checkbox" name="" lay-skin="primary" title="1类" checked="">
       <input type="checkbox" name="" lay-skin="primary" title="2类" checked="">
       <input type="checkbox" name="" lay-skin="primary" title="3类" checked="">
+    </div>
+  </div>
+  <div class="layui-form-item" pane="">
+    <div class="layui-input-block">
       <input type="checkbox" name="" lay-skin="primary" title="4类" checked="">
+      <input type="checkbox" name="" lay-skin="primary" title="5类" checked="">
+      <input type="checkbox" name="" lay-skin="primary" title="6类" checked="">
     </div>
   </div>
     <div class="layui-form-item">

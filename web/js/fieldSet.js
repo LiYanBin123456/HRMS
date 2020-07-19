@@ -327,8 +327,30 @@ var columns_detail3  = [[
     {fixed: 'right', title: '操作', toolbar: '#bar_detail3',width:80}
 ]];
 
-//小时工工资明细添加字段集合
+//商业保险工资明细添加字段集合
 var columns_staff3 = [[
+    {type:'checkbox'},
+    {field:'ID', title: '身份证号',width:400},
+    {field:'name', title: '姓名',width:200},
+]];
+
+//社保参保字段集合
+var columns_socialsc  = [[
+    {field:'ID', title: '身份证号'},
+    {field:'name', title: '姓名',width:80},
+    {field:'personal', title: '个人代码',width:80},
+    {field:'insured', title: '参保时间',width:80},
+    {field:'wage', title: '月缴费工资',width:100},
+    {field:'time', title: '工作时间',width:100},
+    {field:'phone', title: '联系电话',width:100},
+    {field:'nature', title: '户口性质',width:80},
+    {field:'site', title: '户籍地址',width:150},
+    {field:'state', title: '参保状态',width:80},
+    {fixed: 'right', title: '操作', toolbar: '#bar_socialsc',width:200}
+]];
+
+//社保参保添加字段集合
+var columns_socialscadd  = [[
     {type:'checkbox'},
     {field:'ID', title: '身份证号',width:400},
     {field:'name', title: '姓名',width:200},
@@ -340,9 +362,10 @@ var columns_insurance = [[
     {field:'coverage', title: '产品保额',width:80},
     {field:'yiliao', title: '医疗保额',width:80},
     {field:'allowance', title: '住院津贴',width:80},
-    {field:'time', title: '保险时间',width:100},
+    {field:'time', title: '保障时段',width:100},
     {field:'personnel', title: '可参保人员',width:130},
-    {fixed: 'right', title: '操作', toolbar: '#bar_insurance',width:200}
+    {field:'restrict', title: '年龄限制',width:100},
+    {fixed: 'right', title: '操作', toolbar: '#bar_insurance',width:270}
 ]];
 
 //账号管理字段集合
@@ -350,6 +373,18 @@ var columns_account  = [[
     {field:'name', title: '姓名'},
     {field:'ID', title: '登录账号',width:200},
     {fixed: 'right', title: '操作', toolbar: '#bar_account',width:200}
+]];
+
+//账号管理权限分配字段集合
+var columns_list1  = [[
+    {field:'allocated', title: '已分配客户',width:200},
+    {fixed: 'right', title: '操作', toolbar: '#bar_list1',width:200}
+]];
+
+//账号管理权限分配字段集合
+var columns_list2  = [[
+    {field:'unallocated', title: '待分配客户',width:200},
+    {fixed: 'right', title: '操作', toolbar: '#bar_list2',width:200}
 ]];
 
 //简历字段集合
