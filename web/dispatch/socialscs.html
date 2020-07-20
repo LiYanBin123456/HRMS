@@ -33,12 +33,21 @@
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导出新增</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导出停保</button>
-                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 校对</button>
+                <button type="button" class="layui-btn layui-btn-sm" lay-event=""  id="test1" ><i class="layui-icon "></i> 校对</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
                         <input name="keyword" class="layui-input" placeholder="输入要查找投保人员的姓名或身份证号">
                     </div>
                     <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                    <div class="layui-input-inline">
+                        <select name="state"   lay-verify="required" >
+                                    <option value="">按状态过滤</option>
+                                    <option value="0">在保</option>
+                                    <option value="1">新增</option>
+                                    <option value="2">停保</option>
+                                    <option value="3">拟停</option>
+                        </select>
+                    </div>
                 </form>
             </div>
             <table id="tbl_socialsc" lay-filter="filter_tb_socialsc"></table>
@@ -58,17 +67,19 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
+            var upload;
             var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
 
             function loadLayuiModule() {
-                layui.use(['table','form','element','layer','laypage'], function() {
+                layui.use(['upload','table','form','element','layer','laypage'], function() {
                     table = layui.table;
                     layer = layui.layer;
                     element = layui.element;
                     laypage = layui.laypage;
+                    var upload = layui.upload;
                     form = layui.form;
                     initPage();
                 });
@@ -97,6 +108,7 @@
                         }
                     }
                 });
+
 
                 //初始化数据表格
                 table.render({
@@ -134,6 +146,7 @@
                     };
                 });
 
+
                 getSocialscs();
             }
 
@@ -162,7 +175,7 @@
                 layer.open({
                     title:"编辑",
                     type: 2,
-                    area: ['300px', '350px'],
+                    area: ['600px', '500px'],
                     content: content
                 });
             }

@@ -13,18 +13,37 @@
             <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
             <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
+        <style>
+            .searchbox{
+                margin-left:100px;
+                display:inline;
+                width:300px;
+            }
+        </style>
     </head>
     <body>
-            <div class="layui-card-header">
-                <button class="layui-btn" ><i class="layui-icon layui-icon-radio"></i>固定期限</button>
-                <button class="layui-btn" ><i class="layui-icon layui-icon-radio"></i>无固定期限</button>
-            </div>
+
                 <form lay-filter="form_staffcontract" class="layui-form">
+                    <div class="layui-input-inline searchbox">
+                             <div class="layui-inline"><input type="radio" name="se" value="固定期限" title="固定期限" checked></div>
+                             <div class="layui-inline"><input type="radio" name="se" value="无固定期限" title="无固定期限" ></div>
+                    </div>
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
-                            <span class="x-red">*</span>姓名</label>
+                            <span class="x-red">*</span>身份证号码</label>
                         <div class="layui-input-inline">
-                            <input type="text"  name="name" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                            <input type="text"  name="ID" required="" lay-verify="nikename" autocomplete="off" class="layui-input layui-disabled" disabled></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">
+                           <span class="x-red">*</span>姓名</label>
+                        <div class="layui-input-inline layui-disabled" disabled>
+                             <select name="name" lay-verify="required">
+                             <option value=""></option>
+                             <option value="0">张三</option>
+                             <option value="1">李四</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
@@ -36,7 +55,7 @@
                         <label  class="layui-form-label">
                             <span class="x-red">*</span>合同到期时间</label>
                         <div class="layui-input-inline">
-                            <input type="text"  name="finishtime" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                            <input type="text"  name="finishtime" required=""  autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
                         <label  class="layui-form-label">

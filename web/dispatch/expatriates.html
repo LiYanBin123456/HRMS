@@ -38,9 +38,12 @@
                     </div>
                     <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                     <div class="layui-input-inline">
-                        <input name="keyword1" class="layui-input" placeholder="按派遣单位过滤">
+                        <select name="unit"  lay-filter="city" lay-verify="required" >
+                                    <option value="">按派遣单位过滤</option>
+                                    <option value="0">江西制氧机械</option>
+                                    <option value="1">九江石化</option>
+                        </select>
                     </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search1"><i class="layui-icon layui-icon-search"></i></button>
                 </form>
             </div>
             <table id="tbl_expatriate" lay-filter="filter_tb_expatriate"></table>

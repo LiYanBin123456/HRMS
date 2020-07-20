@@ -36,6 +36,13 @@
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
                     </div>
                     <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                    <div class="layui-input-inline">
+                        <select name="unit" lay-verify="required">
+                              <option value="">按派遣单位过滤</option>
+                              <option value="0">江西制氧机械</option>
+                              <option value="1">九江石化</option>
+                        </select>
+                    </div>
                 </form>
             </div>
             <table id="tbl_staff" lay-filter="filter_tb_staff"></table>

@@ -36,7 +36,6 @@
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
                              <div class="layui-inline"><input type="radio" name="se" value="录入模式" title="录入模式" checked></div>
-                             <div class="layui-inline"><input type="radio" name="se" value="结算模式" title="结算模式" ></div>
                              <div class="layui-inline"><input type="radio" name="se" value="完整模式" title="完整模式"></div>
                     </div>
                 </form>
@@ -133,7 +132,7 @@
           }
 
             function getDetail2s() {
-                var result = {total:100,rows:[{ID:"360402199008230081",name:"张晓国",time:"1000",up:"50",mealbuzhu:"100",mealkoukuan:"-50",zhushu:"5000",shuidian:"5000",baoxian:"5000",geshui:"5000",qita:"5000",yingfu:"5000",shifa:"5000"},{ID:"360402199008230081",name:"宋丽",time:"2000",up:"50",mealbuzhu:"600",mealkoukuan:"-60",zhushu:"12000",shuidian:"12000",baoxian:"12000",geshui:"12000",qita:"12000",yingfu:"12000",shifa:"12000"}]};
+                var result = {total:100,rows:[{ID:"360402199008230081",name:"张晓国",time:"1000",meal:"100",traffic:"100",zhusu:"5000",shuidian:"5000",baoxian:"5000",qita1:"5000",qita2:"5000",yingfu:"5000",shifa:"5000"},{ID:"360402199008230081",name:"宋丽",time:"2000",meal:"600",zhusu:"12000",traffic:"100",shuidian:"12000",baoxian:"12000",qita1:"12000",qita2:"12000",yingfu:"12000",shifa:"12000"}]};
                 table.reload('tbl_detail2', {
                     data:result.rows
                 });

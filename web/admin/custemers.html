@@ -176,10 +176,10 @@
             }
 
             //打开合同对话框
-            function showContractDlg() {
+            function showContractDlg(custemer) {
                 var content = "admin-contract.html";
                 layer.open({
-                    title:"合同",
+                    title:'合同-'+custemer.name,
                     type: 2,
                     area: ['800px', '600px'],
                     content: content
@@ -199,7 +199,7 @@
 
             //删除公告
             function del(custemer) {
-                layer.confirm('确定删除'+custemer.title, {icon: 3, title:'删除'}, function(index){
+                layer.confirm('确定删除'+custemer.name, {icon: 3, title:'删除'}, function(index){
                     iCustemer.delete(custemer.id,function () {
                         layer.close(index);
                         getCustemers();

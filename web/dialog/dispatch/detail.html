@@ -19,7 +19,7 @@
         <![endif]-->
         <style>
             .searchbox{
-                margin-left:470px;
+                margin-left:400px;
                 display:inline;
                 width:300px;
             }
@@ -31,15 +31,15 @@
             <!--顶部工具栏-->
             <div class="layui-hide" id="top_bar_detail">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
-                <button class="layui-btn layui-btn-sm" lay-event="addrecord"><i class="layui-icon "></i> 补录</button>
+                <button class="layui-btn layui-btn-sm" lay-event="addrecord"><i class="layui-icon "></i> 社保补缴</button>
+                <button class="layui-btn layui-btn-sm" lay-event="addrecord"><i class="layui-icon "></i> 社保补差</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导入工资表</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 下载模板</button>
                 <button class="layui-btn layui-btn-sm" lay-event="derive"><i class="layui-icon "></i> 导出工资发放表</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
-                             <div class="layui-inline"><input type="radio" name="se" value="录入" title="录入" checked></div>
-                             <div class="layui-inline"><input type="radio" name="se" value="结算" title="结算" ></div>
-                             <div class="layui-inline"><input type="radio" name="se" value="完整" title="完整"></div>
+                             <div class="layui-inline"><input type="radio" name="se" value="录入" title="录入" checked="checked" value="1"></div>
+                             <div class="layui-inline"><input type="radio" name="se" value="完整" title="完整" value="2"></div>
                     </div>
                 </form>
             </div>
@@ -137,11 +137,12 @@
                             break;
                 };
                 });
+
                 getDetails();
           }
 
             function getDetails() {
-                var result = {total:100,rows:[{ID:"360402199008230081",name:"张晓国",money:"5000",post:"1000",house:"500",traffic:"100",shebao:"300",gongjijin:"500",geshui:"100",kaoqin:"50",shifa:"4500"},{ID:"360402199008230081",name:"宋丽",money:"12000",post:"2000",house:"600",traffic:"600",shebao:"600",gongjijin:"600",geshui:"600",kaoqin:"60",shifa:"8000"}]};
+                var result = {total:100,rows:[{ID:"360402199008230081",name:"张晓国",money:"5000",post:"1000",bonus:"500",house:"500",traffic:"100",shebao:"300",gongjijin:"500",geshui:"100",kaoqin:"50",shifa:"4500"},{ID:"360402199008230081",name:"宋丽",money:"12000",post:"2000",bonus:"600",house:"600",traffic:"600",shebao:"600",gongjijin:"600",geshui:"600",kaoqin:"60",shifa:"8000"}]};
                 table.reload('tbl_detail', {
                     data:result.rows
                 });

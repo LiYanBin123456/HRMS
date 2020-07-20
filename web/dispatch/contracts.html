@@ -157,7 +157,7 @@
             function showDetailDlg(contract) {
                 var content = "../dialog/contract.html?contract="+encodeURIComponent(JSON.stringify(contract));
                 layer.open({
-                    title:"合同详情",
+                    title:'合同-'+contract.client,
                     type: 2,
                     area: ['800px', '600px'],
                     content: content

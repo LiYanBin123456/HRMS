@@ -37,6 +37,24 @@
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
                     </div>
                     <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                     <div class="layui-input-inline">
+                        <select name="month" lay-verify="required">
+                              <option value="">按月份过滤</option>
+                              <option value="0">2020-06</option>
+                              <option value="1"></option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="state"   lay-verify="required" >
+                                    <option value="">按状态过滤</option>
+                                    <option value="0">编辑</option>
+                                    <option value="1">提交</option>
+                                    <option value="2">初审</option>
+                                    <option value="3">终审</option>
+                                    <option value="4">扣款</option>
+                                    <option value="5">发放</option>
+                        </select>
+                    </div>
                 </form>
             </div>
             <table id="tbl_settlements2" lay-filter="filter_tb_settlements2"></table>
