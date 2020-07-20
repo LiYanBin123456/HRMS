@@ -39,19 +39,38 @@
                         </div>
                         </div>
                      </form>
-                </div>
                 <div class="layui-card-body ">
                             <div class="layui-card-header">
-                          <button class="layui-btn" onclick="xadmin.open('添加新合同','./custemer-contractadd.html',600,400)"><i class="layui-icon"></i>签订</button>
-                          <button class="layui-btn" onclick="xadmin.open('查看合同历史记录','./custemer-contracthistory.html',600,400)"><i class="layui-icon"></i>历史记录</button>
+                          <button class="layui-btn" onclick="xadmin.open('查看合同历史记录',',600,400)"><i class="layui-icon"></i>历史</button>
+                          <button class="layui-btn" onclick="xadmin.open('添加新合同','./custemer-contractadd.html',600,400)"><i class="layui-icon"></i>添加</button>
                         </div>
                         </div>
-                
-                        
+                        <div class="layui-card-body ">
+                            <table class="layui-table layui-form">
+                               <label for="L_username" class="layui-form-item">
+                            <span class="x-blue">历史合同</span>-------------------------------------------------------------------------------------------------------------------------------------------------------------------------</label> 
+                              <thead>
+                                <tr cate-id='0' fid='0' >
+                                  <th width="100">合同编号</th>
+                                  <th width="100">合同生效时间</th>
+                                  <th width="20">合同到期时间</th>
+                              </thead>
+                              <tbody class="x-cate">
+                                <tr cate-id='1' fid='0' >
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                </tr>
+                                <tr cate-id='1' fid='0' >
+                                  <td></td>
+                                  <td></td>
+                                  <td></td>
+                                </tr>
+                              </tbody>
+                            </table>
+                        </div>        
            </div> 
-                </form>
             </div>
-        </div>
         <script>layui.use(['form', 'layer','jquery'],
             function() {
                 $ = layui.jquery;

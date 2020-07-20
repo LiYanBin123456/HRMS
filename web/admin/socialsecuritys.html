@@ -19,7 +19,7 @@
         <![endif]-->
         <style>
             .searchbox{
-                margin-left:100px;
+                margin-left:400px;
                 display:inline;
                 width:300px;
             }
@@ -33,9 +33,15 @@
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="按地市过滤">
+                        <select name="city"  lay-filter="city" lay-verify="required" >
+                                    <option value="">按地市过滤</option>
+                                    <option value="0">北京</option>
+                                    <option value="1">上海</option>
+                                    <option value="2">广州</option>
+                                    <option value="3">深圳</option>
+                                    <option value="4">杭州</option>
+                        </select>
                     </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i></button>
                 </form>
             </div>
             <table id="tbl_socialsecurity" lay-filter="filter_tb_socialsecurity"></table>
@@ -135,7 +141,7 @@
             }
 
             function getSocialsecuritys() {
-                var result = {total:100,rows:[{city:"九江市",time:"2019-06",cardinal:"2500",yanglaodanwei:"3%",yanglaogeren:"1%",gongshangdanwei:"3%",gongshangbuchong:"4元",shiyedanwei:"3%",shiyegeren:"1%"},{city:"九江市",time:"2004-12",cardinal:"2500",yanglaodanwei:"2%",yanglaogeren:"2%",gongshangdanwei:"2%",gongshangbuchong:"4元",shiyedanwei:"2%",shiyegeren:"2%"}]};
+                var result = {total:100,rows:[{city:"九江市",time:"2019-06",cardinal:"2500",yanglaodanwei:"3%",yanglaogeren:"1%",gongshangdanwei:"3%",gongshangbuchong:"4",shiyedanwei:"3%",shiyegeren:"1%"},{city:"九江市",time:"2004-12",cardinal:"2500",yanglaodanwei:"2%",yanglaogeren:"2%",gongshangdanwei:"2%",gongshangbuchong:"4",shiyedanwei:"2%",shiyegeren:"2%"}]};
                 table.reload('tbl_socialsecurity', {
                     data:result.rows
                 });
@@ -177,7 +183,7 @@
 
             //删除公告
             function del(socialsecurity) {
-                layer.confirm('确定删除'+socialsecurity.title, {icon: 3, title:'删除'}, function(index){
+                layer.confirm('确定删除'+socialsecurity.city+socialsecurity.time+'的社保规则', {icon: 3, title:'删除'}, function(index){
                     iSocialsecurity.delete(socialsecurity.id,function () {
                         layer.close(index);
                         getSocialsecuritys();

@@ -160,13 +160,21 @@ var columns_contract = [[
     {fixed: 'right', title: '操作', toolbar: '#bar_contract',width:200}
 ]];
 
+//劳务派遣客户合同工资定义字段集合
+var columns_wage = [[
+    {field:'ID', title: '合作客户'},
+    {field:'name', title: '生效时间',width:130},
+    {field:'expirationtime', title: '到期时间',width:130},
+    {fixed: 'right', title: '操作', toolbar: '#bar_wage',width:200}
+]];
+
 //内部员工管理字段集合
 var columns_internalstaff = [[
     {field:'ID', title: '身份证号'},
-    {field:'name', title: '姓名',width:200},
-    {field:'education', title: '学历',width:130},
-    {field:'phone', title: '联系电话',width:230},
-    {field:'department', title: '所属部门',width:130},
+    {field:'name', title: '姓名',width:80},
+    {field:'education', title: '学历',width:100},
+    {field:'phone', title: '联系电话',width:120},
+    {field:'department', title: '所属部门',width:120},
     {fixed: 'right', title: '操作', toolbar: '#bar_internalstaff',width:400}
 ]];
 
