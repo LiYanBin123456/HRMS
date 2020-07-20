@@ -8,13 +8,13 @@ public class Rule_medical {
     private float per1;//医疗单位比例
     private float per2;//医疗个人比例
     private float per3;//生育单位比例
-    private float per4;//大病单位
-    private float per5;//大病个人
+    private float fin1;//大病单位
+    private float fin2;//大病个人
 
     public Rule_medical() {
     }
 
-    public Rule_medical(long id, String city, String start, int base, float per1, float per2, float per3, float per4, float per5) {
+    public Rule_medical(long id, String city, String start, int base, float per1, float per2, float per3, float fin1, float fin2) {
         this.id = id;
         this.city = city;
         this.start = start;
@@ -22,16 +22,24 @@ public class Rule_medical {
         this.per1 = per1;
         this.per2 = per2;
         this.per3 = per3;
-        this.per4 = per4;
-        this.per5 = per5;
+        this.fin1 = fin1;
+        this.fin2 = fin2;
     }
 
-    public float getPer5() {
-        return per5;
+    public float getFin1() {
+        return fin1;
     }
 
-    public void setPer5(float per5) {
-        this.per5 = per5;
+    public void setFin1(float fin1) {
+        this.fin1 = fin1;
+    }
+
+    public float getFin2() {
+        return fin2;
+    }
+
+    public void setFin2(float fin2) {
+        this.fin2 = fin2;
     }
 
     public String getStart() {
@@ -91,14 +99,6 @@ public class Rule_medical {
         this.per3 = per3;
     }
 
-    public float getPer4() {
-        return per4;
-    }
-
-    public void setPer4(float per4) {
-        this.per4 = per4;
-    }
-
     @Override
     public String toString() {
         return "Rule_medical{" +
@@ -109,8 +109,8 @@ public class Rule_medical {
                 ", per1=" + per1 +
                 ", per2=" + per2 +
                 ", per3=" + per3 +
-                ", per4=" + per4 +
-                ", per5=" + per5 +
+                ", fin1=" + fin1 +
+                ", fin2=" + fin2 +
                 '}';
     }
 }

@@ -5,14 +5,12 @@ public class Client {
     private String rid;//档案编号
     private String name;//全称
     private String nickname;//昵称
-
     /**
      * 客户类型
       0_平台管理员管理劳务派遣单位
       1_劳务派遣单位管理合作单位
      */
     private int type;
-
     /**
      *是否为合作客户
      0_ 潜在客户
@@ -21,8 +19,6 @@ public class Client {
 
      */
     private int status;
-
-
     /**
      * 客户性质，只有派遣单位才有
      0_政府部门
@@ -38,6 +34,13 @@ public class Client {
      10_其它
      */
     private int category;
+    /**
+     * 业务类型（供应商才有）
+     0_顶岗实习
+     1_就业安置
+     2_其他
+     */
+    private int business;
     private String address;
     private String contact;
     private String phone;
@@ -84,7 +87,12 @@ public class Client {
     public void setCategory(int category) {
         this.category = category;
     }
-
+    public int getBusiness() {
+        return business;
+    }
+    public void setBusiness(int business) {
+        this.business = business;
+    }
     public String getAddress() {
         return address;
     }
@@ -154,7 +162,7 @@ public class Client {
     public Client() {
     }
 
-    public Client(long id, String rid, String name, String nickname, int type, int status, int category, String address, String contact, String phone, String wx, String qq, String intro) {
+    public Client(long id, String rid, String name, String nickname, int type, int status, int category, int business, String address, String contact, String phone, String wx, String qq, String intro) {
         this.id = id;
         this.rid = rid;
         this.name = name;
@@ -162,6 +170,7 @@ public class Client {
         this.type = type;
         this.status = status;
         this.category = category;
+        this.business = business;
         this.address = address;
         this.contact = contact;
         this.phone = phone;
@@ -170,15 +179,17 @@ public class Client {
         this.intro = intro;
     }
 
-
     @Override
     public String toString() {
         return "Client{" +
                 "id=" + id +
+                ", rid='" + rid + '\'' +
                 ", name='" + name + '\'' +
+                ", nickname='" + nickname + '\'' +
                 ", type=" + type +
                 ", status=" + status +
                 ", category=" + category +
+                ", business=" + business +
                 ", address='" + address + '\'' +
                 ", contact='" + contact + '\'' +
                 ", phone='" + phone + '\'' +

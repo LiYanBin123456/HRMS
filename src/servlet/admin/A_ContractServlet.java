@@ -2,6 +2,8 @@ package servlet.admin;
 
 import bean.admin.a_contract;
 import com.alibaba.fastjson.JSONObject;
+import dao.admin.A_ContractDao;
+import dao.admin.ContractDao;
 import database.*;
 import org.apache.commons.io.IOUtils;
 import service.admin.A_ContractService;
@@ -22,6 +24,7 @@ import java.sql.Connection;
 @MultipartConfig
 public class A_ContractServlet extends HttpServlet {
     private a_contract contract = new a_contract();
+    private A_ContractDao contractDao=new A_ContractDao();
     private A_ContractService contractService = new A_ContractService();
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8");
@@ -77,13 +80,13 @@ public class A_ContractServlet extends HttpServlet {
     private String insertContract(Connection conn, HttpServletRequest request) throws IOException, ServletException {
         DaoUpdateResult res ;
 
-        long cid = Long.parseLong(request.getParameter("cid"));
+        long bid = Long.parseLong(request.getParameter("bid"));
         String start = request.getParameter("start");
         String end = request.getParameter("end");
         int status = Integer.parseInt(request.getParameter("status"));
         String intro = request.getParameter("intro");
 
-        contract.setCid(cid);
+        contract.setBid(bid);
         contract.setStart(start);
         contract.setEnd(end);
         contract.setStatus(status);
@@ -117,29 +120,39 @@ public class A_ContractServlet extends HttpServlet {
                 String headername = header.substring(header.indexOf("filename")+10, header.length()-1);
                 //获取文件名后缀
                 String suffixName=headername.substring(headername.indexOf(".")+1);
+                System.out.println(suffixName);
+                String s="pdf";
+                if(suffixName.equals(s)){
+                    System.out.println(1);
+                    //获取文件流
+                    InputStream put = part.getInputStream();
+                    //获取文件的真实路径
+                    String url = request.getServletContext().getRealPath("/upload");
 
-                //获取文件流
-                InputStream put = part.getInputStream();
-                //获取文件的真实路径
-                String url = request.getServletContext().getRealPath("/upload");
+                    File uploadDir = new File(url);
 
-                File uploadDir = new File(url);
+                    // 如果该文件夹不存在则创建
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdirs();
+                    }
 
-                // 如果该文件夹不存在则创建
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
+                    file = id+"."+suffixName;
+
+                    //建立对拷流
+                    FileOutputStream fos = new FileOutputStream(new File(url, file));
+
+                    IOUtils.copy(put, fos);
+                    put.close();
+                    fos.close();
+                    //删除临时文件
+                    part.delete();
+                    res.msg="合同已上传";
                 }
-
-                file = id+"."+suffixName;
-
-                //建立对拷流
-                FileOutputStream fos = new FileOutputStream(new File(url, file));
-
-                IOUtils.copy(put, fos);
-                put.close();
-                fos.close();
-                //删除临时文件
-                part.delete();
+                else {
+                    res.msg="不是pdf格式文件，不能上传";
+                    //如果文件上传失败要删除掉该合同，以免前台重新插入时错误
+                     contractDao.delete(conn,id);
+                }
             }else {
                 res.msg+= "合同文件未插入";
             }
@@ -151,13 +164,13 @@ public class A_ContractServlet extends HttpServlet {
     private String insertContract2(Connection conn, HttpServletRequest request) throws IOException, ServletException{
         DaoUpdateResult res ;
 
-        long cid = Long.parseLong(request.getParameter("cid"));
+        long bid = Long.parseLong(request.getParameter("bid"));
         String start = request.getParameter("start");
         String end = request.getParameter("end");
         int status = Integer.parseInt(request.getParameter("status"));
         String intro = request.getParameter("intro");
 
-        contract.setCid(cid);
+        contract.setBid(bid);
         contract.setStart(start);
         contract.setEnd(end);
         contract.setStatus(status);
@@ -191,29 +204,33 @@ public class A_ContractServlet extends HttpServlet {
                 String headername = header.substring(header.indexOf("filename")+10, header.length()-1);
                 //获取文件名后缀
                 String suffixName=headername.substring(headername.indexOf(".")+1);
-
-                //获取文件流
-                InputStream put = part.getInputStream();
-                //获取文件的真实路径
-                String url = request.getServletContext().getRealPath("/upload");
-
-                File uploadDir = new File(url);
-
-                // 如果该文件夹不存在则创建
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
+                String s="pdf";
+                if(suffixName.equals(s)){
+                    System.out.println(1);
+                    //获取文件流
+                    InputStream put = part.getInputStream();
+                    //获取文件的真实路径
+                    String url = request.getServletContext().getRealPath("/upload");
+                    File uploadDir = new File(url);
+                    // 如果该文件夹不存在则创建
+                    if (!uploadDir.exists()) {
+                        uploadDir.mkdirs();
+                    }
+                    file = id+"."+suffixName;
+                    //建立对拷流
+                    FileOutputStream fos = new FileOutputStream(new File(url, file));
+                    IOUtils.copy(put, fos);
+                    put.close();
+                    fos.close();
+                    //删除临时文件
+                    part.delete();
+                    res.msg="合同已上传";
                 }
-
-                file = id+"."+suffixName;
-
-                //建立对拷流
-                FileOutputStream fos = new FileOutputStream(new File(url, file));
-
-                IOUtils.copy(put, fos);
-                put.close();
-                fos.close();
-                //删除临时文件
-                part.delete();
+                else {
+                    res.msg="不是pdf格式文件，不能上传";
+                    //如果文件上传失败要删除掉该合同，以免前台重新插入时错误
+                    res = contractDao.delete(conn,id);
+                }
             }else {
                 res.msg+= "合同文件未插入";
             }
@@ -223,9 +240,9 @@ public class A_ContractServlet extends HttpServlet {
 
     private String getContract(Connection conn, HttpServletRequest request) {
 
-        String cid = (request.getParameter("cid"));
-        System.out.println("客户id="+cid);
-        DaoQueryResult res = contractService.getContract(conn,cid);
+        String bid = (request.getParameter("bid"));
+        System.out.println("客户id="+bid);
+        DaoQueryResult res = contractService.getContract(conn,bid);
         if(res.data == null){
            res.msg="该客户暂时未签订合同";
         }else {
