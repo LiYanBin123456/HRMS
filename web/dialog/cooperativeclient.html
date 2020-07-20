@@ -17,10 +17,16 @@
             <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
         <style>
-            .searchbox{
-                margin-left:100px;
-                display:inline;
-                width:300px;
+            .salary_priview{
+                border: 1px solid grey;
+            }
+            .columns{
+                margin-left:20px;
+                width:200px;
+                float:left;
+            }
+            .columns input{
+                margin: 5px;
             }
         </style>
     </head>
@@ -158,30 +164,65 @@
                 </form>
             </div>
       <div class="layui-tab-item">
-        <div class="layui-card-body ">
-                            <table class="layui-table layui-form">
-                               <label for="" class="layui-form-item">
-                              
-                              <tbody class="x-cate">
-                                <tr cate-id='1' fid='0' >
-                                  <td>基本工资</td>
-                                  <td>绩效奖金</td>
-                                  <td>岗位补贴</td>
-                                  <td>住房补助</td>
-                                  <td>交通补助</td>
-                                  <td>社保</td>
-                                  <td>公积金</td>
-                                </tr><br>
-                                <tr>
-                                  <td>个税</td>
-                                  <td>实发</td>
-                                  <td>加班工资</td>
-                                  <td><i class="layui-icon layui-icon-addition"></i></td>
-                                </tr>
-                              </tbody>
-                            </table>
-                        </div> 
-      </div>
+          <fieldset class="layui-elem-field layui-field-title">
+              <legend>工资表预览</legend>
+              <table class="layui-table" lay-even="" lay-skin="row">
+                  <colgroup>
+                      <col width="60">
+                      <col width="60">
+                      <col width="60">
+                      <col width="60">
+                      <col width="60">
+                      <col width="60">
+                      <col width="60">
+                      <col width="60">
+                      <col width="60">
+                      <col width="60">
+                  </colgroup>
+                  <thead>
+                  <tr>
+                      <th>基本工资</th>
+                      <th>绩效奖金</th>
+                      <th>岗位补贴</th>
+                      <th>个人社保</th>
+                      <th>单位社保</th>
+                      <th>个人公积金</th>
+                      <th>单位公积金</th>
+                      <th>个税</th>
+                      <th>应发</th>
+                      <th>实发</th>
+                  </tr>
+                  </thead>
+              </table>
+          </fieldset>
+
+          <fieldset class="layui-elem-field layui-field-title">
+              <legend>自定义工资字段（最多10个）</legend>
+              <div class="columns">
+                  <input type="text" class="layui-input" value="基本工资" disabled>
+                  <input type="text" class="layui-input" value="绩效奖金" disabled>
+                  <input type="text" class="layui-input" value="岗位补贴" disabled>
+                  <input type="text" class="layui-input" value="个人社保" disabled>
+                  <input type="text" class="layui-input" value="单位社保" disabled>
+                  <input type="text" class="layui-input" value="个人公积金" disabled>
+                  <input type="text" class="layui-input" value="单位公积金" disabled>
+                  <input type="text" class="layui-input" value="个税" disabled>
+                  <input type="text" class="layui-input" value="应发" disabled>
+                  <input type="text" class="layui-input" value="实发" disabled>
+              </div>
+              <div class="columns">
+                  <input type="text" class="layui-input" name="f1" placeholder="输入自定义字段名">
+                  <input type="text" class="layui-input" name="f2" placeholder="输入自定义字段名">
+                  <input type="text" class="layui-input" name="f3" placeholder="输入自定义字段名">
+                  <input type="text" class="layui-input" name="f4" placeholder="输入自定义字段名">
+                  <input type="text" class="layui-input" name="f5" placeholder="输入自定义字段名">
+                  <input type="text" class="layui-input" name="f6" placeholder="输入自定义字段名">
+                  <input type="text" class="layui-input" name="f7" placeholder="输入自定义字段名">
+                  <input type="text" class="layui-input" name="f8" placeholder="输入自定义字段名">
+                  <input type="text" class="layui-input" name="f9" placeholder="输入自定义字段名">
+                  <input type="text" class="layui-input" name="f10" placeholder="输入自定义字段名">
+              </div>
+          </fieldset>
       </div>
     </div>
 </body>

@@ -221,16 +221,34 @@ var columns_settlement1  = [[
     {title: '操作', toolbar: '#bar_settlement',width:350}
 ]];
 
-//工资管理明细字段集合
-var columns_detail  = [[
+//工资管理明细字段集合（完整模式）
+var columns_detail_full  = [[
     {field:'ID', title: '身份证号',edit: 'text'},
     {field:'name', title: '姓名',width:80,edit: 'text'},
     {field:'money', title: '基本工资',width:80,edit: 'text'},
-    {field:'post', title: '岗位补贴',width:80,edit: 'text'},
     {field:'bonus', title: '绩效奖金',width:80,edit: 'text'},
+    {field:'post', title: '岗位补贴',width:80,edit: 'text'},
+    {field:'post', title: '个人社保',width:80,edit: 'text'},
+    {field:'post', title: '单位社保',width:80,edit: 'text'},
+    {field:'post', title: '个人公积金',width:80,edit: 'text'},
+    {field:'post', title: '单位公积金',width:80,edit: 'text'},
+    {field:'post', title: '个税',width:80,edit: 'text'},
     {field:'traffic', title: '交通补助',width:80,edit: 'text'},
     {field:'kaoqin', title: '考勤扣款',width:80,edit: 'text'},
-    {fixed: 'right', title: '操作', toolbar: '#bar_detail',width:80}
+    {field:'kaoqin', title: '应发',width:80,edit: 'text'},
+    {field:'kaoqin', title: '实发',width:80,edit: 'text'}
+]];
+
+//工资管理明细字段集合(录入模式）
+var columns_detail_input  = [[
+    {field:'ID', title: '身份证号',width:160,edit: 'text'},
+    {field:'name', title: '姓名',width:80,edit: 'text'},
+    {field:'money', title: '基本工资',width:80,edit: 'text'},
+    {field:'bonus', title: '绩效奖金',width:80,edit: 'text'},
+    {field:'post', title: '岗位补贴',width:80,edit: 'text'},
+    {field:'traffic', title: '交通补助',width:80,edit: 'text'},
+    {field:'kaoqin', title: '考勤扣款',width:80,edit: 'text'},
+    {fixed: 'right', title: '操作', toolbar: '#bar_detail'}
 ]];
 
 //工资明细添加字段集合
