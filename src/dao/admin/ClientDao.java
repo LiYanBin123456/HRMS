@@ -9,7 +9,7 @@ import java.sql.Connection;
 
 public class ClientDao {
     /**
-     * 获取客户列表
+     * 获取派遣单位客户列表
      * @param conn 数据库连接
      *@param param 查询参数
      * @return 检索结果，格式："{success:true,msg:"",effects:1}"

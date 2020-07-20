@@ -26,14 +26,14 @@ public class Rule_medicalDao {
     }
 
     public DaoUpdateResult updateMedical(Connection conn, Rule_medical m) {
-        String sql = "update rule_medical set city = ?,start = ?,base=?,per1=?,per2=?,per3=?,per4=? where id=?";
-        Object []param ={m.getCity(),m.getStart(),m.getBase(),m.getPer1(),m.getPer2(),m.getPer3(),m.getPer4(),m.getId()} ;
+        String sql = "update rule_medical set city = ?,start = ?,base=?,per1=?,per2=?,per3=?,fin1=?,fin2=? where id=?";
+        Object []param ={m.getCity(),m.getStart(),m.getBase(),m.getPer1(),m.getPer2(),m.getPer3(),m.getFin1(),m.getFin2(),m.getId()} ;
         return  DbUtil.update(conn,sql,param);
     }
 
     public DaoUpdateResult insertMedical(Connection conn, Rule_medical m) {
-        String sql = "insert rule_medical(city ,start ,base,per1,per2,per3,per4) values (?,?,?,?,?,?,?)";
-        Object []param ={m.getCity(),m.getStart(),m.getBase(),m.getPer1(),m.getPer2(),m.getPer3(),m.getPer4()};
+        String sql = "insert rule_medical(city ,start ,base,per1,per2,per3,fin1,fin2) values (?,?,?,?,?,?,?,?)";
+        Object []param ={m.getCity(),m.getStart(),m.getBase(),m.getPer1(),m.getPer2(),m.getPer3(),m.getFin1(),m.getFin2()};
         return  DbUtil.insert(conn,sql,param);
     }
 

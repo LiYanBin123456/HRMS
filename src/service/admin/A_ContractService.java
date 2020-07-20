@@ -17,8 +17,8 @@ public class A_ContractService {
         return contractDao.insert(conn,contract);
     }
 
-    public DaoQueryResult getContract(Connection conn, String cid) {
-        return  contractDao.getContract(conn,cid);
+    public DaoQueryResult getContract(Connection conn, String bid) {
+        return  contractDao.getContract(conn,bid);
     }
 
     public DaoQueryListResult getContracts(Connection conn, QueryParameter parameter) {
@@ -27,7 +27,7 @@ public class A_ContractService {
 
     public DaoUpdateResult insert2(Connection conn, a_contract contract) {
         int status = 1;//修改为合作状态
-        DaoUpdateResult result = clientDao.updateStatus(conn, contract.getCid(), status);
+        DaoUpdateResult result = clientDao.updateStatus(conn, contract.getBid(), status);
         if(result.success){
             result.msg="修改为合作客户";
         }

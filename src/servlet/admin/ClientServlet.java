@@ -72,21 +72,23 @@ public class ClientServlet extends HttpServlet {
      * @return
      */
     private String deleteClient2(Connection conn, HttpServletRequest request) {
+        DaoUpdateResult res=new DaoUpdateResult();
         long id = Long.parseLong(request.getParameter("id"));
         List<String> list = contractDao.deleteContract(conn, id);
         if(list!=null){
            for(String filename:list){
                String url = request.getServletContext().getRealPath("/upload");
-               File file = new File(url+"/"+filename+".jpg");
+               File file = new File(url+"/"+filename+".pdf");
                if (file.exists()) {
                    file.delete();
                    System.out.println(filename+"文件删除成功!!");
+                   res.msg+="合同文件删除成功!!";
                }else {
                    System.out.println("文件不存在!!");
                }
            }
         }
-        DaoUpdateResult res = clientService.deleteClient2(conn,id);
+        res = clientService.deleteClient2(conn,id);
         return JSONObject.toJSONString(res);
     }
 

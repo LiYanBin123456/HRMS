@@ -2,6 +2,7 @@ package service.admin;
 
 import bean.admin.Client;
 import dao.admin.ClientDao;
+import dao.admin.FinanceDao;
 import database.DaoQueryListResult;
 import database.DaoQueryResult;
 import database.DaoUpdateResult;
@@ -11,6 +12,7 @@ import java.sql.Connection;
 
 public class ClientService {
     private ClientDao clientDao = new ClientDao();
+    private FinanceDao financeDao = new FinanceDao();
     public  DaoQueryListResult getClientList(Connection conn, QueryParameter param){
         return clientDao.getClientList(conn,param);
     }
@@ -28,7 +30,13 @@ public class ClientService {
     }
 
     public DaoUpdateResult deleteClient1(Connection conn, long id) {
-        return clientDao.deleteClient1(conn,id);
+        DaoUpdateResult res;
+        res= clientDao.deleteClient1(conn,id);
+        //删除潜在客户时，也要删除客户的财务服务信息表
+        if(res.success){
+            financeDao.deleteFinance(conn,id);
+        }
+        return res;
     }
 
     public DaoUpdateResult deleteClient2(Connection conn, long id) {

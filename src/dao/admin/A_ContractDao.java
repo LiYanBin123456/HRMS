@@ -9,14 +9,14 @@ import java.util.List;
 public class A_ContractDao {
     //插入合同
     public DaoUpdateResult insert(Connection conn, a_contract c) {
-        String sql = "insert into a_contract (id,cid,start,end,status,intro) values (?,?,?,?,?,?)";
-        Object[] params = {c.getId(), c.getCid(), c.getStart(), c.getEnd(), c.getStatus(), c.getIntro()};
+        String sql = "insert into a_contract (id,bid,start,end,status,intro) values (?,?,?,?,?,?)";
+        Object[] params = {c.getId(), c.getBid(), c.getStart(), c.getEnd(), c.getStatus(), c.getIntro()};
         return DbUtil.insert(conn, sql, params);
     }
     //根据客户id获取合同
-    public DaoQueryResult getContract(Connection conn, String cid) {
+    public DaoQueryResult getContract(Connection conn, String bid) {
         QueryConditions conditions = new QueryConditions();
-        conditions.add("cid", "=", cid);
+        conditions.add("bid", "=", bid);
         return DbUtil.getLast(conn, "a_contract", conditions, a_contract.class);
     }
 
@@ -29,10 +29,11 @@ public class A_ContractDao {
     public List<String> deleteContract(Connection conn, long id) {
         QueryParameter parameter = new QueryParameter();
         QueryConditions conditions = new QueryConditions();
-        conditions.add("cid", "=", id);
+        conditions.add("bid", "=", id);
 
         String sql = "id";
         parameter.conditions = conditions;
+        //获取到该用户的所有合同名字
         List<String> column = DbUtil.getColumns(conn, sql,"a_contract",parameter);
 
         //查询完所有要删除的合同文件名字之后，在删除合同
@@ -46,6 +47,12 @@ public class A_ContractDao {
 //        DaoQueryListResult daoQueryListResult = contractDao.deleteContract(conn, 2);
 //        System.out.println(daoQueryListResult.rows);
         contractDao.deleteContract(conn,3);
+    }
+
+    public DaoUpdateResult delete(Connection conn, String id) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id", "=", id);
+        return DbUtil.delete(conn,"a_contract",conditions);
     }
 }
 
