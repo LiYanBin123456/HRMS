@@ -227,7 +227,7 @@
 
             //删除公告
             function del(settlements2) {
-                layer.confirm('确定删除'+settlements2.title, {icon: 3, title:'删除'}, function(index){
+                layer.confirm('确定删除'+settlements2.unit+'小时工结算单那', {icon: 3, title:'删除'}, function(index){
                     iSalsry.delete(settlements2.id,function () {
                         layer.close(index);
                         getSettlements2();

@@ -223,20 +223,20 @@ var columns_settlement1  = [[
 
 //工资管理明细字段集合（完整模式）
 var columns_detail_full  = [[
-    {field:'ID', title: '身份证号',edit: 'text'},
-    {field:'name', title: '姓名',width:80,edit: 'text'},
-    {field:'money', title: '基本工资',width:80,edit: 'text'},
-    {field:'bonus', title: '绩效奖金',width:80,edit: 'text'},
-    {field:'post', title: '岗位补贴',width:80,edit: 'text'},
-    {field:'post', title: '个人社保',width:80,edit: 'text'},
-    {field:'post', title: '单位社保',width:80,edit: 'text'},
-    {field:'post', title: '个人公积金',width:80,edit: 'text'},
-    {field:'post', title: '单位公积金',width:80,edit: 'text'},
-    {field:'post', title: '个税',width:80,edit: 'text'},
-    {field:'traffic', title: '交通补助',width:80,edit: 'text'},
-    {field:'kaoqin', title: '考勤扣款',width:80,edit: 'text'},
-    {field:'kaoqin', title: '应发',width:80,edit: 'text'},
-    {field:'kaoqin', title: '实发',width:80,edit: 'text'}
+    {field:'ID', title: '身份证号'},
+    {field:'name', title: '姓名',width:80},
+    {field:'money', title: '基本工资',width:80},
+    {field:'bonus', title: '绩效奖金',width:80},
+    {field:'post', title: '岗位补贴',width:80},
+    {field:'post', title: '个人社保',width:80},
+    {field:'post', title: '单位社保',width:80},
+    {field:'post', title: '个人公积金',width:80},
+    {field:'post', title: '单位公积金',width:80},
+    {field:'post', title: '个税',width:80},
+    {field:'traffic', title: '交通补助',width:80},
+    {field:'kaoqin', title: '考勤扣款',width:80},
+    {field:'kaoqin', title: '应发',width:80},
+    {field:'kaoqin', title: '实发',width:80}
 ]];
 
 //工资管理明细字段集合(录入模式）
@@ -312,8 +312,8 @@ var columns_settlements2  = [[
     {title: '操作', toolbar: '#bar_settlements2',width:300}
 ]];
 
-//小时工工资管理明细字段集合
-var columns_detail2  = [[
+//小时工工资管理明细字段集合(录入模式)
+var columns_detail2_input  = [[
     {field:'ID', title: '身份证号',edit: 'text'},
     {field:'name', title: '姓名',width:80,edit: 'text'},
     {field:'time', title: '工时',width:80,edit: 'text'},
@@ -325,6 +325,24 @@ var columns_detail2  = [[
     {field:'qita1', title: '其他1',width:80,edit: 'text'},
     {field:'qita2', title: '其他2',width:80,edit: 'text'},
     {fixed: 'right', title: '操作', toolbar: '#bar_detail2',width:80}
+]];
+
+//小时工工资管理明细字段集合(完整模式)
+var columns_detail2_full  = [[
+    {field:'ID', title: '身份证号'},
+    {field:'name', title: '姓名',width:80},
+    {field:'time', title: '工时',width:80},
+    {field:'unitprice', title: '单价',width:80},
+    {field:'meal', title: '餐费',width:80},
+    {field:'traffic', title: '交通费',width:80},
+    {field:'zhusu', title: '住宿费',width:80},
+    {field:'shuidian', title: '水电费',width:80},
+    {field:'baoxian', title: '保险',width:80},
+    {field:'geshui', title: '个税',width:80},
+    {field:'qita1', title: '其他1',width:80},
+    {field:'qita2', title: '其他2',width:80},
+    {field:'yingfu', title: '应付金额',width:80},
+    {field:'shifa', title: '实发金额',width:80},
 ]];
 
 //小时工工资明细添加字段集合
@@ -376,6 +394,42 @@ var columns_socialsc  = [[
 
 //社保参保添加字段集合
 var columns_socialscadd  = [[
+    {type:'checkbox'},
+    {field:'ID', title: '身份证号',width:400},
+    {field:'name', title: '姓名',width:200},
+]];
+
+//医保参保字段集合
+var columns_medical  = [[
+    {field:'ID', title: '身份证号'},
+    {field:'personal', title: '个人代码',width:80},
+    {field:'name', title: '姓名',width:80},
+    {field:'insured', title: '参保时间',width:80},
+    {field:'wage', title: '月缴费工资',width:100},
+    {field:'time', title: '工作时间',width:100},
+    {field:'state', title: '参保状态',width:80},
+    {fixed: 'right', title: '操作', toolbar: '#bar_medical',width:200}
+]];
+
+//医保参保添加字段集合
+var columns_medicaladd  = [[
+    {type:'checkbox'},
+    {field:'ID', title: '身份证号',width:400},
+    {field:'name', title: '姓名',width:200},
+]];
+
+//公积金参保字段集合
+var columns_accumulations  = [[
+    {field:'ID', title: '身份证号'},
+    {field:'name', title: '姓名',width:80},
+    {field:'insured', title: '起缴时间',width:80},
+    {field:'wage', title: '工作基数',width:100},
+    {field:'state', title: '参保状态',width:80},
+    {fixed: 'right', title: '操作', toolbar: '#bar_accumulation',width:200}
+]];
+
+//公积金参保添加字段集合
+var columns_accumulationadd  = [[
     {type:'checkbox'},
     {field:'ID', title: '身份证号',width:400},
     {field:'name', title: '姓名',width:200},

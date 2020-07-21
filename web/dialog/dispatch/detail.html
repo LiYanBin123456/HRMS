@@ -208,10 +208,10 @@
 
             //删除公告
             function del(detail) {
-                layer.confirm('确定删除'+salsry.title, {icon: 3, title:'删除'}, function(index){
-                    iSalsry.delete(salsry.id,function () {
+                layer.confirm('确定删除'+detail.name, {icon: 3, title:'删除'}, function(index){
+                    iSalsry.delete(detail.id,function () {
                         layer.close(index);
-                        getNotices();
+                        getDetails();
                         layer.msg('删除成功');
                     });
                 });

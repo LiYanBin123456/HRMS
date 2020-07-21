@@ -32,7 +32,7 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_socialsc">
+            <div class="layui-hide" id="top_bar_medical">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导出新增</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导出停保</button>
@@ -53,11 +53,11 @@
                     </div>
                 </form>
             </div>
-            <table id="tbl_socialsc" lay-filter="filter_tb_socialsc"></table>
+            <table id="tbl_medical" lay-filter="filter_tb_medical"></table>
             <div id="pager"></div>
 
             <!--行内工具栏-->
-            <script type="text/html" id="bar_socialsc">
+            <script type="text/html" id="bar_medical">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>编辑</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
@@ -107,7 +107,7 @@
                         if(!first){
                             param_query.pagination.page = obj.curr;
                             param_query.pagination.size = obj.limit;
-                            getSocialscs();
+                            getMedicals();
                         }
                     }
                 });
@@ -115,17 +115,17 @@
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_socialsc',
-                    toolbar: '#top_bar_socialsc', //开启头部工具栏，并为其绑定左侧模板
+                    elem: '#tbl_medical',
+                    toolbar: '#top_bar_medical', //开启头部工具栏，并为其绑定左侧模板
                     defaultToolbar: ['filter', 'exports', 'print'],//自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                     title: '列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_socialsc,
-                    id: 'tbl_socialsc'
+                    cols: columns_medical,
+                    id: 'tbl_medical'
                 });
 
                 //行内工具栏事件响应
-                table.on('tool(filter_tb_socialsc)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                table.on('tool(filter_tb_medical)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
                     var data = obj.data; //获得当前行数据
                     switch (obj.event){
                         case "detail":
@@ -138,7 +138,7 @@
                 });
 
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_socialsc)', function(obj){
+                table.on('toolbar(filter_tb_medical)', function(obj){
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
@@ -150,12 +150,12 @@
                 });
 
 
-                getSocialscs();
+                getMedicals();
             }
 
-            function getSocialscs() {
+            function getMedicals() {
                 var result = {total:100,rows:[{ID:"360402199003230081",name:"张晓国",personal:"",insured:"2006-10",wage:"5000",time:"2006-10-22",phone:"18900001111",nature:"农村",site:"九江市长虹大道221号",state:"在保"},{ID:"360403199212099812",name:"宋丽",personal:"",insured:"2015-03",wage:"6000",time:"2015-03-20",phone:"13822224444",nature:"城镇",site:"九江市星子县",state:"新增"}]};
-                table.reload('tbl_socialsc', {
+                table.reload('tbl_medical', {
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
@@ -173,8 +173,8 @@
             }
 
             //打开编辑对话框
-            function showDetailDlg(socialsc) {
-                var content = "../dialog/dispatch/socialsc.html?socialsc="+encodeURIComponent(JSON.stringify(socialsc));
+            function showDetailDlg(medical) {
+                var content = "../dialog/dispatch/medical.html?medical="+encodeURIComponent(JSON.stringify(medical));
                 layer.open({
                     title:"编辑",
                     type: 2,
@@ -185,7 +185,7 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/dispatch/socialscadd.html";
+                var content = "../dialog/dispatch/medicaladd.html";
                 layer.open({
                     title:"添加",
                     type: 2,
@@ -195,9 +195,9 @@
             }
 
             //删除公告
-            function del(socialsc) {
-                layer.confirm('确定删除'+socialsc.name+'的社保参保', {icon: 3, title:'删除'}, function(index){
-                    iNotice.delete(socialsc.id,function () {
+            function del(medical) {
+                layer.confirm('确定删除'+medical.name+'的医保参保', {icon: 3, title:'删除'}, function(index){
+                    iNotice.delete(medical.id,function () {
                         layer.close(index);
                         getSocialscs();
                         layer.msg('删除成功');

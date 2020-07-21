@@ -136,9 +136,9 @@
             function showDetailDlg(account) {
                 var content = "../dialog/account.html?account="+encodeURIComponent(JSON.stringify(account));
                 layer.open({
-                    title:"详情",
+                    title:"编辑",
                     type: 2,
-                    area: ['800px', '600px'],
+                    area: ['600px', '540px'],
                     content: content
                 });
             }
@@ -147,9 +147,9 @@
             function showInsertDlg() {
                 var content = "../dialog/account.html";
                 layer.open({
-                    title:"",
+                    title:"添加",
                     type: 2,
-                    area: ['800px', '600px'],
+                    area: ['600px', '540px'],
                     content: content
                 });
             }
