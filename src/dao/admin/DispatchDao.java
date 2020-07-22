@@ -3,11 +3,11 @@ package dao.admin;
 
 
 
-import bean.admin.Client;
+import bean.admin.Dispatch;
 import database.*;
 import java.sql.Connection;
 
-public class ClientDao {
+public class DispatchDao {
     /**
      * 获取派遣单位客户列表
      * @param conn 数据库连接
@@ -15,14 +15,14 @@ public class ClientDao {
      * @return 检索结果，格式："{success:true,msg:"",effects:1}"
      */
     public  DaoQueryListResult getClientList(Connection conn, QueryParameter param){
-        return DbUtil.getList(conn,"client",param, Client.class);
+        return DbUtil.getList(conn,"dispatch",param, Dispatch.class);
     }
 
 
     public DaoQueryResult getClient(Connection conn, long id) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
-        return  DbUtil.get(conn,"client",conditions, Client.class);
+        return  DbUtil.get(conn,"dispatch",conditions, Dispatch.class);
     }
 
 
@@ -32,8 +32,8 @@ public class ClientDao {
      * @param c 求职者信息
      * @return 更新结果，格式："{success:true,msg:"",effects:1}"
      */
-    public  DaoUpdateResult updateClient(Connection conn, Client c){
-        String sql = "update client set rid=?,name=?,nickname=?,address=?,contact=?,phone=?,wx=?,qq=?,intro=? where id=?";
+    public  DaoUpdateResult updateClient(Connection conn, Dispatch c){
+        String sql = "update dispatch set rid=?,name=?,nickname=?,address=?,contact=?,phone=?,wx=?,qq=?,intro=? where id=?";
         Object []params = {c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getIntro(),c.getId()};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
@@ -45,9 +45,9 @@ public class ClientDao {
      * @param c
      * @return
      */
-    public DaoUpdateResult insertClient(Connection conn, Client c) {
-        String sql = "insert into client (rid,name,nickname,address,contact,phone,wx,qq,intro,status,type) values (?,?,?,?,?,?,?,?,?,?,?)";
-        Object []params = {c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getIntro(),c.getStatus(),c.getType()};
+    public DaoUpdateResult insertClient(Connection conn, Dispatch c) {
+        String sql = "insert into dispatch (rid,name,nickname,address,contact,phone,wx,qq,intro,status) values (?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getIntro(),c.getStatus()};
         return DbUtil.insert(conn,sql,params);
     }
 
@@ -55,15 +55,16 @@ public class ClientDao {
     public DaoUpdateResult deleteClient1(Connection conn, long id) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
-        return DbUtil.delete(conn,"client",conditions);
+        return DbUtil.delete(conn,"dispatch",conditions);
     }
 
 
     //修改客户状态 合作或者潜在 0_潜在，1_合作
     public  DaoUpdateResult updateStatus(Connection conn, long id,int status){
-        String sql = "update client set status=? where id=?";
+        String sql = "update dispatch set status=? where id=?";
         Object []params = {status,id};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
     }
+
 }

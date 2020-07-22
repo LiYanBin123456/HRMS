@@ -1,6 +1,6 @@
 package service.admin;
 
-import bean.admin.Fund;
+import bean.admin.Rule_fund;
 import dao.admin.FundDao;
 import database.DaoQueryListResult;
 import database.DaoQueryResult;
@@ -20,11 +20,11 @@ public class FundService {
         return fundDao.getFund(conn,id);
     }
 
-    public DaoUpdateResult updateFund(Connection conn, Fund fund) {
+    public DaoUpdateResult updateFund(Connection conn, Rule_fund fund) {
         return fundDao.updateFund(conn,fund);
     }
 
-    public DaoUpdateResult insertFund(Connection conn, Fund fund) {
+    public DaoUpdateResult insertFund(Connection conn, Rule_fund fund) {
         return fundDao.insertFund(conn,fund);
     }
 

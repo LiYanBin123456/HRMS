@@ -15,8 +15,8 @@ public class FinanceService {
         return financeDao.updateFinance(conn,finance);
     }
 
-    public DaoQueryResult getFinance(Connection conn, long cid) {
-        return financeDao.getFinance(conn,cid);
+    public DaoQueryResult getFinance(Connection conn, long cid,String type) {
+        return financeDao.getFinance(conn,cid,type);
     }
 
     public DaoUpdateResult insertFinance(Connection conn, Finance finance) {

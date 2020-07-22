@@ -26,13 +26,13 @@ public class FinanceServlet extends HttpServlet {
         String op = request.getParameter("op");
 
         switch (op) {
-            case "getFinance"://根据客户id获取财务信息
+            case "get"://根据客户id获取财务信息
                 result = getFinance(conn,request);
                 break;
-            case "updateFinance"://根据客户id修改财务信息
+            case "update"://根据客户id修改财务信息
                 result = updateFinance(conn,request);
                 break;
-            case "insertFinance"://根据客户id添加一个财务信息
+            case "insert"://根据客户id添加一个财务信息
                 result = insertFinance(conn,request);
                 break;
         }
@@ -50,7 +50,8 @@ public class FinanceServlet extends HttpServlet {
 
     private String getFinance(Connection conn, HttpServletRequest request) {
         long cid = Long.parseLong(request.getParameter("cid"));
-        DaoQueryResult res =financeService.getFinance(conn,cid);
+        String type = request.getParameter("type");
+        DaoQueryResult res =financeService.getFinance(conn,cid,type);
         return JSONObject.toJSONString(res);
     }
 

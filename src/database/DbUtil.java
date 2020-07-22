@@ -317,6 +317,23 @@ public class DbUtil {
 
         return result;
     }
+
+    public static String getLast(Connection conn, String table, QueryConditions conditions){
+        String sql = String.format("select id from %s where ",table);
+        String condition = conditions.toString();
+        sql += condition;
+        sql += " ORDER BY id DESC limit 1 ";
+        String id=null;
+        QueryRunner qr = new QueryRunner();
+        try {
+            List<Object> values = conditions.extraValues();
+            System.out.println("get==sql=="+sql);
+            id= qr.query(conn, sql, new ScalarHandler<>(),values.toArray());
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return id;
+    }
     /**
      * 删除
      * @param conn

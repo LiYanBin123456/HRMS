@@ -1,37 +1,33 @@
 package service.admin;
 
 import bean.admin.Contract;
+import dao.admin.DispatchDao;
 import dao.admin.ContractDao;
 import database.*;
-import utills.CreateGetNextId;
 
 import java.sql.Connection;
 
 public class ContractService {
     ContractDao contractDao = new ContractDao();
+    private DispatchDao dispatchDao = new DispatchDao();
     public DaoQueryListResult getContracts(Connection conn, QueryParameter parameter) {
      return contractDao.getContracts(conn,parameter);
     }
 
-    public DaoQueryResult getContract(Connection conn, String id) {
-        return contractDao.getContract(conn,id);
+    public DaoQueryResult getContract(Connection conn, String id,String type) {
+        return contractDao.getContract(conn,id,type);
     }
 
     public DaoUpdateResult insertContract(Connection conn, Contract contract) {
-        //自定义自增id
-        QueryConditions conditions = new QueryConditions();
-        String type = contract.getType();
-        System.out.println(type);
-        type += "%";
-        System.out.println(type);
-        conditions.add("id","like",type);
+        return contractDao.insertContract(conn,contract);
+    }
 
-        //通过模糊查找各种类型id的条数
-        DaoQueryListResult counts = DbUtil.getCounts(conn, "contract", conditions);
-        long total = counts.total;
-        String id = CreateGetNextId.NextId(total, contract.getType());
-        contract.setId(id);
-
+    public DaoUpdateResult insertContract2(Connection conn, Contract contract) {
+        int status = 1;//修改为合作状态
+        DaoUpdateResult result = dispatchDao.updateStatus(conn, contract.getBid(), status);
+        if(result.success){
+            result.msg="修改为合作客户";
+        }
         return contractDao.insertContract(conn,contract);
     }
 }

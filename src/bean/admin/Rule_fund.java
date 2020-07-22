@@ -1,6 +1,6 @@
 package bean.admin;
 
-public class Fund {
+public class Rule_fund {
     private long id;
     private String city;
     private String start;//生效时间
@@ -10,10 +10,10 @@ public class Fund {
     private float per1;//单位比例
     private float per2;//个人比例
 
-    public Fund() {
+    public Rule_fund() {
     }
 
-    public Fund(long id, String city, String start, int base, int min, int max, float per1, float per2) {
+    public Rule_fund(long id, String city, String start, int base, int min, int max, float per1, float per2) {
         this.id = id;
         this.city = city;
         this.start = start;
@@ -90,7 +90,7 @@ public class Fund {
 
     @Override
     public String toString() {
-        return "Fund{" +
+        return "Rule_fund{" +
                 "id=" + id +
                 ", city='" + city + '\'' +
                 ", start='" + start + '\'' +

@@ -3,8 +3,10 @@ package bean.admin;
 public class Finance {
     //客户编号
     private long cid;
+   //客户类型 0_派遣单位 1_合作客户
+   private int type;
     //统一社会信用代码
-    private String credit_code;
+    private String code;
     //开户的银行
     private String bank;
     //银行卡号
@@ -15,6 +17,16 @@ public class Finance {
     private String phone;
     //公司地址
     private String address;
+    //公司余额
+    private float balance;
+
+    public float getBalance() {
+        return balance;
+    }
+
+    public void setBalance(float balance) {
+        this.balance = balance;
+    }
 
     public long getCid() {
         return cid;
@@ -24,12 +36,20 @@ public class Finance {
         this.cid = cid;
     }
 
-    public String getCredit_code() {
-        return credit_code;
+    public int getType() {
+        return type;
     }
 
-    public void setCredit_code(String credit_code) {
-        this.credit_code = credit_code;
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getBank() {
@@ -75,26 +95,30 @@ public class Finance {
     public Finance() {
     }
 
-    public Finance(long cid, String credit_code, String bank, String cardNo, String contact, String phone, String address) {
+    public Finance(long cid, int type, String code, String bank, String cardNo, String contact, String phone, String address, float balance) {
         this.cid = cid;
-        this.credit_code = credit_code;
+        this.type = type;
+        this.code = code;
         this.bank = bank;
         this.cardNo = cardNo;
         this.contact = contact;
         this.phone = phone;
         this.address = address;
+        this.balance = balance;
     }
 
     @Override
     public String toString() {
         return "Finance{" +
                 "cid=" + cid +
-                ", credit_code='" + credit_code + '\'' +
+                ", type=" + type +
+                ", code='" + code + '\'' +
                 ", bank='" + bank + '\'' +
                 ", cardNo='" + cardNo + '\'' +
                 ", contact='" + contact + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
+                ", balance=" + balance +
                 '}';
     }
 }

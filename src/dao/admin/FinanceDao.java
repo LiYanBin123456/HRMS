@@ -10,22 +10,23 @@ import java.sql.Connection;
 
 public class FinanceDao {
 
-    public DaoQueryResult getFinance(Connection conn, long cid) {
+    public DaoQueryResult getFinance(Connection conn, long cid,String type) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("cid","=",cid);
+        conditions.add("type","=",type);
         return DbUtil.get(conn,"finance",conditions, Finance.class);
     }
 
     public DaoUpdateResult updateFinance(Connection conn, Finance f) {
-        String sql = "update finance set credit_code=?,bank=?,cardNo=?,contact=?,phone=?,address=? where cid=?";
-        Object []params = { f.getCredit_code(),f.getBank(),f.getCardNo(),f.getContact(),f.getPhone(),f.getAddress(),f.getCid()};
+        String sql = "update finance set type=?,code=?,bank=?,cardNo=?,contact=?,phone=?,address=?,balance=? where cid=?";
+        Object []params = {f.getType(),f.getCode(),f.getBank(),f.getCardNo(),f.getContact(),f.getPhone(),f.getAddress(),f.getBalance(),f.getCid()};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
     }
 
     public DaoUpdateResult insertFinance(Connection conn, Finance f) {
-        String sql = "insert into finance(cid,credit_code,bank,cardNo,contact,phone,address) values (?,?,?,?,?,?,?)";
-        Object []params = {f.getCid(),f.getCredit_code(),f.getBank(),f.getCardNo(),f.getContact(),f.getPhone(),f.getAddress()};
+        String sql = "insert into finance(cid,type,code,bank,cardNo,contact,phone,address,balance) values (?,?,?,?,?,?,?,?,?)";
+        Object []params = {f.getCid(),f.getType(),f.getCode(),f.getBank(),f.getCardNo(),f.getContact(),f.getPhone(),f.getAddress(),f.getBalance()};
         return  DbUtil.insert(conn,sql,params);
     }
 
