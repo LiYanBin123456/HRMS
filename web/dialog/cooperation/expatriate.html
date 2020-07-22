@@ -27,7 +27,7 @@
            </ul>
            <div class="layui-tab-content">
             <div class="layui-tab-item layui-show">
-                <form lay-filter="form_internalstaff" class="layui-form">
+                <form lay-filter="form_expatriate" class="layui-form">
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
                             <span class="x-red">*</span>档案编号</label>
@@ -72,37 +72,33 @@
                     </div>
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
-                            <span class="x-red">*</span>毕业时间</label>
+                            <span class="x-red">*</span>毕业专业</label>
                         <div class="layui-input-inline">
-                            <input type="text"   name="time" required="" autocomplete="off" class="layui-input"></div>
-                        </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                        <span class="x-red">*</span>户口性质</label>
-                            <div class="layui-input-inline">
-                                <select name="rpr" lay-verify="required">
-                                    <option value=""></option>
-                                    <option value="0">外地城镇</option>
-                                    <option value="1">本地城镇</option>
-                                    <option value="2">外地农村</option>
-                                    <option value="3">城镇</option>
-                                    <option value="4">农村</option>
-                                    <option value="5">港澳台</option>
-                                    <option value="6">外籍</option>
-                            </select>
-                    </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>户籍地址</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="pra" required="" autocomplete="off" class="layui-input"></div>
+                            <input type="text"  name="major" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
                     </div>
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
                             <span class="x-red">*</span>入职时间</label>
                         <div class="layui-input-inline">
                             <input type="text"  name="entrytime" required="" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                        <span class="x-red">*</span>用工性质</label>
+                            <div class="layui-input-inline">
+                                <select name="nature" lay-verify="required">
+                                    <option value=""></option>
+                                    <option value="0">派遣</option>
+                                    <option value="1">外包</option>
+                                    <option value="2">小时工</option>
+                            </select>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                            <span class="x-red">*</span>小时工报酬</label>
+                        <div class="layui-input-inline">
+                            <input type="text"  name="reward" required="" autocomplete="off" class="layui-input"></div>
+                    </div>
                     </div>
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
@@ -117,14 +113,11 @@
                             </select>
                     </div>
                     </div>
-                     <div class="layui-form-item">
+                    <div class="layui-form-item">
                         <label  class="layui-form-label">
-                        <span class="x-red">*</span>部门</label>
+                        <span class="x-red">*</span>外派单位</label>
                             <div class="layui-input-inline">
-                                <select name="department" lay-verify="required">
-                                    <option value=""></option>
-                                    <option value="0">客户一部</option>
-                                    <option value="1">财务部</option>
+                                <select name="unit" lay-verify="required">
                             </select>
                     </div>
                     </div>
@@ -133,7 +126,7 @@
                             <span class="x-red">*</span>岗位</label>
                         <div class="layui-input-inline">
                             <input type="text"  name="post" required="" autocomplete="off" class="layui-input"></div>
-                    </div>
+                        </div>
                     <div class="layui-form-item">
                         <label for="L_uploading" class="layui-form-label"></label>
                         <button type="button" class="layui-btn" id="test1">
@@ -141,11 +134,11 @@
                         </button></div>
                <div class="layui-form-item">
                         <label for="L_repass" class="layui-form-label"></label>
-                        <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button></div>
+                        <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
                 </form>
               </div>
             <div class="layui-tab-item">
-                <form lay-filter="form_internalstaff" class="layui-form">
+                <form lay-filter="form_expatriate" class="layui-form">
                     <div class="layui-form-item">
                         <label for="L_username" class="layui-form-item">
                             <span class="x-blue">医保-------------------------</span></label>
@@ -178,11 +171,11 @@
                     </div>
                <div class="layui-form-item">
                         <label for="L_repass" class="layui-form-label"></label>
-                        <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button></div>
+                        <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
                 </form>
               </div>
             <div class="layui-tab-item">
-                <form lay-filter="form_internalstaff" class="layui-form">
+                <form lay-filter="form_expatriate" class="layui-form">
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
                             <span class="x-red">*</span>子女教育扣除额</label>
@@ -224,11 +217,11 @@
                         <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button></div>
                 </form>
               </div>
-            <div class="layui-tab-item">
-                <form lay-filter="form_internalstaff" class="layui-form">
+              <div class="layui-tab-item">
+                <form lay-filter="form_expatriate" class="layui-form">
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
-                            <span class="x-red">*</span>发卡银行</label>
+                            <span class="x-red">*</span>开户行</label>
                         <div class="layui-input-inline">
                             <input type="text"  name="bank" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
                     </div>
@@ -269,21 +262,21 @@
     }
 
     function initData() {
-        var param = $.query.get("internalstaff");
+        var param = $.query.get("expatriate");
         if (param) {
-            var internalstaff = JSON.parse(param);
-            form.val('form_internalstaff', internalstaff);
-            layedit.setContent(editer, internalstaff.content, false);
+            var expatriate = JSON.parse(param);
+            form.val('form_expatriate', expatriate);
+            layedit.setContent(editer, expatriate.content, false);
             op = "update";
         }
     }
 
     function save() {
-        var notice = form.val('form_internalstaff');
+        var notice = form.val('form_expatriate');
         if(op == "insert") {
-            iInternalstaff.insert(internalstaff, onInsertSuccess);
+            iExpatriate.insert(expatriate, onInsertSuccess);
         }else{
-            iInternalstaff.update(internalstaff,onUpdateSuccess);
+            iExpatriate.update(expatriate,onUpdateSuccess);
         }
 
         function onInsertSuccess() {

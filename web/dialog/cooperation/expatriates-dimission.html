@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>员工离职</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+        <link rel="stylesheet" href="../../css/font.css">
+        <link rel="stylesheet" href="../../css/xadmin.css">
+        <script type="text/javascript" src="../../lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../../js/xadmin.js"></script>
+        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+        <!--[if lt IE 9]>
+            <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+            <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+        <div class="layui-fluid">
+            <div class="layui-row">
+                <form class="layui-form">
+                    <div class="layui-form-item">
+                        <label for="L_username" class="layui-form-label">
+                            <span class="x-red">*</span>离职时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
+                        <span class="x-red">*</span>离职原因</label>
+                            <div class="layui-input-inline">
+                                <select name="" lay-verify="required">
+                                    <option value=""></option>
+                                    <option value="0">合同到期</option>
+                                    <option value="1">被用人单位解除劳动合同</option>
+                                    <option value="2">被用人单位开除</option>
+                                    <option value="3">被用人单位除名</option>
+                                    <option value="4">被用人单位辞退</option>
+                                    <option value="5">公司倒闭</option>
+                                    <option value="6">公司破产</option>
+                                    <option value="7">单位人员减少</option>
+                                    <option value="8">养老在职转退休</option>
+                                    <option value="9">参军</option>
+                                    <option value="10">入学</option>
+                                    <option value="11">劳改劳教</option>
+                                    <option value="12">出国定居</option>
+                                    <option value="13">异地转移</option>
+                                    <option value="14">不足缴纳年限</option>
+                                    <option value="15">人员失踪</option>
+                                    <option value="16">错误申报</option>
+                                    <option value="17">其他原因</option>
+                            </select>
+                    </div>
+                    </div>
+               <div class="layui-form-item">
+                        <label for="L_repass" class="layui-form-label"></label>
+                        <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button></div>
+                </form>
+            </div>
+        </div>
+</body>
+<script src="../../js/jquery.min.js"></script>
+<script src="../../js/jquery.params.js"></script>
+<script src="../../js/interface.js"></script>
+<script>
+    var op = "insert";
+    var form;//表单对象
+    var editer;
+
+    loadLayuiModule();
+
+    function loadLayuiModule() {
+        layui.use(['form', 'layedit','jquery'], function () {
+            form = layui.form;
+            layedit = layui.layedit;
+            editer = layedit.build('content'); //建立编辑器
+            initData();
+        });
+    }
+
+    function save() {
+        var notice = form.val('form_expatriate');
+        if(op == "insert") {
+            iExpatriate.insert(expatriate, onInsertSuccess);
+        }else{
+            iExpatriate.update(expatriate,onUpdateSuccess);
+        }
+
+        function onInsertSuccess() {
+            layer.alert("添加成功", {icon: 6}, refresh());
+        }
+
+        function onUpdateSuccess() {
+            layer.alert("修改成功", {icon: 6}, refresh());
+        }
+
+        function refresh() {
+            // 获得frame索引
+            var index = parent.layer.getFrameIndex(window.name);
+            //关闭当前frame
+            parent.layer.close(index);
+            //修改成功后刷新父界面
+            window.parent.location.reload();
+        }
+    }
+</script>
+
+</html>

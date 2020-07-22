@@ -29,23 +29,16 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_settlements3">
-                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
-                <button class="layui-btn layui-btn-sm" lay-event="copy"><i class="layui-icon "></i> 复制</button>
-                <form class="layui-form searchbox">
-                    <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
-                    </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-                </form>
+            <div class="layui-hide" id="top_bar_account">
+                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
             </div>
-            <table id="tbl_settlements3" lay-filter="filter_tb_settlements3"></table>
+            <table id="tbl_account" lay-filter="filter_tb_account"></table>
             <div id="pager"></div>
 
             <!--行内工具栏-->
-            <script type="text/html" id="bar_settlements3">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>明细</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            <script type="text/html" id="bar_account">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
         </div>
         <script src="../js/fieldSet.js"></script>
@@ -68,17 +61,10 @@
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
-                    initPage();
+                    initTable();
                 });
             }
 
-            function initPage() {
-                initTable();
-                form.on('submit(search)', function (data) {
-                    var keyword = data.field.keyword;
-                    search(keyword);
-                });
-            }
 
             function initTable() {
                 //初始化分页
@@ -91,27 +77,28 @@
                         if(!first){
                             param_query.pagination.page = obj.curr;
                             param_query.pagination.size = obj.limit;
-                            getSettlements3();
+                            getAccounts();
                         }
                     }
                 });
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_settlements3',
-                    toolbar: '#top_bar_settlements3', //开启头部工具栏，并为其绑定左侧模板
+                    elem: '#tbl_account',
+                    toolbar: '#top_bar_account', //开启头部工具栏，并为其绑定左侧模板
                     defaultToolbar: ['filter', 'exports', 'print'],//自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                     title: '列表',
-                    cols: columns_settlements3,
-                    id: 'tbl_settlements3'
+                    cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                    cols: columns_account2,
+                    id: 'tbl_account'
                 });
 
                 //行内工具栏事件响应
-                table.on('tool(filter_tb_settlements3)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                table.on('tool(filter_tb_account)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
                     var data = obj.data; //获得当前行数据
                     switch (obj.event){
                         case "detail":
-                            showDetailDlg();
+                            showDetailDlg(data);
                             break;
                         case "del":
                             del(data);
@@ -120,26 +107,20 @@
                 });
 
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_settlements3)', function(obj){
+                table.on('toolbar(filter_tb_account)', function(obj){
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
                             break;
-                        case 'copy':
-                            showCopyDlg();
-                            break;
-                        case 'search':
-                            search();
-                            break;
                     };
                 });
 
-                getSettlements3();
+                getAccounts();
             }
 
-            function getSettlements3() {
-                var result = {total:100,rows:[{unit:"科技中专",month:"2020-06",product:"用工宝",premium:"5000",state:"申报中"},{unit:"国棉四厂",month:"2020-06",product:".....",premium:"12000",state:"已审核"}]};
-                table.reload('tbl_settlements3', {
+            function getAccounts() {
+                var result = {total:100,rows:[{ID:"stuff001",name:"赵斌"},{ID:"stuff002",name:"李晓刚"}]};
+                table.reload('tbl_account', {
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
@@ -150,52 +131,35 @@
                 });*/
             }
 
-            //模糊查找
-            function search(keyword) {
-                param_query.conditions.extra = keyword;
-                getSalsrys();
-            }
 
-            //打开明细对话框
-            function showDetailDlg() {
-                var content = "../dialog/dispatch/detail3.html";
+            //打开编辑对话框
+            function showDetailDlg(account) {
+                var content = "../dialog/cooperation/account.html?account="+encodeURIComponent(JSON.stringify(account));
                 layer.open({
-                    title:"明细",
+                    title:"编辑",
                     type: 2,
-                    area: ['1200px', '600px'],
-                    content: content
-                });
-            }
-
-            //打开复制对话框
-            function showCopyDlg() {
-                var content = "../dialog/dispatch/copy3.html";
-                layer.open({
-                    title:"复制",
-                    type: 2,
-                    area: ['400px', '300px'],
+                    area: ['600px', '540px'],
                     content: content
                 });
             }
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/dispatch/settlement3.html";
+                var content = "../dialog/cooperation/account.html";
                 layer.open({
                     title:"添加",
                     type: 2,
-                    area: ['400px', '400px'],
+                    area: ['600px', '540px'],
                     content: content
                 });
             }
 
-
             //删除公告
-            function del(settlements3) {
-                layer.confirm('确定删除'+settlements3.title, {icon: 3, title:'删除'}, function(index){
-                    iSalsry.delete(settlements3.id,function () {
+            function del(account) {
+                layer.confirm('确定删除管理员'+account.name, {icon: 3, title:'删除'}, function(index){
+                    iNotice.delete(account.id,function () {
                         layer.close(index);
-                        getSettlements3();
+                        getAccounts();
                         layer.msg('删除成功');
                     });
                 });

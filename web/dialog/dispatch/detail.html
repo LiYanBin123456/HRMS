@@ -35,7 +35,6 @@
                 <button class="layui-btn layui-btn-sm" lay-event="addrecord"><i class="layui-icon "></i> 社保补差</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导入工资表</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 下载模板</button>
-                <button class="layui-btn layui-btn-sm" lay-event="derive"><i class="layui-icon "></i> 导出工资发放表</button>
 
             </div>
             <form class="layui-form" style="display: inline">
@@ -144,9 +143,6 @@
                         case 'insert':
                             showInsertDlg();
                             break;
-                        case 'derive':
-                            showDeriveDlg();
-                            break;
                         case 'addrecord':
                             showAddrecordDlg();
                             break;
@@ -195,16 +191,6 @@
                 });
             }
 
-            //打开导出工资发放表对话框
-            function showDeriveDlg() {
-                var content = "payroll.html";
-                layer.open({
-                    title:"导出工资发放表",
-                    type: 2,
-                    area: ['200px', '360px'],
-                    content: content
-                });
-            }
 
             //删除公告
             function del(detail) {

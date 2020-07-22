@@ -177,6 +177,7 @@ var columns_wage = [[
 
 //内部员工管理字段集合
 var columns_internalstaff = [[
+    {type:'checkbox'},
     {field:'ID', title: '身份证号'},
     {field:'name', title: '姓名',width:80},
     {field:'education', title: '学历',width:100},
@@ -198,6 +199,7 @@ var columns_expatriate = [[
 
 //员工合同字段集合
 var columns_staffcontract  = [[
+    {type:'checkbox'},
     {field:'ID', title: '身份证号码'},
     {field:'name', title: '姓名',width:100},
     {field:'time', title: '生效时间',width:100},
@@ -357,6 +359,7 @@ var columns_settlements3  = [[
     {type:'checkbox',width:30},
     {field:'unit', title: '用工企业'},
     {field:'month', title: '月份',width:80},
+    {field:'product', title: '保险产品',width:80},
     {field:'premium', title: '保费',width:70},
     {field:'state', title: '状态',width:70},
     {title: '操作', toolbar: '#bar_settlements3',width:200}
@@ -454,16 +457,33 @@ var columns_account  = [[
     {fixed: 'right', title: '操作', toolbar: '#bar_account',width:200}
 ]];
 
-//账号管理权限分配字段集合
-var columns_list1  = [[
-    {field:'allocated', title: '已分配客户',width:200},
-    {fixed: 'right', title: '操作', toolbar: '#bar_list1',width:200}
+//面向合作内部员工管理字段集合
+var columns_internalstaff2 = [[
+    {type:'checkbox'},
+    {field:'ID', title: '身份证号'},
+    {field:'name', title: '姓名',width:80},
+    {field:'education', title: '学历',width:100},
+    {field:'phone', title: '联系电话',width:120},
+    {field:'department', title: '所属部门',width:120},
+    {fixed: 'right', title: '操作', toolbar: '#bar_internalstaff',width:400}
 ]];
 
-//账号管理权限分配字段集合
-var columns_list2  = [[
-    {field:'unallocated', title: '待分配客户',width:200},
-    {fixed: 'right', title: '操作', toolbar: '#bar_list2',width:200}
+//面向合作外派员工管理字段集合
+var columns_expatriate2 = [[
+    {type:'checkbox'},
+    {field:'ID', title: '身份证号',width:180},
+    {field:'name', title: '姓名',width:80},
+    {field:'education', title: '学历',width:100},
+    {field:'phone', title: '联系电话',width:120},
+    {field:'unit', title: '派遣单位',width:150},
+    {fixed: 'right', title: '操作', toolbar: '#bar_expatriate'}
+]];
+
+//面向合作账号管理字段集合
+var columns_account2  = [[
+    {field:'name', title: '姓名'},
+    {field:'ID', title: '登录账号',width:200},
+    {fixed: 'right', title: '操作', toolbar: '#bar_account',width:200}
 ]];
 
 //简历字段集合

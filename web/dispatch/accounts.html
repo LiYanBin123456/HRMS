@@ -134,7 +134,7 @@
 
             //打开编辑对话框
             function showDetailDlg(account) {
-                var content = "../dialog/account.html?account="+encodeURIComponent(JSON.stringify(account));
+                var content = "../dialog/dispatch/account.html?account="+encodeURIComponent(JSON.stringify(account));
                 layer.open({
                     title:"编辑",
                     type: 2,
@@ -145,7 +145,7 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/account.html";
+                var content = "../dialog/dispatch/account.html";
                 layer.open({
                     title:"添加",
                     type: 2,
@@ -156,7 +156,7 @@
 
             //删除公告
             function del(account) {
-                layer.confirm('确定删除'+account.title, {icon: 3, title:'删除'}, function(index){
+                layer.confirm('确定删除管理员'+account.name, {icon: 3, title:'删除'}, function(index){
                     iNotice.delete(account.id,function () {
                         layer.close(index);
                         getAccounts();

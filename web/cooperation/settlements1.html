@@ -29,23 +29,46 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_settlements3">
+            <div class="layui-hide" id="top_bar_settlement">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
                 <button class="layui-btn layui-btn-sm" lay-event="copy"><i class="layui-icon "></i> 复制</button>
+                <button class="layui-btn layui-btn-sm" lay-event="copy"><i class="layui-icon "></i> 提交</button>
+                <button class="layui-btn layui-btn-sm" lay-event="copy"><i class="layui-icon "></i> 重置</button>
+                <button class="layui-btn layui-btn-sm" lay-event="copy"><i class="layui-icon "></i> 扣款</button>
+                <button class="layui-btn layui-btn-sm" lay-event="copy"><i class="layui-icon "></i> 发放工资</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
                     </div>
                     <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                    <div class="layui-input-inline">
+                        <select name="month" lay-verify="required">
+                              <option value="">按月份过滤</option>
+                              <option value="0">2020-06</option>
+                              <option value="1"></option>
+                        </select>
+                    </div>
+                    <div class="layui-input-inline">
+                        <select name="state"   lay-verify="required" >
+                                    <option value="">按状态过滤</option>
+                                    <option value="0">编辑</option>
+                                    <option value="1">提交</option>
+                                    <option value="2">初审</option>
+                                    <option value="3">终审</option>
+                                    <option value="4">扣款</option>
+                                    <option value="5">发放</option>
+                        </select>
+                    </div>
                 </form>
             </div>
-            <table id="tbl_settlements3" lay-filter="filter_tb_settlements3"></table>
+            <table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>
             <div id="pager"></div>
 
             <!--行内工具栏-->
-            <script type="text/html" id="bar_settlements3">
+            <script type="text/html" id="bar_settlement">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>明细</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log"><i class="layui-icon layui-icon-edit"></i>日志</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
         </div>
         <script src="../js/fieldSet.js"></script>
@@ -91,27 +114,33 @@
                         if(!first){
                             param_query.pagination.page = obj.curr;
                             param_query.pagination.size = obj.limit;
-                            getSettlements3();
+                            getSalsrys();
                         }
                     }
                 });
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_settlements3',
-                    toolbar: '#top_bar_settlements3', //开启头部工具栏，并为其绑定左侧模板
+                    elem: '#tbl_settlement',
+                    toolbar: '#top_bar_settlement', //开启头部工具栏，并为其绑定左侧模板
                     defaultToolbar: ['filter', 'exports', 'print'],//自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                     title: '列表',
-                    cols: columns_settlements3,
-                    id: 'tbl_settlements3'
+                    cols: columns_settlement1,
+                    id: 'tbl_settlement'
                 });
 
                 //行内工具栏事件响应
-                table.on('tool(filter_tb_settlements3)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                table.on('tool(filter_tb_settlement)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
                     var data = obj.data; //获得当前行数据
                     switch (obj.event){
                         case "detail":
                             showDetailDlg();
+                            break;
+                        case "log":
+                            showLogDlg();
+                            break;
+                        case "edit":
+                            showEditDlg(data);
                             break;
                         case "del":
                             del(data);
@@ -120,7 +149,7 @@
                 });
 
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_settlements3)', function(obj){
+                table.on('toolbar(filter_tb_settlement)', function(obj){
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
@@ -134,12 +163,12 @@
                     };
                 });
 
-                getSettlements3();
+                getSalsrys();
             }
 
-            function getSettlements3() {
-                var result = {total:100,rows:[{unit:"科技中专",month:"2020-06",product:"用工宝",premium:"5000",state:"申报中"},{unit:"国棉四厂",month:"2020-06",product:".....",premium:"12000",state:"已审核"}]};
-                table.reload('tbl_settlements3', {
+            function getSalsrys() {
+                var result = {total:100,rows:[{unit:"科技中专",month:"2020-06",salary:"5000",social:"5000",accumulation:"5000",manager:"5000",tax:"5000",summary:"5000",state:"编辑"},{unit:"国棉四厂",month:"2020-06",salary:"12000",social:"12000",accumulation:"5000",manager:"12000",tax:"12000",summary:"12000",state:"已审核"}]};
+                table.reload('tbl_settlement', {
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
@@ -158,7 +187,7 @@
 
             //打开明细对话框
             function showDetailDlg() {
-                var content = "../dialog/dispatch/detail3.html";
+                var content = "../dialog/dispatch/detail.html";
                 layer.open({
                     title:"明细",
                     type: 2,
@@ -167,9 +196,31 @@
                 });
             }
 
+            //打开查看日志对话框
+            function showLogDlg() {
+                var content = "log.html";
+                layer.open({
+                    title:"操作日志",
+                    type: 2,
+                    area: ['800px', '500px'],
+                    content: content
+                });
+            }
+
+            //打开添加对话框
+            function showInsertDlg() {
+                var content = "../dialog/dispatch/settlement1.html";
+                layer.open({
+                    title:"添加",
+                    type: 2,
+                    area: ['400px', '520px'],
+                    content: content
+                });
+            }
+
             //打开复制对话框
             function showCopyDlg() {
-                var content = "../dialog/dispatch/copy3.html";
+                var content = "../dialog/dispatch/copy.html";
                 layer.open({
                     title:"复制",
                     type: 2,
@@ -178,24 +229,22 @@
                 });
             }
 
-            //打开添加对话框
-            function showInsertDlg() {
-                var content = "../dialog/dispatch/settlement3.html";
+            function showEditDlg(settlement1) {
+                var content = "../dialog/dispatch/settlement1.html?settlement1="+encodeURIComponent(JSON.stringify(settlement1));
                 layer.open({
-                    title:"添加",
+                    title:"编辑",
                     type: 2,
-                    area: ['400px', '400px'],
+                    area: ['400px', '520px'],
                     content: content
                 });
             }
 
-
             //删除公告
-            function del(settlements3) {
-                layer.confirm('确定删除'+settlements3.title, {icon: 3, title:'删除'}, function(index){
-                    iSalsry.delete(settlements3.id,function () {
+            function del(settlement) {
+                layer.confirm('确定删除'+settlement.unit+'的结算单', {icon: 3, title:'删除'}, function(index){
+                    iSalsry.delete(settlement.id,function () {
                         layer.close(index);
-                        getSettlements3();
+                        getNotices();
                         layer.msg('删除成功');
                     });
                 });
