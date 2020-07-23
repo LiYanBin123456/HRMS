@@ -107,12 +107,15 @@ public class RuleServlet extends HttpServlet {
     }
 
     private String updateFund(Connection conn,HttpServletRequest request){
-        Rule_fund fund = JSONObject.parseObject(request.getParameter("fund"), Rule_fund.class);
+
+        Rule_fund fund = JSONObject.parseObject(request.getParameter("rule"), Rule_fund.class);
+        System.out.println(fund.getStart());
+
         DaoUpdateResult res = fundService.updateFund(conn,fund);
         return JSONObject.toJSONString(res);
     }
     private String insertFund(Connection conn,HttpServletRequest request){
-        Rule_fund fund = JSONObject.parseObject(request.getParameter("fund"), Rule_fund.class);
+        Rule_fund fund = JSONObject.parseObject(request.getParameter("rule"), Rule_fund.class);
         DaoUpdateResult res=fundService.insertFund(conn,fund);
         return JSONObject.toJSONString(res);
     }
@@ -138,13 +141,13 @@ public class RuleServlet extends HttpServlet {
     }
 
     private String updateMedical(Connection conn, HttpServletRequest request) {
-        Rule_medical medical = JSONObject.parseObject(request.getParameter("rule_medical"), Rule_medical.class);
+        Rule_medical medical = JSONObject.parseObject(request.getParameter("rule"), Rule_medical.class);
         DaoUpdateResult res = medicalService.updateMedical(conn,medical);
         return JSONObject.toJSONString(res);
     }
 
     private String insertMedical(Connection conn, HttpServletRequest request) {
-        Rule_medical medical = JSONObject.parseObject(request.getParameter("rule_medical"), Rule_medical.class);
+        Rule_medical medical = JSONObject.parseObject(request.getParameter("rule"), Rule_medical.class);
         DaoUpdateResult res = medicalService.insertMedical(conn,medical);
         return JSONObject.toJSONString(res);
     }
@@ -164,13 +167,13 @@ public class RuleServlet extends HttpServlet {
         return JSONObject.toJSONString(res);
     }
     private String updateSocial(Connection conn, HttpServletRequest request) {
-        Rule_social social = JSONObject.parseObject(request.getParameter("social"), Rule_social.class);
+        Rule_social social = JSONObject.parseObject(request.getParameter("rule"), Rule_social.class);
         DaoUpdateResult res = socialService.updateSocial(conn,social);
         return JSONObject.toJSONString(res);
     }
 
     private String insertSocial(Connection conn, HttpServletRequest request) {
-        Rule_social social = JSONObject.parseObject(request.getParameter("social"), Rule_social.class);
+        Rule_social social = JSONObject.parseObject(request.getParameter("rule"), Rule_social.class);
         DaoUpdateResult res = socialService.insertSocial(conn,social);
         return JSONObject.toJSONString(res);
     }

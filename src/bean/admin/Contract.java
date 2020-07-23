@@ -1,5 +1,8 @@
 package bean.admin;
 
+import java.sql.Date;
+
+//合同
 public class Contract {
     private String id;//合同id（规则为类型+年份+四位编号，如“A2020000001”）
     private long aid;//甲方id 平台为0
@@ -12,18 +15,18 @@ public class Contract {
      * D人力资源派遣单位和员工之间的合同
      */
     private String type;
-    private String start;//合同生效时间
-    private String end;//合同失效时间
-    private int status;//状态：0-正常；1-过期
+    private Date start;//合同生效时间
+    private Date end;//合同失效时间
+    private byte status;//状态：0-正常；1-过期
     private String intro;//备注
     /**发票类型(派遣公司),其他类型的合同默认为null
      * 0_有增值税专用发票（全额）
      * 1_增值税专用发票（差额）
      * 2_增值税普通发票
      */
-    private int invoice;
+    private byte invoice;
     private String project;//开票项目（派遣公司） 其他类型默认为null
-    private int times;//签订次数（员工） 其他类型合同默认为null
+    private byte times;//签订次数（员工） 其他类型合同默认为null
 
     public String getId() {
         return id;
@@ -53,33 +56,35 @@ public class Contract {
         return type;
     }
 
+    public byte getTimes() {
+        return times;
+    }
+
+    public void setTimes(byte times) {
+        this.times = times;
+    }
+
     public void setType(String type) {
         this.type = type;
     }
 
-    public String getStart() {
+    public Date getStart() {
         return start;
     }
 
-    public void setStart(String start) {
+    public void setStart(Date start) {
         this.start = start;
     }
 
-    public String getEnd() {
+    public Date getEnd() {
         return end;
     }
 
-    public void setEnd(String end) {
+    public void setEnd(Date end) {
         this.end = end;
     }
 
-    public int getStatus() {
-        return status;
-    }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
 
     public String getIntro() {
         return intro;
@@ -89,11 +94,19 @@ public class Contract {
         this.intro = intro;
     }
 
-    public int getInvoice() {
+    public byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(byte status) {
+        this.status = status;
+    }
+
+    public byte getInvoice() {
         return invoice;
     }
 
-    public void setInvoice(int invoice) {
+    public void setInvoice(byte invoice) {
         this.invoice = invoice;
     }
 
@@ -105,18 +118,12 @@ public class Contract {
         this.project = project;
     }
 
-    public int getTimes() {
-        return times;
-    }
 
-    public void setTimes(int times) {
-        this.times = times;
-    }
 
     public Contract() {
     }
 
-    public Contract(String id, long aid, long bid, String type, String start, String end, int status, String intro, int invoice, String project, int times) {
+    public Contract(String id, long aid, long bid, String type, Date start, Date end, byte status, String intro, byte invoice, String project, byte times) {
         this.id = id;
         this.aid = aid;
         this.bid = bid;

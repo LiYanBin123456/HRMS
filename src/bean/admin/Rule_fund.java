@@ -1,19 +1,21 @@
 package bean.admin;
 
+import java.sql.Date;
+
 public class Rule_fund {
     private long id;
     private String city;
-    private String start;//生效时间
-    private int base;//基数
-    private int min;//公积金下限
-    private int max;//公积金上限
+    private Date start;//生效时间
+    private float base;//基数
+    private float min;//公积金下限
+    private float max;//公积金上限
     private float per1;//单位比例
     private float per2;//个人比例
 
     public Rule_fund() {
     }
 
-    public Rule_fund(long id, String city, String start, int base, int min, int max, float per1, float per2) {
+    public Rule_fund(long id, String city, Date start, float base, float min, float max, float per1, float per2) {
         this.id = id;
         this.city = city;
         this.start = start;
@@ -40,35 +42,35 @@ public class Rule_fund {
         this.city = city;
     }
 
-    public String getStart() {
+    public Date getStart() {
         return start;
     }
 
-    public void setStart(String start) {
+    public void setStart(Date start) {
         this.start = start;
     }
 
-    public int getBase() {
+    public float getBase() {
         return base;
     }
 
-    public void setBase(int base) {
+    public void setBase(float base) {
         this.base = base;
     }
 
-    public int getMin() {
+    public float getMin() {
         return min;
     }
 
-    public void setMin(int min) {
+    public void setMin(float min) {
         this.min = min;
     }
 
-    public int getMax() {
+    public float getMax() {
         return max;
     }
 
-    public void setMax(int max) {
+    public void setMax(float max) {
         this.max = max;
     }
 
@@ -93,7 +95,7 @@ public class Rule_fund {
         return "Rule_fund{" +
                 "id=" + id +
                 ", city='" + city + '\'' +
-                ", start='" + start + '\'' +
+                ", start=" + start +
                 ", base=" + base +
                 ", min=" + min +
                 ", max=" + max +

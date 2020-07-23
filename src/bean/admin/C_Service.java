@@ -1,29 +1,41 @@
 package bean.admin;
 
+import java.sql.Date;
+
 //合同服务项目
 public class C_Service {
 
     private long id;//服务项目id
     private String cid;//外键  合同id
-    private int project;//位运算，每一位表示一种服务项目的有无  第0位 发放工资  第1位  代缴社保   第2位 代缴公积金  例如（010 代表  代缴社保）
-    private int category;//结算方式  0_按人数收取  1_按比例收取  2_外包整体核算  3_小时工
+    /**
+     * 类型
+     0_劳务外包派遣
+     1_小时工
+     2_商业保险
+     */
+    private byte type;
+    private byte category;//结算方式  0_按人数收取  1_按比例收取  2_外包整体核算  3_小时工
+    private byte payment;//工资放发日，即不能晚于每月的之地呢日期
+    private byte settlement;//结算日
+    private byte receipt;//回款日
+    private float tax;//税率（只有选择了按人数收取才有）默认null
+    private String insure;//商业保险名称
     private float value;//结算值 根据结算方式的不同而不同，因为按比例是百分比，因此设置为float类型
-    private int payment;//工资放发日，即不能晚于每月的之地呢日期
-    private int settlement;//结算日
-    private int receipt;//回款日
 
     public C_Service() {
     }
 
-    public C_Service(long id, String cid, int project, int category, float value, int payment, int settlement, int receipt) {
+    public C_Service(long id, String cid, byte type, byte category, byte payment, byte settlement, byte receipt, float tax, String insure, float value) {
         this.id = id;
         this.cid = cid;
-        this.project = project;
+        this.type = type;
         this.category = category;
-        this.value = value;
         this.payment = payment;
         this.settlement = settlement;
         this.receipt = receipt;
+        this.tax = tax;
+        this.insure = insure;
+        this.value = value;
     }
 
     public long getId() {
@@ -42,20 +54,60 @@ public class C_Service {
         this.cid = cid;
     }
 
-    public int getProject() {
-        return project;
+    public byte getType() {
+        return type;
     }
 
-    public void setProject(int project) {
-        this.project = project;
+    public void setType(byte type) {
+        this.type = type;
     }
 
-    public int getCategory() {
+    public byte getCategory() {
         return category;
     }
 
-    public void setCategory(int category) {
+    public void setCategory(byte category) {
         this.category = category;
+    }
+
+    public byte getPayment() {
+        return payment;
+    }
+
+    public void setPayment(byte payment) {
+        this.payment = payment;
+    }
+
+    public byte getSettlement() {
+        return settlement;
+    }
+
+    public void setSettlement(byte settlement) {
+        this.settlement = settlement;
+    }
+
+    public byte getReceipt() {
+        return receipt;
+    }
+
+    public void setReceipt(byte receipt) {
+        this.receipt = receipt;
+    }
+
+    public float getTax() {
+        return tax;
+    }
+
+    public void setTax(float tax) {
+        this.tax = tax;
+    }
+
+    public String getInsure() {
+        return insure;
+    }
+
+    public void setInsure(String insure) {
+        this.insure = insure;
     }
 
     public float getValue() {
@@ -66,41 +118,19 @@ public class C_Service {
         this.value = value;
     }
 
-    public int getPayment() {
-        return payment;
-    }
-
-    public void setPayment(int payment) {
-        this.payment = payment;
-    }
-
-    public int getSettlement() {
-        return settlement;
-    }
-
-    public void setSettlement(int settlement) {
-        this.settlement = settlement;
-    }
-
-    public int getReceipt() {
-        return receipt;
-    }
-
-    public void setReceipt(int receipt) {
-        this.receipt = receipt;
-    }
-
     @Override
     public String toString() {
         return "C_Service{" +
                 "id=" + id +
                 ", cid='" + cid + '\'' +
-                ", project=" + project +
+                ", type=" + type +
                 ", category=" + category +
-                ", value=" + value +
                 ", payment=" + payment +
                 ", settlement=" + settlement +
                 ", receipt=" + receipt +
+                ", tax=" + tax +
+                ", insure='" + insure + '\'' +
+                ", value=" + value +
                 '}';
     }
 }

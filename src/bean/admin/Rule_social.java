@@ -1,10 +1,12 @@
 package bean.admin;
 
+import java.sql.Date;
+
 public class Rule_social {
     private long id;
     private String city;//地市代码
-    private String start;//开始日期
-    private int base;//基数
+    private Date start;//开始日期
+    private float base;//基数
     private float per1;//养老单位比例
     private float per2;//养老个人比例
     private float per3;//工伤单位比例
@@ -15,7 +17,7 @@ public class Rule_social {
     public Rule_social() {
     }
 
-    public Rule_social(long id, String city, String start, int base, float per1, float per2, float per3, float extra, float per4, float per5) {
+    public Rule_social(long id, String city, Date start, float base, float per1, float per2, float per3, float extra, float per4, float per5) {
         this.id = id;
         this.city = city;
         this.start = start;
@@ -44,19 +46,19 @@ public class Rule_social {
         this.city = city;
     }
 
-    public String getStart() {
+    public Date getStart() {
         return start;
     }
 
-    public void setStart(String start) {
+    public void setStart(Date start) {
         this.start = start;
     }
 
-    public int getBase() {
+    public float getBase() {
         return base;
     }
 
-    public void setBase(int base) {
+    public void setBase(float base) {
         this.base = base;
     }
 

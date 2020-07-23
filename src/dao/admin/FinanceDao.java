@@ -30,9 +30,10 @@ public class FinanceDao {
         return  DbUtil.insert(conn,sql,params);
     }
 
-    public DaoUpdateResult deleteFinance(Connection conn, long id){
+    public DaoUpdateResult deleteFinance(Connection conn, long id,int type){
         QueryConditions conditions = new QueryConditions();
         conditions.add("cid","=",id);
+        conditions.add("type","=",type);
         return DbUtil.delete(conn,"finance",conditions);
     }
 

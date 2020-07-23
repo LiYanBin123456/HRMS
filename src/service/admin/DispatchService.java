@@ -29,12 +29,12 @@ public class DispatchService {
         return dispatchDao.insertClient(conn, dispatch);
     }
 
-    public DaoUpdateResult deleteClient1(Connection conn, long id) {
+    public DaoUpdateResult deleteClient1(Connection conn, long id,int type) {
         DaoUpdateResult res;
         res= dispatchDao.deleteClient1(conn,id);
         //删除潜在客户时，也要删除客户的财务服务信息表
         if(res.success){
-            financeDao.deleteFinance(conn,id);
+            financeDao.deleteFinance(conn,id,type);
         }
         return res;
     }

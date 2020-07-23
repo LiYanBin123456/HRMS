@@ -1,10 +1,12 @@
 package bean.admin;
 
+import java.sql.Date;
+
 public class Rule_medical {
     private long id;
     private String city;//地市代码
-    private String start;//开始日期
-    private int base;//基数
+    private Date start;//开始日期
+    private float base;//基数
     private float per1;//医疗单位比例
     private float per2;//医疗个人比例
     private float per3;//生育单位比例
@@ -14,7 +16,8 @@ public class Rule_medical {
     public Rule_medical() {
     }
 
-    public Rule_medical(long id, String city, String start, int base, float per1, float per2, float per3, float fin1, float fin2) {
+
+    public Rule_medical(long id, String city, Date start, float base, float per1, float per2, float per3, float fin1, float fin2) {
         this.id = id;
         this.city = city;
         this.start = start;
@@ -42,11 +45,11 @@ public class Rule_medical {
         this.fin2 = fin2;
     }
 
-    public String getStart() {
+    public Date getStart() {
         return start;
     }
 
-    public void setStart(String start) {
+    public void setStart(Date start) {
         this.start = start;
     }
 
@@ -67,11 +70,11 @@ public class Rule_medical {
     }
 
 
-    public int getBase() {
+    public float getBase() {
         return base;
     }
 
-    public void setBase(int base) {
+    public void setBase(float base) {
         this.base = base;
     }
 
