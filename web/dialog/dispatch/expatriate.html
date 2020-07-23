@@ -221,6 +221,20 @@
                 <form lay-filter="form_expatriate" class="layui-form">
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
+                        <span class="x-red">*</span>选择发行卡</label>
+                            <div class="layui-input-inline">
+                                <select name="banks" lay-verify="required">
+                                    <option value=""></option>
+                                    <option value="0">中国银行</option>
+                                    <option value="1">交通银行</option>
+                                    <option value="2">建设银行</option>
+                                    <option value="3">其他</option>
+                            </select>
+                    </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label  class="layui-form-label">
                             <span class="x-red">*</span>开户行</label>
                         <div class="layui-input-inline">
                             <input type="text"  name="bank" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>

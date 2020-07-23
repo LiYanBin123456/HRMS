@@ -220,7 +220,7 @@ var columns_settlement1  = [[
     {field:'tax', title: '税费',width:70},
     {field:'summary', title: '总额',width:80},
     {field:'state', title: '状态',width:70},
-    {title: '操作', toolbar: '#bar_settlement',width:350}
+    {title: '操作', toolbar: '#bar_settlement',width:250}
 ]];
 
 //工资管理明细字段集合（完整模式）
@@ -383,6 +383,48 @@ var columns_staff3 = [[
     {field:'name', title: '姓名',width:200},
 ]];
 
+//导出工资发放表普通字段集合
+var columns_common  = [[
+    {type:'checkbox',width:30},
+    {field:'unit', title: '用工企业'},
+    {field:'month', title: '月份',width:80},
+    {field:'salary', title: '工资',width:70},
+    {field:'social', title: '社保',width:70},
+    {field:'accumulation', title: '公积金',width:80},
+    {field:'manager', title: '管理费',width:70},
+    {field:'tax', title: '税费',width:70},
+    {field:'summary', title: '总额',width:80},
+    {field:'state', title: '状态',width:70},
+    {title: '操作', toolbar: '#bar_common',width:270}
+]];
+
+//导出工资发放表小时工字段集合
+var columns_hourly  = [[
+    {type:'checkbox',width:30},
+    {field:'unit', title: '用工企业'},
+    {field:'month', title: '月份',width:80},
+    {field:'time', title: '总工时',width:70},
+    {field:'price', title: '单价',width:70},
+    {field:'tax', title: '交通费',width:70},
+    {field:'add', title: '附加',width:70},
+    {field:'summary', title: '总额',width:80},
+    {field:'state', title: '状态',width:70},
+    {title: '操作', toolbar: '#bar_hourly',width:300}
+]];
+
+//专项扣除字段集合
+var columns_special  = [[
+    {field:'ID', title: '身份证号'},
+    {field:'name', title: '姓名',width:80},
+    {field:'children', title: '子女教育',width:80},
+    {field:'oldman', title: '赡养老人',width:80},
+    {field:'continue', title: '继续教育',width:80},
+    {field:'medical', title: '大病医疗',width:80},
+    {field:'interest', title: '住房贷款利息',width:110},
+    {field:'rent', title: '住房租金',width:80},
+    {title: '操作', toolbar: '#bar_special',width:100}
+]];
+
 //社保参保字段集合
 var columns_socialsc  = [[
     {field:'ID', title: '身份证号'},
@@ -457,26 +499,15 @@ var columns_account  = [[
     {fixed: 'right', title: '操作', toolbar: '#bar_account',width:200}
 ]];
 
-//面向合作内部员工管理字段集合
-var columns_internalstaff2 = [[
+
+//面向合作员工管理字段集合
+var columns_expatriate2 = [[
     {type:'checkbox'},
     {field:'ID', title: '身份证号'},
     {field:'name', title: '姓名',width:80},
     {field:'education', title: '学历',width:100},
     {field:'phone', title: '联系电话',width:120},
-    {field:'department', title: '所属部门',width:120},
-    {fixed: 'right', title: '操作', toolbar: '#bar_internalstaff',width:400}
-]];
-
-//面向合作外派员工管理字段集合
-var columns_expatriate2 = [[
-    {type:'checkbox'},
-    {field:'ID', title: '身份证号',width:180},
-    {field:'name', title: '姓名',width:80},
-    {field:'education', title: '学历',width:100},
-    {field:'phone', title: '联系电话',width:120},
-    {field:'unit', title: '派遣单位',width:150},
-    {fixed: 'right', title: '操作', toolbar: '#bar_expatriate'}
+    {fixed: 'right', title: '操作', toolbar: '#bar_expatriate',width:330}
 ]];
 
 //面向合作账号管理字段集合
@@ -484,6 +515,41 @@ var columns_account2  = [[
     {field:'name', title: '姓名'},
     {field:'ID', title: '登录账号',width:200},
     {fixed: 'right', title: '操作', toolbar: '#bar_account',width:200}
+]];
+
+//面向合作普通结算单字段集合
+var columns_settlement12  = [[
+    {type:'checkbox',width:30},
+    {field:'month', title: '月份'},
+    {field:'salary', title: '工资',width:70},
+    {field:'social', title: '社保',width:70},
+    {field:'accumulation', title: '公积金',width:80},
+    {field:'manager', title: '管理费',width:70},
+    {field:'tax', title: '税费',width:70},
+    {field:'summary', title: '总额',width:80},
+    {field:'state', title: '状态',width:70},
+    {title: '操作', toolbar: '#bar_settlement',width:250}
+]];
+
+//面向合作小时工结算单字段集合
+var columns_settlements22  = [[
+    {type:'checkbox',width:30},
+    {field:'month', title: '月份'},
+    {field:'time', title: '总工时',width:70},
+    {field:'price', title: '单价',width:70},
+    {field:'tax', title: '交通费',width:70},
+    {field:'add', title: '附加',width:70},
+    {field:'summary', title: '总额',width:80},
+    {field:'state', title: '状态',width:70},
+    {title: '操作', toolbar: '#bar_settlements2',width:300}
+]];
+
+//面向合作工资结算待审核字段集合
+var columns_audit2  = [[
+    {field:'month', title: '月份'},
+    {field:'money', title: '金额',width:100},
+    {field:'state', title: '状态',width:100},
+    {fixed: 'right', title: '操作', toolbar: '#bar_audit2',width:200}
 ]];
 
 //简历字段集合

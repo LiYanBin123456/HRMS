@@ -16,6 +16,13 @@
             <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
             <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
+        <style>
+            .searchbox{
+                margin-left:60px;
+                display:inline;
+                width:80px;
+            }
+        </style>
     </head>
     <body>
         <div class="layui-fluid">
@@ -56,8 +63,26 @@
                     </div>
                <div class="layui-form-item">
                         <label for="L_repass" class="layui-form-label"></label>
-                        <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button></div>
+                        <button type="button" class="layui-btn" id="test1">上传辞职证明</button>
+                        <button class="layui-btn searchbox" lay-filter="add" onclick="save()" lay-submit="">保存</button></div>
                 </form>
+                <script>
+layui.use('upload', function(){
+  var upload = layui.upload;
+   
+  //执行实例
+  var uploadInst = upload.render({
+    elem: '#test1' //绑定元素
+    ,url: '/upload/' //上传接口
+    ,done: function(res){
+      //上传完毕回调
+    }
+    ,error: function(){
+      //请求异常回调
+    }
+  });
+});
+</script>
             </div>
         </div>
 </body>
@@ -67,15 +92,12 @@
 <script>
     var op = "insert";
     var form;//表单对象
-    var editer;
 
     loadLayuiModule();
 
     function loadLayuiModule() {
-        layui.use(['form', 'layedit','jquery'], function () {
+        layui.use(['form','jquery'], function () {
             form = layui.form;
-            layedit = layui.layedit;
-            editer = layedit.build('content'); //建立编辑器
             initData();
         });
     }

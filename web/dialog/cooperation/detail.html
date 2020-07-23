@@ -7,11 +7,11 @@
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
-        <link rel="stylesheet" href="../css/font.css">
-        <link rel="stylesheet" href="../css/xadmin.css">
+        <link rel="stylesheet" href="../../css/font.css">
+        <link rel="stylesheet" href="../../css/xadmin.css">
         <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-        <script src="../lib/layui/layui.js" charset="utf-8"></script>
-        <script type="text/javascript" src="../js/xadmin.js"></script>
+        <script src="../../lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../../js/xadmin.js"></script>
         <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
         <!--[if lt IE 9]>
           <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -19,7 +19,7 @@
         <![endif]-->
         <style>
             .searchbox{
-                margin-left:100px;
+                margin-left:400px;
                 display:inline;
                 width:300px;
             }
@@ -29,20 +29,32 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_account">
-                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
+            <div class="layui-hide" id="top_bar_detail">
+                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
+                <button class="layui-btn layui-btn-sm" lay-event="addrecord"><i class="layui-icon "></i> 社保补缴</button>
+                <button class="layui-btn layui-btn-sm" lay-event="addrecord"><i class="layui-icon "></i> 社保补差</button>
+                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导入工资表</button>
+                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 下载模板</button>
+
             </div>
-            <table id="tbl_account" lay-filter="filter_tb_account"></table>
+            <form class="layui-form" style="display: inline">
+                <div class="layui-input-inline">
+                    <input type="radio" name="mode" title="录入" value="0" lay-filter="mode" checked="checked">
+                    <input type="radio" name="mode" title="完整" value="1" lay-filter="mode" >
+                </div>
+            </form>
+            <div id="container">
+                <table id="tbl_detail" lay-filter="filter_tb_detail"></table>
+            </div>
             <div id="pager"></div>
 
             <!--行内工具栏-->
-            <script type="text/html" id="bar_accounts">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            <script type="text/html" id="bar_detail">
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
         </div>
-        <script src="../js/fieldSet.js"></script>
-        <script src="../js/interface.js"></script>
+        <script src="../../js/fieldSet.js"></script>
+        <script src="../../js/interface.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -66,10 +78,22 @@
             }
 
             function initPage() {
-                initTable();
+                form.on('radio(mode)', function(data){
+                    switchMode(data.value);
+                });
+                initTable(0);
             }
 
-            function initTable() {
+            function switchMode(mode) {
+                $("#container").empty();
+                $("#container").append('<table id="tbl_detail" lay-filter="filter_tb_detail"></table>');
+
+                initTable(mode)
+            }
+
+            function initTable(mode) {
+                var cols = mode==0?columns_detail_input:columns_detail_full;
+
                 //初始化分页
                 laypage.render({
                     elem: 'pager'
@@ -80,53 +104,57 @@
                         if(!first){
                             param_query.pagination.page = obj.curr;
                             param_query.pagination.size = obj.limit;
-                            getAccounts();
+                            getDetails();
                         }
                     }
                 });
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_account',
-                    toolbar: '#top_bar_account', //开启头部工具栏，并为其绑定左侧模板
-                    defaultToolbar: ['filter', 'exports', 'print'],//自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                    elem: '#tbl_detail',
+                    toolbar: '#top_bar_detail', //开启头部工具栏，并为其绑定左侧模板
                     title: '列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_accounts,
-                    id: 'tbl_account'
+                    cols: cols,
+                    id: 'tbl_detail'
                 });
 
                 //行内工具栏事件响应
-                table.on('tool(filter_tb_account)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                table.on('tool(filter_tb_detail)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
                     var data = obj.data; //获得当前行数据
                     switch (obj.event){
-                        case "detail":
-                            showDetailDlg(data);
-                            break;
                         case "del":
                             del(data);
                             break;
                     }
                 });
 
+                //单元格编辑
+                table.on('edit(filter_tb_detail)', function(obj){
+                    var value = obj.value //得到修改后的值
+                    ,data = obj.data //得到所在行所有键值
+                    ,field = obj.field; //得到字段
+                    layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+                  });
+
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_account)', function(obj){
+                table.on('toolbar(filter_tb_detail)', function(obj){
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
                             break;
-                        case 'search':
-                            search();
+                        case 'addrecord':
+                            showAddrecordDlg();
                             break;
-                    };
+                };
                 });
 
-                getAccounts();
-            }
+                getDetails();
+          }
 
-            function getAccounts() {
-                var result = {total:100,rows:[{name:"赵斌",ID:"stuff001",password:"123456"},{name:"李小刚",ID:"stuff002",password:"123456"}]};
-                table.reload('tbl_account', {
+            function getDetails() {
+                var result = {total:100,rows:[{ID:"360402199008230081",name:"张晓国",money:"5000",post:"1000",bonus:"500",house:"500",traffic:"100",shebao:"300",gongjijin:"500",geshui:"100",kaoqin:"50",shifa:"4500"},{ID:"360402199008230081",name:"宋丽",money:"12000",post:"2000",bonus:"600",house:"600",traffic:"600",shebao:"600",gongjijin:"600",geshui:"600",kaoqin:"60",shifa:"8000"}]};
+                table.reload('tbl_detail', {
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
@@ -140,33 +168,36 @@
             //模糊查找
 
             //打开详情对话框
-            function showDetailDlg(account) {
-                var content = "../dialog/admin/account.html?account="+encodeURIComponent(JSON.stringify(account));
-                layer.open({
-                    title:"详情",
-                    type: 2,
-                    area: ['600px', '540px'],
-                    content: content
-                });
-            }
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/admin/account.html";
+                var content = "staff.html";
                 layer.open({
                     title:"添加",
                     type: 2,
-                    area: ['600px', '540px'],
+                    area: ['800px', '500px'],
                     content: content
                 });
             }
 
+            //打开补录对话框
+            function showAddrecordDlg() {
+                var content = "addrecord.html";
+                layer.open({
+                    title:"补录",
+                    type: 2,
+                    area: ['800px', '500px'],
+                    content: content
+                });
+            }
+
+
             //删除公告
-            function del(account) {
-                layer.confirm('确定删除'+account.title, {icon: 3, title:'删除公告'}, function(index){
-                    iNotice.delete(account.id,function () {
+            function del(detail) {
+                layer.confirm('确定删除'+detail.name, {icon: 3, title:'删除'}, function(index){
+                    iSalsry.delete(detail.id,function () {
                         layer.close(index);
-                        getNotices();
+                        getDetails();
                         layer.msg('删除成功');
                     });
                 });

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>通知公告</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+        <link rel="stylesheet" href="../../css/font.css">
+        <link rel="stylesheet" href="../../css/xadmin.css">
+        <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+        <script src="../../lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../../js/xadmin.js"></script>
+        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+        <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <style>
+            .searchbox{
+                margin-left:100px;
+                display:inline;
+                width:300px;
+            }
+        </style>
+    </head>
+
+    <body class="layui-layout-body">
+        <div style="padding: 5px;">
+            <!--顶部工具栏-->
+            <div class="layui-hide" id="top_bar_detail4">
+            </div>
+            <table id="tbl_detail4" lay-filter="filter_tb_detail4"></table>
+            <div id="pager"></div>
+
+            <!--行内工具栏-->
+            <script type="text/html" id="bar_detail4">
+            </script>
+        </div>
+        <script src="../../js/fieldSet.js"></script>
+        <script src="../../js/interface.js"></script>
+        <script>
+            var table;//数据表格对象
+            var laypage;//分页对象
+            var form;//分页对象
+            var layer;//弹出窗口
+            var element;
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            $(function () {
+                loadLayuiModule();
+            });
+
+            function loadLayuiModule() {
+                layui.use(['table','form','element','layer','laypage'], function() {
+                    table = layui.table;
+                    layer = layui.layer;
+                    element = layui.element;
+                    laypage = layui.laypage;
+                    form = layui.form;
+                    initPage();
+                });
+            }
+
+            function initPage() {
+                initTable();
+            }
+
+            function initTable() {
+                //初始化分页
+                laypage.render({
+                    elem: 'pager'
+                    ,count: 10 //数据总数
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+                    ,jump: function(obj,first){
+                        //首次不执行
+                        if(!first){
+                            param_query.pagination.page = obj.curr;
+                            param_query.pagination.size = obj.limit;
+                            getNotices();
+                        }
+                    }
+                });
+
+                //初始化数据表格
+                table.render({
+                    elem: '#tbl_detail4',
+                    title: '列表',
+                    cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                    cols: columns_detail4,
+                    id: 'tbl_detail4'
+                });
+
+
+                getNotices();
+            }
+
+            function getNotices() {
+                var result = {total:100,rows:[{time:"2020-2-1",money:"+5000",matter:"来款"},{time:"2020-3-15",money:"-2000",matter:"三月结算单扣除"}]};
+                table.reload('tbl_detail4', {
+                    data:result.rows
+                });
+                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
+                /*iNotice.getList(param_query,function (result) {
+                    table.reload('tbl_notice', {
+                        data:result.rows
+                    });
+                });*/
+            }
+
+
+        </script>
+    </body>
+</html>

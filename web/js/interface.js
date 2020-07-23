@@ -18,6 +18,9 @@ var InterfaceAccount = function () {
         access(url,para,1,success,fail);
     };
 }
+
+//公告相关接口
+var 
 //职位相关接口
 var InterfaceJob = function () {
     var url = base+"/job";//servlet的url地址

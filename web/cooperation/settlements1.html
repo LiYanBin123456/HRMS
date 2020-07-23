@@ -33,14 +33,7 @@
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
                 <button class="layui-btn layui-btn-sm" lay-event="copy"><i class="layui-icon "></i> 复制</button>
                 <button class="layui-btn layui-btn-sm" lay-event="copy"><i class="layui-icon "></i> 提交</button>
-                <button class="layui-btn layui-btn-sm" lay-event="copy"><i class="layui-icon "></i> 重置</button>
-                <button class="layui-btn layui-btn-sm" lay-event="copy"><i class="layui-icon "></i> 扣款</button>
-                <button class="layui-btn layui-btn-sm" lay-event="copy"><i class="layui-icon "></i> 发放工资</button>
                 <form class="layui-form searchbox">
-                    <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
-                    </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                     <div class="layui-input-inline">
                         <select name="month" lay-verify="required">
                               <option value="">按月份过滤</option>
@@ -125,7 +118,7 @@
                     toolbar: '#top_bar_settlement', //开启头部工具栏，并为其绑定左侧模板
                     defaultToolbar: ['filter', 'exports', 'print'],//自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                     title: '列表',
-                    cols: columns_settlement1,
+                    cols: columns_settlement12,
                     id: 'tbl_settlement'
                 });
 
