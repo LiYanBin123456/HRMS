@@ -12,7 +12,7 @@ public class NoticeDao {
      *@param param 查询参数
      * @return 检索结果，格式："{success:true,msg:"",effects:1}"
      */
-    public DaoQueryListResult getNoticeList(Connection conn, QueryParameter param){
+    public DaoQueryListResult getList(Connection conn, QueryParameter param){
         return DbUtil.getList(conn,"notice",param, Notice.class);
     }
 
@@ -22,7 +22,7 @@ public class NoticeDao {
      * @param id
      * @return
      */
-    public DaoQueryResult getNotice(Connection conn, long id) {
+    public DaoQueryResult get(Connection conn, long id) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
         return DbUtil.get(conn,"notice",conditions,Notice.class);
@@ -34,7 +34,7 @@ public class NoticeDao {
      * @param n
      * @return
      */
-    public DaoUpdateResult updateNotice(Connection conn, Notice n) {
+    public DaoUpdateResult update(Connection conn, Notice n) {
         String sql = "update notice set title=?,brief=?,content=?,publisher=?,date=? where id=?";
         Object []params = {n.getTitle(),n.getBrief(),n.getContent(),n.getPublisher(),n.getDate(),n.getId()};
         //调用DbUtil封装的update方法
@@ -47,13 +47,13 @@ public class NoticeDao {
      * @param n
      * @return
      */
-    public DaoUpdateResult insertNotice(Connection conn, Notice n) {
+    public DaoUpdateResult insert(Connection conn, Notice n) {
         String sql = "insert notice (title,brief,content,publisher,date) values (?,?,?,?,?)";
         Object []params = {n.getTitle(),n.getBrief(),n.getContent(),n.getPublisher(),n.getDate()};
         return  DbUtil.insert(conn,sql,params);
     }
 
-    public DaoUpdateResult deleteNotice(Connection conn, long id) {
+    public DaoUpdateResult delete(Connection conn, long id) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
         return DbUtil.delete(conn,"notice",conditions);

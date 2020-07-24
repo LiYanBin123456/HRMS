@@ -2,22 +2,22 @@ package bean.admin;
 
 import java.sql.Date;
 
-public class Rule_social {
+public class RuleMedical {
     private long id;
     private String city;//地市代码
     private Date start;//开始日期
     private float base;//基数
-    private float per1;//养老单位比例
-    private float per2;//养老个人比例
-    private float per3;//工伤单位比例
-    private float extra;//工伤补充
-    private float per4;//失业单位比例
-    private float per5;//失业个人比例
+    private float per1;//医疗单位比例
+    private float per2;//医疗个人比例
+    private float per3;//生育单位比例
+    private float fin1;//大病单位
+    private float fin2;//大病个人
 
-    public Rule_social() {
+    public RuleMedical() {
     }
 
-    public Rule_social(long id, String city, Date start, float base, float per1, float per2, float per3, float extra, float per4, float per5) {
+
+    public RuleMedical(long id, String city, Date start, float base, float per1, float per2, float per3, float fin1, float fin2) {
         this.id = id;
         this.city = city;
         this.start = start;
@@ -25,9 +25,32 @@ public class Rule_social {
         this.per1 = per1;
         this.per2 = per2;
         this.per3 = per3;
-        this.extra = extra;
-        this.per4 = per4;
-        this.per5 = per5;
+        this.fin1 = fin1;
+        this.fin2 = fin2;
+    }
+
+    public float getFin1() {
+        return fin1;
+    }
+
+    public void setFin1(float fin1) {
+        this.fin1 = fin1;
+    }
+
+    public float getFin2() {
+        return fin2;
+    }
+
+    public void setFin2(float fin2) {
+        this.fin2 = fin2;
+    }
+
+    public Date getStart() {
+        return start;
+    }
+
+    public void setStart(Date start) {
+        this.start = start;
     }
 
     public long getId() {
@@ -46,13 +69,6 @@ public class Rule_social {
         this.city = city;
     }
 
-    public Date getStart() {
-        return start;
-    }
-
-    public void setStart(Date start) {
-        this.start = start;
-    }
 
     public float getBase() {
         return base;
@@ -86,33 +102,9 @@ public class Rule_social {
         this.per3 = per3;
     }
 
-    public float getExtra() {
-        return extra;
-    }
-
-    public void setExtra(float extra) {
-        this.extra = extra;
-    }
-
-    public float getPer4() {
-        return per4;
-    }
-
-    public void setPer4(float per4) {
-        this.per4 = per4;
-    }
-
-    public float getPer5() {
-        return per5;
-    }
-
-    public void setPer5(float per5) {
-        this.per5 = per5;
-    }
-
     @Override
     public String toString() {
-        return "Rule_social{" +
+        return "RuleMedical{" +
                 "id=" + id +
                 ", city='" + city + '\'' +
                 ", start='" + start + '\'' +
@@ -120,9 +112,8 @@ public class Rule_social {
                 ", per1=" + per1 +
                 ", per2=" + per2 +
                 ", per3=" + per3 +
-                ", extra=" + extra +
-                ", per4=" + per4 +
-                ", per5=" + per5 +
+                ", fin1=" + fin1 +
+                ", fin2=" + fin2 +
                 '}';
     }
 }

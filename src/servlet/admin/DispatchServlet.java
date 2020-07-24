@@ -36,7 +36,7 @@ public class DispatchServlet extends HttpServlet {
 
         switch (op) {
             case "insert"://添加一个客户
-                result = insertClient(conn,request);
+                result = insert(conn,request);
                 break;
             case "deletePotential"://删除潜在客户
                 result = deletePotential(conn,request);
@@ -45,13 +45,13 @@ public class DispatchServlet extends HttpServlet {
                 result = deleteCooperation(conn,request);
                 break;
             case "update"://修改一个客户
-                result = updateClient(conn,request);
+                result = update(conn,request);
                 break;
             case "getList"://获取所有客户清单
-                result = getClients(conn,request);
+                result = getList(conn,request);
                 break;
             case "get"://获取一个客户清单
-                result = getClient(conn,request);
+                result = get(conn,request);
                 break;
 }
         ConnUtil.closeConnection(conn);
@@ -62,12 +62,12 @@ public class DispatchServlet extends HttpServlet {
     }
 
     //添加
-    private String insertClient(Connection conn,HttpServletRequest request) {
+    private String insert(Connection conn,HttpServletRequest request) {
 
         Dispatch dispatch = JSON.parseObject(request.getParameter("dispatch"), Dispatch.class);
         System.out.println(dispatch);
         //调用dao层的update方法
-        DaoUpdateResult res = dispatchService.insertClient(conn, dispatch);
+        DaoUpdateResult res = dispatchService.insert(conn, dispatch);
 
         return JSONObject.toJSONString(res);
     }
@@ -98,7 +98,7 @@ public class DispatchServlet extends HttpServlet {
                }
            }
         }
-        res = dispatchService.deleteClient2(conn,id);
+        res = dispatchService.deleteCooperation(conn,id);
         return JSONObject.toJSONString(res);
     }
 
@@ -107,35 +107,35 @@ public class DispatchServlet extends HttpServlet {
         long id = Long.parseLong(request.getParameter("id"));
         //客户类型 0_派遣方   1_合作单位客户
         int type = 0;
-        DaoUpdateResult res = dispatchService.deleteClient1(conn,id,type);
+        DaoUpdateResult res = dispatchService.deletePotential(conn,id,type);
         return JSONObject.toJSONString(res);
     }
 
     //修改客户信息
-    private String updateClient(Connection conn,HttpServletRequest request) {
+    private String update(Connection conn,HttpServletRequest request) {
 
         Dispatch dispatch = JSON.parseObject(request.getParameter("dispatch"), Dispatch.class);
         System.out.println(dispatch);
         //调用dao层的update方法
-        DaoUpdateResult res = dispatchService.updateClient(conn, dispatch);
+        DaoUpdateResult res = dispatchService.update(conn, dispatch);
 
         return JSONObject.toJSONString(res);
     }
 
     //获取客户列表
-    private String getClients(Connection conn,HttpServletRequest request) {
+    private String getList(Connection conn,HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
 
-        DaoQueryListResult res = dispatchService.getClientList(conn,parameter);
+        DaoQueryListResult res = dispatchService.getList(conn,parameter);
         System.out.println(res);
         return JSONObject.toJSONString(res);
     }
 
     //获取客户基本信息
-    private String getClient(Connection conn,HttpServletRequest request){
+    private String get(Connection conn,HttpServletRequest request){
         long id = Long.parseLong(request.getParameter("id"));
         System.out.println("客户id="+id);
-        DaoQueryResult res = dispatchService.getClient(conn,id);
+        DaoQueryResult res = dispatchService.get(conn,id);
         return  JSONObject.toJSONString(res);
     }
 

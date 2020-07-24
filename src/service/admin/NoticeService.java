@@ -13,23 +13,23 @@ import java.sql.Connection;
 public class NoticeService {
     private NoticeDao noticeDao = new NoticeDao();
 
-    public DaoQueryListResult getNoticeList(Connection conn, QueryParameter param){
-        return noticeDao.getNoticeList(conn,param);
+    public DaoQueryListResult getList(Connection conn, QueryParameter param){
+        return noticeDao.getList(conn,param);
     }
 
-    public DaoQueryResult getNotice(Connection conn, long id) {
-        return noticeDao.getNotice(conn,id);
+    public DaoQueryResult get(Connection conn, long id) {
+        return noticeDao.get(conn,id);
     }
 
-    public DaoUpdateResult updateNotice(Connection conn, Notice notice) {
-        return noticeDao.updateNotice(conn,notice);
+    public DaoUpdateResult update(Connection conn, Notice notice) {
+        return noticeDao.update(conn,notice);
     }
 
-    public DaoUpdateResult insertNotice(Connection conn, Notice notice) {
-        return noticeDao.insertNotice(conn,notice);
+    public DaoUpdateResult insert(Connection conn, Notice notice) {
+        return noticeDao.insert(conn,notice);
     }
 
-    public DaoUpdateResult deleteNotice(Connection conn, long id) {
-        return  noticeDao.deleteNotice(conn,id);
+    public DaoUpdateResult delete(Connection conn, long id) {
+        return  noticeDao.delete(conn,id);
     }
 }

@@ -10,19 +10,19 @@ import java.sql.Connection;
 public class ContractService {
     ContractDao contractDao = new ContractDao();
     private DispatchDao dispatchDao = new DispatchDao();
-    public DaoQueryListResult getContracts(Connection conn, QueryParameter parameter) {
-     return contractDao.getContracts(conn,parameter);
+    public DaoQueryListResult getList(Connection conn, QueryParameter parameter) {
+     return contractDao.getList(conn,parameter);
     }
 
-    public DaoQueryResult getContract(Connection conn, String id,String type) {
-        return contractDao.getContract(conn,id,type);
+    public DaoQueryResult get(Connection conn, String id,String type) {
+        return contractDao.get(conn,id,type);
     }
 
-    public DaoUpdateResult insertContract(Connection conn, Contract contract) {
+    public DaoUpdateResult insertCooperation(Connection conn, Contract contract) {
         return contractDao.insertContract(conn,contract);
     }
 
-    public DaoUpdateResult insertContract2(Connection conn, Contract contract) {
+    public DaoUpdateResult insertPotential(Connection conn, Contract contract) {
         int status = 1;//修改为合作状态
         DaoUpdateResult result = dispatchDao.updateStatus(conn, contract.getBid(), status);
         if(result.success){

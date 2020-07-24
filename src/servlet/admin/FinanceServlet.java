@@ -26,15 +26,17 @@ public class FinanceServlet extends HttpServlet {
         String op = request.getParameter("op");
 
         switch (op) {
-            case "get"://根据客户id获取财务信息
-                result = getFinance(conn,request);
+            case "insert"://根据客户id添加一个财务信息
+                result = insert(conn,request);
                 break;
             case "update"://根据客户id修改财务信息
-                result = updateFinance(conn,request);
+                result = update(conn,request);
                 break;
-            case "insert"://根据客户id添加一个财务信息
-                result = insertFinance(conn,request);
+            case "get"://根据客户id获取财务信息
+                result = get(conn,request);
                 break;
+
+
         }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
@@ -48,22 +50,27 @@ public class FinanceServlet extends HttpServlet {
         doPost(request,response);
     }
 
-    private String getFinance(Connection conn, HttpServletRequest request) {
+    //增加公司服务项目
+    private String insert(Connection conn, HttpServletRequest request) {
+        Finance finance = JSONObject.parseObject(request.getParameter("finance"), Finance.class);
+        DaoUpdateResult res = financeService.insert(conn,finance);
+        return JSONObject.toJSONString(res);
+    }
+    //修改公司服务项目
+    private String update(Connection conn, HttpServletRequest request) {
+        Finance finance = JSONObject.parseObject(request.getParameter("finance"), Finance.class);
+        DaoUpdateResult res = financeService.update(conn,finance);
+        return JSONObject.toJSONString(res);
+    }
+    //获取公司服务项目
+    private String get(Connection conn, HttpServletRequest request) {
         long cid = Long.parseLong(request.getParameter("cid"));
         String type = request.getParameter("type");
-        DaoQueryResult res =financeService.getFinance(conn,cid,type);
+        DaoQueryResult res =financeService.get(conn,cid,type);
         return JSONObject.toJSONString(res);
     }
 
-    private String updateFinance(Connection conn, HttpServletRequest request) {
-        Finance finance = JSONObject.parseObject(request.getParameter("finance"), Finance.class);
-        DaoUpdateResult res = financeService.updateFinance(conn,finance);
-        return JSONObject.toJSONString(res);
-    }
 
-    private String insertFinance(Connection conn, HttpServletRequest request) {
-        Finance finance = JSONObject.parseObject(request.getParameter("finance"), Finance.class);
-        DaoUpdateResult res = financeService.insertFinance(conn,finance);
-        return JSONObject.toJSONString(res);
-    }
+
+
 }

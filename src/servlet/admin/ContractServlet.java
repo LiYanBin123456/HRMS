@@ -39,16 +39,16 @@ public class ContractServlet extends HttpServlet {
 
         switch (op) {
             case "insertPotential"://潜在客户插入合同
-                result = insertContract2(conn,request);
+                result = insertPotential(conn,request);
                 break;
             case "insertCooperation"://合作客户插入合同
-                result = insertContract(conn,request);
+                result = insertCooperation(conn,request);
                 break;
             case "get"://根据客户id获取最新合同
-                result = getContract(conn,request);
+                result = get(conn,request);
                 break;
             case "getList"://根据客户获取历史合同清单
-                result = getContracts(conn,request);
+                result = getList(conn,request);
                 break;
 
         }
@@ -60,7 +60,7 @@ public class ContractServlet extends HttpServlet {
     }
 
     //潜在客户插入合同
-    private String insertContract2(Connection conn, HttpServletRequest request)throws IOException, ServletException {
+    private String insertPotential(Connection conn, HttpServletRequest request)throws IOException, ServletException {
         DaoUpdateResult res ;
         Contract contract = JSON.parseObject(request.getParameter("contract"), Contract.class);
 
@@ -80,7 +80,7 @@ public class ContractServlet extends HttpServlet {
         }
         contract.setId(id);
         System.out.println(contract);
-        res = contractService.insertContract2(conn,contract);
+        res = contractService.insertPotential(conn,contract);
         //先判断是否成功插入，否则会出现数据库插入失败，但是文件却已经上传的现象
         if(res.success){
             //将文件上传到服务器并且以合同id命名
@@ -136,7 +136,7 @@ public class ContractServlet extends HttpServlet {
 
 
     //合作客户插入合同
-    private String insertContract(Connection conn, HttpServletRequest request) throws IOException, ServletException {
+    private String insertCooperation(Connection conn, HttpServletRequest request) throws IOException, ServletException {
         DaoUpdateResult res ;
         Contract contract = JSON.parseObject(request.getParameter("contract"), Contract.class);
 
@@ -156,7 +156,7 @@ public class ContractServlet extends HttpServlet {
         }
         contract.setId(id);
         System.out.println(contract);
-        res = contractService.insertContract(conn,contract);
+        res = contractService.insertCooperation(conn,contract);
         //先判断是否成功插入，否则会出现数据库插入失败，但是文件却已经上传的现象
         if(res.success){
             //将文件上传到服务器并且以合同id命名
@@ -211,19 +211,19 @@ public class ContractServlet extends HttpServlet {
     }
 
 
-    private String getContract(Connection conn, HttpServletRequest request) {
+    private String get(Connection conn, HttpServletRequest request) {
 
         String bid = (request.getParameter("bid"));
         System.out.println("客户id="+bid);
         String type = request.getParameter("type");
-        DaoQueryResult res = contractService.getContract(conn,bid,type);
+        DaoQueryResult res = contractService.get(conn,bid,type);
         return JSONObject.toJSONString(res);
     }
 
 
-    private String getContracts(Connection conn, HttpServletRequest request) {
+    private String getList(Connection conn, HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
-        DaoQueryListResult res =contractService.getContracts(conn,parameter);
+        DaoQueryListResult res =contractService.getList(conn,parameter);
         return JSONObject.toJSONString(res);
     }
 

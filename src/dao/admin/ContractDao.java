@@ -8,11 +8,11 @@ import java.util.List;
 
 public class ContractDao {
     //根据查询条件获取所有合同
-    public DaoQueryListResult getContracts(Connection conn, QueryParameter parameter) {
+    public DaoQueryListResult getList(Connection conn, QueryParameter parameter) {
         return DbUtil.getList(conn,"contract",parameter, Contract.class);
     }
 
-    public  DaoQueryResult getContract(Connection conn, String bid,String type) {
+    public  DaoQueryResult get(Connection conn, String bid,String type) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("bid", "=", bid);
         conditions.add("type", "=", type);

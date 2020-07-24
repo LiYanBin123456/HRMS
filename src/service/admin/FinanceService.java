@@ -11,15 +11,15 @@ public class FinanceService {
     private FinanceDao financeDao = new FinanceDao();
 
 
-    public DaoUpdateResult updateFinance(Connection conn, Finance finance) {
-        return financeDao.updateFinance(conn,finance);
+    public DaoUpdateResult update(Connection conn, Finance finance) {
+        return financeDao.update(conn,finance);
     }
 
-    public DaoQueryResult getFinance(Connection conn, long cid,String type) {
-        return financeDao.getFinance(conn,cid,type);
+    public DaoQueryResult get(Connection conn, long cid,String type) {
+        return financeDao.get(conn,cid,type);
     }
 
-    public DaoUpdateResult insertFinance(Connection conn, Finance finance) {
-        return financeDao.insertFinance(conn,finance);
+    public DaoUpdateResult insert(Connection conn, Finance finance) {
+        return financeDao.insert(conn,finance);
     }
 }

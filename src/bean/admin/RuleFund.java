@@ -2,7 +2,7 @@ package bean.admin;
 
 import java.sql.Date;
 
-public class Rule_fund {
+public class RuleFund {
     private long id;
     private String city;
     private Date start;//生效时间
@@ -12,10 +12,10 @@ public class Rule_fund {
     private float per1;//单位比例
     private float per2;//个人比例
 
-    public Rule_fund() {
+    public RuleFund() {
     }
 
-    public Rule_fund(long id, String city, Date start, float base, float min, float max, float per1, float per2) {
+    public RuleFund(long id, String city, Date start, float base, float min, float max, float per1, float per2) {
         this.id = id;
         this.city = city;
         this.start = start;
@@ -92,7 +92,7 @@ public class Rule_fund {
 
     @Override
     public String toString() {
-        return "Rule_fund{" +
+        return "RuleFund{" +
                 "id=" + id +
                 ", city='" + city + '\'' +
                 ", start=" + start +
