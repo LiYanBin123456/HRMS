@@ -1,5 +1,6 @@
 package bean.admin;
 
+//派遣方客户
 public class Dispatch {
     private long id;
     private String rid;//档案编号
@@ -11,7 +12,7 @@ public class Dispatch {
     private String wx;
     private String qq;
     private String intro;
-    private int status;//是否为合作客户  0_ 潜在客户 1_合作客户
+    private byte status;//是否为合作客户  0_ 潜在客户 1_合作客户
 
     public long getId() {
         return id;
@@ -93,18 +94,18 @@ public class Dispatch {
         this.intro = intro;
     }
 
-    public int getStatus() {
+    public byte getStatus() {
         return status;
     }
 
-    public void setStatus(int status) {
+    public void setStatus(byte status) {
         this.status = status;
     }
 
     public Dispatch() {
     }
 
-    public Dispatch(long id, String rid, String name, String nickname, String address, String contact, String phone, String wx, String qq, String intro, int status) {
+    public Dispatch(long id, String rid, String name, String nickname, String address, String contact, String phone, String wx, String qq, String intro, byte status) {
         this.id = id;
         this.rid = rid;
         this.name = name;

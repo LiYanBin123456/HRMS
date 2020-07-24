@@ -4,7 +4,7 @@ public class Finance {
     //客户编号
     private long cid;
    //客户类型 0_派遣单位 1_合作客户
-   private int type;
+   private byte type;
     //统一社会信用代码
     private String code;
     //开户的银行
@@ -36,11 +36,11 @@ public class Finance {
         this.cid = cid;
     }
 
-    public int getType() {
+    public byte getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(byte type) {
         this.type = type;
     }
 
@@ -95,7 +95,7 @@ public class Finance {
     public Finance() {
     }
 
-    public Finance(long cid, int type, String code, String bank, String cardNo, String contact, String phone, String address, float balance) {
+    public Finance(long cid, byte type, String code, String bank, String cardNo, String contact, String phone, String address, float balance) {
         this.cid = cid;
         this.type = type;
         this.code = code;

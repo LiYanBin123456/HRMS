@@ -1,17 +1,19 @@
 package bean.admin;
 
+import java.sql.Date;
+
 public class Notice {
     private long id;
     private String title;//标题
     private String brief;//摘要
     private String content;//正文
     private String publisher;//发布人
-    private String date;//发布时间
+    private Date date;//发布时间
 
     public Notice() {
     }
 
-    public Notice(long id, String title, String brief, String content, String publisher, String date) {
+    public Notice(long id, String title, String brief, String content, String publisher, Date date) {
         this.id = id;
         this.title = title;
         this.brief = brief;
@@ -60,11 +62,11 @@ public class Notice {
         this.publisher = publisher;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

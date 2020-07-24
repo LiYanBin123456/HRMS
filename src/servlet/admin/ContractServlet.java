@@ -74,7 +74,7 @@ public class ContractServlet extends HttpServlet {
         if(id!=null){
             //合同id+1
             id = CreateGetNextId.NextId(id,contract.getType());
-        }else{
+        }else {
             //id=null表示还没有该类型的合同
             id = CreateGetNextId.NextId(0, contract.getType());
         }
@@ -133,6 +133,7 @@ public class ContractServlet extends HttpServlet {
 
         return JSONObject.toJSONString(res);
     }
+
 
     //合作客户插入合同
     private String insertContract(Connection conn, HttpServletRequest request) throws IOException, ServletException {

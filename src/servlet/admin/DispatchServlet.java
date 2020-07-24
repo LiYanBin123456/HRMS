@@ -105,7 +105,9 @@ public class DispatchServlet extends HttpServlet {
     //删除潜在客户
     private String deletePotential(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
-        DaoUpdateResult res = dispatchService.deleteClient1(conn,id);
+        //客户类型 0_派遣方   1_合作单位客户
+        int type = 0;
+        DaoUpdateResult res = dispatchService.deleteClient1(conn,id,type);
         return JSONObject.toJSONString(res);
     }
 
