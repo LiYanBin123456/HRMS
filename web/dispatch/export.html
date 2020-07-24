@@ -35,32 +35,27 @@
             <div class="layui-tab-item layui-show">
                 <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_common">
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
                     </div>
                     <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                     <div class="layui-input-inline">
-                        <select name="month" lay-verify="required">
-                              <option value="">按月份过滤</option>
-                              <option value="0">2020-06</option>
-                              <option value="1"></option>
-                        </select>
+                        <input type="text" class="layui-input" id="filter_month" placeholder="按月份过滤">
                     </div>
                     <div class="layui-input-inline">
                         <select name="state"   lay-verify="required" >
-                                    <option value="">按状态过滤</option>
-                                    <option value="0">编辑</option>
-                                    <option value="1">提交</option>
-                                    <option value="2">初审</option>
-                                    <option value="3">终审</option>
-                                    <option value="4">扣款</option>
-                                    <option value="5">发放</option>
+                            <option value="">按状态过滤</option>
+                            <option value="0">编辑</option>
+                            <option value="1">提交</option>
+                            <option value="2">一审</option>
+                            <option value="3">二审</option>
+                            <option value="4">三审</option>
+                            <option value="5">扣款</option>
+                            <option value="6">发放</option>
                         </select>
                     </div>
                 </form>
-            </div>
             <table id="tbl_common" lay-filter="filter_tb_common"></table>
             <div id="pager"></div>
 
@@ -78,24 +73,30 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
+            var laydate;
             var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
 
             function loadLayuiModule() {
-                layui.use(['table','form','element','layer','laypage'], function() {
+                layui.use(['table','form','element','layer','laypage','laydate'], function() {
                     table = layui.table;
                     layer = layui.layer;
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
+                    laydate = layui.laydate;
                     initPage();
                 });
             }
 
             function initPage() {
                 initTable();
+                laydate.render({
+                    elem: '#filter_month'
+                    ,type: 'month'
+                });
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
                     search(keyword);
@@ -107,7 +108,7 @@
                 laypage.render({
                     elem: 'pager'
                     ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
                     ,jump: function(obj,first){
                         //首次不执行
                         if(!first){
@@ -121,8 +122,6 @@
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_common',
-                    toolbar: '#top_bar_common', //开启头部工具栏，并为其绑定左侧模板
-                    defaultToolbar: ['filter', 'exports', 'print'],//自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                     title: '列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                     cols: columns_common,
@@ -275,7 +274,7 @@
                 laypage.render({
                     elem: 'pager1'
                     ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
                     ,jump: function(obj,first){
                         //首次不执行
                         if(!first){

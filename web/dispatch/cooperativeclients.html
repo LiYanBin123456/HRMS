@@ -23,36 +23,34 @@
                 display:inline;
                 width:300px;
             }
-            .searchboxs{
-                margin-left:600px;
-            }
         </style>
     </head>
 
     <body class="layui-layout-body">
-              <div style="padding: 5px;">
-            <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_cooperativeclient">
-                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
-                <form class="layui-form searchbox">
-                    <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入要查找的合作客户">
-                    </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-                    <div class="layui-input-inline searchboxs">
-                             <div class="layui-inline"><input type="radio" name="se" value="合作中" title="合作中" checked></div>
-                             <div class="layui-inline"><input type="radio" name="se" value="潜在" title="潜在" ></div>
-                    </div>
-                </form>
-            </div>
-            <table id="tbl_cooperativeclient" lay-filter="filter_tb_cooperativeclient"></table>
-            <div id="pager"></div>
+        <div style="padding: 5px;">
+          <form class="layui-form searchbox">
+              <div class="layui-input-inline">
+                  <input name="keyword" class="layui-input" placeholder="请输入要查找的合作客户">
+              </div>
+              <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+              <div class="layui-input-inline">
+                  <input type="radio" name="se" value="合作中" title="合作中" checked>
+                  <input type="radio" name="se" value="潜在" title="潜在" >
+              </div>
+          </form>
+        <!--顶部工具栏-->
+        <div class="layui-hide" id="top_bar_cooperativeclient">
+            <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
 
-            <!--行内工具栏-->
-            <script type="text/html" id="bar_cooperativeclient">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
-            </script>
+        </div>
+        <table id="tbl_cooperativeclient" lay-filter="filter_tb_cooperativeclient"></table>
+        <div id="pager"></div>
+
+        <!--行内工具栏-->
+        <script type="text/html" id="bar_cooperativeclient">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+        </script>
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
@@ -91,7 +89,7 @@
                 laypage.render({
                     elem: 'pager'
                     ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
                     ,jump: function(obj,first){
                         //首次不执行
                         if(!first){
