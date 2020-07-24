@@ -135,16 +135,16 @@
             }
 
             function getNotices() {
-                var result = {total:100,rows:[{title:"主题1",publisher:"张三",date:"2020-6-21",brief:"摘要1",content:"正文1"},{title:"主题2",publisher:"李四",date:"2020-6-22",brief:"摘要2",content:"正文2"}]};
+                /*var result = {total:100,rows:[{title:"主题1",publisher:"张三",date:"2020-6-21",brief:"摘要1",content:"正文1"},{title:"主题2",publisher:"李四",date:"2020-6-22",brief:"摘要2",content:"正文2"}]};
                 table.reload('tbl_notice', {
                     data:result.rows
-                });
+                });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
+                iNotice.getList(param_query,function (result) {
                     table.reload('tbl_notice', {
                         data:result.rows
                     });
-                });*/
+                });
             }
 
             //模糊查找

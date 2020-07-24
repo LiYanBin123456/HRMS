@@ -32,6 +32,7 @@
             <div class="layui-hide" id="top_bar_special">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 批量导入</button>
+                <button class="layui-btn layui-btn-sm" lay-event="" onclick="downLoad()" ><i class="layui-icon "></i> 下载模板</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
@@ -170,6 +171,16 @@
                         layer.msg('删除成功');
                     });
                 });
+            }
+
+            function downLoad() {
+                var curWwwPath = window.document.location.href;
+                var pathName = window.document.location.pathname;
+                var pos = curWwwPath.indexOf(pathName);
+                var localhostPath = curWwwPath.substring(0, pos);
+                var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+                var url = localhostPath + projectName + "/专项扣除.xls";
+                window.open(url);
             }
 
         </script>

@@ -162,7 +162,7 @@
 
             //打开详情对话框
             function showDetailDlg(cooperativeclient) {
-                var content = "../dialog/cooperativeclient.html?cooperativeclient="+encodeURIComponent(JSON.stringify(cooperativeclient));
+                var content = "../dialog/dispatch/cooperativeclient.html?cooperativeclient="+encodeURIComponent(JSON.stringify(cooperativeclient));
                 layer.open({
                     title:"详情合作客户",
                     type: 2,
@@ -173,7 +173,7 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/cooperativeclient.html";
+                var content = "../dialog/dispatch/cooperativeclient.html";
                 layer.open({
                     title:"添加合作客户",
                     type: 2,

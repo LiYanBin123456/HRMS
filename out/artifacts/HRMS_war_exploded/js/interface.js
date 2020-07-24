@@ -18,6 +18,46 @@ var InterfaceAccount = function () {
         access(url,para,1,success,fail);
     };
 }
+
+//公告相关接口
+var InterfaceNotice = function() {
+    var url = base+"/notice";
+    /**
+     * 获取公告列表
+     */
+    this.getList = function(param,success,fail){
+        var para = {op: "getNotices", param:JSON.stringify(param)};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加公告
+     * @param notice
+     * @param success
+     * @param fail
+     */
+    this.showInsertDlg = function (notice,success,fail) {
+        var para = {op: "insertNotice",notice:JSON.stringify(notice)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 删除公告
+     */
+    this.del = function (notice,success,fail) {
+        var para = {op:"deleteNotice",notice:notice};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改公告
+     */
+    this.showDetailDlg = function (notice,success,fail) {
+        var para = {op:"updateNotice",notice:JSON.stringify(notice)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 查找公告
+     */
+
+};
 //职位相关接口
 var InterfaceJob = function () {
     var url = base+"/job";//servlet的url地址
@@ -692,6 +732,7 @@ var InterfaceEnterprise = function () {
     };
 };
 
+var iNotice =new InterfaceNotice
 var iAccount = new InterfaceAccount();
 var iJob = new InterfaceJob();
 var iCurriculum = new InterfaceCurriculum();
