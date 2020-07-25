@@ -141,22 +141,22 @@
             }
 
             function getMedicalinsurances() {
-                var result = {total:100,rows:[{city:"九江市",time:"2019-06",cardinal:"2500",yiliaodanwei:"3%",yiliaogeren:"1%",dabingdanwei:"7",dabinggeren:"7",shengyudanwei:"3%"},{city:"九江市",time:"2004-12",cardinal:"2500",yiliaodanwei:"2%",yiliaogeren:"2%",dabingdanwei:"7",dabinggeren:"7",shengyudanwei:"2%"}]};
+                /*var result = {total:100,rows:[{city:"九江市",time:"2019-06",cardinal:"2500",yiliaodanwei:"3%",yiliaogeren:"1%",dabingdanwei:"7",dabinggeren:"7",shengyudanwei:"3%"},{city:"九江市",time:"2004-12",cardinal:"2500",yiliaodanwei:"2%",yiliaogeren:"2%",dabingdanwei:"7",dabinggeren:"7",shengyudanwei:"2%"}]};
                 table.reload('tbl_medicalinsurance', {
                     data:result.rows
-                });
+                });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
+                iMedicalinsurance.getMedicalRules(param_query,function (result) {
                     table.reload('tbl_notice', {
                         data:result.rows
                     });
-                });*/
+                });
             }
 
             //模糊查找
             function search(keyword) {
                 param_query.conditions.extra = keyword;
-                getNotices();
+                getMedicalinsurances();
             }
 
             //打开详情对话框
@@ -184,7 +184,7 @@
             //删除公告
             function del(medicalinsurance) {
                 layer.confirm('确定删除'+medicalinsurance.city+medicalinsurance.time+'的医保规则', {icon: 3, title:'删除公告'}, function(index){
-                    iNotice.delete(medicalinsurance.id,function () {
+                    iMedicalinsurance.deleteMedicalRule(medicalinsurance.id,function () {
                         layer.close(index);
                         getMedicalinsurances();
                         layer.msg('删除成功');

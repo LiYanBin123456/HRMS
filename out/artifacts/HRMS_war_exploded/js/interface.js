@@ -49,14 +49,63 @@ var InterfaceNotice = function() {
     };
     /**
      * 修改公告
+     * @param notice
+     * @param success
+     * @param fail
      */
     this.update = function (notice,success,fail) {
         var para = {op:"update",notice:JSON.stringify(notice)};
         access(url,para,1,success,fail);
     };
+};
+
+//医保相关接口
+var InterfaceMedicalinsurance = function() {
+    var url = base+"/rule";//servlet的url地址
     /**
-     * 查找公告
+     * 获取医保规则列表
+     * @param param
+     * @param success
+     * @param fail
      */
+    this.getMedicalRules = function(param,success,fail){
+        var para = {op: "getMedicalRules", param:JSON.stringify(param)};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加医保规则
+     * @param rule
+     * @param success
+     * @param fail
+     */
+    this.insertMedicalRule = function (rule,success,fail) {
+        var para = {op: "insertMedicalRule",rule:JSON.stringify(rule)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 删除医保规则
+     * @param id
+     * @param success
+     * @param fail
+     */
+    this.deleteMedicalRule = function (id,success,fail) {
+        var para = {op:"deleteMedicalRule",id:id};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改医保规则
+     * @param rule
+     * @param success
+     * @param fail
+     */
+    this.updateMedicalRule = function (rule,success,fail) {
+        var para = {op:"updateMedicalRule",rule:JSON.stringify(rule)};
+        access(url,para,1,success,fail);
+    };
+    this.getMedicalRule = function (id,success,fail) {
+        var para = {op:"getMedicalRule",id:id};
+        access(url,para,0,success,fail);
+    };
 
 };
 //职位相关接口
@@ -733,7 +782,8 @@ var InterfaceEnterprise = function () {
     };
 };
 
-var iNotice =new InterfaceNotice
+var iMedicalinsurance =new InterfaceMedicalinsurance();
+var iNotice =new InterfaceNotice();
 var iAccount = new InterfaceAccount();
 var iJob = new InterfaceJob();
 var iCurriculum = new InterfaceCurriculum();

@@ -166,16 +166,16 @@
             var socialsecurity = JSON.parse(param);
             form.val('form_socialsecurity', socialsecurity);
             layedit.setContent(editer, socialsecurity.content, false);
-            op = "update";
+            op = "updateSocialRule";
         }
     }
 
     function save() {
         var socialsecurity = form.val('form_socialsecurity');
-        if(op == "insert") {
-            iSocialsecurity.insert(socialsecurity, onInsertSuccess);
+        if(op == "insertSocialRule") {
+            iSocialsecurity.insertSocialRule(socialsecurity, onInsertSuccess);
         }else{
-            iSocialsecurity.update(socialsecurity,onUpdateSuccess);
+            iSocialsecurity.updateSocialRule(socialsecurity,onUpdateSuccess);
         }
 
         function onInsertSuccess() {
