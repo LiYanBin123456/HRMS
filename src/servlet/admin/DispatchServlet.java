@@ -38,11 +38,8 @@ public class DispatchServlet extends HttpServlet {
             case "insert"://添加一个客户
                 result = insert(conn,request);
                 break;
-            case "deletePotential"://删除潜在客户
-                result = deletePotential(conn,request);
-                break;
-            case "deleteCooperation"://删除合作客户
-                result = deleteCooperation(conn,request);
+            case "delete"://删除客户
+                result = delete(conn,request);
                 break;
             case "update"://修改一个客户
                 result = update(conn,request);
@@ -71,43 +68,33 @@ public class DispatchServlet extends HttpServlet {
 
         return JSONObject.toJSONString(res);
     }
-
-    /**
-     * 删除流程
-     * 先查出该用户所签订的合同文件名字，删除存储的文件
-     * 在删除合同
-     * 最后修改合作客户为潜在客户
-     * @param conn
-     * @param request
-     * @return
-     */
-    private String deleteCooperation(Connection conn, HttpServletRequest request) {
+    private String delete(Connection conn, HttpServletRequest request) {
         DaoUpdateResult res=new DaoUpdateResult();
         long id = Long.parseLong(request.getParameter("id"));
-        List<String> list = contractDao.deleteContract(conn, id);
-        if(list!=null){
-           for(String filename:list){
-               String url = request.getServletContext().getRealPath("/upload");
-               File file = new File(url+"/"+filename+".pdf");
-               if (file.exists()) {
-                   file.delete();
-                   System.out.println(filename+"文件删除成功!!");
-                   res.msg+="合同文件删除成功!!";
-               }else {
-                   System.out.println("文件不存在!!");
-               }
-           }
+        byte status = Byte.parseByte(request.getParameter("status"));
+        //判断客户状态
+        if(status==1){
+            //合作客户，删除合同，修改状态为潜在客户
+            List<String> list = contractDao.deleteContract(conn, id);
+            if(list!=null){
+                for(String filename:list){
+                    String url = request.getServletContext().getRealPath("/upload");
+                    File file = new File(url+"/"+filename+".pdf");
+                    if (file.exists()) {
+                        file.delete();
+                        System.out.println(filename+"文件删除成功!!");
+                        res.msg+="合同文件删除成功!!";
+                    }else {
+                        System.out.println("文件不存在!!");
+                    }
+                }
+            }
+            res = dispatchService.deleteCooperation(conn,id);
+        }else {
+            //潜在客户，删除客户服务项目，删除客户
+            int type = 0;
+            res = dispatchService.deletePotential(conn,id,type);
         }
-        res = dispatchService.deleteCooperation(conn,id);
-        return JSONObject.toJSONString(res);
-    }
-
-    //删除潜在客户
-    private String deletePotential(Connection conn, HttpServletRequest request) {
-        long id = Long.parseLong(request.getParameter("id"));
-        //客户类型 0_派遣方   1_合作单位客户
-        int type = 0;
-        DaoUpdateResult res = dispatchService.deletePotential(conn,id,type);
         return JSONObject.toJSONString(res);
     }
 

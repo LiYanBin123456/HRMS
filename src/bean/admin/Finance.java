@@ -1,5 +1,6 @@
 package bean.admin;
 
+//客户服务型项目
 public class Finance {
     //客户编号
     private long cid;
