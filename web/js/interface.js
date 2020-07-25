@@ -26,7 +26,7 @@ var InterfaceNotice = function() {
      * 获取公告列表
      */
     this.getList = function(param,success,fail){
-        var para = {op: "getNotices", param:JSON.stringify(param)};
+        var para = {op: "getList", param:JSON.stringify(param)};
         access(url,para,0,success,fail);
     };
     /**
@@ -35,21 +35,21 @@ var InterfaceNotice = function() {
      * @param success
      * @param fail
      */
-    this.showInsertDlg = function (notice,success,fail) {
+    this.insert = function (notice,success,fail) {
         var para = {op: "insertNotice",notice:JSON.stringify(notice)};
         access(url,para,1,success,fail);
     };
     /**
      * 删除公告
      */
-    this.del = function (notice,success,fail) {
+    this.delete = function (notice,success,fail) {
         var para = {op:"deleteNotice",notice:notice};
         access(url,para,0,success,fail);
     };
     /**
      * 修改公告
      */
-    this.showDetailDlg = function (notice,success,fail) {
+    this.update = function (notice,success,fail) {
         var para = {op:"updateNotice",notice:JSON.stringify(notice)};
         access(url,para,1,success,fail);
     };
