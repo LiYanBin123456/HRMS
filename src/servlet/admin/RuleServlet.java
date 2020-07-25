@@ -33,49 +33,49 @@ public class RuleServlet extends HttpServlet {
         String op = request.getParameter("op");
 
         switch (op) {
-            case "insertFund"://插入公积金清单
+            case "insertFundRule"://插入公积金清单
                 result = insertFund(conn,request);
                 break;
-            case "deleteFund"://删除公积金清单
+            case "deleteFundRule"://删除公积金清单
                 result = deleteFund(conn,request);
                 break;
-            case "updateFund"://修改公积金清单
+            case "updateFundRule"://修改公积金清单
                 result = updateFund(conn,request);
                 break;
-            case "getFunds"://获取所有公积金清单
+            case "getFundRules"://获取所有公积金清单
                 result = getFunds(conn,request);
                 break;
-            case "getFund"://获取一个公积金清单
+            case "getFundRule"://获取一个公积金清单
                 result = getFund(conn,request);
                 break;
-            case "insertMedical":
+            case "insertMedicalRule":
                 result = insertMedical(conn,request);
                 break;
-            case "deleteMedical":
+            case "deleteMedicalRule":
                 result = deleteMedical(conn,request);
                 break;
-            case "updateMedical":
+            case "updateMedicalRule":
                 result = updateMedical(conn,request);
                 break;
-            case "getMedicals":
+            case "getMedicalRules":
                 result = getMedicals(conn,request);
                 break;
-            case "getMedical":
+            case "getMedicalRule":
                 result = getMedical(conn,request);
                 break;
-            case "insertSocial":
+            case "insertSocialRule":
                 result = insertSocial(conn,request);
                 break;
-            case "deleteSocial":
+            case "deleteSocialRule":
                 result = deleteSocial(conn,request);
                 break;
-            case "updateSocial":
+            case "updateSocialRule":
                 result = updateSocial(conn,request);
                 break;
-            case "getSocials":
+            case "getSocialRules":
                 result = getSocials(conn,request);
                 break;
-            case "getSocial":
+            case "getSocialRule":
                 result = getSocial(conn,request);
                 break;
 
