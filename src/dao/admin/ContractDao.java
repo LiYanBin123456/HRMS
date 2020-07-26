@@ -12,7 +12,7 @@ public class ContractDao {
         return DbUtil.getList(conn,"contract",parameter, Contract.class);
     }
 
-    public  DaoQueryResult get(Connection conn, String bid,String type) {
+    public  DaoQueryResult getLast(Connection conn, String bid,String type) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("bid", "=", bid);
         conditions.add("type", "=", type);

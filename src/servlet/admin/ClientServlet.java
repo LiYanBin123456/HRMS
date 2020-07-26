@@ -5,7 +5,7 @@ import bean.admin.Dispatch;
 import com.alibaba.fastjson.*;
 import dao.admin.ContractDao;
 import database.*;
-import service.admin.DispatchService;
+import service.admin.ClientService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -18,9 +18,9 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.List;
 
-@WebServlet(urlPatterns = "/dispatch")
-public class DispatchServlet extends HttpServlet {
-    private DispatchService dispatchService = new DispatchService();
+@WebServlet(urlPatterns = "/client")
+public class ClientServlet extends HttpServlet {
+    private ClientService clientService = new ClientService();
    private ContractDao contractDao = new ContractDao();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
@@ -35,20 +35,20 @@ public class DispatchServlet extends HttpServlet {
         String op = request.getParameter("op");
 
         switch (op) {
-            case "insert"://添加一个客户
-                result = insert(conn,request);
+            case "insertDispatch"://添加一个客户
+                result = insertDispatch(conn,request);
                 break;
-            case "delete"://删除客户
-                result = delete(conn,request);
+            case "deleteDispatch"://删除客户
+                result = deleteDispatch(conn,request);
                 break;
-            case "update"://修改一个客户
-                result = update(conn,request);
+            case "updateDispatch"://修改一个客户
+                result = updateDispatch(conn,request);
                 break;
-            case "getList"://获取所有客户清单
-                result = getList(conn,request);
+            case "getDispatchs"://获取所有客户清单
+                result = getDispatchs(conn,request);
                 break;
-            case "get"://获取一个客户清单
-                result = get(conn,request);
+            case "getDispatch"://获取一个客户清单
+                result = getDispatch(conn,request);
                 break;
 }
         ConnUtil.closeConnection(conn);
@@ -59,16 +59,16 @@ public class DispatchServlet extends HttpServlet {
     }
 
     //添加
-    private String insert(Connection conn,HttpServletRequest request) {
+    private String insertDispatch(Connection conn,HttpServletRequest request) {
 
         Dispatch dispatch = JSON.parseObject(request.getParameter("dispatch"), Dispatch.class);
         System.out.println(dispatch);
         //调用dao层的update方法
-        DaoUpdateResult res = dispatchService.insert(conn, dispatch);
+        DaoUpdateResult res = clientService.insertDispatch(conn, dispatch);
 
         return JSONObject.toJSONString(res);
     }
-    private String delete(Connection conn, HttpServletRequest request) {
+    private String deleteDispatch(Connection conn, HttpServletRequest request) {
         DaoUpdateResult res=new DaoUpdateResult();
         long id = Long.parseLong(request.getParameter("id"));
         byte status = Byte.parseByte(request.getParameter("status"));
@@ -89,40 +89,40 @@ public class DispatchServlet extends HttpServlet {
                     }
                 }
             }
-            res = dispatchService.deleteCooperation(conn,id);
+            res = clientService.deleteCooperation(conn,id);
         }else {
             //潜在客户，删除客户服务项目，删除客户
             int type = 0;
-            res = dispatchService.deletePotential(conn,id,type);
+            res = clientService.deletePotential(conn,id,type);
         }
         return JSONObject.toJSONString(res);
     }
 
     //修改客户信息
-    private String update(Connection conn,HttpServletRequest request) {
+    private String updateDispatch(Connection conn,HttpServletRequest request) {
 
         Dispatch dispatch = JSON.parseObject(request.getParameter("dispatch"), Dispatch.class);
         System.out.println(dispatch);
         //调用dao层的update方法
-        DaoUpdateResult res = dispatchService.update(conn, dispatch);
+        DaoUpdateResult res = clientService.updateDispatch(conn, dispatch);
 
         return JSONObject.toJSONString(res);
     }
 
     //获取客户列表
-    private String getList(Connection conn,HttpServletRequest request) {
+    private String getDispatchs(Connection conn,HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
 
-        DaoQueryListResult res = dispatchService.getList(conn,parameter);
+        DaoQueryListResult res = clientService.getDispatchs(conn,parameter);
         System.out.println(res);
         return JSONObject.toJSONString(res);
     }
 
     //获取客户基本信息
-    private String get(Connection conn,HttpServletRequest request){
+    private String getDispatch(Connection conn,HttpServletRequest request){
         long id = Long.parseLong(request.getParameter("id"));
         System.out.println("客户id="+id);
-        DaoQueryResult res = dispatchService.get(conn,id);
+        DaoQueryResult res = clientService.getDispatch(conn,id);
         return  JSONObject.toJSONString(res);
     }
 

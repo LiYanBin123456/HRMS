@@ -7,19 +7,19 @@ import bean.admin.Dispatch;
 import database.*;
 import java.sql.Connection;
 
-public class DispatchDao {
+public class ClientDao {
     /**
      * 获取派遣单位客户列表
      * @param conn 数据库连接
      *@param param 查询参数
      * @return 检索结果，格式："{success:true,msg:"",effects:1}"
      */
-    public  DaoQueryListResult getList(Connection conn, QueryParameter param){
+    public  DaoQueryListResult getDispatchs(Connection conn, QueryParameter param){
         return DbUtil.getList(conn,"dispatch",param, Dispatch.class);
     }
 
 
-    public DaoQueryResult get(Connection conn, long id) {
+    public DaoQueryResult getDispatch(Connection conn, long id) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
         return  DbUtil.get(conn,"dispatch",conditions, Dispatch.class);
@@ -32,7 +32,7 @@ public class DispatchDao {
      * @param c 求职者信息
      * @return 更新结果，格式："{success:true,msg:"",effects:1}"
      */
-    public  DaoUpdateResult update(Connection conn, Dispatch c){
+    public  DaoUpdateResult updateDispatch(Connection conn, Dispatch c){
         String sql = "update dispatch set rid=?,name=?,nickname=?,address=?,contact=?,phone=?,wx=?,qq=?,intro=? where id=?";
         Object []params = {c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getIntro(),c.getId()};
         //调用DbUtil封装的update方法
@@ -40,19 +40,19 @@ public class DispatchDao {
     }
 
     /**
-     * 插入潜在客户
+     * 插入客户
      * @param conn
      * @param c
      * @return
      */
-    public DaoUpdateResult insert(Connection conn, Dispatch c) {
+    public DaoUpdateResult insertDispatch(Connection conn, Dispatch c) {
         String sql = "insert into dispatch (rid,name,nickname,address,contact,phone,wx,qq,intro,status) values (?,?,?,?,?,?,?,?,?,?)";
         Object []params = {c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getIntro(),c.getStatus()};
         return DbUtil.insert(conn,sql,params);
     }
 
     //删除潜在客户
-    public DaoUpdateResult delete(Connection conn, long id) {
+    public DaoUpdateResult deleteDispatch(Connection conn, long id) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
         return DbUtil.delete(conn,"dispatch",conditions);

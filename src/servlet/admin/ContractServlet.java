@@ -44,8 +44,8 @@ public class ContractServlet extends HttpServlet {
             case "insertCooperation"://合作客户插入合同
                 result = insertCooperation(conn,request);
                 break;
-            case "get"://根据客户id获取最新合同
-                result = get(conn,request);
+            case "getLast"://根据客户id获取最新合同
+                result = getLast(conn,request);
                 break;
             case "getList"://根据客户获取历史合同清单
                 result = getList(conn,request);
@@ -86,17 +86,19 @@ public class ContractServlet extends HttpServlet {
             //将文件上传到服务器并且以合同id命名
             String file = null;
             Part part = request.getPart("file");
+            System.out.println("part==="+part);
+            System.out.println(part);
             if(part!=null){
                 //获取文件的名称
                 String header = part.getHeader("content-disposition");
+                System.out.println(header);
                 //截取字符串获取文件名称
                 String headername = header.substring(header.indexOf("filename")+10, header.length()-1);
+                System.out.println(headername);
                 //获取文件名后缀
                 String suffixName=headername.substring(headername.indexOf(".")+1);
-                System.out.println(suffixName);
                 String s="pdf";
                 if(suffixName.equals(s)){
-                    System.out.println(1);
                     //获取文件流
                     InputStream put = part.getInputStream();
                     //获取文件的真实路径
@@ -211,12 +213,12 @@ public class ContractServlet extends HttpServlet {
     }
 
 
-    private String get(Connection conn, HttpServletRequest request) {
+    private String getLast(Connection conn, HttpServletRequest request) {
 
         String bid = (request.getParameter("bid"));
         System.out.println("客户id="+bid);
         String type = request.getParameter("type");
-        DaoQueryResult res = contractService.get(conn,bid,type);
+        DaoQueryResult res = contractService.getLast(conn,bid,type);
         return JSONObject.toJSONString(res);
     }
 
