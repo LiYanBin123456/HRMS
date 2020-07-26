@@ -1,193 +1,222 @@
 <!DOCTYPE html>
 <html class="x-admin-sm">
 
-    <head>
-        <meta charset="UTF-8">
-        <title>添加客户</title>
-        <meta name="renderer" content="webkit">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
-        <link rel="stylesheet" href="../../css/font.css">
-        <link rel="stylesheet" href="../../css/xadmin.css">
-        <script type="text/javascript" src="../../lib/layui/layui.js" charset="utf-8"></script>
-        <script type="text/javascript" src="../../js/xadmin.js"></script>
-        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
-        <!--[if lt IE 9]>
-            <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-            <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-        <style>
-            .salary_priview{
-                border: 1px solid grey;
-            }
-            [name=salary_item_defined]:after{
-                content: "×";
-                position: relative;
-                left:5px;
-                top:-12px;
-                color: red;
-            }
-            .salary_item{
-                padding: 10px;
-                margin: 5px;
-            }
+<head>
+    <meta charset="UTF-8">
+    <title>添加客户</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="../../css/font.css">
+    <link rel="stylesheet" href="../../css/xadmin.css">
+    <script type="text/javascript" src="../../lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .salary_priview {
+            border: 1px solid grey;
+        }
 
-        </style>
-    </head>
-    <body>
-        <div class="layui-tab layui-tab-brief" lay-filter="tab_info">
-           <ul class="layui-tab-title">
-            <li class="layui-this" lay-id="base">基础信息</li>
-            <li lay-id="finance">财务信息</li>
-            <li lay-id="salary_define">工资定义</li>
-           </ul>
-           <div class="layui-tab-content">
-            <div class="layui-tab-item layui-show">
-                 <form lay-filter="form_cooperation" class="layui-form">
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>档案编号</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="ID" required=""  autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>客户名称</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="name" required=""  autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
+        [name=salary_item_defined]:after {
+            content: "×";
+            position: relative;
+            left: 5px;
+            top: -12px;
+            color: red;
+        }
+
+        .salary_item {
+            padding: 10px;
+            margin: 5px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="layui-tab layui-tab-brief" lay-filter="tab_info">
+    <ul class="layui-tab-title">
+        <li class="layui-this" lay-id="base">基础信息</li>
+        <li lay-id="finance">财务信息</li>
+        <li lay-id="salary_define">工资定义</li>
+    </ul>
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+            <form lay-filter="form_cooperation" class="layui-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>档案编号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="ID" required="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>客户名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" required="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
                         <span class="x-red">*</span>客户性质</label>
-                            <div class="layui-input-inline">
-                                <select name="nature" lay-verify="required">
-                                    <option value=""></option>
-                                    <option value="0">政府部门</option>
-                                    <option value="1">事业单位</option>
-                                    <option value="2">人才市场</option>
-                                    <option value="3">学校</option>
-                                    <option value="4">内资企业</option>
-                                    <option value="5">外资企业</option>
-                                    <option value="6">港澳台企业</option>
-                                    <option value="7">内资工厂</option>
-                                    <option value="8">外资工厂</option>
-                                    <option value="9">港澳台工厂</option>
-                                    <option value="10">其他</option>
-                            </select>
+                    <div class="layui-input-inline">
+                        <select name="nature" lay-verify="required">
+                            <option value=""></option>
+                            <option value="0">政府部门</option>
+                            <option value="1">事业单位</option>
+                            <option value="2">人才市场</option>
+                            <option value="3">学校</option>
+                            <option value="4">内资企业</option>
+                            <option value="5">外资企业</option>
+                            <option value="6">港澳台企业</option>
+                            <option value="7">内资工厂</option>
+                            <option value="8">外资工厂</option>
+                            <option value="9">港澳台工厂</option>
+                            <option value="10">其他</option>
+                        </select>
                     </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>联系人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="linkman" required="" lay-verify="nikename" autocomplete="off"
+                               class="layui-input">
                     </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>联系人</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="linkman" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>联系电话</label>
+                    <div class="layui-input-inline">
+                        <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="phone"
+                               required="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>微信号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="weixin" required="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>QQ号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="qq" required=""
+                               autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>地址</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="site" required="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>邮箱</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="mail" required="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label for="L_brief" class="layui-form-label">
+                        <span class="x-red">*</span>客户简介</label>
+                    <div class="layui-input-block">
+                        <textarea name="concise" placeholder="请输入内容" class="layui-textarea"></textarea>
                     </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>联系电话</label>
-                        <div class="layui-input-inline">
-                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');"  name="phone" required="" autocomplete="off" class="layui-input"></div>
-                        </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>微信号</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="weixin" required="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_repass" class="layui-form-label"></label>
+                    <button class="layui-btn" lay-filter="add" lay-submit="">保存</button>
+                </div>
+            </form>
+        </div>
+        <div class="layui-tab-item">
+            <form lay-filter="form_cooperation" class="layui-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>统一社会信用代码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="credit" required="" lay-verify="nikename" autocomplete="off"
+                               class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>开户行</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="bank" required="" lay-verify="nikename" autocomplete="off"
+                               class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>银行账户</label>
+                    <div class="layui-input-inline">
+                        <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="account"
+                               required="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>联系人</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="linkman" required="" lay-verify="nikename" autocomplete="off"
+                               class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>联系电话</label>
+                    <div class="layui-input-inline">
+                        <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="phone"
+                               required="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>公司地址</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="site" required="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>大额行号</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="bankNo" required="" lay-verify="nikename" autocomplete="off"
+                               class="layui-input">
                     </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>QQ号</label>
-                        <div class="layui-input-inline">
-                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="qq" required="" autocomplete="off" class="layui-input"></div>
-                        </div>
-                        <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>地址</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="site" required=""  autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item layui-form-text">
-                        <label  for="L_brief" class="layui-form-label">
-                            <span class="x-red">*</span>客户简介</label>
-                        <div class="layui-input-block">
-                            <textarea name="concise" placeholder="请输入内容" class="layui-textarea"></textarea>
-                        </div>
-                        </div>
-               <div class="layui-form-item">
-                        <label for="L_repass" class="layui-form-label"></label>
-                        <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
-                </form>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>公司余额</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="balance" required="" lay-verify="nikename" autocomplete="off"
+                               class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_repass" class="layui-form-label"></label>
+                    <button class="layui-btn" lay-filter="add" lay-submit="">保存</button>
+                </div>
+            </form>
+        </div>
+        <div class="layui-tab-item">
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>工资表预览</legend>
+            </fieldset>
+            <div id="table_contain"></div>
+            <fieldset class="layui-elem-field layui-field-title">
+                <legend>自定义工资字段</legend>
+            </fieldset>
+            <blockquote class="layui-elem-quote">红色的是固定字段，不能变更。可以单击“+”进行添加自定义字段（最多10个），单击自定义字段可以删除</blockquote>
+            <div id="template" class="layui-hide">
+                <span name="salary_item_fixed" class="layui-badge salary_item">固定字段</span>
+                <span name="salary_item_defined" class="layui-badge layui-bg-blue salary_item">自定义字段</span>
             </div>
-            <div class="layui-tab-item">
-                <form lay-filter="form_cooperation" class="layui-form">
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>信用代码</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="credit" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>开户行</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="bank" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
-                    </div>
-                     <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>银行账户</label>
-                        <div class="layui-input-inline">
-                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');"  name="account" required="" autocomplete="off" class="layui-input"></div>
-                        </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>联系人</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="linkman" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>联系电话</label>
-                        <div class="layui-input-inline">
-                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');"  name="phone" required="" autocomplete="off" class="layui-input"></div>
-                        </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>公司地址</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="site" required="" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>公司余额</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="balance" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
-                    </div>
-               <div class="layui-form-item">
-                        <label for="L_repass" class="layui-form-label"></label>
-                        <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
-                </form>
+            <div id="salary_items">
+                <span id="btn_append" class="layui-badge layui-bg-orange salary_item" onclick="appendSalaryItem()">&emsp;&emsp;+&emsp;&emsp;</span>
             </div>
-      <div class="layui-tab-item">
-          <fieldset class="layui-elem-field layui-field-title">
-              <legend>工资表预览</legend>
-          </fieldset>
-          <div id="table_contain"></div>
-          <fieldset class="layui-elem-field layui-field-title">
-              <legend>自定义工资字段</legend>
-          </fieldset>
-          <blockquote class="layui-elem-quote">红色的是固定字段，不能变更。可以单击“+”进行添加自定义字段（最多10个），单击自定义字段可以删除</blockquote>
-          <div id="template" class="layui-hide">
-              <span name="salary_item_fixed" class="layui-badge salary_item">固定字段</span>
-              <span name="salary_item_defined" class="layui-badge layui-bg-blue salary_item">自定义字段</span>
-          </div>
-          <div id="salary_items">
-              <span id="btn_append" class="layui-badge layui-bg-orange salary_item" onclick="appendSalaryItem()">&emsp;&emsp;+&emsp;&emsp;</span>
-          </div>
-          <div class="layui-input-block">
-              <button class="layui-btn" onclick="saveSalaryDefine()">保存</button>
-              <button class="layui-btn" onclick="previewSalaryDefine()">预览</button>
-          </div>
-      </div>
+            <div class="layui-input-block">
+                <button class="layui-btn" onclick="saveSalaryDefine()">保存</button>
+                <button class="layui-btn" onclick="previewSalaryDefine()">预览</button>
+            </div>
+        </div>
     </div>
 </body>
 <script src="../../js/jquery.min.js"></script>
@@ -202,12 +231,12 @@
     var element;
     var cooperation;//合作企业基本信息
     var finance;//合作企业财务信息
-    var salary_items_fixed = ["基本工资" ,"绩效奖金" ,"岗位补贴" ,"个人社保","单位社保","个人公积金","单位公积金","个税","应发","实发"];
+    var salary_items_fixed = ["基本工资", "绩效奖金", "岗位补贴", "个人社保", "单位社保", "个人公积金", "单位公积金", "个税", "应发", "实发"];
     var salary_items_defined;//合作企业自定义工资字段
     loadLayuiModule();
 
     function loadLayuiModule() {
-        layui.use(['form','table', 'layedit','layer','element','jquery'], function () {
+        layui.use(['form', 'table', 'layedit', 'layer', 'element', 'jquery'], function () {
             form = layui.form;
             table = layui.table;
             element = layui.element;
@@ -215,9 +244,9 @@
             layedit = layui.layedit;
             editer = layedit.build('content'); //建立编辑器
             //监听Tab切换，以改变地址hash值
-            element.on('tab(tab_info)', function(){
+            element.on('tab(tab_info)', function () {
                 var id = this.getAttribute('lay-id');
-                switch (id){
+                switch (id) {
                     case "base":
                         initBase();
                         break;
@@ -235,7 +264,7 @@
 
     function initBase() {
         //如果已经有基本信息就忽略
-        if(cooperation){
+        if (cooperation) {
             return;
         }
 
@@ -247,31 +276,31 @@
             op = "update";
         }
     }
-    
+
     function initFinance() {
         //如果已经读取过财务信息就忽略
-        if(cooperation){
+        if (cooperation) {
             return;
         }
 
 
     }
-    
+
     function initSalayDefine() {
         //如果已经有基本信息就忽略
-        if(salary_items_defined){
+        if (salary_items_defined) {
             return;
         }
         //此处应该从后台获取
-        salary_items_defined = ["加班费" ,"考勤扣款"];
+        salary_items_defined = ["加班费", "考勤扣款"];
 
-        for(var i in salary_items_fixed){
+        for (var i in salary_items_fixed) {
             var item = salary_items_fixed[i];
             var node = $("#template [name=salary_item_fixed]").clone();
             node.text(item);
             $("#btn_append").before(node);
         }
-        for(var i in salary_items_defined){
+        for (var i in salary_items_defined) {
             var item = salary_items_defined[i];
             var node = $("#template [name=salary_item_defined]").clone();
             node.text(item);
@@ -282,11 +311,12 @@
 
     //添加自定义字段
     function appendSalaryItem() {
-        layer.prompt({formType: 2,value: '',title: '请输入字段名（不超过8个字符）',area: ['100px', '30px'] //自定义文本域宽高
-        }, function(value, index, elem){
-            if(salary_items_defined.length >= 10){
+        layer.prompt({
+            formType: 2, value: '', title: '请输入字段名（不超过8个字符）', area: ['100px', '30px'] //自定义文本域宽高
+        }, function (value, index, elem) {
+            if (salary_items_defined.length >= 10) {
                 layer.msg('最多只能子定义10个字段');
-            }else {
+            } else {
                 salary_items_defined.push(value);
                 var node = $("#template [name=salary_item_defined]").clone();
                 node.text(value);
@@ -301,13 +331,13 @@
     function removeSalaryItem() {
         var that = this;
         var item = $(that).text();
-        var msg = '确定要删除自定义字段['+item+']?';
-        layer.confirm(msg, function(index){
+        var msg = '确定要删除自定义字段[' + item + ']?';
+        layer.confirm(msg, function (index) {
             that.remove();//移除元素
             //从自定义字段集合中移除
-            for(var i in salary_items_defined){
-                if(salary_items_defined[i] == item){
-                    salary_items_defined.splice(i,1);
+            for (var i in salary_items_defined) {
+                if (salary_items_defined[i] == item) {
+                    salary_items_defined.splice(i, 1);
                     break;
                 }
             }
@@ -316,49 +346,50 @@
     }
 
     //保存工资定义
-    function saveSalaryDefine(){
+    function saveSalaryDefine() {
         var items = salary_items_defined.join();
         layer.msg(items);
     }
 
     //预览工资定义
-    function previewSalaryDefine(){
+    function previewSalaryDefine() {
         $("#table_contain").empty();
         $("#table_contain").append('<table id="preview_salary" class="layui-table"></table>');
         var cols = generateColumns();
         var data = [];
-        for(var i in cols){
-            var d = {i:0};
+        for (var i in cols) {
+            var d = {i: 0};
             data.push(d);
         }
         //初始化数据表格
         table.render({
             elem: '#preview_salary',
             cols: cols,
-            data:data
+            data: data
         });
-        
+
         function generateColumns() {
             var columns = [];
-            for(var i in salary_items_fixed){
+            for (var i in salary_items_fixed) {
                 var item = salary_items_fixed[i];
-                var field = {field:i,title:item,width:15*item.length+30};
+                var field = {field: i, title: item, width: 15 * item.length + 30};
                 columns.push(field);
             }
-            for(var i in salary_items_defined){
+            for (var i in salary_items_defined) {
                 var item = salary_items_defined[i];
-                var field = {field:i,title:item,width:15*item.length+30};
+                var field = {field: i, title: item, width: 15 * item.length + 30};
                 columns.push(field);
             }
             return [columns];
         }
     }
+
     function save() {
         var cooperativeclient = form.val('form_cooperation');
-        if(op == "insert") {
+        if (op == "insert") {
             iCooperativeclient.insert(cooperativeclient, onInsertSuccess);
-        }else{
-            iCooperativeclient.update(cooperativeclient,onUpdateSuccess);
+        } else {
+            iCooperativeclient.update(cooperativeclient, onUpdateSuccess);
         }
 
         function onInsertSuccess() {

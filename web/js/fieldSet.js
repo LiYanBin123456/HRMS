@@ -162,6 +162,7 @@ var columns_supplier = [[
 //劳务派遣客户合同字段集合
 var columns_contract = [[
     {field:'client', title: '合作客户'},
+    {field:'service', title: '服务项目',width:130},
     {field:'time', title: '生效时间',width:130},
     {field:'expirationtime', title: '到期时间',width:130},
     {fixed:'right', title: '操作', toolbar: '#bar_contract',width:200}
@@ -187,6 +188,7 @@ var columns_internalstaff = [[
 
 //外派员工管理字段集合
 var columns_expatriate = [[
+    {type:'checkbox'},
     {field:'ID', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
     {field:'education', title: '学历',width:100},
@@ -314,8 +316,8 @@ var columns_settlements2  = [[
 
 //小时工工资管理明细字段集合(录入模式)
 var columns_detail2_input  = [[
-    {field:'ID', title: '身份证号',width:160,edit: 'text'},
-    {field:'name', title: '姓名',width:80,edit: 'text'},
+    {field:'ID', title: '身份证号',width:160},
+    {field:'name', title: '姓名',width:80},
     {field:'time', title: '工时',width:80,edit: 'text'},
     {field:'meal', title: '餐费',width:80,edit: 'text'},
     {field:'traffic', title: '交通费',width:80,edit: 'text'},
@@ -365,13 +367,13 @@ var columns_settlements3  = [[
 
 //商业保险工资管理明细字段集合
 var columns_detail3  = [[
-    {field:'ID', title: '身份证号',edit: 'text'},
-    {field:'name', title: '姓名',width:80,edit: 'text'},
-    {field:'site', title: '工作地点',width:80,edit: 'text'},
-    {field:'post', title: '工作岗位',width:80,edit: 'text'},
+    {field:'ID', title: '身份证号',width:160},
+    {field:'name', title: '姓名',width:80},
+    {field:'site', title: '工作地点',width:80},
+    {field:'post', title: '工作岗位',width:80},
     {field:'product', title: '保险产品',width:100,edit: 'text'},
     {field:'premium', title: '保费',width:80,edit: 'text'},
-    {fixed: 'right', title: '操作', toolbar: '#bar_detail3',width:80}
+    {fixed: 'right', title: '操作', toolbar: '#bar_detail3'}
 ]];
 
 //商业保险工资明细添加字段集合

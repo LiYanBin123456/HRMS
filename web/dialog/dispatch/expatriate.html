@@ -9,6 +9,8 @@
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
         <link rel="stylesheet" href="../../css/font.css">
         <link rel="stylesheet" href="../../css/xadmin.css">
+        <link href="../../city-picker/city-picker.css" rel="stylesheet" />
+
         <script type="text/javascript" src="../../lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../../js/xadmin.js"></script>
         <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
@@ -133,44 +135,62 @@
                            <i class="layui-icon">&#xe67c;</i>上传照片
                         </button></div>
                <div class="layui-form-item">
-                        <label for="L_repass" class="layui-form-label"></label>
+                        <label class="layui-form-label"></label>
                         <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
                 </form>
               </div>
             <div class="layui-tab-item">
                 <form lay-filter="form_expatriate" class="layui-form">
                     <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-item">
+                        <label class="layui-form-item"><span class="x-red"></span>社保所在地</label>
+                        <div class="layui-input-inline">
+                            <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city-picker" readonly="readonly" data-toggle="city-picker" placeholder="请选择">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-item">
                             <span class="x-blue">医保-------------------------</span></label>
                         <div class="layui-form-item">
-                             <div class="layui-inline"><input type="radio" name="sex" value="最低标准" title="最低标准" checked></div>
-                             <div class="layui-inline"><input type="radio" name="sex" value="实际工资" title="实际工资" ></div>
-                             <div class="layui-inline"><input type="radio" name="sex" value="自定义基数" title="自定义基数"></div>
+                             <div class="layui-inline"><input type="radio" name="rad_medical" value="最低标准" title="最低标准" checked></div>
+                             <div class="layui-inline"><input type="radio" name="rad_medical" value="实际工资" title="实际工资" ></div>
+                             <div class="layui-inline"><input type="radio" name="rad_medical" value="实际工资" title="不缴纳" ></div>
+                             <div class="layui-inline"><input type="radio" name="rad_medical" value="自定义基数" title="自定义基数"></div>
                              <div class="layui-inline"><input type="text" name="username" required=""  placeholder="自定义基数" autocomplete="off" class="layui-input" ></div>
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-item" >
+                        <label class="layui-form-item" >
                             <span class="x-blue">社保基数--------------------</span></label>
                         <div class="layui-form-item">
-                             <div class="layui-inline"><input type="radio" name="se" value="最低标准" title="最低标准" checked></div>
-                             <div class="layui-inline"><input type="radio" name="se" value="实际工资" title="实际工资" ></div>
-                             <div class="layui-inline"><input type="radio" name="se" value="自定义基数" title="自定义基数"></div>
-                             <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="自定义基数" autocomplete="off" class="layui-input"></div>
+                             <div class="layui-inline"><input type="radio" name="rad_social" value="最低标准" title="最低标准" checked></div>
+                             <div class="layui-inline"><input type="radio" name="rad_social" value="实际工资" title="实际工资" ></div>
+                            <div class="layui-inline"><input type="radio" name="rad_social" value="实际工资" title="不缴纳" ></div>
+                             <div class="layui-inline"><input type="radio" name="rad_social" value="自定义基数" title="自定义基数"></div>
+                             <div class="layui-inline"><input type="text" name="username" required="" lay-verify="nikename" placeholder="自定义基数" autocomplete="off" class="layui-input"></div>
                         </div>
                     </div>
                     <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-item">
+                        <label class="layui-form-item">
                             <span class="x-blue">公积金-----------------------</span></label>
                         <div class="layui-form-item">
                         <div class="layui-inline">
-                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="基数" autocomplete="off" class="layui-input"></div>
+                            <input type="radio" name="rad_fund" value="最低标准" title="按比例交" checked>
+                        </div>
                         <div class="layui-inline">
-                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="比例" placeholder="%" autocomplete="off" class="layui-input"></div>
+                            <input type="text" name="username" required="" lay-verify="nikename" placeholder="基数" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-inline">
+                            <input type="text" name="username" required="" lay-verify="nikename" placeholder="%" autocomplete="off" class="layui-input">
+                        </div>
+                        <div class="layui-inline">
+                            <input type="radio" name="rad_fund" value="实际工资" title="自定义" >
+                        </div>
+                        <div class="layui-inline">
+                            <input type="text" name="username" required="" lay-verify="nikename" placeholder="自定义金额" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                <div class="layui-form-item">
-                        <label for="L_repass" class="layui-form-label"></label>
+                        <label class="layui-form-label"></label>
                         <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
                 </form>
               </div>
@@ -213,7 +233,7 @@
                             <input type="text"  name="rent" required="" autocomplete="off" class="layui-input"></div>
                         </div>
                <div class="layui-form-item">
-                        <label for="L_repass" class="layui-form-label"></label>
+                        <label class="layui-form-label"></label>
                         <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button></div>
                 </form>
               </div>
@@ -259,18 +279,29 @@
 <script src="../../js/jquery.min.js"></script>
 <script src="../../js/jquery.params.js"></script>
 <script src="../../js/interface.js"></script>
+<script src="../../city-picker/city-picker.data.js"></script>
 <script>
     var op = "insert";
     var form;//表单对象
     var editer;
+    var cityPicker;
 
     loadLayuiModule();
 
     function loadLayuiModule() {
-        layui.use(['form', 'layedit','jquery'], function () {
+        layui.extend({
+            index: 'lib/index' //主入口模块
+            , citypicker: '../../city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
+        }).use(['form', 'layedit', 'citypicker'], function () {
             form = layui.form;
             layedit = layui.layedit;
+            var picker = layui.citypicker;
             editer = layedit.build('content'); //建立编辑器
+            cityPicker = new picker("#city-picker", {
+                provincename:"provinceId",
+                cityname:"city",
+                level: 'cityId'// 级别
+            });
             initData();
         });
     }

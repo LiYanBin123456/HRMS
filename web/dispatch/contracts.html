@@ -90,7 +90,7 @@
                         if(!first){
                             param_query.pagination.page = obj.curr;
                             param_query.pagination.size = obj.limit;
-                            getNotices();
+                            getContracts();
                         }
                     }
                 });
@@ -135,7 +135,7 @@
             }
 
             function getContracts() {
-                var result = {total:100,rows:[{client:"科技中专",time:"2019-1-29",expirationtime:"2020-6-29",type1:"增值税专用发票（差额）",project:"建筑",remark:"暂无",grant:"2020-6-29"},{client:"国棉四厂",time:"2019-2-12",expirationtime:"2020-2-30",type1:"增值税专用发票（差额）",project:"棉花",remark:"暂无",grant:"2020-2-30"}]};
+                var result = {total:100,rows:[{client:"科技中专",time:"2019-1-29",expirationtime:"2020-6-29",service:"劳务外包/派遣",project:"建筑",remark:"暂无"},{client:"国棉四厂",time:"2019-2-12",expirationtime:"2020-2-30",service:"小时工",project:"棉花",remark:"暂无",grant:"2020-2-30"}]};
                 table.reload('tbl_contract', {
                     data:result.rows
                 });

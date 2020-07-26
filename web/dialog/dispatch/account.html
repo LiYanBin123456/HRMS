@@ -54,15 +54,14 @@
             <div class="layui-tab-item">
                 <form lay-filter="form_account" class="layui-form">               
                 <div class="layui-form-item">
-                            <div class="layui-input-inline">
-                                <input type="checkbox" lay-skin="primary" title="账号管理" checked>
-                                <input type="checkbox" lay-skin="primary" title="工资审核" checked>
-                                <input type="checkbox" lay-skin="primary" title="财务审核" checked>
-                                <input type="checkbox" lay-skin="primary" title="客户管理" checked>
-                            </div>
-                         </div>
+                    <div class="layui-input-inline">
+                        <input type="checkbox" lay-skin="primary" title="账号管理" checked>
+                        <input type="checkbox" lay-skin="primary" title="工资审核" checked>
+                        <input type="checkbox" lay-skin="primary" title="财务审核" checked>
+                        <input type="checkbox" lay-skin="primary" title="客户管理" checked>
+                    </div>
+                 </div>
                 </form>
-                <div id="task" class="transfer"></div>
             </div>
            </div>
         </div>
@@ -74,35 +73,17 @@
     var op = "insert";
     var form;//表单对象
     var table;
-    var transfer;
 
     $(function () {
                 loadLayuiModule();
             });
 
     function loadLayuiModule() {
-        layui.use(['table','form','jquery','transfer'], function () {
+        layui.use(['table','form','jquery'], function () {
             form = layui.form;
             table = layui.table;
-            transfer = layui.transfer;
             initData();
-            initTask();
         });
-    }
-    
-    function initTask() {
-        var dispatches = [
-            {"value": "1", "title": "国棉四场"}
-            ,{"value": "2", "title": "九玻厂"}
-            ,{"value": "3", "title": "九江移动"}
-            ,{"value": "4", "title": "九江石化"}
-        ];
-        transfer.render({
-            elem: '#task'
-            ,data: dispatches
-            ,title: ['待分配客户', '已分配客户']
-            ,showSearch: true
-        })
     }
 
 
