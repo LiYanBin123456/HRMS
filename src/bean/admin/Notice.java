@@ -2,6 +2,7 @@ package bean.admin;
 
 import java.sql.Date;
 
+//公告
 public class Notice {
     private long id;
     private String title;//标题

@@ -12,23 +12,23 @@ import java.sql.Connection;
 public class RuleSocialService {
     private RuleSocialDao reluSocialDao = new RuleSocialDao();
 
-    public DaoQueryListResult getRule_socialList(Connection conn, QueryParameter param){
-        return reluSocialDao.getRule_socialList(conn,param);
+    public DaoQueryListResult getSocialRules(Connection conn, QueryParameter param){
+        return reluSocialDao.getSocialRules(conn,param);
     }
 
-    public DaoQueryResult getSocial(Connection conn, long id) {
-        return reluSocialDao.getSocial(conn,id);
+    public DaoQueryResult getSocialRule(Connection conn, long id) {
+        return reluSocialDao.getSocialRule(conn,id);
     }
 
-    public DaoUpdateResult updateSocial(Connection conn, RuleSocial rule) {
-        return reluSocialDao.updateSocial(conn,rule);
+    public DaoUpdateResult updateSocialRule(Connection conn, RuleSocial rule) {
+        return reluSocialDao.updateSocialRule(conn,rule);
     }
 
-    public DaoUpdateResult insertSocial(Connection conn, RuleSocial rule) {
-        return reluSocialDao.insertSocial(conn,rule);
+    public DaoUpdateResult insertSocialRule(Connection conn, RuleSocial rule) {
+        return reluSocialDao.insertSocialRule(conn,rule);
     }
 
-    public DaoUpdateResult deleteSocial(Connection conn, long id) {
-        return reluSocialDao.deleteSocial(conn,id);
+    public DaoUpdateResult deleteSocialRule(Connection conn, long id) {
+        return reluSocialDao.deleteSocialRule(conn,id);
     }
 }

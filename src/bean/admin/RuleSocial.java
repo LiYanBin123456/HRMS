@@ -2,6 +2,7 @@ package bean.admin;
 
 import java.sql.Date;
 
+//社保规则
 public class RuleSocial {
     private long id;
     private String city;//地市代码

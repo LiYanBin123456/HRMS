@@ -160,16 +160,16 @@
             var medicalinsurance = JSON.parse(param);
             form.val('form_medicalinsurance', medicalinsurance);
             layedit.setContent(editer, medicalinsurance.content, false);
-            op = "update";
+            op = "updateMedicalRule";
         }
     }
 
     function save() {
-        var notice = form.val('form_medicalinsurance');
-        if(op == "insert") {
-            iMedicalinsurance.insert(medicalinsurance, onInsertSuccess);
+        var medicalinsurance = form.val('form_medicalinsurance');
+        if(op == "insertMedicalRule") {
+            iMedicalinsurance.insertMedicalRule(medicalinsurance, onInsertSuccess);
         }else{
-            iMedicalinsurance.update(medicalinsurance,onUpdateSuccess);
+            iMedicalinsurance.updateMedicalRule(medicalinsurance,onUpdateSuccess);
         }
 
         function onInsertSuccess() {

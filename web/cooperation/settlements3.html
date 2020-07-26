@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>通知公告</title>
+        <title></title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -28,23 +28,39 @@
 
     <body class="layui-layout-body">
         <div style="padding: 5px;">
+            <form class="layui-form searchbox">
+                <div class="layui-input-inline">
+                    <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
+                </div>
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" id="filter_month" placeholder="按月份过滤">
+                </div>
+                <div class="layui-input-inline">
+                    <select name="state"   lay-verify="required" >
+                        <option value="">按状态过滤</option>
+                        <option value="0">编辑</option>
+                        <option value="1">提交</option>
+                        <option value="2">一审</option>
+                        <option value="3">二审</option>
+                        <option value="4">三审</option>
+                        <option value="5">扣款</option>
+                        <option value="6">发放</option>
+                    </select>
+                </div>
+            </form>
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_notice">
-                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 发布公告</button>
-                <form class="layui-form searchbox">
-                    <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入要查找的主题">
-                    </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-                </form>
+            <div class="layui-hide" id="top_bar_settlements3">
+                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
+                <button class="layui-btn layui-btn-sm" lay-event="copy"><i class="layui-icon "></i> 复制</button>
             </div>
-            <table id="tbl_notice" lay-filter="filter_tb_notice"></table>
+            <table id="tbl_settlements3" lay-filter="filter_tb_settlements3"></table>
             <div id="pager"></div>
 
             <!--行内工具栏-->
-            <script type="text/html" id="bar_notice">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+            <script type="text/html" id="bar_settlements3">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>明细</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
             </script>
         </div>
         <script src="../js/fieldSet.js"></script>
@@ -55,24 +71,31 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
+            var laydate;
             var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
 
             function loadLayuiModule() {
-                layui.use(['table','form','element','layer','laypage'], function() {
+                layui.use(['table','form','element','layer','laypage','laydate'], function() {
                     table = layui.table;
                     layer = layui.layer;
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
+                    laydate = layui.laydate;
                     initPage();
                 });
             }
 
             function initPage() {
                 initTable();
+
+                laydate.render({
+                    elem: '#filter_month'
+                    ,type: 'month'
+                });
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
                     search(keyword);
@@ -90,28 +113,27 @@
                         if(!first){
                             param_query.pagination.page = obj.curr;
                             param_query.pagination.size = obj.limit;
-                            getNotices();
+                            getSettlements3();
                         }
                     }
                 });
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_notice',
-                    toolbar: '#top_bar_notice', //开启头部工具栏，并为其绑定左侧模板
+                    elem: '#tbl_settlements3',
+                    toolbar: '#top_bar_settlements3', //开启头部工具栏，并为其绑定左侧模板
                     defaultToolbar: ['filter', 'exports', 'print'],//自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
-                    title: '职位列表',
-                    cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_notice,
-                    id: 'tbl_notice'
+                    title: '列表',
+                    cols: columns_settlements3,
+                    id: 'tbl_settlements3'
                 });
 
                 //行内工具栏事件响应
-                table.on('tool(filter_tb_notice)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                table.on('tool(filter_tb_settlements3)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
                     var data = obj.data; //获得当前行数据
                     switch (obj.event){
                         case "detail":
-                            showDetailDlg(data);
+                            showDetailDlg();
                             break;
                         case "del":
                             del(data);
@@ -120,10 +142,13 @@
                 });
 
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_notice)', function(obj){
+                table.on('toolbar(filter_tb_settlements3)', function(obj){
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
+                            break;
+                        case 'copy':
+                            showCopyDlg();
                             break;
                         case 'search':
                             search();
@@ -131,56 +156,68 @@
                     };
                 });
 
-                getNotices();
+                getSettlements3();
             }
 
-            function getNotices() {
-                /*var result = {total:100,rows:[{title:"主题1",publisher:"张三",date:"2020-6-21",brief:"摘要1",content:"正文1"},{title:"主题2",publisher:"李四",date:"2020-6-22",brief:"摘要2",content:"正文2"}]};
-                table.reload('tbl_notice', {
+            function getSettlements3() {
+                var result = {total:100,rows:[{unit:"科技中专",month:"2020-06",product:"用工宝",premium:"5000",state:"申报中"},{unit:"国棉四厂",month:"2020-06",product:".....",premium:"12000",state:"已审核"}]};
+                table.reload('tbl_settlements3', {
                     data:result.rows
-                });*/
+                });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                iNotice.getList(param_query,function (result) {
+                /*iNotice.getList(param_query,function (result) {
                     table.reload('tbl_notice', {
                         data:result.rows
                     });
-                });
+                });*/
             }
 
             //模糊查找
             function search(keyword) {
                 param_query.conditions.extra = keyword;
-                getNotices();
+                getSalsrys();
             }
 
-            //打开详情对话框
-            function showDetailDlg(notice) {
-                var content = "../dialog/notice.html?notice="+encodeURIComponent(JSON.stringify(notice));
+            //打开明细对话框
+            function showDetailDlg() {
+                var content = "../dialog/dispatch/detail3.html";
                 layer.open({
-                    title:"公告详情",
+                    title:"明细",
                     type: 2,
-                    area: ['800px', '600px'],
+                    area: ['1200px', '600px'],
+                    content: content
+                });
+            }
+
+            //打开复制对话框
+            function showCopyDlg() {
+                var content = "../dialog/dispatch/copy3.html";
+                layer.open({
+                    title:"复制",
+                    type: 2,
+                    area: ['400px', '300px'],
                     content: content
                 });
             }
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/notice.html";
+                var content = "../dialog/dispatch/settlement3.html";
                 layer.open({
-                    title:"发布公告",
+                    title:"添加",
                     type: 2,
-                    area: ['800px', '600px'],
+                    area: ['400px', '400px'],
                     content: content
                 });
             }
 
+
             //删除公告
-            function del(notice) {
-                layer.confirm('确定删除'+notice.title, {icon: 3, title:'删除公告'}, function(index){
-                    iNotice.delete(notice.id,function () {
+            function del(settlements3) {
+                layer.confirm('确定删除'+settlements3.title, {icon: 3, title:'删除'}, function(index){
+                    iSalsry.delete(settlements3.id,function () {
                         layer.close(index);
-                        getNotices();
+                        getSettlements3();
                         layer.msg('删除成功');
                     });
                 });

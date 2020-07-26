@@ -33,50 +33,50 @@ public class RuleServlet extends HttpServlet {
         String op = request.getParameter("op");
 
         switch (op) {
-            case "insertFund"://插入公积金清单
-                result = insertFund(conn,request);
+            case "insertFundRule"://插入公积金清单
+                result = insertFundRule(conn,request);
                 break;
-            case "deleteFund"://删除公积金清单
-                result = deleteFund(conn,request);
+            case "deleteFundRule"://删除公积金清单
+                result = deleteFundRule(conn,request);
                 break;
-            case "updateFund"://修改公积金清单
-                result = updateFund(conn,request);
+            case "updateFundRule"://修改公积金清单
+                result = updateFundRule(conn,request);
                 break;
-            case "getFunds"://获取所有公积金清单
-                result = getFunds(conn,request);
+            case "getFundRules"://获取所有公积金清单
+                result = getFundRules(conn,request);
                 break;
-            case "getFund"://获取一个公积金清单
-                result = getFund(conn,request);
+            case "getFundRule"://获取一个公积金清单
+                result = getFundRule(conn,request);
                 break;
-            case "insertMedical":
-                result = insertMedical(conn,request);
+            case "insertMedicalRule":
+                result = insertMedicalRule(conn,request);
                 break;
-            case "deleteMedical":
+            case "deleteMedicalRule":
                 result = deleteMedical(conn,request);
                 break;
-            case "updateMedical":
+            case "updateMedicalRule":
                 result = updateMedical(conn,request);
                 break;
-            case "getMedicals":
-                result = getMedicals(conn,request);
+            case "getMedicalRules":
+                result = getMedicalRules(conn,request);
                 break;
-            case "getMedical":
-                result = getMedical(conn,request);
+            case "getMedicalRule":
+                result = getMedicalRule(conn,request);
                 break;
-            case "insertSocial":
-                result = insertSocial(conn,request);
+            case "insertSocialRule":
+                result = insertSocialRule(conn,request);
                 break;
-            case "deleteSocial":
-                result = deleteSocial(conn,request);
+            case "deleteSocialRule":
+                result = deleteSocialRule(conn,request);
                 break;
-            case "updateSocial":
-                result = updateSocial(conn,request);
+            case "updateSocialRule":
+                result = updateSocialRule(conn,request);
                 break;
-            case "getSocials":
-                result = getSocials(conn,request);
+            case "getSocialRules":
+                result = getSocialRules(conn,request);
                 break;
-            case "getSocial":
-                result = getSocial(conn,request);
+            case "getSocialRule":
+                result = getSocialRule(conn,request);
                 break;
 
 
@@ -95,35 +95,35 @@ public class RuleServlet extends HttpServlet {
     }
 
     //插入公积金规则
-    private String insertFund(Connection conn,HttpServletRequest request){
+    private String insertFundRule(Connection conn,HttpServletRequest request){
         RuleFund rule = JSONObject.parseObject(request.getParameter("rule"), RuleFund.class);
-        DaoUpdateResult res= ruleFundService.insertFund(conn,rule);
+        DaoUpdateResult res= ruleFundService.insertFundRule(conn,rule);
         return JSONObject.toJSONString(res);
     }
     //删除公积金规则
-    private String deleteFund(Connection conn, HttpServletRequest request) {
+    private String deleteFundRule(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
-        DaoUpdateResult res= ruleFundService.deleteFund(conn,id);
+        DaoUpdateResult res= ruleFundService.deleteFundRule(conn,id);
         return JSONObject.toJSONString(res);
     }
     //修改公积金规则
-    private String updateFund(Connection conn,HttpServletRequest request){
+    private String updateFundRule(Connection conn,HttpServletRequest request){
 
         RuleFund rule = JSONObject.parseObject(request.getParameter("rule"), RuleFund.class);
-        DaoUpdateResult res = ruleFundService.updateFund(conn,rule);
+        DaoUpdateResult res = ruleFundService.updateFundRule(conn,rule);
         return JSONObject.toJSONString(res);
     }
     //获取公积金规则列表
-    private String getFunds(Connection conn,HttpServletRequest request) {
+    private String getFundRules(Connection conn,HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
 
-        DaoQueryListResult res = ruleFundService.getFundList(conn,parameter);
+        DaoQueryListResult res = ruleFundService.getFundRules(conn,parameter);
         return JSONObject.toJSONString(res);
     }
     //获取公积金规则
-    private String getFund(Connection conn,HttpServletRequest request){
+    private String getFundRule(Connection conn,HttpServletRequest request){
         long id = Long.parseLong(request.getParameter("id"));
-        DaoQueryResult res = ruleFundService.getFund(conn,id);
+        DaoQueryResult res = ruleFundService.getFundRule(conn,id);
         return JSONObject.toJSONString(res);
     }
 
@@ -131,67 +131,67 @@ public class RuleServlet extends HttpServlet {
 
 
     //增加医保规则
-    private String insertMedical(Connection conn, HttpServletRequest request) {
+    private String insertMedicalRule(Connection conn, HttpServletRequest request) {
         RuleMedical rule = JSONObject.parseObject(request.getParameter("rule"), RuleMedical.class);
-        DaoUpdateResult res = medicalService.insertMedical(conn,rule);
+        DaoUpdateResult res = medicalService.insertMedicalRule(conn,rule);
         return JSONObject.toJSONString(res);
     }
     //删除医保规则
     private String deleteMedical(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
-        DaoUpdateResult res= medicalService.deleteMedical(conn,id);
+        DaoUpdateResult res= medicalService.deleteMedicalRule(conn,id);
         return JSONObject.toJSONString(res);
     }
     //修改医保规则
     private String updateMedical(Connection conn, HttpServletRequest request) {
         RuleMedical rule = JSONObject.parseObject(request.getParameter("rule"), RuleMedical.class);
-        DaoUpdateResult res = medicalService.updateMedical(conn,rule);
+        DaoUpdateResult res = medicalService.updateMedicalRule(conn,rule);
         return JSONObject.toJSONString(res);
     }
     //获取所有医保规则
-    private String getMedicals(Connection conn,HttpServletRequest request) {
+    private String getMedicalRules(Connection conn,HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
 
-        DaoQueryListResult res =medicalService.getRule_medicalList(conn,parameter);
+        DaoQueryListResult res =medicalService.getMedicalRules(conn,parameter);
         System.out.println(res);
         return JSONObject.toJSONString(res);
     }
     //获取医保规则
-    private String getMedical(Connection conn, HttpServletRequest request) {
+    private String getMedicalRule(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
-        DaoQueryResult res= medicalService.getMedical(conn,id);
+        DaoQueryResult res= medicalService.getMedicalRule(conn,id);
         return JSONObject.toJSONString(res);
     }
 
 
     //增加社保规则
-    private String insertSocial(Connection conn, HttpServletRequest request) {
+    private String insertSocialRule(Connection conn, HttpServletRequest request) {
         RuleSocial rule = JSONObject.parseObject(request.getParameter("rule"), RuleSocial.class);
-        DaoUpdateResult res = socialService.insertSocial(conn,rule);
+        DaoUpdateResult res = socialService.insertSocialRule(conn,rule);
         return JSONObject.toJSONString(res);
     }
     //删除社保规则
-    private String deleteSocial(Connection conn, HttpServletRequest request) {
+    private String deleteSocialRule(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
-        DaoUpdateResult res= socialService.deleteSocial(conn,id);
+        DaoUpdateResult res= socialService.deleteSocialRule(conn,id);
         return JSONObject.toJSONString(res);
     }
     //修改社保规则
-    private String updateSocial(Connection conn, HttpServletRequest request) {
+    private String updateSocialRule(Connection conn, HttpServletRequest request) {
         RuleSocial rule = JSONObject.parseObject(request.getParameter("rule"), RuleSocial.class);
-        DaoUpdateResult res = socialService.updateSocial(conn,rule);
+        DaoUpdateResult res = socialService.updateSocialRule(conn,rule);
         return JSONObject.toJSONString(res);
     }
     //获取社保规则
-    private String getSocial(Connection conn, HttpServletRequest request) {
+    private String getSocialRule(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
-        DaoQueryResult res= socialService.getSocial(conn,id);
+        DaoQueryResult res= socialService.getSocialRule(conn,id);
         return JSONObject.toJSONString(res);
     }
     //获取所有社保规则列表
-    private String getSocials(Connection conn,HttpServletRequest request) {
+    private String getSocialRules(Connection conn,HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
-        DaoQueryListResult res =socialService.getRule_socialList(conn,parameter);
+        DaoQueryListResult res =socialService.getSocialRules(conn,parameter);
         return JSONObject.toJSONString(res);
     }
 

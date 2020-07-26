@@ -2,6 +2,7 @@ package bean.admin;
 
 import java.sql.Date;
 
+//公积金规则
 public class RuleFund {
     private long id;
     private String city;

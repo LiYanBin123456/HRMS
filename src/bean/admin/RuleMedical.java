@@ -2,6 +2,7 @@ package bean.admin;
 
 import java.sql.Date;
 
+//医保规则
 public class RuleMedical {
     private long id;
     private String city;//地市代码
