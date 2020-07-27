@@ -144,121 +144,159 @@
                         <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button></div>
                 </form>
               </div>
-            <div class="layui-tab-item">
-                <form lay-filter="form_internalstaff" class="layui-form">
-                    <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-item">
-                            <span class="x-blue">医保-------------------------</span></label>
-                        <div class="layui-form-item">
-                             <div class="layui-inline"><input type="radio" name="sex" value="最低标准" title="最低标准" checked></div>
-                             <div class="layui-inline"><input type="radio" name="sex" value="实际工资" title="实际工资" ></div>
-                             <div class="layui-inline"><input type="radio" name="sex" value="自定义基数" title="自定义基数"></div>
-                             <div class="layui-inline"><input type="text" name="username" required=""  placeholder="自定义基数" autocomplete="off" class="layui-input" ></div>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-item" >
-                            <span class="x-blue">社保基数--------------------</span></label>
-                        <div class="layui-form-item">
-                             <div class="layui-inline"><input type="radio" name="se" value="最低标准" title="最低标准" checked></div>
-                             <div class="layui-inline"><input type="radio" name="se" value="实际工资" title="实际工资" ></div>
-                             <div class="layui-inline"><input type="radio" name="se" value="自定义基数" title="自定义基数"></div>
-                             <div class="layui-inline"><input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="自定义基数" autocomplete="off" class="layui-input"></div>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-item">
-                            <span class="x-blue">公积金-----------------------</span></label>
-                        <div class="layui-form-item">
-                        <div class="layui-inline">
-                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="基数" autocomplete="off" class="layui-input"></div>
-                        <div class="layui-inline">
-                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" placeholder="比例" placeholder="%" autocomplete="off" class="layui-input"></div>
-                        </div>
-                    </div>
-               <div class="layui-form-item">
-                        <label for="L_repass" class="layui-form-label"></label>
-                        <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button></div>
-                </form>
-              </div>
-            <div class="layui-tab-item">
-                <form lay-filter="form_internalstaff" class="layui-form">
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>子女教育扣除额</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="children" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>赡养老人</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="oldman" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>继续教育</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="continue" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>大病医疗</label>
-                        <div class="layui-input-inline">
-                            <input type="text"   name="medical" required="" autocomplete="off" class="layui-input"></div>
-                        </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>住房贷款利息</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="interest" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>住房租金</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="rent" required="" autocomplete="off" class="layui-input"></div>
-                        </div>
-               <div class="layui-form-item">
-                        <label for="L_repass" class="layui-form-label"></label>
-                        <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button></div>
-                </form>
-              </div>
-            <div class="layui-tab-item">
-                <form lay-filter="form_internalstaff" class="layui-form">
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                        <span class="x-red">*</span>选择发行卡</label>
-                            <div class="layui-input-inline">
-                                <select name="banks" lay-verify="required">
-                                    <option value=""></option>
-                                    <option value="0">中国银行</option>
-                                    <option value="1">交通银行</option>
-                                    <option value="2">建设银行</option>
-                                    <option value="3">其他</option>
-                            </select>
-                    </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>开户行</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="bank" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>行号</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="number" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>账号</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="account" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
-                    </div>
-                </form>
-            </div>
+               <div class="layui-tab-item">
+                   <form lay-filter="form_security" class="layui-form">
+                       <div class="layui-form-item">
+                           <label class="layui-form-label"><span class="x-red"></span>社保所在地</label>
+                           <div class="layui-input-inline">
+                               <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city-picker"
+                                      readonly="readonly" data-toggle="city-picker" placeholder="请选择">
+                           </div>
+                       </div>
+                       <div class="layui-form-item">
+                           <fieldset class="layui-elem-field">
+                               <legend>医保</legend>
+                               <div class="layui-field-box">
+                                   <div class="layui-inline">
+                                       <input type="radio" lay-filter="settingM" name="settingM" value="0" title="最低标准" checked>
+                                       <input type="radio" lay-filter="settingM" name="settingM" value="1" title="实际工资">
+                                       <input type="radio" lay-filter="settingM" name="settingM" value="2" title="不缴纳">
+                                       <input type="radio" lay-filter="settingM" name="settingM" value="3" title="自定义基数">
+                                   </div>
+                                   <div class="layui-inline layui-hide" name="m1">
+                                       <input type="text" name="valueM" required="" placeholder="自定义基数" autocomplete="off" class="layui-input ">
+                                   </div>
+                               </div>
+                           </fieldset>
+                       </div>
+                       <div class="layui-form-item">
+                           <fieldset class="layui-elem-field">
+                               <legend>社保</legend>
+                               <div class="layui-field-box">
+                                   <div class="layui-inline">
+                                       <input type="radio" lay-filter="settingS" name="settingS" value="0" title="最低标准" checked>
+                                       <input type="radio" lay-filter="settingS" name="settingS" value="1" title="实际工资">
+                                       <input type="radio" lay-filter="settingS" name="settingS" value="2" title="不缴纳">
+                                       <input type="radio" lay-filter="settingS" name="settingS" value="3" title="自定义基数">
+                                   </div>
+                                   <div class="layui-inline layui-hide" name="s1">
+                                       <input type="text" name="valueS" required="" placeholder="自定义基数" autocomplete="off" class="layui-input ">
+                                   </div>
+                               </div>
+                           </fieldset>
+                       </div>
+                       <div class="layui-form-item">
+                           <fieldset class="layui-elem-field">
+                               <legend>公积金</legend>
+                               <div class="layui-field-box">
+                                   <div class="layui-inline">
+                                       <input type="radio" lay-filter="settingF" name="settingF" value="0" title="按比例交" checked>
+                                       <input type="radio" lay-filter="settingF" name="settingF" value="1" title="自定义金额">
+                                   </div>
+                                   <div class="layui-inline" name="f1">
+                                       <input type="text" name="fundBase" required="" placeholder="基数"
+                                              autocomplete="off" class="layui-input">
+                                   </div>
+                                   <div class="layui-inline" name="f1">
+                                       <input type="text" name="fundPer" required="" placeholder="%"
+                                              autocomplete="off" class="layui-input">
+                                   </div>
+                                   <div class="layui-inline layui-hide" name="f2">
+                                       <input type="text" name="fund" required="" placeholder="自定义金额" autocomplete="off" class="layui-input ">
+                                   </div>
+                               </div>
+                           </fieldset>
+                       </div>
+                       <div class="layui-form-item">
+                           <button class="layui-btn" lay-filter="add" lay-submit="">保存</button>
+                       </div>
+                   </form>
+               </div>
+               <div class="layui-tab-item">
+                   <form lay-filter="form_reduct" class="layui-form">
+                       <div class="layui-form-item">
+                           <label class="layui-form-label">
+                               <span class="x-red">*</span>子女教育</label>
+                           <div class="layui-input-inline">
+                               <input type="text" name="reduct" required="" autocomplete="off"
+                                      class="layui-input"></div>
+                       </div>
+                       <div class="layui-form-item">
+                           <label class="layui-form-label">
+                               <span class="x-red">*</span>赡养老人</label>
+                           <div class="layui-input-inline">
+                               <input type="text" name="reduct2" required="" autocomplete="off"
+                                      class="layui-input"></div>
+                       </div>
+                       <div class="layui-form-item">
+                           <label class="layui-form-label">
+                               <span class="x-red">*</span>继续教育</label>
+                           <div class="layui-input-inline">
+                               <input type="text" name="reduct3" required="" autocomplete="off"
+                                      class="layui-input"></div>
+                       </div>
+                       <div class="layui-form-item">
+                           <label class="layui-form-label">
+                               <span class="x-red">*</span>大病医疗</label>
+                           <div class="layui-input-inline">
+                               <input type="text" name="reduct4" required="" autocomplete="off" class="layui-input"></div>
+                       </div>
+                       <div class="layui-form-item">
+                           <label class="layui-form-label">
+                               <span class="x-red">*</span>住房贷款利息</label>
+                           <div class="layui-input-inline">
+                               <input type="text" name="reduct5" required="" autocomplete="off"
+                                      class="layui-input"></div>
+                       </div>
+                       <div class="layui-form-item">
+                           <label class="layui-form-label">
+                               <span class="x-red">*</span>住房租金</label>
+                           <div class="layui-input-inline">
+                               <input type="text" name="reduct6" required="" autocomplete="off" class="layui-input"></div>
+                       </div>
+                       <div class="layui-form-item">
+                           <label class="layui-form-label"></label>
+                           <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button>
+                       </div>
+                   </form>
+               </div>
+               <div class="layui-tab-item">
+                   <form lay-filter="form_salary_card" class="layui-form">
+                       <div class="layui-form-item">
+                           <label class="layui-form-label"><span class="x-red">*</span>选择发行卡</label>
+                           <div class="layui-input-inline">
+                               <select name="bank1" lay-verify="required">
+                                   <option value=""></option>
+                                   <option value="0">中国银行</option>
+                                   <option value="1">交通银行</option>
+                                   <option value="2">建设银行</option>
+                                   <option value="3">其他</option>
+                               </select>
+                           </div>
+                       </div>
+                       <div class="layui-form-item">
+                           <label class="layui-form-label"><span class="x-red">*</span>开户行</label>
+                           <div class="layui-input-inline">
+                               <input type="text" name="bank2" required="" autocomplete="off"
+                                      class="layui-input">
+                           </div>
+                       </div>
+                       <div class="layui-form-item">
+                           <label class="layui-form-label"><span class="x-red">*</span>行号</label>
+                           <div class="layui-input-inline">
+                               <input type="text" name="bankNo" required="" autocomplete="off"
+                                      class="layui-input">
+                           </div>
+                       </div>
+                       <div class="layui-form-item">
+                           <label class="layui-form-label"><span class="x-red">*</span>账号</label>
+                           <div class="layui-input-inline">
+                               <input type="text" name="cardNo" required="" autocomplete="off"
+                                      class="layui-input">
+                           </div>
+                       </div>
+                   </form>
+               </div>
            </div>
        </div>
 </body>
@@ -277,10 +315,39 @@
             form = layui.form;
             layedit = layui.layedit;
             editer = layedit.build('content'); //建立编辑器
-            initData();
+            initPage();
         });
     }
 
+    function initPage() {
+        form.on('radio(settingM)', function(data){
+            var settingM = data.value;
+            if(settingM == 3){
+                $("[name=m1]").removeClass("layui-hide");
+            }else{
+                $("[name=m1]").addClass("layui-hide");
+            }
+        });
+        form.on('radio(settingS)', function(data){
+            var settingS = data.value;
+            if(settingS == 3){
+                $("[name=s1]").removeClass("layui-hide");
+            }else{
+                $("[name=s1]").addClass("layui-hide");
+            }
+        });
+        form.on('radio(settingF)', function(data){
+            var settingF = data.value;
+            if(settingF == 0){
+                $("[name=f1]").removeClass("layui-hide");
+                $("[name=f2]").addClass("layui-hide");
+            }else{
+                $("[name=f1]").addClass("layui-hide");
+                $("[name=f2]").removeClass("layui-hide");
+            }
+        });
+        initData();
+    }
     function initData() {
         var param = $.query.get("internalstaff");
         if (param) {
