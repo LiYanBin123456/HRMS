@@ -143,8 +143,8 @@ var columns_pool = [[
 //合作客户管理字段集合
 var columns_cooperativeclient = [[
     {field:'name', title: '客户名称'},
-    {field:'nature', title: '客户性质',width:200},
-    {field:'linkman', title: '联系人',width:200},
+    {field:'category', title: '客户性质',width:200},
+    {field:'contact', title: '联系人',width:200},
     {field:'phone', title: '联系电话',width:200},
     {fixed: 'right', title: '操作', toolbar: '#bar_cooperativeclient',width:300}
 ]];
@@ -153,8 +153,8 @@ var columns_cooperativeclient = [[
 var columns_supplier = [[
     {field:'name', title: '名称'},
     {field:'nature', title: '性质',width:80},
-    {field:'sort', title: '业务类别',width:90},
-    {field:'linkman', title: '联系人',width:100},
+    {field:'business', title: '业务类别',width:90},
+    {field:'contact', title: '联系人',width:100},
     {field:'phone', title: '联系电话',width:150},
     {fixed: 'right', title: '操作', toolbar: '#bar_supplier',width:200}
 ]];

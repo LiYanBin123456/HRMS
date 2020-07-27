@@ -178,9 +178,9 @@ var columns_wage = [[
 
 //内部员工管理字段集合
 var columns_internalstaff = [[
-    {field:'ID', title: '身份证号',width:170},
+    {field:'cardid', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
-    {field:'education', title: '学历',width:80},
+    {field:'degree', title: '学历',width:80},
     {field:'phone', title: '联系电话',width:120},
     {field:'department', title: '所属部门',width:120},
     {title: '操作', toolbar: '#bar_internalstaff'}

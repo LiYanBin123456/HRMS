@@ -26,7 +26,6 @@ var InterfaceNotice = function() {
      * 获取公告列表
      */
     this.getList = function(param,success,fail){
-        console.log("getList发放运行");
         var para = {op: "getList", param:JSON.stringify(param)};
         access(url,para,0,success,fail);
     };
