@@ -73,7 +73,7 @@ var works_enterprise = [
 //管理员合作客户管理字段集合
 var columns_custemer = [[
     {field:'name', title: '客户名称'},
-    {field:'linkman', title: '联系人',width:250},
+    {field:'contact', title: '联系人',width:250},
     {field:'phone', title: '联系电话',width:250},
     {fixed: 'right', title: '操作', toolbar: '#bar_custemer',width:300}
 ]];
@@ -81,38 +81,38 @@ var columns_custemer = [[
 //医保规则字段集合
 var columns_medicalinsurance = [[
     {field:'city', title: '所属城市',width:100},
-    {field:'time', title: '生效时间',width:100},
-    {field:'cardinal', title: '基数',width:80},
-    {field:'yiliaodanwei', title: '医疗单位比例',width:105},
-    {field:'yiliaogeren', title: '医疗个人比例',width:105},
-    {field:'dabingdanwei', title: '大病单位',width:90},
-    {field:'dabinggeren', title: '大病个人',width:90},
-    {field:'shengyudanwei', title: '生育单位比例',width:105},
+    {field:'start', title: '生效时间',width:100},
+    {field:'base', title: '基数',width:80},
+    {field:'per1', title: '医疗单位比例',width:105},
+    {field:'per2', title: '医疗个人比例',width:105},
+    {field:'fin1', title: '大病单位',width:90},
+    {field:'fin2', title: '大病个人',width:90},
+    {field:'per3', title: '生育单位比例',width:105},
     {fixed: 'right', title: '操作', toolbar: '#bar_medicalinsurance'}
 ]];
 
 //社保规则字段集合
 var columns_socialsecurity = [[
     {field:'city', title: '所属城市',width:100},
-    {field:'time', title: '生效时间',width:100},
-    {field:'cardinal', title: '基数',width:80},
-    {field:'yanglaodanwei', title: '养老单位比例',width:105},
-    {field:'yanglaogeren', title: '养老个人比例',width:105},
-    {field:'gongshangdanwei', title: '工伤单位比例',width:105},
-    {field:'gongshangbuchong', title: '工伤补充',width:95},
-    {field:'shiyedanwei', title: '失业单位比例',width:105},
-    {field:'shiyegeren', title: '失业个人比例',width:105},
+    {field:'start', title: '生效时间',width:100},
+    {field:'base', title: '基数',width:80},
+    {field:'per1', title: '养老单位比例',width:105},
+    {field:'per2', title: '养老个人比例',width:105},
+    {field:'per3', title: '工伤单位比例',width:105},
+    {field:'extra', title: '工伤补充',width:95},
+    {field:'per4', title: '失业单位比例',width:105},
+    {field:'per5', title: '失业个人比例',width:105},
     {fixed: 'right', title: '操作', toolbar: '#bar_socialsecurity'}
 ]];
 
 //公积金规则字段集合
 var columns_accumulation = [[
     {field:'city', title: '所属城市',width:100},
-    {field:'time', title: '生效时间',width:100},
-    {field:'floor', title: '基金下限',width:80},
-    {field:'upper', title: '基金上限',width:80},
-    {field:'danweibili', title: '比例上限',width:90},
-    {field:'gerenbili', title: '比例下限',width:90},
+    {field:'start', title: '生效时间',width:100},
+    {field:'min', title: '基金下限',width:80},
+    {field:'max', title: '基金上限',width:80},
+    {field:'per1', title: '比例下限',width:90},
+    {field:'per2', title: '比例上限',width:90},
     {fixed: 'right', title: '操作', toolbar: '#bar_accumulation'}
 ]];
 
@@ -143,8 +143,8 @@ var columns_pool = [[
 //合作客户管理字段集合
 var columns_cooperativeclient = [[
     {field:'name', title: '客户名称'},
-    {field:'nature', title: '客户性质',width:200},
-    {field:'linkman', title: '联系人',width:200},
+    {field:'category', title: '客户性质',width:200},
+    {field:'contact', title: '联系人',width:200},
     {field:'phone', title: '联系电话',width:200},
     {fixed: 'right', title: '操作', toolbar: '#bar_cooperativeclient',width:300}
 ]];
@@ -153,8 +153,8 @@ var columns_cooperativeclient = [[
 var columns_supplier = [[
     {field:'name', title: '名称'},
     {field:'nature', title: '性质',width:80},
-    {field:'sort', title: '业务类别',width:90},
-    {field:'linkman', title: '联系人',width:100},
+    {field:'business', title: '业务类别',width:90},
+    {field:'contact', title: '联系人',width:100},
     {field:'phone', title: '联系电话',width:150},
     {fixed: 'right', title: '操作', toolbar: '#bar_supplier',width:200}
 ]];

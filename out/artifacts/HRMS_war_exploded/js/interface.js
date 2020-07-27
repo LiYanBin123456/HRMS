@@ -102,8 +102,70 @@ var InterfaceMedicalinsurance = function() {
         var para = {op:"updateMedicalRule",rule:JSON.stringify(rule)};
         access(url,para,1,success,fail);
     };
+    /**
+     * 查找医保规则
+     * @param id
+     * @param success
+     * @param fail
+     */
     this.getMedicalRule = function (id,success,fail) {
         var para = {op:"getMedicalRule",id:id};
+        access(url,para,0,success,fail);
+    };
+
+};
+
+//社保相关接口
+var InterfaceSocialsecurity = function() {
+    var url = base+"/rule";//servlet的url地址
+    /**
+     * 获取社保规则列表
+     * @param param
+     * @param success
+     * @param fail
+     */
+    this.getSocialRules = function(param,success,fail){
+        var para = {op: "getSocialRules", param:JSON.stringify(param)};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加医保规则
+     * @param rule
+     * @param success
+     * @param fail
+     */
+    this.insertSocialRule = function (rule,success,fail) {
+        var para = {op: "insertSocialRule",rule:JSON.stringify(rule)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 删除社保规则
+     * @param id
+     * @param success
+     * @param fail
+     */
+    this.deleteSocialRule = function (id,success,fail) {
+        var para = {op:"deleteSocialRule",id:id};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改社保规则
+     * @param rule
+     * @param success
+     * @param fail
+     */
+    this.updateSocialRule = function (rule,success,fail) {
+        var para = {op:"updateSocialRule",rule:JSON.stringify(rule)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 查找社保规则
+     * @param id
+     * @param success
+     * @param fail
+     */
+    this.getSocialRule = function (id,success,fail) {
+        var para = {op:"getSocialRule",id:id};
         access(url,para,0,success,fail);
     };
 
@@ -782,6 +844,7 @@ var InterfaceEnterprise = function () {
     };
 };
 
+var iSocialsecurity =new InterfaceSocialsecurity();
 var iMedicalinsurance =new InterfaceMedicalinsurance();
 var iNotice =new InterfaceNotice();
 var iAccount = new InterfaceAccount();

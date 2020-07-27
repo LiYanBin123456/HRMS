@@ -51,7 +51,7 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>档案编号</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="ID" required="" autocomplete="off" class="layui-input"></div>
+                        <input type="text" name="id" required="" autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
@@ -63,7 +63,7 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>客户性质</label>
                     <div class="layui-input-inline">
-                        <select name="nature" lay-verify="required">
+                        <select name="category" lay-verify="required">
                             <option value=""></option>
                             <option value="0">政府部门</option>
                             <option value="1">事业单位</option>
@@ -83,7 +83,7 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>联系人</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="linkman" required="" lay-verify="nikename" autocomplete="off"
+                        <input type="text" name="contact" required="" lay-verify="nikename" autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
@@ -98,7 +98,7 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>微信号</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="weixin" required="" autocomplete="off" class="layui-input"></div>
+                        <input type="text" name="wx" required="" autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
@@ -111,7 +111,7 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>地址</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="site" required="" autocomplete="off" class="layui-input"></div>
+                        <input type="text" name="address" required="" autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
@@ -123,7 +123,7 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>客户简介</label>
                     <div class="layui-input-block">
-                        <textarea name="concise" placeholder="请输入内容" class="layui-textarea"></textarea>
+                        <textarea name="intro" placeholder="请输入内容" class="layui-textarea"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -138,28 +138,28 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>统一社会信用代码</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="credit" required="" lay-verify="nikename" autocomplete="off"
+                        <input type="text" name="code" required="" autocomplete="off"
                                class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>开户行</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="bank" required="" lay-verify="nikename" autocomplete="off"
+                        <input type="text" name="bank" required=""  autocomplete="off"
                                class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>银行账户</label>
                     <div class="layui-input-inline">
-                        <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="account"
+                        <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="cardNo"
                                required="" autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>联系人</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="linkman" required="" lay-verify="nikename" autocomplete="off"
+                        <input type="text" name="contact" required="" lay-verify="nikename" autocomplete="off"
                                class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
@@ -173,7 +173,7 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>公司地址</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="site" required="" autocomplete="off" class="layui-input"></div>
+                        <input type="text" name="address" required="" autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
@@ -194,7 +194,7 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>备注</label>
                     <div class="layui-input-block">
-                        <textarea name="comment" placeholder="请输入内容" class="layui-textarea"></textarea>
+                        <textarea name="intro" placeholder="请输入内容" class="layui-textarea"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item">
