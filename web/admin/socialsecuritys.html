@@ -147,7 +147,7 @@
                 });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
                 iSocialsecurity.getSocialRules(param_query,function (result) {
-                    table.reload('tbl_notice', {
+                    table.reload('tbl_socialsecurity', {
                         data:result.rows
                     });
                 });
