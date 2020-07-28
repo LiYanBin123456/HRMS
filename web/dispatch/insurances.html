@@ -139,7 +139,7 @@
             }
 
             function getInsurances() {
-                var result = {total:100,rows:[{name:"团队意外险",coverage:"800000",yiliao:"200000",allowance:"100元/天",time:"上班时间",personnel:"1、2、3、4类",restrict:"16-70"},{name:"雇主责任险",coverage:"900000",yiliao:"200000",allowance:"100元/天",time:"24小时",personnel:"1、2、3类",restrict:"18-60"}]};
+                var result = {total:100,rows:[{name:"团队意外险",fin1:"800000",fin2:"200000",allowance:"100元/天",period:"上班时间",allow:"1、2、3、4类",min:"16",max:"70"},{name:"雇主责任险",fin1:"900000",fin2:"200000",allowance:"100元/天",period:"24小时",allow:"1、2、3类",min:"18",max:"60"}]};
                 table.reload('tbl_insurance', {
                     data:result.rows
                 });
