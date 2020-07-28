@@ -141,7 +141,7 @@
             }
 
             function getSocialsecuritys() {
-                /*var result = {total:100,rows:[{city:"九江市",time:"2019-06",cardinal:"2500",yanglaodanwei:"3%",yanglaogeren:"1%",gongshangdanwei:"3%",gongshangbuchong:"4",shiyedanwei:"3%",shiyegeren:"1%"},{city:"九江市",time:"2004-12",cardinal:"2500",yanglaodanwei:"2%",yanglaogeren:"2%",gongshangdanwei:"2%",gongshangbuchong:"4",shiyedanwei:"2%",shiyegeren:"2%"}]};
+                /*var result = {total:100,rows:[{city:"九江市",start:"2019-06",base:"2500",per1:"3%",per2:"1%",per3:"3%",extra:"4",per4:"3%",per5:"1%"},{city:"九江市",start:"2004-12",base:"2500",per1:"2%",per2:"2%",per3:"2%",extra:"4",per4:"2%",per5:"2%"}]};
                 table.reload('tbl_socialsecurity', {
                     data:result.rows
                 });*/
@@ -183,7 +183,7 @@
 
             //删除公告
             function del(socialsecurity) {
-                layer.confirm('确定删除'+socialsecurity.city+socialsecurity.time+'的社保规则', {icon: 3, title:'删除'}, function(index){
+                layer.confirm('确定删除'+socialsecurity.city+socialsecurity.start+'的社保规则', {icon: 3, title:'删除'}, function(index){
                     iSocialsecurity.delete(socialsecurity.id,function () {
                         layer.close(index);
                         getSocialsecuritys();

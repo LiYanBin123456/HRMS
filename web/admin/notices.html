@@ -177,7 +177,7 @@
 
             //删除公告
             function del(notice) {
-                layer.confirm('确定删除'+notice.title, {icon: 3, title:'删除公告'}, function(index){
+                layer.confirm('确定删除'+notice.title+'的公告', {icon: 3, title:'删除公告'}, function(index){
                     iNotice.delete(notice.id,function () {
                         layer.close(index);
                         getNotices();
