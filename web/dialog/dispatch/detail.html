@@ -31,8 +31,8 @@
             <!--顶部工具栏-->
             <div class="layui-hide" id="top_bar_detail">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
-                <button class="layui-btn layui-btn-sm" lay-event="addrecord"><i class="layui-icon "></i> 社保补缴</button>
-                <button class="layui-btn layui-btn-sm" lay-event="addrecord"><i class="layui-icon "></i> 社保补差</button>
+                <button class="layui-btn layui-btn-sm" lay-event="append"><i class="layui-icon "></i> 社保补缴</button>
+                <button class="layui-btn layui-btn-sm" lay-event="balance"><i class="layui-icon "></i> 社保补差</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导出</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导入</button>
                 <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 下载模板</button>
@@ -143,8 +143,11 @@
                         case 'insert':
                             showInsertDlg();
                             break;
-                        case 'addrecord':
-                            showAddrecordDlg();
+                        case 'append':
+                            showAppendDlg();
+                            break;
+                        case 'balance':
+                            showBalanceDlg();
                             break;
                 };
                 });
@@ -167,13 +170,22 @@
 
             //模糊查找
 
-            //打开详情对话框
-
-            //打开添加对话框
-            function showInsertDlg() {
+            //打开添加明细对话框
+            function showAppendDlg() {
                 var content = "staff.html";
                 layer.open({
-                    title:"添加",
+                    title:"添加明细",
+                    type: 2,
+                    area: ['800px', '500px'],
+                    content: content
+                });
+            }
+
+            //打开添加对话框
+            function showAppendDlg() {
+                var content = "appendDetail.html";
+                layer.open({
+                    title:"社保补缴",
                     type: 2,
                     area: ['800px', '500px'],
                     content: content
@@ -181,10 +193,10 @@
             }
 
             //打开补录对话框
-            function showAddrecordDlg() {
-                var content = "addrecord.html";
+            function showBalanceDlg() {
+                var content = "balance.html";
                 layer.open({
-                    title:"补录",
+                    title:"社保补差",
                     type: 2,
                     area: ['800px', '500px'],
                     content: content

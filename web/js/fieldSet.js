@@ -261,14 +261,16 @@ var columns_staff  = [[
     {field:'unit', title: '派遣单位',width:200}
 ]];
 
-//工资明细补录字段集合
-var columns_addrecord  = [[
+//工资明细添加字段集合
+var columns_staff_with_base  = [[
     {type:'checkbox'},
-    {field:'ID', title: '身份证号',width:400},
+    {field:'ID', title: '身份证号',width:200},
     {field:'name', title: '姓名',width:100},
-    {field:'shebao', title: '社保基数',width:100},
-    {field:'yibao', title: '医保基数',width:100},
+    {field:'Medicare', title: '医保基数',width:200,edit: 'number'},
+    {field:'social', title: '社保基数',width:200,edit: 'number'}
 ]];
+
+
 
 //工资查看日志字段集合
 var columns_log  = [[
