@@ -61,7 +61,6 @@
                     </div>
                 </div>
             </form>
-            <div id="task" class="demo-transfer"></div>
         </div>
     </div>
 </div>
@@ -74,34 +73,17 @@
     var op = "insert";
     var form;//表单对象
     var table;
-    var transfer;
 
     $(function () {
         loadLayuiModule();
     });
 
     function loadLayuiModule() {
-        layui.use(['table', 'form', 'jquery','transfer'], function () {
+        layui.use(['table', 'form', 'jquery'], function () {
             form = layui.form;
             table = layui.table;
-            transfer = layui.transfer;
             initData();
-            initTask();
         });
-    }
-
-    function initTask() {
-        var dispatches = [
-            {"value": "1", "title": "九江市鲲鹏人力资源有限"}
-            ,{"value": "2", "title": "江西国盛人力资源有限公司"}
-            ,{"value": "3", "title": "九江杰博"}
-        ];
-        transfer.render({
-            elem: '#task'
-            ,data: dispatches
-            ,title: ['待分配客户', '已分配客户']
-            ,showSearch: true
-        })
     }
 
     function initData() {
