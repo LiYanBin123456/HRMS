@@ -133,9 +133,9 @@ var columns_accounts  = [[
 
 //人才字段集合
 var columns_pool = [[
-    {field:'ID', title: '身份证号',width:200},
+    {field:'cardid', title: '身份证号',width:200},
     {field:'name', title: '姓名',width:200},
-    {field:'education', title: '学历',width:230},
+    {field:'degree', title: '学历',width:230},
     {field:'phone', title: '联系电话',width:230},
     {fixed: 'right', title: '操作', toolbar: '#bar_pool'}
 ]];
@@ -178,9 +178,9 @@ var columns_wage = [[
 
 //内部员工管理字段集合
 var columns_internalstaff = [[
-    {field:'ID', title: '身份证号',width:170},
+    {field:'cardid', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
-    {field:'education', title: '学历',width:80},
+    {field:'degree', title: '学历',width:80},
     {field:'phone', title: '联系电话',width:120},
     {field:'department', title: '所属部门',width:120},
     {title: '操作', toolbar: '#bar_internalstaff'}
@@ -189,22 +189,22 @@ var columns_internalstaff = [[
 //外派员工管理字段集合
 var columns_expatriate = [[
     {type:'checkbox'},
-    {field:'ID', title: '身份证号',width:170},
+    {field:'cardid', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
-    {field:'education', title: '学历',width:100},
+    {field:'degree', title: '学历',width:100},
     {field:'phone', title: '联系电话',width:120},
-    {field:'unit', title: '派遣单位',width:150},
+    {field:'department', title: '派遣单位',width:150},
     { title: '操作', toolbar: '#bar_expatriate'}
 ]];
 
 //员工合同字段集合
 var columns_staffcontract  = [[
     {type:'checkbox'},
-    {field:'ID', title: '身份证号码',width:170},
+    {field:'cardid', title: '身份证号码',width:170},
     {field:'name', title: '姓名',width:100},
-    {field:'time', title: '生效时间',width:100},
-    {field:'finishtime', title: '到期时间',width:100},
-    {field:'number', title: '签订次数',width:80},
+    {field:'start', title: '生效时间',width:100},
+    {field:'end', title: '到期时间',width:100},
+    {field:'times', title: '签订次数',width:80},
     { title: '操作', toolbar: '#bar_staffcontract'}
 ]];
 
@@ -305,46 +305,46 @@ var columns_settlements2  = [[
     {type:'checkbox'},
     {field:'unit', title: '用工企业',width:180},
     {field:'month', title: '月份',width:80},
-    {field:'time', title: '总工时',width:70},
+    {field:'hours', title: '总工时',width:70},
     {field:'price', title: '单价',width:70},
-    {field:'tax', title: '交通费',width:70},
-    {field:'add', title: '附加',width:70},
+    {field:'traffic', title: '交通费',width:70},
+    {field:'extra', title: '附加',width:70},
     {field:'summary', title: '总额',width:80},
-    {field:'state', title: '状态',width:70},
+    {field:'status', title: '状态',width:70},
     {title: '操作', toolbar: '#bar_settlements2'}
 ]];
 
 //小时工工资管理明细字段集合(录入模式)
 var columns_detail2_input  = [[
-    {field:'ID', title: '身份证号',width:160},
+    {field:'cardid', title: '身份证号',width:160},
     {field:'name', title: '姓名',width:80},
-    {field:'time', title: '工时',width:80,edit: 'text'},
-    {field:'meal', title: '餐费',width:80,edit: 'text'},
+    {field:'hours', title: '工时',width:80,edit: 'text'},
+    {field:'food', title: '餐费',width:80,edit: 'text'},
     {field:'traffic', title: '交通费',width:80,edit: 'text'},
-    {field:'zhusu', title: '住宿费',width:80,edit: 'text'},
-    {field:'shuidian', title: '水电费',width:80,edit: 'text'},
-    {field:'baoxian', title: '保险',width:80,edit: 'text'},
-    {field:'qita1', title: '其他1',width:80,edit: 'text'},
-    {field:'qita2', title: '其他2',width:80,edit: 'text'},
+    {field:'accommodation', title: '住宿费',width:80,edit: 'text'},
+    {field:'utilities', title: '水电费',width:80,edit: 'text'},
+    {field:'insurance', title: '保险',width:80,edit: 'text'},
+    {field:'other1', title: '其他1',width:80,edit: 'text'},
+    {field:'other2', title: '其他2',width:80,edit: 'text'},
     {fixed: 'right', title: '操作', toolbar: '#bar_detail2'}
 ]];
 
 //小时工工资管理明细字段集合(完整模式)
 var columns_detail2_full  = [[
-    {field:'ID', title: '身份证号'},
+    {field:'cardid', title: '身份证号'},
     {field:'name', title: '姓名',width:80},
-    {field:'time', title: '工时',width:80},
-    {field:'unitprice', title: '单价',width:80},
-    {field:'meal', title: '餐费',width:80},
+    {field:'hours', title: '工时',width:80},
+    {field:'price', title: '单价',width:80},
+    {field:'food', title: '餐费',width:80},
     {field:'traffic', title: '交通费',width:80},
-    {field:'zhusu', title: '住宿费',width:80},
-    {field:'shuidian', title: '水电费',width:80},
-    {field:'baoxian', title: '保险',width:80},
-    {field:'geshui', title: '个税',width:80},
-    {field:'qita1', title: '其他1',width:80},
-    {field:'qita2', title: '其他2',width:80},
-    {field:'yingfu', title: '应付金额',width:80},
-    {field:'shifa', title: '实发金额',width:80},
+    {field:'accommodation', title: '住宿费',width:80},
+    {field:'utilities', title: '水电费',width:80},
+    {field:'insurance', title: '保险',width:80},
+    {field:'tax', title: '个税',width:80},
+    {field:'other1', title: '其他1',width:80},
+    {field:'other2', title: '其他2',width:80},
+    {field:'payable', title: '应付金额',width:80},
+    {field:'paid', title: '实发金额',width:80},
 ]];
 
 //小时工工资明细添加字段集合
@@ -425,13 +425,13 @@ var columns_special  = [[
 
 //社保参保字段集合
 var columns_socialsc  = [[
-    {field:'ID', title: '身份证号',width:170},
-    {field:'personal', title: '个人代码',width:80},
+    {field:'cardid', title: '身份证号',width:170},
+    {field:'code', title: '个人代码',width:80},
     {field:'name', title: '姓名',width:80},
-    {field:'insured', title: '参保时间',width:80},
-    {field:'wage', title: '月缴费工资',width:100},
+    {field:'start', title: '参保时间',width:80},
+    {field:'money', title: '月缴费工资',width:100},
     {field:'time', title: '工作时间',width:100},
-    {field:'state', title: '参保状态',width:80},
+    {field:'status', title: '参保状态',width:80},
     {fixed: 'right', title: '操作', toolbar: '#bar_socialsc'}
 ]];
 
@@ -481,12 +481,13 @@ var columns_accumulationadd  = [[
 //保险产品字段集合
 var columns_insurance = [[
     {field:'name', title: '产品名称',width:180},
-    {field:'coverage', title: '产品保额',width:80},
-    {field:'yiliao', title: '医疗保额',width:80},
+    {field:'fin1', title: '产品保额',width:80},
+    {field:'fin2', title: '医疗保额',width:80},
     {field:'allowance', title: '住院津贴',width:80},
-    {field:'time', title: '保障时段',width:100},
-    {field:'personnel', title: '可参保人员',width:130},
-    {field:'restrict', title: '年龄限制',width:100},
+    {field:'period', title: '保障时段',width:100},
+    {field:'allow', title: '可参保人员',width:130},
+    {field:'min', title: '年龄下限',width:100},
+    {field:'max', title: '年龄上限',width:100},
     {fixed: 'right', title: '操作', toolbar: '#bar_insurance'}
 ]];
 

@@ -183,7 +183,7 @@
 
             //删除公告
             function del(accumulation) {
-                layer.confirm('确定删除'+accumulation.city+accumulation.time+'的公积金规则', {icon: 3, title:'删除'}, function(index){
+                layer.confirm('确定删除'+accumulation.city+accumulation.start+'的公积金规则', {icon: 3, title:'删除'}, function(index){
                     iAccumulation.delete(accumulation.id,function () {
                         layer.close(index);
                         getAccumulations();

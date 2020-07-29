@@ -37,7 +37,7 @@
                     <input type="text" class="layui-input" id="filter_month" placeholder="按月份过滤">
                 </div>
                 <div class="layui-input-inline">
-                    <select name="state"   lay-verify="required" >
+                    <select name="status"   lay-verify="required" >
                         <option value="">按状态过滤</option>
                         <option value="0">编辑</option>
                         <option value="1">提交</option>
@@ -167,7 +167,7 @@
             }
 
             function getSettlements2() {
-                var result = {total:100,rows:[{unit:"蓝科",month:"2020-06",time:"500",price:"20",tax:"600",add:"0",summary:"5000",state:"申报中"},{unit:"典展",month:"2020-06",time:"600",price:"18",tax:"0",add:"0",summary:"12000",state:"已审核"}]};
+                var result = {total:100,rows:[{unit:"蓝科",month:"2020-06",hours:"500",price:"20",traffic:"600",extra:"0",summary:"5000",state:"申报中"},{unit:"典展",month:"2020-06",hours:"600",price:"18",traffic:"0",extra:"0",summary:"12000",state:"已审核"}]};
                 table.reload('tbl_settlements2', {
                     data:result.rows
                 });

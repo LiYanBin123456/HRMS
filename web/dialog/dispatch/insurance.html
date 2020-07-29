@@ -28,13 +28,13 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><span class="x-red">*</span>产品保额</label>
         <div class="layui-input-inline">
-            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="coverage" required="" autocomplete="off" class="layui-input">
+            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="fin1" required="" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label"><span class="x-red">*</span>医疗保额</label>
         <div class="layui-input-inline">
-            <input type="text" name="yiliao" required="" autocomplete="off" class="layui-input">
+            <input type="text" name="fin2" required="" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
@@ -47,7 +47,7 @@
                         <label  class="layui-form-label">
                         <span class="x-red">*</span>选择保险时段</label>
                             <div class="layui-input-inline">
-                                <select name="time" lay-verify="required">
+                                <select name="period" lay-verify="required">
                                     <option value=""></option>
                                     <option value="0">上班时间</option>
                                     <option value="1">24小时</option>
@@ -58,13 +58,13 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><span class="x-red">*</span>年龄下限</label>
         <div class="layui-input-inline">
-            <input type="text" name="restrict" required="" autocomplete="off" class="layui-input">
+            <input type="text" name="min" required="" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label"><span class="x-red">*</span>年龄上限</label>
         <div class="layui-input-inline">
-            <input type="text" name="restrict" required="" autocomplete="off" class="layui-input">
+            <input type="text" name="max" required="" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item" pane="">
