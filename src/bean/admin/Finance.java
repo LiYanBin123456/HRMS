@@ -18,8 +18,12 @@ public class Finance {
     private String phone;
     //公司地址
     private String address;
+    //大额行号
+    private String bankNo;
     //公司余额
     private float balance;
+    //备注
+    private String comments;
 
     public float getBalance() {
         return balance;

@@ -1,7 +1,7 @@
 package servlet.admin;
 
 import bean.admin.RuleFund;
-import bean.admin.RuleMedical;
+import bean.admin.RuleMedicare;
 import bean.admin.RuleSocial;
 import com.alibaba.fastjson.JSONObject;
 import database.*;
@@ -132,7 +132,7 @@ public class RuleServlet extends HttpServlet {
 
     //增加医保规则
     private String insertMedicalRule(Connection conn, HttpServletRequest request) {
-        RuleMedical rule = JSONObject.parseObject(request.getParameter("rule"), RuleMedical.class);
+        RuleMedicare rule = JSONObject.parseObject(request.getParameter("rule"), RuleMedicare.class);
         DaoUpdateResult res = medicalService.insertMedicalRule(conn,rule);
         return JSONObject.toJSONString(res);
     }
@@ -144,7 +144,7 @@ public class RuleServlet extends HttpServlet {
     }
     //修改医保规则
     private String updateMedical(Connection conn, HttpServletRequest request) {
-        RuleMedical rule = JSONObject.parseObject(request.getParameter("rule"), RuleMedical.class);
+        RuleMedicare rule = JSONObject.parseObject(request.getParameter("rule"), RuleMedicare.class);
         DaoUpdateResult res = medicalService.updateMedicalRule(conn,rule);
         return JSONObject.toJSONString(res);
     }

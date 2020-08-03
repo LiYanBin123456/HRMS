@@ -1,0 +1,55 @@
+package bean.admin;
+
+import java.sql.Date;
+
+//员工补充表
+public class EmployeeExtra {
+    //员工id
+    private long eid;
+    //档案编号
+    private String rid;
+    //毕业院校
+    private String school;
+    //毕业专业
+    private String major;
+    /**户口性质
+     0_外地城镇、
+     1_本地城镇、
+     2_外地农村、
+     3_城镇、
+     4_农村、
+     5_港澳台、
+     6_外籍
+     *
+     */
+    private byte household;
+    //户籍地址
+    private String address;
+    //离职时间
+    private Date date1;
+    //退休时间
+    private Date date2;
+    /**离职原因(默认为null)
+     0_合同到期、
+     1_被用人单位解除劳动合同、
+     2_被用人单位开除、
+     3_被用人单位除名、
+     4_被用人单位辞退、
+     5_公司倒闭、
+     6_公司破产、
+     7_单位人员减少、
+     8_养老在职转退休、
+     9_参军、
+     10_入学、
+     11_劳改劳教、
+     12_出国定居、
+     13_异地转移、
+     14_不足缴费年限、
+     15_人员失踪、
+     16_错误申报、
+     17_其他原因
+     *
+     */
+    private byte leave;
+
+}

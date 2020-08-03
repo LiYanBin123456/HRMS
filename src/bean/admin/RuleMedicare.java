@@ -3,7 +3,7 @@ package bean.admin;
 import java.sql.Date;
 
 //医保规则
-public class RuleMedical {
+public class RuleMedicare {
     private long id;
     private String city;//地市代码
     private Date start;//开始日期
@@ -14,11 +14,11 @@ public class RuleMedical {
     private float fin1;//大病单位
     private float fin2;//大病个人
 
-    public RuleMedical() {
+    public RuleMedicare() {
     }
 
 
-    public RuleMedical(long id, String city, Date start, float base, float per1, float per2, float per3, float fin1, float fin2) {
+    public RuleMedicare(long id, String city, Date start, float base, float per1, float per2, float per3, float fin1, float fin2) {
         this.id = id;
         this.city = city;
         this.start = start;
@@ -105,7 +105,7 @@ public class RuleMedical {
 
     @Override
     public String toString() {
-        return "RuleMedical{" +
+        return "RuleMedicare{" +
                 "id=" + id +
                 ", city='" + city + '\'' +
                 ", start='" + start + '\'' +

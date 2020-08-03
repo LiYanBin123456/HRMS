@@ -21,8 +21,8 @@ public class ContractDao {
     }
 
     public DaoUpdateResult insertContract(Connection conn, Contract c) {
-        String sql = "insert into contract (id,aid,bid,type,start,end,status,intro,invoice,project,times) values (?,?,?,?,?,?,?,?,?,?,?)";
-        Object []params = {c.getId(),c.getAid(),c.getBid(),c.getType(),c.getStart(),c.getEnd(),c.getStatus(),c.getIntro(),c.getInvoice(),c.getProject(),c.getTimes()};
+        String sql = "insert into contract (id,aid,bid,type,start,end,status,intro,comments,project,times) values (?,?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {c.getId(),c.getAid(),c.getBid(),c.getType(),c.getStart(),c.getEnd(),c.getStatus(),c.getComments(),c.getInvoice(),c.getProject(),c.getTimes()};
         return DbUtil.insert(conn,sql,params);
     }
 

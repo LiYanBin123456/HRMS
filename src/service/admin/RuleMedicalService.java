@@ -1,6 +1,6 @@
 package service.admin;
 
-import bean.admin.RuleMedical;
+import bean.admin.RuleMedicare;
 import dao.admin.RuleMedicalDao;
 import database.DaoQueryListResult;
 import database.DaoQueryResult;
@@ -20,11 +20,11 @@ public class RuleMedicalService {
         return reluMedicalDao.getMedicalRule(conn,id);
     }
 
-    public DaoUpdateResult updateMedicalRule(Connection conn, RuleMedical rule) {
+    public DaoUpdateResult updateMedicalRule(Connection conn, RuleMedicare rule) {
         return reluMedicalDao.updateMedicalRule(conn,rule);
     }
 
-    public DaoUpdateResult insertMedicalRule(Connection conn, RuleMedical rule) {
+    public DaoUpdateResult insertMedicalRule(Connection conn, RuleMedicare rule) {
         return reluMedicalDao.insertMedicalRule(conn,rule);
     }
 

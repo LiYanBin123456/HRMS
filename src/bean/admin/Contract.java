@@ -18,7 +18,7 @@ public class Contract {
     private Date start;//合同生效时间
     private Date end;//合同失效时间
     private byte status;//状态：0-正常；1-过期
-    private String intro;//备注
+    private String comments;//备注
     /**发票类型(派遣公司),其他类型的合同默认为null
      * 0_有增值税专用发票（全额）
      * 1_增值税专用发票（差额）
@@ -84,14 +84,12 @@ public class Contract {
         this.end = end;
     }
 
-
-
-    public String getIntro() {
-        return intro;
+    public String getComments() {
+        return comments;
     }
 
-    public void setIntro(String intro) {
-        this.intro = intro;
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 
     public byte getStatus() {
@@ -123,7 +121,7 @@ public class Contract {
     public Contract() {
     }
 
-    public Contract(String id, long aid, long bid, String type, Date start, Date end, byte status, String intro, byte invoice, String project, byte times) {
+    public Contract(String id, long aid, long bid, String type, Date start, Date end, byte status, String comments, byte invoice, String project, byte times) {
         this.id = id;
         this.aid = aid;
         this.bid = bid;
@@ -131,7 +129,7 @@ public class Contract {
         this.start = start;
         this.end = end;
         this.status = status;
-        this.intro = intro;
+        this.comments = comments;
         this.invoice = invoice;
         this.project = project;
         this.times = times;
@@ -147,7 +145,7 @@ public class Contract {
                 ", start='" + start + '\'' +
                 ", end='" + end + '\'' +
                 ", status=" + status +
-                ", intro='" + intro + '\'' +
+
                 ", invoice=" + invoice +
                 ", project='" + project + '\'' +
                 ", times=" + times +
