@@ -3,7 +3,7 @@ package dao.admin;
 
 
 
-import bean.admin.Dispatch;
+import bean.client.Dispatch;
 import database.*;
 import java.sql.Connection;
 

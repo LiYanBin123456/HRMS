@@ -1,4 +1,4 @@
-package bean.admin;
+package bean.contract;
 
 import java.sql.Date;
 

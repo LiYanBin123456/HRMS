@@ -1,6 +1,6 @@
 package servlet.admin;
 
-import bean.admin.Contract;
+import bean.contract.Contract;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import dao.admin.ContractDao;

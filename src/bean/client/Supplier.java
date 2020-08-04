@@ -1,5 +1,4 @@
-package bean.admin;
-
+package bean.client;
 //供应商
 public class Supplier extends Dispatch {
     private Dispatch dispatch;

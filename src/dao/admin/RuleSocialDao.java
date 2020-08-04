@@ -1,7 +1,7 @@
 package dao.admin;
 
 
-import bean.admin.RuleSocial;
+import bean.rule.RuleSocial;
 import database.*;
 
 import java.sql.Connection;

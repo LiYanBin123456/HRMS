@@ -1,6 +1,6 @@
 package service.admin;
 
-import bean.admin.Dispatch;
+import bean.client.Dispatch;
 import dao.admin.ClientDao;
 import dao.admin.FinanceDao;
 import database.DaoQueryListResult;

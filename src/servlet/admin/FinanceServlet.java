@@ -1,6 +1,6 @@
 package servlet.admin;
 
-import bean.admin.Finance;
+import bean.client.Finance;
 import com.alibaba.fastjson.JSONObject;
 import database.*;
 import service.admin.FinanceService;

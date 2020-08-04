@@ -1,6 +1,6 @@
 package service.admin;
 
-import bean.admin.RuleFund;
+import bean.rule.RuleFund;
 import dao.admin.RuleFundDao;
 import database.DaoQueryListResult;
 import database.DaoQueryResult;

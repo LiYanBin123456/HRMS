@@ -1,6 +1,6 @@
 package dao.admin;
 
-import bean.admin.Contract;
+import bean.contract.Contract;
 import database.*;
 
 import java.sql.Connection;

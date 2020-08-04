@@ -1,6 +1,6 @@
 package dao.admin;
 
-import bean.admin.Finance;
+import bean.client.Finance;
 import database.DaoQueryResult;
 import database.DaoUpdateResult;
 import database.DbUtil;

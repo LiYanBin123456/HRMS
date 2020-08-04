@@ -1,4 +1,4 @@
-package bean.admin;
+package bean.employee;
 //工资卡
 public class PayCard {
     private long eid;//员工id 外键

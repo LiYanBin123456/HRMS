@@ -1,4 +1,4 @@
-package bean.admin;
+package bean.rule;
 
 import java.sql.Date;
 

@@ -1,4 +1,4 @@
-package bean.admin;
+package bean.employee;
 //员工个税专项扣除
 public class EmployeeSetting {
     private long eid;//员工id

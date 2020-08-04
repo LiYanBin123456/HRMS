@@ -1,4 +1,4 @@
-package bean.admin;
+package bean.client;
 
 //派遣方客户
 public class Dispatch {

@@ -1,4 +1,4 @@
-package bean.admin;
+package bean.client;
 
 //客户服务型项目
 public class Finance {

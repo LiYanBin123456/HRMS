@@ -1,6 +1,6 @@
 package service.admin;
 
-import bean.admin.RuleSocial;
+import bean.rule.RuleSocial;
 import dao.admin.RuleSocialDao;
 import database.DaoQueryListResult;
 import database.DaoQueryResult;

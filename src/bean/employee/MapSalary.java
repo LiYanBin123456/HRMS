@@ -1,4 +1,4 @@
-package bean.admin;
+package bean.employee;
 
 import java.sql.Date;
 

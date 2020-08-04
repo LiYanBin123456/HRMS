@@ -1,8 +1,8 @@
 package servlet.admin;
 
-import bean.admin.RuleFund;
-import bean.admin.RuleMedicare;
-import bean.admin.RuleSocial;
+import bean.rule.RuleFund;
+import bean.rule.RuleMedicare;
+import bean.rule.RuleSocial;
 import com.alibaba.fastjson.JSONObject;
 import database.*;
 import service.admin.RuleFundService;

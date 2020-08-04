@@ -1,4 +1,4 @@
-package bean.admin;
+package bean.client;
 
 //合作客户
 public class Cooperation extends Dispatch{

@@ -1,7 +1,7 @@
 package servlet.admin;
 
 
-import bean.admin.Dispatch;
+import bean.client.Dispatch;
 import com.alibaba.fastjson.*;
 import dao.admin.ContractDao;
 import database.*;

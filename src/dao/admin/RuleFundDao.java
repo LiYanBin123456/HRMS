@@ -1,6 +1,6 @@
 package dao.admin;
 
-import bean.admin.RuleFund;
+import bean.rule.RuleFund;
 import database.*;
 
 import java.sql.Connection;

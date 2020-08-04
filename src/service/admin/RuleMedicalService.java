@@ -1,6 +1,6 @@
 package service.admin;
 
-import bean.admin.RuleMedicare;
+import bean.rule.RuleMedicare;
 import dao.admin.RuleMedicalDao;
 import database.DaoQueryListResult;
 import database.DaoQueryResult;

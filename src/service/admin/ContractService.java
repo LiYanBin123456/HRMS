@@ -1,6 +1,6 @@
 package service.admin;
 
-import bean.admin.Contract;
+import bean.contract.Contract;
 import dao.admin.ClientDao;
 import dao.admin.ContractDao;
 import database.*;
