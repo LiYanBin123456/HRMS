@@ -19,6 +19,113 @@ var InterfaceAccount = function () {
     };
 }
 
+//面向平台客户相关接口
+var InterfaceCustemer = function() {
+    var url = base+"/client";
+    /**
+     * 获取合作客户列表
+     * @param param
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.getList = function(param,category,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param), category: 0};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加合作客户
+     * @param client
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.insert = function (client,category,success,fail) {
+        var para = {op: "insert",client:JSON.stringify(client), category: 0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取合作客户信息
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.get = function (id,category,success,fail) {
+        var para = {op:"get",id:id, category: 0};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改合作客户信息
+     * @param client
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.update = function (client,category,success,fail) {
+        var para = {op:"update",client:JSON.stringify(client), category: 0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取财务信息
+     * @param id
+     * @param success
+     * @param fail
+     */
+    this.getFinance = function (id,success,fail) {
+        var para = {op:"getFinance",id:id};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加财务信息
+     * @param finance
+     * @param success
+     * @param fail
+     */
+    this.insertFinance = function (finance,success,fail) {
+        var para = {op: "insertFinance",finance:JSON.stringify(finance)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 修改财务信息
+     * @param finance
+     * @param success
+     * @param fail
+     */
+    this.updateFinance = function (finance,success,fail) {
+        var para = {op:"updateFinance",finance:JSON.stringify(finance)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 删除合作客户
+     * @param id
+     * @param category
+     * @param status
+     * @param success
+     * @param fail
+     */
+    this.delete = function (id,category,status,success,fail) {
+        var para = {op:"delete",id:id, category: 0,status: 1};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 分配管理员
+     * @param aid
+     * @param category
+     * @param cids
+     * @param success
+     * @param fail
+     */
+    this.allocate = function (aid,category,cids,success,fail) {
+        var para = {op:"allocate",aid:aid,category: 0,cids:cids};
+        access(url,para,1,success,fail);
+    };
+};
+//面向平台合同相关接口
+var InterfaceContract = function() {
+
+};
+
 //公告相关接口
 var InterfaceNotice = function() {
     var url = base+"/notice";
@@ -48,6 +155,16 @@ var InterfaceNotice = function() {
         access(url,para,0,success,fail);
     };
     /**
+     * 获取公告详情
+     * @param id
+     * @param success
+     * @param fail
+     */
+    this.get = function (id,success,fail) {
+        var para = {op:"get",id:id};
+        access(url,para,0,success,fail);
+    };
+    /**
      * 修改公告
      * @param notice
      * @param success
@@ -65,51 +182,56 @@ var InterfaceMedicalinsurance = function() {
     /**
      * 获取医保规则列表
      * @param param
+     * @param category
      * @param success
      * @param fail
      */
-    this.getMedicalRules = function(param,success,fail){
-        var para = {op: "getMedicalRules", param:JSON.stringify(param)};
+    this.getList = function(param,category,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param),category:0};
         access(url,para,0,success,fail);
     };
     /**
      * 添加医保规则
      * @param rule
+     * @param category
      * @param success
      * @param fail
      */
-    this.insertMedicalRule = function (rule,success,fail) {
-        var para = {op: "insertMedicalRule",rule:JSON.stringify(rule)};
+    this.insert = function (rule,category,success,fail) {
+        var para = {op: "insert",rule:JSON.stringify(rule),category:0};
         access(url,para,1,success,fail);
     };
     /**
      * 删除医保规则
      * @param id
+     * @param category
      * @param success
      * @param fail
      */
-    this.deleteMedicalRule = function (id,success,fail) {
-        var para = {op:"deleteMedicalRule",id:id};
+    this.delete = function (id,category,success,fail) {
+        var para = {op:"delete",id:id,category:0};
         access(url,para,0,success,fail);
     };
     /**
      * 修改医保规则
      * @param rule
+     * @param category
      * @param success
      * @param fail
      */
-    this.updateMedicalRule = function (rule,success,fail) {
-        var para = {op:"updateMedicalRule",rule:JSON.stringify(rule)};
+    this.update = function (rule,category,success,fail) {
+        var para = {op:"update",rule:JSON.stringify(rule),category:0};
         access(url,para,1,success,fail);
     };
     /**
-     * 查找医保规则
+     * 获取医保规则详情
      * @param id
+     * @param category
      * @param success
      * @param fail
      */
-    this.getMedicalRule = function (id,success,fail) {
-        var para = {op:"getMedicalRule",id:id};
+    this.get = function (id,category,success,fail) {
+        var para = {op:"get",id:id,category:0};
         access(url,para,0,success,fail);
     };
 
@@ -121,55 +243,1397 @@ var InterfaceSocialsecurity = function() {
     /**
      * 获取社保规则列表
      * @param param
+     * @param category
      * @param success
      * @param fail
      */
-    this.getSocialRules = function(param,success,fail){
-        var para = {op: "getSocialRules", param:JSON.stringify(param)};
+    this.getList = function(param,category,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param),category:1};
         access(url,para,0,success,fail);
     };
     /**
-     * 添加医保规则
+     * 添加社保规则
      * @param rule
+     * @param category
      * @param success
      * @param fail
      */
-    this.insertSocialRule = function (rule,success,fail) {
-        var para = {op: "insertSocialRule",rule:JSON.stringify(rule)};
+    this.insert = function (rule,category,success,fail) {
+        var para = {op: "insert",rule:JSON.stringify(rule),category:1};
         access(url,para,1,success,fail);
     };
     /**
      * 删除社保规则
      * @param id
+     * @param category
      * @param success
      * @param fail
      */
-    this.deleteSocialRule = function (id,success,fail) {
-        var para = {op:"deleteSocialRule",id:id};
+    this.delete = function (id,category,success,fail) {
+        var para = {op:"delete",id:id,category:1};
         access(url,para,0,success,fail);
     };
     /**
      * 修改社保规则
      * @param rule
+     * @param category
      * @param success
      * @param fail
      */
-    this.updateSocialRule = function (rule,success,fail) {
-        var para = {op:"updateSocialRule",rule:JSON.stringify(rule)};
+    this.update = function (rule,category,success,fail) {
+        var para = {op:"update",rule:JSON.stringify(rule),category:1};
         access(url,para,1,success,fail);
     };
     /**
-     * 查找社保规则
+     * 获取社保规则详情
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.get = function (id,category,success,fail) {
+        var para = {op:"get",id:id,category:1};
+        access(url,para,0,success,fail);
+    };
+};
+//公积金规则接口
+var InterfaceAccumulation = function () {
+    var url = base+"/rule";//servlet的url地址
+    /**
+     * 获取公积金规则列表
+     * @param param
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.getList = function(param,category,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param),category:2};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加公积金规则
+     * @param rule
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.insert = function (rule,category,success,fail) {
+        var para = {op: "insert",rule:JSON.stringify(rule),category:2};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 删除公积金规则
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.delete = function (id,category,success,fail) {
+        var para = {op:"delete",id:id,category:2};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改公积金规则
+     * @param rule
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.update = function (rule,category,success,fail) {
+        var para = {op:"update",rule:JSON.stringify(rule),category:2};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取公积金规则详情
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.get = function (id,category,success,fail) {
+        var para = {op:"get",id:id,category:2};
+        access(url,para,0,success,fail);
+    };
+};
+//面向平台账号管理接口
+var InterfaceAccount = function () {
+    var url = base+"/account";//servlet的url地址
+    /**
+     * 登录
+     * @param username
+     * @param password
+     * @param success
+     * @param fail
+     */
+    this.login = function(username,password,success,fail){
+        var para = {op: "login", username:username,password:password};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 注销
+     * @param success
+     * @param fail
+     */
+    this.quit = function(success,fail){
+        var para = {op: "quit"};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取账户列表
+     * @param param
+     * @param success
+     * @param fail
+     */
+    this.getList = function(param,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param)};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加账号
+     * @param account
+     * @param success
+     * @param fail
+     */
+    this.insert = function (account,success,fail) {
+        var para = {op: "insert",account:JSON.stringify(account)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 删除账号
      * @param id
      * @param success
      * @param fail
      */
-    this.getSocialRule = function (id,success,fail) {
-        var para = {op:"getSocialRule",id:id};
+    this.delete = function (id,success,fail) {
+        var para = {op: "delete",id:id};
         access(url,para,0,success,fail);
     };
-
+    /**
+     * 获取账号详情
+     * @param id
+     * @param success
+     * @param fail
+     */
+    this.get = function (id,success,fail) {
+        var para = {op:"get",id:id};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改账号
+     * @param account
+     * @param success
+     * @param fail
+     */
+    this.update = function (account,success,fail) {
+        var para = {op:"update",account:JSON.stringify(account)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 设置权限
+     * @param permisson
+     * @param success
+     * @param fail
+     */
+    this.permit = function (permisson,success,fail) {
+        var para = {op:"permit",permisson:permisson};
+        access(url,para,1,success,fail);
+    };
 };
+
+
+
+//面向派遣单位
+
+
+//合作单位相关接口
+var InterfaceCooperativeclient = function () {
+    var url = base+"/client";//servlet的url地址
+    /**
+     * 获取合作单位列表
+     * @param param
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.getList = function(param,category,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param), category: 1};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加合作单位
+     * @param client
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.insert = function (client,category,success,fail) {
+        var para = {op: "insert",client:JSON.stringify(client), category: 1};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取合作单位信息
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.get = function (id,category,success,fail) {
+        var para = {op:"get",id:id, category: 1};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改合作单位信息
+     * @param client
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.update = function (client,category,success,fail) {
+        var para = {op:"update",client:JSON.stringify(client), category: 1};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取客户最新自定义工资
+     * @param id
+     * @param success
+     * @param fail
+     */
+    this.getLastSalaryDefine = function (id,success,fail) {
+        var para = {op:"getLastSalaryDefine",id:id};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 根据月份获取自定义工资
+     * @param id
+     * @param month
+     * @param success
+     * @param fail
+     */
+    this.getSalaryDefine = function (id,month,success,fail) {
+        var para = {op:"getSalaryDefine",id:id,month:month};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加自定义工资
+     * @param mapSalary
+     * @param success
+     * @param fail
+     */
+    this.insertSalaryDefine = function (mapSalary,success,fail) {
+        var para = {op: "insertSalaryDefine",mapSalary:JSON.stringify(mapSalary)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取财务信息
+     * @param id
+     * @param success
+     * @param fail
+     */
+    this.getFinance = function (id,success,fail) {
+        var para = {op:"getFinance",id:id};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加财务信息
+     * @param finance
+     * @param success
+     * @param fail
+     */
+    this.insertFinance = function (finance,success,fail) {
+        var para = {op: "insertFinance",finance:JSON.stringify(finance)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 修改财务信息
+     * @param finance
+     * @param success
+     * @param fail
+     */
+    this.updateFinance = function (finance,success,fail) {
+        var para = {op:"updateFinance",finance:JSON.stringify(finance)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 删除合作单位
+     * @param id
+     * @param category
+     * @param status
+     * @param success
+     * @param fail
+     */
+    this.delete = function (id,category,status,success,fail) {
+        var para = {op:"delete",id:id, category: 1,status: 1};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 分配管理员
+     * @param aid
+     * @param category
+     * @param cids
+     * @param success
+     * @param fail
+     */
+    this.allocate = function (aid,category,cids,success,fail) {
+        var para = {op:"allocate",aid:aid,category: 1,cids:cids};
+        access(url,para,1,success,fail);
+    };
+};
+//供应商相关接口
+var InterfaceSupplier = function () {
+    var url = base+"/client";//servlet的url地址
+    /**
+     * 获取供应商列表
+     * @param param
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.getList = function(param,category,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param), category: 2};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加供应商
+     * @param client
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.insert = function (client,category,success,fail) {
+        var para = {op: "insert",client:JSON.stringify(client), category: 2};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取供应商信息
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.get = function (id,category,success,fail) {
+        var para = {op:"get",id:id, category: 2};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改供应商信息
+     * @param client
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.update = function (client,category,success,fail) {
+        var para = {op:"update",client:JSON.stringify(client), category: 2};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 删除供应商
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.delete = function (id,category,success,fail) {
+        var para = {op:"delete",id:id, category: 2};
+        access(url,para,0,success,fail);
+    };
+};
+//内部员工相关接口
+var InterfaceInternalstaff = function () {
+    var url = base+"/employee";//servlet的url地址
+    /**
+     * 获取内部员工列表
+     * @param param
+     * @param success
+     * @param fail
+     */
+    this.getList = function(param,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param)};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加内部员工信息
+     * @param employee
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.insert = function (employee,category,success,fail) {
+        var para = {op: "insert",employee:JSON.stringify(employee), category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 批量导入内部员工信息
+     * @param employees
+     * @param success
+     * @param fail
+     */
+    this.insertBatch = function (employees,success,fail) {
+        var para = {op: "insertBatch",employees:JSON.stringify(employees)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取内部员工详情
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.get = function (id,category,success,fail) {
+        var para = {op: "get",id:id, category:0};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改内部员工
+     * @param employee
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.update = function (employee,category,success,fail) {
+        var para = {op: "update",employee:JSON.stringify(employee), category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 离职退休
+     * @param leave
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.leave = function (leave,category,success,fail) {
+        var para = {op: "leave",leave:JSON.stringify(leave), category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 删除内部员工
+     * @param id
+     * @param success
+     * @param fail
+     */
+    this.delete = function (id,success,fail) {
+        var para = {op:"delete",id:id};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加社保设置
+     * @param setting
+     * @param success
+     * @param fail
+     */
+    this.insertSetting = function (setting,success,fail) {
+        var para = {op: "insertSetting",setting:JSON.stringify(setting)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 设置社保和个人税专项扣除
+     * @param setting
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.updateSetting = function (setting,category,success,fail) {
+        var para = {op: "updateSetting",setting:JSON.stringify(setting), category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 添加工资卡
+     * @param payCard
+     * @param success
+     * @param fail
+     */
+    this.insertCard = function (payCard,success,fail) {
+        var para = {op: "insertCard",payCard:JSON.stringify(payCard)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取社保设置和个人税扣除详情
+     * @param id
+     * @param success
+     * @param fail
+     */
+    this.getSetting = function (eid,success,fail) {
+        var para = {op: "getSetting",eid:eid};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 获取员工工资卡详情
+     * @param eid
+     * @param success
+     * @param fail
+     */
+    this.getCard = function (eid,success,fail) {
+        var para = {op: "getCard",eid:eid};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改员工工资卡
+     * @param eid
+     * @param success
+     * @param fail
+     */
+    this.updateCard = function (eid,success,fail) {
+        var para = {op: "updateCard",eid:eid};
+        access(url,para,1,success,fail);
+    };
+};
+//外派员工相关接口
+var InterfaceExpatriate = function () {
+    var url = base+"/employee";//servlet的url地址
+    /**
+     * 获取外派员工列表
+     * @param param
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.getList = function(param,category,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param)};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加外派员工信息
+     * @param employee
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.insert = function (employee,category,success,fail) {
+        var para = {op: "insert",employee:JSON.stringify(employee), category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 批量导入外派员工信息
+     * @param employees
+     * @param success
+     * @param fail
+     */
+    this.insertBatch = function (employees,success,fail) {
+        var para = {op: "insertBatch",employees:JSON.stringify(employees)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取外派员工详情
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.get = function (id,category,success,fail) {
+        var para = {op: "get",id:id, category:0};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改外派员工
+     * @param employee
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.update = function (employee,category,success,fail) {
+        var para = {op: "update",employee:JSON.stringify(employee), category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 离职退休
+     * @param leave
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.leave = function (leave,category,success,fail) {
+        var para = {op: "leave",leave:JSON.stringify(leave), category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 删除外派员工
+     * @param id
+     * @param success
+     * @param fail
+     */
+    this.delete = function (id,success,fail) {
+        var para = {op:"delete",id:id};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加社保设置
+     * @param setting
+     * @param success
+     * @param fail
+     */
+    this.insertSetting = function (setting,success,fail) {
+        var para = {op: "insertSetting",setting:JSON.stringify(setting)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 设置社保和个人税专项扣除
+     * @param setting
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.updateSetting = function (setting,category,success,fail) {
+        var para = {op: "updateSetting",setting:JSON.stringify(setting), category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 添加工资卡
+     * @param payCard
+     * @param success
+     * @param fail
+     */
+    this.insertCard = function (payCard,success,fail) {
+        var para = {op: "insertCard",payCard:JSON.stringify(payCard)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取社保设置和个人税扣除详情
+     * @param id
+     * @param success
+     * @param fail
+     */
+    this.getSetting = function (eid,success,fail) {
+        var para = {op: "getSetting",eid:eid};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 获取员工工资卡详情
+     * @param eid
+     * @param success
+     * @param fail
+     */
+    this.getCard = function (eid,success,fail) {
+        var para = {op: "getCard",eid:eid};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改员工工资卡
+     * @param eid
+     * @param success
+     * @param fail
+     */
+    this.updateCard = function (eid,success,fail) {
+        var para = {op: "updateCard",eid:eid};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 批量派遣员工
+     * @param eids
+     * @param cid
+     * @param success
+     * @param fail
+     */
+    this.diapatch = function (eids,cid,success,fail) {
+        var para = {op: "diapatch",eids:eids,cid:cid};
+        access(url,para,1,success,fail);
+    };
+};
+//人才库相关接口
+var InterfaceTalentpool = function () {
+    var url = base+"/employee";//servlet的url地址
+    /**
+     * 聘用人才库员工
+     * @param eid
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.employ = function (eid,category,success,fail) {
+        var para = {op: "employ",eid:eid,category:0};
+        access(url,para,1,success,fail);
+    };
+};
+//普通结算单相关接口
+var InterfaceSettlements1 = function () {
+    var url = base+"/settlement";//servlet的url地址
+    /**
+     * 获取普通结算单列表
+     * @param param
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.getList = function(param,category,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param),category:0};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加普通结算单
+     * @param settlement
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.insert = function (settlement,category,success,fail) {
+        var para = {op: "insert",settlement:JSON.stringify(settlement), category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 删除普通结算单
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.delete = function (id,category,success,fail) {
+        var para = {op:"delete",id:id,category:0};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 复制普通结算单
+     * @param id
+     * @param category
+     * @param month
+     * @param success
+     * @param fail
+     */
+    this.copy = function (id,category,month,success,fail) {
+        var para = {op:"copy",id:id,month:month,category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取普通结算单明细列表
+     * @param param
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.getDetails = function(param,id,category,success,fail){
+        var para = {op: "getDetails", param:JSON.stringify(param),id:id,category:0};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改普通结算单明细
+     * @param details
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.updateDetails = function (details,category,success,fail) {
+        var para = {op: "updateDetails",details:JSON.stringify(details), category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 导入工资明细
+     * @param id
+     * @param details
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.importDetails = function (id,details,category,success,fail) {
+        var para = {op: "importDetails",id:id,details:[], category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 导出工资明细
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.exportDetails = function (id,category,success,fail) {
+        var para = {op: "exportDetails",id:id, category:0};
+        access(url,para,1,success,fail);
+    };
+    //社保补缴
+    //社保补差
+    /**
+     * 提交普通结算单
+     * @param sid
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.commint = function (sid,category,success,fail) {
+        var para = {op: "commint",sid:sid, category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 重置普通结算单
+     * @param sid
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.reset = function (sid,category,success,fail) {
+        var para = {op: "reset",sid:sid, category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 扣款
+     * @param sid
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.deduct = function (sid,category,success,fail) {
+        var para = {op: "deduct",sid:sid, category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 发放工资
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.comfirm = function (id,category,success,fail) {
+        var para = {op: "comfirm",id:id, category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 导出工资发放表
+     * @param id
+     * @param bank
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.exportBank = function (id,bank,category,success,fail) {
+        var para = {op: "exportBank",id:id,bank:bank, category:0};
+        access(url,para,1,success,fail);
+    };
+};
+//小时工结算单相关接口
+var InterfaceSettlements2 = function () {
+    var url = base+"/settlement";//servlet的url地址
+    /**
+     * 获取小时工结算单列表
+     * @param param
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.getList = function(param,category,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param),category:1};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加小时工结算单
+     * @param settlement
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.insert = function (settlement,category,success,fail) {
+        var para = {op: "insert",settlement:JSON.stringify(settlement), category:1};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 删除小时工结算单
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.delete = function (id,category,success,fail) {
+        var para = {op:"delete",id:id,category:1};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 复制小时工结算单
+     * @param id
+     * @param category
+     * @param month
+     * @param success
+     * @param fail
+     */
+    this.copy = function (id,category,month,success,fail) {
+        var para = {op:"copy",id:id,month:month,category:1};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取小时工结算单明细列表
+     * @param param
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.getDetails = function(param,id,category,success,fail){
+        var para = {op: "getDetails", param:JSON.stringify(param),id:id,category:1};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改小时工结算单明细
+     * @param details
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.updateDetails = function (details,category,success,fail) {
+        var para = {op: "updateDetails",details:JSON.stringify(details), category:1};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 导入工资明细
+     * @param id
+     * @param details
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.importDetails = function (id,details,category,success,fail) {
+        var para = {op: "importDetails",id:id,details:[], category:1};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 导出工资明细
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.exportDetails = function (id,category,success,fail) {
+        var para = {op: "exportDetails",id:id, category:1};
+        access(url,para,1,success,fail);
+    };
+    //社保补缴
+    //社保补差
+    /**
+     * 提交小时工结算单
+     * @param sid
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.commint = function (sid,category,success,fail) {
+        var para = {op: "commint",sid:sid, category:1};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 重置小时工结算单
+     * @param sid
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.reset = function (sid,category,success,fail) {
+        var para = {op: "reset",sid:sid, category:1};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 扣款
+     * @param sid
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.deduct = function (sid,category,success,fail) {
+        var para = {op: "deduct",sid:sid, category:1};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 发放工资
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.comfirm = function (id,category,success,fail) {
+        var para = {op: "comfirm",id:id, category:1};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 导出工资发放表
+     * @param id
+     * @param bank
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.exportBank = function (id,bank,category,success,fail) {
+        var para = {op: "exportBank",id:id,bank:bank, category:1};
+        access(url,para,1,success,fail);
+    };
+};
+//商业保险结算单相关接口
+var InterfaceSettlements3 = function () {
+    var url = base+"/settlement";//servlet的url地址
+    /**
+     * 获取商业保险结算单列表
+     * @param param
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.getList = function(param,category,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param),category:2};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加商业保险结算单
+     * @param settlement
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.insert = function (settlement,category,success,fail) {
+        var para = {op: "insert",settlement:JSON.stringify(settlement), category:2};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 删除商业保险结算单
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.delete = function (id,category,success,fail) {
+        var para = {op:"delete",id:id,category:2};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 复制商业保险结算单
+     * @param id
+     * @param category
+     * @param month
+     * @param success
+     * @param fail
+     */
+    this.copy = function (id,category,month,success,fail) {
+        var para = {op:"copy",id:id,month:month,category:2};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取商业保险结算单明细列表
+     * @param param
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.getDetails = function(param,id,category,success,fail){
+        var para = {op: "getDetails", param:JSON.stringify(param),id:id,category:2};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改商业保险结算单明细
+     * @param details
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.updateDetails = function (details,category,success,fail) {
+        var para = {op: "updateDetails",details:JSON.stringify(details), category:2};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 导入工资明细
+     * @param id
+     * @param details
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.importDetails = function (id,details,category,success,fail) {
+        var para = {op: "importDetails",id:id,details:[], category:2};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 导出工资明细
+     * @param id
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.exportDetails = function (id,category,success,fail) {
+        var para = {op: "exportDetails",id:id, category:2};
+        access(url,para,1,success,fail);
+    };
+    //社保补缴
+    //社保补差
+};
+//社保参保相关接口
+var InterfaceSocialsc = function () {
+    var url = base+"/insurance";//servlet的url地址
+    /**
+     * 获取社保参保列表
+     * @param param
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.getList = function(param,category,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param),category:0};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 导出参保单
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.export = function(category,success,fail){
+        var para = {op: "export",category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 校对参保单
+     * @param insurance
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.check = function(insurance,category,success,fail){
+        var para = {op: "check", insurance:JSON.stringify(insurance),category:0};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 删除参保单
+     * @param eid
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.delete = function (eid,category,success,fail) {
+        var para = {op:"delete",eid:eid,category:0};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加参保单
+     * @param insurances
+     * @param success
+     * @param fail
+     */
+    this.insertBatch = function(insurances,success,fail){
+        var para = {op: "insertBatch", insurances:JSON.stringify(insurances)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取参保单详情
+     * @param eid
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.get = function(eid,category,success,fail){
+        var para = {op: "get", eid:eid,category:0};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改参保单
+     * @param insurance
+     * @param success
+     * @param fail
+     */
+    this.update = function(insurance,success,fail){
+        var para = {op: "update", insurance:JSON.stringify(insurance)};
+        access(url,para,1,success,fail);
+    };
+};
+//医保参保相关接口
+var InterfaceMedical = function () {
+    var url = base+"/insurance";//servlet的url地址
+    /**
+     * 获取医保参保列表
+     * @param param
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.getList = function(param,category,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param),category:1};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 导出参保单
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.export = function(category,success,fail){
+        var para = {op: "export",category:1};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 校对参保单
+     * @param insurance
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.check = function(insurance,category,success,fail){
+        var para = {op: "check", insurance:JSON.stringify(insurance),category:1};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 删除参保单
+     * @param eid
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.delete = function (eid,category,success,fail) {
+        var para = {op:"delete",eid:eid,category:1};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加参保单
+     * @param insurances
+     * @param success
+     * @param fail
+     */
+    this.insertBatch = function(insurances,success,fail){
+        var para = {op: "insertBatch", insurances:JSON.stringify(insurances)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取参保单详情
+     * @param eid
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.get = function(eid,category,success,fail){
+        var para = {op: "get", eid:eid,category:1};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改参保单
+     * @param insurance
+     * @param success
+     * @param fail
+     */
+    this.update = function(insurance,success,fail){
+        var para = {op: "update", insurance:JSON.stringify(insurance)};
+        access(url,para,1,success,fail);
+    };
+};
+//公积金参保相关接口
+var InterfaceAccumulations = function () {
+    var url = base+"/insurance";//servlet的url地址
+    /**
+     * 获取公积金参保列表
+     * @param param
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.getList = function(param,category,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param),category:2};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 导出参保单
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.export = function(category,success,fail){
+        var para = {op: "export",category:2};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 校对参保单
+     * @param insurance
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.check = function(insurance,category,success,fail){
+        var para = {op: "check", insurance:JSON.stringify(insurance),category:2};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 删除参保单
+     * @param eid
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.delete = function (eid,category,success,fail) {
+        var para = {op:"delete",eid:eid,category:2};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加参保单
+     * @param insurances
+     * @param success
+     * @param fail
+     */
+    this.insertBatch = function(insurances,success,fail){
+        var para = {op: "insertBatch", insurances:JSON.stringify(insurances)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取参保单详情
+     * @param eid
+     * @param category
+     * @param success
+     * @param fail
+     */
+    this.get = function(eid,category,success,fail){
+        var para = {op: "get", eid:eid,category:2};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改参保单
+     * @param insurance
+     * @param success
+     * @param fail
+     */
+    this.update = function(insurance,success,fail){
+        var para = {op: "update", insurance:JSON.stringify(insurance)};
+        access(url,para,1,success,fail);
+    };
+};
+//保险产品相关接口
+var InterfaceInsurance = function () {
+    var url = base+"/product";//servlet的url地址
+    /**
+     * 获取保险产品列表
+     * @param param
+     * @param success
+     * @param fail
+     */
+    this.getList = function(param,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param)};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 删除保险产品
+     * @param id
+     * @param success
+     * @param fail
+     */
+    this.delete = function (id,success,fail) {
+        var para = {op:"delete",id:id};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 添加保险产品
+     * @param product
+     * @param success
+     * @param fail
+     */
+    this.insert = function (product,success,fail) {
+        var para = {op: "insert",product:JSON.stringify(product)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取保险产品详情
+     * @param id
+     * @param success
+     * @param fail
+     */
+    this.get = function (id,success,fail) {
+        var para = {op:"get",id:id};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 修改保险产品详情
+     * @param product
+     * @param success
+     * @param fail
+     */
+    this.update = function (product,success,fail) {
+        var para = {op:"update",product:JSON.stringify(product)};
+        access(url,para,1,success,fail);
+    };
+};
+
 //职位相关接口
 var InterfaceJob = function () {
     var url = base+"/job";//servlet的url地址
@@ -843,11 +2307,31 @@ var InterfaceEnterprise = function () {
         access(url,para,0,success,fail);
     };
 };
-
+//面向平台
+var iContract = new InterfaceContract();
+var iCustemer = new InterfaceCustemer();
 var iSocialsecurity =new InterfaceSocialsecurity();
 var iMedicalinsurance =new InterfaceMedicalinsurance();
+var iAccumulation = new InterfaceAccumulation();
 var iNotice =new InterfaceNotice();
 var iAccount = new InterfaceAccount();
+
+//面向派遣单位
+var iCooperativeclient = new InterfaceCooperativeclient();
+var iSupplier = new InterfaceSupplier();
+var iInternalstaff = new InterfaceInternalstaff();
+var iExpatriate = new InterfaceExpatriate();
+var iTalentpool = new InterfaceTalentpool();
+var iSettlements1 = new InterfaceSettlements1();
+var iSettlements2 = new InterfaceSettlements2();
+var iSettlements3 = new InterfaceSettlements3();
+var iSocialsc = new InterfaceSocialsc();
+var iMedical = new InterfaceMedical();
+var iAccumulations = new InterfaceAccumulations();
+var iInsurance = new InterfaceInsurance();
+
+
+
 var iJob = new InterfaceJob();
 var iCurriculum = new InterfaceCurriculum();
 var iApp = new InterfaceApp();
