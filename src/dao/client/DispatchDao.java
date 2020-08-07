@@ -1,4 +1,4 @@
-package dao.admin;
+package dao.client;
 
 
 
@@ -7,7 +7,7 @@ import bean.client.Dispatch;
 import database.*;
 import java.sql.Connection;
 
-public class ClientDao {
+public class DispatchDao {
     /**
      * 获取派遣单位客户列表
      * @param conn 数据库连接

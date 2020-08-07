@@ -1,11 +1,11 @@
-package servlet.admin;
+package servlet.client;
 
 
 import bean.client.Dispatch;
 import com.alibaba.fastjson.*;
 import dao.admin.ContractDao;
 import database.*;
-import service.admin.ClientService;
+import service.client.DispatchService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @WebServlet(urlPatterns = "/client")
 public class ClientServlet extends HttpServlet {
-    private ClientService clientService = new ClientService();
+    private DispatchService dispatchService = new DispatchService();
    private ContractDao contractDao = new ContractDao();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
@@ -35,21 +35,44 @@ public class ClientServlet extends HttpServlet {
         String op = request.getParameter("op");
 
         switch (op) {
-            case "insertDispatch"://添加一个客户
-                result = insertDispatch(conn,request);
+            case "insert"://添加一个客户
+                result = insert(conn,request);
                 break;
-            case "deleteDispatch"://删除客户
-                result = deleteDispatch(conn,request);
+            case "delete"://删除客户
+                result = delete(conn,request);
                 break;
-            case "updateDispatch"://修改一个客户
-                result = updateDispatch(conn,request);
+            case "update"://修改一个客户
+                result = update(conn,request);
                 break;
-            case "getDispatchs"://获取所有客户清单
-                result = getDispatchs(conn,request);
+            case "getList"://获取所有客户清单
+                result = getList(conn,request);
                 break;
-            case "getDispatch"://获取一个客户清单
-                result = getDispatch(conn,request);
+            case "get"://获取一个客户清单
+                result = get(conn,request);
                 break;
+            case "allocate"://修改管理员
+                result = allocate(conn,request);
+                break;
+            case "insertSalaryDefine"://增加客户自定义工资
+                result = insertSalaryDefine(conn,request);
+                break;
+            case "getLastSalaryDefine"://获取客户最新自定义工资
+                result = getLastSalaryDefine(conn,request);
+                break;
+            case "getSalaryDefine"://获取客户自定义工资
+                result = getSalaryDefine(conn,request);
+                break;
+            case "insertFinance"://增加客户服务信息
+                result = insertFinance(conn,request);
+                break;
+            case "getFinance"://获取客户服务信息
+                result = getFinance(conn,request);
+                break;
+            case "updateFinance"://修改客户服务信息
+                result = updateFinance(conn,request);
+                break;
+
+
 }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
@@ -58,17 +81,21 @@ public class ClientServlet extends HttpServlet {
         out.close();
     }
 
+
+
+
     //添加
-    private String insertDispatch(Connection conn,HttpServletRequest request) {
+    private String insert(Connection conn,HttpServletRequest request) {
 
         Dispatch dispatch = JSON.parseObject(request.getParameter("dispatch"), Dispatch.class);
         System.out.println(dispatch);
         //调用dao层的update方法
-        DaoUpdateResult res = clientService.insertDispatch(conn, dispatch);
+        DaoUpdateResult res = dispatchService.insertDispatch(conn, dispatch);
 
         return JSONObject.toJSONString(res);
     }
-    private String deleteDispatch(Connection conn, HttpServletRequest request) {
+    //删除
+    private String delete(Connection conn, HttpServletRequest request) {
         DaoUpdateResult res=new DaoUpdateResult();
         long id = Long.parseLong(request.getParameter("id"));
         byte status = Byte.parseByte(request.getParameter("status"));
@@ -89,44 +116,77 @@ public class ClientServlet extends HttpServlet {
                     }
                 }
             }
-            res = clientService.deleteCooperation(conn,id);
+            res = dispatchService.deleteCooperation(conn,id);
         }else {
             //潜在客户，删除客户服务项目，删除客户
             int type = 0;
-            res = clientService.deletePotential(conn,id,type);
+            res = dispatchService.deletePotential(conn,id,type);
         }
         return JSONObject.toJSONString(res);
     }
 
     //修改客户信息
-    private String updateDispatch(Connection conn,HttpServletRequest request) {
+    private String update(Connection conn,HttpServletRequest request) {
 
         Dispatch dispatch = JSON.parseObject(request.getParameter("dispatch"), Dispatch.class);
         System.out.println(dispatch);
         //调用dao层的update方法
-        DaoUpdateResult res = clientService.updateDispatch(conn, dispatch);
+        DaoUpdateResult res = dispatchService.updateDispatch(conn, dispatch);
 
         return JSONObject.toJSONString(res);
     }
 
     //获取客户列表
-    private String getDispatchs(Connection conn,HttpServletRequest request) {
+    private String getList(Connection conn,HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
 
-        DaoQueryListResult res = clientService.getDispatchs(conn,parameter);
+        DaoQueryListResult res = dispatchService.getDispatchs(conn,parameter);
         System.out.println(res);
         return JSONObject.toJSONString(res);
     }
 
     //获取客户基本信息
-    private String getDispatch(Connection conn,HttpServletRequest request){
+    private String get(Connection conn,HttpServletRequest request){
         long id = Long.parseLong(request.getParameter("id"));
         System.out.println("客户id="+id);
-        DaoQueryResult res = clientService.getDispatch(conn,id);
+        DaoQueryResult res = dispatchService.getDispatch(conn,id);
         return  JSONObject.toJSONString(res);
     }
 
+    //分配管理员
+    private String allocate(Connection conn, HttpServletRequest request) {
+        return null;
+    }
 
+    //修改客户服务信息
+    private String updateFinance(Connection conn, HttpServletRequest request) {
+        return  null;
+    }
+
+    //获取客户服务信息
+    private String getFinance(Connection conn, HttpServletRequest request) {
+        return  null;
+    }
+
+    //增加客户服务信息
+    private String insertFinance(Connection conn, HttpServletRequest request) {
+        return  null;
+    }
+
+    //获取客户自定义工资信息
+    private String getSalaryDefine(Connection conn, HttpServletRequest request) {
+        return  null;
+    }
+
+    //获取客户最新自定义工资信息
+    private String getLastSalaryDefine(Connection conn, HttpServletRequest request) {
+        return  null;
+    }
+
+    //增加客户自定义工资信息
+    private String insertSalaryDefine(Connection conn, HttpServletRequest request) {
+        return  null;
+    }
 
 
 }

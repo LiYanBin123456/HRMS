@@ -1,4 +1,4 @@
-package dao.admin;
+package dao.client;
 
 import bean.client.Finance;
 import database.DaoQueryResult;

@@ -1,9 +1,9 @@
-package servlet.admin;
+package servlet.client;
 
 import bean.client.Finance;
 import com.alibaba.fastjson.JSONObject;
 import database.*;
-import service.admin.FinanceService;
+import service.client.FinanceService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

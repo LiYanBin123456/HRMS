@@ -1,7 +1,7 @@
-package service.admin;
+package service.client;
 
 import bean.client.Finance;
-import dao.admin.FinanceDao;
+import dao.client.FinanceDao;
 import database.DaoQueryResult;
 import database.DaoUpdateResult;
 

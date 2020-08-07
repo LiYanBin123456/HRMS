@@ -1,8 +1,8 @@
-package service.admin;
+package service.client;
 
 import bean.client.Dispatch;
-import dao.admin.ClientDao;
-import dao.admin.FinanceDao;
+import dao.client.DispatchDao;
+import dao.client.FinanceDao;
 import database.DaoQueryListResult;
 import database.DaoQueryResult;
 import database.DaoUpdateResult;
@@ -10,28 +10,28 @@ import database.QueryParameter;
 
 import java.sql.Connection;
 
-public class ClientService {
-    private ClientDao clientDao = new ClientDao();
+public class DispatchService {
+    private DispatchDao dispatchDao = new DispatchDao();
     private FinanceDao financeDao = new FinanceDao();
     public  DaoQueryListResult getDispatchs(Connection conn, QueryParameter param){
-        return clientDao.getDispatchs(conn,param);
+        return dispatchDao.getDispatchs(conn,param);
     }
 
     public DaoQueryResult getDispatch(Connection conn, long id) {
-        return clientDao.getDispatch(conn,id);
+        return dispatchDao.getDispatch(conn,id);
     }
 
     public DaoUpdateResult updateDispatch(Connection conn, Dispatch dispatch) {
-        return clientDao.updateDispatch(conn, dispatch);
+        return dispatchDao.updateDispatch(conn, dispatch);
     }
 
     public DaoUpdateResult insertDispatch(Connection conn, Dispatch dispatch) {
-        return clientDao.insertDispatch(conn, dispatch);
+        return dispatchDao.insertDispatch(conn, dispatch);
     }
 
     public DaoUpdateResult deletePotential(Connection conn, long id,int type) {
         DaoUpdateResult res;
-        res= clientDao.deleteDispatch(conn,id);
+        res= dispatchDao.deleteDispatch(conn,id);
         //删除潜在客户时，也要删除客户的财务服务信息表
         if(res.success){
             financeDao.delete(conn,id,type);
@@ -41,6 +41,6 @@ public class ClientService {
 
     public DaoUpdateResult deleteCooperation(Connection conn, long id) {
         int status = 0;
-        return clientDao.updateStatus(conn,id,status);
+        return dispatchDao.updateStatus(conn,id,status);
     }
 }
