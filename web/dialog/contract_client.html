@@ -43,21 +43,21 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>合同生效时间</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="time" required="" lay-verify="nikename" autocomplete="off"
+                        <input type="text" name="start" required="" lay-verify="nikename" autocomplete="off"
                                class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>合同到期时间</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="expirationtime" required="" lay-verify="nikename" autocomplete="off"
+                        <input type="text" name="end" required="" lay-verify="nikename" autocomplete="off"
                                class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>发票类型</label>
                     <div class="layui-input-inline">
-                        <select name="type" lay-verify="required">
+                        <select name="invoice" lay-verify="required">
                             <option value=""></option>
                             <option value="0">增值税专用发票（全额）</option>
                             <option value="1">增值税专用发票（差额）</option>
@@ -75,7 +75,7 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>备注</label>
                     <div class="layui-input-block">
-                        <textarea name="remark" placeholder="请输入内容" class="layui-textarea"></textarea>
+                        <textarea name="comments" placeholder="请输入内容" class="layui-textarea"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -99,25 +99,25 @@
                 <div class="layui-form-item" name="c1">
                     <label class="layui-form-label">工资发放日</label>
                     <div class="layui-inline">
-                        <input type="text" name="" required="" placeholder="工资发放日" autocomplete="off" class="layui-input">
+                        <input type="text" name="payment" required="" placeholder="工资发放日" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item" name="c1">
                     <label class="layui-form-label">结算日</label>
                     <div class="layui-inline">
-                        <input type="text" name="" required="" placeholder="结算日" autocomplete="off" class="layui-input">
+                        <input type="text" name="settlement" required="" placeholder="结算日" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item" name="c1">
                     <label class="layui-form-label">回款日</label>
                     <div class="layui-inline">
-                        <input type="text" name="" required="" placeholder="回款日" autocomplete="off" class="layui-input">
+                        <input type="text" name="receipt" required="" placeholder="回款日" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item" name="c1">
                     <label class="layui-form-label">结算方式</label>
                     <div class="layui-input-inline">
-                        <select name="type" lay-verify="required">
+                        <select name="category" lay-verify="required">
                             <option value="1">按人数收取</option>
                             <option value="2">按费用总额比例</option>
                             <option value="3">外包整体核算</option>

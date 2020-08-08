@@ -180,7 +180,7 @@
             }
 
             function getSettlements() {
-                var result = {total:100,rows:[{client:"蓝科",month:"2020-06",hours:500,price:20,food:100,traffic:"600",accommodation:50,utilities:60,insurance:40,other1:-10,other2:0,summary:"5000",status:"申报中"},{client:"典展",month:"2020-06",hours:"600",price:"18",food:200,traffic:"0",accommodation:50,utilities:60,insurance:40,other1:-10,other2:0,summary:"12000",status:"已审核"}]};
+                var result = {total:100,rows:[{client:"蓝科",month:"2020-06",hours:500,price:20,traffic:"600",extra:0,summary:"5000",status:"申报中"},{client:"典展",month:"2020-06",hours:"600",price:"18",traffic:"0",extra:0,summary:"12000",status:"已审核"}]};
 
                 table.reload('tbl_settlement', {
                     data:result.rows

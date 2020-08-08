@@ -37,7 +37,7 @@
                     <input type="text" class="layui-input" id="filter_month" placeholder="按月份过滤">
                 </div>
                 <div class="layui-input-inline">
-                    <select name="state"   lay-verify="required" >
+                    <select name="status"   lay-verify="required" >
                         <option value="">按状态过滤</option>
                         <option value="0">编辑</option>
                         <option value="1">提交</option>
@@ -181,7 +181,7 @@
             }
 
             function getSettlements() {
-                var result = {total:100,rows:[{client:"科技中专",month:"2020-06",salary:"5000",social:"5000",fund:"5000",manager:"5000",tax:"5000",summary:"5000",state:"编辑"},{client:"国棉四厂",month:"2020-06",salary:"12000",social:"12000",fund:"5000",manager:"12000",tax:"12000",summary:"12000",state:"已审核"}]};
+                var result = {total:100,rows:[{client:"科技中专",month:"2020-06",salary:"5000",social:"5000",fund:"5000",manage:"5000",tax:"5000",summary:"5000",status:"编辑"},{client:"国棉四厂",month:"2020-06",salary:"12000",social:"12000",fund:"5000",manage:"12000",tax:"12000",summary:"12000",status:"已审核"}]};
                 table.reload('tbl_settlement', {
                     data:result.rows
                 });
