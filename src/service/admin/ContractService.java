@@ -1,7 +1,7 @@
 package service.admin;
 
-import bean.admin.Contract;
-import dao.admin.ClientDao;
+import bean.contract.Contract;
+import dao.client.DispatchDao;
 import dao.admin.ContractDao;
 import database.*;
 
@@ -9,7 +9,7 @@ import java.sql.Connection;
 
 public class ContractService {
     ContractDao contractDao = new ContractDao();
-    private ClientDao clientDao = new ClientDao();
+    private DispatchDao dispatchDao = new DispatchDao();
     public DaoQueryListResult getList(Connection conn, QueryParameter parameter) {
      return contractDao.getList(conn,parameter);
     }
@@ -28,7 +28,7 @@ public class ContractService {
         String type = contract.getType();
         if(type=="A"){
             //修改派遣方客户的状态
-             result = clientDao.updateStatus(conn, contract.getBid(), status);
+             result = dispatchDao.updateStatus(conn, contract.getBid(), status);
             if(result.success){
                 result.msg="修改为派遣方合作客户";
             }

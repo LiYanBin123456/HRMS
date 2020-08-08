@@ -1,6 +1,6 @@
 package dao.admin;
 
-import bean.admin.RuleMedicare;
+import bean.rule.RuleMedicare;
 import database.*;
 
 import java.sql.Connection;
