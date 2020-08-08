@@ -3,6 +3,7 @@ package bean.client;
 //客户基类
 public class Client {
     private long id;
+    private long aid;//所属管理员id
     private String rid;//档案编号
     private String name;//全称
     private String nickname;//昵称
@@ -11,13 +12,15 @@ public class Client {
     private String phone;
     private String wx;
     private String qq;
+    private String mail;
     private String intro;
 
     public Client() {
     }
 
-    public Client(long id, String rid, String name, String nickname, String address, String contact, String phone, String wx, String qq, String intro) {
+    public Client(long id, long aid, String rid, String name, String nickname, String address, String contact, String phone, String wx, String qq, String mail, String intro) {
         this.id = id;
+        this.aid = aid;
         this.rid = rid;
         this.name = name;
         this.nickname = nickname;
@@ -26,6 +29,7 @@ public class Client {
         this.phone = phone;
         this.wx = wx;
         this.qq = qq;
+        this.mail = mail;
         this.intro = intro;
     }
 
@@ -35,6 +39,14 @@ public class Client {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getAid() {
+        return aid;
+    }
+
+    public void setAid(long aid) {
+        this.aid = aid;
     }
 
     public String getRid() {
@@ -101,6 +113,14 @@ public class Client {
         this.qq = qq;
     }
 
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
+    }
+
     public String getIntro() {
         return intro;
     }
@@ -113,6 +133,7 @@ public class Client {
     public String toString() {
         return "Client{" +
                 "id=" + id +
+                ", aid=" + aid +
                 ", rid='" + rid + '\'' +
                 ", name='" + name + '\'' +
                 ", nickname='" + nickname + '\'' +
@@ -121,6 +142,7 @@ public class Client {
                 ", phone='" + phone + '\'' +
                 ", wx='" + wx + '\'' +
                 ", qq='" + qq + '\'' +
+                ", mail='" + mail + '\'' +
                 ", intro='" + intro + '\'' +
                 '}';
     }

@@ -14,12 +14,12 @@ public class DispatchDao {
      *@param param 查询参数
      * @return 检索结果，格式："{success:true,msg:"",effects:1}"
      */
-    public  DaoQueryListResult getDispatchs(Connection conn, QueryParameter param){
+    public  DaoQueryListResult getList(Connection conn, QueryParameter param){
         return DbUtil.getList(conn,"dispatch",param, Dispatch.class);
     }
 
 
-    public DaoQueryResult getDispatch(Connection conn, long id) {
+    public DaoQueryResult get(Connection conn, long id) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
         return  DbUtil.get(conn,"dispatch",conditions, Dispatch.class);
@@ -32,7 +32,7 @@ public class DispatchDao {
      * @param c 求职者信息
      * @return 更新结果，格式："{success:true,msg:"",effects:1}"
      */
-    public  DaoUpdateResult updateDispatch(Connection conn, Dispatch c){
+    public  DaoUpdateResult update(Connection conn, Dispatch c){
         String sql = "update dispatch set rid=?,name=?,nickname=?,address=?,contact=?,phone=?,wx=?,qq=?,intro=? where id=?";
         Object []params = {c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getIntro(),c.getId()};
         //调用DbUtil封装的update方法
@@ -45,14 +45,14 @@ public class DispatchDao {
      * @param c
      * @return
      */
-    public DaoUpdateResult insertDispatch(Connection conn, Dispatch c) {
-        String sql = "insert into dispatch (rid,name,nickname,address,contact,phone,wx,qq,intro,status) values (?,?,?,?,?,?,?,?,?,?)";
-        Object []params = {c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getIntro(),c.getStatus()};
+    public DaoUpdateResult insert(Connection conn, Dispatch c) {
+        String sql = "insert into dispatch (rid,name,nickname,address,contact,phone,wx,qq,intro,type) values (?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getIntro(),c.getType()};
         return DbUtil.insert(conn,sql,params);
     }
 
-    //删除潜在客户
-    public DaoUpdateResult deleteDispatch(Connection conn, long id) {
+    //删除客户
+    public DaoUpdateResult delete(Connection conn, long id) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
         return DbUtil.delete(conn,"dispatch",conditions);

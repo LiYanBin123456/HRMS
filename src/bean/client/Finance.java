@@ -25,12 +25,21 @@ public class Finance {
     //备注
     private String comments;
 
-    public float getBalance() {
-        return balance;
+    public Finance() {
     }
 
-    public void setBalance(float balance) {
+    public Finance(long cid, byte type, String code, String bank, String cardNo, String contact, String phone, String address, String bankNo, float balance, String comments) {
+        this.cid = cid;
+        this.type = type;
+        this.code = code;
+        this.bank = bank;
+        this.cardNo = cardNo;
+        this.contact = contact;
+        this.phone = phone;
+        this.address = address;
+        this.bankNo = bankNo;
         this.balance = balance;
+        this.comments = comments;
     }
 
     public long getCid() {
@@ -97,19 +106,28 @@ public class Finance {
         this.address = address;
     }
 
-    public Finance() {
+    public String getBankNo() {
+        return bankNo;
     }
 
-    public Finance(long cid, byte type, String code, String bank, String cardNo, String contact, String phone, String address, float balance) {
-        this.cid = cid;
-        this.type = type;
-        this.code = code;
-        this.bank = bank;
-        this.cardNo = cardNo;
-        this.contact = contact;
-        this.phone = phone;
-        this.address = address;
+    public void setBankNo(String bankNo) {
+        this.bankNo = bankNo;
+    }
+
+    public float getBalance() {
+        return balance;
+    }
+
+    public void setBalance(float balance) {
         this.balance = balance;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 
     @Override
@@ -123,7 +141,9 @@ public class Finance {
                 ", contact='" + contact + '\'' +
                 ", phone='" + phone + '\'' +
                 ", address='" + address + '\'' +
+                ", bankNo='" + bankNo + '\'' +
                 ", balance=" + balance +
+                ", comments='" + comments + '\'' +
                 '}';
     }
 }

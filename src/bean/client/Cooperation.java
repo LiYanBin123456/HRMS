@@ -2,12 +2,13 @@ package bean.client;
 
 //合作客户
 public class Cooperation extends Client{
-    private Client client;
+
+    private long did;//派遣方id
     /**
      * 0  潜在客户
      * 1  合作客户
      */
-    private byte status;
+    private byte type;
     /**客户性质
      0_政府部门
      1_事业单位
@@ -27,27 +28,27 @@ public class Cooperation extends Client{
     public Cooperation() {
     }
 
-    public Cooperation(long id, String rid, String name, String nickname, String address, String contact, String phone, String wx, String qq, String intro, Client client, byte status, byte category) {
-        super(id, rid, name, nickname, address, contact, phone, wx, qq, intro);
-        this.client = client;
-        this.status = status;
+    public Cooperation(long id, long aid, String rid, String name, String nickname, String address, String contact, String phone, String wx, String qq, String mail, String intro, long did, byte type, byte category) {
+        super(id, aid, rid, name, nickname, address, contact, phone, wx, qq, mail, intro);
+        this.did = did;
+        this.type = type;
         this.category = category;
     }
 
-    public Client getClient() {
-        return client;
+    public long getDid() {
+        return did;
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public void setDid(long did) {
+        this.did = did;
     }
 
-    public byte getStatus() {
-        return status;
+    public byte getType() {
+        return type;
     }
 
-    public void setStatus(byte status) {
-        this.status = status;
+    public void setType(byte type) {
+        this.type = type;
     }
 
     public byte getCategory() {
@@ -61,8 +62,8 @@ public class Cooperation extends Client{
     @Override
     public String toString() {
         return "Cooperation{" +
-                "client=" + client +
-                ", status=" + status +
+                "did=" + did +
+                ", type=" + type +
                 ", category=" + category +
                 '}';
     }

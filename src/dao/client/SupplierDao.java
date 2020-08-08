@@ -17,9 +17,11 @@ public class SupplierDao {
     public String update(Connection conn,Cooperation cooperation){
         return null;
     }
+
     public String delete(long id,Connection conn){
         return null;
     }
+
     public String insert(Cooperation cooperation, Connection conn){
         return null;
     }

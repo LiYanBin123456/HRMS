@@ -1,7 +1,8 @@
 package bean.client;
 //供应商
 public class Supplier extends Client {
-    private Client client;
+
+    private long did;//派遣方客户id
     /**业务类型
      0_顶岗实习
      1_就业安置
@@ -10,12 +11,21 @@ public class Supplier extends Client {
      */
     private byte business;
 
-    public Client getClient() {
-        return client;
+    public Supplier() {
     }
 
-    public void setClient(Client client) {
-        this.client = client;
+    public Supplier(long id, long aid, String rid, String name, String nickname, String address, String contact, String phone, String wx, String qq, String mail, String intro, long did, byte business) {
+        super(id, aid, rid, name, nickname, address, contact, phone, wx, qq, mail, intro);
+        this.did = did;
+        this.business = business;
+    }
+
+    public long getDid() {
+        return did;
+    }
+
+    public void setDid(long did) {
+        this.did = did;
     }
 
     public byte getBusiness() {
@@ -26,12 +36,11 @@ public class Supplier extends Client {
         this.business = business;
     }
 
-    public Supplier() {
-    }
-
-    public Supplier(long id, String rid, String name, String nickname, String address, String contact, String phone, String wx, String qq, String intro, Client client, byte business) {
-        super(id, rid, name, nickname, address, contact, phone, wx, qq, intro);
-        this.client = client;
-        this.business = business;
+    @Override
+    public String toString() {
+        return "Supplier{" +
+                "did=" + did +
+                ", business=" + business +
+                '}';
     }
 }

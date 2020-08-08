@@ -8,24 +8,31 @@ import database.DaoUpdateResult;
 import java.sql.Connection;
 
 public class ClientDao {
+    //修改客户服务信息
     public DaoUpdateResult updateFinance(Connection conn, Finance finance) {
         return null;
     }
 
+    //获取客户服务信息
     public DaoQueryResult getFinance(Connection conn, long cid, String type) {
         return null;
     }
 
+    //添加客户服务信息
     public DaoUpdateResult insertFinance(Connection conn, Finance finance) {
         return null;
     }
 
-    public String getSalaryDefine(long id,Connection conn){
+    //按月份获取自定义工资
+    public String getSalaryDefine(long id,String month,Connection conn){
         return null;
     }
+    //获取最新自定义工资
     public String getLastSalaryDefine(long id,Connection conn){
         return null;
     }
+
+    //添加自定义工资
     public String insertSalaryDefine(MapSalary mapSalary, Connection conn){
         return null;
     }

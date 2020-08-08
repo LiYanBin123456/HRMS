@@ -1,12 +1,8 @@
 package bean.settlement;
 
-import java.sql.Date;
 //结算单明细
 public class SalaryCommon {
-    private long id;//工资表id
-    private long sid;//结算单id
-    private long eid;//员工id
-    private Date month;//月份
+
     private float base;//基础工资
     private float reward;//绩效奖金
     private float allowance;//岗位补贴
@@ -27,6 +23,6 @@ public class SalaryCommon {
     private float f8;
     private float f9;
     private float f10;
-    private byte status;
+
 
 }

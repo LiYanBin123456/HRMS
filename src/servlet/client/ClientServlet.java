@@ -90,7 +90,7 @@ public class ClientServlet extends HttpServlet {
         Dispatch dispatch = JSON.parseObject(request.getParameter("dispatch"), Dispatch.class);
         System.out.println(dispatch);
         //调用dao层的update方法
-        DaoUpdateResult res = dispatchService.insertDispatch(conn, dispatch);
+        DaoUpdateResult res = dispatchService.insert(conn, dispatch);
 
         return JSONObject.toJSONString(res);
     }
@@ -116,11 +116,11 @@ public class ClientServlet extends HttpServlet {
                     }
                 }
             }
-            res = dispatchService.deleteCooperation(conn,id);
+            res = dispatchService.deleteCoop(conn,id);
         }else {
             //潜在客户，删除客户服务项目，删除客户
             int type = 0;
-            res = dispatchService.deletePotential(conn,id,type);
+            res = dispatchService.deletePot(conn,id,type);
         }
         return JSONObject.toJSONString(res);
     }
@@ -131,7 +131,7 @@ public class ClientServlet extends HttpServlet {
         Dispatch dispatch = JSON.parseObject(request.getParameter("dispatch"), Dispatch.class);
         System.out.println(dispatch);
         //调用dao层的update方法
-        DaoUpdateResult res = dispatchService.updateDispatch(conn, dispatch);
+        DaoUpdateResult res = dispatchService.update(conn, dispatch);
 
         return JSONObject.toJSONString(res);
     }
@@ -140,7 +140,7 @@ public class ClientServlet extends HttpServlet {
     private String getList(Connection conn,HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
 
-        DaoQueryListResult res = dispatchService.getDispatchs(conn,parameter);
+        DaoQueryListResult res = dispatchService.getList(conn,parameter);
         System.out.println(res);
         return JSONObject.toJSONString(res);
     }
@@ -149,7 +149,7 @@ public class ClientServlet extends HttpServlet {
     private String get(Connection conn,HttpServletRequest request){
         long id = Long.parseLong(request.getParameter("id"));
         System.out.println("客户id="+id);
-        DaoQueryResult res = dispatchService.getDispatch(conn,id);
+        DaoQueryResult res = dispatchService.get(conn,id);
         return  JSONObject.toJSONString(res);
     }
 

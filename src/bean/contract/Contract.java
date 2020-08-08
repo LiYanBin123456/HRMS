@@ -7,7 +7,6 @@ public class Contract {
     private String id;//合同id（规则为类型+年份+四位编号，如“A2020000001”）
     private long aid;//甲方id 平台为0
     private long bid;//乙方id  客户id
-
     /**合同类型
      * A平台和人力资源派遣单位的合同
      * B平台和用人单位之间的合同
