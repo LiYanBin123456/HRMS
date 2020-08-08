@@ -86,7 +86,7 @@
                 table.render({
                     elem: '#tbl_account',
                     toolbar: '#top_bar_account', //开启头部工具栏，并为其绑定左侧模板
-                    defaultToolbar: ['filter', 'exports', 'print'],//自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+
                     title: '列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                     cols: columns_account2,
@@ -134,7 +134,7 @@
 
             //打开编辑对话框
             function showDetailDlg(account) {
-                var content = "../dialog/cooperation/account.html?account="+encodeURIComponent(JSON.stringify(account));
+                var content = "../dialog/account_cooperation.html?account="+encodeURIComponent(JSON.stringify(account));
                 layer.open({
                     title:"编辑",
                     type: 2,
@@ -145,7 +145,7 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/cooperation/account.html";
+                var content = "../dialog/account_cooperation.html";
                 layer.open({
                     title:"添加",
                     type: 2,

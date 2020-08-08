@@ -29,21 +29,24 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_confirm">
-                <form class="layui-form ">
+            <div class="layui-hide" id="top_bar_contract">
+                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加合同</button>
+                <button class="layui-btn layui-btn-sm" lay-event="" onclick="downLoad()" ><i class="layui-icon "></i> 批量导入</button>
+                <button class="layui-btn layui-btn-sm" lay-event="" onclick="downLoad()" ><i class="layui-icon "></i> 下载模板</button>
+                <form class="layui-form searchbox">
                     <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入企业名称">
+                        <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
                     </div>
                     <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                 </form>
             </div>
-            <table id="tbl_confirm" lay-filter="filter_tb_confirm"></table>
+            <table id="tbl_contract" lay-filter="filter_tb_contract"></table>
             <div id="pager"></div>
 
             <!--行内工具栏-->
-            <script type="text/html" id="bar_confirm">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="affirm"><i class="layui-icon "></i>到账确认</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon "></i>明细</a>
+            <script type="text/html" id="bar_contract">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
         </div>
         <script src="../js/fieldSet.js"></script>
@@ -89,51 +92,53 @@
                         if(!first){
                             param_query.pagination.page = obj.curr;
                             param_query.pagination.size = obj.limit;
-                            getConfirms();
+                            getNotices();
                         }
                     }
                 });
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_confirm',
-                    toolbar: '#top_bar_confirm', //开启头部工具栏，并为其绑定左侧模板
+                    elem: '#tbl_contract',
+                    toolbar: '#top_bar_contract', //开启头部工具栏，并为其绑定左侧模板
 
-                    title: '列表',
+                    title: '职位列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_confirm,
-                    id: 'tbl_confirm'
+                    cols: columns_contract_employee,
+                    id: 'tbl_contract'
                 });
 
                 //行内工具栏事件响应
-                table.on('tool(filter_tb_confirm)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                table.on('tool(filter_tb_contract)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
                     var data = obj.data; //获得当前行数据
                     switch (obj.event){
-                        case "affirm":
-                            showAffirmDlg();
-                            break;
                         case "detail":
-                            showDetailDlg();
+                            showDetailDlg(data);
+                            break;
+                        case "del":
+                            del(data);
                             break;
                     }
                 });
 
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_confirm)', function(obj){
+                table.on('toolbar(filter_tb_contract)', function(obj){
                     switch(obj.event){
+                        case 'insert':
+                            showInsertDlg();
+                            break;
                         case 'search':
                             search();
                             break;
                     };
                 });
-                
 
-                getConfirms();
+                getContracts();
             }
 
-            function getConfirms() {
-                var result = {total:100,rows:[{unit:"科技中专",money:"5000"},{unit:"国棉四厂",money:"12000"}]};
-                table.reload('tbl_confirm', {
+            function getContracts() {
+                var result = {total:100,rows:[{cardId:"360201200310243354",name:"张三",start:"2019-1-29",end:"2020-6-21",times:"1",intro:"暂无备注"},{cardId:"360201998310243354",name:"李四",start:"2019-1-29",end:"2020-6-21",times:"3",intro:"暂无备注"}]};
+                table.reload('tbl_contract', {
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
@@ -147,31 +152,51 @@
             //模糊查找
             function search(keyword) {
                 param_query.conditions.extra = keyword;
-                getSalsrys();
+                getContracts();
             }
 
-            //打开确认对话框
-            function showAffirmDlg() {
-                var content = "../dialog/receipt.html";
+            //打开详情对话框
+            function showDetailDlg(contract) {
+                var content = "../dialog/contract_employee.html?contract_employee="+encodeURIComponent(JSON.stringify(contract));
                 layer.open({
-                    title:"到账确认",
+                    title:"合同详情",
                     type: 2,
-                    area: ['400px', '300px'],
+                    area: ['800px', '600px'],
                     content: content
                 });
             }
 
-            //打开明细对话框
-            function showDetailDlg() {
-                var content = "../dialog/detail4.html";
+            //打开添加对话框
+            function showInsertDlg() {
+                var content = "../dialog/contract_employee.html";
                 layer.open({
-                    title:"明细",
+                    title:"添加合同",
                     type: 2,
-                    area: ['600px', '400px'],
+                    area: ['800px', '600px'],
                     content: content
                 });
             }
 
+            //删除公告
+            function del(contract) {
+                layer.confirm('确定删除'+contract.name, {icon: 3, title:'删除合同'}, function(index){
+                    iNotice.delete(contract.id,function () {
+                        layer.close(index);
+                        getContracts();
+                        layer.msg('删除成功');
+                    });
+                });
+            }
+
+            function downLoad() {
+                var curWwwPath = window.document.location.href;
+                var pathName = window.document.location.pathname;
+                var pos = curWwwPath.indexOf(pathName);
+                var localhostPath = curWwwPath.substring(0, pos);
+                var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+                var url = localhostPath + projectName + "/劳务派遣员工合同.xls";
+                window.open(url);
+            }
 
         </script>
     </body>

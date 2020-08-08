@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <title>社保补差</title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -23,28 +23,29 @@
                 display:inline;
                 width:300px;
             }
+
+            .jishu{
+                margin-left:50px;
+                display:inline;
+            }
         </style>
     </head>
 
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_confirm">
-                <form class="layui-form ">
+            <div class="layui-hide" id="top_bar_balance">
+                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 社保补差</button>
+                <form class="layui-form searchbox">
                     <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入企业名称">
+                        <div class="layui-inline"><input type="text"   name="time" required="" placeholder="起始月份" autocomplete="off" class="layui-input"></div>
+                        <div class="layui-inline"><input type="text"   name="time" required="" placeholder="结束月份" autocomplete="off" class="layui-input"></div>
                     </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                 </form>
             </div>
-            <table id="tbl_confirm" lay-filter="filter_tb_confirm"></table>
+            <table id="tbl_staff" lay-filter="filter_tb_balance"></table>
             <div id="pager"></div>
 
-            <!--行内工具栏-->
-            <script type="text/html" id="bar_confirm">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="affirm"><i class="layui-icon "></i>到账确认</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon "></i>明细</a>
-            </script>
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
@@ -89,51 +90,36 @@
                         if(!first){
                             param_query.pagination.page = obj.curr;
                             param_query.pagination.size = obj.limit;
-                            getConfirms();
+                            getStaffs();
                         }
                     }
                 });
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_confirm',
-                    toolbar: '#top_bar_confirm', //开启头部工具栏，并为其绑定左侧模板
-
+                    elem: '#tbl_staff',
+                    toolbar: '#top_bar_balance', //开启头部工具栏，并为其绑定左侧模板
+                    defaultToolbar:['filter', 'exports', 'print'],//自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                     title: '列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_confirm,
-                    id: 'tbl_confirm'
-                });
-
-                //行内工具栏事件响应
-                table.on('tool(filter_tb_confirm)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
-                    var data = obj.data; //获得当前行数据
-                    switch (obj.event){
-                        case "affirm":
-                            showAffirmDlg();
-                            break;
-                        case "detail":
-                            showDetailDlg();
-                            break;
-                    }
+                    cols: columns_member,
+                    id: 'tbl_staff'
                 });
 
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_confirm)', function(obj){
+                table.on('toolbar(filter_tb_balance)', function(obj){
                     switch(obj.event){
-                        case 'search':
-                            search();
+                        case 'insert':
+                            balance();
                             break;
                     };
                 });
-                
+                getStuff();
+          }
 
-                getConfirms();
-            }
-
-            function getConfirms() {
-                var result = {total:100,rows:[{unit:"科技中专",money:"5000"},{unit:"国棉四厂",money:"12000"}]};
-                table.reload('tbl_confirm', {
+            function getStuff() {
+                var result = {total:100,rows:[{ID:"360402199008230081",name:"赵阳",shebao:"2500",yibao:"2500"},{ID:"360402199008230081",name:"李斌",shebao:"3000",yibao:"3000"}]};
+                table.reload('tbl_staff', {
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
@@ -145,34 +131,11 @@
             }
 
             //模糊查找
-            function search(keyword) {
-                param_query.conditions.extra = keyword;
-                getSalsrys();
+
+            //补差
+            function balance() {
+
             }
-
-            //打开确认对话框
-            function showAffirmDlg() {
-                var content = "../dialog/receipt.html";
-                layer.open({
-                    title:"到账确认",
-                    type: 2,
-                    area: ['400px', '300px'],
-                    content: content
-                });
-            }
-
-            //打开明细对话框
-            function showDetailDlg() {
-                var content = "../dialog/detail4.html";
-                layer.open({
-                    title:"明细",
-                    type: 2,
-                    area: ['600px', '400px'],
-                    content: content
-                });
-            }
-
-
         </script>
     </body>
 </html>

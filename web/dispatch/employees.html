@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+        <link rel="stylesheet" href="../css/font.css">
+        <link rel="stylesheet" href="../css/xadmin.css">
+        <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+        <script src="../lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../js/xadmin.js"></script>
+        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+        <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <style>
+            .searchbox{
+                margin-left:100px;
+                display:inline;
+                width:300px;
+            }
+        </style>
+    </head>
+
+    <body class="layui-layout-body">
+        <div style="padding: 5px;">
+            <form class="layui-form" style="display: inline">
+                <div class="layui-input-inline">
+                    <input type="radio" name="category" title="内部员工" value="0" lay-filter="category" checked="checked">
+                    <input type="radio" name="category" title="外派员工" value="1" lay-filter="category" >
+                    <input type="radio" name="category" title="人才库" value="2" lay-filter="category" >
+                </div>
+            </form>
+            <!--顶部工具栏-->
+            <div class="layui-hide" id="top_bar_internal">
+                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加员工</button>
+                <button class="layui-btn layui-btn-sm" lay-event="" onclick="downLoad()"><i class="layui-icon "></i> 批量导入</button>
+                <button class="layui-btn layui-btn-sm" lay-event="" onclick="downLoad()"><i class="layui-icon "></i> 下载模板</button>
+                <form class="layui-form searchbox">
+                    <div class="layui-input-inline">
+                        <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
+                    </div>
+                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                </form>
+            </div>
+
+            <div class="layui-hide" id="top_bar_expatriate">
+                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加外派员工</button>
+                <button class="layui-btn layui-btn-sm" lay-event="" onclick="downLoad()" ><i class="layui-icon "></i> 批量导入</button>
+                <button class="layui-btn layui-btn-sm" lay-event="" onclick="downLoad()" ><i class="layui-icon "></i> 下载模板</button>
+                <button class="layui-btn layui-btn-sm" lay-event="dispatch"><i class="layui-icon "></i> 批量派遣</button>
+                <form class="layui-form searchbox">
+                    <div class="layui-input-inline">
+                        <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
+                    </div>
+                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                    <div class="layui-input-inline">
+                        <select name="unit"  lay-filter="city" lay-verify="required" >
+                            <option value="">按派遣单位过滤</option>
+                            <option value="0">江西制氧机械</option>
+                            <option value="1">九江石化</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+
+            <div id="container">
+                <table id="tbl_employee" lay-filter="filter_tb_employee"></table>
+            </div>
+            <div id="pager"></div>
+
+            <!--行内工具栏-->
+            <script type="text/html" id="bar_employee">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dimission"><i class="layui-icon layui-icon-edit"></i> 离职</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="retire"><i class="layui-icon layui-icon-edit"></i> 退休</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 移入人才库</a>
+            </script>
+            <script type="text/html" id="bar_spare">
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="enroll"><i class="layui-icon layui-icon-edit"></i>聘用</a>
+            </script>
+        </div>
+        <script src="../js/fieldSet.js"></script>
+        <script src="../js/interface.js"></script>
+        <script>
+            var category = 0;//记录是显示内部员工、外派员工还是人才库
+            var table;//数据表格对象
+            var laypage;//分页对象
+            var form;//分页对象
+            var layer;//弹出窗口
+            var element;
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            $(function () {
+                loadLayuiModule();
+            });
+
+            function loadLayuiModule() {
+                layui.use(['table','form','element','layer','laypage'], function() {
+                    table = layui.table;
+                    layer = layui.layer;
+                    element = layui.element;
+                    laypage = layui.laypage;
+                    form = layui.form;
+                    initPage();
+                });
+            }
+
+            function initPage() {
+                form.on('submit(search)', function (data) {
+                    var keyword = data.field.keyword;
+                    search(keyword);
+                });
+
+                form.on('radio(category)', function(data){
+                    switchCategory(Number(data.value));
+                });
+                initTable();
+            }
+
+            function switchCategory(value) {
+                $("#container").empty();
+                $("#container").append('<table id="tbl_employee" lay-filter="filter_tb_employee"></table>');
+
+                category = value;
+                initTable()
+            }
+
+            function initTable() {
+                var cols;
+                var top_bar;
+                switch(Number(category)){
+                    case 0:
+                        cols = columns_employee_internal;
+                        top_bar = '#top_bar_internal';
+                        break;
+                    case 1:
+                        cols = columns_employee_expatriate;
+                        top_bar = '#top_bar_expatriate';
+                        break;
+                    case 2:
+                        cols = columns_employee_spare;
+                        break;
+                };
+
+                //初始化分页
+                laypage.render({
+                    elem: 'pager'
+                    ,count: 10 //数据总数
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                    ,jump: function(obj,first){
+                        //首次不执行
+                        if(!first){
+                            param_query.pagination.page = obj.curr;
+                            param_query.pagination.size = obj.limit;
+                            getNotices();
+                        }
+                    }
+                });
+
+                //初始化数据表格
+                table.render({
+                    elem: '#tbl_employee',
+                    toolbar: top_bar,
+                    title: '内部员工列表',
+                    cols: cols,
+                    id: 'tbl_employee'
+                });
+
+                //行内工具栏事件响应
+                table.on('tool(filter_tb_employee)', function(obj){ //注：tool 是工具条事件名，filter_tb_employee是table原始容器的属性lay-filter="对应的值"
+                    var employee = obj.data; //获得当前行数据
+                    switch (obj.event){
+                        case "detail":
+                            showDetailDlg(employee);
+                            break;
+                        case "dimission":
+                            showDimissionDlg(employee);
+                            break;
+                        case "retire":
+                            showRetireDlg(employee);
+                            break;
+                        case "del":
+                            del(employee);
+                            break;
+                        case "enroll":
+                            showEnrollDlg(employee);
+                            break;
+                    }
+                });
+
+                //顶部工具栏事件处理
+                table.on('toolbar(filter_tb_employee)', function(obj){
+                    switch(obj.event){
+                        case 'insert':
+                            showInsertDlg();
+                            break;
+                        case "dispatch":
+                            showSelectCooperationDlg();
+                            break;
+                        case 'search':
+                            search();
+                            break;
+                    };
+                });
+
+                getEmployees();
+            }
+
+            function getEmployees() {
+                var result = {total:100,rows:[{id:1,serial:"1",cardId:"360402197701233645",name:"赵阳",phone:"15986888888",degree:"大专",school:"科技中专",time:"2017-8-10",household:"本地城镇",address:"江西省九江市湖口镇",entry:"2017-12-10",status:"在职",department:"客户一部",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"200",rent:"1000元",bank:"建设银行",bankNo:"365982546525",cardNo:"6259536541526524"},{id:2,serial:"2",cardId:"360402197701233645",name:"李斌",phone:"15368425987",degree:"本科",school:"科技大学",time:"2017-8-10",household:"本地城镇",address:"江西省九江市湖口镇",entry:"2017-12-10",status:"在职",department:"财务部",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"200",rent:"1000元",bank:"建设银行",bankNo:"365982546525",cardNo:"6259536541526524"}]};
+                table.reload('tbl_employee', {
+                    data:result.rows
+                });
+                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
+                /*iNotice.getList(param_query,function (result) {
+                    table.reload('tbl_notice', {
+                        data:result.rows
+                    });
+                });*/
+            }
+
+            //模糊查找
+            function search(keyword) {
+                param_query.conditions.extra = keyword;
+                getEmployees();
+            }
+
+            //打开详情对话框
+            function showDetailDlg(employee) {
+                var content = "../dialog/employee.html?employee="+encodeURIComponent(JSON.stringify(employee));
+                layer.open({
+                    title:"内部员工详情",
+                    type: 2,
+                    area: ['800px', '600px'],
+                    content: content
+                });
+            }
+
+            //打开离职对话框
+            function showDimissionDlg() {
+                var content = "../dialog/dismiss.html";
+                layer.open({
+                    title:"离职",
+                    type: 2,
+                    area: ['400px', '300px'],
+                    content: content
+                });
+            }
+
+            //打开退休对话框
+            function showRetireDlg() {
+                var content = "../dialog/retire.html";
+                layer.open({
+                    title:"退休",
+                    type: 2,
+                    area: ['400px', '300px'],
+                    content: content
+                });
+            }
+
+            //打开添加对话框
+            function showInsertDlg() {
+                var content = "../dialog/employee.html";
+                layer.open({
+                    title:"添加员工",
+                    type: 2,
+                    area: ['800px', '600px'],
+                    content: content
+                });
+            }
+
+            //删除
+            function del(employee) {
+                layer.confirm('确定删除'+employee.name, {icon: 3, title:'删除员工'}, function(index){
+                    iInternalstaff.delete(employee.id,function () {
+                        layer.close(index);
+                        getEmployees();
+                        layer.msg('删除成功');
+                    });
+                });
+            }
+
+            //聘用
+            function showEnrollDlg(employee) {
+                layer.open({
+                    content: '确认要聘用'+employee.name+"吗,是内部聘用还是外派聘用？"
+                    ,btn: ['内部聘用', '外派聘用']
+                    ,yes: function(index, layero){
+                        enroll(employee.id,0);
+                    }
+                    ,btn2: function(index, layero){
+                        enroll(employee.id,1);
+                    }
+                });
+
+                function enroll(eid,category) {
+                    layer.msg("聘用,eid:"+eid+",category:"+category);
+                }
+            }
+
+            //打开银行选择对话框
+            function showSelectCooperationDlg() {
+                var employees = table.checkStatus('tbl_employee').data;
+                layer.open({
+                    title:"派遣至",
+                    type: 2,
+                    area: ['300px', '300px'],
+                    content: "../dialog/selectCooperation.html",
+                    btn: ['派遣', '关闭']
+                    ,yes: function(index, layero){
+                        var cooperation = window["layui-layer-iframe" + index].callbackData();
+                        layer.close(index);
+                        dispatch(employees,cooperation);
+
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
+                });
+            }
+
+            function dispatch(employees,cooperation) {
+                var msg = "确认将选中的"+employees.length+"个员工派遣至"+cooperation.name+"?";
+                layer.confirm(msg, {icon: 3, title:'批量派遣'}, function(index){
+                    //do something
+
+                    layer.close(index);
+                });
+            }
+
+            function downLoad() {
+                var curWwwPath = window.document.location.href;
+                var pathName = window.document.location.pathname;
+                var pos = curWwwPath.indexOf(pathName);
+                var localhostPath = curWwwPath.substring(0, pos);
+                var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
+                var url = localhostPath + projectName + "/劳务派遣内部员工.xls";
+                window.open(url);
+            }
+
+        </script>
+    </body>
+</html>

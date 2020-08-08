@@ -844,8 +844,8 @@ var InterfaceEnterprise = function () {
     };
 };
 
-var iSocialsecurity =new InterfaceSocialsecurity();
-var iMedicalinsurance =new InterfaceMedicalinsurance();
+var iSocial =new InterfaceSocialsecurity();
+var iMedicare =new InterfaceMedicalinsurance();
 var iNotice =new InterfaceNotice();
 var iAccount = new InterfaceAccount();
 var iJob = new InterfaceJob();

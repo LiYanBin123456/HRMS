@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>月份选择对话框</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+</head>
+<body>
+<form lay-filter="form_settlement" class="layui-form" style="padding: 10px">
+    <div class="layui-form-item">
+        <label class="layui-form-label">
+            <span class="x-red">*</span>选择结算月份
+        </label>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="month">
+        </div>
+    </div>
+</form>
+</body>
+<script>
+    var month;
+
+    layui.use(['laydate'], function () {
+        var laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#month' //指定元素
+            ,type: 'month'
+            ,change: function(value, date, endDate){
+                month = value;
+            }
+        });
+    });
+
+    //向调用页面返回选中的月份
+    var callbackData = function () {
+        return month;
+    }
+</script>
+
+</html>

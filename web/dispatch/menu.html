@@ -84,7 +84,7 @@
                     <i class="iconfont nav_right">&#xe697;</i></a>
                 <ul class="sub-menu">
                     <li>
-                        <a onclick="xadmin.add_tab('合作单位','cooperativeclients.html')">
+                        <a onclick="xadmin.add_tab('合作单位','cooperations.html')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>合作单位</cite></a>
                     </li>
@@ -94,14 +94,9 @@
                             <cite>供应商</cite></a>
                     </li>
                     <li>
-                        <a onclick="xadmin.add_tab('合同管理','contracts.html')">
+                        <a onclick="xadmin.add_tab('合同管理','contracts_client.html')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>合同管理</cite></a>
-                    </li>
-                    <li>
-                        <a onclick="xadmin.add_tab('客户分配','distribution.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>客户分配</cite></a>
                     </li>
                 </ul>
             </li>
@@ -112,24 +107,14 @@
                     <i class="iconfont nav_right">&#xe697;</i></a>
                 <ul class="sub-menu">
                     <li>
-                        <a onclick="xadmin.add_tab('内部员工','internalstaffs.html')">
+                        <a onclick="xadmin.add_tab('员工列表','employees.html')">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>内部员工</cite></a>
+                            <cite>员工列表</cite></a>
                     </li>
                     <li>
-                        <a onclick="xadmin.add_tab('外派员工','expatriates.html')">
+                        <a onclick="xadmin.add_tab('员工合同','contracts_employee.html')">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>外派员工</cite></a>
-                    </li>
-                    <li>
-                        <a onclick="xadmin.add_tab('人才库','talentpool.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>人才库</cite></a>
-                    </li>
-                    <li>
-                        <a onclick="xadmin.add_tab('员工合同管理','staffcontracts.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>员工合同管理</cite></a>
+                            <cite>员工合同</cite></a>
                     </li>
                 </ul>
             </li>
@@ -155,17 +140,17 @@
                             <cite>商业保险结算单</cite></a>
                     </li>
                     <li>
-                        <a onclick="xadmin.add_tab('结算单审核','audits.html')">
+                        <a onclick="xadmin.add_tab('结算单审核','check1.html')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>普通结算单审核</cite></a>
                     </li>
                     <li>
-                        <a onclick="xadmin.add_tab('结算单审核','audits.html')">
+                        <a onclick="xadmin.add_tab('结算单审核','check2.html')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>小时工结算单审核</cite></a>
                     </li>
                     <li>
-                        <a onclick="xadmin.add_tab('结算单审核','audits.html')">
+                        <a onclick="xadmin.add_tab('结算单审核','check3.html')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>商业保险结算单审核</cite></a>
                     </li>
@@ -178,9 +163,9 @@
                     <i class="iconfont nav_right">&#xe697;</i></a>
                 <ul class="sub-menu">
                     <li>
-                        <a onclick="xadmin.add_tab('导出工资发放表','export.html')">
+                        <a onclick="xadmin.add_tab('工资发放','payroll.html')">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>导出工资发放表</cite></a>
+                            <cite>工资发放</cite></a>
                     </li>
                     <li>
                         <a onclick="xadmin.add_tab('到账确认','confirm.html')">
@@ -188,44 +173,25 @@
                             <cite>到账确认</cite></a>
                     </li>
                     <li>
-                        <a onclick="xadmin.add_tab('批量导入专项扣除','specials.html')">
+                        <a onclick="xadmin.add_tab('个税专项扣除','deducts.html')">
                             <i class="iconfont">&#xe6a7;</i>
-                            <cite>批量导入专项扣除</cite></a>
+                            <cite>个税专项扣除</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('个税申报','taxes.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>个税申报</cite></a>
                     </li>
                 </ul>
             </li>
             <li>
-                <a href="javascript:;">
-                    <i class="iconfont">&#xe70b;</i>
-                    <cite>五险一金</cite>
-                    <i class="iconfont nav_right">&#xe697;</i></a>
-                <ul class="sub-menu">
-                    <li>
-                        <a onclick="xadmin.add_tab('社保参保','socialscs.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>社保参保</cite></a>
-                    </li>
-                    <li>
-                        <a onclick="xadmin.add_tab('医保参保','medical-insureds.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>医保参保</cite></a>
-                    </li>
-                    <li>
-                        <a onclick="xadmin.add_tab('公积金','accumulation-insureds.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>公积金</cite></a>
-                    </li>
-                </ul>
+                <a onclick="xadmin.add_tab('五险一金参保','insureds.html')"><i class="iconfont">&#xe70b;</i><cite>五险一金</cite></a>
             </li>
             <li>
-                <a onclick="xadmin.add_tab('保险产品','insurances.html')">
-                    <i class="iconfont">&#xe6a7;</i>
-                    <cite>保险产品</cite></a>
+                <a onclick="xadmin.add_tab('保险产品','products.html')"><i class="iconfont">&#xe6a7;</i><cite>保险产品</cite></a>
             </li>
             <li>
-                <a onclick="xadmin.add_tab('账户管理','accounts.html')">
-                    <i class="iconfont">&#xe6a7;</i>
-                    <cite>账户管理</cite></a>
+                <a onclick="xadmin.add_tab('账户管理','accounts.html')"><i class="iconfont">&#xe6a7;</i><cite>账户管理</cite></a>
             </li>
         </ul>
     </div>

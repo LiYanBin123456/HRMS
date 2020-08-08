@@ -29,21 +29,21 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_confirm">
+            <div class="layui-hide" id="top_bar_audit">
                 <form class="layui-form ">
                     <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入企业名称">
+                             <div class="layui-inline"><input type="radio" name="se" value="待审核" title="待审核" checked></div>
+                             <div class="layui-inline searchbox"><input type="radio" name="se" value="全部" title="全部" ></div>
                     </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                 </form>
             </div>
-            <table id="tbl_confirm" lay-filter="filter_tb_confirm"></table>
+            <table id="tbl_audit" lay-filter="filter_tb_audit"></table>
             <div id="pager"></div>
-
+ 
             <!--行内工具栏-->
-            <script type="text/html" id="bar_confirm">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="affirm"><i class="layui-icon "></i>到账确认</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon "></i>明细</a>
+            <script type="text/html" id="bar_audit2">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>明细</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log"><i class="layui-icon layui-icon-edit"></i>审核</a>
             </script>
         </div>
         <script src="../js/fieldSet.js"></script>
@@ -72,10 +72,6 @@
 
             function initPage() {
                 initTable();
-                form.on('submit(search)', function (data) {
-                    var keyword = data.field.keyword;
-                    search(keyword);
-                });
             }
 
             function initTable() {
@@ -89,51 +85,44 @@
                         if(!first){
                             param_query.pagination.page = obj.curr;
                             param_query.pagination.size = obj.limit;
-                            getConfirms();
+                            getAudits();
                         }
                     }
                 });
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_confirm',
-                    toolbar: '#top_bar_confirm', //开启头部工具栏，并为其绑定左侧模板
+                    elem: '#tbl_audit',
+                    toolbar: '#top_bar_audit', //开启头部工具栏，并为其绑定左侧模板
 
                     title: '列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_confirm,
-                    id: 'tbl_confirm'
+                    cols: columns_settlement1,
+                    id: 'tbl_audit'
                 });
 
                 //行内工具栏事件响应
-                table.on('tool(filter_tb_confirm)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                table.on('tool(filter_tb_audit;)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
                     var data = obj.data; //获得当前行数据
                     switch (obj.event){
-                        case "affirm":
-                            showAffirmDlg();
-                            break;
                         case "detail":
                             showDetailDlg();
+                            break;
+                        case "log":
+                            showLogDlg();
                             break;
                     }
                 });
 
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_confirm)', function(obj){
-                    switch(obj.event){
-                        case 'search':
-                            search();
-                            break;
-                    };
-                });
-                
 
-                getConfirms();
+
+                getAudits();
             }
 
-            function getConfirms() {
-                var result = {total:100,rows:[{unit:"科技中专",money:"5000"},{unit:"国棉四厂",money:"12000"}]};
-                table.reload('tbl_confirm', {
+            function getAudits() {
+                var result = {total:100,rows:[{month:"2020-06",sort:"",money:"5000",state:"申报中"},{month:"2020-06",sort:"",money:"12000",state:"已审核"}]};
+                table.reload('tbl_audit', {
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
@@ -145,29 +134,14 @@
             }
 
             //模糊查找
-            function search(keyword) {
-                param_query.conditions.extra = keyword;
-                getSalsrys();
-            }
-
-            //打开确认对话框
-            function showAffirmDlg() {
-                var content = "../dialog/receipt.html";
-                layer.open({
-                    title:"到账确认",
-                    type: 2,
-                    area: ['400px', '300px'],
-                    content: content
-                });
-            }
 
             //打开明细对话框
             function showDetailDlg() {
-                var content = "../dialog/detail4.html";
+                var content = "../dialog/detail.html";
                 layer.open({
                     title:"明细",
                     type: 2,
-                    area: ['600px', '400px'],
+                    area: ['1200px', '600px'],
                     content: content
                 });
             }

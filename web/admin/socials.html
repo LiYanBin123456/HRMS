@@ -19,7 +19,7 @@
         <![endif]-->
         <style>
             .searchbox{
-                margin-left:100px;
+                margin-left:400px;
                 display:inline;
                 width:300px;
             }
@@ -29,21 +29,28 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_confirm">
-                <form class="layui-form ">
+            <div class="layui-hide" id="top_bar_social">
+                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
+                <form class="layui-form searchbox">
                     <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入企业名称">
+                        <select name="city"  lay-filter="city" lay-verify="required" >
+                                    <option value="">按地市过滤</option>
+                                    <option value="0">北京</option>
+                                    <option value="1">上海</option>
+                                    <option value="2">广州</option>
+                                    <option value="3">深圳</option>
+                                    <option value="4">杭州</option>
+                        </select>
                     </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                 </form>
             </div>
-            <table id="tbl_confirm" lay-filter="filter_tb_confirm"></table>
+            <table id="tbl_social" lay-filter="filter_tb_social"></table>
             <div id="pager"></div>
 
             <!--行内工具栏-->
-            <script type="text/html" id="bar_confirm">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="affirm"><i class="layui-icon "></i>到账确认</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon "></i>明细</a>
+            <script type="text/html" id="bar_social">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
         </div>
         <script src="../js/fieldSet.js"></script>
@@ -89,56 +96,58 @@
                         if(!first){
                             param_query.pagination.page = obj.curr;
                             param_query.pagination.size = obj.limit;
-                            getConfirms();
+                            getSocials();
                         }
                     }
                 });
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_confirm',
-                    toolbar: '#top_bar_confirm', //开启头部工具栏，并为其绑定左侧模板
+                    elem: '#tbl_social',
+                    toolbar: '#top_bar_social', //开启头部工具栏，并为其绑定左侧模板
 
-                    title: '列表',
+                    title: '规则列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_confirm,
-                    id: 'tbl_confirm'
+                    cols: columns_social,
+                    id: 'tbl_social'
                 });
 
                 //行内工具栏事件响应
-                table.on('tool(filter_tb_confirm)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                table.on('tool(filter_tb_social)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
                     var data = obj.data; //获得当前行数据
                     switch (obj.event){
-                        case "affirm":
-                            showAffirmDlg();
-                            break;
                         case "detail":
-                            showDetailDlg();
+                            showDetailDlg(data);
+                            break;
+                        case "del":
+                            del(data);
                             break;
                     }
                 });
 
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_confirm)', function(obj){
+                table.on('toolbar(filter_tb_social)', function(obj){
                     switch(obj.event){
+                        case 'insert':
+                            showInsertDlg();
+                            break;
                         case 'search':
                             search();
                             break;
                     };
                 });
-                
 
-                getConfirms();
+                getSocials();
             }
 
-            function getConfirms() {
-                var result = {total:100,rows:[{unit:"科技中专",money:"5000"},{unit:"国棉四厂",money:"12000"}]};
-                table.reload('tbl_confirm', {
+            function getSocials() {
+                var result = {total:100,rows:[{city:"九江市",start:"2019-06",base:"2500",per1:"3%",per2:"1%",per3:"3%",extra:"4",per4:"3%",per5:"1%"},{city:"九江市",start:"2004-12",base:"2500",per1:"2%",per2:"2%",per3:"2%",extra:"4",per4:"2%",per5:"2%"}]};
+                table.reload('tbl_social', {
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
-                    table.reload('tbl_notice', {
+                /*iSocial.getSocialRules(param_query,function (result) {
+                    table.reload('tbl_social', {
                         data:result.rows
                     });
                 });*/
@@ -147,31 +156,41 @@
             //模糊查找
             function search(keyword) {
                 param_query.conditions.extra = keyword;
-                getSalsrys();
+                getSocials();
             }
 
-            //打开确认对话框
-            function showAffirmDlg() {
-                var content = "../dialog/receipt.html";
+            //打开详情对话框
+            function showDetailDlg(social) {
+                var content = "../dialog/social.html?social="+encodeURIComponent(JSON.stringify(social));
                 layer.open({
-                    title:"到账确认",
+                    title:"详情",
                     type: 2,
-                    area: ['400px', '300px'],
+                    area: ['800px', '600px'],
                     content: content
                 });
             }
 
-            //打开明细对话框
-            function showDetailDlg() {
-                var content = "../dialog/detail4.html";
+            //打开添加对话框
+            function showInsertDlg() {
+                var content = "../dialog/social.html";
                 layer.open({
-                    title:"明细",
+                    title:"添加规则",
                     type: 2,
-                    area: ['600px', '400px'],
+                    area: ['800px', '600px'],
                     content: content
                 });
             }
 
+            //删除公告
+            function del(social) {
+                layer.confirm('确定删除'+social.city+social.start+'的社保规则', {icon: 3, title:'删除'}, function(index){
+                    iSocial.delete(social.id,function () {
+                        layer.close(index);
+                        getSocials();
+                        layer.msg('删除成功');
+                    });
+                });
+            }
 
         </script>
     </body>

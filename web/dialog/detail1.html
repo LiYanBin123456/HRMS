@@ -19,7 +19,7 @@
         <![endif]-->
         <style>
             .searchbox{
-                margin-left:100px;
+                margin-left:400px;
                 display:inline;
                 width:300px;
             }
@@ -29,16 +29,28 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_account">
-                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
+            <div class="layui-hide" id="top_bar_detail">
+                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
+                <button class="layui-btn layui-btn-sm" lay-event="append"><i class="layui-icon "></i> 社保补缴</button>
+                <button class="layui-btn layui-btn-sm" lay-event="balance"><i class="layui-icon "></i> 社保补差</button>
+                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导出</button>
+                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导入</button>
+                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 下载模板</button>
+
             </div>
-            <table id="tbl_account" lay-filter="filter_tb_account"></table>
+            <form class="layui-form" style="display: inline">
+                <div class="layui-input-inline">
+                    <input type="radio" name="mode" title="录入" value="0" lay-filter="mode" checked="checked">
+                    <input type="radio" name="mode" title="完整" value="1" lay-filter="mode" >
+                </div>
+            </form>
+            <div id="container">
+                <table id="tbl_detail" lay-filter="filter_tb_detail"></table>
+            </div>
             <div id="pager"></div>
 
             <!--行内工具栏-->
-            <script type="text/html" id="bar_account">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>编辑</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="task"><i class="layui-icon layui-icon-edit"></i> 客户分配</a>
+            <script type="text/html" id="bar_detail">
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
         </div>
@@ -62,12 +74,27 @@
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
-                    initTable();
+                    initPage();
                 });
             }
 
+            function initPage() {
+                form.on('radio(mode)', function(data){
+                    switchMode(data.value);
+                });
+                initTable(0);
+            }
 
-            function initTable() {
+            function switchMode(mode) {
+                $("#container").empty();
+                $("#container").append('<table id="tbl_detail" lay-filter="filter_tb_detail"></table>');
+
+                initTable(mode)
+            }
+
+            function initTable(mode) {
+                var cols = mode==0?columns_detail1_input:columns_detail1_full;
+
                 //初始化分页
                 laypage.render({
                     elem: 'pager'
@@ -78,53 +105,59 @@
                         if(!first){
                             param_query.pagination.page = obj.curr;
                             param_query.pagination.size = obj.limit;
-                            getAccounts();
+                            getDetails();
                         }
                     }
                 });
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_account',
-                    toolbar: '#top_bar_account', //开启头部工具栏，并为其绑定左侧模板
-
+                    elem: '#tbl_detail',
+                    toolbar: '#top_bar_detail', //开启头部工具栏，并为其绑定左侧模板
                     title: '列表',
-                    cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_account,
-                    id: 'tbl_account'
+                    cols: cols,
+                    id: 'tbl_detail'
                 });
 
                 //行内工具栏事件响应
-                table.on('tool(filter_tb_account)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                table.on('tool(filter_tb_detail)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
                     var data = obj.data; //获得当前行数据
                     switch (obj.event){
-                        case "detail":
-                            showDetailDlg(data);
-                            break;
                         case "del":
                             del(data);
-                            break;
-                        case "task":
-                            showTaskDlg(data);
                             break;
                     }
                 });
 
+                //单元格编辑
+                table.on('edit(filter_tb_detail)', function(obj){
+                    var value = obj.value //得到修改后的值
+                    ,data = obj.data //得到所在行所有键值
+                    ,field = obj.field; //得到字段
+                    layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+                  });
+
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_account)', function(obj){
+                table.on('toolbar(filter_tb_detail)', function(obj){
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
                             break;
-                    };
+                        case 'append':
+                            showAppendDlg();
+                            break;
+                        case 'balance':
+                            showBalanceDlg();
+                            break;
+                };
                 });
 
-                getAccounts();
-            }
+                getDetails();
+          }
 
-            function getAccounts() {
-                var result = {total:100,rows:[{ID:"stuff001",name:"赵斌",password:"123456"},{ID:"stuff002",name:"李晓刚",password:"123456"}]};
-                table.reload('tbl_account', {
+            function getDetails() {
+                var result = {total:100,rows:[{ID:"360402199008230081",name:"张晓国",money:"5000",post:"1000",bonus:"500",house:"500",traffic:"100",shebao:"300",gongjijin:"500",geshui:"100",kaoqin:"50",shifa:"4500"},{ID:"360402199008230081",name:"宋丽",money:"12000",post:"2000",bonus:"600",house:"600",traffic:"600",shebao:"600",gongjijin:"600",geshui:"600",kaoqin:"60",shifa:"8000"}]};
+                table.reload('tbl_detail', {
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
@@ -135,46 +168,48 @@
                 });*/
             }
 
+            //模糊查找
 
-            //打开编辑对话框
-            function showDetailDlg(account) {
-                var content = "../dialog/account_dispatch.html?account="+encodeURIComponent(JSON.stringify(account));
+            //打开添加明细对话框
+            function showAppendDlg() {
+                var content = "member.html";
                 layer.open({
-                    title:"编辑",
+                    title:"添加明细",
                     type: 2,
-                    area: ['600px', '540px'],
+                    area: ['800px', '500px'],
                     content: content
                 });
             }
 
             //打开添加对话框
-            function showInsertDlg() {
-                var content = "../dialog/account_dispatch.html";
+            function showAppendDlg() {
+                var content = "replenish.html";
                 layer.open({
-                    title:"添加",
+                    title:"社保补缴",
                     type: 2,
-                    area: ['600px', '540px'],
+                    area: ['800px', '500px'],
                     content: content
                 });
             }
 
-            //打开任务分配对话框
-            function showTaskDlg(account) {
-                var content = "../dialog/task_dispatch.html?id="+account.id;
+            //打开补录对话框
+            function showBalanceDlg() {
+                var content = "balance.html";
                 layer.open({
-                    title:"客户分配-"+account.name,
+                    title:"社保补差",
                     type: 2,
-                    area: ['550px', '500px'],
+                    area: ['800px', '500px'],
                     content: content
                 });
             }
+
 
             //删除公告
-            function del(account) {
-                layer.confirm('确定删除管理员'+account.name, {icon: 3, title:'删除'}, function(index){
-                    iNotice.delete(account.id,function () {
+            function del(detail) {
+                layer.confirm('确定删除'+detail1.name, {icon: 3, title:'删除'}, function(index){
+                    iSalsry.delete(detail1.id,function () {
                         layer.close(index);
-                        getAccounts();
+                        getDetails();
                         layer.msg('删除成功');
                     });
                 });

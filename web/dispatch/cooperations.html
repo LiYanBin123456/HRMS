@@ -28,23 +28,29 @@
 
     <body class="layui-layout-body">
         <div style="padding: 5px;">
-            <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_confirm">
-                <form class="layui-form ">
-                    <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入企业名称">
-                    </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-                </form>
-            </div>
-            <table id="tbl_confirm" lay-filter="filter_tb_confirm"></table>
-            <div id="pager"></div>
+          <form class="layui-form searchbox">
+              <div class="layui-input-inline">
+                  <input name="keyword" class="layui-input" placeholder="请输入要查找的合作客户">
+              </div>
+              <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+              <div class="layui-input-inline">
+                  <input type="radio" name="se" value="合作中" title="合作中" checked>
+                  <input type="radio" name="se" value="潜在" title="潜在" >
+              </div>
+          </form>
+        <!--顶部工具栏-->
+        <div class="layui-hide" id="top_bar_cooperation">
+            <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
 
-            <!--行内工具栏-->
-            <script type="text/html" id="bar_confirm">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="affirm"><i class="layui-icon "></i>到账确认</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon "></i>明细</a>
-            </script>
+        </div>
+        <table id="tbl_cooperation" lay-filter="filter_tb_cooperation"></table>
+        <div id="pager"></div>
+
+        <!--行内工具栏-->
+        <script type="text/html" id="bar_cooperation">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+        </script>
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
@@ -89,51 +95,53 @@
                         if(!first){
                             param_query.pagination.page = obj.curr;
                             param_query.pagination.size = obj.limit;
-                            getConfirms();
+                            getNotices();
                         }
                     }
                 });
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_confirm',
-                    toolbar: '#top_bar_confirm', //开启头部工具栏，并为其绑定左侧模板
+                    elem: '#tbl_cooperation',
+                    toolbar: '#top_bar_cooperation', //开启头部工具栏，并为其绑定左侧模板
 
-                    title: '列表',
+                    title: '合作客户列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_confirm,
-                    id: 'tbl_confirm'
+                    cols: columns_cooperation,
+                    id: 'tbl_cooperation'
                 });
 
                 //行内工具栏事件响应
-                table.on('tool(filter_tb_confirm)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                table.on('tool(filter_tb_cooperation)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
                     var data = obj.data; //获得当前行数据
                     switch (obj.event){
-                        case "affirm":
-                            showAffirmDlg();
-                            break;
                         case "detail":
-                            showDetailDlg();
+                            showDetailDlg(data);
+                            break;
+                        case "del":
+                            del(data);
                             break;
                     }
                 });
 
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_confirm)', function(obj){
+                table.on('toolbar(filter_tb_cooperation)', function(obj){
                     switch(obj.event){
+                        case 'insert':
+                            showInsertDlg();
+                            break;
                         case 'search':
                             search();
                             break;
                     };
                 });
-                
 
-                getConfirms();
+                getCooperations();
             }
 
-            function getConfirms() {
-                var result = {total:100,rows:[{unit:"科技中专",money:"5000"},{unit:"国棉四厂",money:"12000"}]};
-                table.reload('tbl_confirm', {
+            function getCooperations() {
+                var result = {total:100,rows:[{id:"1",name:"朝阳机械厂（6301）",category:"内资企业",contact:"方部长",phone:"15986345868",wx:"15986345868",qq:"15264555528",address:"黑龙江省哈尔滨市",balance:"1000000",intro:"暂无简介",code:"2566423548145882554",bank:"建设银行",cardNo:"68539844528953641"},{id:"2",name:"西江典展(3325)",category:"外资企业",contact:"李经理",phone:"15986358956",wx:"15986358956",qq:"15264555528",address:"黑龙江省哈尔滨市",balance:"1000000",intro:"暂无简介",code:"2566423548145882554",bank:"建设银行",cardNo:"68539844528953641"}]};
+                table.reload('tbl_cooperation', {
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
@@ -147,32 +155,41 @@
             //模糊查找
             function search(keyword) {
                 param_query.conditions.extra = keyword;
-                getSalsrys();
+                getCooperations();
             }
 
-            //打开确认对话框
-            function showAffirmDlg() {
-                var content = "../dialog/receipt.html";
+            //打开详情对话框
+            function showDetailDlg(cooperation) {
+                var content = "../dialog/cooperation.html?cooperation="+encodeURIComponent(JSON.stringify(cooperation));
                 layer.open({
-                    title:"到账确认",
+                    title:"详情合作客户",
                     type: 2,
-                    area: ['400px', '300px'],
+                    area: ['800px', '600px'],
                     content: content
                 });
             }
 
-            //打开明细对话框
-            function showDetailDlg() {
-                var content = "../dialog/detail4.html";
+            //打开添加对话框
+            function showInsertDlg() {
+                var content = "../dialog/cooperation.html";
                 layer.open({
-                    title:"明细",
+                    title:"添加合作客户",
                     type: 2,
-                    area: ['600px', '400px'],
+                    area: ['800px', '600px'],
                     content: content
                 });
             }
 
-
+            //删除公告
+            function del(cooperation) {
+                layer.confirm('确定删除'+cooperation.name, {icon: 3, title:'删除'}, function(index){
+                    iNotice.delete(cooperation.id,function () {
+                        layer.close(index);
+                        getCooperations();
+                        layer.msg('删除成功');
+                    });
+                });
+            }
         </script>
     </body>
 </html>
