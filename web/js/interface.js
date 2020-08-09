@@ -85,11 +85,12 @@ var InterfaceClient = function() {
     /**
      * 获取财务信息
      * @param id
+     * @param category
      * @param success
      * @param fail
      */
-    this.getFinance = function (id,success,fail) {
-        var para = {op:"getFinance",id:id};
+    this.getFinance = function (id,category,success,fail) {
+        var para = {op:"getFinance",id:id,category:category};
         access(url,para,0,success,fail);
     };
     /**
@@ -274,12 +275,12 @@ var InterfaceContract = function() {
     };
     /**
      * 获取合同服务项目详情
-     * @param cid
+     * @param id
      * @param success
      * @param fail
      */
-    this.getService = function (cid,success,fail) {
-        var para = {op: "getService",cid:cid};
+    this.getService = function (id,success,fail) {
+        var para = {op: "getService",id:id};
         access(url,para,0,success,fail);
     };
     /**
@@ -379,12 +380,12 @@ var InterfaceAccount = function () {
     };
     /**
      * 设置权限
-     * @param permisson
+     * @param permission
      * @param success
      * @param fail
      */
-    this.permit = function (permisson,success,fail) {
-        var para = {op:"permit",permisson:permisson};
+    this.permit = function (permission,success,fail) {
+        var para = {op:"permit",permission:permission};
         access(url,para,1,success,fail);
     };
 };
@@ -548,32 +549,32 @@ var InterfaceEmployee = function () {
     };
     /**
      * 获取社保设置和个人税扣除详情
-     * @param eid
+     * @param id
      * @param success
      * @param fail
      */
-    this.getSetting = function (eid,success,fail) {
-        var para = {op: "getSetting",eid:eid};
+    this.getSetting = function (id,success,fail) {
+        var para = {op: "getSetting",id:id};
         access(url,para,0,success,fail);
     };
     /**
      * 获取员工工资卡详情
-     * @param eid
+     * @param id
      * @param success
      * @param fail
      */
-    this.getCard = function (eid,success,fail) {
-        var para = {op: "getCard",eid:eid};
+    this.getCard = function (id,success,fail) {
+        var para = {op: "getCard",id:id};
         access(url,para,0,success,fail);
     };
     /**
      * 修改员工工资卡
-     * @param eid
+     * @param id
      * @param success
      * @param fail
      */
-    this.updateCard = function (eid,success,fail) {
-        var para = {op: "updateCard",eid:eid};
+    this.updateCard = function (id,success,fail) {
+        var para = {op: "updateCard",id:id};
         access(url,para,1,success,fail);
     };
     /**
@@ -589,13 +590,13 @@ var InterfaceEmployee = function () {
     };
     /**
      * 聘用人才库员工
-     * @param eid
+     * @param id
      * @param category
      * @param success
      * @param fail
      */
-    this.employ = function (eid,category,success,fail) {
-        var para = {op: "employ",eid:eid,category:category};
+    this.employ = function (id,category,success,fail) {
+        var para = {op: "employ",id:id,category:category};
         access(url,para,1,success,fail);
     };
 };
@@ -699,35 +700,35 @@ var InterfaceSettlement = function () {
     //社保补差
     /**
      * 提交结算单
-     * @param sid
+     * @param id
      * @param category
      * @param success
      * @param fail
      */
-    this.commint = function (sid,category,success,fail) {
-        var para = {op: "commint",sid:sid, category:category};
+    this.commit = function (id,category,success,fail) {
+        var para = {op: "commit",id:id, category:category};
         access(url,para,1,success,fail);
     };
     /**
      * 重置结算单
-     * @param sid
+     * @param id
      * @param category
      * @param success
      * @param fail
      */
-    this.reset = function (sid,category,success,fail) {
-        var para = {op: "reset",sid:sid, category:category};
+    this.reset = function (id,category,success,fail) {
+        var para = {op: "reset",id:id, category:category};
         access(url,para,1,success,fail);
     };
     /**
      * 扣款
-     * @param sid
+     * @param id
      * @param category
      * @param success
      * @param fail
      */
-    this.deduct = function (sid,category,success,fail) {
-        var para = {op: "deduct",sid:sid, category:category};
+    this.deduct = function (id,category,success,fail) {
+        var para = {op: "deduct",id:id, category:category};
         access(url,para,1,success,fail);
     };
     /**
@@ -803,13 +804,13 @@ var InterfaceInsurance = function () {
     };
     /**
      * 删除参保单
-     * @param eid
+     * @param id
      * @param category
      * @param success
      * @param fail
      */
-    this.delete = function (eid,category,success,fail) {
-        var para = {op:"delete",eid:eid,category:category};
+    this.delete = function (id,category,success,fail) {
+        var para = {op:"delete",id:id,category:category};
         access(url,para,0,success,fail);
     };
     /**
@@ -824,13 +825,13 @@ var InterfaceInsurance = function () {
     };
     /**
      * 获取参保单详情
-     * @param eid
+     * @param id
      * @param category
      * @param success
      * @param fail
      */
-    this.get = function(eid,category,success,fail){
-        var para = {op: "get", eid:eid,category:category};
+    this.get = function(id,category,success,fail){
+        var para = {op: "get", id:id,category:category};
         access(url,para,0,success,fail);
     };
     /**
@@ -906,12 +907,12 @@ var InterfaceFinance = function () {
     /**
      * 到账确认
      * @param balance
-     * @param did
+     * @param id
      * @param success
      * @param fail
      */
-    this.arrive = function(balance,did,success,fail){
-        var para = {op: "arrive",balance:balance,did:did};
+    this.arrive = function(balance,id,success,fail){
+        var para = {op: "arrive",balance:balance,id:id};
         access(url,para,1,success,fail);
     };
     /**
