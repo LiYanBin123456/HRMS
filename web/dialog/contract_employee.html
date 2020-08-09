@@ -71,12 +71,12 @@
                         </div>
                         </div>
                         <div class="layui-form-item">
-                        <label for="L_uploading" class="layui-form-label"></label>
+                        <label  class="layui-form-label"></label>
                         <button type="button" class="layui-btn" id="test1">
                            <i class="layui-icon">&#xe67c;</i>上传pdf
                         </button></div>
                <div class="layui-form-item">
-                        <label for="L_repass" class="layui-form-label"></label>
+                        <label  class="layui-form-label"></label>
                         <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
                 </form>
 </body>
@@ -112,9 +112,9 @@
     function save() {
         var contract = form.val('form_contract');
         if(op == "insert") {
-            iStaffcontract.insert(contract, onInsertSuccess);
+            iContract.insert(contract, onInsertSuccess);
         }else{
-            iStaffcontract.update(contract,onUpdateSuccess);
+            iContract.update(contract,onUpdateSuccess);
         }
 
         function onInsertSuccess() {

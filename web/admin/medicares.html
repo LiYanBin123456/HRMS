@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title>通知公告</title>
+        <title></title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
@@ -146,7 +146,7 @@
                     data:result.rows
                 })
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iMedicalinsurance.getMedicalRules(param_query,function (result) {
+                /*iMedicare.getList(param_query,function (result) {
                     table.reload('tbl_medicare', {
                         data:result.rows
                     });
@@ -184,7 +184,7 @@
             //删除公告
             function del(medicare) {
                 layer.confirm('确定删除'+medicare.city+medicare.start+'的医保规则', {icon: 3, title:'删除公告'}, function(index){
-                    iMedicalinsurance.deleteMedicalRule(medicare.id,function () {
+                    iMedicare.delete(medicare.id,function () {
                         layer.close(index);
                         getMedicalinsurances();
                         layer.msg('删除成功');

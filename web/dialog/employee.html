@@ -384,9 +384,9 @@
     }
 
     function initData() {
-        var param = $.query.get("expatriate");
+        var param = $.query.get("employee");
         if (param) {
-            var expatriate = JSON.parse(param);
+            var employee = JSON.parse(param);
             form.val('form_expatriate', employee);
             layedit.setContent(editer, employee.content, false);
             op = "update";
@@ -394,11 +394,11 @@
     }
 
     function save() {
-        var notice = form.val('form_expatriate');
+        var employee = form.val('form_expatriate');
         if (op == "insert") {
-            iExpatriate.insert(expatriate, onInsertSuccess);
+            iEmployee.insert(employee, onInsertSuccess);
         } else {
-            iExpatriate.update(expatriate, onUpdateSuccess);
+            iEmployee.update(employee, onUpdateSuccess);
         }
 
         function onInsertSuccess() {

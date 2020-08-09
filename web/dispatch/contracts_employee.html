@@ -142,7 +142,7 @@
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
+                /*iContract.getList(param_query,function (result) {
                     table.reload('tbl_notice', {
                         data:result.rows
                     });
@@ -180,7 +180,7 @@
             //删除公告
             function del(contract) {
                 layer.confirm('确定删除'+contract.name, {icon: 3, title:'删除合同'}, function(index){
-                    iNotice.delete(contract.id,function () {
+                    iContract.delete(contract.id,function () {
                         layer.close(index);
                         getContracts();
                         layer.msg('删除成功');

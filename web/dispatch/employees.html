@@ -217,7 +217,7 @@
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
+                /*iEmployee.getList(param_query,function (result) {
                     table.reload('tbl_notice', {
                         data:result.rows
                     });
@@ -277,7 +277,7 @@
             //删除
             function del(employee) {
                 layer.confirm('确定删除'+employee.name, {icon: 3, title:'删除员工'}, function(index){
-                    iInternalstaff.delete(employee.id,function () {
+                    iEmployee.delete(employee.id,function () {
                         layer.close(index);
                         getEmployees();
                         layer.msg('删除成功');

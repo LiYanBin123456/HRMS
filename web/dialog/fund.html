@@ -152,9 +152,9 @@
     function save() {
         var fund = form.val('form_fund');
         if(op == "insert") {
-            iAccumulation.insert(fund, onInsertSuccess);
+            iFund.insert(fund, onInsertSuccess);
         }else{
-            iAccumulation.update(fund,onUpdateSuccess);
+            iFund.update(fund,onUpdateSuccess);
         }
 
         function onInsertSuccess() {

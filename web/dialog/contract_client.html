@@ -248,7 +248,7 @@
     }
 
     function save() {
-        var notice = form.val('form_contract');
+        var contract = form.val('form_contract');
         if (op == "insert") {
             iContract.insert(contract, onInsertSuccess);
         } else {

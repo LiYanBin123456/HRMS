@@ -215,7 +215,7 @@
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
+                /*iInsurance.getList(param_query,function (result) {
                     table.reload('tbl_notice', {
                         data:result.rows
                     });
@@ -235,12 +235,22 @@
 
             //打开添加对话框
             function showMemberDlg() {
-                var content = "../dialog/dispatch/member.html?category=2";
+                var content = "../dialog/member.html?category=2";
                 layer.open({
                     title:"添加",
                     type: 2,
                     area: ['700px', '500px'],
                     content: content
+                });
+            }
+            //删除
+            function del(insured) {
+                layer.confirm('确定删除'+insured.title, {icon: 3, title:'删除公告'}, function(index){
+                    iInsurance.delete(insured.id,function () {
+                        layer.close(index);
+                        getInsureds();
+                        layer.msg('删除成功');
+                    });
                 });
             }
 

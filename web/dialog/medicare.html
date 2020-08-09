@@ -167,9 +167,9 @@
     function save() {
         var medicare = form.val('form_medicare');
         if(op == "insert") {
-            iMedicalinsurance.insertMedicalRule(medicare, onInsertSuccess);
+            iMedicare.insert(medicare, onInsertSuccess);
         }else{
-            iMedicalinsurance.updateMedicalRule(medicare,onUpdateSuccess);
+            iMedicare.update(medicare,onUpdateSuccess);
         }
 
         function onInsertSuccess() {

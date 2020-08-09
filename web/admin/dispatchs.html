@@ -151,8 +151,8 @@
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
-                    table.reload('tbl_notice', {
+                /*iDispatch.getList(param_query,function (result) {
+                    table.reload('tbl_dispatch', {
                         data:result.rows
                     });
                 });*/
@@ -161,7 +161,7 @@
             //模糊查找
             function search(keyword) {
                 param_query.conditions.extra = keyword;
-                getNotices();
+                getDispatchs();
             }
 
             //打开详情对话框

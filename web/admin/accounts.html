@@ -133,8 +133,8 @@
                     data:result.rows
                 });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
-                    table.reload('tbl_notice', {
+                /*iAccount.getList(param_query,function (result) {
+                    table.reload('tbl_account', {
                         data:result.rows
                     });
                 });*/
@@ -178,9 +178,9 @@
             //删除公告
             function del(account) {
                 layer.confirm('确定删除'+account.title, {icon: 3, title:'删除公告'}, function(index){
-                    iNotice.delete(account.id,function () {
+                    iAccount.delete(account.id,function () {
                         layer.close(index);
-                        getNotices();
+                        getAccounts();
                         layer.msg('删除成功');
                     });
                 });

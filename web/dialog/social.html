@@ -166,16 +166,16 @@
             var social = JSON.parse(param);
             form.val('form_social', social);
             layedit.setContent(editer, social.content, false);
-            op = "updateSocialRule";
+            op = "update";
         }
     }
 
     function save() {
         var social = form.val('form_social');
-        if(op == "insertSocialRule") {
-            iSocial.insertSocialRule(social, onInsertSuccess);
+        if(op == "insert") {
+            iSocial.insert(social, onInsertSuccess);
         }else{
-            iSocial.updateSocialRule(social,onUpdateSuccess);
+            iSocial.update(social,onUpdateSuccess);
         }
 
         function onInsertSuccess() {

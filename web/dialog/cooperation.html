@@ -401,9 +401,9 @@
     function save() {
         var cooperativeclient = form.val('form_cooperation');
         if (op == "insert") {
-            iCooperativeclient.insert(cooperation, onInsertSuccess);
+            iCooperation.insert(cooperation, onInsertSuccess);
         } else {
-            iCooperativeclient.update(cooperation, onUpdateSuccess);
+            iCooperation.update(cooperation, onUpdateSuccess);
         }
 
         function onInsertSuccess() {
