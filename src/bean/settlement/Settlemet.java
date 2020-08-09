@@ -17,11 +17,11 @@ public class Settlemet {
      5_扣款
      6_发放
      */
-    private float status;
+    private byte status;
     /**来源
      0_派遣单位录入
      1_合作单位录入
      */
-    private float source;
+    private byte source;
 
 }

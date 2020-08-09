@@ -4,11 +4,17 @@ package bean.settlement;
 public class SalaryCommon {
 
     private float base;//基础工资
-    private float reward;//绩效奖金
-    private float allowance;//岗位补贴
-    private float social1;//个人社保
-    private float social2;//单位社保
+    private float pension1;//个人养老
+    private float medicare1;//个人医疗
+    private float unemployd1;//个人失业
+    private float disease1;//个人大病
     private float fund1;//个人公积金
+    private float pension2;//单位养老
+    private float medicare2;//单位医疗
+    private float unemployd2;//单位失业
+    private float injury;//单位工伤
+    private float disease2;//单位大病
+    private float birth;//单位生育
     private float fund2;//单位公积金
     private float tax;//个税
     private float payable;//应发
@@ -23,6 +29,16 @@ public class SalaryCommon {
     private float f8;
     private float f9;
     private float f10;
+    private float f11;
+    private float f12;
+    private float f13;
+    private float f14;
+    private float f15;
+    private float f16;
+    private float f17;
+    private float f18;
+    private float f19;
+    private float f20;
 
 
 }

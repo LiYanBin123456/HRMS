@@ -1,6 +1,7 @@
 package service.client;
 
 import bean.client.Cooperation;
+import database.DaoQueryListResult;
 import database.QueryParameter;
 
 import java.sql.Connection;
@@ -12,7 +13,7 @@ public class CooperationService {
     }
 
     //获取客户列表
-    public String getList(Connection conn, QueryParameter param){
+    public DaoQueryListResult getList(Connection conn, QueryParameter param){
         return null;
     }
 

@@ -1,7 +1,7 @@
-package service.admin;
+package service.rule;
 
 import bean.rule.RuleSocial;
-import dao.admin.RuleSocialDao;
+import dao.rule.RuleSocialDao;
 import database.DaoQueryListResult;
 import database.DaoQueryResult;
 import database.DaoUpdateResult;

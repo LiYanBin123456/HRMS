@@ -1,7 +1,9 @@
 package dao.client;
 
 import bean.client.Cooperation;
-import database.ConnUtil;
+
+import database.DaoQueryListResult;
+import database.DbUtil;
 import database.QueryParameter;
 
 import java.sql.Connection;
@@ -12,8 +14,8 @@ public class CooperationDao {
         return null;
     }
 
-    public String getList(Connection conn, QueryParameter param){
-        return null;
+    public DaoQueryListResult getList(Connection conn, QueryParameter param){
+        return DbUtil.getList(conn,"cooperation",param, Cooperation.class);
     }
 
     public String update(Connection conn,Cooperation cooperation){

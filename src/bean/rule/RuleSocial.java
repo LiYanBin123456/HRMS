@@ -5,6 +5,8 @@ import java.sql.Date;
 //社保规则
 public class RuleSocial extends Rule{
 
+    private float per1;
+    private float per2;
     private float base;//基数
     private float per3;//工伤单位比例
     private float extra;//工伤补充
@@ -15,12 +17,30 @@ public class RuleSocial extends Rule{
     }
 
     public RuleSocial(long id, String city, Date start, float per1, float per2, float base, float per3, float extra, float per4, float per5) {
-        super(id, city, start, per1, per2);
+        super(id, city, start);
+        this.per1 = per1;
+        this.per2 = per2;
         this.base = base;
         this.per3 = per3;
         this.extra = extra;
         this.per4 = per4;
         this.per5 = per5;
+    }
+
+    public float getPer1() {
+        return per1;
+    }
+
+    public void setPer1(float per1) {
+        this.per1 = per1;
+    }
+
+    public float getPer2() {
+        return per2;
+    }
+
+    public void setPer2(float per2) {
+        this.per2 = per2;
     }
 
     public float getBase() {
@@ -61,16 +81,5 @@ public class RuleSocial extends Rule{
 
     public void setPer5(float per5) {
         this.per5 = per5;
-    }
-
-    @Override
-    public String toString() {
-        return "RuleSocial{" +
-                "base=" + base +
-                ", per3=" + per3 +
-                ", extra=" + extra +
-                ", per4=" + per4 +
-                ", per5=" + per5 +
-                '}';
     }
 }

@@ -1,4 +1,4 @@
-package servlet.admin;
+package servlet;
 
 import bean.admin.Notice;
 import com.alibaba.fastjson.JSON;

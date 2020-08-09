@@ -1,4 +1,4 @@
-package dao.admin;
+package dao.contract;
 
 import bean.contract.Contract;
 import bean.contract.Serve;

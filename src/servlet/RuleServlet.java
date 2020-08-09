@@ -1,13 +1,13 @@
-package servlet.admin;
+package servlet;
 
 import bean.rule.RuleFund;
 import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
 import com.alibaba.fastjson.JSONObject;
 import database.*;
-import service.admin.RuleFundService;
-import service.admin.RuleMedicalService;
-import service.admin.RuleSocialService;
+import service.rule.RuleFundService;
+import service.rule.RuleMedicalService;
+import service.rule.RuleSocialService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

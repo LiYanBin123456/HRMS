@@ -1,4 +1,4 @@
-package dao.admin;
+package dao.rule;
 
 
 import bean.rule.RuleSocial;

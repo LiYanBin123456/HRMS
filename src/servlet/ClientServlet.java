@@ -1,11 +1,13 @@
-package servlet.client;
+package servlet;
 
 
 import bean.client.Dispatch;
 import com.alibaba.fastjson.*;
-import dao.admin.ContractDao;
+import dao.contract.ContractDao;
 import database.*;
+import service.client.CooperationService;
 import service.client.DispatchService;
+import service.client.SupplierService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,6 +23,8 @@ import java.util.List;
 @WebServlet(urlPatterns = "/client")
 public class ClientServlet extends HttpServlet {
     private DispatchService dispatchService = new DispatchService();
+    private CooperationService cooperationService = new CooperationService();
+    private SupplierService supplierService = new SupplierService();
    private ContractDao contractDao = new ContractDao();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
@@ -138,10 +142,20 @@ public class ClientServlet extends HttpServlet {
 
     //获取客户列表
     private String getList(Connection conn,HttpServletRequest request) {
+        DaoQueryListResult res = new DaoQueryListResult();
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
+        byte category= Byte.parseByte(request.getParameter("category"));
+        if(category==0){
+            //派遣方客户
+            res = dispatchService.getList(conn,parameter);
+        }else if(category==1){
+            //合作单位客户
+            res=cooperationService.getList(conn,parameter);
+        }else {
+            //供应商客户
+            res=supplierService.getList(conn,parameter);
+        }
 
-        DaoQueryListResult res = dispatchService.getList(conn,parameter);
-        System.out.println(res);
         return JSONObject.toJSONString(res);
     }
 

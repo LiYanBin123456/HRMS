@@ -1,7 +1,7 @@
-package service.admin;
+package service.rule;
 
 import bean.rule.RuleFund;
-import dao.admin.RuleFundDao;
+import dao.rule.RuleFundDao;
 import database.DaoQueryListResult;
 import database.DaoQueryResult;
 import database.DaoUpdateResult;
