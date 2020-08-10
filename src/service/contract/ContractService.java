@@ -10,8 +10,8 @@ import java.sql.Connection;
 public class ContractService {
     ContractDao contractDao = new ContractDao();
     private DispatchDao dispatchDao = new DispatchDao();
-    public DaoQueryListResult getList(Connection conn, QueryParameter parameter) {
-     return contractDao.getList(conn,parameter);
+    public DaoQueryListResult getList(Connection conn, QueryParameter parameter,String type) {
+     return contractDao.getList(conn,parameter,type);
     }
 
     public DaoQueryResult getLast(Connection conn, String id,String type) {

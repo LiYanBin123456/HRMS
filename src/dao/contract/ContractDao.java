@@ -2,6 +2,9 @@ package dao.contract;
 
 import bean.contract.Contract;
 import bean.contract.Serve;
+import bean.contract.V_coop_contract;
+import bean.contract.V_emp_contract;
+import com.alibaba.fastjson.JSONObject;
 import database.*;
 
 import java.sql.Connection;
@@ -9,9 +12,20 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class ContractDao {
-    //根据查询条件获取所有合同，用视图查找
-    public DaoQueryListResult getList(Connection conn, QueryParameter parameter) {
-        return DbUtil.getList(conn,"contract",parameter, Contract.class);
+    //根据查询条件获取合同列表，用视图查找
+    public DaoQueryListResult getList(Connection conn, QueryParameter parameter,String type) {
+        DaoQueryListResult res = null;
+        if(type=="A"){
+            //查询平台和派遣单位合同列表
+            res= DbUtil.getList(conn,"contract",parameter, Contract.class);
+        }else if(type=="C"){
+            //查询派遣单位和合作单位列表
+            res= DbUtil.getList(conn,"v_coop_contract",parameter, V_coop_contract.class);
+        }else if(type=="D"){
+            //派遣单位和员工列表
+            res= DbUtil.getList(conn,"v_emp_contract",parameter, V_emp_contract.class);
+        }
+        return res;
     }
 
     //查询最新合同

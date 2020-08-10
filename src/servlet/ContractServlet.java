@@ -167,7 +167,8 @@ public class ContractServlet extends HttpServlet {
     //获取合同列表
     private String getList(Connection conn, HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
-        DaoQueryListResult res =contractService.getList(conn,parameter);
+        String type=request.getParameter("type");
+        DaoQueryListResult res =contractService.getList(conn,parameter,type);
         return JSONObject.toJSONString(res);
     }
 
