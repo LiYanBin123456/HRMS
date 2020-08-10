@@ -146,16 +146,16 @@
             }
 
             function getDispatchs() {
-                var result = {total:100,rows:[{name:"九江市鲲鹏人力资源有限用丝（5614）",nickname:"鲲鹏人力",contact:"方部长",phone:"15986345868",address:"黑龙江省哈尔滨市",wx:"15986345868",qq:"159535455",mail:"159535455@qq.com",intro:"人力资源",code:"1233010078828217X8",bank:"建设银行",cardNo:"62536525512341241354"},{name:"江西国盛人力资源有限公司（2241）",nickname:"国盛人力",contact:"李经理",phone:"15986345868",address:"黑龙江省哈尔滨市",wx:"15986345868",qq:"159535455",mail:"159535455@qq.com",intro:"人力资源",code:"1233010078828217X8",bank:"建设银行",cardNo:"62536525512341241354"}]};
+                /*var result = {total:100,rows:[{name:"九江市鲲鹏人力资源有限用丝（5614）",nickname:"鲲鹏人力",contact:"方部长",phone:"15986345868",address:"黑龙江省哈尔滨市",wx:"15986345868",qq:"159535455",mail:"159535455@qq.com",intro:"人力资源",code:"1233010078828217X8",bank:"建设银行",cardNo:"62536525512341241354"},{name:"江西国盛人力资源有限公司（2241）",nickname:"国盛人力",contact:"李经理",phone:"15986345868",address:"黑龙江省哈尔滨市",wx:"15986345868",qq:"159535455",mail:"159535455@qq.com",intro:"人力资源",code:"1233010078828217X8",bank:"建设银行",cardNo:"62536525512341241354"}]};
                 table.reload('tbl_dispatch', {
                     data:result.rows
-                });
+                });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iDispatch.getList(param_query,function (result) {
+                iDispatch.getList(param_query,category,function (result) {
                     table.reload('tbl_dispatch', {
                         data:result.rows
                     });
-                });*/
+                });
             }
 
             //模糊查找

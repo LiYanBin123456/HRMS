@@ -9,8 +9,8 @@ var InterfaceClient = function() {
     var url = base+"/client";
     /**
      * 获取客户列表
-     * @param param
-     * @param category
+     * @param param 查询参数
+     * @param category 0-派遣方 1-合作单位 2-供应商
      * @param success
      * @param fail
      */
@@ -20,8 +20,8 @@ var InterfaceClient = function() {
     };
     /**
      * 添加客户
-     * @param client
-     * @param category
+     * @param client 客户信息
+     * @param category 0-派遣方 1-合作单位 2-供应商
      * @param success
      * @param fail
      */
@@ -31,8 +31,8 @@ var InterfaceClient = function() {
     };
     /**
      * 获取客户信息
-     * @param id
-     * @param category
+     * @param id 客户id
+     * @param category 0-派遣方 1-合作单位 2-供应商
      * @param success
      * @param fail
      */
@@ -42,8 +42,8 @@ var InterfaceClient = function() {
     };
     /**
      * 修改客户信息
-     * @param client
-     * @param category
+     * @param client 客户信息
+     * @param category 0-派遣方 1-合作单位 2-供应商
      * @param success
      * @param fail
      */
@@ -53,7 +53,7 @@ var InterfaceClient = function() {
     };
     /**
      * 获取客户最新自定义工资
-     * @param id
+     * @param id 客户id
      * @param success
      * @param fail
      */
@@ -63,8 +63,8 @@ var InterfaceClient = function() {
     };
     /**
      * 根据月份获取自定义工资
-     * @param id
-     * @param month
+     * @param id 客户id
+     * @param month 月份
      * @param success
      * @param fail
      */
@@ -74,7 +74,7 @@ var InterfaceClient = function() {
     };
     /**
      * 添加自定义工资
-     * @param mapSalary
+     * @param mapSalary 自定义工资
      * @param success
      * @param fail
      */
@@ -84,8 +84,8 @@ var InterfaceClient = function() {
     };
     /**
      * 获取财务信息
-     * @param id
-     * @param category
+     * @param id 客户id
+     * @param category 0-派遣方 1-合作单位
      * @param success
      * @param fail
      */
@@ -95,7 +95,7 @@ var InterfaceClient = function() {
     };
     /**
      * 添加财务信息
-     * @param finance
+     * @param finance 财务信息
      * @param success
      * @param fail
      */
@@ -105,7 +105,7 @@ var InterfaceClient = function() {
     };
     /**
      * 修改财务信息
-     * @param finance
+     * @param finance 财务信息
      * @param success
      * @param fail
      */
@@ -115,9 +115,9 @@ var InterfaceClient = function() {
     };
     /**
      * 删除客户
-     * @param id
-     * @param category
-     * @param status
+     * @param id 客户id
+     * @param category 0-派遣方 1-合作单位 2-供应商
+     * @param status 0-潜在客户 1-合作客户
      * @param success
      * @param fail
      */
@@ -127,9 +127,9 @@ var InterfaceClient = function() {
     };
     /**
      * 分配管理员
-     * @param aid
-     * @param category
-     * @param cids
+     * @param aid 管理员id
+     * @param category 0-派遣方 1-合作单位
+     * @param cids 给哪些客户分配管理员
      * @param success
      * @param fail
      */
@@ -144,8 +144,8 @@ var InterfaceRule = function() {
     var url = base+"/rule";//servlet的url地址
     /**
      * 获取规则列表
-     * @param param
-     * @param category
+     * @param param 查询参数
+     * @param category 类型 0-医保 1-社保 2-公积金
      * @param success
      * @param fail
      */
@@ -155,8 +155,8 @@ var InterfaceRule = function() {
     };
     /**
      * 添加规则
-     * @param rule
-     * @param category
+     * @param rule 规则信息
+     * @param category 类型 0-医保 1-社保 2-公积金
      * @param success
      * @param fail
      */
@@ -166,8 +166,8 @@ var InterfaceRule = function() {
     };
     /**
      * 删除规则
-     * @param id
-     * @param category
+     * @param id 规则id
+     * @param category 类型 0-医保 1-社保 2-公积金
      * @param success
      * @param fail
      */
@@ -177,8 +177,8 @@ var InterfaceRule = function() {
     };
     /**
      * 修改规则
-     * @param rule
-     * @param category
+     * @param rule 规则信息
+     * @param category 类型 0-医保 1-社保 2-公积金
      * @param success
      * @param fail
      */
@@ -188,8 +188,8 @@ var InterfaceRule = function() {
     };
     /**
      * 获取规则详情
-     * @param id
-     * @param category
+     * @param id 规则id
+     * @param category 类型 0-医保 1-社保 2-公积金
      * @param success
      * @param fail
      */
@@ -204,7 +204,7 @@ var InterfaceContract = function() {
     var url = base+"/contract";
     /**
      * 获取合同列表
-     * @param param
+     * @param param 查询参数
      * @param success
      * @param fail
      */
@@ -214,8 +214,8 @@ var InterfaceContract = function() {
     };
     /**
      * 获取最新合同
-     * @param id
-     * @param type
+     * @param id 该客户id
+     * @param type 类型 A-平台和派遣单位合同 B-平台和用人单位 C-派遣单位和合作单位 D-派遣单位和员工
      * @param success
      * @param fail
      */
@@ -225,7 +225,7 @@ var InterfaceContract = function() {
     };
     /**
      * 修改合同
-     * @param contract
+     * @param contract 合同信息
      * @param success
      * @param fail
      */
@@ -235,7 +235,7 @@ var InterfaceContract = function() {
     };
     /**
      * 添加合同
-     * @param contract
+     * @param contract 合同信息
      * @param success
      * @param fail
      */
@@ -245,7 +245,7 @@ var InterfaceContract = function() {
     };
     /**
      * 获取合同详情
-     * @param id
+     * @param id 合同id
      * @param success
      * @param fail
      */
@@ -255,7 +255,7 @@ var InterfaceContract = function() {
     };
     /**
      * 删除合同
-     * @param id
+     * @param id 合同id
      * @param success
      * @param fail
      */
@@ -265,7 +265,7 @@ var InterfaceContract = function() {
     };
     /**
      * 添加服务项目
-     * @param serve
+     * @param serve 服务项目信息
      * @param success
      * @param fail
      */
@@ -275,7 +275,7 @@ var InterfaceContract = function() {
     };
     /**
      * 获取合同服务项目详情
-     * @param id
+     * @param id 合同id
      * @param success
      * @param fail
      */
@@ -285,7 +285,7 @@ var InterfaceContract = function() {
     };
     /**
      * 修改服务项目
-     * @param serve
+     * @param serve 服务项目信息
      * @param success
      * @param fail
      */
@@ -295,7 +295,7 @@ var InterfaceContract = function() {
     };
     /**
      * 获取当前合作单位的有效服务项目列表
-     * @param param
+     * @param param 查询参数
      * @param success
      * @param fail
      */
@@ -310,8 +310,8 @@ var InterfaceAccount = function () {
     var url = base+"/account";//servlet的url地址
     /**
      * 登录
-     * @param username
-     * @param password
+     * @param username 账号
+     * @param password 密码
      * @param success
      * @param fail
      */
@@ -330,7 +330,7 @@ var InterfaceAccount = function () {
     };
     /**
      * 获取账户列表
-     * @param param
+     * @param param 查询参数
      * @param success
      * @param fail
      */
@@ -340,7 +340,7 @@ var InterfaceAccount = function () {
     };
     /**
      * 添加账号
-     * @param account
+     * @param account 账号信息
      * @param success
      * @param fail
      */
@@ -350,7 +350,7 @@ var InterfaceAccount = function () {
     };
     /**
      * 删除账号
-     * @param id
+     * @param id 账号id
      * @param success
      * @param fail
      */
@@ -360,7 +360,7 @@ var InterfaceAccount = function () {
     };
     /**
      * 获取账号详情
-     * @param id
+     * @param id 账号id
      * @param success
      * @param fail
      */
@@ -370,7 +370,7 @@ var InterfaceAccount = function () {
     };
     /**
      * 修改账号
-     * @param account
+     * @param account 账号信息
      * @param success
      * @param fail
      */
@@ -380,12 +380,13 @@ var InterfaceAccount = function () {
     };
     /**
      * 设置权限
-     * @param permission
+     * @param id 账号id
+     * @param permission 权限
      * @param success
      * @param fail
      */
-    this.permit = function (permission,success,fail) {
-        var para = {op:"permit",permission:permission};
+    this.permit = function (id,permission,success,fail) {
+        var para = {op:"permit",id:id,permission:permission};
         access(url,para,1,success,fail);
     };
 };
@@ -402,7 +403,7 @@ var InterfaceNotice = function() {
     };
     /**
      * 添加公告
-     * @param notice
+     * @param notice 公告信息
      * @param success
      * @param fail
      */
@@ -412,6 +413,9 @@ var InterfaceNotice = function() {
     };
     /**
      * 删除公告
+     * @param id 公告id
+     * @param success
+     * @param fail
      */
     this.delete = function (id,success,fail) {
         var para = {op:"delete",id:id};
@@ -419,7 +423,7 @@ var InterfaceNotice = function() {
     };
     /**
      * 获取公告详情
-     * @param id
+     * @param id 公告id
      * @param success
      * @param fail
      */
@@ -429,7 +433,7 @@ var InterfaceNotice = function() {
     };
     /**
      * 修改公告
-     * @param notice
+     * @param notice 公告信息
      * @param success
      * @param fail
      */
@@ -444,7 +448,7 @@ var InterfaceEmployee = function () {
     var url = base+"/employee";//servlet的url地址
     /**
      * 获取员工列表
-     * @param param
+     * @param param 查询参数
      * @param success
      * @param fail
      */
@@ -454,8 +458,8 @@ var InterfaceEmployee = function () {
     };
     /**
      * 添加员工信息
-     * @param employee
-     * @param category
+     * @param employee 员工信息
+     * @param category 0-员工信息 1-员工补充信息
      * @param success
      * @param fail
      */
@@ -465,18 +469,19 @@ var InterfaceEmployee = function () {
     };
     /**
      * 批量导入员工信息
-     * @param employees
+     * @param employees 员工信息集合
+     * @param extracts 员工补充信息集合
      * @param success
      * @param fail
      */
-    this.insertBatch = function (employees,success,fail) {
-        var para = {op: "insertBatch",employees:JSON.stringify(employees)};
+    this.insertBatch = function (employees,extracts,success,fail) {
+        var para = {op: "insertBatch",employees:JSON.stringify(employees),extracts:extracts};
         access(url,para,1,success,fail);
     };
     /**
      * 获取员工详情
-     * @param id
-     * @param category
+     * @param id 员工id
+     * @param category 0-员工信息 1-员工补充信息
      * @param success
      * @param fail
      */
@@ -486,8 +491,8 @@ var InterfaceEmployee = function () {
     };
     /**
      * 修改员工
-     * @param employee
-     * @param category
+     * @param employee 员工信息
+     * @param category 0-员工信息 1-员工补充信息
      * @param success
      * @param fail
      */
@@ -497,18 +502,19 @@ var InterfaceEmployee = function () {
     };
     /**
      * 离职退休
-     * @param leave
-     * @param type
+     * @param leave 离职原因信息
+     * @param category 0-离职 1-退休
+     * @param id 员工id
      * @param success
      * @param fail
      */
-    this.leave = function (leave,type,success,fail) {
-        var para = {op: "leave",leave:JSON.stringify(leave), type:type};
+    this.leave = function (id,leave,category,success,fail) {
+        var para = {op: "leave",leave:JSON.stringify(leave),id:id, category:category};
         access(url,para,1,success,fail);
     };
     /**
      * 删除员工
-     * @param id
+     * @param id 员工id
      * @param success
      * @param fail
      */
@@ -518,7 +524,7 @@ var InterfaceEmployee = function () {
     };
     /**
      * 添加社保设置
-     * @param setting
+     * @param setting 只要社保信息，个税补充信息为null即可
      * @param success
      * @param fail
      */
@@ -528,8 +534,8 @@ var InterfaceEmployee = function () {
     };
     /**
      * 设置社保和个人税专项扣除
-     * @param setting
-     * @param category
+     * @param setting 只要社保信息，个税补充信息为null即可
+     * @param category 0-修改社保设置 1-修改个税扣除
      * @param success
      * @param fail
      */
@@ -539,7 +545,7 @@ var InterfaceEmployee = function () {
     };
     /**
      * 添加工资卡
-     * @param payCard
+     * @param payCard 工资卡信息
      * @param success
      * @param fail
      */
@@ -549,7 +555,7 @@ var InterfaceEmployee = function () {
     };
     /**
      * 获取社保设置和个人税扣除详情
-     * @param id
+     * @param id 员工id
      * @param success
      * @param fail
      */
@@ -559,7 +565,7 @@ var InterfaceEmployee = function () {
     };
     /**
      * 获取员工工资卡详情
-     * @param id
+     * @param id 员工id
      * @param success
      * @param fail
      */
@@ -569,18 +575,18 @@ var InterfaceEmployee = function () {
     };
     /**
      * 修改员工工资卡
-     * @param id
+     * @param payCard 工资卡信息
      * @param success
      * @param fail
      */
-    this.updateCard = function (id,success,fail) {
-        var para = {op: "updateCard",id:id};
+    this.updateCard = function (payCard,success,fail) {
+        var para = {op: "updateCard",payCard:JSON.stringify(payCard)};
         access(url,para,1,success,fail);
     };
     /**
      * 批量派遣员工
-     * @param eids
-     * @param cid
+     * @param eids 员工id合集
+     * @param cid 合作单位id
      * @param success
      * @param fail
      */
@@ -590,8 +596,8 @@ var InterfaceEmployee = function () {
     };
     /**
      * 聘用人才库员工
-     * @param id
-     * @param category
+     * @param id 员工id
+     * @param category 0-内部员工 1-外部员工
      * @param success
      * @param fail
      */
@@ -606,8 +612,8 @@ var InterfaceSettlement = function () {
     var url = base+"/settlement";//servlet的url地址
     /**
      * 获取结算单列表
-     * @param param
-     * @param category
+     * @param param 查询列表
+     * @param category 0-普通结算单 1-小时工结算单 2-商业保险结算单
      * @param success
      * @param fail
      */
@@ -617,8 +623,8 @@ var InterfaceSettlement = function () {
     };
     /**
      * 添加结算单
-     * @param settlement
-     * @param category
+     * @param settlement 结算单信息
+     * @param category 0-普通结算单 1-小时工结算单 2-商业保险结算单
      * @param success
      * @param fail
      */
@@ -628,8 +634,8 @@ var InterfaceSettlement = function () {
     };
     /**
      * 删除结算单
-     * @param id
-     * @param category
+     * @param id 结算单id
+     * @param category 0-普通结算单 1-小时工结算单 2-商业保险结算单
      * @param success
      * @param fail
      */
@@ -639,9 +645,9 @@ var InterfaceSettlement = function () {
     };
     /**
      * 复制结算单
-     * @param id
-     * @param category
-     * @param month
+     * @param id 结算单id
+     * @param category 0-普通结算单 1-小时工结算单 2-商业保险结算单
+     * @param month 月份
      * @param success
      * @param fail
      */
@@ -651,9 +657,9 @@ var InterfaceSettlement = function () {
     };
     /**
      * 获取结算单明细列表
-     * @param param
-     * @param id
-     * @param category
+     * @param param 查询参数列表
+     * @param id 结算单编号
+     * @param category 0-普通结算单明细 1-小时工结算单明细 2-商业保险结算单明细
      * @param success
      * @param fail
      */
@@ -663,8 +669,8 @@ var InterfaceSettlement = function () {
     };
     /**
      * 修改结算单明细
-     * @param details
-     * @param category
+     * @param details 结算单明细
+     * @param category 0-普通结算单明细 1-小时工结算单明细 2-商业保险结算单明细
      * @param success
      * @param fail
      */
@@ -674,20 +680,20 @@ var InterfaceSettlement = function () {
     };
     /**
      * 导入工资明细
-     * @param id
-     * @param details
-     * @param category
+     * @param id 结算单编号
+     * @param details []结算单明细集合
+     * @param category 0-普通结算单明细 1-小时工结算单明细 2-商业保险结算单明细
      * @param success
      * @param fail
      */
     this.importDetails = function (id,details,category,success,fail) {
-        var para = {op: "importDetails",id:id,details:[], category:category};
+        var para = {op: "importDetails",id:id,details:details, category:category};
         access(url,para,1,success,fail);
     };
     /**
      * 导出工资明细
-     * @param id
-     * @param category
+     * @param id 结算单编号
+     * @param category 0-普通结算单明细 1-小时工结算单明细 2-商业保险结算单明细
      * @param success
      * @param fail
      */
@@ -700,8 +706,8 @@ var InterfaceSettlement = function () {
     //社保补差
     /**
      * 提交结算单
-     * @param id
-     * @param category
+     * @param id 结算单id
+     * @param category 0-结算单 1-小时工结算单
      * @param success
      * @param fail
      */
@@ -711,8 +717,8 @@ var InterfaceSettlement = function () {
     };
     /**
      * 重置结算单
-     * @param id
-     * @param category
+     * @param id 结算单id
+     * @param category 0-结算单 1-小时工结算单
      * @param success
      * @param fail
      */
@@ -722,8 +728,8 @@ var InterfaceSettlement = function () {
     };
     /**
      * 扣款
-     * @param id
-     * @param category
+     * @param id 结算单id
+     * @param category 0-结算单 1-小时工结算单
      * @param success
      * @param fail
      */
@@ -733,8 +739,8 @@ var InterfaceSettlement = function () {
     };
     /**
      * 发放工资
-     * @param id
-     * @param category
+     * @param id 结算单id
+     * @param category 0-结算单 1-小时工结算单
      * @param success
      * @param fail
      */
@@ -744,9 +750,9 @@ var InterfaceSettlement = function () {
     };
     /**
      * 导出工资发放表
-     * @param id
-     * @param bank
-     * @param category
+     * @param id 结算单id
+     * @param bank 银行
+     * @param category 0-结算单 1-小时工结算单
      * @param success
      * @param fail
      */
@@ -756,8 +762,8 @@ var InterfaceSettlement = function () {
     };
     /**
      * 查询结算单日志
-     * @param id
-     * @param category
+     * @param id 结算单id
+     * @param category 0-结算单 1-小时工结算单
      * @param success
      * @param fail
      */
@@ -772,8 +778,8 @@ var InterfaceInsurance = function () {
     var url = base+"/insurance";//servlet的url地址
     /**
      * 获取参保列表
-     * @param param
-     * @param category
+     * @param param 查询参数
+     * @param category 0-社保 1-医保 2-公积金
      * @param success
      * @param fail
      */
@@ -783,7 +789,7 @@ var InterfaceInsurance = function () {
     };
     /**
      * 导出参保单
-     * @param category
+     * @param category 0-社保 1-医保 2-公积金
      * @param success
      * @param fail
      */
@@ -793,8 +799,8 @@ var InterfaceInsurance = function () {
     };
     /**
      * 校对参保单
-     * @param insurance
-     * @param category
+     * @param insurance 将校对名单册导入后台
+     * @param category 0-社保 1-医保 2-公积金
      * @param success
      * @param fail
      */
@@ -804,8 +810,8 @@ var InterfaceInsurance = function () {
     };
     /**
      * 删除参保单
-     * @param id
-     * @param category
+     * @param id 员工id
+     * @param category 0-社保 1-医保 2-公积金
      * @param success
      * @param fail
      */
@@ -815,7 +821,7 @@ var InterfaceInsurance = function () {
     };
     /**
      * 添加参保单
-     * @param insurances
+     * @param insurances 参保单集合
      * @param success
      * @param fail
      */
@@ -825,8 +831,8 @@ var InterfaceInsurance = function () {
     };
     /**
      * 获取参保单详情
-     * @param id
-     * @param category
+     * @param id 员工id
+     * @param category 0-社保 1-医保 2-公积金
      * @param success
      * @param fail
      */
@@ -836,7 +842,7 @@ var InterfaceInsurance = function () {
     };
     /**
      * 修改参保单
-     * @param insurance
+     * @param insurance 参保单信息
      * @param success
      * @param fail
      */
@@ -851,7 +857,7 @@ var InterfaceProduct = function () {
     var url = base+"/product";//servlet的url地址
     /**
      * 获取保险产品列表
-     * @param param
+     * @param param 查询参数
      * @param success
      * @param fail
      */
@@ -861,7 +867,7 @@ var InterfaceProduct = function () {
     };
     /**
      * 删除保险产品
-     * @param id
+     * @param id 保险产品id
      * @param success
      * @param fail
      */
@@ -871,7 +877,7 @@ var InterfaceProduct = function () {
     };
     /**
      * 添加保险产品
-     * @param product
+     * @param product 产品信息
      * @param success
      * @param fail
      */
@@ -881,7 +887,7 @@ var InterfaceProduct = function () {
     };
     /**
      * 获取保险产品详情
-     * @param id
+     * @param id 产品id
      * @param success
      * @param fail
      */
@@ -891,7 +897,7 @@ var InterfaceProduct = function () {
     };
     /**
      * 修改保险产品详情
-     * @param product
+     * @param product 要修改的产品信息
      * @param success
      * @param fail
      */
@@ -906,8 +912,8 @@ var InterfaceFinance = function () {
     var url = base+"/";//servlet的url地址
     /**
      * 到账确认
-     * @param balance
-     * @param id
+     * @param balance 金额
+     * @param id 该派遣方id
      * @param success
      * @param fail
      */
@@ -917,7 +923,7 @@ var InterfaceFinance = function () {
     };
     /**
      * 资金明细
-     * @param param
+     * @param param 查询参数
      * @param success
      * @param fail
      */
@@ -941,8 +947,8 @@ var InterfaceFile = function () {
     };
     /**
      * 上传合同附件
-     * @param file
-     * @param id
+     * @param file 合同附件，只能是pdf格式
+     * @param id 合同id
      * @param success
      * @param fail
      */
@@ -952,7 +958,7 @@ var InterfaceFile = function () {
     };
     /**
      * 下载合同复印件
-     * @param id
+     * @param id 合同id
      * @param success
      * @param fail
      */
@@ -962,13 +968,13 @@ var InterfaceFile = function () {
     };
     /**
      * 上传员工头像
-     * @param file
-     * @param eid
+     * @param file 头像图片
+     * @param id 员工id
      * @param success
      * @param fail
      */
-    this.uploadlmg = function (file,eid,success,fail) {
-        var para = {op: "uploadlmg",eid:eid,file:file};
+    this.uploadImg = function (file,id,success,fail) {
+        var para = {op: "uploadImg",id:id,file:file};
         access(url,para,1,success,fail);
     };
 };

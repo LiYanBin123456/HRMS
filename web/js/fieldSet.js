@@ -160,7 +160,7 @@ var columns_contract = [[
 
 //内部员工管理字段集合
 var columns_employee_internal = [[
-    {field:'cardld', title: '身份证号',width:170},
+    {field:'cardId', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
     {field:'degree', title: '学历',width:80},
     {field:'phone', title: '联系电话',width:120},
@@ -171,7 +171,7 @@ var columns_employee_internal = [[
 //外派员工管理字段集合
 var columns_employee_expatriate = [[
     {type:'checkbox'},
-    {field:'cardld', title: '身份证号',width:170},
+    {field:'cardId', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
     {field:'degree', title: '学历',width:100},
     {field:'phone', title: '联系电话',width:120},
@@ -181,7 +181,7 @@ var columns_employee_expatriate = [[
 
 //人才库字段集合
 var columns_employee_spare = [[
-    {field:'cardld', title: '身份证号',width:200},
+    {field:'cardId', title: '身份证号',width:200},
     {field:'name', title: '姓名',width:200},
     {field:'degree', title: '学历',width:230},
     {field:'phone', title: '联系电话'},
@@ -190,7 +190,7 @@ var columns_employee_spare = [[
 
 //员工合同字段集合
 var columns_contract_employee  = [[
-    {field:'cardld', title: '身份证号码',width:170},
+    {field:'cardId', title: '身份证号码',width:170},
     {field:'name', title: '姓名',width:100},
     {field:'start', title: '生效时间',width:100},
     {field:'end', title: '到期时间',width:100},
@@ -277,7 +277,7 @@ var columns_settlement30  = [[
 
 //工资管理明细字段集合（完整模式）
 var columns_detail1_full  = [[
-    {field:'cardld', title: '身份证号',width:160},
+    {field:'cardId', title: '身份证号',width:160},
     {field:'name', title: '姓名',width:80},
     {field:'base', title: '基本工资',width:80},
     {field:'reward', title: '绩效奖金',width:80},
@@ -295,7 +295,7 @@ var columns_detail1_full  = [[
 
 //工资管理明细字段集合(录入模式）
 var columns_detail1_input  = [[
-    {field:'cardld', title: '身份证号',width:160},
+    {field:'cardId', title: '身份证号',width:160},
     {field:'name', title: '姓名',width:80},
     {field:'base', title: '基本工资',width:80,edit: 'text'},
     {field:'reward', title: '绩效奖金',width:80,edit: 'text'},
@@ -340,7 +340,7 @@ var columns_detail2_full  = [[
 
 //商业保险工资管理明细字段集合
 var columns_detail3  = [[
-    {field:'cardld', title: '身份证号',width:160},
+    {field:'cardId', title: '身份证号',width:160},
     {field:'name', title: '姓名',width:80},
     {field:'place', title: '工作地点',width:80},
     {field:'post', title: '工作岗位',width:80},
@@ -404,7 +404,7 @@ var columns_tax  = [[
 
 //医/社保参保字段集合
 var columns_insured1  = [[
-    {field:'cardld', title: '身份证号',width:170},
+    {field:'cardId', title: '身份证号',width:170},
     {field:'code', title: '个人代码',width:80},
     {field:'name', title: '姓名',width:80},
     {field:'start', title: '参保时间',width:80},
@@ -416,7 +416,7 @@ var columns_insured1  = [[
 
 //公积金参保字段集合
 var columns_insured2  = [[
-    {field:'cardld', title: '身份证号',width:170},
+    {field:'cardId', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
     {field:'start', title: '起缴时间',width:80},
     {field:'money', title: '工资基数',width:100},
@@ -427,7 +427,7 @@ var columns_insured2  = [[
 //公积金参保添加字段集合
 var columns_member  = [[
     {type:'checkbox'},
-    {field:'cardld', title: '身份证号',width:400},
+    {field:'cardId', title: '身份证号',width:400},
     {field:'name', title: '姓名',width:200},
 ]];
 
