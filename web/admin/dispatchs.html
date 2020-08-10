@@ -63,7 +63,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"name",direction:false},pagination: {need:true,page:1,size:5}};
             $(function () {
                 loadLayuiModule();
             });
@@ -151,7 +151,7 @@
                     data:result.rows
                 });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                iDispatch.getList(param_query,category,function (result) {
+                iDispatch.getList(param_query,0,function (result) {
                     table.reload('tbl_dispatch', {
                         data:result.rows
                     });
