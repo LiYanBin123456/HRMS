@@ -7,8 +7,11 @@ import java.sql.Connection;
 import java.util.List;
 
 public class EmployeeDao {
-    //获取列表
+    //获取列表，通过视图查找
     public DaoQueryListResult getList(Connection conn, QueryParameter param){
+        if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
+            param.addCondition("concat(name,contact)","like",param.conditions.extra);
+        }
         return DbUtil.getList(conn,"employee",param,Employee.class);
     }
 

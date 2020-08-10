@@ -15,6 +15,9 @@ public class CooperationDao {
     }
 
     public DaoQueryListResult getList(Connection conn, QueryParameter param){
+        if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
+            param.addCondition("concat(name,contact)","like",param.conditions.extra);
+        }
         return DbUtil.getList(conn,"cooperation",param, Cooperation.class);
     }
 

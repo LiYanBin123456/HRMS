@@ -15,6 +15,9 @@ public class DispatchDao {
      * @return 检索结果，格式："{success:true,msg:"",effects:1}"
      */
     public  DaoQueryListResult getList(Connection conn, QueryParameter param){
+        if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
+            param.addCondition("concat(name,contact)","like",param.conditions.extra);
+        }
         return DbUtil.getList(conn,"dispatch",param, Dispatch.class);
     }
 

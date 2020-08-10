@@ -112,7 +112,7 @@ public class DbUtil {
         String condition = param.conditions.toString();
         sql1 += condition;
         sql2 += condition;
-
+        System.out.println(param.conditions.extra);
         //是否需要排序
         if(param.order.need){
             sql1 += (" order by "+param.order.field);
@@ -129,6 +129,7 @@ public class DbUtil {
         DaoQueryListResult result = new DaoQueryListResult();
         try {
             Object[] values = param.conditions.extraValues().toArray();
+            System.out.println(values.toString());
             result.success = true;
             result.rows = qr.query(conn, sql1, new BeanListHandler<>(c), values);
             if(param.pagination.need) {

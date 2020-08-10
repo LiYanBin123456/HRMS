@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class ContractDao {
-    //根据查询条件获取所有合同
+    //根据查询条件获取所有合同，用视图查找
     public DaoQueryListResult getList(Connection conn, QueryParameter parameter) {
         return DbUtil.getList(conn,"contract",parameter, Contract.class);
     }
