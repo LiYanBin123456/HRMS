@@ -1,7 +1,7 @@
 package bean.settlement;
 
 //小时工结算单明细
-public class SalaryHour {
+public class detail2 extends detail {
 
     private int hours;//工时
     private float price;//员工表中的价格

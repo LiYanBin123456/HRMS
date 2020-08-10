@@ -5,8 +5,8 @@ import java.sql.Date;
 //社保规则
 public class RuleSocial extends Rule{
 
-    private float per1;
-    private float per2;
+    private float per1;//养老单位比例
+    private float per2;//养老个人比例
     private float base;//基数
     private float per3;//工伤单位比例
     private float extra;//工伤补充

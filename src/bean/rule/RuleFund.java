@@ -5,8 +5,8 @@ import java.sql.Date;
 //公积金规则
 public class RuleFund extends Rule{
 
-    private float per1;
-    private float per2;
+    private float per1;//比例上限
+    private float per2;//比例下限
     private float base;//基数
     private float min;//公积金下限
     private float max;//公积金上限

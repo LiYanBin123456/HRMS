@@ -2,7 +2,7 @@ package bean.settlement;
 
 
 //小时工结算单
-public class SettlementHour extends Settlemet{
+public class Settlement2 extends Settlemet{
 
     private  int hours;//总工时
     private  float price;//合作客户所给的单价

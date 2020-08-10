@@ -3,7 +3,7 @@ package bean.settlement;
 import java.sql.Date;
 
 //结算单明细基类
-public class Salary {
+public class detail {
     private long id;//工资表id
     private long sid;//结算单id
     private long eid;//员工id

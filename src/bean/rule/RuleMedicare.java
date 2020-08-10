@@ -6,8 +6,8 @@ import java.sql.Date;
 //医保规则
 public class RuleMedicare extends Rule{
 
-    private float per1;
-    private float per2;
+    private float per1;//医疗单位比例
+    private float per2;//医疗个人比例
     private float base;//基数
     private float per3;//生育单位比例
     private float fin1;//大病单位

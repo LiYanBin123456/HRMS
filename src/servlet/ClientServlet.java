@@ -142,7 +142,7 @@ public class ClientServlet extends HttpServlet {
 
     //获取客户列表
     private String getList(Connection conn,HttpServletRequest request) {
-        DaoQueryListResult res = new DaoQueryListResult();
+        DaoQueryListResult res ;
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         byte category= Byte.parseByte(request.getParameter("category"));
         if(category==0){

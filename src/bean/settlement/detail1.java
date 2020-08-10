@@ -1,17 +1,17 @@
 package bean.settlement;
 
 //结算单明细
-public class SalaryCommon {
+public class detail1 extends detail{
 
     private float base;//基础工资
     private float pension1;//个人养老
     private float medicare1;//个人医疗
-    private float unemployd1;//个人失业
+    private float unemployment1;//个人失业
     private float disease1;//个人大病
     private float fund1;//个人公积金
     private float pension2;//单位养老
     private float medicare2;//单位医疗
-    private float unemployd2;//单位失业
+    private float unemployment2;//单位失业
     private float injury;//单位工伤
     private float disease2;//单位大病
     private float birth;//单位生育

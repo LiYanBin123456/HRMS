@@ -7,13 +7,14 @@ import database.QueryParameter;
 import service.admin.AccountService;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-
+@WebServlet(urlPatterns = "/account")
 public class AccountServlet extends HttpServlet {
     private AccountService accountService = new AccountService();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -65,10 +66,10 @@ public class AccountServlet extends HttpServlet {
 
     //获取账号列表
     private String getList(Connection conn, HttpServletRequest request) {
-        DaoQueryListResult res = new DaoQueryListResult();
+        DaoQueryListResult res;
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         res = accountService.getList(conn,parameter);
-        return null;
+        return JSONObject.toJSONString(res);
     }
 
     //删除账号

@@ -2,7 +2,7 @@ package bean.settlement;
 
 
 //商业结算单明细
-public class SalaryInsurance {
+public class detail3  extends  detail{
 
     private Long pid;//保险产品id
     private String place;//工作地点
