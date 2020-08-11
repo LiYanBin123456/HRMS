@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sound.midi.Soundbank;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -31,20 +32,28 @@ public class AccountServlet extends HttpServlet {
         switch (op) {
             case "login"://登录
                 result = login(conn,request);
+                break;
             case "quit"://退出
                 result = quit(conn,request);
+                break;
             case "getList"://获取账号列表
                 result = getList(conn,request);
+                break;
             case "delete"://删除账号列表
                 result = delete(conn,request);
+                break;
             case "insert"://添加账号
                 result = insert(conn,request);
+                break;
             case "get"://获取账号详情
                 result = get(conn,request);
+                break;
             case "update"://修改账号
                 result = update(conn,request);
+                break;
             case "permit"://设置权限
                 result = permit(conn,request);
+                break;
         }
         ConnUtil.closeConnection(conn);
 
@@ -69,6 +78,7 @@ public class AccountServlet extends HttpServlet {
         DaoQueryListResult res;
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         res = accountService.getList(conn,parameter);
+        System.out.println(JSONObject.toJSONString(res));
         return JSONObject.toJSONString(res);
     }
 

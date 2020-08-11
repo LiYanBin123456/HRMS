@@ -12,8 +12,10 @@ public class AccountDao {
     public String login(String username,String password){
         return null;
     }
+
     public DaoQueryListResult getList(Connection conn, QueryParameter param){
         return DbUtil.getList(conn,"account",param,Account.class);
+
     }
 
     public DaoQueryResult get(Connection conn, long id) {

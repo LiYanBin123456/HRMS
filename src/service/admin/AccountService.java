@@ -16,6 +16,7 @@ public class AccountService {
     public String login(String username,String password){
         return null;
     }
+
     public DaoQueryListResult getList(Connection conn, QueryParameter param){
         return accountDao.getList(conn,param);
     }
