@@ -151,7 +151,7 @@ var columns_supplier = [[
 
 //劳务派遣客户合同字段集合
 var columns_contract = [[
-    {field:'client', title: '合作客户'},
+    {field:'name', title: '合作客户'},
     {field:'service', title: '服务项目',width:130},
     {field:'start', title: '生效时间',width:130},
     {field:'end', title: '到期时间',width:130},
