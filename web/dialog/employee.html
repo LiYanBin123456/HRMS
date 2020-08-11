@@ -187,10 +187,6 @@
                     <fieldset class="layui-elem-field">
                         <legend>公积金</legend>
                         <div class="layui-field-box">
-                            <div class="layui-inline">
-                                <input type="radio" lay-filter="settingF" name="settingF" value="0" title="按比例交" checked>
-                                <input type="radio" lay-filter="settingF" name="settingF" value="1" title="自定义金额">
-                            </div>
                             <div class="layui-inline" name="f1">
                                 <input type="text" name="fundBase" required="" placeholder="基数"
                                        autocomplete="off" class="layui-input">
@@ -198,9 +194,6 @@
                             <div class="layui-inline" name="f1">
                                 <input type="text" name="fundPer" required="" placeholder="%"
                                        autocomplete="off" class="layui-input">
-                            </div>
-                            <div class="layui-inline layui-hide" name="f2">
-                                <input type="text" name="fund" required="" placeholder="自定义金额" autocomplete="off" class="layui-input ">
                             </div>
                         </div>
                     </fieldset>
@@ -212,11 +205,6 @@
                             <div class="layui-inline">
                                 <input type="radio" lay-filter="settingP" name="settingP" value="0" title="无" checked>
                                 <input type="radio" lay-filter="settingP" name="settingP" value="1" title="购买">
-                            </div>
-                            <div class="layui-inline layui-hide" name="p1">
-                                <input type="checkbox" name="product[1]" title="用工宝">
-                                <input type="checkbox" name="product[2]" title="产品1">
-                                <input type="checkbox" name="product[3]" title="产品2">
                             </div>
                         </div>
                     </fieldset>
