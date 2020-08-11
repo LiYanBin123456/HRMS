@@ -1,7 +1,7 @@
 package bean.settlement;
 
 //结算单明细
-public class detail1 extends detail{
+public class Detail1 extends Detail {
 
     private float base;//基础工资
     private float pension1;//个人养老
