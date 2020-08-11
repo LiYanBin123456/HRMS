@@ -1,12 +1,14 @@
 package service.client;
 
 import bean.client.Cooperation;
+import dao.client.CooperationDao;
 import database.DaoQueryListResult;
 import database.QueryParameter;
 
 import java.sql.Connection;
 
 public class CooperationService {
+    private CooperationDao cooperationDao = new CooperationDao();
    //获取客户详情
     public String get(long id,Connection conn){
         return null;
@@ -14,7 +16,7 @@ public class CooperationService {
 
     //获取客户列表
     public DaoQueryListResult getList(Connection conn, QueryParameter param){
-        return null;
+        return cooperationDao.getList(conn,param);
     }
 
     //修改客户
