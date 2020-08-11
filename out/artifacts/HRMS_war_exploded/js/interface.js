@@ -205,11 +205,12 @@ var InterfaceContract = function() {
     /**
      * 获取合同列表
      * @param param 查询参数
+     * @param type 类型 A-平台和派遣单位合同 B-平台和用人单位 C-派遣单位和合作单位 D-派遣单位和员工
      * @param success
      * @param fail
      */
-    this.getList = function(param,success,fail){
-        var para = {op: "getList", param:JSON.stringify(param)};
+    this.getList = function(param,type,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param),type:type};
         access(url,para,0,success,fail);
     };
     /**
@@ -981,7 +982,7 @@ var InterfaceFile = function () {
 
 var iDispatch = new InterfaceClient();//客户管理
 var iSupplier = new InterfaceClient();//客户管理
-var iCooperation =  new InterfaceClient();//客户管理
+var iCooperation = new InterfaceClient();//客户管理
 var iMedicare = new InterfaceRule();//规则管理
 var iSocial =  new InterfaceRule();//规则管理
 var iFund = new InterfaceRule();//规则管理

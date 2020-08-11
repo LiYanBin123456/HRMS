@@ -54,7 +54,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"name",direction:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule1();
             });
@@ -134,16 +134,16 @@
             }
 
             function getSuppliers() {
-                var result = {total:100,rows:[{name:"科技中专",nature:"学校",business:"顶岗实习",contact:"赵老师",phone:"18966666633",address:"江西九江",wx:"18966666633",qq:"122565458",business2:"教育",intro:"暂无备注"},{name:"国棉四厂",nature:"工厂",business:"就业安置",contact:"李科长",phone:"18966666633",address:"江西九江",wx:"18966666633",qq:"122565458",business2:"棉花",intro:"暂无备注"}]};
+                /*var result = {total:100,rows:[{name:"科技中专",nature:"学校",business:"顶岗实习",contact:"赵老师",phone:"18966666633",address:"江西九江",wx:"18966666633",qq:"122565458",business2:"教育",intro:"暂无备注"},{name:"国棉四厂",nature:"工厂",business:"就业安置",contact:"李科长",phone:"18966666633",address:"江西九江",wx:"18966666633",qq:"122565458",business2:"棉花",intro:"暂无备注"}]};
                 table.reload('tbl_supplier', {
                     data:result.rows
-                });
+                });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iSupplier.getList(param_query,function (result) {
+                iSupplier.getList(param_query,2,function (result) {
                     table.reload('tbl_supplier', {
                         data:result.rows
                     });
-                });*/
+                });
             }
 
             //模糊查找

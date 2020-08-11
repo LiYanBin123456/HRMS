@@ -8,7 +8,7 @@
 			]]>
 		</property>
 		<property name="user">root</property>
-		<property name="password">123</property>
+		<property name="password">123456</property>
 		<!-- 如果池中数据连接不够时一次增长多少个 -->
 		<property name="acquireIncrement">5</property>
 		<property name="initialPoolSize">20</property>
