@@ -153,8 +153,8 @@ var columns_supplier = [[
 var columns_contract = [[
     {field:'name', title: '合作客户'},
     {field:'service', title: '服务项目',width:130},
-    {field:'start', title: '生效时间',width:130},
-    {field:'end', title: '到期时间',width:130},
+    {field:'start', title: '生效时间',width:130,templet:templet_modtime},
+    {field:'end', title: '到期时间',width:130,templet:templet_modtime},
     {fixed:'right', title: '操作', toolbar: '#bar_contract',width:200}
 ]];
 
@@ -483,7 +483,7 @@ function templet_works(d) {
     return format_works(d.works);
 }
 function templet_modtime(d) {
-    return format_dateTime(d.modtime)
+    return format_date(d.modtime)
 }
 function templet_time(d) {
     return format_dateTime(d.time)
@@ -559,10 +559,10 @@ function array_value2text(arr,value){
 }
 
 function format_date(timestamp) {
-    var d = new Date(timestamp);
-    var year=d.getFullYear();
-    var month=d.getMonth()+1;
-    var date=d.getDate();
+    var modtime = new Date(timestamp);
+    var year=modtime.getFullYear();
+    var month=modtime.getMonth()+1;
+    var date=modtime.getDate();
     return year+"-"+month+"-"+date;
 }
 
