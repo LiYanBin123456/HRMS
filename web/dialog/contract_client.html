@@ -239,8 +239,8 @@
         var param = $.query.get("contract");
         if (param) {
             var contract = JSON.parse(param);
-            form.val('form_contract', contract_client);
-            layedit.setContent(editer, contract_client.content, false);
+            form.val('form_contract', contract);
+            layedit.setContent(editer, contract.content, false);
             op = "update";
             $("[name=client]").attr("disabled", 'disabled');
             form.render('select', 'form_contract');

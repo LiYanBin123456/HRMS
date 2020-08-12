@@ -3,71 +3,6 @@
  *
  */
 
-//----------------------------------------------------------------数据集合-----------------------
-
-var items_welfare = [
-    {value:1,text:"五险一金"},
-    {value:2,text:"包住"},
-    {value:4,text:"包吃"},
-    {value:8,text:"周末双休"},
-    {value:16,text:"交通补助"},
-    {value:32,text:"加班补助"},
-    {value:64,text:"餐补"},
-    {value:128,text:"话补"},
-    {value:256,text:"房补"}
-];
-
-var items_degree = [
-    {value:0,text:"高中以下"},
-    {value:1,text:"高中"},
-    {value:2,text:"中专"},
-    {value:3,text:"大专"},
-    {value:4,text:"本科"},
-    {value:5,text:"硕士"},
-    {value:6,text:"博士"}
-];
-
-var items_degree_limit = [{value:-1,text:"不限"}].concat(items_degree);
-
-var states_app = [
-    {value:0,text:"已离职，需求新工作"},
-    {value:1,text:"在职，考虑更好职位"},
-    {value:2,text:"其他"}
-];
-
-var status_interview = [
-    {value:0,text:"邀请中"},
-    {value:1,text:"面试中"},
-    {value:2,text:"已拒绝"},
-    {value:3,text:"已录用"},
-    {value:4,text:"不录用"}
-];
-var status_job = [
-    {value:0,text:"待修改"},
-    {value:1,text:"待审核"},
-    {value:2,text:"招聘中"},
-    {value:3,text:"已下架"},
-    {value:4,text:"已删除"}
-];
-var categorys_enterprise = [
-    {value:0,text:"外资企业"},
-    {value:1,text:"民营企业"},
-    {value:2,text:"股份制企业"},
-    {value:3,text:"集体企业"},
-    {value:4,text:"上市公司"},
-    {value:5,text:"国家机关"},
-    {value:6,text:"事业单位"},
-    {value:7,text:"其它"}
-];
-var works_enterprise = [
-    {value:0,text:"10人以下"},
-    {value:1,text:"10-50人"},
-    {value:2,text:"50-200人"},
-    {value:3,text:"200-500人"},
-    {value:4,text:"500-1000人"},
-    {value:5,text:"1000人以上"}
-]
-
 //----------------------------------------------------------------字段集合-----------------------
 
 //派遣单位字段集合
@@ -134,7 +69,7 @@ var columns_accounts  = [[
 //合作客户管理字段集合
 var columns_cooperation = [[
     {field:'name', title: '客户名称'},
-    {field:'category', title: '客户性质',width:200},
+    {field:'category', title: '客户性质',width:200,templet:function (d) { return array_value2text(categorys_cooperation,d.category) }},
     {field:'contact', title: '联系人',width:200},
     {field:'phone', title: '联系电话',width:200},
     {fixed: 'right', title: '操作', toolbar: '#bar_cooperation',width:300}
@@ -150,12 +85,30 @@ var columns_supplier = [[
 ]];
 
 //劳务派遣客户合同字段集合
-var columns_contract = [[
+var columns_contract_dispatch = [[
+    {field:'name', title: '合作客户'},
+    {field:'start', title: '生效时间',width:130,templet:function (d) {return format_date(d.start)}},
+    {field:'end', title: '到期时间',width:130,templet:function (d) {return format_date(d.end)}},
+    {fixed:'right', title: '操作', toolbar: '#bar_contract',width:200}
+]];
+
+//劳务派遣客户合同字段集合
+var columns_contract_cooperation = [[
     {field:'name', title: '合作客户'},
     {field:'service', title: '服务项目',width:130},
-    {field:'start', title: '生效时间',width:130},
-    {field:'end', title: '到期时间',width:130},
+    {field:'start', title: '生效时间',width:130,templet:function (d) {return format_date(d.start)}},
+    {field:'end', title: '到期时间',width:130,templet:function (d) {return format_date(d.end)}},
     {fixed:'right', title: '操作', toolbar: '#bar_contract',width:200}
+]];
+
+//员工合同字段集合
+var columns_contract_employee  = [[
+    {field:'cardId', title: '身份证号码',width:170},
+    {field:'name', title: '姓名',width:100},
+    {field:'start', title: '生效时间',width:100,templet:function (d) {return format_date(d.start)}},
+    {field:'end', title: '到期时间',width:100,templet:function (d) {return format_date(d.end)}},
+    {field:'times', title: '签订次数',width:80},
+    { title: '操作', toolbar: '#bar_contract'}
 ]];
 
 //内部员工管理字段集合
@@ -186,16 +139,6 @@ var columns_employee_spare = [[
     {field:'degree', title: '学历',width:230},
     {field:'phone', title: '联系电话'},
     {field: 'right', title: '操作', toolbar: '#bar_spare',width:200,fixed:"right"}
-]];
-
-//员工合同字段集合
-var columns_contract_employee  = [[
-    {field:'cardId', title: '身份证号码',width:170},
-    {field:'name', title: '姓名',width:100},
-    {field:'start', title: '生效时间',width:100},
-    {field:'end', title: '到期时间',width:100},
-    {field:'times', title: '签订次数',width:80},
-    { title: '操作', toolbar: '#bar_contract'}
 ]];
 
 //普通结算单字段集合
@@ -469,94 +412,24 @@ var columns_account2  = [[
     {fixed: 'right', title: '操作', toolbar: '#bar_account',width:200}
 ]];
 
+//----------------------------------------------------------------数据集合-----------------------
+var categorys_cooperation = [
+    {value:0,text:"政府部门"},
+    {value:1,text:"事业单位"},
+    {value:2,text:"人才市场"},
+    {value:3,text:"学校"},
+    {value:4,text:"内资企业"},
+    {value:5,text:"外资企业"},
+    {value:5,text:"港澳台企业"},
+    {value:5,text:"内资工厂"},
+    {value:5,text:"外资工厂"},
+    {value:5,text:"港澳台工厂"},
+    {value:5,text:"其它"}
+];
+
 
 //----------------------------------------------------------------字段格式化-----------------------
-function templet_candidate(d) {
-    return d.name+"/"+d.phone;
-}
 
-function templet_category_enterprise(d) {
-    return format_category_enterprise(d.category);
-}
-
-function templet_works(d) {
-    return format_works(d.works);
-}
-function templet_modtime(d) {
-    return format_dateTime(d.modtime)
-}
-function templet_time(d) {
-    return format_dateTime(d.time)
-}
-function templet_salary(d) {
-    return "¥"+d.salary1+"-"+d.salary2;
-}
-function templet_status_job(d) {
-    return array_value2text(status_job,d.status);
-}
-function templet_status_interview(d) {
-    return array_value2text(status_interview,d.status);
-}
-
-function templet_sex(d) {
-    return format_sex(d.sex);
-}
-
-function templet_degree(d){
-    return format_degree(d.degree);
-}
-
-function templet_category(d) {
-    return format_category(d.category);
-}
-
-function templet_recurit(d){
-    return "收藏:"+d.favorites+",投简历:"+d.submit+",录用:"+d.pass;
-}
-function format_sex(value) {
-    return value==0?"男":"女";
-}
-function format_degree(value){
-    return array_value2text(items_degree_limit,value);
-}
-function format_state(value){
-    return array_value2text(states_app,value);
-}
-function format_category_enterprise(value){
-    return array_value2text(categorys_enterprise,value);
-}
-function format_works(value){
-    return array_value2text(works_enterprise,value);
-}
-function format_welfare(value,extra){
-    var res = [];
-    for(var i in items_welfare){
-        var w = items_welfare[i];
-        if((value & w.value) != 0){
-            res.push(w.text);
-        }
-    }
-    if((value & 1)!=0){
-        res.push(extra);
-    }
-
-    return res;
-}
-
-/**
- * 在数组中根据指定值转换为文本
- * @param {array} arr 数组
- * @param {*} value 指定值
- */
-function array_value2text(arr,value){
-    for(var i in arr){
-        var obj = arr[i];
-        if(obj.value == value){
-            return obj.text;
-        }
-    }
-    return "";
-}
 
 function format_date(timestamp) {
     var d = new Date(timestamp);
@@ -576,27 +449,17 @@ function format_dateTime(timestamp) {
     return year+"-"+month+"-"+date+" "+hour+":"+minute;
 }
 
-
-
-
-
-//----------------------------------------------------------------字段设置相关-----------------------
-
-
 /**
- * 根据字段值提取相应的字段
- * @param columns 所有的字段
- * @param value 字段值，相应的二进制位为1表示有该字段
- * @returns {[field]} 字段集合，形如[[field1,field2……]]。
+ * 在数组中根据指定值转换为文本
+ * @param {array} arr 数组
+ * @param {*} value 指定值
  */
-function getColumns(columns, value) {
-    var result = [];
-    for (var i in columns){
-        if((value & Math.pow(2,i))!=0){
-            result.push(columns[i]);
+function array_value2text(arr,value){
+    for(var i in arr){
+        var obj = arr[i];
+        if(obj.value == value){
+            return obj.text;
         }
     }
-    return [result];
+    return "";
 }
-
-

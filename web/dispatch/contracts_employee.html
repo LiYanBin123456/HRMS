@@ -137,16 +137,31 @@
             }
 
             function getContracts() {
-                var result = {total:100,rows:[{cardld:"360201200310243354",name:"张三",start:"2019-1-29",end:"2020-6-21",times:"1",comments:"暂无备注"},{cardld:"360201998310243354",name:"李四",start:"2019-1-29",end:"2020-6-21",times:"3",comments:"暂无备注"}]};
+                /*var result = {total:100,rows:[{cardld:"360201200310243354",name:"张三",start:"2019-1-29",end:"2020-6-21",times:"1",comments:"暂无备注"},{cardld:"360201998310243354",name:"李四",start:"2019-1-29",end:"2020-6-21",times:"3",comments:"暂无备注"}]};
                 table.reload('tbl_contract', {
                     data:result.rows
-                });
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iContract.getList(param_query,function (result) {
-                    table.reload('tbl_notice', {
+                });*/
+                iContract.getList(param_query,"C",function (result) {
+                    table.reload('tbl_contract', {
                         data:result.rows
                     });
-                });*/
+
+                    //初始化分页
+                    laypage.render({
+                        elem: 'pager',
+                        curr:param_query.pagination.page,
+                        count: result.total, //数据总数
+                        layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip'],
+                        jump: function(obj,first){
+                            //首次不执行
+                            if(!first){
+                                param_query.pagination.page = obj.curr;
+                                param_query.pagination.size = obj.limit;
+                                getContracts();
+                            }
+                        }
+                    });
+                });
             }
 
             //模糊查找

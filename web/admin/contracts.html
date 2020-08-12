@@ -87,7 +87,7 @@
 
                     title: '合同列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_contract_cooperation,
+                    cols: columns_contract_dispatch,
                     id: 'tbl_contract'
                 });
 
@@ -125,7 +125,7 @@
                     data:result.rows
                 });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                iContract.getList(param_query,"B",function (result) {
+                iContract.getList(param_query,"A",function (result) {
                     table.reload('tbl_contract', {
                         data:result.rows
                     });
@@ -156,9 +156,9 @@
 
             //打开详情对话框
             function showDetailDlg(contract) {
-                var content = "../dialog/contract_client.html?contract="+encodeURIComponent(JSON.stringify(contract));
+                var content = "../dialog/contract_dispatch.html?contract="+encodeURIComponent(JSON.stringify(contract));
                 layer.open({
-                    title:'合同-'+contract.client,
+                    title:'合同-'+contract.name,
                     type: 2,
                     area: ['800px', '600px'],
                     content: content
@@ -167,7 +167,7 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/contract_client.html";
+                var content = "../dialog/contract_dispatch.html";
                 layer.open({
                     title:"添加合同",
                     type: 2,
