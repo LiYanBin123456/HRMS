@@ -11,13 +11,13 @@ public class Detail1Dao {
     private String getList(Connection conn, QueryParameter param){
         return null;
     }
-    private String update(Connection conn, Detail1 detail){
+    private String update(Connection conn, List<Detail1> details){
         return  null;
     }
     private String importDetails(Connection conn,long id, List<Detail1> details){
         return  null;
     }
-    private String exportDetails(Connection conn,long id, List<Detail1> details){
+    private String exportDetails(Connection conn,long id){
         return  null;
     }
     private String backup(Connection conn,Long id,String month){

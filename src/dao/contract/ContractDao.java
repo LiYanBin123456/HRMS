@@ -14,32 +14,23 @@ public class ContractDao {
     //根据查询条件获取合同列表，用视图查找
     public DaoQueryListResult getList(Connection conn, QueryParameter parameter,String type) {
         DaoQueryListResult res = null;
-        String A="A";
-        String B="B";
-        String C="C";
-        String D="D";
-        if(type.equals(A)){
-            //查询type为A即平台和派遣单位的合同
-            parameter.addCondition("type","=",type);
-            res= DbUtil.getList(conn,"contract",parameter, Contract.class);
-        }else if(type.equals(B)){
-            //查询平台和合作单位的合同,现在还没有这方面的合同
-            res = null;
-        } else if(type.equals(C)){
-            //查询type为C即派遣单位和合作单位的合同
-            if(parameter.conditions.extra!=null && !parameter.conditions.extra.isEmpty()) {
-                parameter.addCondition("name","like",parameter.conditions.extra);
-            }
-            parameter.addCondition("type","=",type);
-            res= DbUtil.getList(conn,"view_contract_cooperation",parameter, ViewContractCooperation.class);
-        }else if(type.equals(D)){
-            //查询type为D即派遣单位和员工的合同
-            if(parameter.conditions.extra!=null && !parameter.conditions.extra.isEmpty()) {
-                parameter.addCondition("name","like",parameter.conditions.extra);
-                System.out.println(parameter.conditions.extra);
-            }
-            parameter.addCondition("type","=",type);
-            res= DbUtil.getList(conn,"view_contract_employee",parameter, ViewContractEmployee.class);
+        if(parameter.conditions.extra!=null && !parameter.conditions.extra.isEmpty()) {
+            parameter.addCondition("name","like",parameter.conditions.extra);
+        }
+        switch(type){
+            case "A":
+                //获取平台和派遣方的合同
+                res= DbUtil.getList(conn,"contract",parameter, Contract.class);
+                break;
+            case "B":
+                //获取派遣方与合作单位的合同
+                res= DbUtil.getList(conn,"view_contract_cooperation",parameter, ViewContractCooperation.class);
+                break;
+            case "C":
+                //获取派遣方与员工的合同
+                res= DbUtil.getList(conn,"view_contract_employee",parameter, ViewContractEmployee.class);
+                break;
+
         }
         return res;
     }

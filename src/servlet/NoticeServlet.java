@@ -30,27 +30,20 @@ public class NoticeServlet extends HttpServlet {
             case "insert"://插入清单
                 result = insert(conn,request);
                 break;
-        }
-        switch (op) {
-            case "delete"://删除所有公积金清单
-                result = delete(conn,request);
-                break;
-        }
-        switch (op) {
             case "update"://修改清单
                 result = update(conn,request);
                 break;
-        }
-        switch (op) {
+            case "delete"://删除所有清单
+                result = delete(conn,request);
+                break;
             case "getList"://获取所有公积金清单
                 result = getList(conn,request);
                 break;
-        }
-        switch (op) {
             case "get"://获取一个清单
                 result = get(conn,request);
                 break;
         }
+
 
 
         ConnUtil.closeConnection(conn);

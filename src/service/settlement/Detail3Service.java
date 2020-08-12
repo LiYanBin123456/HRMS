@@ -11,13 +11,13 @@ public class Detail3Service {
     private String getList(Connection conn, QueryParameter param){
         return null;
     }
-    private String update(Connection conn, Detail3 detail3){
+    private String update(Connection conn,  List<Detail3> details){
         return  null;
     }
     private String importDetails(Connection conn,long id, List<Detail3> details){
         return  null;
     }
-    private String exportDetails(Connection conn,long id, List<Detail3> details){
+    private String exportDetails(Connection conn,long id){
         return  null;
     }
 }

@@ -12,23 +12,24 @@ import java.sql.Connection;
 public class RuleFundService {
     private RuleFundDao ruleFundDao = new RuleFundDao();
 
-    public DaoQueryListResult getFundRules(Connection conn, QueryParameter param){
-        return ruleFundDao.getFundRules(conn,param);
+    public DaoQueryListResult getList(Connection conn, QueryParameter param){
+        return null;
     }
 
-    public DaoQueryResult getFundRule(Connection conn, long id) {
-        return ruleFundDao.getFundRule(conn,id);
+    public DaoQueryResult get(Connection conn, long id) {
+
+        return null;
     }
 
-    public DaoUpdateResult updateFundRule(Connection conn, RuleFund rule) {
-        return ruleFundDao.updateFundRule(conn,rule);
+    public DaoUpdateResult update(Connection conn, RuleFund rule) {
+        return null;
     }
 
-    public DaoUpdateResult insertFundRule(Connection conn, RuleFund rule) {
-        return ruleFundDao.insertFundRule(conn,rule);
+    public DaoUpdateResult insert(Connection conn, RuleFund rule) {
+        return null;
     }
 
-    public DaoUpdateResult deleteFundRule(Connection conn, long id) {
-        return  ruleFundDao.deleteFundRule(conn,id);
+    public DaoUpdateResult delete(Connection conn, long id) {
+        return null;
     }
 }

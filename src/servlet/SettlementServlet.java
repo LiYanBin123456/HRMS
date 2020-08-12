@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 
-@WebServlet(name = "SettlementServlet",urlPatterns = "settlement")
+@WebServlet(name = "SettlementServlet",urlPatterns = "/settlement")
 public class SettlementServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);

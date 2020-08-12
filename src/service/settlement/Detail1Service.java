@@ -10,7 +10,7 @@ public class Detail1Service {
     private String getList(Connection conn, QueryParameter param){
         return null;
     }
-    private String update(Connection conn, Detail1 detail1){
+    private String update(Connection conn,List<Detail1> details ){
         return  null;
     }
     private String importDetails(Connection conn,long id, List<Detail1> details){
