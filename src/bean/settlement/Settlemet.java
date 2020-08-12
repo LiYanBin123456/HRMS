@@ -24,4 +24,27 @@ public class Settlemet {
      */
     private byte source;
 
+    public Settlemet() {
+    }
+
+    public Settlemet(long id, long did, long cid, Date month, byte status, byte source) {
+        this.id = id;
+        this.did = did;
+        this.cid = cid;
+        this.month = month;
+        this.status = status;
+        this.source = source;
+    }
+
+    @Override
+    public String toString() {
+        return "Settlemet{" +
+                "id=" + id +
+                ", did=" + did +
+                ", cid=" + cid +
+                ", month=" + month +
+                ", status=" + status +
+                ", source=" + source +
+                '}';
+    }
 }

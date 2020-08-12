@@ -1,9 +1,6 @@
 package dao.contract;
 
-import bean.contract.Contract;
-import bean.contract.Serve;
-import bean.contract.ViewContractCooperation;
-import bean.contract.ViewContractEmployee;
+import bean.contract.*;
 import database.*;
 
 import javax.sound.midi.Soundbank;
@@ -20,7 +17,7 @@ public class ContractDao {
         switch(type){
             case "A":
                 //获取平台和派遣方的合同
-                res= DbUtil.getList(conn,"contract",parameter, Contract.class);
+                res= DbUtil.getList(conn,"view_contract_dispatch",parameter, ViewContractDispatch.class);
                 break;
             case "B":
                 //获取派遣方与合作单位的合同
