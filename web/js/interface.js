@@ -205,7 +205,7 @@ var InterfaceContract = function() {
     /**
      * 获取合同列表
      * @param param 查询参数
-     * @param type 类型 A-平台和派遣单位合同 B-平台和用人单位 C-派遣单位和合作单位 D-派遣单位和员工
+     * @param type 类型 A-平台和派遣单位合同 B-派遣单位和合作单位 C-派遣单位和员工
      * @param success
      * @param fail
      */
@@ -216,7 +216,7 @@ var InterfaceContract = function() {
     /**
      * 获取最新合同
      * @param id 该客户id
-     * @param type 类型 A-平台和派遣单位合同 B-平台和用人单位 C-派遣单位和合作单位 D-派遣单位和员工
+     * @param type 类型 A-平台和派遣单位合同 B-派遣单位和合作单位 C-派遣单位和员工
      * @param success
      * @param fail
      */

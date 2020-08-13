@@ -91,7 +91,7 @@
         var param = $.query.get("account");
         if (param) {
             var account = JSON.parse(param);
-            form.val('form_account', account_dispatch);
+            form.val('form_account', account);
             op = "update";
         }
     }
@@ -99,9 +99,9 @@
     function save() {
         var account = form.val('form_account');
         if(op == "insert") {
-            iAccount.insert(account_dispatch, onInsertSuccess);
+            iAccount.insert(account, onInsertSuccess);
         }else{
-            iAccount.update(account_dispatch,onUpdateSuccess);
+            iAccount.update(account,onUpdateSuccess);
         }
 
         function onInsertSuccess() {

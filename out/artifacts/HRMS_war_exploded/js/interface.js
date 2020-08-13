@@ -205,7 +205,7 @@ var InterfaceContract = function() {
     /**
      * 获取合同列表
      * @param param 查询参数
-     * @param type 类型 A-平台和派遣单位合同 B-平台和用人单位 C-派遣单位和合作单位 D-派遣单位和员工
+     * @param type 类型 A-平台和派遣单位合同 B-派遣单位和合作单位 C-派遣单位和员工
      * @param success
      * @param fail
      */
@@ -216,7 +216,7 @@ var InterfaceContract = function() {
     /**
      * 获取最新合同
      * @param id 该客户id
-     * @param type 类型 A-平台和派遣单位合同 B-平台和用人单位 C-派遣单位和合作单位 D-派遣单位和员工
+     * @param type 类型 A-平台和派遣单位合同 B-派遣单位和合作单位 C-派遣单位和员工
      * @param success
      * @param fail
      */
@@ -983,16 +983,12 @@ var InterfaceFile = function () {
 var iDispatch = new InterfaceClient();//客户管理
 var iSupplier = new InterfaceClient();//客户管理
 var iCooperation = new InterfaceClient();//客户管理
-var iMedicare = new InterfaceRule();//规则管理
-var iSocial =  new InterfaceRule();//规则管理
-var iFund = new InterfaceRule();//规则管理
+var iRule = new InterfaceRule();//规则管理
 var iContract =new InterfaceContract();//合同管理
 var iAccount =new InterfaceAccount();//账号管理
 var iNotice =new InterfaceNotice();//公告管理
 var iEmployee = new InterfaceEmployee();//员工管理
-var iSettlement1 = new InterfaceSettlement();//结算单管理
-var iSettlement2 = new InterfaceSettlement();//结算单管理
-var iSettlement3 = new InterfaceSettlement();//结算单管理
+var iSettlement = new InterfaceSettlement();//结算单管理
 var iInsurance = new InterfaceInsurance();//参保单管理
 var iProduct = new InterfaceProduct();//保险产品管理
 var iFinance = new InterfaceFinance();//财务管理（待定）

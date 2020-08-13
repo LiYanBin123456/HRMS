@@ -94,7 +94,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"cardId",direction:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -147,20 +147,6 @@
                         break;
                 };
 
-                //初始化分页
-                laypage.render({
-                    elem: 'pager'
-                    ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
-                            getNotices();
-                        }
-                    }
-                });
 
                 //初始化数据表格
                 table.render({
@@ -212,16 +198,31 @@
             }
 
             function getEmployees() {
-                var result = {total:100,rows:[{id:1,serial:"1",cardld:"360402197701233645",name:"赵阳",phone:"15986888888",degree:"大专",school:"科技中专",time:"2017-8-10",household:"本地城镇",address:"江西省九江市湖口镇",entry:"2017-12-10",status:"在职",department:"客户一部",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"200",rent:"1000元",bank:"建设银行",bankNo:"365982546525",cardNo:"6259536541526524"},{id:2,serial:"2",cardld:"360402197701233645",name:"李斌",phone:"15368425987",degree:"本科",school:"科技大学",time:"2017-8-10",household:"本地城镇",address:"江西省九江市湖口镇",entry:"2017-12-10",status:"在职",department:"财务部",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"200",rent:"1000元",bank:"建设银行",bankNo:"365982546525",cardNo:"6259536541526524"}]};
+                /*var result = {total:100,rows:[{id:1,serial:"1",cardld:"360402197701233645",name:"赵阳",phone:"15986888888",degree:"大专",school:"科技中专",time:"2017-8-10",household:"本地城镇",address:"江西省九江市湖口镇",entry:"2017-12-10",status:"在职",department:"客户一部",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"200",rent:"1000元",bank:"建设银行",bankNo:"365982546525",cardNo:"6259536541526524"},{id:2,serial:"2",cardld:"360402197701233645",name:"李斌",phone:"15368425987",degree:"本科",school:"科技大学",time:"2017-8-10",household:"本地城镇",address:"江西省九江市湖口镇",entry:"2017-12-10",status:"在职",department:"财务部",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"200",rent:"1000元",bank:"建设银行",bankNo:"365982546525",cardNo:"6259536541526524"}]};
                 table.reload('tbl_employee', {
                     data:result.rows
-                });
+                });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iEmployee.getList(param_query,function (result) {
-                    table.reload('tbl_notice', {
+                iEmployee.getList(param_query,0,function (result) {
+                    table.reload('tbl_employee', {
                         data:result.rows
                     });
-                });*/
+                //初始化分页
+                laypage.render({
+                    elem: 'pager'
+                    ,curr: param_query.pagination.page
+                    ,count: result.total //数据总数
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                    ,jump: function(obj,first){
+                        //首次不执行
+                        if(!first){
+                            param_query.pagination.page = obj.curr;
+                            param_query.pagination.size = obj.limit;
+                            getEmployees();
+                        }
+                    }
+                });
+                });
             }
 
             //模糊查找
