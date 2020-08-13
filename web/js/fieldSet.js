@@ -55,7 +55,7 @@ var columns_fund = [[
 var columns_notice = [[
     {field:'title', title: '主题'},
     {field:'publisher', title: '发布人',width:100},
-    {field:'date', title: '发布时间',width:130},
+    {field:'date', title: '发布时间',width:130,templet:function (d) {return format_date(d.date)}},
     {fixed: 'right', title: '操作', toolbar: '#bar_notice',width:200}
 ]];
 
