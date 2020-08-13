@@ -268,6 +268,7 @@ public class DbUtil {
         String condition = conditions.toString();
         sql += condition;
         sql += " limit 1 ";
+        System.out.println(sql);
         DaoQueryResult result = new DaoQueryResult();
         QueryRunner qr = new QueryRunner();
         try {
@@ -295,27 +296,24 @@ public class DbUtil {
      * @param c
      * @return
      */
-    public static DaoQueryResult getLast(Connection conn, String table, QueryConditions conditions, Class c){
+    public static DaoQueryResult getLast(Connection conn, String table, QueryConditions conditions, Class c,String order){
         String sql = String.format("select * from %s where ",table);
         String condition = conditions.toString();
         sql += condition;
-        sql += " ORDER BY id DESC limit 1 ";
+        sql += order;
+        System.out.println("getLast==="+sql);
         DaoQueryResult result = new DaoQueryResult();
         QueryRunner qr = new QueryRunner();
         try {
             List<Object> values = conditions.extraValues();
-            System.out.println("get==sql=="+sql);
             result.data = qr.query(conn, sql, new BeanHandler<>(c),values.toArray());
             result.success = true;
-
             System.out.println(result.data);
-
         }catch (SQLException e){
             result.success = false;
             result.msg = "数据库操作错误";
             e.printStackTrace();
         }
-
         return result;
     }
 

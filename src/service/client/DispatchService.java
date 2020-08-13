@@ -41,6 +41,7 @@ public class DispatchService {
     }
 
     public DaoUpdateResult deleteCoop(Connection conn, long id) {
+        //修改状态为潜在客户
         int status = 0;
         return dispatchDao.updateStatus(conn,id,status);
     }

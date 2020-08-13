@@ -1,13 +1,11 @@
 package servlet;
 
 
-import bean.client.Dispatch;
+import bean.client.*;
 import com.alibaba.fastjson.*;
 import dao.contract.ContractDao;
 import database.*;
-import service.client.CooperationService;
-import service.client.DispatchService;
-import service.client.SupplierService;
+import service.client.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -26,6 +24,9 @@ public class ClientServlet extends HttpServlet {
     private CooperationService cooperationService = new CooperationService();
     private SupplierService supplierService = new SupplierService();
    private ContractDao contractDao = new ContractDao();
+   private FinanceService financeService = new FinanceService();
+   private MapSalaryService mapSalaryService = new MapSalaryService();
+   private ClientService clientService = new ClientService();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
     }
@@ -90,12 +91,22 @@ public class ClientServlet extends HttpServlet {
 
     //添加
     private String insert(Connection conn,HttpServletRequest request) {
-
-        Dispatch dispatch = JSON.parseObject(request.getParameter("dispatch"), Dispatch.class);
-        System.out.println(dispatch);
-        //调用dao层的update方法
-        DaoUpdateResult res = dispatchService.insert(conn, dispatch);
-
+        DaoUpdateResult res = null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        switch (category) {
+            case 0://派遣方客户
+                Dispatch dispatch = JSON.parseObject(request.getParameter("client"), Dispatch.class);
+                res = dispatchService.insert(conn, dispatch);
+                break;
+            case 1://合作单位客户
+               Cooperation cooperation= JSON.parseObject(request.getParameter("client"), Cooperation.class);
+               res = cooperationService.insert(cooperation,conn);
+               break;
+            case 2://派遣单位客户
+                Supplier supplier= JSON.parseObject(request.getParameter("client"), Supplier.class);
+                res = supplierService.insert(supplier,conn);
+                break;
+        }
         return JSONObject.toJSONString(res);
     }
     //删除
@@ -103,39 +114,61 @@ public class ClientServlet extends HttpServlet {
         DaoUpdateResult res=new DaoUpdateResult();
         long id = Long.parseLong(request.getParameter("id"));
         byte status = Byte.parseByte(request.getParameter("status"));
-        //判断客户状态
-        if(status==1){
-            //合作客户，删除合同，修改状态为潜在客户
-            List<String> list = contractDao.deleteContract(conn, id);
-            if(list!=null){
-                for(String filename:list){
-                    String url = request.getServletContext().getRealPath("/upload");
-                    File file = new File(url+"/"+filename+".pdf");
-                    if (file.exists()) {
-                        file.delete();
-                        System.out.println(filename+"文件删除成功!!");
-                        res.msg+="合同文件删除成功!!";
-                    }else {
-                        System.out.println("文件不存在!!");
+        byte category = Byte.parseByte(request.getParameter("category"));
+        switch (category) {
+            case 0://派遣方客户
+               if(status!=1){//潜在客户，删除合同和附件，删除服务信息,删除客户 A代表平台与派遣方的合同
+                   List<String> list = contractDao.deleteContract(conn, id,"A");
+                   if(list!=null){
+                       if(list!=null){
+                           //调用自定义方法 删除服务器中的合同附件
+                           String msg =deleteContract(list,request);
+                           res.msg +=msg;
+                       }
+                   }
+                   res = dispatchService.deletePot(conn,id,0);
+               }else{//修改合作客户为潜在客户
+                   res = dispatchService.deleteCoop(conn,id);
+               }
+                break;
+            case 1://合作单位客户
+                if(status!=1){//潜在客户，删除合同和附件，删除服务信息,删除客户 B代表派遣方与合作客户的合同
+                    List<String> list = contractDao.deleteContract(conn, id,"B");
+                    if(list!=null){
+                        //调用自定义方法 删除服务器中的合同附件
+                        String msg =deleteContract(list,request);
+                        res.msg +=msg;
                     }
+                    res = cooperationService.deletePot(conn,id,1);
+                }else{//修改合作客户为潜在客户
+                    res = cooperationService.deleteCoop(conn,id);
                 }
-            }
-            res = dispatchService.deleteCoop(conn,id);
-        }else {
-            //潜在客户，删除客户服务项目，删除客户
-            int type = 0;
-            res = dispatchService.deletePot(conn,id,type);
+                break;
+            case 2://派遣单位客户
+                   res = supplierService.delete(id,conn);
+                break;
         }
         return JSONObject.toJSONString(res);
     }
 
     //修改客户信息
     private String update(Connection conn,HttpServletRequest request) {
-
-        Dispatch dispatch = JSON.parseObject(request.getParameter("dispatch"), Dispatch.class);
-        System.out.println(dispatch);
-        //调用dao层的update方法
-        DaoUpdateResult res = dispatchService.update(conn, dispatch);
+        DaoUpdateResult res=null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        switch (category) {
+            case 0://派遣方客户
+                Dispatch dispatch = JSON.parseObject(request.getParameter("client"), Dispatch.class);
+                res = dispatchService.update(conn, dispatch);
+                break;
+            case 1://合作单位客户
+                Cooperation cooperation= JSON.parseObject(request.getParameter("client"), Cooperation.class);
+                res = cooperationService.update(conn,cooperation);
+                break;
+            case 2://派遣单位客户
+                Supplier supplier= JSON.parseObject(request.getParameter("client"), Supplier.class);
+                res = supplierService.update(conn,supplier);
+                break;
+        }
 
         return JSONObject.toJSONString(res);
     }
@@ -161,46 +194,97 @@ public class ClientServlet extends HttpServlet {
 
     //获取客户基本信息
     private String get(Connection conn,HttpServletRequest request){
+        DaoQueryResult res = null;
         long id = Long.parseLong(request.getParameter("id"));
-        System.out.println("客户id="+id);
-        DaoQueryResult res = dispatchService.get(conn,id);
+        byte category = Byte.parseByte(request.getParameter("category"));
+        switch (category) {
+            case 0://派遣方客户
+                res = dispatchService.get(conn, id);
+                break;
+            case 1://合作单位客户
+                res = cooperationService.get(id,conn);
+                break;
+            case 2://派遣单位客户
+                res = supplierService.get(id,conn);
+                break;
+        }
         return  JSONObject.toJSONString(res);
     }
 
     //分配管理员
     private String allocate(Connection conn, HttpServletRequest request) {
-        return null;
+        DaoQueryResult res = null;
+        long aid = Long.parseLong(request.getParameter("aid"));
+        String  cids =(request.getParameter("cids"));
+        System.out.println(cids);
+        JSONArray cidss=JSONArray.parseArray(cids);
+        System.out.println(cidss);
+        byte category = Byte.parseByte(request.getParameter("category"));
+       // clientService.allocate(conn,aid,cids,category);
+        return  JSONObject.toJSONString(res);
     }
 
     //修改客户服务信息
     private String updateFinance(Connection conn, HttpServletRequest request) {
-        return  null;
+        Finance finance =JSONObject.parseObject(request.getParameter("finance"),Finance.class);
+        DaoUpdateResult res =financeService.update(conn,finance);
+        return JSONObject.toJSONString(res);
     }
 
     //获取客户服务信息
     private String getFinance(Connection conn, HttpServletRequest request) {
-        return  null;
+        long id = Long.parseLong(request.getParameter("id"));
+        byte category = Byte.parseByte(request.getParameter("category"));
+        DaoQueryResult res =financeService.get(conn,id,category);
+        return  JSONObject.toJSONString(res);
     }
 
     //增加客户服务信息
     private String insertFinance(Connection conn, HttpServletRequest request) {
-        return  null;
+        Finance finance =JSONObject.parseObject(request.getParameter("finance"),Finance.class);
+        DaoUpdateResult res =financeService.insert(conn,finance);
+        return JSONObject.toJSONString(res);
     }
 
-    //获取客户自定义工资信息
+    //根据月份获取客户自定义工资信息
     private String getSalaryDefine(Connection conn, HttpServletRequest request) {
-        return  null;
+        String month = request.getParameter("month");
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoQueryResult res = mapSalaryService.get(id,month,conn);
+        return  JSONObject.toJSONString(res);
     }
 
     //获取客户最新自定义工资信息
     private String getLastSalaryDefine(Connection conn, HttpServletRequest request) {
-        return  null;
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoQueryResult res =mapSalaryService.getLast(id,conn);
+        return  JSONObject.toJSONString(res);
     }
 
     //增加客户自定义工资信息
     private String insertSalaryDefine(Connection conn, HttpServletRequest request) {
-        return  null;
+        MapSalary mapSalary =JSONObject.parseObject(request.getParameter("mapSalary"),MapSalary.class);
+        DaoUpdateResult res=mapSalaryService.insert(mapSalary,conn);
+        return  JSONObject.toJSONString(res);
     }
 
 
+
+    //自定义方法 删除服务器中合同文件
+    private String deleteContract(List<String>list ,HttpServletRequest request){
+        String msg=null;
+        for(String filename:list){
+            String url = request.getServletContext().getRealPath("/upload");
+            File file = new File(url+"/"+filename+".pdf");
+            if (file.exists()) {
+                file.delete();
+                msg = "合同文件删除成功!!";
+                System.out.println(filename+"文件删除成功!!");
+
+            }else {
+                msg = "文件不存在或者已删除";
+            }
+        }
+        return msg;
+    }
 }

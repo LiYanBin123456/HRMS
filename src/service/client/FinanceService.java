@@ -17,7 +17,7 @@ public class FinanceService {
     }
 
     //获取客户服务信息
-    public DaoQueryResult get(Connection conn, long cid,String type) {
+    public DaoQueryResult get(Connection conn, long cid,byte type) {
         return financeDao.get(conn,cid,type);
     }
 

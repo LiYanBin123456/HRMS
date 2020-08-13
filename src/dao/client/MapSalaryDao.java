@@ -1,22 +1,35 @@
 package dao.client;
 
 import bean.client.MapSalary;
+import database.DaoQueryResult;
+import database.DaoUpdateResult;
+import database.DbUtil;
+import database.QueryConditions;
 
 import java.sql.Connection;
 
 public class MapSalaryDao {
-    //根据月份获取自定义工资
-    public String get(long id,String month,Connection conn){
-        return null;
+    //根据月份获取自定义工资,也是查出这个月的最新自定义工资
+    public DaoQueryResult get(long id,String month,Connection conn){
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("cid", "=", id);
+        conditions.add("date" ,"like",month);
+        String order = " order by date desc limit 1";
+        return DbUtil.getLast(conn, "map_salary", conditions,MapSalary.class,order);
     }
 
     //获取最新自定义工资
-    public String getLast(long id,Connection conn){
-        return null;
+    public DaoQueryResult getLast(long id, Connection conn){
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("cid", "=", id);
+        String order = " ORDER BY date DESC limit 1";
+        return DbUtil.getLast(conn, "map_salary", conditions,MapSalary.class,order);
     }
 
     //添加自定义工资
-    public String insert(MapSalary mapSalary, Connection conn){
-        return null;
+    public DaoUpdateResult insert(MapSalary m, Connection conn){
+        String sql = "insert into map_salary (cid,items,date) values (?,?,?)";
+        Object []params = {m.getCid(),m.getItems(),m.getDate()};
+        return DbUtil.insert(conn,sql,params);
     }
 }

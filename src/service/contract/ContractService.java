@@ -18,24 +18,20 @@ public class ContractService {
         return contractDao.getLast(conn,id,type);
     }
 
-    public DaoUpdateResult insertPot(Connection conn, Contract contract) {
-        DaoUpdateResult result;
-        int status = 1;//修改为合作状态
-        String type = contract.getType();
-        if(type=="A"){
-            //修改派遣方客户的状态
-             result = dispatchDao.updateStatus(conn, contract.getBid(), status);
-            if(result.success){
-                result.msg="修改为派遣方合作客户";
-            }
-        }else if(type=="C"){
-            //修改合作单位客户的状态
-            System.out.println("修改合作单位客户的状态");
-        }
+    public DaoUpdateResult insert(Connection conn, Contract contract) {
+        return contractDao.insert(conn,contract);
+    }
 
-
-        return contractDao.insertContract(conn,contract);
+    public DaoUpdateResult update(Connection conn, Contract contract) {
+        return  contractDao.update(conn,contract);
     }
 
 
+    public DaoQueryResult get(Connection conn,String id) {
+        return contractDao.get(conn,id);
+    }
+
+    public DaoUpdateResult delete(Connection conn, String id) {
+        return contractDao.delete(conn,id);
+    }
 }

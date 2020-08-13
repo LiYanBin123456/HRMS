@@ -31,26 +31,35 @@ public class ContractDao {
         }
         return res;
     }
+    public DaoQueryResult get(Connection conn,String id) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id", "=", id);
+        return DbUtil.get(conn,"contract",conditions,Contract.class);
+    }
 
     //查询最新合同
     public  DaoQueryResult getLast(Connection conn, String bid,String type) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("bid", "=", bid);
         conditions.add("type", "=", type);
-        return DbUtil.getLast(conn, "contract", conditions,Contract.class);
+        String order = " ORDER BY id DESC limit 1";
+        return DbUtil.getLast(conn, "contract", conditions,Contract.class,order);
 
     }
 
     //插入合同
-    public DaoUpdateResult insertContract(Connection conn, Contract c) {
-        String sql = "insert into contract (id,aid,bid,type,start,end,status,intro,comments,project,times) values (?,?,?,?,?,?,?,?,?,?,?)";
+    public DaoUpdateResult insert(Connection conn, Contract c) {
+        String sql = "insert into contract (id,aid,bid,type,start,end,status,comments,invoice,project,times) values (?,?,?,?,?,?,?,?,?,?,?)";
         Object []params = {c.getId(),c.getAid(),c.getBid(),c.getType(),c.getStart(),c.getEnd(),c.getStatus(),c.getComments(),c.getInvoice(),c.getProject(),c.getTimes()};
         return DbUtil.insert(conn,sql,params);
     }
 
     //修改合同
     public  DaoUpdateResult update(Connection conn, Contract c){
-        return null;
+        String sql = "update contract set aid=?,bid=?,type=?,start=?,end=?,status=?,comments=?,invoice=?,project=?,times=? where id =?";
+        Object []params = {c.getAid(),c.getBid(),c.getType(),c.getStart(),c.getEnd(),c.getStatus(), c.getComments(), c.getInvoice(),c.getProject(),c.getTimes(),c.getId()};
+        //调用DbUtil封装的update方法
+        return DbUtil.update(conn,sql,params);
     }
 
     //删除一个合同，还要删除对应的合同文件
@@ -60,11 +69,18 @@ public class ContractDao {
         return DbUtil.delete(conn,"contract",conditions);
     }
 
-    //删除该客户的所有合同,还要删除对应合同的文件
-    public List<String> deleteContract(Connection conn, long id) {
+    /**
+     * 删除该客户的所有合同
+     * @param conn
+     * @param id 该客户的id
+     * @param type 合同类型
+     * @return
+     */
+    public List<String> deleteContract(Connection conn, long id,String type) {
         QueryParameter parameter = new QueryParameter();
         QueryConditions conditions = new QueryConditions();
         conditions.add("bid", "=", id);
+        conditions.add("type", "=", type);
 
         String sql = "id";
         parameter.conditions = conditions;
@@ -95,4 +111,6 @@ public class ContractDao {
     public String updateService(Connection conn,Serve serve){
         return null;
     }
+
+
 }

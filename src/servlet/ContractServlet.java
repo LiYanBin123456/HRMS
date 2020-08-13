@@ -1,12 +1,14 @@
 package servlet;
 
 import bean.contract.Contract;
+import bean.contract.Serve;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import dao.contract.ContractDao;
 import database.*;
 import org.apache.commons.io.IOUtils;
 import service.contract.ContractService;
+import service.contract.ServeService;
 import utills.CreateGetNextId;
 
 import javax.servlet.ServletException;
@@ -25,6 +27,7 @@ import java.sql.Connection;
 public class ContractServlet extends HttpServlet {
     private ContractDao contractDao = new ContractDao();
     private ContractService contractService =new ContractService();
+    private ServeService serveService = new ServeService();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
     }
@@ -81,7 +84,6 @@ public class ContractServlet extends HttpServlet {
     private String insert(Connection conn, HttpServletRequest request)throws IOException, ServletException {
         DaoUpdateResult res ;
         Contract contract = JSON.parseObject(request.getParameter("contract"), Contract.class);
-
         //自定义自增id
         QueryConditions conditions = new QueryConditions();
         String type = contract.getType();
@@ -98,66 +100,14 @@ public class ContractServlet extends HttpServlet {
         }
         contract.setId(id);
         System.out.println(contract);
-        res = contractService.insertPot(conn,contract);
-        //先判断是否成功插入，否则会出现数据库插入失败，但是文件却已经上传的现象
-        if(res.success){
-            //将文件上传到服务器并且以合同id命名
-            String file = null;
-            Part part = request.getPart("file");
-            System.out.println("part==="+part);
-            System.out.println(part);
-            if(part!=null){
-                //获取文件的名称
-                String header = part.getHeader("content-disposition");
-                System.out.println(header);
-                //截取字符串获取文件名称
-                String headername = header.substring(header.indexOf("filename")+10, header.length()-1);
-                System.out.println(headername);
-                //获取文件名后缀
-                String suffixName=headername.substring(headername.indexOf(".")+1);
-                String s="pdf";
-                if(suffixName.equals(s)){
-                    //获取文件流
-                    InputStream put = part.getInputStream();
-                    //获取文件的真实路径
-                    String url = request.getServletContext().getRealPath("/upload");
-
-                    File uploadDir = new File(url);
-
-                    // 如果该文件夹不存在则创建
-                    if (!uploadDir.exists()) {
-                        uploadDir.mkdirs();
-                    }
-
-                    file = id+"."+suffixName;
-
-                    //建立对拷流
-                    FileOutputStream fos = new FileOutputStream(new File(url, file));
-
-                    IOUtils.copy(put, fos);
-                    put.close();
-                    fos.close();
-                    //删除临时文件
-                    part.delete();
-                    res.msg="合同已上传";
-                }
-                else {
-                    res.msg="不是pdf格式文件，不能上传";
-                    //如果文件上传失败要删除掉该合同，以免前台重新插入时错误
-                    contractDao.delete(conn,id);
-                }
-            }else {
-                res.msg+= "合同文件未插入";
-            }
-        }
-
+        res = contractService.insert(conn,contract);
         return JSONObject.toJSONString(res);
     }
 
     //获取最新合同
     private String getLast(Connection conn, HttpServletRequest request) {
 
-        String bid = (request.getParameter("bid"));
+        String bid = (request.getParameter("id"));
         System.out.println("客户id="+bid);
         String type = request.getParameter("type");
         DaoQueryResult res = contractService.getLast(conn,bid,type);
@@ -172,40 +122,58 @@ public class ContractServlet extends HttpServlet {
         return JSONObject.toJSONString(res);
     }
 
-    //获取合同服务项目列表
-    private String getServiceList(Connection conn, HttpServletRequest request) {
-        return null;
-    }
-
-    //修改合同服务项目
-    private String updateService(Connection conn, HttpServletRequest request) {
-        return null;
-    }
-
-    //获取合同服务项目
-    private String getService(Connection conn, HttpServletRequest request) {
-        return null;
-    }
-
-    //添加合同服务项目
-    private String insertService(Connection conn, HttpServletRequest request) {
-        return null;
-    }
-
     //删除合同
     private String delete(Connection conn, HttpServletRequest request) {
-        return null;
+        String id = request.getParameter("id");
+        DaoUpdateResult res = contractService.delete(conn,id);
+        return JSONObject.toJSONString(res);
     }
 
     //获取合同信息
     private String get(Connection conn, HttpServletRequest request) {
-        return null;
+        String id = request.getParameter("id");
+        DaoQueryResult res = contractService.get(conn,id);
+        return JSONObject.toJSONString(res);
     }
 
     //修改合同
     private String update(Connection conn, HttpServletRequest request) {
-        return null;
+        Contract contract = JSON.parseObject(request.getParameter("contract"), Contract.class);
+        DaoUpdateResult res =contractService.update(conn,contract);
+        return JSONObject.toJSONString(res);
     }
+
+    //获取合同服务项目列表
+    private String getServiceList(Connection conn, HttpServletRequest request) {
+        QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
+        long id= Long.parseLong(request.getParameter("id"));
+        DaoQueryListResult res = serveService.getList(conn,parameter,id);
+        return JSONObject.toJSONString(res);
+    }
+
+    //修改合同服务项目
+    private String updateService(Connection conn, HttpServletRequest request) {
+        Serve serve  = JSON.parseObject(request.getParameter("serve"), Serve.class);
+        DaoUpdateResult res =serveService.update(conn,serve);
+        return JSONObject.toJSONString(res);
+    }
+
+    //获取合同服务项目
+    private String getService(Connection conn, HttpServletRequest request) {
+        String id = request.getParameter("id");
+        DaoQueryResult res =serveService.get(conn,id);
+        return JSONObject.toJSONString(res);
+    }
+
+    //添加合同服务项目
+    private String insertService(Connection conn, HttpServletRequest request) {
+        Serve serve  = JSON.parseObject(request.getParameter("serve"), Serve.class);
+        DaoUpdateResult res =serveService.insert(conn,serve);
+        return JSONObject.toJSONString(res);
+    }
+
+
+
 
 
 }

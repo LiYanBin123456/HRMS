@@ -1,30 +1,33 @@
 package service.client;
 
-import bean.client.Cooperation;
+import bean.client.Supplier;
 import dao.client.SupplierDao;
 import database.DaoQueryListResult;
+import database.DaoQueryResult;
+import database.DaoUpdateResult;
 import database.QueryParameter;
 
 import java.sql.Connection;
 
 public class SupplierService {
     private SupplierDao supplierDao = new SupplierDao();
-    public String get(long id,Connection conn){
-        return null;
+    public DaoQueryResult get(long id, Connection conn){
+        return supplierDao.get(conn,id);
     }
 
     public DaoQueryListResult getList(Connection conn, QueryParameter param){
         return supplierDao.getList(conn,param);
     }
 
-    public String update(Connection conn,Cooperation cooperation){
-        return null;
+    public DaoUpdateResult update(Connection conn, Supplier supplier){
+        return supplierDao.update(conn,supplier);
     }
-    public String delete(long id,Connection conn){
-        return null;
+
+    public DaoUpdateResult delete(long id, Connection conn){
+        return supplierDao.delete(conn,id);
     }
-    public String insert(Cooperation cooperation, Connection conn){
-        return null;
+    public DaoUpdateResult insert(Supplier supplier, Connection conn){
+        return supplierDao.insert(conn,supplier);
     }
 
 }

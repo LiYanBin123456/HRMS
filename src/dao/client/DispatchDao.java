@@ -29,25 +29,14 @@ public class DispatchDao {
     }
 
 
-    /**
-     * 修改客户信息
-     * @param conn 数据库连接
-     * @param c 求职者信息
-     * @return 更新结果，格式："{success:true,msg:"",effects:1}"
-     */
     public  DaoUpdateResult update(Connection conn, Dispatch c){
-        String sql = "update dispatch set rid=?,name=?,nickname=?,address=?,contact=?,phone=?,wx=?,qq=?,intro=? where id=?";
-        Object []params = {c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getIntro(),c.getId()};
+        String sql = "update dispatch set aid=?,rid=?,name=?,nickname=?,address=?,contact=?,phone=?,wx=?,qq=?,intro=? where id=?";
+        Object []params = {c.getAid(),c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getIntro(),c.getId()};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
     }
 
-    /**
-     * 插入客户
-     * @param conn
-     * @param c
-     * @return
-     */
+
     public DaoUpdateResult insert(Connection conn, Dispatch c) {
         String sql = "insert into dispatch (rid,name,nickname,address,contact,phone,wx,qq,intro,type) values (?,?,?,?,?,?,?,?,?,?)";
         Object []params = {c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getIntro(),c.getType()};

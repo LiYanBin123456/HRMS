@@ -3,15 +3,15 @@ package dao.client;
 import bean.client.Cooperation;
 import bean.client.Dispatch;
 import bean.client.Supplier;
-import database.DaoQueryListResult;
-import database.DbUtil;
-import database.QueryParameter;
+import database.*;
 
 import java.sql.Connection;
 
 public class SupplierDao {
-    public String get(long id,Connection conn){
-        return null;
+    public DaoQueryResult get(Connection conn, long id) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id","=",id);
+        return  DbUtil.get(conn,"supplier",conditions, Supplier.class);
     }
 
     public DaoQueryListResult getList(Connection conn, QueryParameter param){
@@ -21,15 +21,25 @@ public class SupplierDao {
         return DbUtil.getList(conn,"supplier",param, Supplier.class);
     }
 
-    public String update(Connection conn,Cooperation cooperation){
-        return null;
+    public  DaoUpdateResult update(Connection conn, Supplier c){
+        String sql = "update supplier set aid=?,did=?, rid=?,name=?,nickname=?,business=?,address=?,contact=?,phone=?,wx=?,qq=?,mail=?,intro=?where id=?";
+        Object []params = {c.getAid(),c.getDid(),c.getRid(),c.getName(),c.getNickname(),c.getBusiness(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getMail(),c.getIntro(),c.getId()};
+        //调用DbUtil封装的update方法
+        return DbUtil.update(conn,sql,params);
     }
 
-    public String delete(long id,Connection conn){
-        return null;
+
+    public DaoUpdateResult insert(Connection conn, Supplier c) {
+        String sql = "insert into supplier (aid,did,rid,name,nickname,business,address,contact,phone,wx,qq,mail,intro) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {c.getAid(),c.getDid(),c.getRid(),c.getName(),c.getNickname(),c.getBusiness(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getMail(),c.getIntro()};
+        return DbUtil.insert(conn,sql,params);
     }
 
-    public String insert(Cooperation cooperation, Connection conn){
-        return null;
+    //删除客户
+    public DaoUpdateResult delete(Connection conn, long id) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id","=",id);
+        return DbUtil.delete(conn,"supplier",conditions);
     }
+
 }

@@ -24,6 +24,102 @@ public class Serve {
     public Serve() {
     }
 
+    public Serve(String cid, byte type, byte category, byte payment, byte settlement, byte receipt, long pid, float value, float tax) {
+        this.cid = cid;
+        this.type = type;
+        this.category = category;
+        this.payment = payment;
+        this.settlement = settlement;
+        this.receipt = receipt;
+        this.pid = pid;
+        this.value = value;
+        this.tax = tax;
+    }
 
+    public String getCid() {
+        return cid;
+    }
 
+    public void setCid(String cid) {
+        this.cid = cid;
+    }
+
+    public byte getType() {
+        return type;
+    }
+
+    public void setType(byte type) {
+        this.type = type;
+    }
+
+    public byte getCategory() {
+        return category;
+    }
+
+    public void setCategory(byte category) {
+        this.category = category;
+    }
+
+    public byte getPayment() {
+        return payment;
+    }
+
+    public void setPayment(byte payment) {
+        this.payment = payment;
+    }
+
+    public byte getSettlement() {
+        return settlement;
+    }
+
+    public void setSettlement(byte settlement) {
+        this.settlement = settlement;
+    }
+
+    public byte getReceipt() {
+        return receipt;
+    }
+
+    public void setReceipt(byte receipt) {
+        this.receipt = receipt;
+    }
+
+    public long getPid() {
+        return pid;
+    }
+
+    public void setPid(long pid) {
+        this.pid = pid;
+    }
+
+    public float getValue() {
+        return value;
+    }
+
+    public void setValue(float value) {
+        this.value = value;
+    }
+
+    public float getTax() {
+        return tax;
+    }
+
+    public void setTax(float tax) {
+        this.tax = tax;
+    }
+
+    @Override
+    public String toString() {
+        return "Serve{" +
+                "cid='" + cid + '\'' +
+                ", type=" + type +
+                ", category=" + category +
+                ", payment=" + payment +
+                ", settlement=" + settlement +
+                ", receipt=" + receipt +
+                ", pid=" + pid +
+                ", value=" + value +
+                ", tax=" + tax +
+                '}';
+    }
 }
