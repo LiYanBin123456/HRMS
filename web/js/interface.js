@@ -15,7 +15,7 @@ var InterfaceClient = function() {
      * @param fail
      */
     this.getList = function(param,category,success,fail){
-        var para = {op: "getList", param:JSON.stringify(param), category: category};
+        var para = {op: "getList", param:JSON.stringify(param),category: category};
         access(url,para,0,success,fail);
     };
     /**
@@ -26,7 +26,7 @@ var InterfaceClient = function() {
      * @param fail
      */
     this.insert = function (client,category,success,fail) {
-        var para = {op: "insert",client:JSON.stringify(client), category: category};
+        var para = {op: "insert",client:JSON.stringify(client),category: category};
         access(url,para,1,success,fail);
     };
     /**
@@ -450,11 +450,12 @@ var InterfaceEmployee = function () {
     /**
      * 获取员工列表
      * @param param 查询参数
+     * @param category 0-员工信息 1-员工补充信息
      * @param success
      * @param fail
      */
-    this.getList = function(param,success,fail){
-        var para = {op: "getList", param:JSON.stringify(param)};
+    this.getList = function(param,category,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param), category:category};
         access(url,para,0,success,fail);
     };
     /**
@@ -983,6 +984,7 @@ var InterfaceFile = function () {
 var iDispatch = new InterfaceClient();//客户管理
 var iSupplier = new InterfaceClient();//客户管理
 var iCooperation = new InterfaceClient();//客户管理
+var iClient = new InterfaceClient();//客户管理
 var iRule = new InterfaceRule();//规则管理
 var iContract =new InterfaceContract();//合同管理
 var iAccount =new InterfaceAccount();//账号管理
