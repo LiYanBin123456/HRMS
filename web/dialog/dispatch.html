@@ -170,9 +170,9 @@
     function save() {
         var dispatch = form.val('form_dispatch');
         if(op == "insert") {
-            iDispatch.insert(dispatch,0, onInsertSuccess);
+            iClient.insert(dispatch,0, onInsertSuccess);
         }else{
-            iDispatch.update(dispatch,0,onUpdateSuccess);
+            iClient.update(dispatch,0,onUpdateSuccess);
         }
 
         function onInsertSuccess() {

@@ -63,7 +63,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"name",direction:false},pagination: {need:true,page:1,size:5}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"name",direction:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -137,7 +137,7 @@
                     data:result.rows
                 });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                iDispatch.getList(param_query,0,function (result) {
+                iClient.getList(param_query,0,function (result) {
                     table.reload('tbl_dispatch', {
                         data:result.rows
                     });
@@ -201,7 +201,7 @@
             //删除公告
             function del(dispatch) {
                 layer.confirm('确定删除'+dispatch.name, {icon: 3, title:'删除'}, function(index){
-                    iDispatch.delete(dispatch.id,0,1,function () {
+                    iClient.delete(dispatch.id,0,0,function () {
                         layer.close(index);
                         getDispatchs();
                         layer.msg('删除成功');
