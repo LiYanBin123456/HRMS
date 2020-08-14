@@ -37,4 +37,8 @@ public class FinanceDao {
         return DbUtil.delete(conn,"finance",conditions);
     }
 
+    //充值 type 0_派遣方单位  1_合作客户单位 因为充值操作只有合作客户才有 所以type默认为1
+    public static  DaoUpdateResult recharge(Connection conn, long id,float balance,byte type){
+       return null;
+    }
 }

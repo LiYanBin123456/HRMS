@@ -7,6 +7,7 @@ import database.DaoQueryResult;
 import database.DaoUpdateResult;
 import database.QueryParameter;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 
 public class RuleFundService {
@@ -30,6 +31,10 @@ public class RuleFundService {
     }
 
     public DaoUpdateResult delete(Connection conn, long id) {
+        return null;
+    }
+
+    private String getLast(Connection conn, String city) {
         return null;
     }
 }

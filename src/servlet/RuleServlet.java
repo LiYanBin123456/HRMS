@@ -34,22 +34,24 @@ public class RuleServlet extends HttpServlet {
         String op = request.getParameter("op");
 
         switch (op) {
-            case "insert"://插入公积金清单
+            case "insert"://插入规则
                 result = insert(conn,request);
                 break;
-            case "delete"://删除公积金清单
+            case "delete"://删除规则
                 result = delete(conn,request);
                 break;
-            case "update"://修改公积金清单
+            case "update"://修改规则
                 result = update(conn,request);
                 break;
-            case "getList"://获取所有公积金清单
+            case "getList"://获取规则列表
                 result = getList(conn,request);
                 break;
-            case "get"://获取一个公积金清单
+            case "get"://获取规则详情
                 result = get(conn,request);
                 break;
-
+            case "getLast"://获取规则详情
+                result = getLast(conn,request);
+                break;
 
 
         }
@@ -59,6 +61,8 @@ public class RuleServlet extends HttpServlet {
         out.flush();
         out.close();
     }
+
+
 
     private String insert(Connection conn, HttpServletRequest request) {
       return null;
@@ -81,7 +85,9 @@ public class RuleServlet extends HttpServlet {
       return null;
     }
 
-
+    private String getLast(Connection conn, HttpServletRequest request) {
+        return null;
+    }
 
 
 

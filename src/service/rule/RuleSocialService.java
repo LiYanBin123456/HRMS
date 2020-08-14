@@ -31,4 +31,7 @@ public class RuleSocialService {
     public DaoUpdateResult delete(Connection conn, long id) {
         return null;
     }
+    private String getLast(Connection conn, String city) {
+        return null;
+    }
 }

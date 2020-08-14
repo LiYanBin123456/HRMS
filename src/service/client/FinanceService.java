@@ -25,4 +25,8 @@ public class FinanceService {
     public DaoUpdateResult insert(Connection conn, Finance finance) {
         return financeDao.insert(conn,finance);
     }
+
+    public static String arrive(Connection conn,long id,float balance){
+       return  null;
+    }
 }
