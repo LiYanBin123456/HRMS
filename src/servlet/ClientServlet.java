@@ -213,14 +213,11 @@ public class ClientServlet extends HttpServlet {
 
     //分配管理员
     private String allocate(Connection conn, HttpServletRequest request) {
-        DaoQueryResult res = null;
+        DaoUpdateResult res = null;
         long aid = Long.parseLong(request.getParameter("aid"));
-        String  cids =(request.getParameter("cids"));
-        System.out.println(cids);
-        JSONArray cidss=JSONArray.parseArray(cids);
-        System.out.println(cidss);
+        String[] cids = request.getParameterValues("cids[]");
         byte category = Byte.parseByte(request.getParameter("category"));
-       // clientService.allocate(conn,aid,cids,category);
+        res =clientService.allocate(conn,aid,cids,category);
         return  JSONObject.toJSONString(res);
     }
 

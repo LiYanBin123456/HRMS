@@ -49,7 +49,7 @@ public class RuleServlet extends HttpServlet {
             case "get"://获取规则详情
                 result = get(conn,request);
                 break;
-            case "getLast"://获取规则详情
+            case "getLast"://获取最新规则详情
                 result = getLast(conn,request);
                 break;
 
