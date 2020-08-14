@@ -201,7 +201,7 @@
             //删除公告
             function del(dispatch) {
                 layer.confirm('确定删除'+dispatch.name, {icon: 3, title:'删除'}, function(index){
-                    iDispatch.delete(dispatch.id,function () {
+                    iDispatch.delete(dispatch.id,0,1,function () {
                         layer.close(index);
                         getDispatchs();
                         layer.msg('删除成功');

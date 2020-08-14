@@ -32,7 +32,7 @@
                         <label  class="layui-form-label">
                             <span class="x-red">*</span>身份证号码</label>
                         <div class="layui-input-inline">
-                            <input type="text"  name="cardld" required="" lay-verify="nikename" autocomplete="off" class="layui-input layui-disabled" disabled></div>
+                            <input type="text"  name="cardId" required="" lay-verify="nikename" autocomplete="off" class="layui-input layui-disabled" disabled></div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">
@@ -77,7 +77,7 @@
                         </button></div>
                <div class="layui-form-item">
                         <label  class="layui-form-label"></label>
-                        <button class="layui-btn" lay-filter="add" lay-submit="">保存</button></div>
+                        <button class="layui-btn" lay-filter="add" lay-submit=""  onclick="save()" onclick="save()">保存</button></div>
                 </form>
 </body>
 <script src="../js/jquery.min.js"></script>
@@ -106,6 +106,8 @@
             form.val('form_contract', contract);
             layedit.setContent(editer, contract.content, false);
             op = "update";
+            $("[name=contract]").attr("disabled", 'disabled');
+            form.render('select', 'form_contract');
         }
     }
 

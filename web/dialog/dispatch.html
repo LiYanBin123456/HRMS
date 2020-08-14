@@ -82,9 +82,7 @@
                         </div>
                         </div>
                   <div class="layui-form-item">
-                      <label  class="layui-form-label">
-                      </label>
-                      <button  class="layui-btn" onclick="save()" lay-filter="add" lay-submit="">
+                      <button  type="button" class="layui-btn layui-btn-fluid" onclick="save()" >
                           保存
                       </button>
                   </div>
@@ -131,7 +129,7 @@
                   <div class="layui-form-item">
                       <label  class="layui-form-label">
                       </label>
-                      <button  class="layui-btn" onclick="save()" lay-filter="add" lay-submit="">
+                      <button  type="button" class="layui-btn layui-btn-fluid"  >
                           保存
                       </button>
                   </div>
@@ -172,9 +170,9 @@
     function save() {
         var dispatch = form.val('form_dispatch');
         if(op == "insert") {
-            iDispatch.insert(dispatch, onInsertSuccess);
+            iDispatch.insert(dispatch,0, onInsertSuccess);
         }else{
-            iDispatch.update(dispatch,onUpdateSuccess);
+            iDispatch.update(dispatch,0,onUpdateSuccess);
         }
 
         function onInsertSuccess() {
