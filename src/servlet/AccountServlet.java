@@ -1,9 +1,8 @@
 package servlet;
 
+import bean.admin.Account;
 import com.alibaba.fastjson.JSONObject;
-import database.ConnUtil;
-import database.DaoQueryListResult;
-import database.QueryParameter;
+import database.*;
 import service.admin.AccountService;
 
 import javax.servlet.ServletException;
@@ -31,7 +30,7 @@ public class AccountServlet extends HttpServlet {
         String op = request.getParameter("op");
         switch (op) {
             case "login"://登录
-                result = login(conn,request);
+                result = login(conn,request,response);
                 break;
             case "quit"://退出
                 result = quit(conn,request);
@@ -64,8 +63,43 @@ public class AccountServlet extends HttpServlet {
     }
 
     //登录
-    private String login(Connection conn, HttpServletRequest request) {
-        return null;
+    private String login(Connection conn, HttpServletRequest request,HttpServletResponse response)  {
+        DaoQueryResult res;
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        res = accountService.login(conn,username);
+        System.out.println(res);
+        Account account =JSONObject.parseObject(res.data.toString(),Account.class);
+        if(account.getPassword().equals(password)){
+            res.msg +="账号密码正确";
+            request.getSession().setAttribute("Account", account);
+            request.getSession().setAttribute("res", res);
+            try {
+                switch (account.getRole()){
+                    case 0://平台管理员
+                        System.out.println("返回平台首页面");
+                        request.getRequestDispatcher("/admin/menu.html").forward(request, response);
+                        break;
+                    case 1://派遣单位管理员
+                        System.out.println("返回派遣单位首页面");
+                        request.getRequestDispatcher("/dispatch/menu.html").forward(request, response);
+                        break;
+                    case 2://合作单位管理员
+                        System.out.println("返回合作单位首页面");
+                        request.getRequestDispatcher("/cooperation/menu.html").forward(request, response);
+                        break;
+                    case 3://员工
+                        System.out.println("返回员工首页面");
+                        break;
+                }
+            } catch (ServletException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        res.msg +="账号密码错误";
+        return JSONObject.toJSONString(res);
     }
 
     //退出
@@ -84,12 +118,16 @@ public class AccountServlet extends HttpServlet {
 
     //删除账号
     private String delete(Connection conn, HttpServletRequest request) {
-        return null;
+        long id= Long.parseLong(request.getParameter("id"));
+        DaoUpdateResult res = accountService.delete(conn,id);
+        return JSONObject.toJSONString(res);
     }
 
     //插入账号
     private String insert(Connection conn, HttpServletRequest request) {
-        return null;
+        Account account =JSONObject.parseObject(request.getParameter("account"),Account.class);
+        DaoUpdateResult res = accountService.insert(conn,account);
+        return JSONObject.toJSONString(res);
     }
 
     //获取账号详情
