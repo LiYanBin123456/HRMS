@@ -82,7 +82,7 @@
                         </div>
                         </div>
                   <div class="layui-form-item">
-                      <button  lay-submit lay-filter="submit_dispatch" class="layui-btn layui-btn-fluid">保存</button>
+                      <button  lay-submit lay-filter="submit_dispatch" class="layui-btn layui-btn-fluid"  onclick="saveDispatch()">保存</button>
                   </div>
               </form> 
              </div>
@@ -127,7 +127,7 @@
                   <div class="layui-form-item">
                       <label  class="layui-form-label">
                       </label>
-                      <button  lay-submit lay-filter="submit_finance" class="layui-btn layui-btn-fluid">保存</button>
+                      <button  lay-submit lay-filter="submit_finance" class="layui-btn layui-btn-fluid" onclick="saveFinance()">保存</button>
                   </div>
               </form>
              </div>
@@ -199,6 +199,7 @@
     }
 
     function saveDispatch(dispatch) {
+        console.log(dispatch);
         if(flag1) {
             iClient.update(dispatch,0,onUpdateSuccess);
         }else{

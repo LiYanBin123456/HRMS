@@ -22,7 +22,7 @@
         </style>
     </head>
     <body>
-
+    <div class="layui-tab-content">
                 <form lay-filter="form_contract" class="layui-form">
                     <div class="layui-input-inline searchbox">
                              <div class="layui-inline"><input type="radio" name="se" value="固定期限" title="固定期限" checked></div>
@@ -76,9 +76,9 @@
                            <i class="layui-icon">&#xe67c;</i>上传pdf
                         </button></div>
                <div class="layui-form-item">
-                        <label  class="layui-form-label"></label>
-                        <button class="layui-btn" lay-filter="add" lay-submit=""  onclick="save()" onclick="save()">保存</button></div>
+                        <button type="button" class="layui-btn layui-btn-fluid"  onclick="save()">保存</button></div>
                 </form>
+    </div>
 </body>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
