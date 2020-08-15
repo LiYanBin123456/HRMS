@@ -167,7 +167,7 @@
 
             //打开详情对话框
             function showDetailDlg(dispatch) {
-                var content = "../dialog/dispatch.html?dispatch="+encodeURIComponent(JSON.stringify(dispatch));
+                var content = "../dialog/dispatch.html?id="+dispatch.id;
                 layer.open({
                     title:"详情",
                     type: 2,

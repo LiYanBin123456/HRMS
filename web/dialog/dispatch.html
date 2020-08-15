@@ -18,7 +18,7 @@
         <![endif]-->
     </head>
     <body>
-        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+        <div class="layui-tab layui-tab-brief" lay-filter="tab_dispatch">
            <ul class="layui-tab-title">
             <li class="layui-this">基本信息</li>
             <li>财务信息</li>
@@ -82,14 +82,12 @@
                         </div>
                         </div>
                   <div class="layui-form-item">
-                      <button  type="button" class="layui-btn layui-btn-fluid" onclick="save()" >
-                          保存
-                      </button>
+                      <button  lay-submit lay-filter="submit_dispatch" class="layui-btn layui-btn-fluid">保存</button>
                   </div>
               </form> 
              </div>
              <div class="layui-tab-item">
-                <form lay-filter="form_dispatch" class="layui-form">
+                <form lay-filter="form_finance" class="layui-form">
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
                             <span class="x-red">*</span>信用代码</label>
@@ -129,9 +127,7 @@
                   <div class="layui-form-item">
                       <label  class="layui-form-label">
                       </label>
-                      <button  type="button" class="layui-btn layui-btn-fluid"  onclick="save()">
-                          保存
-                      </button>
+                      <button  lay-submit lay-filter="submit_finance" class="layui-btn layui-btn-fluid">保存</button>
                   </div>
               </form>
              </div>
@@ -145,41 +141,87 @@
     var op = "insert";
     var form;//表单对象
     var editer;
+    var element;
+    var id;//派遣单位编号
+    var flag1;//派遣单位基本信息是否已经存在
+    var flag2;//派遣单位财务信息是否已经存在
 
     loadLayuiModule();
 
     function loadLayuiModule() {
-        layui.use(['form', 'layedit','jquery'], function () {
+        layui.use(['form', 'layedit','element'], function () {
             form = layui.form;
             layedit = layui.layedit;
+            element = layui.element;
             editer = layedit.build('content'); //建立编辑器
-            initData();
+            initPage();
         });
     }
 
-    function initData() {
-        var param = $.query.get("dispatch");
-        if (param) {
-            var dispatch = JSON.parse(param);
-            form.val('form_dispatch', dispatch);
-            layedit.setContent(editer, dispatch.content, false);
+    function initPage() {
+        id = $.query.get("id");
+        if (id) {
+            getDispatch();
             op = "update";
+        }
+        element.on('tab(tab_dispatch)', function(data){
+            if(data.index == 1){
+                if(!flag2){
+                    getFinance();
+                }
+            }
+        });
+        form.on('submit(submit_dispatch)', function(data){
+            saveDispatch(data.field);
+        });
+        form.on('submit(submit_finance)', function(data){
+            saveFinance(data.field);
+        });
+    }
+
+    function getDispatch() {
+        iClient.get(id,0,function (result) {
+            var dispatch = result.data;
+            if(dispatch){
+                flag1 = true;
+                form.val('form_dispatch', dispatch);
+                layedit.setContent(editer, dispatch.content, false);
+            }
+        });
+    }
+
+    function getFinance() {
+        iClient.getFinance(id,0,function (result) {
+            var finance = result.data;
+            if(finance){
+                flag2 = true;
+                form.val('form_finance', finance);
+            }
+        });
+    }
+
+    function saveDispatch(dispatch) {
+        if(flag1) {
+            iClient.update(dispatch,0,onUpdateSuccess);
+        }else{
+            iClient.insert(dispatch,0, onInsertSuccess);
+        }
+
+        function onInsertSuccess(result) {
+            id = result.extra;//获取插入的主键
+            layer.alert("添加成功", {icon: 6}, refresh());
+        }
+
+        function onUpdateSuccess() {
+            layer.alert("修改成功", {icon: 6}, refresh());
         }
     }
 
-    function save() {
-        var dispatch = form.val('form_dispatch');
-        var finance = form.val('form_dispatch');
-        if(op == "insert") {
-            iClient.insert(dispatch,0, onInsertSuccess);
+    function saveFinance(finance) {
+        if(flag2) {
+            iClient.updateFinance(finance,0,onUpdateSuccess);
         }else{
-            iClient.update(dispatch,0,onUpdateSuccess);
-        }
-
-        if(op == "insertFinance") {
-            iClient.insertFinance(finance,onInsertSuccess);
-        }else{
-            iClient.updateFinance(finance,onUpdateSuccess);
+            iClient.insertFinance(finance,0, onInsertSuccess);
         }
 
         function onInsertSuccess() {
@@ -189,15 +231,15 @@
         function onUpdateSuccess() {
             layer.alert("修改成功", {icon: 6}, refresh());
         }
+    }
 
-        function refresh() {
-            // 获得frame索引
-            var index = parent.layer.getFrameIndex(window.name);
-            //关闭当前frame
-            parent.layer.close(index);
-            //修改成功后刷新父界面
-            window.parent.location.reload();
-        }
+    function refresh() {
+        // 获得frame索引
+        var index = parent.layer.getFrameIndex(window.name);
+        //关闭当前frame
+        parent.layer.close(index);
+        //修改成功后刷新父界面
+        window.parent.location.reload();
     }
 </script>
 
