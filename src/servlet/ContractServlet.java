@@ -84,6 +84,7 @@ public class ContractServlet extends HttpServlet {
     private String insert(Connection conn, HttpServletRequest request)throws IOException, ServletException {
         DaoUpdateResult res ;
         Contract contract = JSON.parseObject(request.getParameter("contract"), Contract.class);
+        System.out.println("前台传来的数据："+contract);
         //自定义自增id
         QueryConditions conditions = new QueryConditions();
         String type = contract.getType();
@@ -139,6 +140,7 @@ public class ContractServlet extends HttpServlet {
     //修改合同
     private String update(Connection conn, HttpServletRequest request) {
         Contract contract = JSON.parseObject(request.getParameter("contract"), Contract.class);
+        System.out.println("前台传来的数据："+contract);
         DaoUpdateResult res =contractService.update(conn,contract);
         return JSONObject.toJSONString(res);
     }
@@ -154,6 +156,7 @@ public class ContractServlet extends HttpServlet {
     //修改合同服务项目
     private String updateService(Connection conn, HttpServletRequest request) {
         Serve serve  = JSON.parseObject(request.getParameter("serve"), Serve.class);
+        System.out.println("前台传来的数据："+serve);
         DaoUpdateResult res =serveService.update(conn,serve);
         return JSONObject.toJSONString(res);
     }
@@ -168,6 +171,7 @@ public class ContractServlet extends HttpServlet {
     //添加合同服务项目
     private String insertService(Connection conn, HttpServletRequest request) {
         Serve serve  = JSON.parseObject(request.getParameter("serve"), Serve.class);
+        System.out.println("前台传来的数据："+serve);
         DaoUpdateResult res =serveService.insert(conn,serve);
         return JSONObject.toJSONString(res);
     }

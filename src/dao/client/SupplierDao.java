@@ -22,7 +22,7 @@ public class SupplierDao {
     }
 
     public  DaoUpdateResult update(Connection conn, Supplier c){
-        String sql = "update supplier set aid=?,did=?, rid=?,name=?,nickname=?,business=?,address=?,contact=?,phone=?,wx=?,qq=?,mail=?,intro=?where id=?";
+        String sql = "update supplier set aid=?,did=?, rid=?,name=?,nickname=?,business=?,address=?,contact=?,phone=?,wx=?,qq=?,mail=?,intro=? where id=?";
         Object []params = {c.getAid(),c.getDid(),c.getRid(),c.getName(),c.getNickname(),c.getBusiness(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getMail(),c.getIntro(),c.getId()};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);

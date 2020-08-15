@@ -9,6 +9,7 @@ import database.DaoUpdateResult;
 import database.QueryParameter;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.util.List;
 
 public class ExtraService {
@@ -20,27 +21,27 @@ public class ExtraService {
 
     //获取详情
     public DaoQueryResult get(Connection conn, long id) {
-        return null;
+        return extraDao.get(conn,id);
     }
 
     //修改
     public DaoUpdateResult update(Connection conn,  EmployeeExtra extra) {
-        return null;
+        return extraDao.update(conn,extra);
     }
 
     //增加
     public DaoUpdateResult insert(Connection conn, EmployeeExtra extra) {
-        return null;
+        return extraDao.insert(conn,extra);
     }
 
     //批量插入
-    public DaoUpdateResult insertBatch(Connection conn, List<EmployeeExtra> extras) {
-        return  null;
+    public DaoUpdateResult insertBatch(Connection conn, String[] extras) {
+        return  extraDao.insertBatch(conn,extras);
     }
 
     //离职或者退休
-    public DaoUpdateResult leave(Connection conn, long id,byte category,byte leave) {
-        return  null;
+    public DaoUpdateResult leave(Connection conn, long id, byte category, byte leave, Date date) {
+        return  extraDao.leave(conn,id,category,leave,date);
     }
 
 }

@@ -52,4 +52,105 @@ public class EmployeeExtra {
      */
     private byte leave;
 
+    public EmployeeExtra() {
+    }
+
+    public EmployeeExtra(long eid, String rid, String school, String major, byte household, String address, Date date1, Date date2, byte leave) {
+        this.eid = eid;
+        this.rid = rid;
+        this.school = school;
+        this.major = major;
+        this.household = household;
+        this.address = address;
+        this.date1 = date1;
+        this.date2 = date2;
+        this.leave = leave;
+    }
+
+    public long getEid() {
+        return eid;
+    }
+
+    public void setEid(long eid) {
+        this.eid = eid;
+    }
+
+    public String getRid() {
+        return rid;
+    }
+
+    public void setRid(String rid) {
+        this.rid = rid;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
+    }
+
+    public String getMajor() {
+        return major;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public byte getHousehold() {
+        return household;
+    }
+
+    public void setHousehold(byte household) {
+        this.household = household;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public Date getDate1() {
+        return date1;
+    }
+
+    public void setDate1(Date date1) {
+        this.date1 = date1;
+    }
+
+    public Date getDate2() {
+        return date2;
+    }
+
+    public void setDate2(Date date2) {
+        this.date2 = date2;
+    }
+
+    public byte getLeave() {
+        return leave;
+    }
+
+    public void setLeave(byte leave) {
+        this.leave = leave;
+    }
+
+    @Override
+    public String toString() {
+        return "EmployeeExtra{" +
+                "eid=" + eid +
+                ", rid='" + rid + '\'' +
+                ", school='" + school + '\'' +
+                ", major='" + major + '\'' +
+                ", household=" + household +
+                ", address='" + address + '\'' +
+                ", date1=" + date1 +
+                ", date2=" + date2 +
+                ", leave=" + leave +
+                '}';
+    }
 }

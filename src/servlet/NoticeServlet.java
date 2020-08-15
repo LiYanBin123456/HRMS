@@ -80,10 +80,8 @@ public class NoticeServlet extends HttpServlet {
 
     //修改公告
     private String update(Connection conn,HttpServletRequest request) {
-        //获取前台传过来的求职者的信息封装成对象Client
         Notice notice = JSON.parseObject(request.getParameter("notice"), Notice.class);
-        System.out.println(notice);
-
+        System.out.println("前台传来的数据："+notice);
         DaoUpdateResult res = noticeService.update(conn, notice);
 
         return JSONObject.toJSONString(res);

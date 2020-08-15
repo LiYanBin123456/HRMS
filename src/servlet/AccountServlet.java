@@ -68,43 +68,28 @@ public class AccountServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         res = accountService.login(conn,username);
-        System.out.println(res);
-        Account account =JSONObject.parseObject(res.data.toString(),Account.class);
-        if(account.getPassword().equals(password)){
-            res.msg +="账号密码正确";
-            request.getSession().setAttribute("Account", account);
-            request.getSession().setAttribute("res", res);
-            try {
-                switch (account.getRole()){
-                    case 0://平台管理员
-                        System.out.println("返回平台首页面");
-                        request.getRequestDispatcher("/admin/menu.html").forward(request, response);
-                        break;
-                    case 1://派遣单位管理员
-                        System.out.println("返回派遣单位首页面");
-                        request.getRequestDispatcher("/dispatch/menu.html").forward(request, response);
-                        break;
-                    case 2://合作单位管理员
-                        System.out.println("返回合作单位首页面");
-                        request.getRequestDispatcher("/cooperation/menu.html").forward(request, response);
-                        break;
-                    case 3://员工
-                        System.out.println("返回员工首页面");
-                        break;
-                }
-            } catch (ServletException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
+        Account account = (Account) res.data;
+        if(account!=null){
+            if(account.getPassword().equals(password)){
+                res.msg ="账号密码正确";
+                request.getSession().setAttribute("Account", account);
+                res.success=true;
+                return JSONObject.toJSONString(res);
+            }else {
+                res.msg="密码错误";
             }
         }
-        res.msg +="账号密码错误";
+        res.success=false;
         return JSONObject.toJSONString(res);
     }
 
     //退出
     private String quit(Connection conn, HttpServletRequest request) {
-        return null;
+        request.getSession().invalidate();
+        DaoUpdateResult res=null;
+        res.msg+="退出";
+        res.success = true;
+        return JSONObject.toJSONString(res);
     }
 
     //获取账号列表
@@ -126,23 +111,32 @@ public class AccountServlet extends HttpServlet {
     //插入账号
     private String insert(Connection conn, HttpServletRequest request) {
         Account account =JSONObject.parseObject(request.getParameter("account"),Account.class);
+        System.out.println("前台传过来的参数："+account);
         DaoUpdateResult res = accountService.insert(conn,account);
         return JSONObject.toJSONString(res);
     }
 
     //获取账号详情
     private String get(Connection conn, HttpServletRequest request) {
-        return null;
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoQueryResult res = accountService.get(conn,id);
+        return JSONObject.toJSONString(res);
     }
 
     //修改账号
     private String update(Connection conn, HttpServletRequest request) {
-        return null;
+        Account account =JSONObject.parseObject(request.getParameter("account"),Account.class);
+        System.out.println("前台传过来的参数："+account);
+        DaoUpdateResult res =accountService.update(conn,account);
+        return JSONObject.toJSONString(res);
     }
 
     //设置权限
     private String permit(Connection conn, HttpServletRequest request) {
-        return null;
+        byte permission = Byte.parseByte(request.getParameter("permission"));
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoUpdateResult res =accountService.permit(conn,id,permission);
+        return JSONObject.toJSONString(res);
     }
 
 

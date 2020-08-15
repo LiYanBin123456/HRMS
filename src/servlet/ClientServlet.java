@@ -158,14 +158,17 @@ public class ClientServlet extends HttpServlet {
         switch (category) {
             case 0://派遣方客户
                 Dispatch dispatch = JSON.parseObject(request.getParameter("client"), Dispatch.class);
+                System.out.println("前台传来的数据："+dispatch);
                 res = dispatchService.update(conn, dispatch);
                 break;
             case 1://合作单位客户
                 Cooperation cooperation= JSON.parseObject(request.getParameter("client"), Cooperation.class);
+                System.out.println("前台传来的数据："+cooperation);
                 res = cooperationService.update(conn,cooperation);
                 break;
             case 2://派遣单位客户
                 Supplier supplier= JSON.parseObject(request.getParameter("client"), Supplier.class);
+                System.out.println("前台传来的数据："+supplier);
                 res = supplierService.update(conn,supplier);
                 break;
         }
@@ -224,6 +227,7 @@ public class ClientServlet extends HttpServlet {
     //修改客户服务信息
     private String updateFinance(Connection conn, HttpServletRequest request) {
         Finance finance =JSONObject.parseObject(request.getParameter("finance"),Finance.class);
+        System.out.println("前台传来的数据："+finance);
         DaoUpdateResult res =financeService.update(conn,finance);
         return JSONObject.toJSONString(res);
     }
@@ -239,6 +243,7 @@ public class ClientServlet extends HttpServlet {
     //增加客户服务信息
     private String insertFinance(Connection conn, HttpServletRequest request) {
         Finance finance =JSONObject.parseObject(request.getParameter("finance"),Finance.class);
+        System.out.println("前台传来的数据："+finance);
         DaoUpdateResult res =financeService.insert(conn,finance);
         return JSONObject.toJSONString(res);
     }
@@ -261,6 +266,7 @@ public class ClientServlet extends HttpServlet {
     //增加客户自定义工资信息
     private String insertSalaryDefine(Connection conn, HttpServletRequest request) {
         MapSalary mapSalary =JSONObject.parseObject(request.getParameter("mapSalary"),MapSalary.class);
+        System.out.println("前台传来的数据："+mapSalary);
         DaoUpdateResult res=mapSalaryService.insert(mapSalary,conn);
         return  JSONObject.toJSONString(res);
     }

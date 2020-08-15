@@ -19,11 +19,11 @@ public class AccountService {
     }
 
     public DaoQueryResult get(Connection conn, long id) {
-        return null;
+        return accountDao.get(conn,id);
     }
 
     public DaoUpdateResult update(Connection conn, Account account) {
-        return null;
+        return accountDao.update(conn,account);
     }
 
     public DaoUpdateResult insert(Connection conn, Account account) {
@@ -35,6 +35,6 @@ public class AccountService {
     }
 
     public DaoUpdateResult permit(Connection conn, long id,byte permission) {
-        return null;
+        return accountDao.permit(conn,id,permission);
     }
 }

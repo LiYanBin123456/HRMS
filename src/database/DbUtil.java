@@ -276,9 +276,7 @@ public class DbUtil {
             System.out.println("get==sql=="+sql);
             result.data = qr.query(conn, sql, new BeanHandler<>(c),values.toArray());
             result.success = true;
-
             System.out.println(result.data);
-
         }catch (SQLException e){
             result.success = false;
             result.msg = "数据库操作错误";

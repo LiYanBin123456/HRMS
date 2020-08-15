@@ -1,6 +1,9 @@
 package servlet;
 
-import database.ConnUtil;
+import bean.insurance.Product;
+import com.alibaba.fastjson.JSONObject;
+import database.*;
+import service.product.ProductService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,6 +16,7 @@ import java.sql.Connection;
 
 @WebServlet(name = "ProductServlet",urlPatterns = "/product")
 public class ProductServlet extends HttpServlet {
+    private ProductService productService = new ProductService();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
     }
@@ -50,23 +54,33 @@ public class ProductServlet extends HttpServlet {
     }
 
     private String insert(Connection conn, HttpServletRequest request) {
-        return null;
+        Product product = JSONObject.parseObject(request.getParameter("product"),Product.class);
+        DaoUpdateResult res =productService.insert(conn,product);
+        return JSONObject.toJSONString(res);
     }
 
     private String update(Connection conn, HttpServletRequest request) {
-        return null;
+        Product product = JSONObject.parseObject(request.getParameter("product"),Product.class);
+        DaoUpdateResult res =productService.update(conn,product);
+        return JSONObject.toJSONString(res);
     }
 
     private String delete(Connection conn, HttpServletRequest request) {
-        return null;
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoUpdateResult res =productService.delete(conn,id);
+        return JSONObject.toJSONString(res);
     }
 
     private String get(Connection conn, HttpServletRequest request) {
-        return null;
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoQueryResult res =productService.get(conn,id);
+        return JSONObject.toJSONString(res);
     }
 
     private String getList(Connection conn, HttpServletRequest request) {
-        return null;
+        QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
+        DaoQueryListResult res =productService.getList(conn,parameter);
+        return JSONObject.toJSONString(res);
     }
 
 

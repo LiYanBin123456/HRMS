@@ -20,22 +20,22 @@ private EmployeeDao employeeDao = new EmployeeDao();
 
     //获取详情
     public DaoQueryResult get(Connection conn, long id) {
-        return null;
+        return employeeDao.get(conn,id);
     }
 
     //修改
     public DaoUpdateResult update(Connection conn, Employee employee) {
-        return null;
+        return employeeDao.update(conn,employee);
     }
 
     //增加
     public DaoUpdateResult insert(Connection conn, Employee employee) {
-        return null;
+        return employeeDao.insert(conn,employee);
     }
 
     //删除
     public DaoUpdateResult delete(Connection conn, long id) {
-        return  null;
+        return  employeeDao.delete(conn,id);
     }
 
     //批量插入

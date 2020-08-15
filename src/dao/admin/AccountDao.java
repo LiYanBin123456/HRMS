@@ -13,14 +13,14 @@ public class AccountDao {
     }
 
     public DaoQueryResult login(Connection conn,String username){
-        DaoQueryResult res =null;
+        DaoQueryResult res ;
         QueryConditions conditions = new QueryConditions();
         conditions.add("username","=",username);
         if(isExist(conn,username).exist){
            res = DbUtil.get(conn,"account",conditions,Account.class);
-           res.msg+="用户存在";
         }else {
-            res.msg+="用户不存在";
+            res = DbUtil.get(conn,"account",conditions,Account.class);
+            res.msg="用户不存在";
         }
         return res;
     }
@@ -31,19 +31,21 @@ public class AccountDao {
     }
 
     public DaoQueryResult get(Connection conn, long id) {
-        return null;
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id","=",id);
+        return DbUtil.get(conn,"account",conditions,Account.class);
     }
 
     public DaoUpdateResult update(Connection conn, Account a) {
-        String sql = "update notice set nickname=?,username=?,password=?,role=?,rid=?,permission=? where id=?";
-        Object []params = {};
+        String sql = "update account set nickname=?,username=?,password=?,role=?,rid=?,permission=? where id=?";
+        Object []params = {a.getNickname(),a.getUsername(),a.getPassword(),a.getRole(),a.getRid(),a.getPermission(),a.getId()};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
     }
 
     public DaoUpdateResult insert(Connection conn, Account a) {
-        String sql = "insert account (id,nickname,username,password,role,rid,permission) values (?,?,?,?,?,?,?)";
-        Object []params = {a.getId(),a.getNickname(),a.getPassword(),a.getRole(),a.getRid(),a.getPermission()};
+        String sql = "insert account (nickname,username,password,role,rid,permission) values (?,?,?,?,?,?)";
+        Object []params = {a.getNickname(),a.getPassword(),a.getRole(),a.getRid(),a.getPermission()};
         return  DbUtil.insert(conn,sql,params);
     }
 
@@ -54,6 +56,9 @@ public class AccountDao {
     }
 
     public DaoUpdateResult permit(Connection conn, long id,byte permission) {
-        return null;
+        String sql = "update account set permission=? where id=?";
+        Object []params = {permission,id};
+        //调用DbUtil封装的update方法
+        return DbUtil.update(conn,sql,params);
     }
 }

@@ -1,9 +1,9 @@
 package servlet;
 
+import bean.employee.Employee;
+import bean.employee.EmployeeExtra;
 import com.alibaba.fastjson.JSONObject;
-import database.ConnUtil;
-import database.DaoQueryListResult;
-import database.QueryParameter;
+import database.*;
 import service.employee.EmployeeService;
 import service.employee.ExtraService;
 import service.employee.PayCardService;
@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Date;
 
 @WebServlet(name = "EmployeeServlet",urlPatterns = "/employee")
 public class EmployeeServlet extends HttpServlet {
@@ -105,26 +106,59 @@ public class EmployeeServlet extends HttpServlet {
 
     //插入员工信息
     private String insert(Connection conn, HttpServletRequest request) {
-        return  null;
+        DaoUpdateResult res = null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        if(category==0){
+            Employee employee =JSONObject.parseObject(request.getParameter("employee"), Employee.class);
+            res= employeeService.insert(conn,employee);
+        }else {
+            EmployeeExtra employeeExtra =JSONObject.parseObject(request.getParameter("employee"), EmployeeExtra.class);
+            res = extraService.insert(conn,employeeExtra);
+        }
+        return JSONObject.toJSONString(res);
     }
     //获取员工信息
     private String get(Connection conn, HttpServletRequest request) {
-        return  null;
+        DaoQueryResult res = null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        long id = Long.parseLong((request.getParameter("id")));
+        if(category==0){
+           res = employeeService.get(conn,id);
+        }else {
+           res = extraService.get(conn,id);
+        }
+        return JSONObject.toJSONString(res);
     }
 
     //修改员工信息
     private String update(Connection conn, HttpServletRequest request) {
-        return  null;
+        DaoUpdateResult res = null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        if(category==0){
+            Employee employee =JSONObject.parseObject(request.getParameter("employee"), Employee.class);
+            res= employeeService.update(conn,employee);
+        }else {
+            EmployeeExtra employeeExtra =JSONObject.parseObject(request.getParameter("employee"), EmployeeExtra.class);
+            res = extraService.update(conn,employeeExtra);
+        }
+        return JSONObject.toJSONString(res);
     }
 
     //离职或者退休
     private String leave(Connection conn, HttpServletRequest request) {
-        return  null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        long id = Long.parseLong((request.getParameter("id")));
+        Date date = Date.valueOf(request.getParameter("date"));
+        byte leave = Byte.parseByte(request.getParameter("leave"));
+        DaoUpdateResult res =extraService.leave(conn,id,category,leave,date);
+        return JSONObject.toJSONString(res);
     }
 
     //删除
     private String delete(Connection conn, HttpServletRequest request) {
-        return  null;
+        long id = Long.parseLong((request.getParameter("id")));
+        DaoUpdateResult   res = employeeService.delete(conn,id);
+        return JSONObject.toJSONString(res);
     }
 
     //批量插入
