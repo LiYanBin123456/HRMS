@@ -981,9 +981,6 @@ var InterfaceFile = function () {
     };
 };
 
-var iDispatch = new InterfaceClient();//客户管理
-var iSupplier = new InterfaceClient();//客户管理
-var iCooperation = new InterfaceClient();//客户管理
 var iClient = new InterfaceClient();//客户管理
 var iRule = new InterfaceRule();//规则管理
 var iContract =new InterfaceContract();//合同管理
