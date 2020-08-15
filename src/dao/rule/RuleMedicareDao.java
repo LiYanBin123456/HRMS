@@ -13,7 +13,7 @@ public class RuleMedicareDao {
      * @param param 查询参数
      * @return 检索结果，格式："{success:true,msg:"",effects:1}"
      */
-    public DaoQueryListResult getList(Connection conn, QueryParameter param){
+    public static DaoQueryListResult getList(Connection conn, QueryParameter param){
         return DbUtil.getList(conn, "rule_medicare", param, RuleMedicare.class);
     }
 
@@ -23,7 +23,7 @@ public class RuleMedicareDao {
      * @param conditions 查询参数
      * @return 检索结果，格式："{success:true,msg:"",effects:1}"
      */
-    public DaoQueryResult get(Connection conn, QueryConditions conditions) {
+    public static DaoQueryResult get(Connection conn, QueryConditions conditions) {
         return DbUtil.get(conn, "rule_medicare", conditions, RuleMedicare.class);
     }
 
@@ -33,7 +33,7 @@ public class RuleMedicareDao {
      * @param rule 医保规则对象
      * @return 更新结果，格式："{success:true,msg:"",effects:1}"
      */
-    public DaoUpdateResult update(Connection conn, RuleMedicare rule) {
+    public static DaoUpdateResult update(Connection conn, RuleMedicare rule) {
         String sql = "update rule_medicare set city=?, start=?, base=?, per1=?, per2=?, per3=?, fin1=?, fin2=? where id=?";
         Object[] params = {rule.getCity(), rule.getStart(), rule.getBase(), rule.getPer1(), rule.getPer2(), rule.getPer3(), rule.getFin1(), rule.getFin2(), rule.getId()};
         return DbUtil.update(conn, sql, params);
@@ -45,7 +45,7 @@ public class RuleMedicareDao {
      * @param rule 医保规则对象
      * @return 更新结果，格式："{success:true,msg:"",effects:1}"
      */
-    public DaoUpdateResult insert(Connection conn, RuleMedicare rule) {
+    public static DaoUpdateResult insert(Connection conn, RuleMedicare rule) {
         String sql = "insert into rule_medicare (city , start, base, per1, per2, per3, fin1, fin2) values (?,?,?,?,?,?,?,?)";
         Object[] params = {rule.getCity(), rule.getStart(), rule.getBase(), rule.getPer1(), rule.getPer2(), rule.getPer3(), rule.getFin1(), rule.getFin2()};
         return DbUtil.insert(conn, sql, params);
@@ -57,7 +57,7 @@ public class RuleMedicareDao {
      * @param queryConditions 删除参数
      * @return 更新结果，格式："{success:true,msg:"",effects:1}"
      */
-    public DaoUpdateResult delete(Connection conn, QueryConditions queryConditions) {
+    public static DaoUpdateResult delete(Connection conn, QueryConditions queryConditions) {
         return DbUtil.delete(conn,"rule_medicare", queryConditions);
     }
 }
