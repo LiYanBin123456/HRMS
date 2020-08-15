@@ -51,7 +51,6 @@
             <!--行内工具栏-->
             <script type="text/html" id="bar_dispatch">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="contract"><i class="layui-icon layui-icon-edit"></i>合同</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
         </div>
@@ -106,9 +105,6 @@
                     switch (obj.event){
                         case "detail":
                             showDetailDlg(data);
-                            break;
-                        case "contract":
-                            showContractDlg(data);
                             break;
                         case "del":
                             del(data);
@@ -170,17 +166,6 @@
                 var content = "../dialog/dispatch.html?id="+dispatch.id;
                 layer.open({
                     title:"详情",
-                    type: 2,
-                    area: ['800px', '600px'],
-                    content: content
-                });
-            }
-
-            //打开合同对话框
-            function showContractDlg(dispatch) {
-                var content = "contract.html";
-                layer.open({
-                    title:'合同-'+dispatch.name,
                     type: 2,
                     area: ['800px', '600px'],
                     content: content

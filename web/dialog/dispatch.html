@@ -138,7 +138,6 @@
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
 <script>
-    var op = "insert";
     var form;//表单对象
     var editer;
     var element;
@@ -162,7 +161,6 @@
         id = $.query.get("id");
         if (id) {
             getDispatch();
-            op = "update";
         }
         element.on('tab(tab_dispatch)', function(data){
             if(data.index == 1){
