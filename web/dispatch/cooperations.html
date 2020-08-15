@@ -131,7 +131,7 @@
                     data:result.rows
                 });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                iCooperation.getList(param_query,1,function (result) {
+                iClient.getList(param_query,1,function (result) {
                     table.reload('tbl_cooperation', {
                         data:result.rows
                     });
@@ -184,7 +184,7 @@
             //删除公告
             function del(cooperation) {
                 layer.confirm('确定删除'+cooperation.name, {icon: 3, title:'删除'}, function(index){
-                    iCooperation.delete(cooperation.id,function () {
+                    iClient.delete(cooperation.id,1,0,function () {
                         layer.close(index);
                         getCooperations();
                         layer.msg('删除成功');

@@ -186,9 +186,9 @@
     function save() {
         var supplier = form.val('form_supplier');
         if(op == "insert") {
-            iSupplier.insert(supplier, onInsertSuccess);
+            iClient.insert(supplier,2, onInsertSuccess);
         }else{
-            iSupplier.update(supplier,onUpdateSuccess);
+            iClient.update(supplier,2,onUpdateSuccess);
         }
 
         function onInsertSuccess() {

@@ -125,7 +125,7 @@
                     data:result.rows
                 });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                iSupplier.getList(param_query,2,function (result) {
+                iClient.getList(param_query,2,function (result) {
                     table.reload('tbl_supplier', {
                         data:result.rows
                     });
@@ -178,7 +178,7 @@
             //删除公告
             function del(supplier) {
                 layer.confirm('确定删除'+supplier.name, {icon: 3, title:'删除'}, function(index){
-                    iSupplier.delete(supplier.id,function () {
+                    iClient.delete(supplier.id,2,0,function () {
                         layer.close(index);
                         getSuppliers();
                         layer.msg('删除成功');

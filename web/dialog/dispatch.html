@@ -129,7 +129,7 @@
                   <div class="layui-form-item">
                       <label  class="layui-form-label">
                       </label>
-                      <button  type="button" class="layui-btn layui-btn-fluid"  >
+                      <button  type="button" class="layui-btn layui-btn-fluid"  onclick="save()">
                           保存
                       </button>
                   </div>
@@ -169,10 +169,17 @@
 
     function save() {
         var dispatch = form.val('form_dispatch');
+        var finance = form.val('form_dispatch');
         if(op == "insert") {
             iClient.insert(dispatch,0, onInsertSuccess);
         }else{
             iClient.update(dispatch,0,onUpdateSuccess);
+        }
+
+        if(op == "insertFinance") {
+            iClient.insertFinance(finance,onInsertSuccess);
+        }else{
+            iClient.updateFinance(finance,onUpdateSuccess);
         }
 
         function onInsertSuccess() {

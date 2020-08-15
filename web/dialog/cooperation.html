@@ -128,7 +128,7 @@
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label"></label>
-                    <button class="layui-btn" lay-filter="add" lay-submit="">保存</button>
+                    <button type="button" class="layui-btn layui-btn-fluid" onclick="save()" >保存</button>
                 </div>
             </form>
         </div>
@@ -278,7 +278,7 @@
             return;
         }
 
-        var param = $.query.get("cooperativeclient");
+        var param = $.query.get("cooperation");
         if (param) {
             cooperation = JSON.parse(param);
             form.val('form_cooperation', cooperation);
@@ -399,11 +399,11 @@
     }
 
     function save() {
-        var cooperativeclient = form.val('form_cooperation');
+        var cooperation = form.val('form_cooperation');
         if (op == "insert") {
-            iCooperation.insert(cooperation, onInsertSuccess);
+            iClient.insert(cooperation,1, onInsertSuccess);
         } else {
-            iCooperation.update(cooperation, onUpdateSuccess);
+            iClient.update(cooperation,1, onUpdateSuccess);
         }
 
         function onInsertSuccess() {
