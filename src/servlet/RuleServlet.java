@@ -16,9 +16,6 @@ import java.sql.Connection;
 
 @WebServlet(urlPatterns = "/rule")
 public class RuleServlet extends HttpServlet {
-    private RuleSocialService socialService = new RuleSocialService();
-    private RuleMedicareService medicalService = new RuleMedicareService();
-    private RuleFundService ruleFundService = new RuleFundService();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
@@ -28,11 +25,10 @@ public class RuleServlet extends HttpServlet {
 
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
-        String result = "";
         Connection conn = ConnUtil.getConnection();
 
         String op = request.getParameter("op");
-
+        String result;
         switch (op) {
             case "insert"://插入规则
                 result = insert(conn,request);
@@ -52,7 +48,8 @@ public class RuleServlet extends HttpServlet {
             case "getLast"://获取最新规则详情
                 result = getLast(conn,request);
                 break;
-
+            default:
+                result = "{\"success\":false,\"msg\":\"参数错误\"}";
 
         }
         ConnUtil.closeConnection(conn);
@@ -65,28 +62,87 @@ public class RuleServlet extends HttpServlet {
 
 
     private String insert(Connection conn, HttpServletRequest request) {
-      return null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        switch (category){
+            case 0:
+                return RuleMedicareService.insert(conn,request);
+            case 1:
+                return RuleSocialService.insert(conn,request);
+            case 2:
+                return RuleFundService.insert(conn,request);
+            default:
+                return "{\"success\":false,\"msg\":\"参数错误\"}";
+        }
     }
 
     private String delete(Connection conn, HttpServletRequest request) {
-        return null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        switch (category){
+            case 0:
+                return RuleMedicareService.delete(conn,request);
+            case 1:
+                return RuleSocialService.delete(conn,request);
+            case 2:
+                return RuleFundService.delete(conn,request);
+            default:
+                return "{\"success\":false,\"msg\":\"参数错误\"}";
+        }
     }
 
     private String update(Connection conn, HttpServletRequest request) {
-      return null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        switch (category){
+            case 0:
+                return RuleMedicareService.update(conn,request);
+            case 1:
+                return RuleSocialService.update(conn,request);
+            case 2:
+                return RuleFundService.update(conn,request);
+            default:
+                return "{\"success\":false,\"msg\":\"参数错误\"}";
+        }
     }
 
     private String getList(Connection conn, HttpServletRequest request) {
-
-        return null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        switch (category){
+            case 0:
+                return RuleMedicareService.getList(conn,request);
+            case 1:
+                return RuleSocialService.getList(conn,request);
+            case 2:
+                return RuleFundService.getList(conn,request);
+            default:
+                return "{\"success\":false,\"msg\":\"参数错误\"}";
+        }
     }
 
     private String get(Connection conn, HttpServletRequest request) {
-      return null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        switch (category){
+            case 0:
+                return RuleMedicareService.get(conn,request);
+            case 1:
+                return RuleSocialService.get(conn,request);
+            case 2:
+                return RuleFundService.get(conn,request);
+            default:
+                return "{\"success\":false,\"msg\":\"参数错误\"}";
+        }
     }
 
     private String getLast(Connection conn, HttpServletRequest request) {
-        return null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        switch (category){
+            case 0:
+                return RuleMedicareService.getLast(conn,request);
+            case 1:
+                return RuleSocialService.getLast(conn,request);
+            case 2:
+                return RuleFundService.getLast(conn,request);
+            default:
+                return "{\"success\":false,\"msg\":\"参数错误\"}";
+        }
     }
 
 
