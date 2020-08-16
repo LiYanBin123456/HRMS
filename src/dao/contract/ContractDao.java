@@ -92,25 +92,6 @@ public class ContractDao {
         return column;
     }
 
-    //添加合同服务项目
-    public String insertService(Connection conn, Serve serve){
-        return null;
-    }
-
-    //获取合同服务项目
-    public String getService(Connection conn,Long cid){
-        return null;
-    }
-
-    //获取合作客户的所有合同服务项目
-    public String getServiceList(Connection conn,QueryParameter parameter){
-        return null;
-    }
-
-    //修改合同服务项目
-    public String updateService(Connection conn,Serve serve){
-        return null;
-    }
 
 
 }

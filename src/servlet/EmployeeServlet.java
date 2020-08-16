@@ -2,12 +2,20 @@ package servlet;
 
 import bean.employee.Employee;
 import bean.employee.EmployeeExtra;
+import bean.employee.EmployeeSetting;
+import bean.rule.RuleMedicare;
 import com.alibaba.fastjson.JSONObject;
+import dao.rule.RuleFundDao;
+import dao.rule.RuleMedicareDao;
+import dao.rule.RuleSocialDao;
 import database.*;
 import service.employee.EmployeeService;
 import service.employee.ExtraService;
 import service.employee.PayCardService;
 import service.employee.SettingService;
+import service.rule.RuleFundService;
+import service.rule.RuleMedicareService;
+import service.rule.RuleSocialService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,6 +33,9 @@ public class EmployeeServlet extends HttpServlet {
     private ExtraService extraService = new ExtraService();
     private SettingService settingService = new SettingService();
     private PayCardService payCardService = new PayCardService();
+    private RuleMedicareDao medicareDao = new RuleMedicareDao();
+    private RuleSocialDao socialDao = new RuleSocialDao();
+    private RuleFundDao fundDao = new RuleFundDao();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
     }
@@ -163,22 +174,45 @@ public class EmployeeServlet extends HttpServlet {
 
     //批量插入
     private String insertBatch(Connection conn, HttpServletRequest request) {
-        return  null;
+        DaoUpdateResult res;
+        String[] employees = request.getParameterValues("employees[]");
+        String[] extracts = request.getParameterValues("extracts[]");
+        res =employeeService.insertBatch(conn,employees);
+        res =extraService.insertBatch(conn,extracts);
+
+        return  JSONObject.toJSONString(res);
     }
 
     //插入社保和个税
     private String insertSetting(Connection conn, HttpServletRequest request) {
-        return  null;
+        EmployeeSetting setting =JSONObject.parseObject(request.getParameter("setting"), EmployeeSetting.class);
+        DaoUpdateResult res = settingService.insert(conn,setting);
+        return  JSONObject.toJSONString(res);
     }
 
     //修改社保和个税
     private String updateSetting(Connection conn, HttpServletRequest request) {
-        return  null;
+        EmployeeSetting setting =JSONObject.parseObject(request.getParameter("setting"), EmployeeSetting.class);
+        Byte category = Byte.valueOf(request.getParameter("category"));
+        if(category==0){//社保信息
+            boolean flag = true;
+           float valueM=setting.getValueM();
+           float valueS=setting.getValueS();
+           float fundPer = setting.getFundPer();
+           float fundBase =setting.getFundBase();
+           if(valueM!=0){
+
+           }
+        }
+        DaoUpdateResult res = settingService.update(conn,setting,category);
+        return  JSONObject.toJSONString(res);
     }
 
     //获取社保和个税
     private String getSetting(Connection conn, HttpServletRequest request) {
-        return  null;
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoQueryResult res = settingService.get(conn,id);
+        return  JSONObject.toJSONString(res);
     }
     //插入员工工资卡
     private String insertCard(Connection conn, HttpServletRequest request) {

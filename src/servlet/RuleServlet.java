@@ -1,5 +1,9 @@
 package servlet;
 
+import bean.rule.RuleFund;
+import bean.rule.RuleMedicare;
+import bean.rule.RuleSocial;
+import com.alibaba.fastjson.JSONObject;
 import database.*;
 import service.rule.RuleFundService;
 import service.rule.RuleMedicareService;
@@ -63,86 +67,138 @@ public class RuleServlet extends HttpServlet {
 
     private String insert(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
+        DaoUpdateResult res = null;
         switch (category){
             case 0:
-                return RuleMedicareService.insert(conn,request);
+                RuleMedicare ruleMedicare =JSONObject.parseObject(request.getParameter("rule"), RuleMedicare.class);
+                res=RuleMedicareService.insert(conn,ruleMedicare);
+                break;
             case 1:
-                return RuleSocialService.insert(conn,request);
+                RuleSocial ruleSocial =JSONObject.parseObject(request.getParameter("rule"), RuleSocial.class);
+                res=RuleSocialService.insert(conn,ruleSocial);
+                break;
             case 2:
-                return RuleFundService.insert(conn,request);
+                RuleFund ruleFund =JSONObject.parseObject(request.getParameter("rule"), RuleFund.class);
+                 res =RuleFundService.insert(conn,ruleFund);
+                 break;
             default:
-                return "{\"success\":false,\"msg\":\"参数错误\"}";
+                res.success=false;
+                res.msg="参数错误";
+               break;
         }
+        return  JSONObject.toJSONString(res);
     }
 
     private String delete(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoUpdateResult res = null;
         switch (category){
             case 0:
-                return RuleMedicareService.delete(conn,request);
+                res=RuleMedicareService.delete(conn,id);
+                break;
             case 1:
-                return RuleSocialService.delete(conn,request);
+                res=RuleSocialService.delete(conn,id);
+                break;
             case 2:
-                return RuleFundService.delete(conn,request);
+                res =RuleFundService.delete(conn,id);
+                break;
             default:
-                return "{\"success\":false,\"msg\":\"参数错误\"}";
+                res.success=false;
+                res.msg="参数错误";
+                break;
         }
+        return  JSONObject.toJSONString(res);
     }
 
     private String update(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
+        DaoUpdateResult res = null;
         switch (category){
             case 0:
-                return RuleMedicareService.update(conn,request);
+                RuleMedicare ruleMedicare =JSONObject.parseObject(request.getParameter("rule"), RuleMedicare.class);
+                res=RuleMedicareService.update(conn,ruleMedicare);
+                break;
             case 1:
-                return RuleSocialService.update(conn,request);
+                RuleSocial ruleSocial =JSONObject.parseObject(request.getParameter("rule"), RuleSocial.class);
+                res=RuleSocialService.update(conn,ruleSocial);
+                break;
             case 2:
-                return RuleFundService.update(conn,request);
+                RuleFund ruleFund =JSONObject.parseObject(request.getParameter("rule"), RuleFund.class);
+                res =RuleFundService.update(conn,ruleFund);
+                break;
             default:
-                return "{\"success\":false,\"msg\":\"参数错误\"}";
+                res.success=false;
+                res.msg="参数错误";
+                break;
         }
+        return  JSONObject.toJSONString(res);
     }
 
     private String getList(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
+        QueryParameter param =JSONObject.parseObject(request.getParameter("param"),QueryParameter.class);
+        DaoQueryListResult res = null;
         switch (category){
             case 0:
-                return RuleMedicareService.getList(conn,request);
+                res=RuleMedicareService.getList(conn,param);
+                break;
             case 1:
-                return RuleSocialService.getList(conn,request);
+                res=RuleSocialService.getList(conn,param);
+                break;
             case 2:
-                return RuleFundService.getList(conn,request);
+                res =RuleFundService.getList(conn,param);
+                break;
             default:
-                return "{\"success\":false,\"msg\":\"参数错误\"}";
+                res.success=false;
+                res.msg="参数错误";
+                break;
         }
+        return  JSONObject.toJSONString(res);
     }
 
     private String get(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoQueryResult res = null;
         switch (category){
             case 0:
-                return RuleMedicareService.get(conn,request);
+                res=RuleMedicareService.get(conn,id);
+                break;
             case 1:
-                return RuleSocialService.get(conn,request);
+                res=RuleSocialService.get(conn,id);
+                break;
             case 2:
-                return RuleFundService.get(conn,request);
+                res =RuleFundService.get(conn,id);
+                break;
             default:
-                return "{\"success\":false,\"msg\":\"参数错误\"}";
+                res.success=false;
+                res.msg="参数错误";
+                break;
         }
+        return  JSONObject.toJSONString(res);
     }
 
     private String getLast(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
+        String city = request.getParameter("city");
+        DaoQueryResult res = null;
         switch (category){
             case 0:
-                return RuleMedicareService.getLast(conn,request);
+                res=RuleMedicareService.getLast(conn,city);
+                break;
             case 1:
-                return RuleSocialService.getLast(conn,request);
+                res=RuleSocialService.getLast(conn,city);
+                break;
             case 2:
-                return RuleFundService.getLast(conn,request);
+                res =RuleFundService.getLast(conn,city);
+                break;
             default:
-                return "{\"success\":false,\"msg\":\"参数错误\"}";
+                res.success=false;
+                res.msg="参数错误";
+                break;
         }
+        return  JSONObject.toJSONString(res);
     }
 
 

@@ -39,8 +39,8 @@ private EmployeeDao employeeDao = new EmployeeDao();
     }
 
     //批量插入
-    public DaoUpdateResult insertBatch(Connection conn, List<Employee> employees) {
-        return  null;
+    public DaoUpdateResult insertBatch(Connection conn, String[] employees) {
+        return  employeeDao.insertBatch(conn,employees);
     }
 
     //批量派遣
