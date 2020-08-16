@@ -20,7 +20,7 @@ public class SettingDao {
 
     //修改
     public static DaoUpdateResult update(Connection conn, EmployeeSetting s, byte category) {
-        DaoUpdateResult res = null;
+        DaoUpdateResult res;
         if(category == 0){//修改社保信息
             String sql = "update employee_setting set city=?,settingM=?,valueM=?,settingS=?,valueS=?,fundPer=?,fundBase=?,product=? where eid=? ";
             Object []params = {s.getCity(),s.getSettingM(),s.getValueM(),s.getSettingS(),s.getValueS(),s.getFundPer(),s.getFundBase(),s.getProduct(),s.getEid()};

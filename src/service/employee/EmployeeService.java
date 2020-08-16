@@ -1,6 +1,6 @@
 package service.employee;
 
-import bean.admin.Account;
+
 import bean.employee.Employee;
 import dao.employee.EmployeeDao;
 import database.DaoQueryListResult;
@@ -9,7 +9,7 @@ import database.DaoUpdateResult;
 import database.QueryParameter;
 
 import java.sql.Connection;
-import java.util.List;
+
 
 public class EmployeeService {
 private EmployeeDao employeeDao = new EmployeeDao();
@@ -44,12 +44,12 @@ private EmployeeDao employeeDao = new EmployeeDao();
     }
 
     //批量派遣
-    public DaoUpdateResult dispatch(Connection conn, List eids,long cid) {
-        return  null;
+    public DaoUpdateResult dispatch(Connection conn, String[] eids,long cid) {
+        return  employeeDao.dispatch(conn,eids,cid);
     }
 
     //雇用
     public DaoUpdateResult employ(Connection conn, long id,byte category) {
-        return  null;
+        return  employeeDao.employ(conn,id,category);
     }
 }

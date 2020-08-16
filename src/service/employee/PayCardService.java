@@ -8,17 +8,17 @@ import java.sql.Connection;
 
 public class PayCardService {
     //获取详情
-    public DaoQueryResult get(Connection conn, long id) {
+    public static DaoQueryResult get(Connection conn, long id) {
         return null;
     }
 
     //修改
-    public DaoUpdateResult update(Connection conn, PayCard payCard) {
+    public static DaoUpdateResult update(Connection conn, PayCard payCard) {
         return null;
     }
 
     //增加
-    public DaoUpdateResult insert(Connection conn, PayCard payCard) {
+    public static DaoUpdateResult insert(Connection conn, PayCard payCard) {
         return null;
     }
 

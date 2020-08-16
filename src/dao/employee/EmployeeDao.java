@@ -47,11 +47,8 @@ public class EmployeeDao {
     //批量插入
     public static DaoUpdateResult insertBatch(Connection conn, String[] employees) {
         String sql = "insert employee (did,cid,cardId,name,phone,degree,type,entry,status,department,post,category,price) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        Object [][]params = new Object[employees.length][];
-        for (int i = 0; i < employees.length; i++) {
-            params[i] = new Object[]{employees[i]};
-        }
-        return  DbUtil.batch(conn,sql,params);
+
+        return  null;
     }
 
     //批量派遣
