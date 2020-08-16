@@ -18,7 +18,14 @@
     <![endif]-->
 </head>
 <body>
-<form lay-filter="form_insurance" class="layui-form">
+<form lay-filter="form_product" class="layui-form">
+    <input type='hidden' name='id'/>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="x-red">*</span>派遣方</label>
+        <div class="layui-input-inline">
+            <input type="text" name="did" required="" autocomplete="off" class="layui-input">
+        </div>
+    </div>
     <div class="layui-form-item">
         <label class="layui-form-label"><span class="x-red">*</span>产品名称</label>
         <div class="layui-input-inline">
@@ -28,7 +35,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label"><span class="x-red">*</span>产品保额</label>
         <div class="layui-input-inline">
-            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="fin1" required="" autocomplete="off" class="layui-input">
+            <input type="text"  name="fin1" required="" autocomplete="off" class="layui-input">
         </div>
     </div>
     <div class="layui-form-item">
@@ -82,8 +89,7 @@
     </div>
   </div>
     <div class="layui-form-item">
-        <label  class="layui-form-label"></label>
-        <button type="button" class="layui-btn " onclick="save()">保存</button>
+        <button ype="button" class="layui-btn layui-btn-fluid" onclick="save()">保存</button>
     </div>
 </form>
 </body>
@@ -110,14 +116,13 @@
         var param = $.query.get("product");
         if (param) {
             var product = JSON.parse(param);
-            form.val('form_insurance', product);
+            form.val('form_product', product);
             layedit.setContent(editer, product.content, false);
             op = "update";
         }
     }
-
     function save() {
-        var product = form.val('form_insurance');
+        var product = form.val('form_product');
         if(op == "insert") {
             iProduct.insert(product, onInsertSuccess);
         }else{
@@ -141,6 +146,7 @@
             window.parent.location.reload();
         }
     }
+
 </script>
 
 </html>

@@ -376,12 +376,12 @@ var columns_member  = [[
 
 //保险产品字段集合
 var columns_product = [[
-    {field:'pname', title: '产品名称',width:180},
+    {field:'name', title: '产品名称',width:180},
     {field:'fin1', title: '产品保额',width:80},
     {field:'fin2', title: '医疗保额',width:80},
     {field:'allowance', title: '住院津贴',width:80},
-    {field:'period', title: '保障时段',width:100,templet:function (d) { return array_value2text(period_product,d.status) }},
-    {field:'allow', title: '可参保人员',width:130,templet:function (d) { return array_value2text(allow_product,d.status) }},
+    {field:'period', title: '保障时段',width:100,templet:function (d) { return array_value2text(period_product,d.period) }},
+    {field:'allow', title: '可参保人员',width:130,templet:function (d) { return array_value2text(allow_product,d.allow) }},
     {field:'min', title: '年龄下限',width:100},
     {field:'max', title: '年龄上限',width:100},
     {fixed: 'right', title: '操作', toolbar: '#bar_product'}
@@ -478,6 +478,13 @@ function format_date(timestamp) {
     var month=d.getMonth()+1;
     var date=d.getDate();
     return year+"-"+month+"-"+date;
+}
+
+function format_number() {
+    var d = new Date
+    var num =d.parseInt(num,2);
+    return  num;
+
 }
 
 function format_dateTime(timestamp) {

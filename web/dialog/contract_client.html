@@ -28,11 +28,12 @@
     <div class="layui-tab-content">
         <div class="layui-tab-item layui-show">
             <form lay-filter="form_contract" class="layui-form">
+                <input type='hidden' name='id'/>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>合作客户</label>
                     <div class="layui-input-inline">
-                        <select name="cardId" lay-verify="required">
+                        <select name="cardId" >
                             <option value="">选择合作客户</option>
                             <option value="0">科技中专</option>
                             <option value="1">国棉四厂</option>
@@ -43,14 +44,14 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>合同生效时间</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="start" required="" lay-verify="nikename" autocomplete="off"
+                        <input type="text" name="start" required="" autocomplete="off"
                                class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>合同到期时间</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="end" required="" lay-verify="nikename" autocomplete="off"
+                        <input type="text" name="end" required=""  autocomplete="off"
                                class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
@@ -79,12 +80,13 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <button type="button" class="layui-btn layui-btn-fluid"  onclick="save()">保存</button>
+                    <button lay-submit lay-filter="submit_contract" class="layui-btn layui-btn-fluid" >保存</button>
                 </div>
             </form>
         </div>
         <div class="layui-tab-item">
             <form lay-filter="form_service" class="layui-form">
+                <input type='hidden' name='id'/>
                 <div class="layui-form-item">
                     <label class="layui-form-label"><span class="x-red">*</span>服务项目</label>
                     <div class="layui-input-inline">
@@ -158,7 +160,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <button class="layui-btn" lay-filter="add" lay-submit="" onclick="save()">保存</button>
+                    <button lay-submit lay-filter="submit_serve" class="layui-btn layui-btn-fluid">保存</button>
                 </div>
             </form>
         </div>
@@ -175,17 +177,21 @@
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
 <script>
-    var op = "insert";
     var form;//表单对象
     var editer;
     var upload;
+    var element;
+    var id;//合同编号
+    var flag1;//客户合同基础信息是否已经存在
+    var flag2;//客户合同服务项目是否已经存在
 
     loadLayuiModule();
 
     function loadLayuiModule() {
-        layui.use(['form', 'layedit', 'jquery', 'upload'], function () {
+        layui.use(['form', 'layedit', 'jquery', 'upload','element'], function () {
             form = layui.form;
             layedit = layui.layedit;
+            element = layui.element;
             editer = layedit.build('content'); //建立编辑器
             upload = layui.upload;
             var uploadInst = upload.render({
@@ -236,23 +242,68 @@
     }
 
     function initData() {
-        var param = $.query.get("contract");
-        if (param) {
-            var contract = JSON.parse(param);
-            form.val('form_contract', contract);
-            layedit.setContent(editer, contract.content, false);
-            op = "update";
-            $("[name=client]").attr("disabled", 'disabled');
-            form.render('select', 'form_contract');
+        id = $.query.get("id");
+        if (id) {
+            getContract();
+        }
+        element.on('tab(tab_contract)', function(data){
+            if(data.index == 1){
+                if(!flag2){
+                    getServe();
+                }
+            }
+        });
+        form.on('submit(submit_contract)', function(data){
+            saveContract(data.field);
+        });
+        form.on('submit(submit_serve)', function(data){
+            saveServe(data.field);
+        });
+    }
+    function getContract() {
+        iContract.get(id,function (result) {
+            var contract = result.data;
+            if(contract){
+                flag1 = true;
+                form.val('form_contract', contract);
+                layedit.setContent(editer, contract.content, false);
+            }
+        });
+    }
+
+    function getServe() {
+        iContract.getService(id,function (result) {
+            var serve = result.data;
+            if(serve){
+                flag2 = true;
+                form.val('form_service', serve);
+            }
+        });
+    }
+
+    function saveContract(contract) {
+
+        if(flag1) {
+            iContract.update(contract,onUpdateSuccess);
+        }else{
+            iContract.insert(contract,onInsertSuccess);
+        }
+
+        function onInsertSuccess(result) {
+            id = result.extra;//获取插入的主键
+            layer.alert("添加成功", {icon: 6}, refresh());
+        }
+
+        function onUpdateSuccess() {
+            layer.alert("修改成功", {icon: 6}, refresh());
         }
     }
 
-    function save() {
-        var contract = form.val('form_contract');
-        if (op == "insert") {
-            iContract.insert(contract, onInsertSuccess);
-        } else {
-            iContract.update(contract, onUpdateSuccess);
+    function saveServe(serve) {
+        if(flag2) {
+            iContract.updateService(serve,onUpdateSuccess);
+        }else{
+            iContract.insertService(serve,onInsertSuccess);
         }
 
         function onInsertSuccess() {
@@ -262,15 +313,14 @@
         function onUpdateSuccess() {
             layer.alert("修改成功", {icon: 6}, refresh());
         }
-
-        function refresh() {
-            // 获得frame索引
-            var index = parent.layer.getFrameIndex(window.name);
-            //关闭当前frame
-            parent.layer.close(index);
-            //修改成功后刷新父界面
-            window.parent.location.reload();
-        }
+    }
+    function refresh() {
+        // 获得frame索引
+        var index = parent.layer.getFrameIndex(window.name);
+        //关闭当前frame
+        parent.layer.close(index);
+        //修改成功后刷新父界面
+        window.parent.location.reload();
     }
 </script>
 

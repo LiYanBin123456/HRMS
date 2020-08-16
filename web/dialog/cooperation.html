@@ -47,6 +47,7 @@
     <div class="layui-tab-content">
         <div class="layui-tab-item layui-show">
             <form lay-filter="form_cooperation" class="layui-form">
+                <input type='hidden' name='id'/>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>档案编号</label>
@@ -83,7 +84,7 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>联系人</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="contact" required="" lay-verify="nikename" autocomplete="off"
+                        <input type="text" name="contact" required=""  autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
@@ -91,7 +92,7 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>联系电话</label>
                     <div class="layui-input-inline">
-                        <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="phone"
+                        <input type="text"  name="phone"
                                required="" autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
@@ -104,7 +105,7 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>QQ号</label>
                     <div class="layui-input-inline">
-                        <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="qq" required=""
+                        <input type="text"  name="qq" required=""
                                autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
@@ -127,13 +128,13 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label"></label>
-                    <button type="button" class="layui-btn layui-btn-fluid" onclick="save()" >保存</button>
+                    <button lay-submit lay-filter="submit_dispatch" class="layui-btn layui-btn-fluid" >保存</button>
                 </div>
             </form>
         </div>
         <div class="layui-tab-item">
             <form lay-filter="form_cooperation" class="layui-form">
+                <input type='hidden' name='id'/>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>统一社会信用代码</label>
@@ -152,21 +153,21 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>银行账户</label>
                     <div class="layui-input-inline">
-                        <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="cardNo"
+                        <input type="text"  name="cardNo"
                                required="" autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>联系人</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="contact" required="" lay-verify="nikename" autocomplete="off"
+                        <input type="text" name="contact" required=""  autocomplete="off"
                                class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>联系电话</label>
                     <div class="layui-input-inline">
-                        <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="phone"
+                        <input type="text"  name="phone"
                                required="" autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
@@ -179,7 +180,7 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>大额行号</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="bankNo" required="" lay-verify="nikename" autocomplete="off"
+                        <input type="text" name="bankNo" required=""  autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
@@ -187,7 +188,7 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>公司余额</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="balance" required="" lay-verify="nikename" autocomplete="off"
+                        <input type="text" name="balance" required=""  autocomplete="off"
                                class="layui-input"></div>
                 </div>
                 <div class="layui-form-item layui-form-text">
@@ -198,8 +199,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label"></label>
-                    <button class="layui-btn" lay-filter="add" lay-submit="">保存</button>
+                    <button lay-submit lay-filter="submit_dispatch" class="layui-btn layui-btn-fluid">保存</button>
                 </div>
             </form>
         </div>
