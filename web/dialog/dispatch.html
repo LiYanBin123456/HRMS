@@ -199,7 +199,7 @@
     }
 
     function saveDispatch(dispatch) {
-        console.log(dispatch);
+
         if(flag1) {
             iClient.update(dispatch,0,onUpdateSuccess);
         }else{
@@ -217,6 +217,7 @@
     }
 
     function saveFinance(finance) {
+        console.log(finance);
         if(flag2) {
             iClient.updateFinance(finance,0,onUpdateSuccess);
         }else{
@@ -231,7 +232,6 @@
             layer.alert("修改成功", {icon: 6}, refresh());
         }
     }
-
     function refresh() {
         // 获得frame索引
         var index = parent.layer.getFrameIndex(window.name);
@@ -240,6 +240,7 @@
         //修改成功后刷新父界面
         window.parent.location.reload();
     }
+
 </script>
 
 </html>

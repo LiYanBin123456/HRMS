@@ -93,6 +93,7 @@ public class ClientServlet extends HttpServlet {
     private String insert(Connection conn,HttpServletRequest request) {
         DaoUpdateResult res = null;
         byte category = Byte.parseByte(request.getParameter("category"));
+        System.out.println("insert");
         switch (category) {
             case 0://派遣方客户
                 Dispatch dispatch = JSON.parseObject(request.getParameter("client"), Dispatch.class);
