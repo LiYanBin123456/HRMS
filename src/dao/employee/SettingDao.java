@@ -12,14 +12,14 @@ import java.sql.Connection;
 
 public class SettingDao {
     //获取详情
-    public DaoQueryResult get(Connection conn, long id) {
+    public static DaoQueryResult get(Connection conn, long id) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
         return DbUtil.get(conn,"employee_setting",conditions,Employee.class);
     }
 
     //修改
-    public DaoUpdateResult update(Connection conn, EmployeeSetting s, byte category) {
+    public static DaoUpdateResult update(Connection conn, EmployeeSetting s, byte category) {
         DaoUpdateResult res = null;
         if(category == 0){//修改社保信息
             String sql = "update employee_setting set city=?,settingM=?,valueM=?,settingS=?,valueS=?,fundPer=?,fundBase=?,product=? where eid=? ";
@@ -34,7 +34,7 @@ public class SettingDao {
     }
 
     //增加
-    public DaoUpdateResult insert(Connection conn, EmployeeSetting s) {
+    public static DaoUpdateResult insert(Connection conn, EmployeeSetting s) {
         String sql = "insert employee_setting (eid,city,settingM,valueM,settingS,valueS,fundPer,fundBase,product) values (?,?,?,?,?,?,?,?,?)";
         Object []params = {s.getEid(),s.getCity(),s.getSettingM(),s.getValueM(),s.getSettingS(),s.getValueS(),s.getFundPer(),s.getFundBase(),s.getProduct()};
         return  DbUtil.insert(conn,sql,params);

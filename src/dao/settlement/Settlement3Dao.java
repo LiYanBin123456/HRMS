@@ -7,19 +7,19 @@ import database.QueryParameter;
 import java.sql.Connection;
 
 public class Settlement3Dao {
-    private String getList(Connection conn, QueryParameter param) {
+    private static String getList(Connection conn, QueryParameter param) {
         return null;
     }
 
-    private String insert(Connection conn, Settlement3 settlement3) {
+    private static String insert(Connection conn, Settlement3 settlement3) {
         return null;
     }
 
-    private String delete(Connection conn, Long id) {
+    private static String delete(Connection conn, Long id) {
         return null;
     }
 
-    private String copy(Connection conn, long id,String month) {
+    private static String copy(Connection conn, long id,String month) {
         return null;
     }
 

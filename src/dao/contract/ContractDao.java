@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ContractDao {
     //根据查询条件获取合同列表，用视图查找
-    public DaoQueryListResult getList(Connection conn, QueryParameter parameter,String type) {
+    public static DaoQueryListResult getList(Connection conn, QueryParameter parameter,String type) {
         DaoQueryListResult res = null;
         if(parameter.conditions.extra!=null && !parameter.conditions.extra.isEmpty()) {
             parameter.addCondition("name","like",parameter.conditions.extra);
@@ -31,14 +31,14 @@ public class ContractDao {
         }
         return res;
     }
-    public DaoQueryResult get(Connection conn,String id) {
+    public static DaoQueryResult get(Connection conn,String id) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id", "=", id);
         return DbUtil.get(conn,"contract",conditions,Contract.class);
     }
 
     //查询最新合同
-    public  DaoQueryResult getLast(Connection conn, String bid,String type) {
+    public  static DaoQueryResult getLast(Connection conn, String bid,String type) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("bid", "=", bid);
         conditions.add("type", "=", type);
@@ -48,14 +48,14 @@ public class ContractDao {
     }
 
     //插入合同
-    public DaoUpdateResult insert(Connection conn, Contract c) {
+    public static DaoUpdateResult insert(Connection conn, Contract c) {
         String sql = "insert into contract (id,aid,bid,type,start,end,status,comments,invoice,project,times) values (?,?,?,?,?,?,?,?,?,?,?)";
         Object []params = {c.getId(),c.getAid(),c.getBid(),c.getType(),c.getStart(),c.getEnd(),c.getStatus(),c.getComments(),c.getInvoice(),c.getProject(),c.getTimes()};
         return DbUtil.insert(conn,sql,params);
     }
 
     //修改合同
-    public  DaoUpdateResult update(Connection conn, Contract c){
+    public  static DaoUpdateResult update(Connection conn, Contract c){
         String sql = "update contract set aid=?,bid=?,type=?,start=?,end=?,status=?,comments=?,invoice=?,project=?,times=? where id =?";
         Object []params = {c.getAid(),c.getBid(),c.getType(),c.getStart(),c.getEnd(),c.getStatus(), c.getComments(), c.getInvoice(),c.getProject(),c.getTimes(),c.getId()};
         //调用DbUtil封装的update方法
@@ -63,7 +63,7 @@ public class ContractDao {
     }
 
     //删除一个合同，还要删除对应的合同文件
-    public DaoUpdateResult delete(Connection conn, String id) {
+    public static DaoUpdateResult delete(Connection conn, String id) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id", "=", id);
         return DbUtil.delete(conn,"contract",conditions);
@@ -76,7 +76,7 @@ public class ContractDao {
      * @param type 合同类型
      * @return
      */
-    public List<String> deleteContract(Connection conn, long id,String type) {
+    public static List<String> deleteContract(Connection conn, long id,String type) {
         QueryParameter parameter = new QueryParameter();
         QueryConditions conditions = new QueryConditions();
         conditions.add("bid", "=", id);

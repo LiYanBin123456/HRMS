@@ -8,7 +8,7 @@ import java.sql.Connection;
 public class ClientDao {
 
     //分配管理员
-    public DaoUpdateResult allocate(Connection conn, Long aid, String[] cids, byte category) {
+    public static DaoUpdateResult allocate(Connection conn, Long aid, String[] cids, byte category) {
        DaoUpdateResult res =null;
         String sql;
         Object [][]params ;
