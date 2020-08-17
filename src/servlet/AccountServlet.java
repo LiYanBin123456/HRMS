@@ -16,7 +16,6 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 @WebServlet(urlPatterns = "/account")
 public class AccountServlet extends HttpServlet {
-    private AccountService accountService = new AccountService();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
     }
@@ -67,7 +66,7 @@ public class AccountServlet extends HttpServlet {
         DaoQueryResult res;
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        res = accountService.login(conn,username);
+        res = AccountService.login(conn,username);
         Account account = (Account) res.data;
         if(account!=null){
             if(account.getPassword().equals(password)){
@@ -96,7 +95,7 @@ public class AccountServlet extends HttpServlet {
     private String getList(Connection conn, HttpServletRequest request) {
         DaoQueryListResult res;
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
-        res = accountService.getList(conn,parameter);
+        res = AccountService.getList(conn,parameter);
         System.out.println(JSONObject.toJSONString(res));
         return JSONObject.toJSONString(res);
     }
@@ -104,7 +103,7 @@ public class AccountServlet extends HttpServlet {
     //删除账号
     private String delete(Connection conn, HttpServletRequest request) {
         long id= Long.parseLong(request.getParameter("id"));
-        DaoUpdateResult res = accountService.delete(conn,id);
+        DaoUpdateResult res = AccountService.delete(conn,id);
         return JSONObject.toJSONString(res);
     }
 
@@ -112,14 +111,14 @@ public class AccountServlet extends HttpServlet {
     private String insert(Connection conn, HttpServletRequest request) {
         Account account =JSONObject.parseObject(request.getParameter("account"),Account.class);
         System.out.println("前台传过来的参数："+account);
-        DaoUpdateResult res = accountService.insert(conn,account);
+        DaoUpdateResult res = AccountService.insert(conn,account);
         return JSONObject.toJSONString(res);
     }
 
     //获取账号详情
     private String get(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
-        DaoQueryResult res = accountService.get(conn,id);
+        DaoQueryResult res = AccountService.get(conn,id);
         return JSONObject.toJSONString(res);
     }
 
@@ -127,7 +126,7 @@ public class AccountServlet extends HttpServlet {
     private String update(Connection conn, HttpServletRequest request) {
         Account account =JSONObject.parseObject(request.getParameter("account"),Account.class);
         System.out.println("前台传过来的参数："+account);
-        DaoUpdateResult res =accountService.update(conn,account);
+        DaoUpdateResult res =AccountService.update(conn,account);
         return JSONObject.toJSONString(res);
     }
 
@@ -135,7 +134,7 @@ public class AccountServlet extends HttpServlet {
     private String permit(Connection conn, HttpServletRequest request) {
         byte permission = Byte.parseByte(request.getParameter("permission"));
         long id = Long.parseLong(request.getParameter("id"));
-        DaoUpdateResult res =accountService.permit(conn,id,permission);
+        DaoUpdateResult res =AccountService.permit(conn,id,permission);
         return JSONObject.toJSONString(res);
     }
 

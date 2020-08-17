@@ -1,6 +1,5 @@
 package dao.employee;
 
-import bean.employee.Employee;
 import bean.employee.PayCard;
 import database.DaoQueryResult;
 import database.DaoUpdateResult;

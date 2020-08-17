@@ -1,10 +1,9 @@
 package dao.client;
 
 import bean.client.Finance;
-import database.DaoQueryResult;
-import database.DaoUpdateResult;
-import database.DbUtil;
-import database.QueryConditions;
+import bean.client.ViewFinanceCooperation;
+import bean.employee.Employee;
+import database.*;
 
 import java.sql.Connection;
 
@@ -15,6 +14,13 @@ public class FinanceDao {
         conditions.add("cid","=",cid);
         conditions.add("type","=",type);
         return DbUtil.get(conn,"finance",conditions, Finance.class);
+    }
+
+    public static DaoQueryListResult getList(Connection conn, QueryParameter param){
+        if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
+            param.addCondition("name","like",param.conditions.extra);
+        }
+        return DbUtil.getList(conn,"view_finance",param,ViewFinanceCooperation.class);
     }
 
     public static DaoUpdateResult update(Connection conn, Finance f) {

@@ -17,7 +17,6 @@ import java.sql.Connection;
 
 @WebServlet(urlPatterns ="/notice")
 public class NoticeServlet extends HttpServlet {
-    private NoticeService noticeService = new NoticeService();
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         request.setCharacterEncoding("utf-8");
@@ -66,7 +65,7 @@ public class NoticeServlet extends HttpServlet {
         Notice notice = JSON.parseObject(request.getParameter("notice"), Notice.class);
         System.out.println(notice);
 
-        DaoUpdateResult res = noticeService.insert(conn, notice);
+        DaoUpdateResult res = NoticeService.insert(conn, notice);
 
         return JSONObject.toJSONString(res);
     }
@@ -74,7 +73,7 @@ public class NoticeServlet extends HttpServlet {
     private String delete(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
 
-        DaoUpdateResult res = noticeService.delete(conn,id);
+        DaoUpdateResult res = NoticeService.delete(conn,id);
         return  JSONObject.toJSONString(res);
     }
 
@@ -82,7 +81,7 @@ public class NoticeServlet extends HttpServlet {
     private String update(Connection conn,HttpServletRequest request) {
         Notice notice = JSON.parseObject(request.getParameter("notice"), Notice.class);
         System.out.println("前台传来的数据："+notice);
-        DaoUpdateResult res = noticeService.update(conn, notice);
+        DaoUpdateResult res = NoticeService.update(conn, notice);
 
         return JSONObject.toJSONString(res);
     }
@@ -91,7 +90,7 @@ public class NoticeServlet extends HttpServlet {
     private String getList(Connection conn,HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
 
-        DaoQueryListResult res =noticeService.getList(conn,parameter);
+        DaoQueryListResult res = NoticeService.getList(conn,parameter);
         return JSONObject.toJSONString(res);
     }
 
@@ -99,7 +98,7 @@ public class NoticeServlet extends HttpServlet {
     private String get(Connection conn,HttpServletRequest request){
         long id = Long.parseLong(request.getParameter("id"));
         System.out.println("客户id="+id);
-        DaoQueryResult res = noticeService.get(conn,id);
+        DaoQueryResult res = NoticeService.get(conn,id);
         return  JSONObject.toJSONString(res);
     }
 

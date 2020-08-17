@@ -34,9 +34,6 @@ import java.util.List;
 
 @WebServlet(name = "EmployeeServlet",urlPatterns = "/employee")
 public class EmployeeServlet extends HttpServlet {
-    private EmployeeService employeeService = new EmployeeService();
-    private ExtraService extraService = new ExtraService();
-    private SettingService settingService = new SettingService();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
     }
@@ -109,9 +106,9 @@ public class EmployeeServlet extends HttpServlet {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         byte category = Byte.parseByte(request.getParameter("category"));
         if(category==0){
-            res =employeeService.getList(conn,parameter);
+            res = EmployeeService.getList(conn,parameter);
         }else {
-            res = extraService.getList(conn,parameter);
+            res = ExtraService.getList(conn,parameter);
         }
         return JSONObject.toJSONString(res);
     }
@@ -122,10 +119,10 @@ public class EmployeeServlet extends HttpServlet {
         byte category = Byte.parseByte(request.getParameter("category"));
         if(category==0){
             Employee employee =JSONObject.parseObject(request.getParameter("employee"), Employee.class);
-            res= employeeService.insert(conn,employee);
+            res= EmployeeService.insert(conn,employee);
         }else {
             EmployeeExtra employeeExtra =JSONObject.parseObject(request.getParameter("employee"), EmployeeExtra.class);
-            res = extraService.insert(conn,employeeExtra);
+            res = ExtraService.insert(conn,employeeExtra);
         }
         return JSONObject.toJSONString(res);
     }
@@ -135,9 +132,9 @@ public class EmployeeServlet extends HttpServlet {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong((request.getParameter("id")));
         if(category==0){
-           res = employeeService.get(conn,id);
+           res = EmployeeService.get(conn,id);
         }else {
-           res = extraService.get(conn,id);
+           res = ExtraService.get(conn,id);
         }
         return JSONObject.toJSONString(res);
     }
@@ -146,12 +143,12 @@ public class EmployeeServlet extends HttpServlet {
     private String update(Connection conn, HttpServletRequest request) {
         DaoUpdateResult res = null;
         byte category = Byte.parseByte(request.getParameter("category"));
-        if(category==0){
-            Employee employee =JSONObject.parseObject(request.getParameter("employee"), Employee.class);
-            res= employeeService.update(conn,employee);
+        if(category == 0){
+            Employee employee = JSONObject.parseObject(request.getParameter("employee"), Employee.class);
+            res = EmployeeService.update(conn,employee);
         }else {
-            EmployeeExtra employeeExtra =JSONObject.parseObject(request.getParameter("employee"), EmployeeExtra.class);
-            res = extraService.update(conn,employeeExtra);
+            EmployeeExtra employeeExtra = JSONObject.parseObject(request.getParameter("employee"), EmployeeExtra.class);
+            res = ExtraService.update(conn,employeeExtra);
         }
         return JSONObject.toJSONString(res);
     }
@@ -162,14 +159,14 @@ public class EmployeeServlet extends HttpServlet {
         long id = Long.parseLong((request.getParameter("id")));
         Date date = Date.valueOf(request.getParameter("date"));
         byte leave = Byte.parseByte(request.getParameter("leave"));
-        DaoUpdateResult res =extraService.leave(conn,id,category,leave,date);
+        DaoUpdateResult res = ExtraService.leave(conn,id,category,leave,date);
         return JSONObject.toJSONString(res);
     }
 
     //删除
     private String delete(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong((request.getParameter("id")));
-        DaoUpdateResult   res = employeeService.delete(conn,id);
+        DaoUpdateResult res = EmployeeService.delete(conn,id);
         return JSONObject.toJSONString(res);
     }
 
@@ -189,14 +186,14 @@ public class EmployeeServlet extends HttpServlet {
         for(int i = 0;i<=strings.length-1;i++){
             System.out.println(strings[i].toString());
         }
-        employeeService.insertBatch(conn,strings);
+        EmployeeService.insertBatch(conn,strings);
         return  JSONObject.toJSONString(res);
     }
 
     //插入社保和个税
     private String insertSetting(Connection conn, HttpServletRequest request) {
         EmployeeSetting setting =JSONObject.parseObject(request.getParameter("setting"), EmployeeSetting.class);
-        DaoUpdateResult res = settingService.insert(conn,setting);
+        DaoUpdateResult res = SettingService.insert(conn,setting);
         return  JSONObject.toJSONString(res);
     }
 
@@ -204,14 +201,14 @@ public class EmployeeServlet extends HttpServlet {
     private String updateSetting(Connection conn, HttpServletRequest request) {
         EmployeeSetting setting =JSONObject.parseObject(request.getParameter("setting"), EmployeeSetting.class);
         Byte category = Byte.valueOf(request.getParameter("category"));
-        DaoUpdateResult res= settingService.update(conn,setting,category);
+        DaoUpdateResult res= SettingService.update(conn,setting,category);
         return  JSONObject.toJSONString(res);
     }
 
     //获取社保和个税
     private String getSetting(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
-        DaoQueryResult res = settingService.get(conn,id);
+        DaoQueryResult res = SettingService.get(conn,id);
         return  JSONObject.toJSONString(res);
     }
 
@@ -240,7 +237,7 @@ public class EmployeeServlet extends HttpServlet {
     private String dispatch(Connection conn, HttpServletRequest request) {
         long cid = Long.parseLong(request.getParameter("cid"));
         String[] eids = request.getParameterValues("eids[]");
-        DaoUpdateResult res = employeeService.dispatch(conn,eids,cid );
+        DaoUpdateResult res = EmployeeService.dispatch(conn,eids,cid );
         return  JSONObject.toJSONString(res);
     }
 
@@ -248,7 +245,7 @@ public class EmployeeServlet extends HttpServlet {
     private String employ(Connection conn, HttpServletRequest request) {
         Byte category = Byte.valueOf(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
-        DaoUpdateResult res = employeeService.employ(conn, id, category);
+        DaoUpdateResult res = EmployeeService.employ(conn, id, category);
         return  JSONObject.toJSONString(res);
     }
 }

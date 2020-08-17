@@ -10,24 +10,24 @@ import database.QueryParameter;
 import java.sql.Connection;
 
 public class SupplierService {
-    private SupplierDao supplierDao = new SupplierDao();
-    public DaoQueryResult get(long id, Connection conn){
-        return supplierDao.get(conn,id);
+    public static DaoQueryResult get(long id, Connection conn){
+        return SupplierDao.get(conn,id);
     }
 
-    public DaoQueryListResult getList(Connection conn, QueryParameter param){
-        return supplierDao.getList(conn,param);
+    public static DaoQueryListResult getList(Connection conn, QueryParameter param){
+        return SupplierDao.getList(conn,param);
     }
 
-    public DaoUpdateResult update(Connection conn, Supplier supplier){
-        return supplierDao.update(conn,supplier);
+    public static DaoUpdateResult update(Connection conn, Supplier supplier){
+        return SupplierDao.update(conn,supplier);
     }
 
-    public DaoUpdateResult delete(long id, Connection conn){
-        return supplierDao.delete(conn,id);
+    public static DaoUpdateResult delete(long id, Connection conn){
+        return SupplierDao.delete(conn,id);
     }
-    public DaoUpdateResult insert(Supplier supplier, Connection conn){
-        return supplierDao.insert(conn,supplier);
+
+    public static DaoUpdateResult insert(Supplier supplier, Connection conn){
+        return SupplierDao.insert(conn,supplier);
     }
 
 }

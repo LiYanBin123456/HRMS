@@ -12,44 +12,43 @@ import java.sql.Connection;
 
 
 public class EmployeeService {
-private EmployeeDao employeeDao = new EmployeeDao();
     //获取列表
-    public DaoQueryListResult getList(Connection conn, QueryParameter param){
-        return employeeDao.getList(conn,param);
+    public static DaoQueryListResult getList(Connection conn, QueryParameter param){
+        return EmployeeDao.getList(conn,param);
     }
 
     //获取详情
-    public DaoQueryResult get(Connection conn, long id) {
-        return employeeDao.get(conn,id);
+    public static DaoQueryResult get(Connection conn, long id) {
+        return EmployeeDao.get(conn,id);
     }
 
     //修改
-    public DaoUpdateResult update(Connection conn, Employee employee) {
-        return employeeDao.update(conn,employee);
+    public static DaoUpdateResult update(Connection conn, Employee employee) {
+        return EmployeeDao.update(conn,employee);
     }
 
     //增加
-    public DaoUpdateResult insert(Connection conn, Employee employee) {
-        return employeeDao.insert(conn,employee);
+    public static DaoUpdateResult insert(Connection conn, Employee employee) {
+        return EmployeeDao.insert(conn,employee);
     }
 
     //删除
-    public DaoUpdateResult delete(Connection conn, long id) {
-        return  employeeDao.delete(conn,id);
+    public static DaoUpdateResult delete(Connection conn, long id) {
+        return  EmployeeDao.delete(conn,id);
     }
 
     //批量插入
-    public DaoUpdateResult insertBatch(Connection conn, String[] employees) {
-        return  employeeDao.insertBatch(conn,employees);
+    public static DaoUpdateResult insertBatch(Connection conn, String[] employees) {
+        return  EmployeeDao.insertBatch(conn,employees);
     }
 
     //批量派遣
-    public DaoUpdateResult dispatch(Connection conn, String[] eids,long cid) {
-        return  employeeDao.dispatch(conn,eids,cid);
+    public static DaoUpdateResult dispatch(Connection conn, String[] eids,long cid) {
+        return  EmployeeDao.dispatch(conn,eids,cid);
     }
 
     //雇用
-    public DaoUpdateResult employ(Connection conn, long id,byte category) {
-        return  employeeDao.employ(conn,id,category);
+    public static DaoUpdateResult employ(Connection conn, long id,byte category) {
+        return  EmployeeDao.employ(conn,id,category);
     }
 }

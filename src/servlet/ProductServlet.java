@@ -55,31 +55,31 @@ public class ProductServlet extends HttpServlet {
 
     private String insert(Connection conn, HttpServletRequest request) {
         Product product = JSONObject.parseObject(request.getParameter("product"),Product.class);
-        DaoUpdateResult res =productService.insert(conn,product);
+        DaoUpdateResult res = ProductService.insert(conn,product);
         return JSONObject.toJSONString(res);
     }
 
     private String update(Connection conn, HttpServletRequest request) {
         Product product = JSONObject.parseObject(request.getParameter("product"),Product.class);
-        DaoUpdateResult res =productService.update(conn,product);
+        DaoUpdateResult res = ProductService.update(conn,product);
         return JSONObject.toJSONString(res);
     }
 
     private String delete(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
-        DaoUpdateResult res =productService.delete(conn,id);
+        DaoUpdateResult res = ProductService.delete(conn,id);
         return JSONObject.toJSONString(res);
     }
 
     private String get(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
-        DaoQueryResult res =productService.get(conn,id);
+        DaoQueryResult res = ProductService.get(conn,id);
         return JSONObject.toJSONString(res);
     }
 
     private String getList(Connection conn, HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
-        DaoQueryListResult res =productService.getList(conn,parameter);
+        DaoQueryListResult res = ProductService.getList(conn,parameter);
         return JSONObject.toJSONString(res);
     }
 

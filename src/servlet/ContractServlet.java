@@ -25,9 +25,6 @@ import java.sql.Connection;
 @WebServlet(urlPatterns = ("/contract"))
 @MultipartConfig
 public class ContractServlet extends HttpServlet {
-    private ContractDao contractDao = new ContractDao();
-    private ContractService contractService =new ContractService();
-    private ServeService serveService = new ServeService();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
     }
@@ -101,7 +98,7 @@ public class ContractServlet extends HttpServlet {
         }
         contract.setId(id);
         System.out.println(contract);
-        res = contractService.insert(conn,contract);
+        res = ContractService.insert(conn,contract);
         return JSONObject.toJSONString(res);
     }
 
@@ -111,7 +108,7 @@ public class ContractServlet extends HttpServlet {
         String bid = (request.getParameter("id"));
         System.out.println("客户id="+bid);
         String type = request.getParameter("type");
-        DaoQueryResult res = contractService.getLast(conn,bid,type);
+        DaoQueryResult res = ContractService.getLast(conn,bid,type);
         return JSONObject.toJSONString(res);
     }
 
@@ -119,21 +116,21 @@ public class ContractServlet extends HttpServlet {
     private String getList(Connection conn, HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         String type=request.getParameter("type");
-        DaoQueryListResult res =contractService.getList(conn,parameter,type);
+        DaoQueryListResult res = ContractService.getList(conn,parameter,type);
         return JSONObject.toJSONString(res);
     }
 
     //删除合同
     private String delete(Connection conn, HttpServletRequest request) {
         String id = request.getParameter("id");
-        DaoUpdateResult res = contractService.delete(conn,id);
+        DaoUpdateResult res = ContractService.delete(conn,id);
         return JSONObject.toJSONString(res);
     }
 
     //获取合同信息
     private String get(Connection conn, HttpServletRequest request) {
         String id = request.getParameter("id");
-        DaoQueryResult res = contractService.get(conn,id);
+        DaoQueryResult res = ContractService.get(conn,id);
         return JSONObject.toJSONString(res);
     }
 
@@ -141,7 +138,7 @@ public class ContractServlet extends HttpServlet {
     private String update(Connection conn, HttpServletRequest request) {
         Contract contract = JSON.parseObject(request.getParameter("contract"), Contract.class);
         System.out.println("前台传来的数据："+contract);
-        DaoUpdateResult res =contractService.update(conn,contract);
+        DaoUpdateResult res = ContractService.update(conn,contract);
         return JSONObject.toJSONString(res);
     }
 
@@ -149,7 +146,7 @@ public class ContractServlet extends HttpServlet {
     private String getServiceList(Connection conn, HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         long id= Long.parseLong(request.getParameter("id"));
-        DaoQueryListResult res = serveService.getList(conn,parameter,id);
+        DaoQueryListResult res = ServeService.getList(conn,parameter,id);
         return JSONObject.toJSONString(res);
     }
 
@@ -157,14 +154,14 @@ public class ContractServlet extends HttpServlet {
     private String updateService(Connection conn, HttpServletRequest request) {
         Serve serve  = JSON.parseObject(request.getParameter("serve"), Serve.class);
         System.out.println("前台传来的数据："+serve);
-        DaoUpdateResult res =serveService.update(conn,serve);
+        DaoUpdateResult res = ServeService.update(conn,serve);
         return JSONObject.toJSONString(res);
     }
 
     //获取合同服务项目
     private String getService(Connection conn, HttpServletRequest request) {
         String id = request.getParameter("id");
-        DaoQueryResult res =serveService.get(conn,id);
+        DaoQueryResult res = ServeService.get(conn,id);
         return JSONObject.toJSONString(res);
     }
 
@@ -172,12 +169,8 @@ public class ContractServlet extends HttpServlet {
     private String insertService(Connection conn, HttpServletRequest request) {
         Serve serve  = JSON.parseObject(request.getParameter("serve"), Serve.class);
         System.out.println("前台传来的数据："+serve);
-        DaoUpdateResult res =serveService.insert(conn,serve);
+        DaoUpdateResult res = ServeService.insert(conn,serve);
         return JSONObject.toJSONString(res);
     }
-
-
-
-
 
 }

@@ -11,25 +11,24 @@ import database.QueryParameter;
 import java.sql.Connection;
 
 public class NoticeService {
-    private NoticeDao noticeDao = new NoticeDao();
 
-    public DaoQueryListResult getList(Connection conn, QueryParameter param){
-        return noticeDao.getList(conn,param);
+    public static DaoQueryListResult getList(Connection conn, QueryParameter param){
+        return NoticeDao.getList(conn,param);
     }
 
-    public DaoQueryResult get(Connection conn, long id) {
-        return noticeDao.get(conn,id);
+    public static DaoQueryResult get(Connection conn, long id) {
+        return NoticeDao.get(conn,id);
     }
 
-    public DaoUpdateResult update(Connection conn, Notice notice) {
-        return noticeDao.update(conn,notice);
+    public static DaoUpdateResult update(Connection conn, Notice notice) {
+        return NoticeDao.update(conn,notice);
     }
 
-    public DaoUpdateResult insert(Connection conn, Notice notice) {
-        return noticeDao.insert(conn,notice);
+    public static DaoUpdateResult insert(Connection conn, Notice notice) {
+        return NoticeDao.insert(conn,notice);
     }
 
-    public DaoUpdateResult delete(Connection conn, long id) {
-        return  noticeDao.delete(conn,id);
+    public static DaoUpdateResult delete(Connection conn, long id) {
+        return  NoticeDao.delete(conn,id);
     }
 }
