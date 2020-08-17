@@ -84,7 +84,7 @@ var columns_supplier = [[
     {fixed: 'right', title: '操作', toolbar: '#bar_supplier',width:200}
 ]];
 
-//劳务派遣客户合同字段集合
+//派遣方客户合同字段集合
 var columns_contract_dispatch = [[
     {field:'name', title: '合作客户'},
     {field:'start', title: '生效时间',width:130,templet:function (d) {return format_date(d.start)}},
@@ -92,10 +92,9 @@ var columns_contract_dispatch = [[
     {fixed:'right', title: '操作', toolbar: '#bar_contract',width:200}
 ]];
 
-//劳务派遣客户合同字段集合
+//合作单位客户合同字段集合
 var columns_contract_cooperation = [[
     {field:'name', title: '合作客户'},
-    {field:'service', title: '服务项目',width:130},
     {field:'start', title: '生效时间',width:130,templet:function (d) {return format_date(d.start)}},
     {field:'end', title: '到期时间',width:130,templet:function (d) {return format_date(d.end)}},
     {fixed:'right', title: '操作', toolbar: '#bar_contract',width:200}
