@@ -196,8 +196,9 @@ public class DbUtil {
       return Columns;
     }
 
+
     /**
-     *
+     *列表查询
      * @param conn
      * @param sql  可以自定义要查询的字段
      * @param table
@@ -246,6 +247,14 @@ public class DbUtil {
         return result;
     }
 
+    /**
+     *
+     * @param conn
+     * @param table
+     * @param ids
+     * @param c
+     * @return
+     */
     public static DaoQueryListResult getArray(Connection conn, String table, String ids, Class c){
         String sql = String.format("select * from %s where id in (%s)",table,ids);
 
@@ -263,6 +272,14 @@ public class DbUtil {
         return result;
     }
 
+    /**
+     * 根据条件获取一条对象
+     * @param conn
+     * @param table
+     * @param conditions
+     * @param c
+     * @return
+     */
     public static DaoQueryResult get(Connection conn, String table, QueryConditions conditions, Class c){
         String sql = String.format("select * from %s where ",table);
         String condition = conditions.toString();
@@ -287,7 +304,7 @@ public class DbUtil {
     }
 
     /**
-     * 根据条件获取一条最新插入的数据
+     * 根据条件获取一条最新插入的数据，返回对象
      * @param conn
      * @param table
      * @param conditions
@@ -315,6 +332,13 @@ public class DbUtil {
         return result;
     }
 
+    /**
+     * 查询条件查询最新一条插入的数据并且返回id
+     * @param conn
+     * @param table
+     * @param conditions
+     * @return
+     */
     public static String getLast(Connection conn, String table, QueryConditions conditions){
         String sql = String.format("select id from %s where ",table);
         String condition = conditions.toString();
@@ -357,6 +381,13 @@ public class DbUtil {
         return result;
     }
 
+    /**
+     * 判断是否存在
+     * @param conn
+     * @param table
+     * @param conditions
+     * @return
+     */
     public static DaoExistResult exist(Connection conn, String table, QueryConditions conditions){
         String sql = String.format("select count(*) as num from %s where ",table);
         String condition = conditions.toString();

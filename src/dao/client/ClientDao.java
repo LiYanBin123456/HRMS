@@ -1,7 +1,11 @@
 package dao.client;
 
+import bean.client.Cooperation;
+import bean.client.ViewFinanceCooperation;
+import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.DbUtil;
+import database.QueryParameter;
 
 import java.sql.Connection;
 
@@ -31,6 +35,18 @@ public class ClientDao {
                break;
        }
        return  res;
+
+    }
+
+    /**
+     * 获取公司和余额列表
+     * @return
+     */
+    public static DaoQueryListResult getBalances(Connection conn,QueryParameter param){
+        if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
+            param.addCondition("concat(name)","like",param.conditions.extra);
+        }
+        return DbUtil.getList(conn,"view_finance_cooperation",param, ViewFinanceCooperation.class);
 
     }
 

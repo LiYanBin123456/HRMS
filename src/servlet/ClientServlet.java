@@ -76,6 +76,9 @@ public class ClientServlet extends HttpServlet {
             case "updateFinance"://修改客户服务信息
                 result = updateFinance(conn,request);
                 break;
+            case "getBalances"://修改客户服务信息
+                result = getBalances(conn,request);
+                break;
 
 
 }
@@ -86,8 +89,12 @@ public class ClientServlet extends HttpServlet {
         out.close();
     }
 
-
-
+    //获取合作单位和余额
+    private String getBalances(Connection conn, HttpServletRequest request) {
+        QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
+        DaoQueryListResult result =ClientService.getBalances(conn,parameter);
+        return JSONObject.toJSONString(result);
+    }
 
     //添加
     private String insert(Connection conn,HttpServletRequest request) {

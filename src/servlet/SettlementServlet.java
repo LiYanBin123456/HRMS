@@ -1,6 +1,11 @@
 package servlet;
 
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPObject;
 import database.ConnUtil;
+import database.DaoQueryListResult;
+import database.QueryParameter;
+import service.settlement.Settlement3Service;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -89,7 +94,19 @@ public class SettlementServlet extends HttpServlet {
     }
 
     private String getList(Connection conn, HttpServletRequest request) {
-        return null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        QueryParameter param = JSONObject.parseObject(request.getParameter("param"),QueryParameter.class);
+        DaoQueryListResult result = null;
+        switch (category){
+            case 0://普通结算单
+                break;
+            case 1://小时工结算单
+                break;
+            case 2://商业保险结算单
+              result = Settlement3Service.getList(conn,param);
+                break;
+        }
+        return JSONObject.toJSONString(result);
     }
 
     private String insert(Connection conn, HttpServletRequest request) {

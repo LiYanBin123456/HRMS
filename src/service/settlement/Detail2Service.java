@@ -8,16 +8,16 @@ import java.sql.Connection;
 import java.util.List;
 
 public class Detail2Service {
-    private String getList(Connection conn, QueryParameter param){
+    public static String getList(Connection conn, QueryParameter param){
         return null;
     }
-    private String update(Connection conn, List<Detail2> details){
+    public static String update(Connection conn, List<Detail2> details){
         return  null;
     }
-    private String importDetails(Connection conn,long id, List<Detail2> details){
+    public static String importDetails(Connection conn,long id, List<Detail2> details){
         return  null;
     }
-    private String exportDetails(Connection conn,long id){
+    public static String exportDetails(Connection conn,long id){
         return  null;
     }
 

@@ -7,47 +7,47 @@ import database.QueryParameter;
 import java.sql.Connection;
 
 public class Settlement2Service {
-    private String getList(Connection conn, QueryParameter param) {
+    public static String getList(Connection conn, QueryParameter param) {
         return null;
     }
 
-    private String insert(Connection conn, Settlement2 settlement2) {
+    public static String insert(Connection conn, Settlement2 settlement2) {
         return null;
     }
 
-    private String delete(Connection conn, Long id) {
+    public static String delete(Connection conn, Long id) {
         return null;
     }
 
-    private String copy(Connection conn, long id,String month) {
+    public static String copy(Connection conn, long id,String month) {
         return null;
     }
 
-    private String commit(Connection conn, long id) {
+    public static String commit(Connection conn, long id) {
         return null;
     }
 
-    private String check(Connection conn, long id) {
+    public static String check(Connection conn, long id) {
         return null;
     }
 
-    private String reset(Connection conn,long id) {
+    public static String reset(Connection conn,long id) {
         return null;
     }
 
-    private String deduct(Connection conn,long id) {
+    public static String deduct(Connection conn,long id) {
         return null;
     }
 
-    private String confirm(Connection conn,long id) {
+    public static String confirm(Connection conn,long id) {
         return null;
     }
 
-    private String exportBank(Connection conn, long id,String bank) {
+    public static String exportBank(Connection conn, long id,String bank) {
         return null;
     }
 
-    private String getLogs(Connection conn, long id) {
+    public static String getLogs(Connection conn, long id) {
         return null;
     }
 }

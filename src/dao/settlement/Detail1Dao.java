@@ -8,22 +8,22 @@ import java.sql.Connection;
 import java.util.List;
 
 public class Detail1Dao {
-    private static String getList(Connection conn, QueryParameter param){
+    public static String getList(Connection conn, QueryParameter param){
         return null;
     }
-    private static String update(Connection conn, List<Detail1> details){
+    public static String update(Connection conn, List<Detail1> details){
         return  null;
     }
-    private static String importDetails(Connection conn,long id, List<Detail1> details){
+    public static String importDetails(Connection conn,long id, List<Detail1> details){
         return  null;
     }
-    private static String exportDetails(Connection conn,long id){
+    public static String exportDetails(Connection conn,long id){
         return  null;
     }
-    private static String backup(Connection conn,Long id,String month){
+    public static String backup(Connection conn,Long id,String month){
         return null;
     }
-    private static String makeup(Connection conn,Long id,String month){
+    public static String makeup(Connection conn,Long id,String month){
         return null;
     }
 }
