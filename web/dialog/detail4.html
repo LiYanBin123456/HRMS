@@ -58,7 +58,6 @@
         });
         getDetails();
     }
-
     function getDetails() {
         var cid = $.query.get("id");
         iFinance.getTransactions(cid,function (result) {

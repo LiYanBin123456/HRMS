@@ -137,6 +137,17 @@ var InterfaceClient = function() {
         var para = {op:"allocate",aid:aid,category: category,cids:cids};
         access(url,para,1,success,fail);
     };
+    /**
+     * 分配管理员
+     * @param param 查询参数
+     * @param category 0-派遣方 1-合作单位
+     * @param success
+     * @param fail
+     */
+    this.getBalances = function (param,category,success,fail) {
+        var para = {op:"getBalances",param:JSON.stringify(param),category: category};
+        access(url,para,0,success,fail);
+    };
 };
 
 //规则管理相关接口
@@ -911,7 +922,7 @@ var InterfaceProduct = function () {
 
 //财务管理相关接口（待定）
 var InterfaceFinance = function () {
-    var url = base+"/";//servlet的url地址
+    var url = base+"/finance";//servlet的url地址
     /**
      * 到账确认
      * @param balance 金额
@@ -925,12 +936,12 @@ var InterfaceFinance = function () {
     };
     /**
      * 资金明细
-     * @param param 查询参数
+     * @param cid 合作单位编号
      * @param success
      * @param fail
      */
-    this.getTransactions = function(param,success,fail){
-        var para = {op: "getTransactions",param:JSON.stringify(param)};
+    this.getTransactions = function(cid,success,fail){
+        var para = {op: "getTransactions",cid:cid};
         access(url,para,0,success,fail);
     };
 

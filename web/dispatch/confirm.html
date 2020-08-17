@@ -48,6 +48,8 @@
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.params.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -114,7 +116,6 @@
             }
 
             function getConfirms() {
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
                 iClient.getBalances(param_query,1,function (result) {
                     table.reload('tbl_confirm', {
                         data:result.rows

@@ -16,38 +16,38 @@ var columns_dispatch = [[
 //医保规则字段集合
 var columns_medicare = [[
     {field:'city', title: '所属城市',width:100},
-    {field:'start', title: '生效时间',width:100},
+    {field:'start', title: '生效时间',width:100,templet:function (d) {return format_date(d.start)}},
     {field:'base', title: '基数',width:80},
-    {field:'per1', title: '医疗单位比例',width:105},
-    {field:'per2', title: '医疗个人比例',width:105},
+    {field:'per1', title: '医疗单位比例',width:105,templet:function (d) {return format_percent(d.per1)}},
+    {field:'per2', title: '医疗个人比例',width:105,templet:function (d) {return format_percent(d.per2)}},
     {field:'fin1', title: '大病单位',width:90},
     {field:'fin2', title: '大病个人',width:90},
-    {field:'per3', title: '生育单位比例',width:105},
+    {field:'per3', title: '生育单位比例',width:105,templet:function (d) {return format_percent(d.per3)}},
     {fixed: 'right', title: '操作', toolbar: '#bar_medicare'}
 ]];
 
 //社保规则字段集合
 var columns_social = [[
     {field:'city', title: '所属城市',width:100},
-    {field:'start', title: '生效时间',width:100},
+    {field:'start', title: '生效时间',width:100,templet:function (d) {return format_date(d.start)}},
     {field:'base', title: '基数',width:80},
-    {field:'per1', title: '养老单位比例',width:105},
-    {field:'per2', title: '养老个人比例',width:105},
-    {field:'per3', title: '工伤单位比例',width:105},
+    {field:'per1', title: '养老单位比例',width:105,templet:function (d) {return format_percent(d.per1)}},
+    {field:'per2', title: '养老个人比例',width:105,templet:function (d) {return format_percent(d.per2)}},
+    {field:'per3', title: '工伤单位比例',width:105,templet:function (d) {return format_percent(d.per3)}},
     {field:'extra', title: '工伤补充',width:95},
-    {field:'per4', title: '失业单位比例',width:105},
-    {field:'per5', title: '失业个人比例',width:105},
+    {field:'per4', title: '失业单位比例',width:105,templet:function (d) {return format_percent(d.per4)}},
+    {field:'per5', title: '失业个人比例',width:105,templet:function (d) {return format_percent(d.per5)}},
     {fixed: 'right', title: '操作', toolbar: '#bar_social'}
 ]];
 
 //公积金规则字段集合
 var columns_fund = [[
     {field:'city', title: '所属城市',width:100},
-    {field:'start', title: '生效时间',width:100},
+    {field:'start', title: '生效时间',width:100,templet:function (d) {return format_date(d.start)}},
     {field:'min', title: '基金下限',width:80},
     {field:'max', title: '基金上限',width:80},
-    {field:'per1', title: '比例下限',width:90},
-    {field:'per2', title: '比例上限',width:90},
+    {field:'per1', title: '比例下限',width:90,templet:function (d) {return format_percent(d.per1)}},
+    {field:'per2', title: '比例上限',width:90,templet:function (d) {return format_percent(d.per2)}},
     {fixed: 'right', title: '操作', toolbar: '#bar_fund'}
 ]];
 
@@ -294,9 +294,9 @@ var columns_detail3  = [[
 
 //资金明细字段集合
 var columns_detail4  = [[
-    {field:'time', title: '日期'},
-    {field:'money', title: '金额',width:100},
-    {field:'matter', title: '事项',width:200},
+    {field:'time', title: '日期',templet:function (d) {return format_date(d.time)}},
+    {field:'balance', title: '金额',width:100},
+    {field:'comments', title: '事项',width:200}
 ]];
 
 //工资明细添加字段集合
@@ -310,8 +310,8 @@ var columns_staff_with_base  = [[
 
 //工资结算到账确认字段集合
 var columns_confirm  = [[
-    {field:'unit', title: '用工企业'},
-    {field:'money', title: '账户余额',width:100},
+    {field:'name', title: '用工企业'},
+    {field:'balance', title: '账户余额',width:100},
     {fixed: 'right', title: '操作', toolbar: '#bar_confirm',width:200}
 ]];
 
@@ -350,7 +350,7 @@ var columns_insured1  = [[
     {field:'cardId', title: '身份证号',width:170},
     {field:'code', title: '个人代码',width:80},
     {field:'name', title: '姓名',width:80},
-    {field:'start', title: '参保时间',width:80},
+    {field:'start', title: '参保时间',width:80,templet:function (d) {return format_date(d.start)}},
     {field:'money', title: '月缴费工资',width:100},
     {field:'entry', title: '工作时间',width:100},
     {field:'status', title: '参保状态',width:80,templet:function (d) { return array_value2text(status_insurance,d.status) }},
@@ -361,7 +361,7 @@ var columns_insured1  = [[
 var columns_insured2  = [[
     {field:'cardId', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
-    {field:'start', title: '起缴时间',width:80},
+    {field:'start', title: '起缴时间',width:80,templet:function (d) {return format_date(d.start)}},
     {field:'money', title: '工资基数',width:100},
     {field:'status', title: '参保状态',width:80,templet:function (d) { return array_value2text(status_insurance,d.status) }},
     {fixed: 'right', title: '操作', toolbar: '#bar_insured'}
@@ -478,6 +478,9 @@ function format_date(timestamp) {
     var month=d.getMonth()+1;
     var date=d.getDate();
     return year+"-"+month+"-"+date;
+}
+function format_percent(value) {
+    return (value*100)+"%";
 }
 
 function format_number() {

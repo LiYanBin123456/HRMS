@@ -54,7 +54,6 @@
         var finance = form.val('form_finance');
         var id = $.query.get("id");
         iFinance.arrive(finance.balance,id,onSuccess,onFail);
-
         function onSuccess() {
             layer.alert("确认成功", {icon: 6,time:2000},function(){
                 var index = parent.layer.getFrameIndex(window.name);
