@@ -12,6 +12,7 @@
         <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
         <script src="../lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
+        <link href="../city-picker/city-picker.css" rel="stylesheet" />
         <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
         <!--[if lt IE 9]>
           <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -33,14 +34,13 @@
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
-                        <select name="city"  lay-filter="city" lay-verify="required" >
-                            <option value="">按地市过滤</option>
-                            <option value="0">北京</option>
-                            <option value="1">上海</option>
-                            <option value="2">广州</option>
-                            <option value="3">深圳</option>
-                            <option value="4">杭州</option>
-                        </select>
+                        <div class="layui-form-item">
+                            <label  class="layui-form-label">
+                                <span class="x-red">*</span>地市</label>
+                            <div class="layui-input-block">
+                                <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city-picker" readonly="readonly" data-toggle="city-picker" placeholder="请选择">
+                            </div>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -55,13 +55,17 @@
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.params.js"></script>
+        <script src="../city-picker/city-picker.data.js"></script>
+        <script src="../js/city.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"start",direction:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -142,12 +146,7 @@
             }
 
             function getFunds() {
-                var result = {total:100,rows:[{city:"九江市",start:"2019-06",min:"2000",max:"20000",per2:"10%",per1:"5%"},{city:"九江市",start:"2004-12",min:"1800",max:"15000",per2:"12%",per1:"5%"}]};
-                table.reload('tbl_fund', {
-                    data:result.rows
-                });
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iFund.getList(param_query,function (result) {
+                iRule.getList(param_query,2,function (result) {
                     table.reload('tbl_fund', {
                         data:result.rows
                     });
@@ -166,7 +165,7 @@
                         }
                     }
                 });
-                });*/
+                });
             }
 
             //模糊查找
@@ -176,8 +175,8 @@
             }
 
             //打开详情对话框
-            function showDetailDlg(fund) {
-                var content = "../dialog/fund.html?fund="+encodeURIComponent(JSON.stringify(fund));
+            function showDetailDlg(data) {
+                var content = "../dialog/fund.html?fund="+encodeURIComponent(JSON.stringify(data));
                 layer.open({
                     title:"公积金详情",
                     type: 2,
@@ -198,9 +197,9 @@
             }
 
             //删除公告
-            function del(fund) {
-                layer.confirm('确定删除'+fund.city+fund.start+'的公积金规则', {icon: 3, title:'删除'}, function(index){
-                    iFund.delete(fund.id,function () {
+            function del(data) {
+                layer.confirm('确定删除'+data.city+data.start+'的公积金规则', {icon: 3, title:'删除'}, function(index){
+                    iRule.delete(data.id,2,function () {
                         layer.close(index);
                         getFunds();
                         layer.msg('删除成功');
