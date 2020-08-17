@@ -63,8 +63,7 @@ public class RuleServlet extends HttpServlet {
         out.close();
     }
 
-
-
+    //插入规则
     private String insert(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         DaoUpdateResult res = null;
@@ -89,6 +88,7 @@ public class RuleServlet extends HttpServlet {
         return  JSONObject.toJSONString(res);
     }
 
+    //删除规则
     private String delete(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
@@ -111,6 +111,7 @@ public class RuleServlet extends HttpServlet {
         return  JSONObject.toJSONString(res);
     }
 
+    //修改规则
     private String update(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         DaoUpdateResult res = null;
@@ -135,6 +136,7 @@ public class RuleServlet extends HttpServlet {
         return  JSONObject.toJSONString(res);
     }
 
+    //获取规则列表
     private String getList(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         QueryParameter param =JSONObject.parseObject(request.getParameter("param"),QueryParameter.class);
@@ -157,6 +159,7 @@ public class RuleServlet extends HttpServlet {
         return  JSONObject.toJSONString(res);
     }
 
+    //获取规则详情
     private String get(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
@@ -179,6 +182,7 @@ public class RuleServlet extends HttpServlet {
         return  JSONObject.toJSONString(res);
     }
 
+    //获取最新规则详情
     private String getLast(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         String city = request.getParameter("city");

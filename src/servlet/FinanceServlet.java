@@ -1,6 +1,11 @@
 package servlet;
 
+import com.alibaba.fastjson.JSONObject;
+import dao.finance.FinanceDao;
 import database.ConnUtil;
+import database.DaoQueryListResult;
+import database.DaoUpdateResult;
+import database.QueryParameter;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,7 +36,6 @@ public class FinanceServlet extends HttpServlet {
             case "getTransactions"://获取资金往来明细
                 result = getTransactions(conn,request);
                 break;
-
         }
 
         ConnUtil.closeConnection(conn);
@@ -41,15 +45,20 @@ public class FinanceServlet extends HttpServlet {
         out.close();
     }
 
+    //到帐确认
     private String arrive(Connection conn, HttpServletRequest request) {
-        return null;
+        float balance = Float.parseFloat(request.getParameter("balance"));
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoUpdateResult res = FinanceDao.arrive(conn, balance, id);
+        return JSONObject.toJSONString(res);
     }
 
+    //获取资金往来明细
     private String getTransactions(Connection conn, HttpServletRequest request) {
-        return null;
+        long cid = Long.parseLong(request.getParameter("cid"));
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("cid","=",cid);
+        DaoQueryListResult res = FinanceDao.getTransactions(conn,parameter);
+        return JSONObject.toJSONString(res);
     }
-
-
-
-
 }

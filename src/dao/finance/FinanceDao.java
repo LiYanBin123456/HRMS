@@ -16,7 +16,7 @@ public class FinanceDao {
      * @param id 客户编号
      * @return 更新结果，格式："{success:true,msg:"",effects:1}"
      */
-    private static DaoUpdateResult arrive(Connection conn, float balance, long id) {
+    public static DaoUpdateResult arrive(Connection conn, float balance, long id) {
         String sql = "update finance set balance = balance + ? where cid = ?";
         Object []params = {balance, id};
         return DbUtil.update(conn, sql, params);
@@ -28,7 +28,7 @@ public class FinanceDao {
      * @param param 查询参数
      * @return 检索结果，格式："{success:true,msg:"",effects:1}"
      */
-    private static DaoQueryListResult getTransactions(Connection conn, QueryParameter param) {
+    public static DaoQueryListResult getTransactions(Connection conn, QueryParameter param) {
         return DbUtil.getList(conn, "transaction", param, Transaction.class);
     }
 
@@ -38,7 +38,7 @@ public class FinanceDao {
      * @param t 添加资金明细对象
      * @return 更新结果，格式："{success:true,msg:"",effects:1}"
      */
-    private static DaoUpdateResult insertTransactions(Connection conn, Transaction t){
+    public static DaoUpdateResult insertTransactions(Connection conn, Transaction t){
         String sql = "insert into transaction (cid, time, money, comments) values (?,?,?,?)";
         Object[] params = {t.getCid(), t.getTime(), t.getMoney(), t.getComments()};
         return DbUtil.insert(conn, sql, params);
