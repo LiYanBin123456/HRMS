@@ -29,7 +29,7 @@ public class DispatchDao {
     }
 
 
-    public  DaoUpdateResult update(Connection conn, Dispatch c){
+    public static DaoUpdateResult update(Connection conn, Dispatch c){
         String sql = "update dispatch set aid=?,rid=?,name=?,nickname=?,address=?,contact=?,phone=?,wx=?,qq=?,intro=? where id=?";
         Object []params = {c.getAid(),c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getIntro(),c.getId()};
         //调用DbUtil封装的update方法
@@ -59,4 +59,13 @@ public class DispatchDao {
         return DbUtil.update(conn,sql,params);
     }
 
+
+    public static DaoUpdateResult allocateAdmin(Connection conn, String[] cids, long aid) {
+        String sql = "update dispatch set aid=? where id=?";
+        Object [][]params = new Object[cids.length][];
+        for (int i = 0; i < cids.length; i++) {
+            params[i] = new Object[]{aid,cids[i]};
+        }
+        return DbUtil.batch(conn,sql,params);
+    }
 }

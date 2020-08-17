@@ -20,13 +20,6 @@ import java.util.List;
 
 @WebServlet(urlPatterns = "/client")
 public class ClientServlet extends HttpServlet {
-    private DispatchService dispatchService = new DispatchService();
-    private CooperationService cooperationService = new CooperationService();
-    private SupplierService supplierService = new SupplierService();
-   private ContractDao contractDao = new ContractDao();
-   private FinanceService financeService = new FinanceService();
-   private MapSalaryService mapSalaryService = new MapSalaryService();
-   private ClientService clientService = new ClientService();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
     }
@@ -76,8 +69,8 @@ public class ClientServlet extends HttpServlet {
             case "updateFinance"://修改客户服务信息
                 result = updateFinance(conn,request);
                 break;
-            case "getBalances"://修改客户服务信息
-                result = getBalances(conn,request);
+            case "getFinances"://修改客户服务信息
+                result = getFinances(conn,request);
                 break;
 
 
@@ -89,13 +82,6 @@ public class ClientServlet extends HttpServlet {
         out.close();
     }
 
-    //获取合作单位和余额
-    private String getBalances(Connection conn, HttpServletRequest request) {
-        QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
-        DaoQueryListResult result =ClientService.getBalances(conn,parameter);
-        return JSONObject.toJSONString(result);
-    }
-
     //添加
     private String insert(Connection conn,HttpServletRequest request) {
         DaoUpdateResult res = null;
@@ -104,15 +90,15 @@ public class ClientServlet extends HttpServlet {
         switch (category) {
             case 0://派遣方客户
                 Dispatch dispatch = JSON.parseObject(request.getParameter("client"), Dispatch.class);
-                res = dispatchService.insert(conn, dispatch);
+                res = DispatchService.insert(conn, dispatch);
                 break;
             case 1://合作单位客户
                Cooperation cooperation= JSON.parseObject(request.getParameter("client"), Cooperation.class);
-               res = cooperationService.insert(cooperation,conn);
+               res = CooperationService.insert(cooperation,conn);
                break;
             case 2://派遣单位客户
                 Supplier supplier= JSON.parseObject(request.getParameter("client"), Supplier.class);
-                res = supplierService.insert(supplier,conn);
+                res = SupplierService.insert(supplier,conn);
                 break;
         }
         return JSONObject.toJSONString(res);
@@ -126,7 +112,7 @@ public class ClientServlet extends HttpServlet {
         switch (category) {
             case 0://派遣方客户
                if(status!=1){//潜在客户，删除合同和附件，删除服务信息,删除客户 A代表平台与派遣方的合同
-                   List<String> list = contractDao.deleteContract(conn, id,"A");
+                   List<String> list = ContractDao.deleteContract(conn, id,"A");
                    if(list!=null){
                        if(list!=null){
                            //调用自定义方法 删除服务器中的合同附件
@@ -134,26 +120,26 @@ public class ClientServlet extends HttpServlet {
                            res.msg +=msg;
                        }
                    }
-                   res = dispatchService.deletePot(conn,id,0);
+                   res = DispatchService.deletePot(conn,id,0);
                }else{//修改合作客户为潜在客户
-                   res = dispatchService.deleteCoop(conn,id);
+                   res = DispatchService.deleteCoop(conn,id);
                }
                 break;
             case 1://合作单位客户
                 if(status!=1){//潜在客户，删除合同和附件，删除服务信息,删除客户 B代表派遣方与合作客户的合同
-                    List<String> list = contractDao.deleteContract(conn, id,"B");
+                    List<String> list = ContractDao.deleteContract(conn, id,"B");
                     if(list!=null){
                         //调用自定义方法 删除服务器中的合同附件
                         String msg =deleteContract(list,request);
                         res.msg +=msg;
                     }
-                    res = cooperationService.deletePot(conn,id,1);
+                    res = CooperationService.deletePot(conn,id,1);
                 }else{//修改合作客户为潜在客户
-                    res = cooperationService.deleteCoop(conn,id);
+                    res = CooperationService.deleteCoop(conn,id);
                 }
                 break;
             case 2://派遣单位客户
-                   res = supplierService.delete(id,conn);
+                   res = SupplierService.delete(id,conn);
                 break;
         }
         return JSONObject.toJSONString(res);
@@ -167,17 +153,17 @@ public class ClientServlet extends HttpServlet {
             case 0://派遣方客户
                 Dispatch dispatch = JSON.parseObject(request.getParameter("client"), Dispatch.class);
                 System.out.println("前台传来的数据："+dispatch);
-                res = dispatchService.update(conn, dispatch);
+                res = DispatchService.update(conn, dispatch);
                 break;
             case 1://合作单位客户
                 Cooperation cooperation= JSON.parseObject(request.getParameter("client"), Cooperation.class);
                 System.out.println("前台传来的数据："+cooperation);
-                res = cooperationService.update(conn,cooperation);
+                res = CooperationService.update(conn,cooperation);
                 break;
             case 2://派遣单位客户
                 Supplier supplier= JSON.parseObject(request.getParameter("client"), Supplier.class);
                 System.out.println("前台传来的数据："+supplier);
-                res = supplierService.update(conn,supplier);
+                res = SupplierService.update(conn,supplier);
                 break;
         }
 
@@ -191,13 +177,13 @@ public class ClientServlet extends HttpServlet {
         byte category= Byte.parseByte(request.getParameter("category"));
         if(category==0){
             //派遣方客户
-            res = dispatchService.getList(conn,parameter);
+            res = DispatchService.getList(conn,parameter);
         }else if(category==1){
             //合作单位客户
-            res=cooperationService.getList(conn,parameter);
+            res = CooperationService.getList(conn,parameter);
         }else {
             //供应商客户
-            res=supplierService.getList(conn,parameter);
+            res = SupplierService.getList(conn,parameter);
         }
 
         return JSONObject.toJSONString(res);
@@ -210,13 +196,13 @@ public class ClientServlet extends HttpServlet {
         byte category = Byte.parseByte(request.getParameter("category"));
         switch (category) {
             case 0://派遣方客户
-                res = dispatchService.get(conn, id);
+                res = DispatchService.get(conn, id);
                 break;
             case 1://合作单位客户
-                res = cooperationService.get(id,conn);
+                res = CooperationService.get(id,conn);
                 break;
             case 2://派遣单位客户
-                res = supplierService.get(id,conn);
+                res = SupplierService.get(id,conn);
                 break;
         }
         return  JSONObject.toJSONString(res);
@@ -228,7 +214,13 @@ public class ClientServlet extends HttpServlet {
         long aid = Long.parseLong(request.getParameter("aid"));
         String[] cids = request.getParameterValues("cids[]");
         byte category = Byte.parseByte(request.getParameter("category"));
-        res =clientService.allocate(conn,aid,cids,category);
+        switch(category){
+            case 0:
+                res = CooperationService.allocateAdmin(conn,cids,aid);
+                break;
+            case 1:
+                res = DispatchService.allocateAdmin(conn,cids,aid);
+        }
         return  JSONObject.toJSONString(res);
     }
 
@@ -236,7 +228,7 @@ public class ClientServlet extends HttpServlet {
     private String updateFinance(Connection conn, HttpServletRequest request) {
         Finance finance =JSONObject.parseObject(request.getParameter("finance"),Finance.class);
         System.out.println("前台传来的数据："+finance);
-        DaoUpdateResult res =financeService.update(conn,finance);
+        DaoUpdateResult res = FinanceService.update(conn,finance);
         return JSONObject.toJSONString(res);
     }
 
@@ -244,15 +236,22 @@ public class ClientServlet extends HttpServlet {
     private String getFinance(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
         byte category = Byte.parseByte(request.getParameter("category"));
-        DaoQueryResult res =financeService.get(conn,id,category);
+        DaoQueryResult res = FinanceService.get(conn,id,category);
         return  JSONObject.toJSONString(res);
+    }
+
+    //获取合作单位和余额
+    private String getFinances(Connection conn, HttpServletRequest request) {
+        QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
+        DaoQueryListResult result =FinanceService.getList(conn,parameter);
+        return JSONObject.toJSONString(result);
     }
 
     //增加客户服务信息
     private String insertFinance(Connection conn, HttpServletRequest request) {
         Finance finance =JSONObject.parseObject(request.getParameter("finance"),Finance.class);
         System.out.println("前台传来的数据："+finance);
-        DaoUpdateResult res =financeService.insert(conn,finance);
+        DaoUpdateResult res = FinanceService.insert(conn,finance);
         return JSONObject.toJSONString(res);
     }
 
@@ -260,14 +259,14 @@ public class ClientServlet extends HttpServlet {
     private String getSalaryDefine(Connection conn, HttpServletRequest request) {
         String month = request.getParameter("month");
         long id = Long.parseLong(request.getParameter("id"));
-        DaoQueryResult res = mapSalaryService.get(id,month,conn);
+        DaoQueryResult res = MapSalaryService.get(id,month,conn);
         return  JSONObject.toJSONString(res);
     }
 
     //获取客户最新自定义工资信息
     private String getLastSalaryDefine(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
-        DaoQueryResult res =mapSalaryService.getLast(id,conn);
+        DaoQueryResult res = MapSalaryService.getLast(id,conn);
         return  JSONObject.toJSONString(res);
     }
 
@@ -275,11 +274,9 @@ public class ClientServlet extends HttpServlet {
     private String insertSalaryDefine(Connection conn, HttpServletRequest request) {
         MapSalary mapSalary =JSONObject.parseObject(request.getParameter("mapSalary"),MapSalary.class);
         System.out.println("前台传来的数据："+mapSalary);
-        DaoUpdateResult res=mapSalaryService.insert(mapSalary,conn);
+        DaoUpdateResult res= MapSalaryService.insert(mapSalary,conn);
         return  JSONObject.toJSONString(res);
     }
-
-
 
     //自定义方法 删除服务器中合同文件
     private String deleteContract(List<String>list ,HttpServletRequest request){

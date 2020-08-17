@@ -11,24 +11,23 @@ import database.QueryParameter;
 import java.sql.Connection;
 
 public class ServeService {
-    private ServeDao serveDao = new ServeDao();
     //添加合同服务项目
-    public DaoUpdateResult insert(Connection conn, Serve serve){
-        return serveDao.insert(conn,serve);
+    public static DaoUpdateResult insert(Connection conn, Serve serve){
+        return ServeDao.insert(conn,serve);
     }
 
     //获取合同服务项目
-    public DaoQueryResult get(Connection conn, String id){
-        return serveDao.get(conn, id);
+    public static DaoQueryResult get(Connection conn, String id){
+        return ServeDao.get(conn, id);
     }
 
     //获取合作客户的所有合同服务项目
-    public DaoQueryListResult getList(Connection conn, QueryParameter parameter, long id){
-        return serveDao.getList(conn,parameter,id);
+    public static DaoQueryListResult getList(Connection conn, QueryParameter parameter, long id){
+        return ServeDao.getList(conn,parameter,id);
     }
 
     //修改合同服务项目
-    public DaoUpdateResult update(Connection conn, Serve serve){
-        return serveDao.update(conn,serve);
+    public static DaoUpdateResult update(Connection conn, Serve serve){
+        return ServeDao.update(conn,serve);
     }
 }
