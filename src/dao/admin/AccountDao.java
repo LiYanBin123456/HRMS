@@ -45,7 +45,7 @@ public class AccountDao {
 
     public static DaoUpdateResult insert(Connection conn, Account a) {
         String sql = "insert account (nickname,username,password,role,rid,permission) values (?,?,?,?,?,?)";
-        Object []params = {a.getNickname(),a.getPassword(),a.getRole(),a.getRid(),a.getPermission()};
+        Object []params = {a.getNickname(),a.getUsername(),a.getPassword(),a.getRole(),a.getRid(),a.getPermission()};
         return  DbUtil.insert(conn,sql,params);
     }
 

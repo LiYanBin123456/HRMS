@@ -1,9 +1,11 @@
 package servlet;
 
+import bean.settlement.Settlement3;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPObject;
 import database.ConnUtil;
 import database.DaoQueryListResult;
+import database.DaoUpdateResult;
 import database.QueryParameter;
 import service.settlement.Settlement3Service;
 
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Date;
 
 @WebServlet(name = "SettlementServlet",urlPatterns = "/settlement")
 public class SettlementServlet extends HttpServlet {
@@ -41,8 +44,8 @@ public class SettlementServlet extends HttpServlet {
             case "delete"://删除客户
                 result = delete(conn, request);
                 break;
-            case "copy"://复制
-                result = copy(conn, request);
+            case "saveAs"://复制
+                result = saveAs(conn, request);
                 break;
             case "updateDetails"://修改明细
                 result = updateDetails(conn, request);
@@ -110,15 +113,52 @@ public class SettlementServlet extends HttpServlet {
     }
 
     private String insert(Connection conn, HttpServletRequest request) {
-        return null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        DaoUpdateResult result = null;
+        switch (category){
+            case 0://普通结算单
+                break;
+            case 1://小时工结算单
+                break;
+            case 2://商业保险结算单
+                Settlement3 settlement3 = JSONObject.parseObject(request.getParameter("settlement"), Settlement3.class);
+                result = Settlement3Service.insert(conn,settlement3);
+                break;
+        }
+        return JSONObject.toJSONString(result);
     }
 
     private String delete(Connection conn, HttpServletRequest request) {
-        return null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoUpdateResult result = null;
+        switch (category){
+            case 0://普通结算单
+                break;
+            case 1://小时工结算单
+                break;
+            case 2://商业保险结算单
+                result = Settlement3Service.delete(conn,id);
+                break;
+        }
+        return JSONObject.toJSONString(result);
     }
 
-    private String copy(Connection conn, HttpServletRequest request) {
-        return null;
+    private String saveAs(Connection conn, HttpServletRequest request) {
+        byte category = Byte.parseByte(request.getParameter("category"));
+        long id = Long.parseLong(request.getParameter("id"));
+        Date month = Date.valueOf(request.getParameter("month"));
+        DaoUpdateResult result = null;
+        switch (category){
+            case 0://普通结算单
+                break;
+            case 1://小时工结算单
+                break;
+            case 2://商业保险结算单
+                result = Settlement3Service.saveAs(conn,id,month);
+                break;
+        }
+        return JSONObject.toJSONString(result);
     }
 
     private String updateDetails(Connection conn, HttpServletRequest request) {

@@ -178,7 +178,7 @@ public class DbUtil {
      * @param sql
      * @return
      */
-    public static List<String> getColumns(Connection conn, String sql, String table,QueryParameter param){
+    public static List getColumns(Connection conn, String sql, String table,QueryParameter param){
         String sql1 = String.format("select %s from %s where ",sql,table);
 
         String condition = param.conditions.toString();
@@ -186,10 +186,10 @@ public class DbUtil {
         sql1 += condition;
 
         QueryRunner qr = new QueryRunner();
-        List<String> Columns = null;
+        List Columns = null;
         try {
             Object[] values = param.conditions.extraValues().toArray();
-            Columns = qr.query(conn,sql1, new ColumnListHandler<String>(sql),values);
+            Columns = qr.query(conn,sql1, new ColumnListHandler<>(sql),values);
         } catch (SQLException e) {
             e.printStackTrace();
         }
