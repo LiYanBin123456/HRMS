@@ -13,6 +13,7 @@ public class Detail3 extends Detail {
     public Detail3() {
     }
 
+
     public Detail3(long id, long sid, long eid, Date month, byte status, Long pid, String place, float price) {
         super(id, sid, eid, month, status);
         this.pid = pid;
