@@ -54,7 +54,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -79,26 +79,10 @@
             }
 
             function initTable() {
-                //初始化分页
-                laypage.render({
-                    elem: 'pager'
-                    ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
-                            getConfirms();
-                        }
-                    }
-                });
-
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_confirm',
                     toolbar: '#top_bar_confirm', //开启头部工具栏，并为其绑定左侧模板
-
                     title: '列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                     cols: columns_confirm,
@@ -110,10 +94,10 @@
                     var data = obj.data; //获得当前行数据
                     switch (obj.event){
                         case "affirm":
-                            showAffirmDlg();
+                            showAffirmDlg(data);
                             break;
                         case "detail":
-                            showDetailDlg();
+                            showDetailDlg(data);
                             break;
                     }
                 });
@@ -124,21 +108,15 @@
                         case 'search':
                             search();
                             break;
-                    };
+                    }
                 });
-                
-
                 getConfirms();
             }
 
             function getConfirms() {
-                var result = {total:100,rows:[{unit:"科技中专",money:"5000"},{unit:"国棉四厂",money:"12000"}]};
-                table.reload('tbl_confirm', {
-                    data:result.rows
-                });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
-                    table.reload('tbl_notice', {
+                iClient.getBalances(param_query,1,function (result) {
+                    table.reload('tbl_confirm', {
                         data:result.rows
                     });
                     //初始化分页
@@ -156,18 +134,18 @@
                             }
                         }
                     });
-                });*/
+                });
             }
 
             //模糊查找
             function search(keyword) {
                 param_query.conditions.extra = keyword;
-                getSalsrys();
+                getConfirms();
             }
 
             //打开确认对话框
-            function showAffirmDlg() {
-                var content = "../dialog/receipt.html";
+            function showAffirmDlg(data) {
+                var content = "../dialog/receipt.html?id="+data.id;
                 layer.open({
                     title:"到账确认",
                     type: 2,
@@ -177,8 +155,8 @@
             }
 
             //打开明细对话框
-            function showDetailDlg() {
-                var content = "../dialog/detail4.html";
+            function showDetailDlg(data) {
+                var content = "../dialog/detail4.html?id="+data.id;
                 layer.open({
                     title:"明细",
                     type: 2,
@@ -186,8 +164,6 @@
                     content: content
                 });
             }
-
-
         </script>
     </body>
 </html>

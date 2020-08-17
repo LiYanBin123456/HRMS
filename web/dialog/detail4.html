@@ -16,25 +16,18 @@
 
 <body class="layui-layout-body">
 <div style="padding: 5px;">
-  <!--顶部工具栏-->
-  <div class="layui-hide" id="top_bar_detail4">
-  </div>
   <table id="tbl_detail4" lay-filter="filter_tb_detail4"></table>
-  <div id="pager"></div>
-
-  <!--行内工具栏-->
-  <script type="text/html" id="bar_detail4">
-            </script>
 </div>
 <script src="../js/fieldSet.js"></script>
 <script src="../js/interface.js"></script>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.params.js"></script>
 <script>
     var table;//数据表格对象
     var laypage;//分页对象
     var form;//分页对象
     var layer;//弹出窗口
     var element;
-    var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
     $(function () {
         loadLayuiModule();
     });
@@ -55,21 +48,6 @@
     }
 
     function initTable() {
-        //初始化分页
-        laypage.render({
-            elem: 'pager'
-            ,count: 10 //数据总数
-            ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-            ,jump: function(obj,first){
-                //首次不执行
-                if(!first){
-                    param_query.pagination.page = obj.curr;
-                    param_query.pagination.size = obj.limit;
-                    getDetails();
-                }
-            }
-        });
-
         //初始化数据表格
         table.render({
             elem: '#tbl_detail4',
@@ -78,25 +56,17 @@
             cols: columns_detail4,
             id: 'tbl_detail4'
         });
-
-
         getDetails();
     }
 
     function getDetails() {
-        var result = {total:100,rows:[{time:"2020-2-1",money:"+5000",matter:"来款"},{time:"2020-3-15",money:"-2000",matter:"三月结算单扣除"}]};
-        table.reload('tbl_detail4', {
-            data:result.rows
-        });
-        //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-        /*iNotice.getList(param_query,function (result) {
-            table.reload('tbl_notice', {
+        var cid = $.query.get("id");
+        iFinance.getTransactions(cid,function (result) {
+            table.reload('tbl_detail4', {
                 data:result.rows
             });
-        });*/
+        });
     }
-
-
 </script>
 </body>
 </html>
