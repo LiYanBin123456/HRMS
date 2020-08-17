@@ -8,7 +8,7 @@ import java.sql.Connection;
 public class ClientDao {
 
     //分配管理员
-    public DaoUpdateResult allocate(Connection conn, Long aid, String[] cids, byte category) {
+    public static DaoUpdateResult allocate(Connection conn, Long aid, String[] cids, byte category) {
        DaoUpdateResult res =null;
         String sql;
         Object [][]params ;
@@ -19,7 +19,7 @@ public class ClientDao {
                for (int i = 0; i < cids.length; i++) {
                    params[i] = new Object[]{cids[i]};
                }
-               res = DbUtil.batch(conn,sql,params);
+               res = DbUtil.insertBatch(conn,sql,params);
                break;
            case 1://修改合作单位的管理员
               sql = String.format("update cooperation set aid = %S where id = ?",aid);

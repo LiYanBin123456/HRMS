@@ -1,6 +1,7 @@
 package dao.rule;
 
 import bean.rule.RuleMedicare;
+import bean.rule.RuleSocial;
 import database.*;
 
 import java.sql.Connection;
@@ -14,17 +15,23 @@ public class RuleMedicareDao {
      * @return 检索结果，格式："{success:true,msg:"",effects:1}"
      */
     public static DaoQueryListResult getList(Connection conn, QueryParameter param){
+        if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
+            //根据地市模糊查询
+            param.addCondition("city","like",param.conditions.extra);
+        }
         return DbUtil.getList(conn, "rule_medicare", param, RuleMedicare.class);
     }
 
     /**
-     * 获取指定的医保规则
-     * @param conn 连接数据库
-     * @param conditions 查询参数
-     * @return 检索结果，格式："{success:true,msg:"",effects:1}"
+     * 根据指定id获取规则
+     * @param conn
+     * @param id 指定id
+     * @return
      */
-    public static DaoQueryResult get(Connection conn, QueryConditions conditions) {
-        return DbUtil.get(conn, "rule_medicare", conditions, RuleMedicare.class);
+    public static DaoQueryResult get(Connection conn, long id) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id", "=", id);
+        return DbUtil.get(conn, "rule_medicare", conditions,RuleMedicare.class);
     }
 
     /**
@@ -51,13 +58,29 @@ public class RuleMedicareDao {
         return DbUtil.insert(conn, sql, params);
     }
 
+
     /**
-     * 删除指定医保规则
-     * @param conn 连接数据库
-     * @param queryConditions 删除参数
-     * @return 更新结果，格式："{success:true,msg:"",effects:1}"
+     * 删除指定规则
+     * @param conn
+     * @param id 指定规则id
+     * @return
      */
-    public static DaoUpdateResult delete(Connection conn, QueryConditions queryConditions) {
-        return DbUtil.delete(conn,"rule_medicare", queryConditions);
+    public static DaoUpdateResult delete(Connection conn, long id) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id", "=", id);
+        return DbUtil.delete(conn, "rule_medicare", conditions);
+    }
+
+    /**
+     * 根据地市获取最新规则，按照生效时间排序
+     * @param conn
+     * @param city 地市代码
+     * @return
+     */
+    public static DaoQueryResult getLast(Connection conn ,String city){
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("city", "=", city);
+        String order = " ORDER BY start DESC limit 1";
+        return DbUtil.getLast(conn, "rule_medicare", conditions,RuleMedicare.class,order);
     }
 }

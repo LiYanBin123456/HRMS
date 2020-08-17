@@ -10,7 +10,7 @@ import java.sql.Connection;
 
 public class MapSalaryDao {
     //根据月份获取自定义工资,也是查出这个月的最新自定义工资
-    public DaoQueryResult get(long id,String month,Connection conn){
+    public static DaoQueryResult get(long id,String month,Connection conn){
         QueryConditions conditions = new QueryConditions();
         conditions.add("cid", "=", id);
         conditions.add("date" ,"like",month);
@@ -19,7 +19,7 @@ public class MapSalaryDao {
     }
 
     //获取最新自定义工资
-    public DaoQueryResult getLast(long id, Connection conn){
+    public static DaoQueryResult getLast(long id, Connection conn){
         QueryConditions conditions = new QueryConditions();
         conditions.add("cid", "=", id);
         String order = " ORDER BY date DESC limit 1";
@@ -27,7 +27,7 @@ public class MapSalaryDao {
     }
 
     //添加自定义工资
-    public DaoUpdateResult insert(MapSalary m, Connection conn){
+    public static DaoUpdateResult insert(MapSalary m, Connection conn){
         String sql = "insert into map_salary (cid,items,date) values (?,?,?)";
         Object []params = {m.getCid(),m.getItems(),m.getDate()};
         return DbUtil.insert(conn,sql,params);

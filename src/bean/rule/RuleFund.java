@@ -7,18 +7,16 @@ public class RuleFund extends Rule{
 
     private float per1;//比例上限
     private float per2;//比例下限
-    private float base;//基数
     private float min;//公积金下限
     private float max;//公积金上限
 
     public RuleFund() {
     }
 
-    public RuleFund(long id, String city, Date start, float per1, float per2, float base, float min, float max) {
+    public RuleFund(long id, String city, Date start, float per1, float per2, float min, float max) {
         super(id, city, start);
         this.per1 = per1;
         this.per2 = per2;
-        this.base = base;
         this.min = min;
         this.max = max;
     }
@@ -37,14 +35,6 @@ public class RuleFund extends Rule{
 
     public void setPer2(float per2) {
         this.per2 = per2;
-    }
-
-    public float getBase() {
-        return base;
-    }
-
-    public void setBase(float base) {
-        this.base = base;
     }
 
     public float getMin() {
@@ -68,7 +58,6 @@ public class RuleFund extends Rule{
         return "RuleFund{" +
                 "per1=" + per1 +
                 ", per2=" + per2 +
-                ", base=" + base +
                 ", min=" + min +
                 ", max=" + max +
                 '}';

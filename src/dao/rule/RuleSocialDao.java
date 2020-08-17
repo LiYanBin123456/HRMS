@@ -1,6 +1,7 @@
 package dao.rule;
 
 
+import bean.contract.Contract;
 import bean.rule.RuleSocial;
 import database.*;
 
@@ -15,18 +16,17 @@ public class RuleSocialDao {
      * @return 检索结果，格式："{success:true,msg:"",effects:1}"
      */
     public static DaoQueryListResult getList(Connection conn, QueryParameter param){
+        if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
+            //根据地市模糊查询
+            param.addCondition("city","like",param.conditions.extra);
+        }
         return DbUtil.getList(conn, "rule_social", param, RuleSocial.class);
     }
 
-    /**
-     * 获取指定的社保规则
-     * @param conn 连接数据库
-     * @param conditions 查询参数
-     * @return 检索结果，格式："{success:true,msg:"",effects:1}"
-     */
-    public static DaoQueryResult get(Connection conn, QueryConditions conditions) {
+    public static DaoQueryResult get(Connection conn, long id) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id", "=", id);
         return DbUtil.get(conn, "rule_social", conditions, RuleSocial.class);
-
     }
 
     /**
@@ -54,12 +54,27 @@ public class RuleSocialDao {
     }
 
     /**
-     * 删除指定社保规则
-     * @param conn 连接数据库
-     * @param queryConditions 删除参数
-     * @return 更新结果，格式："{success:true,msg:"",effects:1}"
+     *删除指定规则
+     * @param conn
+     * @param id
+     * @return
      */
-    public static DaoUpdateResult delete(Connection conn, QueryConditions queryConditions) {
-        return DbUtil.delete(conn,"rule_social", queryConditions);
+    public static DaoUpdateResult delete(Connection conn, long id) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id", "=", id);
+        return DbUtil.delete(conn, "rule_social", conditions);
+    }
+
+    /**
+     * 根据地市获取最新规则，按照生效时间排序
+     * @param conn
+     * @param city 地市代码
+     * @return
+     */
+    public static DaoQueryResult getLast(Connection conn ,String city){
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("city", "=", city);
+        String order = " ORDER BY start DESC limit 1";
+        return DbUtil.getLast(conn, "rule_social", conditions,RuleSocial.class,order);
     }
 }

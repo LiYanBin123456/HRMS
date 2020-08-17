@@ -35,10 +35,9 @@ public class EmployeeSetting {
      0_按比例
      1_自定义
      */
-    private float settingF;
     private float fundPer;//公积金比例
     private float fundBase;//公积金基数
-    private float valueF;//自定义公积金金额
+    private float product;//保险产品 0 无   1 购买
     private float deduct1;//子女教育扣除额
     private float deduct2;//赡养老人
     private float deduct3;//继续教育
@@ -49,17 +48,16 @@ public class EmployeeSetting {
     public EmployeeSetting() {
     }
 
-    public EmployeeSetting(long eid, String city, byte settingM, float valueM, byte settingS, float valueS, float settingF, float fundPer, float fundBase, float valueF, float deduct1, float deduct2, float deduct3, float deduct4, float deduct5, float deduct6) {
+    public EmployeeSetting(long eid, String city, byte settingM, float valueM, byte settingS, float valueS, float fundPer, float fundBase, float product, float deduct1, float deduct2, float deduct3, float deduct4, float deduct5, float deduct6) {
         this.eid = eid;
         this.city = city;
         this.settingM = settingM;
         this.valueM = valueM;
         this.settingS = settingS;
         this.valueS = valueS;
-        this.settingF = settingF;
         this.fundPer = fundPer;
         this.fundBase = fundBase;
-        this.valueF = valueF;
+        this.product = product;
         this.deduct1 = deduct1;
         this.deduct2 = deduct2;
         this.deduct3 = deduct3;
@@ -116,14 +114,6 @@ public class EmployeeSetting {
         this.valueS = valueS;
     }
 
-    public float getSettingF() {
-        return settingF;
-    }
-
-    public void setSettingF(float settingF) {
-        this.settingF = settingF;
-    }
-
     public float getFundPer() {
         return fundPer;
     }
@@ -140,12 +130,12 @@ public class EmployeeSetting {
         this.fundBase = fundBase;
     }
 
-    public float getValueF() {
-        return valueF;
+    public float getProduct() {
+        return product;
     }
 
-    public void setValueF(float valueF) {
-        this.valueF = valueF;
+    public void setProduct(float product) {
+        this.product = product;
     }
 
     public float getDeduct1() {
@@ -205,10 +195,9 @@ public class EmployeeSetting {
                 ", valueM=" + valueM +
                 ", settingS=" + settingS +
                 ", valueS=" + valueS +
-                ", settingF=" + settingF +
                 ", fundPer=" + fundPer +
                 ", fundBase=" + fundBase +
-                ", valueF=" + valueF +
+                ", product=" + product +
                 ", deduct1=" + deduct1 +
                 ", deduct2=" + deduct2 +
                 ", deduct3=" + deduct3 +

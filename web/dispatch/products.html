@@ -56,7 +56,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"name",direction:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -139,12 +139,12 @@
             }
 
             function getProducts() {
-                var result = {total:100,rows:[{pname:"团队意外险",fin1:"800000",fin2:"200000",allowance:"100元/天",period:"上班时间",allow:"1、2、3、4类",min:"16",max:"70"},{pname:"雇主责任险",fin1:"900000",fin2:"200000",allowance:"100元/天",period:"24小时",allow:"1、2、3类",min:"18",max:"60"}]};
+                /*var result = {total:100,rows:[{pname:"团队意外险",fin1:"800000",fin2:"200000",allowance:"100元/天",period:"上班时间",allow:"1、2、3、4类",min:"16",max:"70"},{pname:"雇主责任险",fin1:"900000",fin2:"200000",allowance:"100元/天",period:"24小时",allow:"1、2、3类",min:"18",max:"60"}]};
                 table.reload('tbl_product', {
                     data:result.rows
-                });
+                });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iProduct.getList(param_query,function (result) {
+                iProduct.getList(param_query,function (result) {
                     table.reload('tbl_product', {
                         data:result.rows
                     });
@@ -163,7 +163,7 @@
                             }
                         }
                     });
-                });*/
+                });
             }
 
             //模糊查找
