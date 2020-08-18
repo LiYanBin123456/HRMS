@@ -70,7 +70,7 @@ public class FinanceServlet extends HttpServlet {
             ConnUtil.rollback(conn);
             JSONObject json = new JSONObject();
             json.put("success",false);
-            json.put("msg","审核失败");
+            json.put("msg","资金到账确认失败");
             return json.toJSONString();
         }
     }
