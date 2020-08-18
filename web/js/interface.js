@@ -138,14 +138,13 @@ var InterfaceClient = function() {
         access(url,para,1,success,fail);
     };
     /**
-     * 分配管理员
+     * 获取合作客户和余额
      * @param param 查询参数
-     * @param category 0-派遣方 1-合作单位
      * @param success
      * @param fail
      */
-    this.getFinances = function (param,category,success,fail) {
-        var para = {op:"getFinances",param:JSON.stringify(param),category: category};
+    this.getFinances = function (param,success,fail) {
+        var para = {op:"getFinances",param:JSON.stringify(param)};
         access(url,para,0,success,fail);
     };
 };
@@ -206,6 +205,17 @@ var InterfaceRule = function() {
      */
     this.get = function (id,category,success,fail) {
         var para = {op:"get",id:id,category:category};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 获取最新规则
+     * @param city 城市
+     * @param category 类型 0-医保 1-社保 2-公积金
+     * @param success
+     * @param fail
+     */
+    this.getLast = function (city,category,success,fail) {
+        var para = {op:"getLast",city:city,category:category};
         access(url,para,0,success,fail);
     };
 };
@@ -308,11 +318,12 @@ var InterfaceContract = function() {
     /**
      * 获取当前合作单位的有效服务项目列表
      * @param param 查询参数
+     * @param id 该客户id
      * @param success
      * @param fail
      */
-    this.getServiceList = function (param,success,fail) {
-        var para = {op: "getServiceList",param:JSON.stringify(param)};
+    this.getServiceList = function (param,id,success,fail) {
+        var para = {op: "getServiceList",param:JSON.stringify(param),id:id};
         access(url,para,0,success,fail);
     };
 };
@@ -517,12 +528,13 @@ var InterfaceEmployee = function () {
      * 离职退休
      * @param leave 离职原因信息
      * @param category 0-离职 1-退休
+     * @param date 离职或退休时间
      * @param id 员工id
      * @param success
      * @param fail
      */
-    this.leave = function (id,leave,category,success,fail) {
-        var para = {op: "leave",leave:JSON.stringify(leave),id:id, category:category};
+    this.leave = function (id,leave,date,category,success,fail) {
+        var para = {op: "leave",leave:JSON.stringify(leave),id:id,date:date, category:category};
         access(url,para,1,success,fail);
     };
     /**
@@ -537,23 +549,52 @@ var InterfaceEmployee = function () {
     };
     /**
      * 添加社保设置
-     * @param setting 只要社保信息，个税补充信息为null即可
+     * @param setting 社保设置信息
      * @param success
      * @param fail
      */
-    this.insertSetting = function (setting,success,fail) {
-        var para = {op: "insertSetting",setting:JSON.stringify(setting)};
+    this.insertEnsureSetting = function (setting,success,fail) {
+        var para = {op: "insertEnsureSetting",setting:JSON.stringify(setting)};
         access(url,para,1,success,fail);
     };
     /**
-     * 设置社保和个人税专项扣除
-     * @param setting 只要社保信息，个税补充信息为null即可
-     * @param category 0-修改社保设置 1-修改个税扣除
+     * 修改社保设置
+     * @param setting 社保设置信息
      * @param success
      * @param fail
      */
-    this.updateSetting = function (setting,category,success,fail) {
-        var para = {op: "updateSetting",setting:JSON.stringify(setting), category:category};
+    this.updateEnsureSetting = function (setting,success,fail) {
+        var para = {op: "updateEnsureSetting",setting:JSON.stringify(setting)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 添加个税扣除
+     * @param deduct 个税扣除信息
+     * @param success
+     * @param fail
+     */
+    this.insertDeduct = function (deduct,success,fail) {
+        var para = {op: "insertDeduct",deduct:JSON.stringify(deduct)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 修改个税扣除
+     * @param deduct 个税扣除信息
+     * @param success
+     * @param fail
+     */
+    this.updateDeduct = function (deduct,success,fail) {
+        var para = {op: "updateDeduct",deduct:JSON.stringify(deduct)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 导入个税扣除
+     * @param deducts 个税扣除集合
+     * @param success
+     * @param fail
+     */
+    this.importDeducts = function (deducts,success,fail) {
+        var para = {op: "importDeducts",deducts:JSON.stringify(deducts)};
         access(url,para,1,success,fail);
     };
     /**
@@ -567,13 +608,23 @@ var InterfaceEmployee = function () {
         access(url,para,1,success,fail);
     };
     /**
-     * 获取社保设置和个人税扣除详情
+     * 获取社保设置
      * @param id 员工id
      * @param success
      * @param fail
      */
-    this.getSetting = function (id,success,fail) {
-        var para = {op: "getSetting",id:id};
+    this.getEnsureSetting = function (id,success,fail) {
+        var para = {op: "getEnsureSetting",id:id};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 获取个税扣除
+     * @param id 员工id
+     * @param success
+     * @param fail
+     */
+    this.getDeduct = function (id,success,fail) {
+        var para = {op: "getDeduct",id:id};
         access(url,para,0,success,fail);
     };
     /**
@@ -692,9 +743,9 @@ var InterfaceSettlement = function () {
         access(url,para,1,success,fail);
     };
     /**
-     * 导入工资明细
+     * 导入结算单明细
      * @param id 结算单编号
-     * @param details []结算单明细集合
+     * @param details 结算单明细集合
      * @param category 0-普通结算单明细 1-小时工结算单明细 2-商业保险结算单明细
      * @param success
      * @param fail
@@ -704,7 +755,7 @@ var InterfaceSettlement = function () {
         access(url,para,1,success,fail);
     };
     /**
-     * 导出工资明细
+     * 导出结算单明细
      * @param id 结算单编号
      * @param category 0-普通结算单明细 1-小时工结算单明细 2-商业保险结算单明细
      * @param success
@@ -714,9 +765,28 @@ var InterfaceSettlement = function () {
         var para = {op: "exportDetails",id:id, category:category};
         access(url,para,1,success,fail);
     };
-    //添加至明细
-    //社保补缴
-    //社保补差
+    /**
+     * 社保补缴
+     * @param id 员工id
+     * @param month 补缴的月份
+     * @param success
+     * @param fail
+     */
+    this.backup = function (id,month,success,fail) {
+        var para = {op: "backup",id:id, month:month};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 社保补差
+     * @param id 员工id
+     * @param month 补差的月份
+     * @param success
+     * @param fail
+     */
+    this.makeup = function (id,month,success,fail) {
+        var para = {op: "makeup",id:id, month:month};
+        access(url,para,1,success,fail);
+    };
     /**
      * 提交结算单
      * @param id 结算单id
@@ -936,13 +1006,23 @@ var InterfaceFinance = function () {
     };
     /**
      * 资金明细
+     * @param param 查询参数
      * @param cid 合作单位编号
      * @param success
      * @param fail
      */
-    this.getTransactions = function(cid,success,fail){
-        var para = {op: "getTransactions",cid:cid};
+    this.getTransactions = function(param,cid,success,fail){
+        var para = {op: "getTransactions",param:JSON.stringify(param),cid:cid};
         access(url,para,0,success,fail);
+    };
+    /**
+     * 导出个税申报
+     * @param success
+     * @param fail
+     */
+    this.exportTaxes = function(success,fail){
+        var para = {op: "exportTaxes"};
+        access(url,para,1,success,fail);
     };
 
 };
