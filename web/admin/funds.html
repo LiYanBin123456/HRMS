@@ -35,6 +35,8 @@
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
                         <div class="layui-form-item">
+                            <label  class="layui-form-label">
+                                <span class="x-red">*</span>地市</label>
                             <div class="layui-input-block">
                                 <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city-picker" readonly="readonly" data-toggle="city-picker" placeholder="请选择">
                             </div>
@@ -63,28 +65,18 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var cityPicker;
             var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"start",direction:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
 
             function loadLayuiModule() {
-                layui.extend({
-                        index: 'lib/index' //主入口模块
-                        , citypicker: '../city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
-                }).use(['table','form','element','layer','laypage','citypicker'], function() {
+                layui.use(['table','form','element','layer','laypage'], function() {
                     table = layui.table;
                     layer = layui.layer;
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
-                    var picker = layui.citypicker;
-                    cityPicker = new picker("#city-picker", {
-                        provincename:"provinceId",
-                        cityname:"city",
-                        level: 'city'// 级别
-                    });
                     initPage();
                 });
             }
@@ -147,7 +139,7 @@
                         case 'search':
                             search();
                             break;
-                    };
+                    }
                 });
 
                 getFunds();
@@ -206,7 +198,9 @@
 
             //删除公告
             function del(data) {
-                layer.confirm('确定删除'+data.city+data.start+'的公积金规则', {icon: 3, title:'删除'}, function(index){
+                 var start = format_date(data.start);
+                 var city = getCityText3(data.city);
+                layer.confirm('确定删除'+'   '+city+'    '+start+'   '+'的公积金规则', {icon: 3, title:'删除'}, function(index){
                     iRule.delete(data.id,2,function () {
                         layer.close(index);
                         getFunds();
