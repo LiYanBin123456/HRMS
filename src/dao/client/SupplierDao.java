@@ -22,16 +22,16 @@ public class SupplierDao {
     }
 
     public  static DaoUpdateResult update(Connection conn, Supplier c){
-        String sql = "update supplier set aid=?,did=?, rid=?,name=?,nickname=?,business=?,address=?,contact=?,phone=?,wx=?,qq=?,mail=?,intro=? where id=?";
-        Object []params = {c.getAid(),c.getDid(),c.getRid(),c.getName(),c.getNickname(),c.getBusiness(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getMail(),c.getIntro(),c.getId()};
+        String sql = "update supplier set did=?, rid=?,name=?,nickname=?,business=?,address=?,contact=?,phone=?,wx=?,qq=?,mail=?,intro=? where id=?";
+        Object []params = {c.getDid(),c.getRid(),c.getName(),c.getNickname(),c.getBusiness(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getMail(),c.getIntro(),c.getId()};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
     }
 
 
     public static DaoUpdateResult insert(Connection conn, Supplier c) {
-        String sql = "insert into supplier (aid,did,rid,name,nickname,business,address,contact,phone,wx,qq,mail,intro) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        Object []params = {c.getAid(),c.getDid(),c.getRid(),c.getName(),c.getNickname(),c.getBusiness(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getMail(),c.getIntro()};
+        String sql = "insert into supplier (did,rid,name,nickname,business,address,contact,phone,wx,qq,mail,intro) values (?,?,?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {c.getDid(),c.getRid(),c.getName(),c.getNickname(),c.getBusiness(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getMail(),c.getIntro()};
         return DbUtil.insert(conn,sql,params);
     }
 

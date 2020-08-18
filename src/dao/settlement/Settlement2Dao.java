@@ -18,8 +18,10 @@ public class Settlement2Dao {
 
     }
 
-    public static String insert(Connection conn, Settlement2 s) {
-        return  null;
+    public static DaoUpdateResult insert(Connection conn, Settlement2 s) {
+        String sql = "insert into settlement2 (did,cid,month,hours,price,traffic,extra,summary,status,source) values (?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {s.getDid(),s.getCid(),s.getMonth(),s.getMonth(),s.getPrice(),s.getTraffic(),s.getExtra(),s.getSummary(),s.getStatus(),s.getSource()};
+        return DbUtil.insert(conn,sql,params);
     }
 
     public static DaoUpdateResult delete(Connection conn, Long id) {
@@ -28,7 +30,7 @@ public class Settlement2Dao {
         return DbUtil.delete(conn,"settlement2",conditions);
     }
 
-    public static String copy(Connection conn, long id,String month) {
+    public static String saveAs(Connection conn, long id,String month) {
         return null;
     }
 

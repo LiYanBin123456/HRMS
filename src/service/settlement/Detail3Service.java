@@ -9,7 +9,8 @@ import java.sql.Connection;
 import java.util.List;
 
 public class Detail3Service {
-    public static DaoQueryListResult getList(Connection conn, QueryParameter param){
+    public static DaoQueryListResult getList(Connection conn, QueryParameter param,long id){
+        param.conditions.add("sid","=",id);
         return Detail3Dao.getList(conn,param);
     }
     public static String update(Connection conn,  List<Detail3> details){

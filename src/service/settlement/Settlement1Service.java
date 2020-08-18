@@ -1,18 +1,20 @@
 package service.settlement;
 
 import bean.settlement.Settlement1;
+import dao.settlement.Settlement1Dao;
+import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.QueryParameter;
 
 import java.sql.Connection;
 
 public class Settlement1Service {
-    public static String getList(Connection conn, QueryParameter param) {
-        return null;
+    public static DaoQueryListResult getList(Connection conn, QueryParameter param) {
+        return Settlement1Dao.getList(conn,param);
     }
 
-    public static String insert(Connection conn, Settlement1 settlement1) {
-        return null;
+    public static DaoUpdateResult insert(Connection conn, Settlement1 settlement1) {
+        return Settlement1Dao.insert(conn,settlement1);
     }
 
     public static DaoUpdateResult delete(Connection conn, Long id) {

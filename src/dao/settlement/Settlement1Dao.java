@@ -2,7 +2,6 @@ package dao.settlement;
 
 import bean.settlement.Settlement1;
 import bean.settlement.ViewSettlement1;
-import bean.settlement.ViewSettlement3;
 import database.*;
 
 import java.sql.Connection;
@@ -34,24 +33,34 @@ public class Settlement1Dao {
         return null;
     }
 
-    public static String commit(Connection conn, long id) {
-        return null;
+    public static DaoUpdateResult commit(Connection conn, long id) {
+        String sql = "update settlement1 set status=1 where id = ?";
+        Object []params = {id};
+        return DbUtil.update(conn,sql,params);
     }
 
-    public static String check(Connection conn, long id) {
-        return null;
+    public static DaoUpdateResult check(Connection conn, long id) {
+        String sql = "update settlement1 set status=1 where id = ?";
+        Object []params = {id};
+        return DbUtil.update(conn,sql,params);
     }
 
-    public static String reset(Connection conn,long id) {
-        return null;
+    public static DaoUpdateResult reset(Connection conn,long id) {
+        String sql = "update settlement1 set status=0 where id = ?";
+        Object []params = {id};
+        return DbUtil.update(conn,sql,params);
     }
 
-    public static String deduct(Connection conn,long id) {
-        return null;
+    public static DaoUpdateResult deduct(Connection conn,long id) {
+        String sql = "update settlement1 set status=5 where id = ?";
+        Object []params = {id};
+        return DbUtil.update(conn,sql,params);
     }
 
-    public static String confirm(Connection conn,long id) {
-        return null;
+    public static DaoUpdateResult confirm(Connection conn,long id) {
+        String sql = "update settlement1 set status=6 where id = ?";
+        Object []params = {id};
+        return DbUtil.update(conn,sql,params);
     }
 
     public static String exportBank(Connection conn, long id,String bank) {

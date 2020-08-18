@@ -23,16 +23,16 @@ public class CooperationDao {
     }
 
     public  static DaoUpdateResult update(Connection conn, Cooperation c){
-        String sql = "update cooperation set aid=?,did=?, rid=?,name=?,nickname=?,address=?,contact=?,phone=?,wx=?,qq=?,mail=?,intro=?,type=?,category=? where id=?";
-        Object []params = {c.getAid(),c.getDid(),c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getMail(),c.getIntro(),c.getType(),c.getCategory(),c.getId()};
+        String sql = "update cooperation set did=?, rid=?,name=?,nickname=?,address=?,contact=?,phone=?,wx=?,qq=?,mail=?,intro=?,type=?,category=? where id=?";
+        Object []params = {c.getDid(),c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getMail(),c.getIntro(),c.getType(),c.getCategory(),c.getId()};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
     }
 
 
     public static DaoUpdateResult insert(Connection conn, Cooperation c) {
-        String sql = "insert into cooperation (aid,did,rid,name,nickname,address,contact,phone,wx,qq,mail,intro,type,category) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        Object []params = {c.getAid(),c.getDid(),c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getMail(),c.getIntro(),c.getType()};
+        String sql = "insert into cooperation (did,rid,name,nickname,address,contact,phone,wx,qq,mail,intro,type,category) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {c.getDid(),c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getMail(),c.getIntro(),c.getType(),c.getCategory()};
         return DbUtil.insert(conn,sql,params);
     }
 
