@@ -1,6 +1,6 @@
 package bean.log;
 
-import java.sql.Date;
+import java.util.Date;
 //资金明细表
 public class Transaction {
     private long cid;//合作单位公司id

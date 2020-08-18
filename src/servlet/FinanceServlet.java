@@ -1,6 +1,8 @@
 package servlet;
 
+import bean.log.Transaction;
 import com.alibaba.fastjson.JSONObject;
+import dao.TransactionDao;
 import dao.finance.FinanceDao;
 import database.ConnUtil;
 import database.DaoQueryListResult;
@@ -15,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.util.Date;
 
 //资金管理servlet
 @WebServlet(name = "FinanceServlet" ,urlPatterns = "/finance")
@@ -49,8 +52,27 @@ public class FinanceServlet extends HttpServlet {
     private String arrive(Connection conn, HttpServletRequest request) {
         float balance = Float.parseFloat(request.getParameter("balance"));
         long id = Long.parseLong(request.getParameter("id"));
-        DaoUpdateResult res = FinanceDao.arrive(conn, balance, id);
-        return JSONObject.toJSONString(res);
+        //关闭自动提交
+        ConnUtil.closeAutoCommit(conn);
+        DaoUpdateResult res1 = FinanceDao.arrive(conn, balance, id);
+        Transaction transaction = new Transaction();
+        transaction.setCid(id);
+        transaction.setComments("资金到账确认"+balance+"元。");
+        transaction.setMoney(balance);
+        transaction.setTime(new Date());
+        //生成明细
+        DaoUpdateResult res2 = TransactionDao.insert(conn,transaction);
+        //事务处理
+        if(res1.success && res2.success){
+            ConnUtil.commit(conn);
+            return JSONObject.toJSONString(res1);
+        }else{
+            ConnUtil.rollback(conn);
+            JSONObject json = new JSONObject();
+            json.put("success",false);
+            json.put("msg","审核失败");
+            return json.toJSONString();
+        }
     }
 
     //获取资金往来明细
