@@ -1,25 +1,9 @@
 package servlet;
 
-import bean.employee.Employee;
-import bean.employee.EmployeeExtra;
-import bean.employee.EmployeeSetting;
-import bean.employee.PayCard;
-import bean.rule.RuleFund;
-import bean.rule.RuleMedicare;
-import bean.rule.RuleSocial;
-import com.alibaba.fastjson.JSONArray;
+import bean.employee.*;
 import com.alibaba.fastjson.JSONObject;
-import dao.rule.RuleFundDao;
-import dao.rule.RuleMedicareDao;
-import dao.rule.RuleSocialDao;
 import database.*;
-import service.employee.EmployeeService;
-import service.employee.ExtraService;
-import service.employee.PayCardService;
-import service.employee.SettingService;
-import service.rule.RuleFundService;
-import service.rule.RuleMedicareService;
-import service.rule.RuleSocialService;
+import service.employee.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,7 +14,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Date;
-import java.util.List;
 
 @WebServlet(name = "EmployeeServlet",urlPatterns = "/employee")
 public class EmployeeServlet extends HttpServlet {
@@ -67,14 +50,26 @@ public class EmployeeServlet extends HttpServlet {
             case "insertBatch"://批量插入
                 result = insertBatch(conn,request);
                 break;
-            case "insertSetting"://插入社保
-                result = insertSetting(conn,request);
+            case "insertEnsureSetting"://插入社保设置信息
+                result = insertEnsureSetting(conn,request);
                 break;
-            case "updateSetting"://修改社保和个税
-                result = updateSetting(conn,request);
+            case "updateEnsureSetting"://修改社保设置信息
+                result = updateEnsureSetting(conn,request);
                 break;
-            case "getSetting"://获取社保和个税
-                result = getSetting(conn,request);
+            case "getEnsureSetting"://获取社保设置信息
+                result = getEnsureSetting(conn,request);
+                break;
+            case "insertDeduct"://插入个税扣除信息
+                result = insertDeduct(conn,request);
+                break;
+            case "updateDeduct"://修改个税扣除信息
+                result = updateDeduct(conn,request);
+                break;
+            case "getDeduct"://获取个税信息
+                result = getDeduct(conn,request);
+                break;
+            case "importDeducts"://导入个税集合
+                result = importDeducts(conn,request);
                 break;
             case "insertCard"://添加工资卡
                 result = insertCard(conn,request);
@@ -98,6 +93,54 @@ public class EmployeeServlet extends HttpServlet {
         out.print(result);
         out.flush();
         out.close();
+    }
+
+    //插入社保设置信息
+    private String insertEnsureSetting(Connection conn, HttpServletRequest request) {
+        EnsureSetting setting = JSONObject.parseObject(request.getParameter("setting"),EnsureSetting.class);
+        DaoUpdateResult result = SettingService.insert(conn, setting);
+        return  JSONObject.toJSONString(result);
+    }
+
+    //修改社保设置信息
+    private String updateEnsureSetting(Connection conn, HttpServletRequest request) {
+        EnsureSetting setting = JSONObject.parseObject(request.getParameter("setting"),EnsureSetting.class);
+        DaoUpdateResult result = SettingService.update(conn, setting);
+        return  JSONObject.toJSONString(result);
+    }
+
+    //获取社保设置信息
+    private String getEnsureSetting(Connection conn, HttpServletRequest request) {
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoQueryResult result = SettingService.get(conn,id);
+        return  JSONObject.toJSONString(result);
+    }
+
+    //插入个税扣除
+    private String insertDeduct(Connection conn, HttpServletRequest request) {
+        Deduct deduct = JSONObject.parseObject(request.getParameter("deduct"), Deduct.class);
+        DaoUpdateResult result = DeductService.insert(conn, deduct);
+        return  JSONObject.toJSONString(result);
+    }
+
+    //修改个税扣除
+    private String updateDeduct(Connection conn, HttpServletRequest request) {
+        Deduct deduct = JSONObject.parseObject(request.getParameter("deduct"), Deduct.class);
+        DaoUpdateResult result = DeductService.update(conn, deduct);
+        return  JSONObject.toJSONString(result);
+    }
+
+    //获取个税扣除
+    private String getDeduct(Connection conn, HttpServletRequest request) {
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoQueryResult result = DeductService.get(conn,id);
+        return  JSONObject.toJSONString(result);
+    }
+
+
+    //导入个税扣除
+    private String importDeducts(Connection conn, HttpServletRequest request) {
+        return  null;
     }
 
     //获取员工列表
@@ -189,29 +232,6 @@ public class EmployeeServlet extends HttpServlet {
         EmployeeService.insertBatch(conn,strings);
         return  JSONObject.toJSONString(res);
     }
-
-    //插入社保和个税
-    private String insertSetting(Connection conn, HttpServletRequest request) {
-        EmployeeSetting setting =JSONObject.parseObject(request.getParameter("setting"), EmployeeSetting.class);
-        DaoUpdateResult res = SettingService.insert(conn,setting);
-        return  JSONObject.toJSONString(res);
-    }
-
-    //修改社保和个税
-    private String updateSetting(Connection conn, HttpServletRequest request) {
-        EmployeeSetting setting =JSONObject.parseObject(request.getParameter("setting"), EmployeeSetting.class);
-        Byte category = Byte.valueOf(request.getParameter("category"));
-        DaoUpdateResult res= SettingService.update(conn,setting,category);
-        return  JSONObject.toJSONString(res);
-    }
-
-    //获取社保和个税
-    private String getSetting(Connection conn, HttpServletRequest request) {
-        long id = Long.parseLong(request.getParameter("id"));
-        DaoQueryResult res = SettingService.get(conn,id);
-        return  JSONObject.toJSONString(res);
-    }
-
     //插入员工工资卡
     private String insertCard(Connection conn, HttpServletRequest request) {
         PayCard payCard = JSONObject.parseObject(request.getParameter("payCard"), PayCard.class);

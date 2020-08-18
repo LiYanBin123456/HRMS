@@ -184,6 +184,7 @@ public class DbUtil {
         String condition = param.conditions.toString();
         System.out.println(condition);
         sql1 += condition;
+        System.out.println(sql1);
 
         QueryRunner qr = new QueryRunner();
         List Columns = null;

@@ -2,21 +2,30 @@ package dao.settlement;
 
 import bean.settlement.Settlement1;
 import bean.settlement.Settlement2;
-import database.QueryParameter;
+import bean.settlement.ViewSettlement1;
+import bean.settlement.ViewSettlement2;
+import database.*;
 
 import java.sql.Connection;
 
 public class Settlement2Dao {
-    public static String getList(Connection conn, QueryParameter param) {
-        return null;
+    public static DaoQueryListResult getList(Connection conn, QueryParameter param) {
+        if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
+            //根据地市模糊查询
+            param.addCondition("concat(name,month,status)","like",param.conditions.extra);
+        }
+        return DbUtil.getList(conn, "view_settlement2", param, ViewSettlement2.class);
+
     }
 
-    public static String insert(Connection conn, Settlement2 settlement2) {
-        return null;
+    public static String insert(Connection conn, Settlement2 s) {
+        return  null;
     }
 
-    public static String delete(Connection conn, Long id) {
-        return null;
+    public static DaoUpdateResult delete(Connection conn, Long id) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id","=",id);
+        return DbUtil.delete(conn,"settlement2",conditions);
     }
 
     public static String copy(Connection conn, long id,String month) {

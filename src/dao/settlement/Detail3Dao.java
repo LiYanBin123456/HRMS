@@ -13,7 +13,7 @@ import java.util.List;
 
 public class Detail3Dao {
     public static DaoQueryListResult getList(Connection conn, QueryParameter param){
-        return DbUtil.getList(conn,"ViewDetail3",param, ViewDetail3.class);
+        return DbUtil.getList(conn,"view_detail3",param, ViewDetail3.class);
     }
     public static DaoUpdateResult update(Connection conn, List<Detail3> details){
         return  null;

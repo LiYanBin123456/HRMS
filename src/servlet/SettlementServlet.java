@@ -1,12 +1,17 @@
 package servlet;
 
+import bean.settlement.Settlement1;
 import bean.settlement.Settlement3;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPObject;
+import dao.settlement.Settlement3Dao;
 import database.ConnUtil;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.QueryParameter;
+import service.settlement.Detail3Service;
+import service.settlement.Settlement1Service;
+import service.settlement.Settlement2Service;
 import service.settlement.Settlement3Service;
 
 import javax.servlet.ServletException;
@@ -134,8 +139,10 @@ public class SettlementServlet extends HttpServlet {
         DaoUpdateResult result = null;
         switch (category){
             case 0://普通结算单
+                result = Settlement1Service.delete(conn,id);
                 break;
             case 1://小时工结算单
+                result = Settlement2Service.delete(conn,id);
                 break;
             case 2://商业保险结算单
                 result = Settlement3Service.delete(conn,id);
@@ -151,6 +158,7 @@ public class SettlementServlet extends HttpServlet {
         DaoUpdateResult result = null;
         switch (category){
             case 0://普通结算单
+
                 break;
             case 1://小时工结算单
                 break;
@@ -166,7 +174,19 @@ public class SettlementServlet extends HttpServlet {
     }
 
     private String getDetails(Connection conn, HttpServletRequest request) {
-        return null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        QueryParameter param = JSONObject.parseObject(request.getParameter("param"),QueryParameter.class);
+        DaoQueryListResult result = null;
+        switch (category){
+            case 0://普通结算单明细
+                break;
+            case 1://小时工结算单明细
+                break;
+            case 2://商业保险结算单明细
+                result = Detail3Service.getList(conn,param);
+                break;
+        }
+        return JSONObject.toJSONString(result);
     }
 
     private String importDetails(Connection conn, HttpServletRequest request) {

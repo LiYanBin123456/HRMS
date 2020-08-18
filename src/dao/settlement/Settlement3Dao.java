@@ -15,7 +15,7 @@ public class Settlement3Dao {
             //根据地市模糊查询
             param.addCondition("concat(cname,month,status)","like",param.conditions.extra);
         }
-        return DbUtil.getList(conn, "ViewSettlement3", param, ViewSettlement3.class);
+        return DbUtil.getList(conn, "view_settlement3", param, ViewSettlement3.class);
 
     }
     //获取结算单详情

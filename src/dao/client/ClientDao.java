@@ -1,7 +1,6 @@
 package dao.client;
 
-import bean.client.Cooperation;
-import bean.client.ViewFinanceCooperation;
+import bean.client.ViewFinance;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.DbUtil;
@@ -46,7 +45,7 @@ public class ClientDao {
         if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
             param.addCondition("concat(name)","like",param.conditions.extra);
         }
-        return DbUtil.getList(conn,"view_finance_cooperation",param, ViewFinanceCooperation.class);
+        return DbUtil.getList(conn,"view_finance_cooperation",param, ViewFinance.class);
 
     }
 

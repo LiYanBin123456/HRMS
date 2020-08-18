@@ -1,7 +1,8 @@
 package service.settlement;
 
-import bean.settlement.Settlement1;
 import bean.settlement.Settlement2;
+import dao.settlement.Settlement2Dao;
+import database.DaoUpdateResult;
 import database.QueryParameter;
 
 import java.sql.Connection;
@@ -15,8 +16,8 @@ public class Settlement2Service {
         return null;
     }
 
-    public static String delete(Connection conn, Long id) {
-        return null;
+    public static DaoUpdateResult delete(Connection conn, Long id) {
+        return Settlement2Dao.delete(conn,id);
     }
 
     public static String copy(Connection conn, long id,String month) {

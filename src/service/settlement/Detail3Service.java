@@ -1,15 +1,16 @@
 package service.settlement;
 
-import bean.settlement.Detail2;
 import bean.settlement.Detail3;
+import dao.settlement.Detail3Dao;
+import database.DaoQueryListResult;
 import database.QueryParameter;
 
 import java.sql.Connection;
 import java.util.List;
 
 public class Detail3Service {
-    public static String getList(Connection conn, QueryParameter param){
-        return null;
+    public static DaoQueryListResult getList(Connection conn, QueryParameter param){
+        return Detail3Dao.getList(conn,param);
     }
     public static String update(Connection conn,  List<Detail3> details){
         return  null;

@@ -1,7 +1,6 @@
 package service.employee;
 
-import bean.employee.EmployeeSetting;
-import bean.employee.PayCard;
+import bean.employee.EnsureSetting;
 import dao.employee.SettingDao;
 import database.DaoQueryResult;
 import database.DaoUpdateResult;
@@ -15,12 +14,12 @@ public class SettingService {
     }
 
     //修改
-    public static DaoUpdateResult update(Connection conn, EmployeeSetting setting,byte catrgory) {
-        return SettingDao.update(conn,setting,catrgory);
+    public static DaoUpdateResult update(Connection conn, EnsureSetting setting) {
+        return SettingDao.update(conn,setting);
     }
 
     //增加
-    public static DaoUpdateResult insert(Connection conn, EmployeeSetting setting) {
+    public static DaoUpdateResult insert(Connection conn, EnsureSetting setting) {
         return SettingDao.insert(conn,setting);
     }
 
