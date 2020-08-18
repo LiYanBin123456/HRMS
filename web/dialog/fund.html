@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="../css/xadmin.css">
         <script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
+        <link href="../city-picker/city-picker.css" rel="stylesheet" />
         <style type="text/css">
 
 .frm-layout{
@@ -59,81 +60,89 @@
     <body>
         <form id="frmEdit" lay-filter="form_fund" class="layui-form" lay-filter="frm">
 
-    <input type="hidden" name="id" lay-verify="" placeholder=""
-
-                    autocomplete="off" class="layui-input" value="">
-
-    <table class="frm-layout" >
-
-            <tr>    
-                
-                 <td class="title">地市</td>
-                            <td class="layui-input-inline">
-                                <select name="city" lay-verify="required">
-                                    <option value=""></option>
-                                    <option value="0">北京</option>
-                                    <option value="1">上海</option>
-                                    <option value="2">广州</option>
-                                    <option value="3">深圳</option>
-                                    <option value="4">杭州</option>
-                                    <option value="5">九江</option>
-                            </select>
-                    </td>
-
-
-                 <td class="title">生效时间</td>
-
-                 <td ><input type="text" name="start" lay-verify="" placeholder=""
-
-                    autocomplete="off" class="layui-input date " value=""></td>
-            </tr>
-            <tr>
-                    <td class="title">公积金下限</td>
-
-            <td><input type="text" name="min" lay-verify="" placeholder=""
-
-                    autocomplete="off" class="layui-input " value=""></td>
-
-            <td class="title">公积金上限</td>
-
-            <td><input type="text" name="max" lay-verify="" placeholder=""
-
-                    autocomplete="off" class="layui-input date " value=""></td>
-            </tr>
-            <tr>
-                    <td class="title">比例下限</td>
-
-            <td><input type="text" name="per1" lay-verify="" placeholder="%"
-
-                    autocomplete="off" class="layui-input " value=""></td>
-
-            <td class="title">比例上限</td>
-
-            <td><input type="text" name="per2" lay-verify="" placeholder="%"
-
-                    autocomplete="off" class="layui-input date " value=""></td>
-            </tr>
-            <tr>
-               <td colspan="4" style="text-align: center;">
-                        <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button></td>
-            </tr>
-    </table>
+    <input type="hidden" name="id" lay-verify="" placeholder="" autocomplete="off" class="layui-input" value="">
+            <div class="layui-form-item">
+                <label  class="layui-form-label">
+                    <span class="x-red">*</span>地市</label>
+                <div class="layui-input-block">
+                    <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city" readonly="readonly" data-toggle="city-picker" placeholder="请选择">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label  class="layui-form-label">
+                    <span class="x-red">*</span>生效时间</label>
+                <div class="layui-input-block">
+                    <input type="text" id="start" name="start" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>基金下限</label>
+                <div class="layui-input-block">
+                    <input type="text" name="min" autocomplete="off" placeholder="" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>基金上限</label>
+                <div class="layui-input-block">
+                    <input type="text" name="max" autocomplete="off" placeholder="" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>比例下限</label>
+                <div class="layui-input-block">
+                    <input type="text" name="per1" autocomplete="off" placeholder="%" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>比例上限</label>
+                <div class="layui-input-block">
+                    <input type="text" name="per2" autocomplete="off" placeholder="%" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item" >
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn " onclick="save()">保存</button>
+                </div>
+            </div>
     </form>
 </body>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
+    <script src="../city-picker/city-picker.data.js"></script>
+    <script src="../js/city.js"></script>
+    <script src="../js/fieldSet.js"></script>
 <script>
     var op = "insert";
     var form;//表单对象
+    var cityPicker;
+    var laydate;
     var editer;
 
     loadLayuiModule();
 
     function loadLayuiModule() {
-        layui.use(['form', 'layedit','jquery'], function () {
+        layui.extend({
+            index: 'lib/index' //主入口模块
+            , citypicker: '../city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
+        }).use(['form', 'layedit','jquery','citypicker','laydate'], function () {
             form = layui.form;
             layedit = layui.layedit;
+            laydate = layui.laydate;
+            var picker = layui.citypicker;
+            cityPicker = new picker("#city-picker", {
+                provincename:"provinceId",
+                cityname:"city",
+                level: 'city'// 级别
+            });
+            laydate.render({
+                elem: '#start'
+                ,type: 'date'
+            });
             editer = layedit.build('content'); //建立编辑器
             initData();
         });
@@ -143,7 +152,10 @@
         var param = $.query.get("fund");
         if (param) {
             var fund = JSON.parse(param);
+            fund.start = format_date(fund.start);
             form.val('form_fund', fund);
+            var city = getCityText4(fund.city);
+            cityPicker.setvalue(city);
             layedit.setContent(editer, fund.content, false);
             op = "update";
         }
@@ -152,26 +164,25 @@
     function save() {
         var fund = form.val('form_fund');
         if(op == "insert") {
-            iFund.insert(fund, onInsertSuccess);
+            iRule.insert(fund,2, onInsertSuccess);
         }else{
-            iFund.update(fund,onUpdateSuccess);
+            iRule.update(fund,2,onUpdateSuccess);
         }
 
         function onInsertSuccess() {
-            layer.alert("添加成功", {icon: 6}, refresh());
+            layer.alert("添加成功", {icon: 6,time:2000},function () {
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.location.reload();
+            });
         }
 
         function onUpdateSuccess() {
-            layer.alert("修改成功", {icon: 6}, refresh());
-        }
-
-        function refresh() {
-            // 获得frame索引
-            var index = parent.layer.getFrameIndex(window.name);
-            //关闭当前frame
-            parent.layer.close(index);
-            //修改成功后刷新父界面
-            window.parent.location.reload();
+            layer.alert("修改成功", {icon: 6,time:2000},function () {
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.location.reload();
+            });
         }
     }
 </script>
