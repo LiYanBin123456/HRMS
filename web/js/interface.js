@@ -144,8 +144,8 @@ var InterfaceClient = function() {
      * @param success
      * @param fail
      */
-    this.getBalances = function (param,category,success,fail) {
-        var para = {op:"getBalances",param:JSON.stringify(param),category: category};
+    this.getFinances = function (param,category,success,fail) {
+        var para = {op:"getFinances",param:JSON.stringify(param),category: category};
         access(url,para,0,success,fail);
     };
 };
