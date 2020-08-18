@@ -990,7 +990,7 @@ var InterfaceProduct = function () {
     };
 };
 
-//财务管理相关接口（待定）
+//财务管理相关接口
 var InterfaceFinance = function () {
     var url = base+"/finance";//servlet的url地址
     /**
@@ -1081,7 +1081,7 @@ var iEmployee = new InterfaceEmployee();//员工管理
 var iSettlement = new InterfaceSettlement();//结算单管理
 var iInsurance = new InterfaceInsurance();//参保单管理
 var iProduct = new InterfaceProduct();//保险产品管理
-var iFinance = new InterfaceFinance();//财务管理（待定）
+var iFinance = new InterfaceFinance();//财务管理
 var iFile = new InterfaceFile();//文件管理
 
 /**

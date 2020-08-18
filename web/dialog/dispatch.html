@@ -221,9 +221,9 @@
     function saveFinance(finance) {
         console.log(finance);
         if(flag2) {
-            iClient.updateFinance(finance,0,onUpdateSuccess);
+            iClient.updateFinance(finance,onUpdateSuccess);
         }else{
-            iClient.insertFinance(finance,0,onInsertSuccess);
+            iClient.insertFinance(finance,onInsertSuccess);
         }
 
         function onInsertSuccess() {

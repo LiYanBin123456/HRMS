@@ -128,12 +128,12 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <button lay-submit lay-filter="submit_dispatch" class="layui-btn layui-btn-fluid" >保存</button>
+                    <button lay-submit lay-filter="submit_cooperation" class="layui-btn layui-btn-fluid" >保存</button>
                 </div>
             </form>
         </div>
         <div class="layui-tab-item">
-            <form lay-filter="form_cooperation" class="layui-form">
+            <form lay-filter="form_finance" class="layui-form">
                 <input type='hidden' name='id'/>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
@@ -199,7 +199,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <button lay-submit lay-filter="submit_dispatch" class="layui-btn layui-btn-fluid">保存</button>
+                    <button lay-submit lay-filter="submit_finance" class="layui-btn layui-btn-fluid">保存</button>
                 </div>
             </form>
         </div>
@@ -233,14 +233,14 @@
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
 <script>
-    var op = "insert";
     var form;//表单对象
     var table;
     var layer;
     var editer;
     var element;
-    var cooperation;//合作企业基本信息
-    var finance;//合作企业财务信息
+    var id;//合作单位编号
+    var flag1;//合作单位基本信息是否已经存在
+    var flag2;//合作单位财务信息是否已经存在
     var salary_items_fixed = ["基本工资", "个人养老", "个人医疗", "个人失业", "个人大病", "个人公积金","单位养老","单位医疗","单位失业","单位工伤","单位大病","单位生育", "单位公积金", "个税", "应发", "实发"];
     var salary_items_defined;//合作企业自定义工资字段
     loadLayuiModule();
@@ -273,29 +273,45 @@
     }
 
     function initBase() {
-        //如果已经有基本信息就忽略
-        if (cooperation) {
-            return;
+        id = $.query.get("id");
+        if (id) {
+            getCooperation();
         }
-
-        var param = $.query.get("cooperation");
-        if (param) {
-            cooperation = JSON.parse(param);
-            form.val('form_cooperation', cooperation);
-            layedit.setContent(editer, cooperation.content, false);
-            op = "update";
-        }
+        element.on('tab(tab_cooperation)', function(data){
+            if(data.index == 1){
+                if(!flag2){
+                    getFinance();
+                }
+            }
+        });
+        form.on('submit(submit_cooperation)', function(data){
+            saveCooperation(data.field);
+        });
+        form.on('submit(submit_finance)', function(data){
+            saveFinance(data.field);
+        });
     }
 
-    function initFinance() {
-        //如果已经读取过财务信息就忽略
-        if (cooperation) {
-            return;
-        }
-
-
+    function getCooperation() {
+        iClient.get(id,1,function (result) {
+            var cooperation = result.data;
+            if(cooperation){
+                flag1 = true;
+                form.val('form_cooperation', cooperation);
+                layedit.setContent(editer, cooperation.content, false);
+            }
+        });
     }
 
+    function getFinance() {
+        iClient.getFinance(id,1,function (result) {
+            var finance = result.data;
+            if(finance){
+                flag2 = true;
+                form.val('form_finance', finance);
+            }
+        });
+    }
     function initSalayDefine() {
         //如果已经有基本信息就忽略
         if (salary_items_defined) {
@@ -398,12 +414,30 @@
         }
     }
 
-    function save() {
-        var cooperation = form.val('form_cooperation');
-        if (op == "insert") {
-            iClient.insert(cooperation,1, onInsertSuccess);
-        } else {
-            iClient.update(cooperation,1, onUpdateSuccess);
+    function saveCooperation(cooperation) {
+
+        if(flag1) {
+            iClient.update(cooperation,1,onUpdateSuccess);
+        }else{
+            iClient.insert(cooperation,1,onInsertSuccess);
+        }
+
+        function onInsertSuccess(result) {
+            id = result.extra;//获取插入的主键
+            layer.alert("添加成功", {icon: 6}, refresh());
+        }
+
+        function onUpdateSuccess() {
+            layer.alert("修改成功", {icon: 6}, refresh());
+        }
+    }
+
+    function saveFinance(finance) {
+        console.log(finance);
+        if(flag2) {
+            iClient.updateFinance(finance,onUpdateSuccess);
+        }else{
+            iClient.insertFinance(finance,onInsertSuccess);
         }
 
         function onInsertSuccess() {
@@ -413,15 +447,14 @@
         function onUpdateSuccess() {
             layer.alert("修改成功", {icon: 6}, refresh());
         }
-
-        function refresh() {
-            // 获得frame索引
-            var index = parent.layer.getFrameIndex(window.name);
-            //关闭当前frame
-            parent.layer.close(index);
-            //修改成功后刷新父界面
-            window.parent.location.reload();
-        }
+    }
+    function refresh() {
+        // 获得frame索引
+        var index = parent.layer.getFrameIndex(window.name);
+        //关闭当前frame
+        parent.layer.close(index);
+        //修改成功后刷新父界面
+        window.parent.location.reload();
     }
 </script>
 

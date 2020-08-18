@@ -161,7 +161,7 @@
 
             //打开详情对话框
             function showDetailDlg(cooperation) {
-                var content = "../dialog/cooperation.html?cooperation="+encodeURIComponent(JSON.stringify(cooperation));
+                var content = "../dialog/cooperation.html?id="+cooperation.id;
                 layer.open({
                     title:"详情合作客户",
                     type: 2,
