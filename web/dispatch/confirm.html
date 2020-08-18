@@ -116,7 +116,7 @@
             }
 
             function getConfirms() {
-                iClient.getFinances(param_query,1,function (result) {
+                iClient.getFinances(param_query,function (result) {
                     table.reload('tbl_confirm', {
                         data:result.rows
                     });
