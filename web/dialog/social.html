@@ -64,7 +64,7 @@
             <label  class="layui-form-label">
                 <span class="x-red">*</span>地市</label>
             <div class="layui-input-block">
-                <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city" readonly="readonly" data-toggle="city-picker" placeholder="请选择">
+                <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city-picker" readonly="readonly" data-toggle="city-picker" placeholder="请选择">
             </div>
         </div>
         <div class="layui-form-item">
@@ -173,7 +173,7 @@
             var social = JSON.parse(param);
             social.start = format_date(social.start);
             form.val('form_social', social);
-            var city = getCityText3(social.city);
+            var city = getCityText4(social.city);
             cityPicker.setvalue(city);
             layedit.setContent(editer, social.content, false);
             op = "update";

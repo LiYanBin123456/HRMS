@@ -14206,8 +14206,9 @@ function getCityText3(id) {
         var citys = provinces[i].children;
         for(var j in citys){
             if(citys[j].id == id){
-                return provinces[i].text + citys[j].text;
+                return [provinces[i].text + citys[j].text];
             }
+
         }
     }
 }

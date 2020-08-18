@@ -65,7 +65,7 @@
                 <label  class="layui-form-label">
                     <span class="x-red">*</span>地市</label>
                 <div class="layui-input-block">
-                    <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city" readonly="readonly" data-toggle="city-picker" placeholder="请选择">
+                    <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city-picker" readonly="readonly" data-toggle="city-picker" placeholder="请选择">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -113,9 +113,10 @@
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
-    <script src="../city-picker/city-picker.data.js"></script>
-    <script src="../js/city.js"></script>
-    <script src="../js/fieldSet.js"></script>
+<script src="../city-picker/city-picker.data.js"></script>
+<script src="../city-picker/city-picker.js"></script>
+<script src="../js/city.js"></script>
+<script src="../js/fieldSet.js"></script>
 <script>
     var op = "insert";
     var form;//表单对象
@@ -154,8 +155,8 @@
             var fund = JSON.parse(param);
             fund.start = format_date(fund.start);
             form.val('form_fund', fund);
-            var city = getCityText4(fund.city);
-            cityPicker.setvalue(city);
+            var city = getCityText3(fund.city);
+            cityPicker.setValue(city);
             layedit.setContent(editer, fund.content, false);
             op = "update";
         }
