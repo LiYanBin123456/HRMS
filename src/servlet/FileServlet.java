@@ -56,7 +56,7 @@ public class FileServlet extends HttpServlet {
     }
 
     private String upload(Connection conn, HttpServletRequest request) throws IOException, ServletException {
-        DaoUpdateResult result = null;
+        String  msg = null;
         String id = request.getParameter("id");
             //将文件上传到服务器并且以合同id命名
             String file = null;
@@ -89,13 +89,13 @@ public class FileServlet extends HttpServlet {
                     fos.close();
                     //删除临时文件
                     part.delete();
-                    result.msg = "合共插入成功";
+                    msg = "合共插入成功";
                 }
                 else {
-                    result.msg ="格式不正确";
+                    msg ="格式不正确";
                 }
             }
-            return JSONObject.toJSONString(result);
+            return JSONObject.toJSONString(msg);
     }
 
     private String download(Connection conn, HttpServletRequest request) {

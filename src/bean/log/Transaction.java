@@ -8,6 +8,16 @@ public class Transaction {
     private float money;//往来资金金额
     private String comments;//内容
 
+    public Transaction() {
+    }
+
+    public Transaction(long cid, Date time, float money, String comments) {
+        this.cid = cid;
+        this.time = time;
+        this.money = money;
+        this.comments = comments;
+    }
+
     public long getCid() {
         return cid;
     }
@@ -38,5 +48,15 @@ public class Transaction {
 
     public void setComments(String comments) {
         this.comments = comments;
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "cid=" + cid +
+                ", time=" + time +
+                ", money=" + money +
+                ", comments='" + comments + '\'' +
+                '}';
     }
 }

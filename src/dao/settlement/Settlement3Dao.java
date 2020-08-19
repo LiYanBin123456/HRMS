@@ -42,4 +42,54 @@ public class Settlement3Dao {
         return null;
     }
 
+    /**
+     * 提交，将结算单的status 设置为 1
+     * @param conn
+     * @param id  要提交的结算单id
+     * @return
+     */
+    public static DaoUpdateResult commit(Connection conn, long id) {
+        String sql = "update settlement3 set status=1 where id = ?";
+        Object []params = {id};
+        return DbUtil.update(conn,sql,params);
+    }
+
+    /**
+     * 审核，修改结算单状态为几审
+     * @param conn
+     * @param id 要审核的结算单id
+     * @param status  几审
+     * @return
+     */
+    public static DaoUpdateResult check(Connection conn, long id,byte status) {
+        String sql = String.format("update settlement3 set status=%s where id = ?",status);
+        Object []params = {id};
+        return DbUtil.update(conn,sql,params);
+    }
+
+    /**
+     * 重置结算单，将结算单的状态设置为0编辑状态
+     * @param conn
+     * @param id
+     * @return
+     */
+    public static DaoUpdateResult reset(Connection conn,long id) {
+        String sql = "update settlement3 set status=0 where id = ?";
+        Object []params = {id};
+        return DbUtil.update(conn,sql,params);
+    }
+
+    /**
+     * 确认扣款 设置结算单为扣款
+     * @param conn
+     * @param id
+     * @return
+     */
+    public static DaoUpdateResult deduct(Connection conn,long id) {
+        String sql = "update settlement3 set status=5 where id = ?";
+        Object []params = {id};
+        return DbUtil.update(conn,sql,params);
+    }
+
+
 }
