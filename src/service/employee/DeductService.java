@@ -22,6 +22,6 @@ public class DeductService {
 
     //增加
     public static DaoUpdateResult insert(Connection conn, Deduct deduct) {
-        return DeductDao.update(conn,deduct);
+        return DeductDao.insert(conn,deduct);
     }
 }
