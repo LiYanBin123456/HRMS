@@ -37,8 +37,8 @@ public class ExtraService {
     }
 
     //离职或者退休
-    public static DaoUpdateResult leave(Connection conn, long id, byte category, byte leave, Date date) {
-        return  ExtraDao.leave(conn,id,category,leave,date);
+    public static DaoUpdateResult leave(Connection conn, long id, byte category, byte reason, Date date) {
+        return  ExtraDao.leave(conn,id,category,reason,date);
     }
 
 }

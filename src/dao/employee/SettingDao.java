@@ -1,6 +1,5 @@
 package dao.employee;
 
-import bean.employee.Employee;
 import bean.employee.EnsureSetting;
 import database.DaoQueryResult;
 import database.DaoUpdateResult;
@@ -19,15 +18,15 @@ public class SettingDao {
 
     //修改
     public static DaoUpdateResult update(Connection conn, EnsureSetting s) {
-        String sql = "update ensureSetting set city=?,settingM=?,valueM=?,settingS=?,valueS=?,fundPer=?,fundBase=?,product=? where eid=? ";
-        Object []params = {s.getCity(),s.getSettingM(),s.getValueM(),s.getSettingS(),s.getValueS(),s.getFundPer(),s.getFundBase(),s.getProduct(),s.getEid()};
+        String sql = "update ensureSetting set city=?,settingM=?,valM=?,settingS=?,vaLS=?,fundPer=?,fundBase=?,product=? where eid=? ";
+        Object []params = {s.getCity(),s.getSettingM(),s.getValM(),s.getSettingS(),s.getValS(),s.getFundPer(),s.getFundBase(),s.getProduct(),s.getEid()};
         return  DbUtil.update(conn,sql,params);
     }
 
     //增加
     public static DaoUpdateResult insert(Connection conn, EnsureSetting s) {
-        String sql = "insert ensureSetting (eid,city,settingM,valueM,settingS,valueS,fundPer,fundBase,product) values (?,?,?,?,?,?,?,?,?)";
-        Object []params = {s.getEid(),s.getCity(),s.getSettingM(),s.getValueM(),s.getSettingS(),s.getValueS(),s.getFundPer(),s.getFundBase(),s.getProduct()};
+        String sql = "insert ensureSetting (eid,city,settingM,valM,settingS,valS,fundPer,fundBase,product) values (?,?,?,?,?,?,?,?,?)";
+        Object []params = {s.getEid(),s.getCity(),s.getSettingM(),s.getValM(),s.getSettingS(),s.getValS(),s.getFundPer(),s.getFundBase(),s.getProduct()};
         return  DbUtil.insert(conn,sql,params);
     }
 
