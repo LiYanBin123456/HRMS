@@ -143,7 +143,7 @@ var columns_employee_spare = [[
 //普通结算单字段集合
 var columns_settlement1  = [[
     {type:'checkbox',fixed:"left"},
-    {field:'client', title: '用工企业',width:180,fixed:"left"},
+    {field:'name', title: '用工企业',width:180,fixed:"left"},
     {field:'month', title: '月份',width:80},
     {field:'salary', title: '工资',width:70},
     {field:'social', title: '社保',width:70},
