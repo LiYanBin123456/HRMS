@@ -62,7 +62,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"month",direction:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -95,20 +95,6 @@
             function initTable(mode) {
                 var cols = mode==0?columns_detail1_input:columns_detail1_full;
 
-                //初始化分页
-                laypage.render({
-                    elem: 'pager'
-                    ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
-                            getDetails();
-                        }
-                    }
-                });
 
                 //初始化数据表格
                 table.render({
@@ -121,10 +107,10 @@
 
                 //行内工具栏事件响应
                 table.on('tool(filter_tb_detail)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
-                    var data = obj.data; //获得当前行数据
+                    var detail = obj.data; //获得当前行数据
                     switch (obj.event){
                         case "del":
-                            del(data);
+                            del(detail);
                             break;
                     }
                 });
@@ -156,22 +142,37 @@
           }
 
             function getDetails() {
-                var result = {total:100,rows:[{cardld:"360402199008230081",name:"张晓国",base:"5000",allowance:"1000",reward:"500",social1:"-100",social2:"200",fund1:"-50",fund2:"150",tax:"-100",f1:"100",f2:"-50",payable:"6600",paid:"6300"},{cardld:"360402199008230081",name:"宋丽",base:"12000",allowance:"2000",reward:"600",social1:"-200",social2:"300",fund1:"-60",fund2:"400",tax:"-300",f1:"600",f2:"-60",payable:"15200",paid:"14900"}]};
+                /*var result = {total:100,rows:[{cardld:"360402199008230081",name:"张晓国",base:"5000",allowance:"1000",reward:"500",social1:"-100",social2:"200",fund1:"-50",fund2:"150",tax:"-100",f1:"100",f2:"-50",payable:"6600",paid:"6300"},{cardld:"360402199008230081",name:"宋丽",base:"12000",allowance:"2000",reward:"600",social1:"-200",social2:"300",fund1:"-60",fund2:"400",tax:"-300",f1:"600",f2:"-60",payable:"15200",paid:"14900"}]};
                 table.reload('tbl_detail', {
                     data:result.rows
-                });
+                });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
-                    table.reload('tbl_notice', {
+                iSettlement.getDetails(param_query,0,function (result) {
+                    table.reload('tbl_detail', {
                         data:result.rows
                     });
-                });*/
+                    //初始化分页
+                    laypage.render({
+                        elem: 'pager'
+                        ,curr:param_query.pagination.page
+                        ,count: result.total //数据总数
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                        ,jump: function(obj,first){
+                            //首次不执行
+                            if(!first){
+                                param_query.pagination.page = obj.curr;
+                                param_query.pagination.size = obj.limit;
+                                getDetails();
+                            }
+                        }
+                    });
+                });
             }
 
             //模糊查找
 
             //打开添加明细对话框
-            function showAppendDlg() {
+            function showInsertDlg() {
                 var content = "member.html";
                 layer.open({
                     title:"添加明细",
@@ -206,8 +207,8 @@
 
             //删除公告
             function del(detail) {
-                layer.confirm('确定删除'+detail1.name, {icon: 3, title:'删除'}, function(index){
-                    iSalsry.delete(detail1.id,function () {
+                layer.confirm('确定删除'+detail.name, {icon: 3, title:'删除'}, function(index){
+                    iSettlement.delete(detail.id,0,function () {
                         layer.close(index);
                         getDetails();
                         layer.msg('删除成功');
