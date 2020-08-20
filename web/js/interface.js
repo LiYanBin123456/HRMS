@@ -499,7 +499,7 @@ var InterfaceEmployee = function () {
      * @param fail
      */
     this.insertBatch = function (employees,extracts,success,fail) {
-        var para = {op: "insertBatch",employees:JSON.stringify(employees),extracts:extracts};
+        var para = {op: "insertBatch",employees:JSON.stringify(employees),extracts:JSON.stringify(extracts)};
         access(url,para,1,success,fail);
     };
     /**
@@ -526,15 +526,15 @@ var InterfaceEmployee = function () {
     };
     /**
      * 离职退休
-     * @param leave 离职原因信息
+     * @param reason 离职原因信息
      * @param category 0-离职 1-退休
      * @param date 离职或退休时间
      * @param id 员工id
      * @param success
      * @param fail
      */
-    this.leave = function (id,leave,date,category,success,fail) {
-        var para = {op: "leave",leave:JSON.stringify(leave),id:id,date:date, category:category};
+    this.leave = function (id,reason,date,category,success,fail) {
+        var para = {op: "leave",reason:JSON.stringify(reason),id:id,date:date, category:category};
         access(url,para,1,success,fail);
     };
     /**
@@ -751,7 +751,7 @@ var InterfaceSettlement = function () {
      * @param fail
      */
     this.importDetails = function (id,details,category,success,fail) {
-        var para = {op: "importDetails",id:id,details:details, category:category};
+        var para = {op: "importDetails",id:id,details:JSON.stringify(details), category:category};
         access(url,para,1,success,fail);
     };
     /**
@@ -790,45 +790,62 @@ var InterfaceSettlement = function () {
     /**
      * 提交结算单
      * @param id 结算单id
-     * @param category 0-结算单 1-小时工结算单
+     * @param aid 管理员id
+     * @param category 0-普通结算单 1-小时工结算单 2-商业保险结算单
      * @param success
      * @param fail
      */
-    this.commit = function (id,category,success,fail) {
-        var para = {op: "commit",id:id, category:category};
+    this.commit = function (id,aid,category,success,fail) {
+        var para = {op: "commit",id:id,aid:aid, category:category};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 审核结算单
+     * @param id 结算单id
+     * @param aid 管理员id
+     * @param category 0-普通结算单 1-小时工结算单 2-商业保险结算单
+     * @param status 2-一审 3-二审 4-终审
+     * @param success
+     * @param fail
+     */
+    this.check = function (id,aid,category,status,success,fail) {
+        var para = {op: "check",id:id,aid:aid, category:category,status:status};
         access(url,para,1,success,fail);
     };
     /**
      * 重置结算单
      * @param id 结算单id
+     * @param aid 管理员id
      * @param category 0-结算单 1-小时工结算单
      * @param success
      * @param fail
      */
-    this.reset = function (id,category,success,fail) {
-        var para = {op: "reset",id:id, category:category};
+    this.reset = function (id,aid,category,success,fail) {
+        var para = {op: "reset",id:id,aid:aid, category:category};
         access(url,para,1,success,fail);
     };
     /**
      * 扣款
      * @param id 结算单id
+     * @param aid 管理员id
      * @param category 0-结算单 1-小时工结算单
      * @param success
      * @param fail
      */
-    this.deduct = function (id,category,success,fail) {
-        var para = {op: "deduct",id:id, category:category};
+    this.deduct = function (id,aid,category,success,fail) {
+        var para = {op: "deduct",id:id,aid:aid, category:category};
         access(url,para,1,success,fail);
     };
     /**
      * 发放工资
      * @param id 结算单id
+     * @param aid 管理员id
      * @param category 0-结算单 1-小时工结算单
      * @param success
      * @param fail
      */
-    this.confirm = function (id,category,success,fail) {
-        var para = {op: "confirm",id:id, category:category};
+    this.confirm = function (id,aid,category,success,fail) {
+        var para = {op: "confirm",id:id,aid:aid, category:category};
         access(url,para,1,success,fail);
     };
     /**
@@ -845,13 +862,14 @@ var InterfaceSettlement = function () {
     };
     /**
      * 查询结算单日志
+     * @param param 查询参数
      * @param id 结算单id
      * @param category 0-结算单 1-小时工结算单
      * @param success
      * @param fail
      */
-    this.getLogs = function (id,category,success,fail) {
-        var para = {op: "getLogs",id:id,category:category};
+    this.getLogs = function (param,id,category,success,fail) {
+        var para = {op: "getLogs",param:JSON.stringify(param),id:id,category:category};
         access(url,para,0,success,fail);
     };
 };
