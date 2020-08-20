@@ -178,7 +178,7 @@ public class SettlementServlet extends HttpServlet {
 
     private String getDetails(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
-        long id = Long.parseLong(request.getParameter("id "));
+        long id = Long.parseLong(request.getParameter("id"));
         QueryParameter param = JSONObject.parseObject(request.getParameter("param"),QueryParameter.class);
         DaoQueryListResult result = null;
         switch (category){
@@ -309,6 +309,21 @@ public class SettlementServlet extends HttpServlet {
     }
 
     private String getLogs(Connection conn, HttpServletRequest request) {
-     return null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        long id = Long.parseLong(request.getParameter("id"));
+        QueryParameter param = JSONObject.parseObject(request.getParameter("param"),QueryParameter.class);
+        DaoQueryListResult result = null;
+        switch (category){
+            case 0://普通结算单明细
+                result = Settlement1Service.getLogs(conn,id,param);
+                break;
+            case 1://小时工结算单明细
+                result = Settlement2Service.getLogs(conn,id,param);
+                break;
+            case 2://商业保险结算单明细
+                result = Settlement3Service.getLogs(conn,id,param);
+                break;
+        }
+     return JSONObject.toJSONString(result);
     }
 }

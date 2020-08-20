@@ -41,8 +41,9 @@ public class ServeDao {
         return DbUtil.get(conn,"serve",conditions,Serve.class);
     }
 
-    //获取合作客户的所有合同服务项目
+    //获取该合作客户的所有合同服务项目
     public static DaoQueryListResult getList(Connection conn, QueryParameter param,long id){
+        param.conditions.add("id","=",id);
         return DbUtil.getList(conn,"view_serve_cooperation",param, ViewServeCooperation.class);
     }
 
