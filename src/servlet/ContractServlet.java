@@ -99,6 +99,7 @@ public class ContractServlet extends HttpServlet {
         contract.setId(id);
         System.out.println(contract);
         res = ContractService.insert(conn,contract);
+        System.out.println(res);
         return JSONObject.toJSONString(res);
     }
 
@@ -142,7 +143,7 @@ public class ContractServlet extends HttpServlet {
         return JSONObject.toJSONString(res);
     }
 
-    //获取合同服务项目列表
+    //获取当前合作单位的有效服务项目列表
     private String getServiceList(Connection conn, HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         long id= Long.parseLong(request.getParameter("id"));

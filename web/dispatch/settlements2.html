@@ -180,13 +180,13 @@
             }
 
             function getSettlements() {
-                var result = {total:100,rows:[{client:"蓝科",month:"2020-06",hours:500,price:20,traffic:"600",extra:0,summary:"5000",status:"申报中"},{client:"典展",month:"2020-06",hours:"600",price:"18",traffic:"0",extra:0,summary:"12000",status:"已审核"}]};
+                /*var result = {total:100,rows:[{client:"蓝科",month:"2020-06",hours:500,price:20,traffic:"600",extra:0,summary:"5000",status:"申报中"},{client:"典展",month:"2020-06",hours:"600",price:"18",traffic:"0",extra:0,summary:"12000",status:"已审核"}]};
 
                 table.reload('tbl_settlement', {
                     data:result.rows
-                });
+                });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iSettlement2.getList(param_query,function (result) {
+                iSettlement.getList(param_query,1,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows
                     });
@@ -205,7 +205,7 @@
                             }
                         }
                     });
-                });*/
+                });
             }
 
             //模糊查找
@@ -329,7 +329,7 @@
             //删除结算单
             function del(settlement) {
                 layer.confirm('确定删除'+settlement.unit+'的结算单', {icon: 3, title:'删除'}, function(index){
-                    iSettlement2.delete(settlement.id,function () {
+                    iSettlement.delete(settlement.id,function () {
                         layer.close(index);
                         getSettlements();
                         layer.msg('删除成功');

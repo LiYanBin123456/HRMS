@@ -119,6 +119,7 @@ public class EmployeeServlet extends HttpServlet {
     //插入个税扣除
     private String insertDeduct(Connection conn, HttpServletRequest request) {
         Deduct deduct = JSONObject.parseObject(request.getParameter("deduct"), Deduct.class);
+        System.out.println("前台传过来的数据"+deduct);
         DaoUpdateResult result = DeductService.insert(conn, deduct);
         return  JSONObject.toJSONString(result);
     }
@@ -165,6 +166,7 @@ public class EmployeeServlet extends HttpServlet {
             res= EmployeeService.insert(conn,employee);
         }else {
             EmployeeExtra employeeExtra =JSONObject.parseObject(request.getParameter("employee"), EmployeeExtra.class);
+            System.out.println("前台传来的数据："+employeeExtra);
             res = ExtraService.insert(conn,employeeExtra);
         }
         return JSONObject.toJSONString(res);
@@ -201,8 +203,8 @@ public class EmployeeServlet extends HttpServlet {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong((request.getParameter("id")));
         Date date = Date.valueOf(request.getParameter("date"));
-        byte leave = Byte.parseByte(request.getParameter("leave"));
-        DaoUpdateResult res = ExtraService.leave(conn,id,category,leave,date);
+        byte reason = Byte.parseByte(request.getParameter("reason"));
+        DaoUpdateResult res = ExtraService.leave(conn,id,category,reason,date);
         return JSONObject.toJSONString(res);
     }
 
@@ -256,7 +258,7 @@ public class EmployeeServlet extends HttpServlet {
     //批量派遣员工
     private String dispatch(Connection conn, HttpServletRequest request) {
         long cid = Long.parseLong(request.getParameter("cid"));
-        String[] eids = request.getParameterValues("eids[]");
+        String[] eids = request.getParameterValues("eids");
         DaoUpdateResult res = EmployeeService.dispatch(conn,eids,cid );
         return  JSONObject.toJSONString(res);
     }

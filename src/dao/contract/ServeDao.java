@@ -11,14 +11,26 @@ import java.sql.Connection;
 public class ServeDao {
     //添加合同服务项目
     public static DaoUpdateResult insert(Connection conn, Serve s){
+        String pid = null;
+        if(s.getPid()==0){
+            pid = null;
+        }else {
+            pid = String.valueOf(s.getPid());
+        }
         String sql = "insert into serve (cid,type,category,payment,settlement,receipt,pid,value,tax) values (?,?,?,?,?,?,?,?,?)";
-        Object []params = {s.getCid(),s.getType(),s.getCategory(),s.getPayment(),s.getSettlement(),s.getReceipt(),s.getPid(),s.getValue(),s.getTax()};
+        Object []params = {s.getCid(),s.getType(),s.getCategory(),s.getPayment(),s.getSettlement(),s.getReceipt(),pid,s.getValue(),s.getTax()};
         return DbUtil.insert(conn,sql,params);
     }
     //修改合同服务项目
     public static DaoUpdateResult update(Connection conn,Serve s){
+        String pid = null;
+        if(s.getPid()==0){
+            pid = null;
+        }else {
+            pid = String.valueOf(s.getPid());
+        }
         String sql = "update serve set type=?,category=?,payment=?,settlement=?,receipt=?,pid=?,value=?,tax=? where cid=?";
-        Object []params = {s.getType(),s.getCategory(),s.getPayment(),s.getSettlement(),s.getReceipt(),s.getPid(),s.getValue(),s.getTax(),s.getCid()};
+        Object []params = {s.getType(),s.getCategory(),s.getPayment(),s.getSettlement(),s.getReceipt(),pid,s.getValue(),s.getTax(),s.getCid()};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
     }
@@ -29,8 +41,9 @@ public class ServeDao {
         return DbUtil.get(conn,"serve",conditions,Serve.class);
     }
 
-    //获取合作客户的所有合同服务项目
+    //获取该合作客户的所有合同服务项目
     public static DaoQueryListResult getList(Connection conn, QueryParameter param,long id){
+        param.conditions.add("id","=",id);
         return DbUtil.getList(conn,"view_serve_cooperation",param, ViewServeCooperation.class);
     }
 

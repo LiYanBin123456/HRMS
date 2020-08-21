@@ -13,7 +13,7 @@ public class MapSalaryDao {
     public static DaoQueryResult get(long id,String month,Connection conn){
         QueryConditions conditions = new QueryConditions();
         conditions.add("cid", "=", id);
-        conditions.add("date" ,"like",month);
+        conditions.add("date" ,"like",month+"%");
         String order = " order by date desc limit 1";
         return DbUtil.getLast(conn, "map_salary", conditions,MapSalary.class,order);
     }

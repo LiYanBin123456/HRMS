@@ -16,7 +16,7 @@ public class EnsureSetting {
      只有选择了自定义才有用
      *
      */
-    private float valueM;
+    private float valM;
     /**社保设置
      0_最低标准
      1_实际工资
@@ -30,7 +30,7 @@ public class EnsureSetting {
      只有选择了自定义才有用
      *
      */
-    private float valueS;
+    private float valS;
     /**公积金设置
      0_按比例
      1_自定义
@@ -43,13 +43,13 @@ public class EnsureSetting {
     public EnsureSetting() {
     }
 
-    public EnsureSetting(long eid, String city, byte settingM, float valueM, byte settingS, float valueS, float fundPer, float fundBase, float product) {
+    public EnsureSetting(long eid, String city, byte settingM, float valM, byte settingS, float valS, float fundPer, float fundBase, float product) {
         this.eid = eid;
         this.city = city;
         this.settingM = settingM;
-        this.valueM = valueM;
+        this.valM = valM;
         this.settingS = settingS;
-        this.valueS = valueS;
+        this.valS = valS;
         this.fundPer = fundPer;
         this.fundBase = fundBase;
         this.product = product;
@@ -79,12 +79,12 @@ public class EnsureSetting {
         this.settingM = settingM;
     }
 
-    public float getValueM() {
-        return valueM;
+    public float getValM() {
+        return valM;
     }
 
-    public void setValueM(float valueM) {
-        this.valueM = valueM;
+    public void setValM(float valM) {
+        this.valM = valM;
     }
 
     public byte getSettingS() {
@@ -95,12 +95,12 @@ public class EnsureSetting {
         this.settingS = settingS;
     }
 
-    public float getValueS() {
-        return valueS;
+    public float getValS() {
+        return valS;
     }
 
-    public void setValueS(float valueS) {
-        this.valueS = valueS;
+    public void setValS(float valS) {
+        this.valS = valS;
     }
 
     public float getFundPer() {
@@ -133,9 +133,9 @@ public class EnsureSetting {
                 "eid=" + eid +
                 ", city='" + city + '\'' +
                 ", settingM=" + settingM +
-                ", valueM=" + valueM +
+                ", valM=" + valM +
                 ", settingS=" + settingS +
-                ", valueS=" + valueS +
+                ", valS=" + valS +
                 ", fundPer=" + fundPer +
                 ", fundBase=" + fundBase +
                 ", product=" + product +

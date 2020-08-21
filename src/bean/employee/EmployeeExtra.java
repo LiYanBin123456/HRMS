@@ -50,12 +50,12 @@ public class EmployeeExtra {
      17_其他原因
      *
      */
-    private byte leave;
+    private byte reason;
 
     public EmployeeExtra() {
     }
 
-    public EmployeeExtra(long eid, String rid, String school, String major, byte household, String address, Date date1, Date date2, byte leave) {
+    public EmployeeExtra(long eid, String rid, String school, String major, byte household, String address, Date date1, Date date2, byte reason) {
         this.eid = eid;
         this.rid = rid;
         this.school = school;
@@ -64,7 +64,7 @@ public class EmployeeExtra {
         this.address = address;
         this.date1 = date1;
         this.date2 = date2;
-        this.leave = leave;
+        this.reason = reason;
     }
 
     public long getEid() {
@@ -131,12 +131,12 @@ public class EmployeeExtra {
         this.date2 = date2;
     }
 
-    public byte getLeave() {
-        return leave;
+    public byte getReason() {
+        return reason;
     }
 
-    public void setLeave(byte leave) {
-        this.leave = leave;
+    public void setReason(byte reason) {
+        this.reason = reason;
     }
 
     @Override
@@ -150,7 +150,7 @@ public class EmployeeExtra {
                 ", address='" + address + '\'' +
                 ", date1=" + date1 +
                 ", date2=" + date2 +
-                ", leave=" + leave +
+                ", reason=" + reason +
                 '}';
     }
 }

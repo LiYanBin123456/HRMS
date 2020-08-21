@@ -77,7 +77,7 @@
             var layer;//弹出窗口
             var element;
             var laydate;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"name",direction:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -181,12 +181,12 @@
             }
 
             function getSettlements() {
-                var result = {total:100,rows:[{client:"科技中专",month:"2020-06",salary:"5000",social:"5000",fund:"5000",manage:"5000",tax:"5000",summary:"5000",status:"编辑"},{client:"国棉四厂",month:"2020-06",salary:"12000",social:"12000",fund:"5000",manage:"12000",tax:"12000",summary:"12000",status:"已审核"}]};
+                /*var result = {total:100,rows:[{client:"科技中专",month:"2020-06",salary:"5000",social:"5000",fund:"5000",manage:"5000",tax:"5000",summary:"5000",status:"编辑"},{client:"国棉四厂",month:"2020-06",salary:"12000",social:"12000",fund:"5000",manage:"12000",tax:"12000",summary:"12000",status:"已审核"}]};
                 table.reload('tbl_settlement', {
                     data:result.rows
-                });
+                });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iSettlement1.getList(param_query,function (result) {
+                iSettlement.getList(param_query,0,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows
                     });
@@ -205,7 +205,7 @@
                             }
                         }
                     });
-                });*/
+                });
             }
 
             //模糊查找
@@ -317,20 +317,36 @@
             //提交结算单
             function submit() {
                 layer.confirm('提交后结算单将被设置为[提交]状态，确认提交吗？', {icon: 3, title:'提交结算单'}, function(index){
+                    iSettlement.commit(settlement.id,settlement.aid,0,function () {
+                        layer.close(index);
+                        getSettlements();
+                        layer.msg('提交成功');
 
+                });
                 });
             }
 
             //重置结算单
             function reset() {
                 layer.confirm('重置后结算单将被强制设置为[编辑]状态，确认重置结算单吗？', {icon: 3, title:'重置结算单'}, function(index){
+                    iSettlement.reset(settlement.id,settlement.aid,0,function () {
+                        layer.close(index);
+                        getSettlements();
+                        layer.msg('重置成功');
 
+                    });
                 });
             }
 
             //扣款
             function charge() {
                 layer.confirm('确认执行扣款？', {icon: 3, title:'扣款'}, function(index){
+                    iSettlement.deduct(settlement.id,settlement.aid,0,function () {
+                        layer.close(index);
+                        getSettlements();
+                        layer.msg('扣款成功');
+
+                    });
 
                 });
             }
@@ -338,7 +354,7 @@
             //删除结算单
             function del(settlement) {
                 layer.confirm('确定删除'+settlement.unit+'的结算单', {icon: 3, title:'删除'}, function(index){
-                    iSettlement1.delete(settlement.id,function () {
+                    iSettlement.delete(settlement.id,0,function () {
                     layer.close(index);
                     getSettlements();
                     layer.msg('删除成功');

@@ -19,14 +19,14 @@ public class PayCardDao {
     //修改
     public static DaoUpdateResult update(Connection conn, PayCard p) {
         String sql = "update payCard set bank1=?,bank2=?,bankNo=?,cardNo=? where eid = ?";
-        Object []params = {p.getBank1(),p.getBank2(),p.getBankNo(),p.getEid()};
+        Object []params = {p.getBank1(),p.getBank2(),p.getBankNo(),p.getCardNo(),p.getEid()};
         return  DbUtil.update(conn,sql,params);
     }
 
     //增加
     public static DaoUpdateResult insert(Connection conn, PayCard p) {
         String sql = "insert into payCard (eid,bank1,bank2,bankNo,cardNo) values (?,?,?,?,?)";
-        Object []params = {p.getEid(),p.getBank1(),p.getBank2(),p.getBankNo()};
+        Object []params = {p.getEid(),p.getBank1(),p.getBank2(),p.getBankNo(),p.getCardNo()};
         return  DbUtil.update(conn,sql,params);
     }
 
