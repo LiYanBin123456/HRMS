@@ -86,6 +86,12 @@ public class EmployeeServlet extends HttpServlet {
             case "employ"://雇用
                 result = employ(conn,request);
                 break;
+            case "getDeducts"://获取个税设置列表
+                result = getDeducts(conn,request);
+                break;
+            case "deleteDeduct"://获取个税设置列表
+                result = deleteDeduct(conn,request);
+                break;
         }
         ConnUtil.closeConnection(conn);
 
@@ -93,6 +99,21 @@ public class EmployeeServlet extends HttpServlet {
         out.print(result);
         out.flush();
         out.close();
+    }
+
+    //删除
+    private String deleteDeduct(Connection conn, HttpServletRequest request) {
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoUpdateResult result = DeductService.delete(conn,id);
+        return JSONObject.toJSONString(result);
+    }
+
+    //导入个税专项扣除
+    private String getDeducts(Connection conn, HttpServletRequest request) {
+        DaoQueryListResult res;
+        QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
+        res = DeductService.getList(conn, parameter);
+        return  JSONObject.toJSONString(res);
     }
 
     //插入社保设置信息
@@ -270,6 +291,8 @@ public class EmployeeServlet extends HttpServlet {
         DaoUpdateResult res = EmployeeService.employ(conn, id, category);
         return  JSONObject.toJSONString(res);
     }
+
+
 }
 
 

@@ -43,7 +43,7 @@ public class ClientDao {
      */
     public static DaoQueryListResult getBalances(Connection conn,QueryParameter param){
         if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
-            param.addCondition("concat(name)","like",param.conditions.extra);
+            param.addCondition("name","like",param.conditions.extra);
         }
         return DbUtil.getList(conn,"view_finance_cooperation",param, ViewFinance.class);
 
