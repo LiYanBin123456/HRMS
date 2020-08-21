@@ -20,16 +20,16 @@
     <body>
         <div class="layui-fluid">
             <div class="layui-row">
-                <form class="layui-form">
+                <form class="layui-form" lay-filter="form_retire">
                     <div class="layui-form-item">
-                        <label for="L_username" class="layui-form-label">
+                        <label class="layui-form-label">
                             <span class="x-red">*</span>退休时间</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="L_username" name="username" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                            <input type="text" id="retirement_time" name="retirement_time" class="layui-input">
+                        </div>
                     </div>
                <div class="layui-form-item">
-                        <label for="L_repass" class="layui-form-label"></label>
-                        <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button></div>
+                        <button class="layui-btn" type="button" onclick="save()" >保存</button></div>
                 </form>
             </div>
         </div>
@@ -38,46 +38,38 @@
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
 <script>
-    var op = "insert";
     var form;//表单对象
     var editer;
-
+    var laydate;
     loadLayuiModule();
 
     function loadLayuiModule() {
-        layui.use(['form', 'layedit','jquery'], function () {
+        layui.use(['form', 'layedit','jquery','laydate'], function () {
             form = layui.form;
             layedit = layui.layedit;
+            laydate = layui.laydate;
             editer = layedit.build('content'); //建立编辑器
-            initData();
+            laydate.render({
+                elem: '#retirement_time'
+                ,type: 'date'
+            });
         });
     }
 
 
     function save() {
-        var notice = form.val('form_internalstaff');
-        if(op == "insert") {
-            iInternalstaff.insert(internalstaff, onInsertSuccess);
-        }else{
-            iInternalstaff.update(internalstaff,onUpdateSuccess);
-        }
-
-        function onInsertSuccess() {
-            layer.alert("添加成功", {icon: 6}, refresh());
-        }
-
-        function onUpdateSuccess() {
-            layer.alert("修改成功", {icon: 6}, refresh());
-        }
-
-        function refresh() {
-            // 获得frame索引
+        var id = $.query.get("id");
+        var data = form.val('form_retire');
+        var date = data.retirement_time;
+        var reason = 0;
+        iEmployee.leave(id,reason,date,1,onUpdateSuccess);
+    }
+    function onUpdateSuccess() {
+        layer.msg("操作成功", {icon: 6,time:1000}, function() {
             var index = parent.layer.getFrameIndex(window.name);
-            //关闭当前frame
             parent.layer.close(index);
-            //修改成功后刷新父界面
             window.parent.location.reload();
-        }
+        });
     }
 </script>
 
