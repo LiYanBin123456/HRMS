@@ -12,7 +12,7 @@ public class PayCardDao {
     //获取详情
     public static DaoQueryResult get(Connection conn, long id) {
         QueryConditions conditions = new QueryConditions();
-        conditions.add("id","=",id);
+        conditions.add("eid","=",id);
         return DbUtil.get(conn,"payCard",conditions,PayCard.class);
     }
 
