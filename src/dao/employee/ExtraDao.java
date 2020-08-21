@@ -53,8 +53,8 @@ public class ExtraDao {
                 Object []params1 = {date,reason,id};
                 res =  DbUtil.update(conn,sql1,params1);
             }else {//退休
-                String sql1 = "update employee_extra set date2 = ?, reason=? where eid = ?";
-                Object []params1 = {date,reason,id};
+                String sql1 = "update employee_extra set date2 = ? where eid = ?";
+                Object []params1 = {date,id};
                 res =  DbUtil.update(conn,sql1,params1);
             }
         }
