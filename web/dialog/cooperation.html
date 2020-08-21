@@ -376,9 +376,13 @@
     }
 
     //保存工资定义
-    function saveSalaryDefine() {
+    function saveSalaryDefine(mapSalary) {
         var items = salary_items_defined.join(";");
         layer.msg(items);
+        iClient.insertSalaryDefine(mapSalary,onInsertSuccess);
+        function onInsertSuccess() {
+            layer.alert("添加成功", {icon: 6}, refresh());
+        }
     }
 
     //预览工资定义

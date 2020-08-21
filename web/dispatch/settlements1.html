@@ -317,7 +317,7 @@
             //提交结算单
             function submit() {
                 layer.confirm('提交后结算单将被设置为[提交]状态，确认提交吗？', {icon: 3, title:'提交结算单'}, function(index){
-                    iSettlement.commit(settlement.id,settlement.aid,0,function () {
+                    iSettlement.commit(id,aid,0,function () {
                         layer.close(index);
                         getSettlements();
                         layer.msg('提交成功');
@@ -329,7 +329,7 @@
             //重置结算单
             function reset() {
                 layer.confirm('重置后结算单将被强制设置为[编辑]状态，确认重置结算单吗？', {icon: 3, title:'重置结算单'}, function(index){
-                    iSettlement.reset(settlement.id,settlement.aid,0,function () {
+                    iSettlement.reset(id,aid,0,function () {
                         layer.close(index);
                         getSettlements();
                         layer.msg('重置成功');
@@ -341,7 +341,7 @@
             //扣款
             function charge() {
                 layer.confirm('确认执行扣款？', {icon: 3, title:'扣款'}, function(index){
-                    iSettlement.deduct(settlement.id,settlement.aid,0,function () {
+                    iSettlement.deduct(settlement1.id,aid,0,function () {
                         layer.close(index);
                         getSettlements();
                         layer.msg('扣款成功');
