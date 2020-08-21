@@ -1,10 +1,9 @@
 package dao.employee;
 
+import bean.client.ViewFinance;
 import bean.employee.EnsureSetting;
-import database.DaoQueryResult;
-import database.DaoUpdateResult;
-import database.DbUtil;
-import database.QueryConditions;
+import bean.employee.ViewDeduct;
+import database.*;
 
 import java.sql.Connection;
 
@@ -29,5 +28,6 @@ public class SettingDao {
         Object []params = {s.getEid(),s.getCity(),s.getSettingM(),s.getValM(),s.getSettingS(),s.getValS(),s.getFundPer(),s.getFundBase(),s.getProduct()};
         return  DbUtil.insert(conn,sql,params);
     }
+
 
 }

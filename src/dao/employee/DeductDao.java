@@ -1,10 +1,8 @@
 package dao.employee;
 
 import bean.employee.Deduct;
-import database.DaoQueryResult;
-import database.DaoUpdateResult;
-import database.DbUtil;
-import database.QueryConditions;
+import bean.employee.ViewDeduct;
+import database.*;
 
 import java.sql.Connection;
 
@@ -30,4 +28,19 @@ public class DeductDao {
         Object []params = {d.getEid(),d.getDeduct1(),d.getDeduct2(),d.getDeduct3(),d.getDeduct4(),d.getDeduct5(),d.getDeduct6()};
         return  DbUtil.insert(conn,sql,params);
     }
+
+    //获取个税扣除视图列表
+    public static DaoQueryListResult getList(Connection conn, QueryParameter param){
+        if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
+            param.addCondition("name","like",param.conditions.extra);
+        }
+        return DbUtil.getList(conn,"view_deduct",param, ViewDeduct.class);
+    }
+
+    public static DaoUpdateResult delete(Connection conn,long id){
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("eid","=",id);
+        return DbUtil.delete(conn,"deduct",conditions);
+    }
+
 }

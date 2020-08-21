@@ -29,6 +29,7 @@
         <div class="layui-tab-item layui-show">
             <form lay-filter="form_contract" class="layui-form">
                 <input type='hidden' name='id'/>
+                <input type='hidden' name='type' value="B"/>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>合同生效时间</label>
@@ -170,7 +171,6 @@
     var form;//表单对象
     var editer;
     var upload;
-
     loadLayuiModule();
 
     function loadLayuiModule() {
@@ -190,9 +190,9 @@
                 }
             });
             initPage();
-            initData();
         });
     }
+
 
     function initPage() {
         form.on('select(service)', function(data){
@@ -224,7 +224,7 @@
 
             }; //得到被选中的值
         });
-
+        initData();
     }
 
     function initData() {

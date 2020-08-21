@@ -2,8 +2,10 @@ package service.employee;
 
 import bean.employee.EnsureSetting;
 import dao.employee.SettingDao;
+import database.DaoQueryListResult;
 import database.DaoQueryResult;
 import database.DaoUpdateResult;
+import database.QueryParameter;
 
 import java.sql.Connection;
 
@@ -22,5 +24,7 @@ public class SettingService {
     public static DaoUpdateResult insert(Connection conn, EnsureSetting setting) {
         return SettingDao.insert(conn,setting);
     }
+
+
 
 }
