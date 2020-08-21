@@ -112,17 +112,18 @@ var columns_contract_employee  = [[
 
 //内部员工管理字段集合
 var columns_employee_internal = [[
+    {fixed: 'left', type: 'checkbox'},
     {field:'cardId', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
     {field:'degree', title: '学历',width:80,templet:function (d) { return array_value2text(degrees_employee,d.degree) }},
     {field:'phone', title: '联系电话',width:120},
     {field:'department', title: '所属部门'},
-    {title: '操作', toolbar: '#bar_employee',width:360,fixed:"right"}
+    {title: '操作', toolbar: '#bar_employee',width:400,fixed:"right"}
 ]];
 
 //外派员工管理字段集合
 var columns_employee_expatriate = [[
-    {type:'checkbox'},
+    {fixed: 'left', type: 'checkbox'},
     {field:'cardId', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
     {field:'degree', title: '学历',width:100,templet:function (d) { return array_value2text(degrees_employee,d.degree) }},
