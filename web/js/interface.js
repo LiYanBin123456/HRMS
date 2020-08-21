@@ -534,7 +534,7 @@ var InterfaceEmployee = function () {
      * @param fail
      */
     this.leave = function (id,reason,date,category,success,fail) {
-        var para = {op: "leave",reason:JSON.stringify(reason),id:id,date:date, category:category};
+        var para = {op: "leave",reason:reason,id:id,date:date, category:category};
         access(url,para,1,success,fail);
     };
     /**
