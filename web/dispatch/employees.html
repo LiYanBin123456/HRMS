@@ -94,7 +94,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"name",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -134,18 +134,18 @@
                 var cols;
                 var top_bar;
                 switch(Number(category)){
-                    case 0:
+                    case 0://内部员工
                         cols = columns_employee_internal;
                         top_bar = '#top_bar_internal';
                         break;
-                    case 1:
+                    case 1://外派员工
                         cols = columns_employee_expatriate;
                         top_bar = '#top_bar_expatriate';
                         break;
-                    case 2:
+                    case 2://人才库
                         cols = columns_employee_spare;
                         break;
-                };
+                }
 
 
                 //初始化数据表格
@@ -191,18 +191,13 @@
                         case 'search':
                             search();
                             break;
-                    };
+                    }
                 });
 
                 getEmployees();
             }
 
             function getEmployees() {
-                /*var result = {total:100,rows:[{id:1,serial:"1",cardld:"360402197701233645",name:"赵阳",phone:"15986888888",degree:"大专",school:"科技中专",time:"2017-8-10",household:"本地城镇",address:"江西省九江市湖口镇",entry:"2017-12-10",status:"在职",department:"客户一部",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"200",rent:"1000元",bank:"建设银行",bankNo:"365982546525",cardNo:"6259536541526524"},{id:2,serial:"2",cardld:"360402197701233645",name:"李斌",phone:"15368425987",degree:"本科",school:"科技大学",time:"2017-8-10",household:"本地城镇",address:"江西省九江市湖口镇",entry:"2017-12-10",status:"在职",department:"财务部",post:"职员",children:"500元",oldman:"500元",continue:"1000元",medical:"1000元",interest:"200",rent:"1000元",bank:"建设银行",bankNo:"365982546525",cardNo:"6259536541526524"}]};
-                table.reload('tbl_employee', {
-                    data:result.rows
-                });*/
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
                 iEmployee.getList(param_query,0,function (result) {
                     table.reload('tbl_employee', {
                         data:result.rows
@@ -233,7 +228,7 @@
 
             //打开详情对话框
             function showDetailDlg(employee) {
-                var content = "../dialog/employee.html?employee="+encodeURIComponent(JSON.stringify(employee));
+                var content = "../dialog/employee.html?id="+employee.id;
                 layer.open({
                     title:"内部员工详情",
                     type: 2,
@@ -243,19 +238,19 @@
             }
 
             //打开离职对话框
-            function showDimissionDlg() {
-                var content = "../dialog/dismiss.html";
+            function showDimissionDlg(employee) {
+                var content = "../dialog/dismiss.html?id="+employee.id;
                 layer.open({
                     title:"离职",
                     type: 2,
-                    area: ['400px', '300px'],
+                    area: ['450px', '350px'],
                     content: content
                 });
             }
 
             //打开退休对话框
-            function showRetireDlg() {
-                var content = "../dialog/retire.html";
+            function showRetireDlg(employee) {
+                var content = "../dialog/retire.html?id="+employee.id;
                 layer.open({
                     title:"退休",
                     type: 2,
