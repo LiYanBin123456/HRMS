@@ -199,7 +199,7 @@
             //删除公告
             function del(data) {
                 var start = format_date(data.start);
-                var city = getCityText3(data.city);
+                var city = getCityText4(data.city);
                 layer.confirm('确定删除'+'   '+city+'    '+start+'   '+'的医保规则', {icon: 3, title:'删除公告'}, function(index){
                     iRule.delete(data.id,0,function () {
                         layer.close(index);

@@ -110,7 +110,6 @@
                 table.render({
                     elem: '#tbl_fund',
                     toolbar: '#top_bar_fund', //开启头部工具栏，并为其绑定左侧模板
-
                     title: '公积金列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                     cols: columns_fund,
@@ -199,7 +198,7 @@
             //删除公告
             function del(data) {
                  var start = format_date(data.start);
-                 var city = getCityText3(data.city);
+                 var city = getCityText4(data.city);
                 layer.confirm('确定删除'+'   '+city+'    '+start+'   '+'的公积金规则', {icon: 3, title:'删除'}, function(index){
                     iRule.delete(data.id,2,function () {
                         layer.close(index);

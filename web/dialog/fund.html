@@ -155,7 +155,7 @@
             var fund = JSON.parse(param);
             fund.start = format_date(fund.start);
             form.val('form_fund', fund);
-            var city = getCityText3(fund.city);
+            var city = getCityText4(fund.city);
             cityPicker.setValue(city);
             layedit.setContent(editer, fund.content, false);
             op = "update";
