@@ -15,7 +15,7 @@ var columns_dispatch = [[
 
 //医保规则字段集合
 var columns_medicare = [[
-    {field:'city', title: '所属城市',width:150,templet:function (d) {return getCityText3(d.city)}},
+    {field:'city', title: '所属城市',width:150,templet:function (d) {return getCityText4(d.city)}},
     {field:'start', title: '生效时间',width:100,templet:function (d) {return format_date(d.start)}},
     {field:'base', title: '基数',width:80},
     {field:'per1', title: '医疗单位比例',width:105,templet:function (d) {return format_percent(d.per1)}},
@@ -28,7 +28,7 @@ var columns_medicare = [[
 
 //社保规则字段集合
 var columns_social = [[
-    {field:'city', title: '所属城市',width:150,templet:function (d) {return getCityText3(d.city)}},
+    {field:'city', title: '所属城市',width:150,templet:function (d) {return getCityText4(d.city)}},
     {field:'start', title: '生效时间',width:100,templet:function (d) {return format_date(d.start)}},
     {field:'base', title: '基数',width:80},
     {field:'per1', title: '养老单位比例',width:105,templet:function (d) {return format_percent(d.per1)}},
@@ -42,7 +42,7 @@ var columns_social = [[
 
 //公积金规则字段集合
 var columns_fund = [[
-    {field:'city', title: '所属城市',width:150,templet:function (d) {return getCityText3(d.city)}},
+    {field:'city', title: '所属城市',width:150,templet:function (d) {return getCityText4(d.city)}},
     {field:'start', title: '生效时间',width:100,templet:function (d) {return format_date(d.start)}},
     {field:'min', title: '基金下限',width:80},
     {field:'max', title: '基金上限',width:80},
