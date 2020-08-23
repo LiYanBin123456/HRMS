@@ -287,21 +287,29 @@
                     content: '确认要聘用'+employee.name+"吗,是内部聘用还是外派聘用？"
                     ,btn: ['内部聘用', '外派聘用']
                     ,yes: function(index, layero){
-                        enroll(employee.id,0);
+                        employ(employee.id,0);
                     }
                     ,btn2: function(index, layero){
-                        enroll(employee.id,1);
+                        employ(employee.id,1);
                     }
                 });
-
-                function enroll(eid,category) {
-                    layer.msg("聘用,eid:"+eid+",category:"+category);
+                function employ(eid,category) {
+                    layer.confirm('确定要聘用吗？', {icon: 3, title:'聘用'}, function(index){
+                        iEmployee.employ(eid,category,function () {
+                            layer.close(index);
+                            layer.msg('聘用成功');
+                        })
+                    });
                 }
             }
 
-            //打开银行选择对话框
+            //打开派遣对话框
             function showSelectCooperationDlg() {
                 var employees = table.checkStatus('tbl_employee').data;
+                if(employees.length<1){
+                    layer.msg("请至少选择一个员工进行操作");
+                    return;
+                }
                 layer.open({
                     title:"派遣至",
                     type: 2,
@@ -319,12 +327,14 @@
                 });
             }
 
-            function dispatch(employees,cooperation) {
+            function dispatch(employees,cooperation){
                 var msg = "确认将选中的"+employees.length+"个员工派遣至"+cooperation.name+"?";
                 layer.confirm(msg, {icon: 3, title:'批量派遣'}, function(index){
-                    //do something
-
-                    layer.close(index);
+                    var ids = getKeyArray(employees,"id");
+                    iEmployee.dispatch(ids,cooperation.id,function () {
+                        layer.close(index);
+                        layer.msg('派遣成功');
+                    })
                 });
             }
 
