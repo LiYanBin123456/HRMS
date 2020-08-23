@@ -56,7 +56,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -100,7 +100,6 @@
                 table.render({
                     elem: '#tbl_deduct',
                     toolbar: '#top_bar_deduct', //开启头部工具栏，并为其绑定左侧模板
-
                     title: '列表',
                     cols: columns_deduct,
                     id: 'tbl_deduct'
@@ -125,20 +124,14 @@
                         case 'search':
                             search();
                             break;
-                    };
+                    }
                 });
-
                 getDeducts();
             }
 
             function getDeducts() {
-                var result = {total:100,rows:[{cardId:"3604021198501233645",name:"赵阳",deduct1:"200",deduct2:"180",deduct3:"0",deduct4:"700",deduct5:"0",deduct6:"500"},{cardId:"3604021198501233645",name:"李斌",deduct1:"150",deduct2:"220",deduct3:"50",deduct4:"0",deduct5:"500",deduct6:"0"}]};
-                table.reload('tbl_deduct', {
-                    data:result.rows
-                });
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
-                    table.reload('tbl_notice', {
+                iEmployee.getDeducts(param_query,function (result) {
+                    table.reload('tbl_deduct', {
                         data:result.rows
                     });
                     //初始化分页
@@ -156,7 +149,7 @@
                             }
                         }
                     });
-                });*/
+                });
             }
 
             //模糊查找
@@ -164,11 +157,10 @@
                 param_query.conditions.extra = keyword;
                 getDeducts();
             }
-            
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/deduct.html";
+                var content = "../dialog/deduct.html?";
                 layer.open({
                     title:"添加",
                     type: 2,
@@ -179,8 +171,8 @@
 
             //删除
             function del(deduct) {
-                layer.confirm('确定删除'+deduct.unit+'小时工结算单那', {icon: 3, title:'删除'}, function(index){
-                    iSalsry.delete(deduct.id,function () {
+                layer.confirm('确定删除'+deduct.name+'的员工个税?', {icon: 3, title:'删除'}, function(index){
+                    iEmployee.deleteDeduct(deduct.eid,function () {
                         layer.close(index);
                         getDeducts();
                         layer.msg('删除成功');
