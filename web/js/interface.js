@@ -669,6 +669,26 @@ var InterfaceEmployee = function () {
         var para = {op: "employ",id:id,category:category};
         access(url,para,1,success,fail);
     };
+    /**
+     * 获取个税扣除列表
+     * @param param 查询参数
+     * @param success
+     * @param fail
+     */
+    this.getDeducts = function (param,success,fail) {
+        var para = {op:"getDeducts",param:JSON.stringify(param)};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 删除员工个税
+     * @param id 员工id
+     * @param success
+     * @param fail
+     */
+    this.deleteDeduct = function (id,success,fail) {
+        var para = {op:"deleteDeduct",id:id};
+        access(url,para,0,success,fail);
+    };
 };
 
 //结算单管理相关接口
