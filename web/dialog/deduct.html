@@ -21,16 +21,17 @@
         <form lay-filter="form_deduct" class="layui-form">
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
-                            <span class="x-red">*</span>身份证号</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="ID" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
                             <span class="x-red">*</span>姓名</label>
                         <div class="layui-input-inline">
-                            <input type="text"  name="name" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+                            <select id="select_name" lay-filter="filter_name"></select>
+                        </div>
                     </div>
+                    <div class="layui-form-item">
+                <label  class="layui-form-label">
+                    <span class="x-red">*</span>身份证号</label>
+                <div class="layui-input-inline">
+                    <input type="text"  name="ID" required="" lay-verify="nikename" autocomplete="off" class="layui-input"></div>
+            </div>
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
                             <span class="x-red">*</span>子女教育</label>
@@ -67,15 +68,16 @@
                         <div class="layui-input-inline">
                             <input type="text"  name="deduct6" required="" autocomplete="off" class="layui-input"></div>
                         </div>
-               <div class="layui-form-item">
-                        <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">保存</button></div>
+                    <div class="layui-form-item">
+                        <button type="button" class="layui-btn" onclick="save()" >保存</button>
+                    </div>
         </form>
 </body>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
+<script src="../layui/layui.js"></script>
 <script>
-    var op = "insert";
     var form;//表单对象
 
     loadLayuiModule();
@@ -83,43 +85,33 @@
     function loadLayuiModule() {
         layui.use(['form','jquery'], function () {
             form = layui.form;
-            initData();
+        });
+        initNameList();
+    }
+
+    function initNameList() {
+        iEmployee.getList({},0,function (result) {
+            var employees = result.rows;
+            var select_name = $("#select_name");
+            select_name.append("<option value='-1' selected disabled hidden>请选择姓名</option>");
+            for (var i in employees) {
+                var employee = employees[i];
+                var option = $("<option>").val(employee.id).text(employee.name);
+                select_name.append(option);
+            }
+            form.render('select', 'form_deduct');
         });
     }
 
-    function initData() {
-        var param = $.query.get("deduct");
-        if (param) {
-            var deduct = JSON.parse(param);
-            form.val('form_deduct', deduct);
-            layedit.setContent(editer, deduct.content, false);
-            op = "update";
-        }
-    }
-
     function save() {
-        var notice = form.val('form_deduct');
-        if(op == "insert") {
-            iInternalstaff.insert(internalstaff, onInsertSuccess);
-        }else{
-            iInternalstaff.update(internalstaff,onUpdateSuccess);
-        }
-
+        var deduct = form.val('form_deduct');
+        iEmployee.insertDeduct(deduct,onInsertSuccess);
         function onInsertSuccess() {
-            layer.alert("添加成功", {icon: 6}, refresh());
-        }
-
-        function onUpdateSuccess() {
-            layer.alert("修改成功", {icon: 6}, refresh());
-        }
-
-        function refresh() {
-            // 获得frame索引
-            var index = parent.layer.getFrameIndex(window.name);
-            //关闭当前frame
-            parent.layer.close(index);
-            //修改成功后刷新父界面
-            window.parent.location.reload();
+            layer.alert("添加成功", {icon: 6,time:2000},function () {
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.location.reload();
+            });
         }
     }
 </script>
