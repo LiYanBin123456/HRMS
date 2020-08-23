@@ -31,6 +31,7 @@
     <div class="layui-tab-content">
         <div class="layui-tab-item layui-show">
             <form lay-filter="form_expatriate" class="layui-form">
+                <input type="hidden" name="id">
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>档案编号</label>
@@ -148,6 +149,7 @@
         </div>
         <div class="layui-tab-item">
             <form lay-filter="form_security" class="layui-form">
+                <input type="hidden" name="eid">
                 <div class="layui-form-item">
                     <label class="layui-form-label"><span class="x-red"></span>社保所在地</label>
                     <div class="layui-input-block">
@@ -162,7 +164,7 @@
                                 <input type="radio" lay-filter="settingM" name="settingM" value="0" title="最低标准" checked>
                                 <input type="radio" lay-filter="settingM" name="settingM" value="1" title="实际工资">
                                 <input type="radio" lay-filter="settingM" name="settingM" value="2" title="不缴纳">
-                                <input type="radio" lay-filter="settingM" name="settingM" value="3" title="自定义基数">
+                                <input type="radio" lay-filter="settingM" name="settingM" value="3" title="自定义基数" onclick="getLast()">
                             </div>
                             <div class="layui-inline layui-hide" name="m1">
                                 <input type="text" name="valM" required="" placeholder="自定义基数" autocomplete="off" class="layui-input ">
@@ -219,6 +221,7 @@
         </div>
         <div class="layui-tab-item">
             <form lay-filter="form_deduct" class="layui-form">
+                <input type="hidden" name="eid">
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>子女教育</label>
@@ -260,12 +263,13 @@
                         <input type="text" name="deduct6" required="" autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
-                    <button class="layui-btn" onclick="save_deduct()">保存</button>
+                    <button type="button" class="layui-btn" onclick="save_deduct()">保存</button>
                 </div>
             </form>
         </div>
         <div class="layui-tab-item">
             <form lay-filter="form_salary_card" class="layui-form">
+                <input type="hidden" name="eid">
                 <div class="layui-form-item">
                     <label class="layui-form-label"><span class="x-red">*</span>选择发行卡</label>
                     <div class="layui-input-inline">
@@ -299,7 +303,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <button class="layui-btn" onclick="save_card()">保存</button>
+                    <button type="button" class="layui-btn" onclick="save_card()">保存</button>
                 </div>
             </form>
         </div>
