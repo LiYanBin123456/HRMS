@@ -19,7 +19,7 @@
     <![endif]-->
 </head>
 <body>
-<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+<div class="layui-tab layui-tab-brief" lay-filter="tab_contracts">
     <ul class="layui-tab-title">
         <li class="layui-this">基础信息</li>
         <li>服务项目</li>
@@ -70,13 +70,13 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <button type="button" class="layui-btn layui-btn-fluid" onclick="save()" >保存</button>
+                    <button type="button" class="layui-btn layui-btn-fluid" onclick="save_contract()" >保存</button>
                 </div>
             </form>
         </div>
         <div class="layui-tab-item">
             <form lay-filter="form_service" class="layui-form">
-                <input type='hidden' name='id'/>
+                <input type='hidden' name='cid' />
                 <div class="layui-form-item">
                     <label class="layui-form-label"><span class="x-red">*</span>服务项目</label>
                     <div class="layui-input-inline">
@@ -150,7 +150,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <button ltype="button" class="layui-btn layui-btn-fluid" onclick="save()">保存</button>
+                    <button ltype="button" class="layui-btn layui-btn-fluid" onclick="save_service()">保存</button>
                 </div>
             </form>
         </div>
@@ -190,6 +190,21 @@
                 }
             });
             initPage();
+            initTab();
+            get();
+        });
+    }
+
+    function initTab() {
+        element.on('tab(tab_contracts)', function(data) {
+            switch (data.index) {
+                case 0:
+                    get();//获取合同基础信息
+                    break;
+                case 1:
+                    getService();//获取合同服务项目
+                    break;
+            }
         });
     }
 
@@ -224,25 +239,32 @@
 
             }; //得到被选中的值
         });
-        initData();
     }
 
-    function initData() {
-        var param = $.query.get("contract");
-        if (param) {
-            var contract = JSON.parse(param);
+    var id = $.query.get("id");
+    function get() {
+        iContract.get(id,function (result) {
+            var contract = result.data;
             form.val('form_contract', contract);
             layedit.setContent(editer, contract.content, false);
             op = "update";
-        }
-
+        })
     }
 
-    function save() {
+    function getService () {
+        iContract.getService(id,function (result) {
+            var data = result.data;
+            form.val('form_service',data);
+            layedit.setContent(editer, data.content, false);
+            op = "update";
+        })
+    }
+
+    function save_contract() {
         var contract = form.val('form_contract');
-        if(op == "insert") {
+        if (op == "insert") {
             iContract.insert(contract, onInsertSuccess);
-        }else{
+        } else {
             iContract.update(contract,onUpdateSuccess);
         }
 
@@ -253,15 +275,32 @@
         function onUpdateSuccess() {
             layer.alert("修改成功", {icon: 6}, refresh());
         }
+    }
 
-        function refresh() {
-            // 获得frame索引
-            var index = parent.layer.getFrameIndex(window.name);
-            //关闭当前frame
-            parent.layer.close(index);
-            //修改成功后刷新父界面
-            window.parent.location.reload();
+    function save_service() {
+        var serve = form.val('form_service');
+        if (op == "insert") {
+            iContract.insertService(serve, onInsertSuccess);
+        } else {
+            iContract.updateService(serve,onUpdateSuccess);
         }
+
+        function onInsertSuccess() {
+            layer.alert("添加成功", {icon: 6}, refresh());
+        }
+
+        function onUpdateSuccess() {
+            layer.alert("修改成功", {icon: 6}, refresh());
+        }
+    }
+
+    function refresh() {
+        // 获得frame索引
+        var index = parent.layer.getFrameIndex(window.name);
+        //关闭当前frame
+        parent.layer.close(index);
+        //修改成功后刷新父界面
+        window.parent.location.reload();
     }
 </script>
 
