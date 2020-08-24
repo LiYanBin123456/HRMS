@@ -29,5 +29,10 @@ public class SettingDao {
         return  DbUtil.insert(conn,sql,params);
     }
 
-
+    //判断是否已经存在
+    public static DaoExistResult exist(Connection conn, long id){
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("eid","=",id);
+        return DbUtil.exist(conn,"ensureSetting",conditions);
+    }
 }

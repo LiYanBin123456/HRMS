@@ -1,6 +1,7 @@
 package service.employee;
 
 import bean.employee.PayCard;
+import dao.employee.ExtraDao;
 import dao.employee.PayCardDao;
 import database.DaoQueryResult;
 import database.DaoUpdateResult;
@@ -20,7 +21,13 @@ public class PayCardService {
 
     //增加
     public static DaoUpdateResult insert(Connection conn, PayCard payCard) {
-        return PayCardDao.insert(conn,payCard);
+        DaoUpdateResult result = null;
+        if(!PayCardDao.exist(conn,payCard.getEid()).exist){
+            result = PayCardDao.insert(conn,payCard);
+        }else {
+            result.msg = "该员工的工资卡已存在，请勿重复添加";
+        }
+        return result;
     }
 
 }

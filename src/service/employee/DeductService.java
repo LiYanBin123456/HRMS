@@ -24,7 +24,13 @@ public class DeductService {
 
     //增加
     public static DaoUpdateResult insert(Connection conn, Deduct deduct) {
-        return DeductDao.insert(conn,deduct);
+        DaoUpdateResult result = null;
+        if(!DeductDao.exist(conn,deduct.getEid()).exist){
+           result = DeductDao.insert(conn,deduct);
+        }else {
+            result.msg = "该员工个税已存在，请勿重复添加";
+        }
+        return result;
     }
 
     //列表查询

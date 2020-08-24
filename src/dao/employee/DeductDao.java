@@ -37,10 +37,18 @@ public class DeductDao {
         return DbUtil.getList(conn,"view_deduct",param, ViewDeduct.class);
     }
 
+    //删除
     public static DaoUpdateResult delete(Connection conn,long id){
         QueryConditions conditions = new QueryConditions();
         conditions.add("eid","=",id);
         return DbUtil.delete(conn,"deduct",conditions);
+    }
+
+    //判断是否已经存在
+    public static DaoExistResult exist(Connection conn, long id){
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("eid","=",id);
+       return DbUtil.exist(conn,"deduct",conditions);
     }
 
 }

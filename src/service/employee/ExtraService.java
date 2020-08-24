@@ -28,7 +28,13 @@ public class ExtraService {
 
     //增加
     public static DaoUpdateResult insert(Connection conn, EmployeeExtra extra) {
-        return ExtraDao.insert(conn,extra);
+        DaoUpdateResult result = null;
+        if(!ExtraDao.exist(conn,extra.getEid()).exist){
+           result = ExtraDao.insert(conn,extra);
+        }else {
+            result.msg = "该员工的补充信息已存在，请勿重复添加";
+        }
+        return result;
     }
 
     //批量插入

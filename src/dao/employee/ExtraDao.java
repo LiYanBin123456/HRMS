@@ -62,4 +62,11 @@ public class ExtraDao {
         return res;
     }
 
+    //判断是否已经存在
+    public static DaoExistResult exist(Connection conn, long id){
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("eid","=",id);
+        return DbUtil.exist(conn,"employee_extra",conditions);
+    }
+
 }

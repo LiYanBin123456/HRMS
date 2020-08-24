@@ -1,10 +1,7 @@
 package dao.employee;
 
 import bean.employee.PayCard;
-import database.DaoQueryResult;
-import database.DaoUpdateResult;
-import database.DbUtil;
-import database.QueryConditions;
+import database.*;
 
 import java.sql.Connection;
 
@@ -28,6 +25,13 @@ public class PayCardDao {
         String sql = "insert into payCard (eid,bank1,bank2,bankNo,cardNo) values (?,?,?,?,?)";
         Object []params = {p.getEid(),p.getBank1(),p.getBank2(),p.getBankNo(),p.getCardNo()};
         return  DbUtil.update(conn,sql,params);
+    }
+
+    //判断是否已经存在
+    public static DaoExistResult exist(Connection conn, long id){
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("eid","=",id);
+        return DbUtil.exist(conn,"payCard",conditions);
     }
 
 }

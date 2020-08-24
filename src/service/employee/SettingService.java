@@ -22,7 +22,13 @@ public class SettingService {
 
     //增加
     public static DaoUpdateResult insert(Connection conn, EnsureSetting setting) {
-        return SettingDao.insert(conn,setting);
+        DaoUpdateResult result = null;
+        if(!SettingDao.exist(conn,setting.getEid()).exist){
+            result = SettingDao.insert(conn,setting);
+        }else{
+            result.msg = "该员工社保设置已存在，请勿宠物添加";
+        }
+        return result;
     }
 
 
