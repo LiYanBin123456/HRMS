@@ -71,8 +71,12 @@ public class AccountServlet extends HttpServlet {
         if(account!=null){
             if(account.getPassword().equals(password)){
                 res.msg ="账号密码正确";
-                request.getSession().setAttribute("Account", account);
                 res.success=true;
+                request.getSession().setAttribute("id", account.getId());
+                request.getSession().setAttribute("nickname", account.getNickname());
+                request.getSession().setAttribute("role", account.getRole());
+                request.getSession().setAttribute("rid", account.getRid());
+                request.getSession().setAttribute("permission", account.getPermission());
                 return JSONObject.toJSONString(res);
             }else {
                 res.msg="密码错误";

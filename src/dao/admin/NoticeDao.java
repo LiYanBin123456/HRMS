@@ -8,6 +8,9 @@ import java.sql.Connection;
 public class NoticeDao {
 
     public static DaoQueryListResult getList(Connection conn, QueryParameter param){
+        if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
+            param.addCondition("title","like",param.conditions.extra);
+        }
         return DbUtil.getList(conn,"notice",param, Notice.class);
     }
 

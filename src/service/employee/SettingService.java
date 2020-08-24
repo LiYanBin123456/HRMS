@@ -26,7 +26,7 @@ public class SettingService {
         if(!SettingDao.exist(conn,setting.getEid()).exist){
             result = SettingDao.insert(conn,setting);
         }else{
-            result.msg = "该员工社保设置已存在，请勿宠物添加";
+            result.msg = "该员工社保设置已存在，请勿重复添加";
         }
         return result;
     }

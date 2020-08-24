@@ -29,6 +29,7 @@ public class XlsUtil {
             e.printStackTrace();
         }
     }
+
     /**
      * 读取xls文件数据
      * @param is 文件输入流
@@ -44,8 +45,6 @@ public class XlsUtil {
             e.printStackTrace();
             return null;
         }
-
-
         //读取元数据（表格结构数据）
         Sheet sheet_meta = workbook.getSheet(sheetName_meta);
         if(null == sheet_meta){
