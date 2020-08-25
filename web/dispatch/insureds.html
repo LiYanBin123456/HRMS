@@ -93,7 +93,7 @@
             var layer;//弹出窗口
             var element;
             var upload;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"start",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -241,9 +241,9 @@
                 });
             }
             //删除
-            function del(insured) {
+            function del(insured,employee) {
                 layer.confirm('确定删除'+insured.title, {icon: 3, title:'删除公告'}, function(index){
-                    iInsurance.delete(insured.id,0,function () {
+                    iInsurance.delete(insured.eid,0,function () {
                         layer.close(index);
                         getInsureds();
                         layer.msg('删除成功');

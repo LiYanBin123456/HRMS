@@ -152,6 +152,7 @@
 
                 //顶部工具栏事件处理
                 table.on('toolbar(filter_tb_settlement)', function(obj){
+                    var settlement = table.checkStatus('tbl_settlement').data;
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
@@ -163,13 +164,13 @@
                             save();
                             break;
                         case 'submit':
-                            submit();
+                            submit(settlement);
                             break;
                         case 'reset':
-                            reset();
+                            reset(settlement);
                             break;
                         case 'charge':
-                            charge();
+                            charge(settlement);
                             break;
                         case 'search':
                             search();
@@ -315,31 +316,29 @@
             }
 
             //提交结算单
-            function submit(settlement,account) {
+            function submit(settlement) {
                 layer.confirm('提交后结算单将被设置为[提交]状态，确认提交吗？', {icon: 3, title:'提交结算单'}, function(index){
-                    iSettlement.commit(0,settlement.id,account.aid,function () {
+                    iSettlement.commit(settlement.id,0,function () {
                         layer.close(index);
                         layer.msg('提交成功');
-
                 });
                 });
             }
 
             //重置结算单
-            function reset(settlement,account) {
+            function reset(settlement) {
                 layer.confirm('重置后结算单将被强制设置为[编辑]状态，确认重置结算单吗？', {icon: 3, title:'重置结算单'}, function(index){
-                    iSettlement.reset(0,settlement.id,account.aid,function () {
+                    iSettlement.reset(settlement.id,0,function () {
                         layer.close(index);
                         layer.msg('重置成功');
-
                     });
                 });
             }
 
             //扣款
-            function charge() {
+            function charge(settlement) {
                 layer.confirm('确认执行扣款？', {icon: 3, title:'扣款'}, function(index){
-                    iSettlement.deduct(settlement1.id,aid,0,function () {
+                    iSettlement.deduct(settlement.id,0,function () {
                         layer.close(index);
                         getSettlements();
                         layer.msg('扣款成功');

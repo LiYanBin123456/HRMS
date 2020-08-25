@@ -810,62 +810,57 @@ var InterfaceSettlement = function () {
     /**
      * 提交结算单
      * @param id 结算单id
-     * @param aid 管理员id
      * @param category 0-普通结算单 1-小时工结算单 2-商业保险结算单
      * @param success
      * @param fail
      */
-    this.commit = function (id,aid,category,success,fail) {
-        var para = {op: "commit",id:id,aid:aid, category:category};
+    this.commit = function (id,category,success,fail) {
+        var para = {op: "commit",id:id, category:category};
         access(url,para,1,success,fail);
     };
     /**
      * 审核结算单
      * @param id 结算单id
-     * @param aid 管理员id
      * @param category 0-普通结算单 1-小时工结算单 2-商业保险结算单
      * @param status 2-一审 3-二审 4-终审
      * @param success
      * @param fail
      */
-    this.check = function (id,aid,category,status,success,fail) {
-        var para = {op: "check",id:id,aid:aid, category:category,status:status};
+    this.check = function (id,category,status,success,fail) {
+        var para = {op: "check",id:id, category:category,status:status};
         access(url,para,1,success,fail);
     };
     /**
      * 重置结算单
      * @param id 结算单id
-     * @param aid 管理员id
      * @param category 0-结算单 1-小时工结算单
      * @param success
      * @param fail
      */
-    this.reset = function (id,aid,category,success,fail) {
-        var para = {op: "reset",id:id,aid:aid, category:category};
+    this.reset = function (id,category,success,fail) {
+        var para = {op: "reset",id:id, category:category};
         access(url,para,1,success,fail);
     };
     /**
      * 扣款
      * @param id 结算单id
-     * @param aid 管理员id
      * @param category 0-结算单 1-小时工结算单
      * @param success
      * @param fail
      */
-    this.deduct = function (id,aid,category,success,fail) {
-        var para = {op: "deduct",id:id,aid:aid, category:category};
+    this.deduct = function (id,category,success,fail) {
+        var para = {op: "deduct",id:id, category:category};
         access(url,para,1,success,fail);
     };
     /**
      * 发放工资
      * @param id 结算单id
-     * @param aid 管理员id
      * @param category 0-结算单 1-小时工结算单
      * @param success
      * @param fail
      */
-    this.confirm = function (id,aid,category,success,fail) {
-        var para = {op: "confirm",id:id,aid:aid, category:category};
+    this.confirm = function (id,category,success,fail) {
+        var para = {op: "confirm",id:id, category:category};
         access(url,para,1,success,fail);
     };
     /**

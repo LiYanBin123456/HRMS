@@ -52,7 +52,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -77,20 +77,6 @@
             }
 
             function initTable() {
-                //初始化分页
-                laypage.render({
-                    elem: 'pager'
-                    ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
-                            getMember();
-                        }
-                    }
-                });
 
                 //初始化数据表格
                 table.render({
@@ -115,22 +101,43 @@
           }
 
             function getMember() {
-                var result = {total:100,rows:[{cardld:"360402199008230081",name:"赵阳",unit:"江西制氧机械"},{cardld:"360402199008230081",name:"李斌",unit:"九江石化"}]};
+                /*var result = {total:100,rows:[{cardld:"360402199008230081",name:"赵阳",unit:"江西制氧机械"},{cardld:"360402199008230081",name:"李斌",unit:"九江石化"}]};
                 table.reload('tbl_member', {
                     data:result.rows
-                });
+                });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iCooperation.getList(param_query,function (result) {
+                iEmployee.getList(param_query,0,function (result) {
                     table.reload('tbl_member', {
                         data:result.rows
                     });
-                });*/
+                    laypage.render({
+                        elem: 'pager'
+                        ,curr: param_query.pagination.page
+                        ,count: result.total //数据总数
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                        ,jump: function(obj,first){
+                            //首次不执行
+                            if(!first){
+                                param_query.pagination.page = obj.curr;
+                                param_query.pagination.size = obj.limit;
+                                getMember();
+                            }
+                        }
+                    });
+                });
             }
 
             //添加参保
-            function add() {
+            function add(insurances) {
                 member = table.checkStatus('tbl_member').data;
                 //调用接口添加参保
+                layer.confirm( '确定删除',{icon: 3, title:'批量添加'}, function(index){
+                /*var insurances = getKeyArray(insurance,"insurance");*/
+                iInsurance.insertBatch(insurances,function () {
+                    layer.close(index);
+                    layer.msg('派遣成功');
+                });
+                });
             }
 
         </script>
