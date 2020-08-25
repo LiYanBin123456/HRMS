@@ -52,7 +52,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -84,20 +84,6 @@
 
             function initTable(mode) {
                 var cols = mode==0?columns_detail2_input:columns_detail2_full;
-                //初始化分页
-                laypage.render({
-                    elem: 'pager'
-                    ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
-                            getDetail2s();
-                        }
-                    }
-                });
 
                 //初始化数据表格
                 table.render({
@@ -139,16 +125,30 @@
           }
 
             function getDetail2s() {
-                var result = {total:100,rows:[{cardId:"360402199008230081",name:"张晓国",hours:"1000",price:"50",food:"100",traffic:"100",accommodation:"5000",utilities:"5000",insurance:"5000",tax:"5000",other1:"5000",other2:"5000",payable:"5000",paid:"5000"},{cardId:"360402199008230081",name:"宋丽",hours:"2000",price:"50",food:"600",accommodation:"12000",traffic:"100",utilities:"12000",insurance:"12000",tax:"12000",other1:"12000",other2:"12000",payable:"12000",paid:"12000"}]};
+                /*var result = {total:100,rows:[{cardId:"360402199008230081",name:"张晓国",hours:"1000",price:"50",food:"100",traffic:"100",accommodation:"5000",utilities:"5000",insurance:"5000",tax:"5000",other1:"5000",other2:"5000",payable:"5000",paid:"5000"},{cardId:"360402199008230081",name:"宋丽",hours:"2000",price:"50",food:"600",accommodation:"12000",traffic:"100",utilities:"12000",insurance:"12000",tax:"12000",other1:"12000",other2:"12000",payable:"12000",paid:"12000"}]};
                 table.reload('tbl_detail', {
                     data:result.rows
-                });
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
-                    table.reload('tbl_notice', {
+                });*/
+                iSettlement.getDetails(param_query,id,1,function (result) {
+                    table.reload('tbl_detail', {
                         data:result.rows
                     });
-                });*/
+                    //初始化分页
+                    laypage.render({
+                        elem: 'pager'
+                        ,curr:param_query.pagination.page
+                        ,count: result.total //数据总数
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                        ,jump: function(obj,first){
+                            //首次不执行
+                            if(!first){
+                                param_query.pagination.page = obj.curr;
+                                param_query.pagination.size = obj.limit;
+                                getDetail2s();
+                            }
+                        }
+                    });
+                });
             }
 
             //模糊查找

@@ -315,11 +315,10 @@
             }
 
             //提交结算单
-            function submit() {
+            function submit(settlement,account) {
                 layer.confirm('提交后结算单将被设置为[提交]状态，确认提交吗？', {icon: 3, title:'提交结算单'}, function(index){
-                    iSettlement.commit(id,aid,0,function () {
+                    iSettlement.commit(0,settlement.id,account.aid,function () {
                         layer.close(index);
-                        getSettlements();
                         layer.msg('提交成功');
 
                 });
@@ -327,11 +326,10 @@
             }
 
             //重置结算单
-            function reset() {
+            function reset(settlement,account) {
                 layer.confirm('重置后结算单将被强制设置为[编辑]状态，确认重置结算单吗？', {icon: 3, title:'重置结算单'}, function(index){
-                    iSettlement.reset(id,aid,0,function () {
+                    iSettlement.reset(0,settlement.id,account.aid,function () {
                         layer.close(index);
-                        getSettlements();
                         layer.msg('重置成功');
 
                     });

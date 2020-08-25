@@ -170,7 +170,7 @@
                 });
             }
 
-            //删除公告
+            //删除管理员
             function del(account) {
                 layer.confirm('确定删除管理员'+account.name, {icon: 3, title:'删除'}, function(index){
                     iNotice.delete(account.id,function () {

@@ -72,7 +72,7 @@
                 <button class="layui-btn layui-btn-sm" lay-event="add"><i class="layui-icon "></i> 添加</button>
                 <button class="layui-btn layui-btn-sm" lay-event="export0"><i class="layui-icon "></i> 导出新增</button>
                 <button class="layui-btn layui-btn-sm" lay-event="export1"><i class="layui-icon "></i> 导出停保</button>
-                <button type="button" class="layui-btn layui-btn-sm" lay-event=""  id="test1" ><i class="layui-icon "></i> 校对</button>
+                <button type="button" class="layui-btn layui-btn-sm" lay-event=""  id="" ><i class="layui-icon "></i> 校对</button>
             </div>
             <table id="tbl_insured" lay-filter="filter_tb_insured"></table>
             <div id="pager"></div>
@@ -93,7 +93,7 @@
             var layer;//弹出窗口
             var element;
             var upload;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"start",direction:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -141,20 +141,6 @@
             }
 
             function initTable() {
-                //初始化分页
-                laypage.render({
-                    elem: 'pager'
-                    ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
-                            getInsureds();
-                        }
-                    }
-                });
 
                 var cols;
                 var top_bar;
@@ -210,13 +196,9 @@
             }
 
             function getInsureds() {
-                var result = {total:100,rows:[{cardld:"360402199003230081",code:"",name:"张晓国",start:"2006-10",money:"5000",entry:"2006-10-22",status:"在保"},{cardld:"360403199212099812",code:"",name:"宋丽",start:"2015-03",money:"6000",entry:"2015-03-20",status:"新增"}]};
-                table.reload('tbl_insured', {
-                    data:result.rows
-                });
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iInsurance.getList(param_query,function (result) {
-                    table.reload('tbl_notice', {
+
+                iInsurance.getList(param_query,0,function (result) {
+                    table.reload('tbl_insured', {
                         data:result.rows
                     });
                     //初始化分页
@@ -234,7 +216,7 @@
                             }
                         }
                     });
-                });*/
+                });
             }
 
             //打开编辑对话框
@@ -261,7 +243,7 @@
             //删除
             function del(insured) {
                 layer.confirm('确定删除'+insured.title, {icon: 3, title:'删除公告'}, function(index){
-                    iInsurance.delete(insured.id,function () {
+                    iInsurance.delete(insured.id,0,function () {
                         layer.close(index);
                         getInsureds();
                         layer.msg('删除成功');

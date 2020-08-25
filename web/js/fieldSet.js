@@ -173,7 +173,7 @@ var columns_settlement10  = [[
 //小时工结算单字段集合
 var columns_settlement2  = [[
     {type:'checkbox',fixed:"left"},
-    {field:'client', title: '用工企业',width:180,fixed:"left"},
+    {field:'name', title: '用工企业',width:180,fixed:"left"},
     {field:'month', title: '月份',width:80},
     {field:'hours', title: '总工时',width:70},
     {field:'price', title: '单价',width:60},
