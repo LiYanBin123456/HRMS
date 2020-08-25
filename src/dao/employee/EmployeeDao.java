@@ -45,10 +45,16 @@ public class EmployeeDao {
     }
 
     //批量插入
-    public static DaoUpdateResult insertBatch(Connection conn, String[] employees) {
+    public static DaoUpdateResult insertBatch(Connection conn, List<Employee> employees) {
         String sql = "insert employee (did,cid,cardId,name,phone,degree,type,entry,status,department,post,category,price) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-        return  null;
+        Object [][]params = new Object[employees.size()][];
+        for (int i = 0; i < employees.size(); i++) {
+            params[i] = new Object[]{employees.get(i).getDid(),employees.get(i).getCid(),employees.get(i).getCardId(),employees.get(i).getName(),employees.get(i).getPhone(),
+                    employees.get(i).getDegree(),employees.get(i).getType(),employees.get(i).getEntry(),employees.get(i).getStatus(),employees.get(i).getDepartment(),employees.get(i).getPost(),
+                    employees.get(i).getCategory(),employees.get(i).getPrice()
+            };
+        }
+        return DbUtil.insertBatch(conn,sql,params);
     }
 
     //批量派遣

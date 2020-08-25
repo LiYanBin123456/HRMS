@@ -9,6 +9,7 @@ import database.QueryParameter;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.util.List;
 
 public class ExtraService {
     //获取列表
@@ -28,7 +29,7 @@ public class ExtraService {
 
     //增加
     public static DaoUpdateResult insert(Connection conn, EmployeeExtra extra) {
-        DaoUpdateResult result = null;
+        DaoUpdateResult result = new DaoUpdateResult();
         if(!ExtraDao.exist(conn,extra.getEid()).exist){
            result = ExtraDao.insert(conn,extra);
         }else {
@@ -38,7 +39,7 @@ public class ExtraService {
     }
 
     //批量插入
-    public static DaoUpdateResult insertBatch(Connection conn, String[] extras) {
+    public static DaoUpdateResult insertBatch(Connection conn, List<EmployeeExtra> extras) {
         return  ExtraDao.insertBatch(conn,extras);
     }
 

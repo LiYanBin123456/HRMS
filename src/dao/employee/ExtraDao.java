@@ -5,6 +5,7 @@ import database.*;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.util.List;
 
 public class ExtraDao {
     //获取列表
@@ -34,10 +35,15 @@ public class ExtraDao {
     }
 
     //批量插入
-    public static DaoUpdateResult insertBatch(Connection conn,String[] extras) {
+    public static DaoUpdateResult insertBatch(Connection conn,List<EmployeeExtra> e) {
         String sql = "insert employee_extra (eid,rid,school,major,household,address,date1,date2,reason) values (?,?,?,?,?,?,?,?,?)";
-
-        return  null;
+        Object [][]params = new Object[e.size()][];
+        for (int i = 0; i < e.size(); i++) {
+            params[i] = new Object[]{e.get(i).getEid(),e.get(i).getRid(),e.get(i).getSchool(),e.get(i).getMajor(),e.get(i).getHousehold(),e.get(i).getAddress(),
+                    e.get(i).getDate1(),e.get(i).getDate2(),e.get(i).getReason()
+            };
+        }
+        return DbUtil.insertBatch(conn,sql,params);
     }
 
     //离职或者退休

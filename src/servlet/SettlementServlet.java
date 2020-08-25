@@ -17,6 +17,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -24,6 +25,7 @@ import java.sql.Date;
 
 @WebServlet(name = "SettlementServlet",urlPatterns = "/settlement")
 public class SettlementServlet extends HttpServlet {
+
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request, response);
     }
@@ -34,6 +36,7 @@ public class SettlementServlet extends HttpServlet {
         String result = "";
         Connection conn = ConnUtil.getConnection();
         String op = request.getParameter("op");
+
 
         switch (op) {
 
@@ -212,9 +215,9 @@ public class SettlementServlet extends HttpServlet {
     }
 
     private String commit(Connection conn, HttpServletRequest request) {
+        Long aid = (Long) request.getSession().getAttribute("id");
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
-        long aid =  Long.parseLong(request.getParameter("aid"));
         DaoUpdateResult result = null;
         switch (category){
             case 0://普通结算单明细
@@ -233,7 +236,7 @@ public class SettlementServlet extends HttpServlet {
     private String check(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
-        long aid =  Long.parseLong(request.getParameter("aid"));
+        Long aid = (Long) request.getSession().getAttribute("id");
         byte status = Byte.parseByte(request.getParameter("status"));
         DaoUpdateResult result = null;
         switch (category){
@@ -253,7 +256,7 @@ public class SettlementServlet extends HttpServlet {
     private String reset(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
-        long aid =  Long.parseLong(request.getParameter("aid"));
+        Long aid = (Long) request.getSession().getAttribute("id");
         DaoUpdateResult result = null;
         switch (category){
             case 0://普通结算单明细
@@ -272,7 +275,7 @@ public class SettlementServlet extends HttpServlet {
     private String deduct(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
-        long aid =  Long.parseLong(request.getParameter("aid"));
+        Long aid = (Long) request.getSession().getAttribute("id");
         DaoUpdateResult result = null;
         switch (category){
             case 0://普通结算单明细
@@ -291,7 +294,7 @@ public class SettlementServlet extends HttpServlet {
     private String confirm(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
-        long aid =  Long.parseLong(request.getParameter("aid"));
+        Long aid = (Long) request.getSession().getAttribute("id");
         DaoUpdateResult result = null;
         switch (category){
             case 0://普通结算单明细

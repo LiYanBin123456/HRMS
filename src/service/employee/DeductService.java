@@ -1,8 +1,10 @@
 package service.employee;
 
 import bean.employee.Deduct;
+import bean.employee.Employee;
 import bean.employee.EnsureSetting;
 import dao.employee.DeductDao;
+import dao.employee.EmployeeDao;
 import dao.employee.SettingDao;
 import database.DaoQueryListResult;
 import database.DaoQueryResult;
@@ -10,6 +12,7 @@ import database.DaoUpdateResult;
 import database.QueryParameter;
 
 import java.sql.Connection;
+import java.util.List;
 
 //个人专项扣除service层
 public class DeductService {
@@ -24,11 +27,12 @@ public class DeductService {
 
     //增加
     public static DaoUpdateResult insert(Connection conn, Deduct deduct) {
-        DaoUpdateResult result = null;
+        DaoUpdateResult result = new DaoUpdateResult();
         if(!DeductDao.exist(conn,deduct.getEid()).exist){
            result = DeductDao.insert(conn,deduct);
         }else {
-            result.msg = "该员工个税已存在，请勿重复添加";
+            Employee employee = (Employee) EmployeeDao.get(conn,deduct.getEid()).data;
+            result.msg = "员工"+employee.getName()+"个税已存在，请勿重复添加";
         }
         return result;
     }
@@ -41,5 +45,18 @@ public class DeductService {
     //删除
     public static DaoUpdateResult delete(Connection conn,long id){
         return DeductDao.delete(conn,id);
+    }
+
+    public static DaoUpdateResult importDeducts(Connection conn, List<Deduct> deducts) {
+        DaoUpdateResult result = new DaoUpdateResult();
+        for (Deduct deduct:deducts){
+            if(!DeductDao.exist(conn,deduct.getEid()).exist){
+                result = DeductDao.importDeducts(conn,deducts);
+            }else {
+                Employee employee = (Employee) EmployeeDao.get(conn,deduct.getEid()).data;
+                result.msg = "员工"+employee.getName()+"个税已存在，请勿重复添加";
+            }
+        }
+        return result;
     }
 }

@@ -21,7 +21,7 @@ public class PayCardService {
 
     //增加
     public static DaoUpdateResult insert(Connection conn, PayCard payCard) {
-        DaoUpdateResult result = null;
+        DaoUpdateResult result = new DaoUpdateResult();
         if(!PayCardDao.exist(conn,payCard.getEid()).exist){
             result = PayCardDao.insert(conn,payCard);
         }else {

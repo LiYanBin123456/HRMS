@@ -22,7 +22,7 @@ public class SettingService {
 
     //增加
     public static DaoUpdateResult insert(Connection conn, EnsureSetting setting) {
-        DaoUpdateResult result = null;
+        DaoUpdateResult result = new DaoUpdateResult();
         if(!SettingDao.exist(conn,setting.getEid()).exist){
             result = SettingDao.insert(conn,setting);
         }else{

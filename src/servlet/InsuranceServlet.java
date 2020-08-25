@@ -3,6 +3,7 @@ package servlet;
 import bean.employee.Employee;
 import bean.employee.EmployeeExtra;
 import bean.insurance.Insurance;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.employee.EmployeeDao;
 import dao.employee.ExtraDao;
@@ -13,6 +14,7 @@ import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
+import service.insurance.InsuranceService;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 
 @WebServlet(name = "InsuranceServlet",urlPatterns = "/insurance")
@@ -54,12 +57,12 @@ public class InsuranceServlet extends HttpServlet {
             case "get"://获取参保单
                 result = get(conn,request);
                 break;
-            case "export"://导出参保单
-                export(conn,request,response);
-                return;
             case  "check"://校对参保单
                 result = check(conn,request);
                 break;
+            case "export"://导出参保单
+                export(conn,request,response);
+                return;
         }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
@@ -123,11 +126,9 @@ public class InsuranceServlet extends HttpServlet {
                 sheet1.addCell(new Label(1, 8, employee.getPhone()));
                 sheet1.addCell(new jxl.write.Number(1, 9, employeeExtra.getHousehold()));
                 sheet1.addCell(new Label(1, 10, employeeExtra.getAddress()));
-
                 //设置列宽
                 sheet1.setColumnView(0, 10);
                 sheet1.setColumnView(1, 30);
-
             /*sheet2.addCell(new Label(0,0,"报名编号"));
             sheet2.addCell(new Label(1,0,"报名时间"));
             sheet2.addCell(new Label(2,0,"身份证号"));
@@ -198,7 +199,9 @@ public class InsuranceServlet extends HttpServlet {
 
     //批量插入
     private String insertBatch(Connection conn, HttpServletRequest request) {
-      return  null;
+        List<Insurance> insurances = JSONArray.parseArray(request.getParameter("insurances"),Insurance.class);
+        DaoUpdateResult result = InsuranceService.insertBatch(conn,insurances);
+        return  JSONObject.toJSONString(result);
     }
 
 

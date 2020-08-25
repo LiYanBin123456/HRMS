@@ -1,7 +1,10 @@
 package servlet;
 
 import bean.employee.*;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
+import dao.employee.ExtraDao;
 import database.*;
 import service.employee.*;
 
@@ -14,6 +17,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Date;
+import java.util.List;
+import java.util.StringTokenizer;
 
 @WebServlet(name = "EmployeeServlet",urlPatterns = "/employee")
 public class EmployeeServlet extends HttpServlet {
@@ -162,7 +167,9 @@ public class EmployeeServlet extends HttpServlet {
 
     //导入个税扣除
     private String importDeducts(Connection conn, HttpServletRequest request) {
-        return  null;
+        List<Deduct> deducts = JSONArray.parseArray(request.getParameter("deducts"),Deduct.class);
+        DaoUpdateResult result = DeductService.importDeducts(conn,deducts);
+        return  JSONObject.toJSONString(result);
     }
 
     //获取员工列表
@@ -246,15 +253,18 @@ public class EmployeeServlet extends HttpServlet {
          * 4、批量插入员工补充信息
          */
         DaoUpdateResult res = null;
-        //Employee employee = JSONArray.parseObject(request.getParameter("employees"), Employee.class);
-        //System.out.println(employee);
-        String[] strings = request.getParameterValues("employees");
-        for(int i = 0;i<=strings.length-1;i++){
-            System.out.println(strings[i].toString());
+        List<Employee> employees = JSONArray.parseArray(request.getParameter("employees"),Employee.class);
+        List<EmployeeExtra> extracts = JSONArray.parseArray(request.getParameter("extracts"),EmployeeExtra.class);
+        for (Employee employee:employees){
+            System.out.println(employee);
         }
-        EmployeeService.insertBatch(conn,strings);
+        res=EmployeeService.insertBatch(conn,employees);
+        if(res.success){
+            String extras = JSONObject.toJSONString(res.extra);
+        }
         return  JSONObject.toJSONString(res);
     }
+
     //插入员工工资卡
     private String insertCard(Connection conn, HttpServletRequest request) {
         PayCard payCard = JSONObject.parseObject(request.getParameter("payCard"), PayCard.class);

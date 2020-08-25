@@ -9,6 +9,7 @@ import database.DaoUpdateResult;
 import database.QueryParameter;
 
 import java.sql.Connection;
+import java.util.List;
 
 
 public class EmployeeService {
@@ -38,7 +39,7 @@ public class EmployeeService {
     }
 
     //批量插入
-    public static DaoUpdateResult insertBatch(Connection conn, String[] employees) {
+    public static DaoUpdateResult insertBatch(Connection conn, List<Employee> employees) {
         return  EmployeeDao.insertBatch(conn,employees);
     }
 

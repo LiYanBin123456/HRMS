@@ -5,6 +5,7 @@ import bean.employee.ViewDeduct;
 import database.*;
 
 import java.sql.Connection;
+import java.util.List;
 
 //个人专项扣除dao层
 public class DeductDao {
@@ -51,4 +52,12 @@ public class DeductDao {
        return DbUtil.exist(conn,"deduct",conditions);
     }
 
+    public static DaoUpdateResult importDeducts(Connection conn, List<Deduct> d) {
+        String sql = "insert deduct (eid,deduct1,deduct2,deduct3,deduct4,deduct5,deduct6) values (?,?,?,?,?,?,?)";
+        Object [][]params = new Object[d.size()][];
+        for (int i = 0; i < d.size(); i++) {
+            params[i] = new Object[]{d.get(i).getEid(),d.get(i).getDeduct1(),d.get(i).getDeduct2(),d.get(i).getDeduct3(),d.get(i).getDeduct4(),d.get(i).getDeduct5(),d.get(i).getDeduct6()};
+        }
+        return DbUtil.insertBatch(conn,sql,params);
+    }
 }
