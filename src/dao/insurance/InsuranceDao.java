@@ -19,6 +19,11 @@ public class InsuranceDao {
         return DbUtil.getList(conn, "view_insurance", param, ViewInsurance.class);
     }
 
+    //获取列表
+    public static DaoQueryListResult getList(Connection conn, QueryParameter param) {
+        return DbUtil.getList(conn, "view_insurance", param, ViewInsurance.class);
+    }
+
     //获取
     public static DaoQueryResult get(Connection conn, QueryConditions conditions) {
         return DbUtil.get(conn, "view_insurance", conditions, ViewInsurance.class);
@@ -46,7 +51,7 @@ public class InsuranceDao {
     }
 
     //导出参保单
-    public static String export(Connection conn, byte category) {
+    public static String getArray(Connection conn, byte category) {
         return null;
     }
 

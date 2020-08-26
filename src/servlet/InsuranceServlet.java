@@ -1,12 +1,11 @@
 package servlet;
 
-import bean.employee.Employee;
-import bean.employee.EmployeeExtra;
+
 import bean.insurance.Insurance;
+import bean.insurance.ViewInsurance;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import dao.employee.EmployeeDao;
-import dao.employee.ExtraDao;
+
 import dao.insurance.InsuranceDao;
 import database.*;
 import jxl.Workbook;
@@ -24,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -83,76 +84,54 @@ public class InsuranceServlet extends HttpServlet {
         byte category = Byte.parseByte(request.getParameter("category"));
         byte status = Byte.parseByte(request.getParameter("status"));
 
-        Employee employee = null;
-        Insurance insurance = null;
-        EmployeeExtra employeeExtra = null;
-
-        //查询条件
-        QueryConditions conditions = new QueryConditions();
-        conditions.add("eid", "=", id);
-        conditions.add("type", "=", category);
-
-
-        employee = (Employee) EmployeeDao.get(conn, id).data;
-        employeeExtra = (EmployeeExtra) ExtraDao.get(conn, id).data;
-        insurance = (Insurance) InsuranceDao.get(conn, conditions).data;
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("type", "=", category);
+        parameter.addCondition("status","=",status);
+        DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
+        String rows = JSONObject.toJSONString(result.rows);
+        System.out.println(rows);
+        List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
             WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
             WritableSheet sheet1 = book.createSheet("导出员工参保单", 0);
-            //WritableSheet sheet2 = book.createSheet("明细", 1);
             try {
                 sheet1.addCell(new Label(0, 0, "姓名"));
-                sheet1.addCell(new Label(0, 1, "个人代码"));
-                sheet1.addCell(new Label(0, 2, "证件号码"));
-                sheet1.addCell(new Label(0, 3, "参保开始年月"));
-                sheet1.addCell(new Label(0, 4, "月缴费工资"));
-                sheet1.addCell(new Label(0, 5, "变更原因"));
-                sheet1.addCell(new Label(0, 6, "用工形式"));
-                sheet1.addCell(new Label(0, 7, "是否补收（不填表示否）"));
-                sheet1.addCell(new Label(0, 8, "参加工作时间"));
-                sheet1.addCell(new Label(0, 9, "联系电话"));
-                sheet1.addCell(new Label(0, 10, "户口性质"));
-                sheet1.addCell(new Label(0, 11, "户籍地址"));
-
-                sheet1.addCell(new Label(1, 0, employee.getName()));
-                sheet1.addCell(new Label(1, 1, insurance.getCode()));
-                sheet1.addCell(new Label(1, 2, employee.getCardId()));
-                sheet1.addCell(new Label(1, 3, sdf.format(insurance.getStart())));
-                sheet1.addCell(new jxl.write.Number(1, 4, insurance.getMoney()));
-                sheet1.addCell(new Label(1, 5, "正常参保登记"));
-                sheet1.addCell(new Label(1, 6, "合同制"));
-                sheet1.addCell(new Label(1, 7, "否"));
-                sheet1.addCell(new Label(1, 8, employee.getPhone()));
-                sheet1.addCell(new jxl.write.Number(1, 9, employeeExtra.getHousehold()));
-                sheet1.addCell(new Label(1, 10, employeeExtra.getAddress()));
-                //设置列宽
-                sheet1.setColumnView(0, 10);
-                sheet1.setColumnView(1, 30);
-            /*sheet2.addCell(new Label(0,0,"报名编号"));
-            sheet2.addCell(new Label(1,0,"报名时间"));
-            sheet2.addCell(new Label(2,0,"身份证号"));
-            sheet2.addCell(new Label(3,0,"姓名"));
-            sheet2.addCell(new Label(4,0,"类型"));
-            sheet2.addCell(new Label(5,0,"准操项目"));
+                sheet1.addCell(new Label(1, 0, "个人代码"));
+                sheet1.addCell(new Label(2, 0, "证件号码"));
+                sheet1.addCell(new Label(3, 0, "参保开始年月"));
+                sheet1.addCell(new Label(4, 0, "月缴费工资"));
+                sheet1.addCell(new Label(5, 0, "变更原因"));
+                sheet1.addCell(new Label(6, 0, "用工形式"));
+                sheet1.addCell(new Label(7, 0, "是否补收（不填表示否）"));
+                sheet1.addCell(new Label(8, 0, "参加工作时间"));
+                sheet1.addCell(new Label(9, 0, "联系电话"));
+                sheet1.addCell(new Label(10, 0, "户口性质"));
+                sheet1.addCell(new Label(11, 0, "户籍地址"));
             int index = 1;
-            for(ViewApp app:apps){
-                sheet2.addCell(new jxl.write.Number(0,index,app.getId()));
-                sheet2.addCell(new Label(1,index,sdf.format(app.getDate())));
-                sheet2.addCell(new Label(2,index,app.getCardId()));
-                sheet2.addCell(new Label(3,index,app.getName()));
-                sheet2.addCell(new Label(4,index,app.getdTypeString()));
-                sheet2.addCell(new Label(5,index,Item.getItemText(app.getItem())));
+            for(ViewInsurance Insurance:insurances){
+                //转化户口性质
+                String houseHold =  houseHold(Insurance.getHousehold());
+                sheet1.addCell(new Label(0, index, Insurance.getName()));
+                sheet1.addCell(new Label(1, index, Insurance.getCode()));
+                sheet1.addCell(new Label(2, index, Insurance.getCardId()));
+                sheet1.addCell(new Label(3, index, sdf.format(Insurance.getStart())));
+                sheet1.addCell(new jxl.write.Number(4, index, Insurance.getMoney()));
+                sheet1.addCell(new Label(5, index, "正常参保登记"));
+                sheet1.addCell(new Label(6, index, "合同制"));
+                sheet1.addCell(new Label(7, index, "否"));
+                sheet1.addCell(new Label(8, index, sdf.format(Insurance.getEntry())));
+                sheet1.addCell(new Label(9, index, Insurance.getPhone()));
+                sheet1.addCell(new Label(10, index, houseHold));
+                sheet1.addCell(new Label(11, index, Insurance.getAddress()));
                 index++;
             }
-
             //设置列宽
-            sheet2.setColumnView(0,8);
-            sheet2.setColumnView(1,11);
-            sheet2.setColumnView(2,19);
-            sheet2.setColumnView(3,8);
-            sheet2.setColumnView(4,8);
-            sheet2.setColumnView(5,40);*/
+            sheet1.setColumnView(0,8);
+            sheet1.setColumnView(1,11);
+            sheet1.setColumnView(2,19);
+            sheet1.setColumnView(3,8);
+            sheet1.setColumnView(4,8);
+            sheet1.setColumnView(5,40);
                 book.write();
                 book.close();
             } catch (WriteException e) {
@@ -205,4 +184,32 @@ public class InsuranceServlet extends HttpServlet {
     }
 
 
+    //转换用户性质
+    private String houseHold(byte h){
+        String houseHold = null;
+       switch (h){
+           case 0:
+               houseHold = "外地城镇";
+               break;
+           case 1:
+               houseHold = "本地城镇";
+               break;
+           case 2:
+               houseHold = "外地农村";
+               break;
+           case 3:
+               houseHold = "城镇";
+               break;
+           case 4:
+               houseHold = "农村";
+               break;
+           case 5:
+               houseHold = "港澳台";
+               break;
+           case 6:
+               houseHold = "外籍";
+               break;
+       }
+       return houseHold;
+    }
 }
