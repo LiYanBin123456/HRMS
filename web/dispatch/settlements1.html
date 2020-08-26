@@ -152,7 +152,6 @@
 
                 //顶部工具栏事件处理
                 table.on('toolbar(filter_tb_settlement)', function(obj){
-                    var settlement = table.checkStatus('tbl_settlement').data;
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
@@ -164,13 +163,13 @@
                             save();
                             break;
                         case 'submit':
-                            submit(settlement);
+                            submit();
                             break;
                         case 'reset':
-                            reset(settlement);
+                            reset();
                             break;
                         case 'charge':
-                            charge(settlement);
+                            charge();
                             break;
                         case 'search':
                             search();

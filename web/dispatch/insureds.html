@@ -241,7 +241,7 @@
                 });
             }
             //删除
-            function del(insured,employee) {
+            function del(insured) {
                 layer.confirm('确定删除'+insured.title, {icon: 3, title:'删除公告'}, function(index){
                     iInsurance.delete(insured.eid,0,function () {
                         layer.close(index);
