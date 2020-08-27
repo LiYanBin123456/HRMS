@@ -52,20 +52,19 @@
             <!--顶部工具栏-->
             <div class="layui-hide" id="top_bar_settlement">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
-                <button class="layui-btn layui-btn-sm" lay-event="copy"><i class="layui-icon "></i> 另存为</button>
-                <button class="layui-btn layui-btn-sm" lay-event="save"><i class="layui-icon "></i> 保存</button>
-                <button class="layui-btn layui-btn-sm" lay-event="submit"><i class="layui-icon "></i> 提交</button>
-                <button class="layui-btn layui-btn-sm" lay-event="reset"><i class="layui-icon "></i> 重置</button>
-                <button class="layui-btn layui-btn-sm" lay-event="charge"><i class="layui-icon "></i> 扣款</button>
             </div>
             <table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>
             <div id="pager"></div>
 
             <!--行内工具栏-->
             <script type="text/html" id="bar_settlement">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>明细</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log"><i class="layui-icon layui-icon-edit"></i>日志</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">明细</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log">日志</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="save">保存</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="saveAs">另存为</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="commit">提交</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reset">重置</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="charge">扣款</a>
             </script>
         </div>
         <script src="../js/fieldSet.js"></script>
@@ -141,11 +140,23 @@
                         case "log":
                             showLogs(settlement);
                             break;
-                        case "edit":
-                            showEditDlg(settlement);
-                            break;
                         case "del":
                             del(settlement);
+                            break;
+                        case 'saveAs':
+                            showCopyDlg(settlement);
+                            break;
+                        case 'save':
+                            save(settlement);
+                            break;
+                        case 'submit':
+                            submit(settlement);
+                            break;
+                        case 'reset':
+                            reset(settlement);
+                            break;
+                        case 'charge':
+                            charge(settlement);
                             break;
                     }
                 });
@@ -155,21 +166,6 @@
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
-                            break;
-                        case 'copy':
-                            showCopyDlg();
-                            break;
-                        case 'save':
-                            save();
-                            break;
-                        case 'submit':
-                            submit();
-                            break;
-                        case 'reset':
-                            reset();
-                            break;
-                        case 'charge':
-                            charge();
                             break;
                         case 'search':
                             search();
@@ -181,12 +177,12 @@
             }
 
             function getSettlements() {
-                /*var result = {total:100,rows:[{client:"科技中专",month:"2020-06",salary:"5000",social:"5000",fund:"5000",manage:"5000",tax:"5000",summary:"5000",status:"编辑"},{client:"国棉四厂",month:"2020-06",salary:"12000",social:"12000",fund:"5000",manage:"12000",tax:"12000",summary:"12000",status:"已审核"}]};
+                var result = {total:100,rows:[{client:"科技中专",month:"2020-06",salary:"5000",social:"5000",fund:"5000",manage:"5000",tax:"5000",summary:"5000",status:"编辑"},{client:"国棉四厂",month:"2020-06",salary:"12000",social:"12000",fund:"5000",manage:"12000",tax:"12000",summary:"12000",status:"已审核"}]};
                 table.reload('tbl_settlement', {
                     data:result.rows
-                });*/
+                });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                iSettlement.getList(param_query,0,function (result) {
+                /*iSettlement.getList(param_query,0,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows
                     });
@@ -205,7 +201,7 @@
                             }
                         }
                     });
-                });
+                });*/
             }
 
             //模糊查找
@@ -262,15 +258,8 @@
             }
 
             //打开复制对话框
-            function showCopyDlg() {
-                var rows = table.checkStatus('tbl_settlement').data;
-                if(rows.length != 1){
-                    layer.msg("只能选择一个进行另存为");
-                    return;
-                }
-                var settlement = rows[0];
-
-                var title = "另存["+settlement.month+"]为";
+            function showCopyDlg(settlement) {
+                var title = "另存["+settlement.name+settlement.month+"]为";
                 layer.open({
                     title:title,
                     type: 2,
@@ -285,7 +274,7 @@
                     },btn2: function(index, layero){
                         layer.close(index);
                     }
-                })
+                });
             }
 
             /**
@@ -297,19 +286,11 @@
                 layer.msg("另存为"+month);
             }
 
-            function showEditDlg(settlement1) {
-                var content = "../dialog/dispatch/settlement1.html?settlement1="+encodeURIComponent(JSON.stringify(settlement1));
-                layer.open({
-                    title:"编辑",
-                    type: 2,
-                    area: ['400px', '520px'],
-                    content: content
-                });
-            }
-
             //保存结算单
-            function save() {
-                layer.confirm('保存后结算单将被设置为[保存]状态，同时会自动计算社保、医保和个税等，确认保存吗？', {icon: 3, title:'保存结算单'}, function(index){
+            function save(settlement) {
+                var msg = "保存后结算单将被设置为[保存]状态，同时会自动计算社保、医保和个税等，确认保存吗？";
+                var title = "保存结算单-"+settlement.name+settlement.month;
+                layer.confirm(msg, {icon: 3, title:title}, function(index){
 
                 });
             }

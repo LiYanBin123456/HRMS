@@ -143,7 +143,6 @@ var columns_employee_spare = [[
 
 //普通结算单字段集合
 var columns_settlement1  = [[
-    {type:'checkbox',fixed:"left"},
     {field:'name', title: '用工企业',width:180,fixed:"left"},
     {field:'month', title: '月份',width:80},
     {field:'salary', title: '工资',width:70},
@@ -153,7 +152,7 @@ var columns_settlement1  = [[
     {field:'tax', title: '税费',width:70},
     {field:'summary', title: '总额',width:80},
     {field:'status', title: '状态',width:70,templet:function (d) { return array_value2text(status_settlement,d.status) }},
-    {title:'操作', toolbar: '#bar_settlement',width:260,fixed:"right"}
+    {title:'操作', toolbar: '#bar_settlement',width:450,fixed:"right"}
 ]];
 
 //面向合作普通结算单字段集合

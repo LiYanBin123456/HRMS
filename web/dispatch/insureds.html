@@ -86,7 +86,7 @@
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script>
-            var category = 0;//记录是显示社保参保、医保参保还是公积金
+            var type = 0;//记录是显示社保参保、医保参保还是公积金
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
@@ -104,7 +104,7 @@
                     layer = layui.layer;
                     element = layui.element;
                     laypage = layui.laypage;
-                    var upload = layui.upload;
+                    upload = layui.upload;
                     form = layui.form;
                     initPage();
                 });
@@ -118,7 +118,7 @@
                 });
 
                 form.on('radio(category)', function(data){
-                    switchCategory(Number(data.value));
+                    switchType(Number(data.value));
                 });
 
                 form.on('select(filter_status)', function(data){
@@ -132,19 +132,18 @@
                 });
             }
 
-            function switchCategory(value) {
+            function switchType(value) {
                 $("#container").empty();
                 $("#container").append('<table id="tbl_insured" lay-filter="filter_tb_insured"></table>');
 
-                category = value;
+                type = Number(value);
                 initTable()
             }
 
             function initTable() {
-
                 var cols;
                 var top_bar;
-                switch(Number(category)){
+                switch(type){
                     case 0:
                     case 1:
                         cols = columns_insured1;
@@ -196,7 +195,6 @@
             }
 
             function getInsureds() {
-
                 iInsurance.getList(param_query,0,function (result) {
                     table.reload('tbl_insured', {
                         data:result.rows
@@ -232,13 +230,41 @@
 
             //打开添加对话框
             function showMemberDlg() {
-                var content = "../dialog/member.html?category=2";
+                var title = "选择名单";
+                var content = "../dialog/member.html";
                 layer.open({
-                    title:"添加",
+                    title:title,
                     type: 2,
                     area: ['700px', '500px'],
-                    content: content
+                    content: content,
+                    btn: ['添加参保', '关闭']
+                    ,yes: function(index, layero){
+                        //获取member页返回的选中名单
+                        var member = window["layui-layer-iframe" + index].callbackData();
+                        layer.close(index);
+                        addInsurances(member);
+
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
                 });
+
+
+
+                //添加参保
+                function addInsurances(member) {
+                    var insurances = [];
+                    for(var i in member){
+                        var m = member[i];
+                        var insurance = {eid:m.eid,type:type};
+                        insurances.push(insurance);
+                    }
+
+                    iInsurance.insertBatch(insurances,function () {
+                        layer.close(index);
+                        layer.msg('添加成功');
+                    });
+                }
             }
             //删除
             function del(insured) {
