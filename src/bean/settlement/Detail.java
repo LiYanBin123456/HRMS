@@ -8,22 +8,17 @@ public class Detail {
     private long sid;//结算单id
     private long eid;//员工id
     private Date month;//月份
-    /**状态
-     0正常
-     1补缴
-     2补差
-     */
-    private byte status;
+
 
     public Detail() {
     }
 
-    public Detail(long id, long sid, long eid, Date month, byte status) {
+    public Detail(long id, long sid, long eid, Date month) {
         this.id = id;
         this.sid = sid;
         this.eid = eid;
         this.month = month;
-        this.status = status;
+
     }
 
     public long getId() {
@@ -58,13 +53,6 @@ public class Detail {
         this.month = month;
     }
 
-    public byte getStatus() {
-        return status;
-    }
-
-    public void setStatus(byte status) {
-        this.status = status;
-    }
 
     @Override
     public String toString() {
@@ -73,7 +61,6 @@ public class Detail {
                 ", sid=" + sid +
                 ", eid=" + eid +
                 ", month=" + month +
-                ", status=" + status +
                 '}';
     }
 }

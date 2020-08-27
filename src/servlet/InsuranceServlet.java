@@ -111,6 +111,9 @@ public class InsuranceServlet extends HttpServlet {
             for(ViewInsurance Insurance:insurances){
                 //转化户口性质
                 String houseHold =  houseHold(Insurance.getHousehold());
+                //比较时间
+                String msg = compareDate(Insurance.getEntry());
+
                 sheet1.addCell(new Label(0, index, Insurance.getName()));
                 sheet1.addCell(new Label(1, index, Insurance.getCode()));
                 sheet1.addCell(new Label(2, index, Insurance.getCardId()));
@@ -118,7 +121,7 @@ public class InsuranceServlet extends HttpServlet {
                 sheet1.addCell(new jxl.write.Number(4, index, Insurance.getMoney()));
                 sheet1.addCell(new Label(5, index, "正常参保登记"));
                 sheet1.addCell(new Label(6, index, "合同制"));
-                sheet1.addCell(new Label(7, index, "否"));
+                sheet1.addCell(new Label(7, index, msg));
                 sheet1.addCell(new Label(8, index, sdf.format(Insurance.getEntry())));
                 sheet1.addCell(new Label(9, index, Insurance.getPhone()));
                 sheet1.addCell(new Label(10, index, houseHold));
@@ -185,7 +188,7 @@ public class InsuranceServlet extends HttpServlet {
 
 
     //转换用户性质
-    private String houseHold(byte h){
+    public static String houseHold(byte h){
         String houseHold = null;
        switch (h){
            case 0:
@@ -211,5 +214,31 @@ public class InsuranceServlet extends HttpServlet {
                break;
        }
        return houseHold;
+    }
+
+    /**
+     * 和现在年月比较时间
+     * @param date
+     * @return 年月相等返回 “否”，年月不等返回“是”
+     */
+    public static String compareDate(Date date){
+        //获取当前时间
+         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");//设置日期格式
+         String now = df.format(new Date(System.currentTimeMillis()));
+         String time =df.format(date);
+         String msg = null;
+        try {
+            java.util.Date date1 = df.parse(now);
+            java.util.Date date2 = df.parse(time);
+            if(date1.compareTo(date2)!=0){
+               msg = "是";
+            }else{
+                msg = "否";
+            }
+            System.out.println(date1.compareTo(date2));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return msg;
     }
 }

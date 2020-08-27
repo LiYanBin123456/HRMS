@@ -41,12 +41,18 @@ public class Detail1 extends Detail {
     private float f18;
     private float f19;
     private float f20;
+    /**状态
+     0正常
+     1补缴
+     2补差
+     */
+    private byte status;
 
     public Detail1() {
     }
 
-    public Detail1(long id, long sid, long eid, Date month, byte status, float base, float pension1, float medicare1, float unemployment1, float disease1, float fund1, float pension2, float medicare2, float unemployment2, float injury, float disease2, float birth, float fund2, float tax, float payable, float paid, float f1, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9, float f10, float f11, float f12, float f13, float f14, float f15, float f16, float f17, float f18, float f19, float f20) {
-        super(id, sid, eid, month, status);
+    public Detail1(long id, long sid, long eid, Date month, float base, float pension1, float medicare1, float unemployment1, float disease1, float fund1, float pension2, float medicare2, float unemployment2, float injury, float disease2, float birth, float fund2, float tax, float payable, float paid, float f1, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9, float f10, float f11, float f12, float f13, float f14, float f15, float f16, float f17, float f18, float f19, float f20, byte status) {
+        super(id, sid, eid, month);
         this.base = base;
         this.pension1 = pension1;
         this.medicare1 = medicare1;
@@ -83,6 +89,7 @@ public class Detail1 extends Detail {
         this.f18 = f18;
         this.f19 = f19;
         this.f20 = f20;
+        this.status = status;
     }
 
     public float getBase() {
@@ -373,6 +380,14 @@ public class Detail1 extends Detail {
         this.f20 = f20;
     }
 
+    public byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(byte status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "Detail1{" +
@@ -412,6 +427,7 @@ public class Detail1 extends Detail {
                 ", f18=" + f18 +
                 ", f19=" + f19 +
                 ", f20=" + f20 +
+                ", status=" + status +
                 '}';
     }
 }

@@ -259,9 +259,11 @@ public class EmployeeServlet extends HttpServlet {
             System.out.println(employee);
         }
         res=EmployeeService.insertBatch(conn,employees);
-        if(res.success){
-            String extras = JSONObject.toJSONString(res.extra);
-        }
+        if(res.success){//将返回的员工ids集合，循环插入到员工补充表中的eid；
+            Object ids = res.extra;
+            System.out.println(ids);
+            System.out.println(ids.toString());
+            }
         return  JSONObject.toJSONString(res);
     }
 

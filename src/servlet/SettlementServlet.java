@@ -1,8 +1,8 @@
 package servlet;
 
-import bean.settlement.Settlement1;
-import bean.settlement.Settlement2;
-import bean.settlement.Settlement3;
+import bean.employee.Employee;
+import bean.settlement.*;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPObject;
 import dao.settlement.Settlement3Dao;
@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Date;
+import java.util.List;
 
 @WebServlet(name = "SettlementServlet",urlPatterns = "/settlement")
 public class SettlementServlet extends HttpServlet {
@@ -176,7 +177,23 @@ public class SettlementServlet extends HttpServlet {
     }
 
     private String updateDetails(Connection conn, HttpServletRequest request) {
-        return null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        DaoUpdateResult result = null;
+        switch (category){
+            case 0://普通结算单明细
+                List<Detail1> detail1s = JSONArray.parseArray(request.getParameter("details"),Detail1.class);
+                result = Detail1Service.update(conn,detail1s);
+                break;
+            case 1://小时工结算单明细
+                List<Detail2> detail2s = JSONArray.parseArray(request.getParameter("details"),Detail2.class);
+                result = Detail2Service.update(conn,detail2s);
+                break;
+            case 2://商业保险结算单明细
+                List<Detail3> detail3s = JSONArray.parseArray(request.getParameter("details"),Detail3.class);
+                result = Detail3Service.update(conn,detail3s);
+                break;
+        }
+        return JSONObject.toJSONString(result);
     }
 
     private String getDetails(Connection conn, HttpServletRequest request) {
@@ -199,7 +216,24 @@ public class SettlementServlet extends HttpServlet {
     }
 
     private String importDetails(Connection conn, HttpServletRequest request) {
-        return null;
+        byte category = Byte.parseByte(request.getParameter("category"));
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoUpdateResult result = null;
+        switch (category){
+            case 0://普通结算单明细
+                List<Detail1> detail1s = JSONArray.parseArray(request.getParameter("details"),Detail1.class);
+                result = Detail1Service.importDetails(conn,id,detail1s);
+                break;
+            case 1://小时工结算单明细
+                List<Detail2> detail2s = JSONArray.parseArray(request.getParameter("details"),Detail2.class);
+                result = Detail2Service.importDetails(conn,id,detail2s);
+                break;
+            case 2://商业保险结算单明细
+                List<Detail3> detail3s = JSONArray.parseArray(request.getParameter("details"),Detail3.class);
+                result = Detail3Service.importDetails(conn,id,detail3s);
+                break;
+        }
+        return JSONObject.toJSONString(result);
     }
 
     private String exportDetails(Connection conn, HttpServletRequest request) {

@@ -22,7 +22,7 @@ public class ClientDao {
                for (int i = 0; i < cids.length; i++) {
                    params[i] = new Object[]{cids[i]};
                }
-               res = DbUtil.insertBatch(conn,sql,params);
+               res = DbUtil.batch(conn,sql,params);
                break;
            case 1://修改合作单位的管理员
               sql = String.format("update cooperation set aid = %S where id = ?",aid);
