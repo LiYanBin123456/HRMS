@@ -165,9 +165,10 @@ public class SettlementServlet extends HttpServlet {
         DaoUpdateResult result = null;
         switch (category){
             case 0://普通结算单
-
+                result = Settlement1Service.saveAs(conn,id,month);
                 break;
             case 1://小时工结算单
+                result = Settlement2Service.saveAs(conn,id,month);
                 break;
             case 2://商业保险结算单
                 result = Settlement3Service.saveAs(conn,id,month);

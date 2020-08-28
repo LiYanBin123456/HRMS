@@ -1,11 +1,18 @@
 package service.settlement;
 
 import bean.admin.Account;
+import bean.employee.Employee;
 import bean.log.Log;
+import bean.settlement.Detail1;
 import bean.settlement.Detail3;
 import bean.settlement.Settlement3;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import dao.LogDao;
 import dao.admin.AccountDao;
+import dao.employee.EmployeeDao;
+import dao.settlement.Detail1Dao;
+import dao.settlement.Detail3Dao;
 import dao.settlement.Settlement2Dao;
 import dao.settlement.Settlement3Dao;
 import database.*;
@@ -14,6 +21,7 @@ import javax.sound.midi.Soundbank;
 import java.sql.Connection;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Settlement3Service {
@@ -30,42 +38,42 @@ public class Settlement3Service {
     public static DaoUpdateResult insert(Connection conn, Settlement3 settlement3) {
         /**
          * 1、插入结算单 返回id
-         * 2、根据cid查询出派遣到该单位的所有员工eids(不包括小时工)
-         * 3、根据eids的个数 封装好商业保险单明细集合
+         * 2、根据cid查询出派遣到该单位的所有员工(不包括小时工)
+         * 3、根据员工的个数 封装好商业保险单明细集合
          * 4、批量插入商业保险结算单明细
          **/
         DaoUpdateResult result = Settlement3Dao.insert(conn,settlement3);
-        if(result.success){
+        if(result.success) {
             long sid = (long) result.extra;//返回插入后的主键
-            System.out.println("sid:"+sid);
+            System.out.println("sid:" + sid);
+            long did = settlement3.getDid();//合作单位id
             long cid = settlement3.getCid();//合作单位id
             long pid = settlement3.getPid();//产品id
             Date month = settlement3.getMonth();//月份
 
-            //根据cid获取所有外派员工eids，不包括小时工
+            //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派员工，用工性质不是小时工，在职
             QueryParameter parameter = new QueryParameter();
             QueryConditions conditions = new QueryConditions();
+            conditions.add("did", "=", did);
             conditions.add("cid", "=", cid);
             conditions.add("type", "=", 1);
             conditions.add("category", "!=", 2);
-            String sql = "id";
+            conditions.add("status", "=", 0);
             parameter.conditions = conditions;
-            //获取到员工的所有id
-            List<Long> eids = DbUtil.getColumns(conn, sql,"employee",parameter);
-            for(long eid:eids){
-                System.out.println(eid);
-                Detail3 detail3 = new Detail3();//生成明细对象
+            List<Employee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),Employee.class);
+            List<Detail3> detail3List = new ArrayList<>();
+            for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
+                Detail3 detail3 = new Detail3();
                 detail3.setSid(sid);
-                detail3.setEid(eid);
-                detail3.setPid(pid);
+                detail3.setEid(employeeList.get(i).getId());
                 detail3.setMonth(month);
-                System.out.println(detail3);
+                detail3.setPid(pid);
+                detail3List.add(i,detail3);
             }
-            //批量插入明细
-        }else {
-
+            //插入明细
+            Detail3Dao.importDetails(conn,detail3List);
         }
-        return null;
+        return result;
     }
 
     public static DaoUpdateResult delete(Connection conn, Long id) {
@@ -76,21 +84,40 @@ public class Settlement3Service {
         /**流程
          * 1、查询出结算单，修改结算月份
          * 2、插入结算单，返回主键id
-         * 3、获取结算单明细集合，修改月份和id
-         * 4、批量插入数据库
+         * 3、根据cid查询出派遣到该单位的所有员工(不包括小时工)
+         * 4、根据员工的个数 封装好商业保险单明细集合
+         * 5、批量插入商业保险结算单明细
          */
         Settlement3 settlement3 = (Settlement3) Settlement3Dao.get(conn, id).data;
         settlement3.setMonth(month);
         long sid = (long) Settlement3Dao.insert(conn, settlement3).extra;
-        System.out.println("sid:"+sid);
-        //获取结算单明细列表
+        long did = settlement3.getDid();
+        long cid = settlement3.getCid();
+        long pid = settlement3.getPid();
+
+        //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派员工，用工性质不是小时工，在职
         QueryParameter parameter = new QueryParameter();
         QueryConditions conditions = new QueryConditions();
-        conditions.add("sid", "=", id);
+        conditions.add("did", "=", did);
+        conditions.add("cid", "=", cid);
+        conditions.add("type", "=", 1);
+        conditions.add("category", "!=", 2);
+        conditions.add("status", "=", 0);
         parameter.conditions = conditions;
-        DaoQueryListResult result = DbUtil.getList(conn,"detail3",parameter,Detail3.class);
+        List<Employee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),Employee.class);
+        List<Detail3> detail3List = new ArrayList<>();
+        for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
+            Detail3 detail3 = new Detail3();
+            detail3.setSid(sid);
+            detail3.setEid(employeeList.get(i).getId());
+            detail3.setMonth(month);
+            detail3.setPid(pid);
+            detail3List.add(i,detail3);
+        }
+        //插入明细
+        DaoUpdateResult result =Detail3Dao.importDetails(conn,detail3List);
 
-        return null;
+        return result;
     }
 
     //提交

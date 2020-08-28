@@ -1,10 +1,19 @@
 package service.settlement;
 
 import bean.admin.Account;
+import bean.employee.Employee;
 import bean.log.Log;
+import bean.settlement.Detail1;
+import bean.settlement.Detail2;
+import bean.settlement.Settlement1;
 import bean.settlement.Settlement2;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import dao.LogDao;
 import dao.admin.AccountDao;
+import dao.employee.EmployeeDao;
+import dao.settlement.Detail1Dao;
+import dao.settlement.Detail2Dao;
 import dao.settlement.Settlement1Dao;
 import dao.settlement.Settlement2Dao;
 import database.DaoQueryListResult;
@@ -15,6 +24,8 @@ import database.QueryParameter;
 import java.sql.Connection;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Settlement2Service {
     static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
@@ -28,9 +39,75 @@ public class Settlement2Service {
 
     //插入结算单
     public static DaoUpdateResult insert(Connection conn, Settlement2 settlement2) {
-        return Settlement2Dao.insert(conn,settlement2);
+        DaoUpdateResult result = null;
+        result = Settlement2Dao.insert(conn,settlement2);
+        if(result.success){
+            long sid = (long) result.extra;//结算单id
+            long cid = settlement2.getCid();//合作单位id
+            long did = settlement2.getDid();//派遣方id
+            Date month = settlement2.getMonth();//月份
+            //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派员工，用工性质是小时工，在职
+            QueryParameter parameter = new QueryParameter();
+            parameter.addCondition("cid","=",cid);
+            parameter.addCondition("did","=",did);
+            parameter.addCondition("type","=",1);
+            parameter.addCondition("category","=",2);
+            parameter.addCondition("status","=",0);
+            List<Employee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),Employee.class);
+            List<Detail2> detail2List = new ArrayList<>();
+            for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
+                Detail2 detail2 = new Detail2();
+                detail2.setSid(sid);
+                detail2.setEid(employeeList.get(i).getId());
+                detail2.setMonth(month);
+                //员工表中单价
+                detail2.setPrice(employeeList.get(i).getPrice());
+                detail2List.add(i,detail2);
+            }
+            //插入明细
+            Detail2Dao.importDetails(conn,detail2List);
+        }
+        return result;
     }
 
+    //另存为
+    public static DaoUpdateResult saveAs(Connection conn, long id, Date month) {
+        /**流程
+         * 1、查询出结算单，修改结算月份
+         * 2、插入结算单，返回主键id
+         * 3、根据cid查询出派遣到该单位的所有员工(不包括小时工)
+         * 4、根据员工的个数 封装好明细集合
+         * 5、批量结算单明细
+         */
+        Settlement2 settlement2 = (Settlement2) Settlement2Dao.get(conn, id).data;
+        settlement2.setMonth(month);
+        long sid = (long) Settlement2Dao.insert(conn, settlement2).extra;
+        long did = settlement2.getDid();
+        long cid = settlement2.getCid();
+
+        //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派员工，用工性质是小时工，在职
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("cid","=",cid);
+        parameter.addCondition("did","=",did);
+        parameter.addCondition("type","=",1);
+        parameter.addCondition("category","=",2);
+        parameter.addCondition("status","=",0);
+        List<Employee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),Employee.class);
+        List<Detail2> detail2List = new ArrayList<>();
+        for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
+            Detail2 detail2 = new Detail2();
+            detail2.setSid(sid);
+            detail2.setEid(employeeList.get(i).getId());
+            detail2.setMonth(month);
+            //员工表中单价
+            detail2.setPrice(employeeList.get(i).getPrice());
+            detail2List.add(i,detail2);
+        }
+        //插入明细
+        DaoUpdateResult result = Detail2Dao.importDetails(conn,detail2List);
+
+        return result;
+    }
     //删除结算单
     public static DaoUpdateResult delete(Connection conn, Long id) {
         return Settlement2Dao.delete(conn,id);
@@ -203,5 +280,6 @@ public class Settlement2Service {
     public static String copy(Connection conn, long id,String month) {
         return null;
     }
+
 
 }

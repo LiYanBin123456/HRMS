@@ -1,6 +1,7 @@
 package dao.settlement;
 
 import bean.settlement.Settlement1;
+import bean.settlement.Settlement3;
 import bean.settlement.ViewSettlement1;
 import database.*;
 
@@ -97,4 +98,10 @@ public class Settlement1Dao {
         return null;
     }
 
+    //获取结算单详情
+    public static DaoQueryResult get(Connection conn,long id){
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id","=",id);
+        return DbUtil.get(conn,"settlement1",conditions,Settlement1.class);
+    }
 }

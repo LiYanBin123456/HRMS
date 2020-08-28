@@ -1,16 +1,28 @@
 package service.settlement;
 
 import bean.admin.Account;
+import bean.employee.Employee;
 import bean.log.Log;
+import bean.settlement.Detail1;
+import bean.settlement.Detail3;
 import bean.settlement.Settlement1;
+import bean.settlement.Settlement3;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import dao.LogDao;
 import dao.admin.AccountDao;
+import dao.employee.EmployeeDao;
+import dao.settlement.Detail1Dao;
+import dao.settlement.Detail3Dao;
 import dao.settlement.Settlement1Dao;
+import dao.settlement.Settlement3Dao;
 import database.*;
 
 import java.sql.Connection;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Settlement1Service {
@@ -27,9 +39,40 @@ public class Settlement1Service {
         return Settlement1Dao.getList(conn,param);
     }
 
-    //插入结算单
+    /**
+     * 插入结算单，插入后根据返回的id，自动生成明细
+     * @param conn
+     * @param settlement1
+     * @return
+     */
     public static DaoUpdateResult insert(Connection conn, Settlement1 settlement1) {
-        return Settlement1Dao.insert(conn,settlement1);
+        DaoUpdateResult result;
+        result = Settlement1Dao.insert(conn,settlement1);
+        if(result.success){
+            long sid = (long) result.extra;//结算单id
+            long cid = settlement1.getCid();//合作单位id
+            long did = settlement1.getDid();//派遣方id
+            Date month = settlement1.getMonth();//月份
+            //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派员工，用工性质不是小时工，在职
+            QueryParameter parameter = new QueryParameter();
+            parameter.addCondition("cid","=",cid);
+            parameter.addCondition("did","=",did);
+            parameter.addCondition("type","=",1);
+            parameter.addCondition("category","!=",2);
+            parameter.addCondition("status","=",0);
+            List<Employee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),Employee.class);
+            List<Detail1> detail1List = new ArrayList<Detail1>();
+            for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
+                Detail1 detail1 = new Detail1();
+                detail1.setSid(sid);
+                detail1.setEid(employeeList.get(i).getId());
+                detail1.setMonth(month);
+                detail1List.add(i,detail1);
+            }
+            //插入明细
+            Detail1Dao.importDetails(conn,detail1List);
+        }
+        return result;
     }
 
     //删除结算单
@@ -197,4 +240,39 @@ public class Settlement1Service {
         return null;
     }
 
+    public static DaoUpdateResult saveAs(Connection conn, long id, Date month) {
+        /**流程
+         * 1、查询出结算单，修改结算月份
+         * 2、插入结算单，返回主键id
+         * 3、根据cid查询出派遣到该单位的所有员工(不包括小时工)
+         * 4、根据员工的个数 封装好明细集合
+         * 5、批量结算单明细
+         */
+        Settlement1 settlement1 = (Settlement1) Settlement1Dao.get(conn, id).data;
+        settlement1.setMonth(month);
+        long sid = (long) Settlement1Dao.insert(conn, settlement1).extra;
+        long did = settlement1.getDid();
+        long cid = settlement1.getCid();
+
+        //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派员工，用工性质不是小时工，在职
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("cid","=",cid);
+        parameter.addCondition("did","=",did);
+        parameter.addCondition("type","=",1);
+        parameter.addCondition("category","!=",2);
+        parameter.addCondition("status","=",0);
+        List<Employee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),Employee.class);
+        List<Detail1> detail1List = new ArrayList<Detail1>();
+        for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
+            Detail1 detail1 = new Detail1();
+            detail1.setSid(sid);
+            detail1.setEid(employeeList.get(i).getId());
+            detail1.setMonth(month);
+            detail1List.add(i,detail1);
+        }
+        //插入明细
+        DaoUpdateResult result = Detail1Dao.importDetails(conn,detail1List);
+
+        return result;
+    }
 }

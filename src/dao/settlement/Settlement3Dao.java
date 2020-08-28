@@ -38,9 +38,7 @@ public class Settlement3Dao {
         return DbUtil.delete(conn,"settlement3",conditions);
     }
 
-    public static DaoUpdateResult copy(Connection conn, long id,String month) {
-        return null;
-    }
+
 
     /**
      * 提交，将结算单的status 设置为 1
