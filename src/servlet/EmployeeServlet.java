@@ -252,18 +252,17 @@ public class EmployeeServlet extends HttpServlet {
          * 3、员工补充信息添加对应eid
          * 4、批量插入员工补充信息
          */
-        DaoUpdateResult res = null;
+        DaoUpdateResult res;
         List<Employee> employees = JSONArray.parseArray(request.getParameter("employees"),Employee.class);
         List<EmployeeExtra> extracts = JSONArray.parseArray(request.getParameter("extracts"),EmployeeExtra.class);
-        for (Employee employee:employees){
-            System.out.println(employee);
-        }
         res=EmployeeService.insertBatch(conn,employees);
         if(res.success){//将返回的员工ids集合，循环插入到员工补充表中的eid；
-            Object ids = res.extra;
-            System.out.println(ids);
-            System.out.println(ids.toString());
+            int[] ids = (int[]) res.extra;
+            for (int i = 0;i<ids.length;i++){
+                extracts.get(i).setEid((long)ids[i]);
             }
+            ExtraDao.insertBatch(conn,extracts);
+        }
         return  JSONObject.toJSONString(res);
     }
 

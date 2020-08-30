@@ -80,7 +80,6 @@ public class InsuranceServlet extends HttpServlet {
     private void export(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.setHeader("Content-Disposition", "attachment; filename=insurance.xls");
-        long id = Long.parseLong((request.getParameter("id")));
         byte category = Byte.parseByte(request.getParameter("category"));
         byte status = Byte.parseByte(request.getParameter("status"));
 
@@ -113,7 +112,6 @@ public class InsuranceServlet extends HttpServlet {
                 String houseHold =  houseHold(Insurance.getHousehold());
                 //比较时间
                 String msg = compareDate(Insurance.getEntry());
-
                 sheet1.addCell(new Label(0, index, Insurance.getName()));
                 sheet1.addCell(new Label(1, index, Insurance.getCode()));
                 sheet1.addCell(new Label(2, index, Insurance.getCardId()));
