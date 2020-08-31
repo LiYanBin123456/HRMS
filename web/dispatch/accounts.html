@@ -163,16 +163,16 @@
             function showTaskDlg(account) {
                 var content = "../dialog/task_dispatch.html?id="+account.id;
                 layer.open({
-                    title:"客户分配-"+account.name,
-                    type: 2,
-                    area: ['550px', '500px'],
-                    content: content
-                });
+                    title:"客户分配-"+account.nickname,
+                type: 2,
+                area: ['550px', '500px'],
+                content: content
+            });
             }
 
-            //删除管理员
+            //删除账号
             function del(account) {
-                layer.confirm('确定删除管理员'+account.name, {icon: 3, title:'删除'}, function(index){
+                layer.confirm('确定删除账号'+account.name, {icon: 3, title:'删除'}, function(index){
                     iNotice.delete(account.id,function () {
                         layer.close(index);
                         getAccounts();

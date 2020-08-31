@@ -148,12 +148,12 @@
             </form>
         </div>
         <div class="layui-tab-item">
-            <form lay-filter="form_security" class="layui-form">
+            <form lay-filter="form_ensure" class="layui-form">
                 <input type="hidden" name="eid">
                 <div class="layui-form-item">
-                    <label class="layui-form-label"><span class="x-red"></span>社保所在地</label>
+                    <label class="layui-form-label">社保所在地</label>
                     <div class="layui-input-block">
-                        <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city-picker" readonly="readonly" data-toggle="city-picker" placeholder="请选择">
+                        <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city" readonly="readonly" data-toggle="city-picker" placeholder="请选择">
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -164,10 +164,10 @@
                                 <input type="radio" lay-filter="settingM" name="settingM" value="0" title="最低标准" checked>
                                 <input type="radio" lay-filter="settingM" name="settingM" value="1" title="实际工资">
                                 <input type="radio" lay-filter="settingM" name="settingM" value="2" title="不缴纳">
-                                <input type="radio" lay-filter="settingM" name="settingM" value="3" title="自定义基数" onclick="getLast()">
+                                <input type="radio" lay-filter="settingM" name="settingM" value="3" title="自定义基数">
                             </div>
                             <div class="layui-inline layui-hide" name="m1">
-                                <input type="text" name="valM" required="" placeholder="自定义基数" autocomplete="off" class="layui-input ">
+                                <input type="text" name="valM" required="" placeholder="自定义基数" autocomplete="off" class="layui-input " onchange="verifyMedicalBase(this.value)">
                             </div>
                         </div>
                     </fieldset>
@@ -183,7 +183,7 @@
                                 <input type="radio" lay-filter="settingS" name="settingS" value="3" title="自定义基数">
                             </div>
                             <div class="layui-inline layui-hide" name="s1">
-                                <input type="text" name="valS" required="" placeholder="自定义基数" autocomplete="off" class="layui-input ">
+                                <input type="text" name="valS" required="" placeholder="自定义基数" autocomplete="off" class="layui-input" onchange="verifySocialBase(this.value)" >
                             </div>
                         </div>
                     </fieldset>
@@ -192,13 +192,13 @@
                     <fieldset class="layui-elem-field">
                         <legend>公积金</legend>
                         <div class="layui-field-box">
+                            基数
                             <div class="layui-inline" name="f1">
-                                <input type="text" name="fundBase" required="" placeholder="基数"
-                                       autocomplete="off" class="layui-input">
+                                <input type="text" name="fundBase" required="" placeholder="基数" autocomplete="off" class="layui-input" onchange="verifyFundBase(this.value)">
                             </div>
+                            比例
                             <div class="layui-inline" name="f1">
-                                <input type="text" name="fundPer" required="" placeholder="%"
-                                       autocomplete="off" class="layui-input">
+                                <input type="text" name="fundPer" required="" placeholder="%" autocomplete="off" class="layui-input" onchange="verifyFundPer(this.value)">
                             </div>
                         </div>
                     </fieldset>
@@ -215,7 +215,7 @@
                     </fieldset>
                 </div>
                 <div class="layui-form-item">
-                    <button class="layui-btn" onclick="save_security()" type="button">保存</button>
+                    <button class="layui-btn" onclick="save_ensure()" type="button">保存</button>
                 </div>
             </form>
         </div>
@@ -314,12 +314,14 @@
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
 <script src="../city-picker/city-picker.data.js"></script>
+<script src="../js/city.js"></script>
 <script>
     var op = "insert";
     var form;//表单对象
-    var editer;
     var cityPicker;
     var laydate;
+    var id = $.query.get("id");
+    var employee,setting,deduct,card;
 
     loadLayuiModule();
 
@@ -327,23 +329,24 @@
         layui.extend({
             index: 'lib/index' //主入口模块
             , citypicker: '../city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
-        }).use(['form', 'layedit', 'citypicker','laydate'], function () {
+        }).use(['form', 'citypicker','laydate'], function () {
             form = layui.form;
-            layedit = layui.layedit;
             laydate = layui.laydate;
             var picker = layui.citypicker;
-            editer = layedit.build('content'); //建立编辑器
             cityPicker = new picker("#city-picker", {
                 provincename: "provinceId",
                 cityname: "city",
-                level: 'city'// 级别
+                level: 'city',
+                onCitySelected:function (code) {
+                    setting.city = code;
+                }
             });
             laydate.render({
                 elem: '#entry'
                 ,type: 'date'
             });
             initPage();
-            get();
+            getEmployee();
             initTab();
         });
     }
@@ -352,7 +355,7 @@
         element.on('tab(tab_employ)', function(data) {
             switch (data.index) {
                 case 0:
-                    get();//获取员工基础信息
+                    getEmployee();//获取员工基础信息
                     break;
                 case 1:
                     getEnsureSetting();//获取社保设置
@@ -384,58 +387,44 @@
                 $("[name=s1]").addClass("layui-hide");
             }
         });
-        form.on('radio(settingF)', function(data){
-            var settingF = data.value;
-            if(settingF == 0){
-                $("[name=f1]").removeClass("layui-hide");
-                $("[name=f2]").addClass("layui-hide");
-            }else{
-                $("[name=f1]").addClass("layui-hide");
-                $("[name=f2]").removeClass("layui-hide");
-            }
-        });
-        form.on('radio(settingP)', function(data){
-            var settingP = data.value;
-            if(settingP == 1){
-                $("[name=p1]").removeClass("layui-hide");
-            }else{
-                $("[name=p1]").addClass("layui-hide");
-            }
-        });
     }
-    var id = $.query.get("id");
-    function get() {
+
+    function getEmployee() {
         iEmployee.get(id,0,function (result) {
-            var employee = result.data;
+            employee = result.data;
             form.val('form_expatriate', employee);
-            layedit.setContent(editer, employee.content, false);
             op = "update";
         })
     }
     
     function getEnsureSetting () {
         iEmployee.getEnsureSetting(id,function (result) {
-            var data = result.data;
-            form.val('form_security',data);
-            layedit.setContent(editer, data.content, false);
+            setting = result.data;
+            form.val('form_ensure',setting);
+            if(setting.settingS == 3){
+                $("[name=s1]").removeClass("layui-hide");
+            }
+            if(setting.settingM == 3){
+                $("[name=m1]").removeClass("layui-hide");
+            }
+            var text = getCityText4(setting.city);
+            cityPicker.setValue(text);
             op = "update";
         })
     }
 
     function getDeduct() {
         iEmployee.getDeduct(id,function (result) {
-            var data = result.data;
-            form.val('form_deduct',data);
-            layedit.setContent(editer, data.content, false);
+            deduct = result.data;
+            form.val('form_deduct',deduct);
             op = "update";
         })
     }
     
     function getCard() {
         iEmployee.getCard(id,function (result) {
-            var data = result.data;
-            form.val('form_salary_card',data);
-            layedit.setContent(editer, data.content, false);
+            card = result.data;
+            form.val('form_salary_card',card);
             op = "update";
         })
     }
@@ -449,8 +438,8 @@
         }
     }
 
-    function save_security() {
-        var setting = form.val('form_security');
+    function save_ensure() {
+        var setting = form.val('form_ensure');
         if(op == "insert"){
             iEmployee.insertEnsureSetting(setting,onInsertSuccess);
         }else{
@@ -475,6 +464,50 @@
         }else {
             iEmployee.updateCard(payCard,onUpdateSuccess);
         }
+    }
+
+    function verifyMedicalBase(base) {
+        if(!setting.city){
+            layer.msg("请先选择社保所在地");
+        }
+        iRule.getLast(setting.city,0,function (result) {
+            if(base < result.data.base){
+                layer.msg("自定义医保基数不能低于最低基数"+result.data.base);
+            };
+        });
+    }
+
+    function verifySocialBase(base) {
+        if(!setting.city){
+            layer.msg("请先选择社保所在地");
+        }
+        iRule.getLast(setting.city,1,function (result) {
+            if(base < result.data.base){
+                layer.msg("自定义社保基数不能低于最低基数"+result.data.base);
+            };
+        });
+    }
+
+    function verifyFundBase(base) {
+        if(!setting.city){
+            layer.msg("请先选择社保所在地");
+        }
+        iRule.getLast(setting.city,2,function (result) {
+            if(base < result.data.min || base > result.data.max){
+                layer.msg("公积金基数必须介于["+result.data.min+","+result.data.max+"]");
+            };
+        });
+    }
+
+    function verifyFundPer(per) {
+        if(!setting.city){
+            layer.msg("请先选择社保所在地");
+        }
+        iRule.getLast(setting.city,2,function (result) {
+            if(per < result.data.per1 || per > result.data.per2){
+                layer.msg("公积金缴纳比例必须介于["+result.data.per1+","+result.data.per2+"]");
+            };
+        });
     }
 
     function onInsertSuccess() {

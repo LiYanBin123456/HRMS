@@ -19,6 +19,26 @@ var InterfaceClient = function() {
         access(url,para,0,success,fail);
     };
     /**
+     * 获取待分配管理员的客户列表
+     * @param category 0-派遣方 1-合作单位
+     * @param success
+     * @param fail
+     */
+    this.getAllocating = function(category,success,fail){
+        var para = {op: "getAllocating", category: category};
+        access(url,para,0,success,fail);
+    };
+    /**
+     * 获取管理员管理的客户列表
+     * @param category 0-派遣方 1-合作单位
+     * @param success
+     * @param fail
+     */
+    this.getAllocated = function(aid,category,success,fail){
+        var para = {op: "getAllocated", aid:aid, category: category};
+        access(url,para,0,success,fail);
+    };
+    /**
      * 添加客户
      * @param client 客户信息
      * @param category 0-派遣方 1-合作单位 2-供应商

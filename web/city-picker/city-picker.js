@@ -380,6 +380,22 @@ layui.define(['jquery'], function (exports) {
             var matched = null;
             var value;
 
+            code = (
+                type === PROVINCE ? 86 :
+                    type === CITY ? this['$' + PROVINCE] && this['$' + PROVINCE].find('.active').data('code') :
+                        type === DISTRICT ? this['$' + CITY] && this['$' + CITY].find('.active').data('code') : code
+            );
+
+            if(type==CITY){
+                if(this.options.onProvinceSelected && code) {
+                    this.options.onProvinceSelected(code);
+                }
+            }else if(type==DISTRICT){
+                if(this.options.onCitySelected && code) {
+                    this.options.onCitySelected(code);
+                }
+            }
+
             if (!$select || !$select.length) {
                 return;
             }
@@ -387,12 +403,6 @@ layui.define(['jquery'], function (exports) {
             item = $select.data('item');
 
             value = (item ? item.address : null) || options[type];
-
-            code = (
-                type === PROVINCE ? 86 :
-                    type === CITY ? this['$' + PROVINCE] && this['$' + PROVINCE].find('.active').data('code') :
-                        type === DISTRICT ? this['$' + CITY] && this['$' + CITY].find('.active').data('code') : code
-            );
 
             districts = $.isNumeric(code) ? ChineseDistricts[code] : null;
 

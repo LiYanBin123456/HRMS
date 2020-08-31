@@ -25,8 +25,10 @@
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
+<script src="../js/util.js"></script>
 <script>
     var transfer;
+    var aid;
 
     $(function () {
         loadLayuiModule();
@@ -35,23 +37,47 @@
     function loadLayuiModule() {
         layui.use(['transfer'], function () {
             transfer = layui.transfer;
-            initTask();
+            initPage();
         });
     }
 
-    function initTask() {
-        var dispatches = [
-            {"value": "1", "title": "国棉四场"}
-            ,{"value": "2", "title": "九玻厂"}
-            ,{"value": "3", "title": "九江移动"}
-            ,{"value": "4", "title": "九江石化"}
-        ];
-        transfer.render({
-            elem: '#task'
-            ,data: dispatches
-            ,title: ['待分配客户', '已分配客户']
-            ,showSearch: true
-        })
+    function initPage() {
+        aid = $.query.get("id");
+        iClient.getAllocating(1,function (result1) {
+            var allocatings = result1.rows;
+            iClient.getAllocated(aid,1,function (result2) {
+                var allocateds = result2.rows;
+                initTransfer(allocatings, allocateds);
+            });
+        });
+        function initTransfer(allocatings,allocateds) {
+            var data = [];
+            var value = [];
+            for(var i in allocatings){
+                data.push({"value": allocatings[i].id, "title": allocatings[i].name});
+            }
+            for(var i in allocateds){
+                data.push({"value": allocateds[i].id, "title": allocateds[i].name});
+                value.push(allocateds[i].id);
+            }
+            transfer.render({
+                elem: '#task'
+                ,data: data
+                ,value:value
+                ,title: ['待分配客户', '已分配客户']
+                ,showSearch: true
+                ,onchange: function(data, index){
+                    allocate(data,index);
+                }
+            });
+        }
+    }
+
+    function allocate(data,direction) {
+        var cids = getKeyArray(data,"value");
+        iClient.allocate(direction==0?aid:0,1,cids,function (result) {
+            layer.msg('分配成功');
+        });
     }
 </script>
 

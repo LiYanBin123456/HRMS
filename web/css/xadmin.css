@@ -404,7 +404,7 @@ table th, table td {
     top: 36px;
     bottom: 0px;
     width: 100%;
-    background:rgb(255, 255, 255,0);
+    background:rgba(255, 255, 255,0);
     padding: 0px;
     overflow: hidden;
     display: none;
@@ -472,7 +472,7 @@ table th, table td {
     font-size: 12px;
 }
 .x-admin-sm .layui-elem-field legend{
-    font-size: 18px;
+    font-size: 14px;
 }
 
 .x-admin-sm .x-admin-backlog-body p cite{
