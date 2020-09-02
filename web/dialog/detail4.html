@@ -28,6 +28,11 @@
     var form;//分页对象
     var layer;//弹出窗口
     var element;
+    var param = {
+        conditions: {keys:[],extra:""},
+        order: {need:true,field:"time",direction:false},
+        pagination: {need:false}
+    };
     $(function () {
         loadLayuiModule();
     });
@@ -60,7 +65,7 @@
     }
     function getDetails() {
         var cid = $.query.get("id");
-        iFinance.getTransactions(cid,function (result) {
+        iFinance.getTransactions(param,cid,function (result) {
             table.reload('tbl_detail4', {
                 data:result.rows
             });
