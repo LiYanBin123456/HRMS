@@ -19,15 +19,16 @@ public class ProductDao {
     }
 
     public static DaoUpdateResult update(Connection conn, Product p) {
-        String sql = "update product set did=?,name=?,fin1=?,fin2=?,allowance=? ,period=?,allow=?,min=?,max=?,intro=? where id=?";
-        Object []params = {p.getDid(),p.getName(),p.getFin1(),p.getFin2(),p.getAllowance(),p.getPeriod(),p.getAllow(),p.getMin(),p.getMax(),p.getIntro(),p.getId()};
+        String sql = "update product set name=?,fin1=?,fin2=?,allowance=? ,period=?,allow=?,min=?,max=?,intro=? where id=?";
+        Object []params = {p.getName(),p.getFin1(),p.getFin2(),p.getAllowance(),p.getPeriod(),p.getAllow(),p.getMin(),p.getMax(),p.getIntro(),p.getId()};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
     }
 
     public static DaoUpdateResult insert(Connection conn,  Product p) {
+        String did = p.getDid()==0?null:String.valueOf(p.getDid());
         String sql = "insert product (did,name,fin1,fin2,allowance,period,allow,min,max,intro) values (?,?,?,?,?,?,?,?,?,?)";
-        Object []params = {p.getDid(),p.getName(),p.getFin1(),p.getFin2(),p.getAllowance(),p.getPeriod(),p.getAllow(),p.getMin(),p.getMax(),p.getIntro()};
+        Object []params = {did,p.getName(),p.getFin1(),p.getFin2(),p.getAllowance(),p.getPeriod(),p.getAllow(),p.getMin(),p.getMax(),p.getIntro()};
         return  DbUtil.insert(conn,sql,params);
     }
 

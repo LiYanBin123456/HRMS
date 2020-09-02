@@ -56,8 +56,8 @@ public class ContractDao {
 
     //修改合同
     public  static DaoUpdateResult update(Connection conn, Contract c){
-        String sql = "update contract set aid=?,bid=?,type=?,start=?,end=?,status=?,comments=?,invoice=?,project=?,times=? where id =?";
-        Object []params = {c.getAid(),c.getBid(),c.getType(),c.getStart(),c.getEnd(),c.getStatus(), c.getComments(), c.getInvoice(),c.getProject(),c.getTimes(),c.getId()};
+        String sql = "update contract set type=?,start=?,end=?,status=?,comments=?,invoice=?,project=?,times=? where id =?";
+        Object []params = {c.getType(),c.getStart(),c.getEnd(),c.getStatus(), c.getComments(), c.getInvoice(),c.getProject(),c.getTimes(),c.getId()};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
     }

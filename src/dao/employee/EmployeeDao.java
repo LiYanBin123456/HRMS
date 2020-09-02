@@ -25,15 +25,20 @@ public class EmployeeDao {
 
     //修改
     public static DaoUpdateResult update(Connection conn, Employee e) {
-        String sql = "update employee set did=?,cid=?,cardId=?,name=?,phone=?,degree=?,type=?,entry=?,status=?,department=?,post=?,category=?,price=? where id=?";
-        Object []params = {e.getDid(),e.getCid(),e.getCardId(),e.getName(),e.getPhone(),e.getDegree(),e.getType(),e.getEntry(),e.getStatus(),e.getDepartment(),e.getPost(),e.getCategory(),e.getPrice(),e.getId()};
+        //需要判断外键是否为0，为0就需要转换成null
+        String cid = e.getCid()==0?null:String.valueOf(e.getCid());
+        String sql = "update employee set cid=?,cardId=?,name=?,phone=?,degree=?,type=?,entry=?,status=?,department=?,post=?,category=?,price=? where id=?";
+        Object []params = {cid,e.getCardId(),e.getName(),e.getPhone(),e.getDegree(),e.getType(),e.getEntry(),e.getStatus(),e.getDepartment(),e.getPost(),e.getCategory(),e.getPrice(),e.getId()};
         return  DbUtil.update(conn,sql,params);
     }
 
     //增加
     public static DaoUpdateResult insert(Connection conn, Employee e) {
+        //需要判断外键是否为0，为0就需要转换成null
+        String did = e.getDid()==0?null:String.valueOf(e.getDid());
+        String cid = e.getCid()==0?null:String.valueOf(e.getCid());
         String sql = "insert employee (did,cid,cardId,name,phone,degree,type,entry,status,department,post,category,price) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        Object []params = {e.getDid(),e.getCid(),e.getCardId(),e.getName(),e.getPhone(),e.getDegree(),e.getType(),e.getEntry(),e.getStatus(),e.getDepartment(),e.getPost(),e.getCategory(),e.getPrice()};
+        Object []params = {did,cid,e.getCardId(),e.getName(),e.getPhone(),e.getDegree(),e.getType(),e.getEntry(),e.getStatus(),e.getDepartment(),e.getPost(),e.getCategory(),e.getPrice()};
         return  DbUtil.insert(conn,sql,params);
     }
 
@@ -42,6 +47,14 @@ public class EmployeeDao {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
         return DbUtil.delete(conn,"employee",conditions);
+    }
+
+    //移入人才库
+    public static DaoUpdateResult remove(Connection conn, long id) {
+        String sql = String.format("update employee set type = %S where id = ?",2);
+        Object []params = {id};
+        return  DbUtil.update(conn,sql,params);
+
     }
 
     //批量插入
