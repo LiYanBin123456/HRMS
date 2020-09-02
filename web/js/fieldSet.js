@@ -144,7 +144,7 @@ var columns_employee_spare = [[
 //普通结算单字段集合
 var columns_settlement1  = [[
     {field:'name', title: '用工企业',width:180,fixed:"left"},
-    {field:'month', title: '月份',width:80},
+    {field:'month', title: '月份',width:90,templet:function (d) {return format_date(d.month)}},
     {field:'salary', title: '工资',width:70},
     {field:'social', title: '社保',width:70},
     {field:'fund', title: '公积金',width:80},

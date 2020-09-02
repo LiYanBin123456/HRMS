@@ -560,11 +560,12 @@ var InterfaceEmployee = function () {
     /**
      * 删除员工
      * @param id 员工id
+     * @param category 0-移入人才库 1-直接删除
      * @param success
      * @param fail
      */
-    this.delete = function (id,success,fail) {
-        var para = {op:"delete",id:id};
+    this.delete = function (id,category,success,fail) {
+        var para = {op:"delete",id:id, category:category};
         access(url,para,0,success,fail);
     };
     /**

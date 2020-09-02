@@ -101,12 +101,12 @@
           }
 
             function getMember() {
-                var result = {total:100,rows:[{cardld:"360402199008230081",name:"赵阳",unit:"江西制氧机械"},{cardld:"360402199008230081",name:"李斌",unit:"九江石化"}]};
+                /*var result = {total:100,rows:[{cardld:"360402199008230081",name:"赵阳",unit:"江西制氧机械"},{cardld:"360402199008230081",name:"李斌",unit:"九江石化"}]};
                 table.reload('tbl_member', {
                     data:result.rows
-                });
+                });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iEmployee.getList(param_query,0,function (result) {
+                iEmployee.getList(param_query,0,function (result) {
                     table.reload('tbl_member', {
                         data:result.rows
                     });
@@ -124,7 +124,7 @@
                             }
                         }
                     });
-                });*/
+                });
             }
 
 
