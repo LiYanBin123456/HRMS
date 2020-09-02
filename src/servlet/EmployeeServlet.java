@@ -239,7 +239,8 @@ public class EmployeeServlet extends HttpServlet {
     //删除
     private String delete(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong((request.getParameter("id")));
-        DaoUpdateResult res = EmployeeService.delete(conn,id);
+        byte category = Byte.parseByte(request.getParameter("category"));
+        DaoUpdateResult res = EmployeeService.delete(conn,id,category);
         return JSONObject.toJSONString(res);
     }
 

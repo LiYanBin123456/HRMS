@@ -34,8 +34,17 @@ public class EmployeeService {
     }
 
     //删除
-    public static DaoUpdateResult delete(Connection conn, long id) {
-        return  EmployeeDao.delete(conn,id);
+    public static DaoUpdateResult delete(Connection conn, long id, byte category) {
+        DaoUpdateResult result = null;
+        switch (category){
+            case 0://移入人才库
+                result = EmployeeDao.remove(conn,id);
+                break;
+            case 1://删除
+                result = EmployeeDao.delete(conn,id);
+                break;
+        }
+        return result;
     }
 
     //批量插入
