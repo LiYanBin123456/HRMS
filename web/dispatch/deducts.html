@@ -50,6 +50,8 @@
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.params.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -76,7 +78,8 @@
                 initTable();
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    search(keyword);
+                    param_query.conditions.extra = keyword;
+                    getDeducts();
                 });
             }
 
@@ -121,9 +124,6 @@
                         case 'insert':
                             showInsertDlg();
                             break;
-                        case 'search':
-                            search();
-                            break;
                     }
                 });
                 getDeducts();
@@ -150,12 +150,6 @@
                         }
                     });
                 });
-            }
-
-            //模糊查找
-            function search(keyword) {
-                param_query.conditions.extra = keyword;
-                getDeducts();
             }
 
             //打开添加对话框
