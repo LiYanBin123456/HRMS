@@ -33,8 +33,8 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>合作客户</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="name" required=""  autocomplete="off"
-                               class="layui-input"></div>
+                        <select name="bid" id="select_dispatch" lay-filter="filter_dispatch"></select>
+                    </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
@@ -99,6 +99,7 @@
                 }
             });
             initPage();
+            initdispatch();
         });
     }
 
@@ -108,6 +109,7 @@
 
     function initData() {
         var param = $.query.get("contract");
+        console.log(param);
         if (param) {
             var contract = JSON.parse(param);
             form.val('form_contract', contract);
@@ -116,6 +118,20 @@
             $("[name=client]").attr("disabled", 'disabled');
             form.render('select', 'form_contract');
         }
+    }
+
+    function initdispatch() {
+        iClient.getList({},0,function(result){
+            var dispatchs = result.rows;
+            var select_dispatch = $("#select_dispatch");
+            select_dispatch.append("<option value='-2' selected disabled hidden>选择合作客户</option>");
+            for(var i in dispatchs){
+                var dispatch = dispatchs[i];
+                var option = $("<option>").val(dispatch.id).text(dispatch.name);
+                select_dispatch.append(option);
+            }
+            form.render('select', 'form_contract');
+        })
     }
 
     function save() {

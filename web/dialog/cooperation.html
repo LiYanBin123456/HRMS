@@ -317,6 +317,15 @@
         });
     }
 
+    function initFinance() {
+        if(flag2) {
+            return;
+        }else {
+            getFinance();
+        }
+
+    }
+
     function initSalayDefine() {
         //如果已经有基本信息就忽略
         if (salary_items_defined) {
