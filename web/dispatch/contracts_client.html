@@ -157,7 +157,7 @@
             function showDetailDlg(contract) {
                 var content = "../dialog/contract_client.html?id="+contract.id;
                 layer.open({
-                    title:'合同-'+contract.client,
+                    title:'合同-'+contract.name,
                     type: 2,
                     area: ['800px', '600px'],
                     content: content
@@ -177,7 +177,7 @@
 
             //删除合同
             function del(contract) {
-                layer.confirm('确定删除'+contract.title, {icon: 3, title:'删除合同'}, function(index){
+                layer.confirm('确定删除'+contract.name+'的合同', {icon: 3, title:'删除合同'}, function(index){
                     iContract.delete(contract.id,function () {
                         layer.close(index);
                         getContracts();

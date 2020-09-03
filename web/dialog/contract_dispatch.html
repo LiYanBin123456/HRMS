@@ -27,16 +27,14 @@
     <div class="layui-tab-content">
         <div class="layui-tab-item layui-show">
             <form lay-filter="form_contract" class="layui-form">
+                <input type='hidden' name='id'/>
+                <input type='hidden' name='type' value="A"/>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>合作客户</label>
                     <div class="layui-input-inline">
-                        <select name="client" lay-verify="required">
-                            <option value="">选择合作客户</option>
-                            <option value="0">科技中专</option>
-                            <option value="1">国棉四厂</option>
-                        </select>
-                    </div>
+                        <input type="text" name="name" required=""  autocomplete="off"
+                               class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
@@ -60,7 +58,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <button class="layui-btn" lay-filter="add" lay-submit="" onclick="save()">保存</button>
+                    <button ltype="button" class="layui-btn layui-btn-fluid" onclick="save()">保存</button>
                 </div>
             </form>
         </div>
