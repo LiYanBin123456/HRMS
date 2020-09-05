@@ -33,21 +33,21 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>合作客户</label>
                     <div class="layui-input-inline">
-                        <select name="bid" id="select_dispatch" lay-filter="filter_dispatch"></select>
+                        <select name="bid" id="select_dispatch" lay-filter="filter_dispatch" lay-verify="required"></select>
                     </div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>合同生效时间</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="start" required="" lay-verify="nikename" autocomplete="off"
+                        <input type="text" name="start" required="" id="contract_dispatch_start" placeholder="" autocomplete="off"
                                class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>合同到期时间</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="end" required="" lay-verify="nikename" autocomplete="off"
+                        <input type="text" name="end" required="" id="contract_dispatch_end" placeholder="" autocomplete="off"
                                class="layui-input"></div>
                 </div>
                 <div class="layui-form-item layui-form-text">
@@ -79,24 +79,35 @@
     var form;//表单对象
     var editer;
     var upload;
+    var laydate;
 
     loadLayuiModule();
 
     function loadLayuiModule() {
-        layui.use(['form', 'layedit', 'jquery', 'upload'], function () {
+        layui.use(['form', 'layedit', 'jquery', 'upload','laydate'], function () {
             form = layui.form;
             layedit = layui.layedit;
             editer = layedit.build('content'); //建立编辑器
             upload = layui.upload;
-            var uploadInst = upload.render({
+            laydate = layui.laydate;
+            upload.render({
                 elem: '#test1' //绑定元素
-                , url: '/upload/' //上传接口
+                , url: '/hrms/file/' //上传接口
+                ,before: function(file,id){
+                    this.data={op:"upload",file:JSON.stringify(file),id:id}
+                }
                 , done: function (res) {
                     //上传完毕回调
                 }
                 , error: function () {
                     //请求异常回调
                 }
+            });
+            laydate.render({
+                elem: '#contract_dispatch_start'
+            });
+            laydate.render({
+                elem: '#contract_dispatch_end'
             });
             initPage();
             initdispatch();

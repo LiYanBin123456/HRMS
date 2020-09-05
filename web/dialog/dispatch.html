@@ -90,6 +90,7 @@
              <div class="layui-tab-item">
                 <form lay-filter="form_finance" class="layui-form">
                     <input type='hidden' name='id'/>
+                    <input type='hidden' name='cid'/>
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
                             <span class="x-red">*</span>信用代码</label>
@@ -196,6 +197,7 @@
             if(finance){
                 flag2 = true;
                 form.val('form_finance', finance);
+                layedit.setContent(editer, finance.content, false);
             }
         });
     }

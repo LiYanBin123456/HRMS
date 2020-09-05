@@ -176,7 +176,7 @@
                 });
             }
 
-            //删除公告
+            //删除合同
             function del(contract) {
                 layer.confirm('确定删除'+contract.name+'的合同', {icon: 3, title:'删除合同'}, function(index){
                     iContract.delete(contract.id,function () {
