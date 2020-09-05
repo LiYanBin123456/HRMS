@@ -46,6 +46,7 @@
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/jquery.params.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -125,11 +126,9 @@
           }
 
             function getDetail2s() {
-                /*var result = {total:100,rows:[{cardId:"360402199008230081",name:"张晓国",hours:"1000",price:"50",food:"100",traffic:"100",accommodation:"5000",utilities:"5000",insurance:"5000",tax:"5000",other1:"5000",other2:"5000",payable:"5000",paid:"5000"},{cardId:"360402199008230081",name:"宋丽",hours:"2000",price:"50",food:"600",accommodation:"12000",traffic:"100",utilities:"12000",insurance:"12000",tax:"12000",other1:"12000",other2:"12000",payable:"12000",paid:"12000"}]};
-                table.reload('tbl_detail', {
-                    data:result.rows
-                });*/
+                var id = $.query.get("id");
                 iSettlement.getDetails(param_query,id,1,function (result) {
+                    console.log(result)
                     table.reload('tbl_detail', {
                         data:result.rows
                     });

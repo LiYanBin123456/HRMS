@@ -52,11 +52,6 @@
             <!--顶部工具栏-->
             <div class="layui-hide" id="top_bar_settlement">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
-                <button class="layui-btn layui-btn-sm" lay-event="copy"><i class="layui-icon "></i> 另存为</button>
-                <button class="layui-btn layui-btn-sm" lay-event="save"><i class="layui-icon "></i> 保存</button>
-                <button class="layui-btn layui-btn-sm" lay-event="submit"><i class="layui-icon "></i> 提交</button>
-                <button class="layui-btn layui-btn-sm" lay-event="reset"><i class="layui-icon "></i> 重置</button>
-                <button class="layui-btn layui-btn-sm" lay-event="charge"><i class="layui-icon "></i> 扣款</button>
             </div>
             <table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>
             <div id="pager"></div>
@@ -65,7 +60,11 @@
             <script type="text/html" id="bar_settlement">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>明细</a>
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log"><i class="layui-icon layui-icon-edit"></i>日志</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="save">保存</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="saveAs">另存为</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="commit">提交</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reset">重置</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
             </script>
         </div>
         <script src="../js/fieldSet.js"></script>
@@ -77,7 +76,7 @@
             var layer;//弹出窗口
             var element;
             var laydate;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -143,18 +142,6 @@
                         case "log":
                             showLogs(settlement);
                             break;
-                        case "del":
-                            del(settlement);
-                            break;
-                    }
-                });
-
-                //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_settlement)', function(obj){
-                    switch(obj.event){
-                        case 'insert':
-                            showInsertDlg();
-                            break;
                         case 'copy':
                             showCopyDlg();
                             break;
@@ -167,8 +154,14 @@
                         case 'reset':
                             reset();
                             break;
-                        case 'charge':
-                            charge();
+                    }
+                });
+
+                //顶部工具栏事件处理
+                table.on('toolbar(filter_tb_settlement)', function(obj){
+                    switch(obj.event){
+                        case 'insert':
+                            showInsertDlg();
                             break;
                         case 'search':
                             search();
@@ -180,12 +173,8 @@
             }
 
             function getSettlements() {
-                var result = {total:100,rows:[{client:"科技中专",month:"2020-06",pname:"用工宝",price:"5000",status:"申报中"},{client:"国棉四厂",month:"2020-06",pname:".....",price:"12000",status:"已审核"}]};
-                table.reload('tbl_settlement', {
-                    data:result.rows
-                });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iSettlement3.getList(param_query,function (result) {
+                iSettlement.getList(param_query,2,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows
                     });
@@ -204,7 +193,7 @@
                             }
                         }
                     });
-                });*/
+                });
             }
 
             //模糊查找

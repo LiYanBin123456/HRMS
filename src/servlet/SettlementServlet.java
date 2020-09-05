@@ -161,7 +161,8 @@ public class SettlementServlet extends HttpServlet {
     private String saveAs(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
-        Date month = Date.valueOf(request.getParameter("month"));
+        String mont=request.getParameter("month");
+        Date month = Date.valueOf(mont+"-"+"01");
         DaoUpdateResult result = null;
         switch (category){
             case 0://普通结算单
