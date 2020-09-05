@@ -160,6 +160,7 @@
     var op = "insert";
     var form;//表单对象
     var editer;
+    var supplier;
 
     loadLayuiModule();
 
@@ -172,14 +173,13 @@
         });
     }
 
+    var id = $.query.get("id");
     function initData() {
-        var param = $.query.get("supplier");
-        if (param) {
-            var supplier = JSON.parse(param);
+        iClient.get(id,2,function (result) {
+            supplier = result.data;
             form.val('form_supplier', supplier);
-            layedit.setContent(editer, supplier.content, false);
             op = "update";
-        }
+        })
     }
 
     function save() {
@@ -198,14 +198,14 @@
             layer.alert("修改成功", {icon: 6}, refresh());
         }
 
-        function refresh() {
-            // 获得frame索引
-            var index = parent.layer.getFrameIndex(window.name);
-            //关闭当前frame
-            parent.layer.close(index);
-            //修改成功后刷新父界面
-            window.parent.location.reload();
-        }
+    }
+    function refresh() {
+        // 获得frame索引
+        var index = parent.layer.getFrameIndex(window.name);
+        //关闭当前frame
+        parent.layer.close(index);
+        //修改成功后刷新父界面
+        window.parent.location.reload();
     }
 </script>
 

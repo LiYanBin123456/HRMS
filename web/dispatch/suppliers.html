@@ -155,7 +155,7 @@
 
             //打开详情对话框
             function showDetailDlg1(supplier) {
-                var content = "../dialog/supplier.html?supplier="+encodeURIComponent(JSON.stringify(supplier));
+                var content = "../dialog/supplier.html?id="+supplier.id;
                 layer.open({
                     title:"详情",
                     type: 2,
