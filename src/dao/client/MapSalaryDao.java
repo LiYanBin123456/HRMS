@@ -28,8 +28,8 @@ public class MapSalaryDao {
 
     //添加自定义工资
     public static DaoUpdateResult insert(MapSalary m, Connection conn){
-        String sql = "insert into map_salary (cid,items,date) values (?,?,?)";
-        Object []params = {m.getCid(),m.getItems(),m.getDate()};
+        String sql = "insert into map_salary (cid,items,date) values (?,?,now())";
+        Object []params = {m.getCid(),m.getItems()};
         return DbUtil.insert(conn,sql,params);
     }
 }

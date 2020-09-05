@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.sql.Date;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/client")
@@ -47,6 +48,12 @@ public class ClientServlet extends HttpServlet {
                 break;
             case "get"://获取一个客户清单
                 result = get(conn,request);
+                break;
+            case "getAllocating"://获取待分配管理员的客户清单
+                result = getAllocating(conn,request);
+                break;
+            case "getAllocated"://获取待分配管理员的客户清单
+                result = getAllocated(conn,request);
                 break;
             case "allocate"://修改管理员
                 result = allocate(conn,request);
@@ -188,6 +195,35 @@ public class ClientServlet extends HttpServlet {
         return JSONObject.toJSONString(res);
     }
 
+    //获取客户列表
+    private String getAllocating(Connection conn,HttpServletRequest request) {
+        DaoQueryListResult res = new DaoQueryListResult();
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("aid","=",0);
+        byte category= Byte.parseByte(request.getParameter("category"));
+        if(category==0){//派遣方客户
+            res = DispatchService.getList(conn,parameter);
+        }else if(category==1){//合作单位客户
+            res = CooperationService.getList(conn,parameter);
+        }
+        return JSONObject.toJSONString(res);
+    }
+
+    //获取客户列表
+    private String getAllocated(Connection conn,HttpServletRequest request) {
+        DaoQueryListResult res = new DaoQueryListResult();
+        byte category= Byte.parseByte(request.getParameter("category"));
+        long aid = Long.parseLong(request.getParameter("aid"));
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("aid","=",aid);
+        if(category==0){//派遣方客户
+            res = DispatchService.getList(conn,parameter);
+        }else if(category==1){//合作单位客户
+            res = CooperationService.getList(conn,parameter);
+        }
+        return JSONObject.toJSONString(res);
+    }
+
     //获取客户基本信息
     private String get(Connection conn,HttpServletRequest request){
         DaoQueryResult res = null;
@@ -215,10 +251,10 @@ public class ClientServlet extends HttpServlet {
         byte category = Byte.parseByte(request.getParameter("category"));
         switch(category){
             case 0:
-                res = CooperationService.allocateAdmin(conn,cids,aid);
+                res = DispatchService.allocateAdmin(conn,cids,aid);
                 break;
             case 1:
-                res = DispatchService.allocateAdmin(conn,cids,aid);
+                res = CooperationService.allocateAdmin(conn,cids,aid);
         }
         return  JSONObject.toJSONString(res);
     }
@@ -272,7 +308,6 @@ public class ClientServlet extends HttpServlet {
     //增加客户自定义工资信息
     private String insertSalaryDefine(Connection conn, HttpServletRequest request) {
         MapSalary mapSalary =JSONObject.parseObject(request.getParameter("mapSalary"),MapSalary.class);
-        System.out.println("前台传来的数据："+mapSalary);
         DaoUpdateResult res= MapSalaryService.insert(mapSalary,conn);
         return  JSONObject.toJSONString(res);
     }
