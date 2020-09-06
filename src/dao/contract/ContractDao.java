@@ -3,31 +3,33 @@ package dao.contract;
 import bean.contract.*;
 import database.*;
 
+import javax.servlet.http.HttpSession;
 import javax.sound.midi.Soundbank;
 import java.sql.Connection;
 import java.util.List;
 
 public class ContractDao {
     //根据查询条件获取合同列表，用视图查找
-    public static DaoQueryListResult getList(Connection conn, QueryParameter parameter,String type) {
+    public static DaoQueryListResult getList(Connection conn, QueryParameter parameter, String type, long rid) {
         DaoQueryListResult res = null;
         if(parameter.conditions.extra!=null && !parameter.conditions.extra.isEmpty()) {
             parameter.addCondition("name","like",parameter.conditions.extra);
         }
         switch(type){
             case "A":
-                //获取平台和派遣方的合同
+                //获取平台和所有派遣方的合同
                 res= DbUtil.getList(conn,"view_contract_dispatch",parameter, ViewContractDispatch.class);
                 break;
             case "B":
-                //获取派遣方与合作单位的合同
+                //获取该派遣方与之合作单位的合同
+                parameter.addCondition("aid","=",rid);
                 res= DbUtil.getList(conn,"view_contract_cooperation",parameter, ViewContractCooperation.class);
                 break;
             case "C":
-                //获取派遣方与员工的合同
+                //获取该派遣方与之员工的合同
+                parameter.addCondition("aid","=",rid);
                 res= DbUtil.getList(conn,"view_contract_employee",parameter, ViewContractEmployee.class);
                 break;
-
         }
         return res;
     }

@@ -106,14 +106,32 @@ public class SettlementServlet extends HttpServlet {
         byte category = Byte.parseByte(request.getParameter("category"));
         QueryParameter param = JSONObject.parseObject(request.getParameter("param"),QueryParameter.class);
         DaoQueryListResult result = null;
+        HttpSession session = request.getSession();
+        byte role = (byte) session.getAttribute("role");
+        long rid = (long) session.getAttribute("rid");
         switch (category){
             case 0://普通结算单
+                if(role==1){
+                    param.addCondition("did","=",rid);
+                }else if(role==2){
+                    param.addCondition("cid","=",rid);
+                }
                 result = Settlement1Service.getList(conn,param);
                 break;
             case 1://小时工结算单
+                if(role==1){
+                    param.addCondition("did","=",rid);
+                }else if(role==2){
+                    param.addCondition("cid","=",rid);
+                }
                 result = Settlement2Service.getList(conn,param);
                 break;
             case 2://商业保险结算单
+                if(role==1){
+                    param.addCondition("did","=",rid);
+                }else if(role==2){
+                    param.addCondition("cid","=",rid);
+                }
               result = Settlement3Service.getList(conn,param);
                 break;
         }

@@ -13,6 +13,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -177,7 +178,16 @@ public class EmployeeServlet extends HttpServlet {
         DaoQueryListResult res;
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         byte category = Byte.parseByte(request.getParameter("category"));
+
+        HttpSession session = request.getSession();
+        byte role = (byte) session.getAttribute("role");
+        long rid = (long) session.getAttribute("rid");
         if(category==0){
+            if(role==1){//派遣方管理员
+                parameter.addCondition("did","=",rid);
+            }else if(role == 2) {//合作方管理员
+                parameter.addCondition("cid","=",rid);
+            }
             res = EmployeeService.getList(conn,parameter);
         }else {
             res = ExtraService.getList(conn,parameter);

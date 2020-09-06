@@ -42,9 +42,6 @@ public class NoticeServlet extends HttpServlet {
                 result = get(conn,request);
                 break;
         }
-
-
-
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
         out.print(result);

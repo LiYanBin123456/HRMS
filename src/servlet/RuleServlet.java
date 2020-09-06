@@ -54,7 +54,6 @@ public class RuleServlet extends HttpServlet {
                 break;
             default:
                 result = "{\"success\":false,\"msg\":\"参数错误\"}";
-
         }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
