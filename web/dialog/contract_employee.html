@@ -22,17 +22,24 @@
         </style>
     </head>
     <body>
-    <div class="layui-tab-content">
+    <div class="layui-tab layui-tab-brief" lay-filter="tab_contracts">
+        <ul class="layui-tab-title">
+            <li class="layui-this">基础信息</li>
+            <li>服务项目</li>
+            <li>复印件</li>
+        </ul>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
                 <form lay-filter="form_contract" class="layui-form">
                     <div class="layui-input-inline searchbox">
-                             <div class="layui-inline"><input type="radio" name="se" value="固定期限" title="固定期限" checked></div>
-                             <div class="layui-inline"><input type="radio" name="se" value="无固定期限" title="无固定期限" ></div>
+                        <div class="layui-inline"><input type="radio" name="se" value="固定期限" title="固定期限" checked></div>
+                        <div class="layui-inline"><input type="radio" name="se" value="无固定期限" title="无固定期限" ></div>
                     </div>
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
                             <span class="x-red">*</span>身份证号码</label>
                         <div class="layui-input-inline">
-                            <input type="text"  name="cardId" required="" lay-verify="nikename" autocomplete="off" class="layui-input layui-disabled" disabled></div>
+                            <input type="text"  name="cardId" required=""  autocomplete="off" class="layui-input layui-disabled" disabled></div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">
@@ -70,14 +77,16 @@
                             <textarea name="comments" placeholder="请输入内容" class="layui-textarea"></textarea>
                         </div>
                         </div>
-                        <div class="layui-form-item">
-                        <label  class="layui-form-label"></label>
-                        <button type="button" class="layui-btn" id="test1">
-                           <i class="layui-icon">&#xe67c;</i>上传pdf
-                        </button></div>
                <div class="layui-form-item">
                         <button type="button" class="layui-btn layui-btn-fluid"  onclick="save()">保存</button></div>
                 </form>
+            </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label"></label>
+                    <button type="button" class="layui-btn" id="test1">
+                        <i class="layui-icon">&#xe67c;</i>上传pdf
+                    </button></div>
+        </div>
     </div>
 </body>
 <script src="../js/jquery.min.js"></script>

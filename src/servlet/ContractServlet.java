@@ -96,6 +96,7 @@ public class ContractServlet extends HttpServlet {
         contract.setId(id);
         System.out.println(contract);
         res = ContractService.insert(conn,contract);
+        res.extra = id;
         System.out.println(res);
         return JSONObject.toJSONString(res);
     }

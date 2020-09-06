@@ -48,7 +48,6 @@
         <div class="layui-tab-item layui-show">
             <form lay-filter="form_cooperation" class="layui-form">
                 <input type='hidden' name='id'/>
-                <input type='hidden' name='did' value="1"/>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>档案编号</label>
@@ -136,7 +135,8 @@
         <div class="layui-tab-item">
             <form lay-filter="form_finance" class="layui-form">
                 <input type='hidden' name='id'/>
-                <input type='hidden' name='did' value="1"/>
+                <input type='hidden' name='cid'/>
+                <input type='hidden' name='type' value="1"/>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>统一社会信用代码</label>
@@ -240,7 +240,7 @@
     var layer;
     var editer;
     var element;
-    var id;//合作单位编号
+    var id = $.query.get("id");
     var flag1;//合作单位基本信息是否已经存在
     var flag2;//合作单位财务信息是否已经存在
     var salary_items_fixed = ["基本工资", "个人养老", "个人医疗", "个人失业", "个人大病", "个人公积金","单位养老","单位医疗","单位失业","单位工伤","单位大病","单位生育", "单位公积金", "个税", "应发", "实发"];
@@ -262,10 +262,10 @@
                 var id = this.getAttribute('lay-id');
                 switch (id) {
                     case "base":
-                        initPage();
+                        getCooperation();
                         break;
                     case "finance":
-                        initFinance();
+                        getFinance();
                         break;
                     case "salary_define":
                         initSalayDefine();
@@ -273,21 +273,11 @@
                 }
             });
             initPage();
+            getCooperation();
         });
     }
 
     function initPage() {
-        id = $.query.get("id");
-        if (id) {
-            getCooperation();
-        }
-        element.on('tab(tab_cooperation)', function(data){
-            if(data.index == 1){
-                if(!flag2){
-                    getFinance();
-                }
-            }
-        });
         form.on('submit(submit_cooperation)', function(data){
             saveCooperation(data.field);
         });
@@ -295,35 +285,18 @@
             saveFinance(data.field);
         });
     }
-
     function getCooperation() {
         iClient.get(id,1,function (result) {
             var cooperation = result.data;
-            if(cooperation){
-                flag1 = true;
                 form.val('form_cooperation', cooperation);
                 layedit.setContent(editer, cooperation.content, false);
-            }
         });
     }
-
     function getFinance() {
         iClient.getFinance(id,1,function (result) {
             var finance = result.data;
-            if(finance){
-                flag2 = true;
                 form.val('form_finance', finance);
-            }
         });
-    }
-
-    function initFinance() {
-        if(flag2) {
-            return;
-        }else {
-            getFinance();
-        }
-
     }
 
     function initSalayDefine() {
