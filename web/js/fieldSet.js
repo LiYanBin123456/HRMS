@@ -464,11 +464,20 @@ var period_product = [
  ];
 
 /**
- * 培训机构员工权限
+ * 管理员权限列表
  */
-var permit_admin = [
+var permissions_admin = [
     {value:1, text:"账号管理"},
     {value:2, text:"客户管理"}
+];
+/**
+ * 派遣单位权限列表
+ */
+var permissions_dispatch = [
+    {value:1, text:"账号管理"},
+    {value:2, text:"工资审核"},
+    {value:4, text:"财务审核"},
+    {value:8, text:"客户管理"}
 ];
 
 //----------------------------------------------------------------字段格式化-----------------------

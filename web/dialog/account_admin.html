@@ -29,37 +29,38 @@
             <form lay-filter="form_account" class="layui-form">
                 <input type='hidden' name='id'/>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>姓名</label>
+                    <label class="layui-form-label"><span class="x-red">*</span>姓名</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="nickname" required="" autocomplete="off" class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>登录账户</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="username" required="" autocomplete="off" class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>初始密码</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="password" required=""  autocomplete="off" class="layui-input"></div>
+                        <input type="text" name="nickname" required="" autocomplete="off" class="layui-input">
                     </div>
+                </div>
                 <div class="layui-form-item">
-                    <label  class="layui-form-label"></label>
-                    <button class="layui-btn" >保存</button>
+                    <label class="layui-form-label"><span class="x-red">*</span>登录账户</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="username" required="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span class="x-red">*</span>初始密码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="password" required="" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <button type="button" lay-submit lay-filter="saveInfo" class="layui-btn layui-btn-fluid">保存</button>
                 </div>
             </form>
         </div>
         <div class="layui-tab-item">
-            <form lay-filter="form_permit" class="layui-form">
+            <form lay-filter="form_permission" class="layui-form">
                 <input type='hidden' name='id'/>
                 <div class="layui-form-item">
-                    <div class="layui-input-inline" id="permits">
+                    <div class="layui-input-inline" id="permissions">
                     </div>
                 </div>
-                <button class="layui-btn" onclick="savePermit()">保存</button>
+                <div class="layui-form-item">
+                    <button type="button" lay-submit lay-filter="savePermission" class="layui-btn layui-btn-fluid">保存</button>
+                </div>
             </form>
         </div>
     </div>
@@ -85,6 +86,9 @@
             form = layui.form;
             table = layui.table;
             layer = layui.layer;
+
+            form.on("submit(saveInfo)", saveInfo);
+            form.on("submit(savePermission)", savePermission);
             initPage();
         });
     }
@@ -98,21 +102,23 @@
             form.val('form_account', account);
 
             //初始化权限信息
-           /* form.val('form_permit', account);
-            for(var i in permit_admin){
-                var p = permit_admin[i];
-                var v = p.value;
-                var o = $("<input type='checkbox' name='permit' lay-skin='primary'>").val(v).attr('title',p.text);
-                $("#permits").append(o);
+            form.val('form_permission', account);
+            for (var i in permissions_admin) {
+                var p = permissions_admin[i];
+                var o = $("<input type='checkbox' name='permit' lay-skin='primary'>").val(p.value).attr('title', p.text);
+                if ((account.permission & p.value) != 0) {
+                    $(o).attr("checked", true);
+                }
+                $("#permissions").append(o);
             }
-            form.render('checkbox');*/
+            form.render('checkbox');
 
             op = "update";
         }
     }
 
-    function save() {
-        /*var account = form.val('form_account');
+    function saveInfo(data) {
+        var account = data.field;
         if (op == "insert") {
             iAccount.insert(account, function (result) {
                 layer.msg("添加成功");
@@ -121,17 +127,16 @@
             iAccount.update(account, function (result) {
                 layer.msg("修改成功");
             });
-        }*/
+        }
     }
 
-    function savePermit() {
-        var data = form.val('form_permit');
-        var id = data.id;
+    function savePermission(data) {
+        var id = data.field.id;
         var permit = 0;
-        $("input:checkbox[name='permit']:checked").each(function(i){
+        $("input:checkbox[name='permit']:checked").each(function (i) {
             permit += Number($(this).val());
         });
-        iAccount.permit(id,permit,function (result) {
+        iAccount.permit(id, permit, function (result) {
             layer.msg("权限分配成功！");
         });
     }
