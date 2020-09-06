@@ -135,7 +135,6 @@ public class Settlement2Service {
                 log.setOperator(operator);
                 log.setTime(time);
                 log.setContent(content);
-                System.out.println(log);
                 //插入log信息
                 LogDao.insert(conn,log);
             }

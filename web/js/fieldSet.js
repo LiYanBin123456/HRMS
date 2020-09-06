@@ -158,7 +158,7 @@ var columns_settlement1  = [[
 //面向合作普通结算单字段集合
 var columns_settlement10  = [[
     {type:'checkbox',width:30},
-    {field:'month', title: '月份',width:80,fixed:"left",templet:function (d) {return format_date(d.month)}},
+    {field:'month', title: '月份',width:90,fixed:"left",templet:function (d) {return format_date(d.month)}},
     {field:'salary', title: '工资',width:70},
     {field:'social', title: '社保',width:70},
     {field:'fund', title: '公积金',width:80},
@@ -172,7 +172,7 @@ var columns_settlement10  = [[
 //小时工结算单字段集合
 var columns_settlement2  = [[
     {field:'name', title: '用工企业',width:180,fixed:"left"},
-    {field:'month', title: '月份',width:80,templet:function (d) {return format_date(d.month)}},
+    {field:'month', title: '月份',width:90,templet:function (d) {return format_date(d.month)}},
     {field:'hours', title: '总工时',width:70},
     {field:'price', title: '单价',width:60},
     {field:'traffic', title: '交通费',width:70},
@@ -184,7 +184,7 @@ var columns_settlement2  = [[
 
 //面向合作小时工结算单字段集合
 var columns_settlement20  = [[
-    {field:'month', title: '月份',width:80,fixed:"left",templet:function (d) {return format_date(d.month)}},
+    {field:'month', title: '月份',width:90,fixed:"left",templet:function (d) {return format_date(d.month)}},
     {field:'time', title: '总工时',width:70},
     {field:'price', title: '单价',width:70},
     {field:'traffic', title: '交通费',width:70},

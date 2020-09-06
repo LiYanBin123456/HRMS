@@ -13,18 +13,14 @@
     <script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
 </head>
 <body>
-<form lay-filter="form_settlement" class="layui-form" style="padding: 10px">
+<input lay-filter="form_settlement" class="layui-form" style="padding: 10px">
     <input type='hidden' name='id'/>
     <div class="layui-form-item">
         <label class="layui-form-label">
             <span class="x-red">*</span>选择结算单位</label>
         <div class="layui-input-inline">
-            <select name="client" lay-filter="filter_client">
-                <option value=""></option>
-                <option value="0">科技中专</option>
-                <option value="1">国棉四厂</option>
-                <option value="2">其他</option>
-            </select>
+            <select name="cid" id="select_cooperation" lay-filter="filter_cooperation" lay-verify="required"></select>
+
         </div>
     </div>
     <div class="layui-form-item">
@@ -64,7 +60,22 @@
         });
     }
 
-
+    //根据派遣方id查询所属的所有合作方
+    function initCoop(did) {
+        //获取session中的派遣方id
+        var did= '<%=session.getAttribute("cid")%>'
+        iClient.getList({},1,function(result){
+            var cooperations = result.rows;
+            var select_cooperation = $("#select_cooperation");
+            select_cooperation.append("<option value='-2' selected disabled hidden>选择合作客户</option>");
+            for(var i in cooperations){
+                var dispatch = cooperations[i];
+                var option = $("<option>").val(dispatch.id).text(dispatch.name);
+                select_cooperation.append(option);
+            }
+            form.render('select', 'form_contract');
+        })
+    }
 
     //向调用页面返回编辑的结算单
     var callbackData = function () {

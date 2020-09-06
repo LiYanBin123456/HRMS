@@ -222,7 +222,7 @@
             //打开查看日志对话框
             function showLogs(settlement) {
                 var content = "log.html?category=0&id="+settlement.id;
-                var title = "操作日志-"+settlement.client+settlement.month;
+                var title = "操作日志-"+settlement.name+format_date(settlement.month);
                 layer.open({
                     title:title,
                     type: 2,
@@ -252,12 +252,12 @@
             }
 
             function insertSettlement(settlement) {
-                layer.msg("创建结算单，cid:"+settlement.cid+",month:"+settlement.month);
+                layer.msg("创建结算单，cid:"+settlement.cid+",month:"+format_date(settlement.month));
             }
 
             //打开复制对话框
             function showCopyDlg(settlement) {
-                var title = "另存["+settlement.name+settlement.month+"]为";
+                var title = "另存["+settlement.name+format_date(settlement.month)+"]为";
                 layer.open({
                     title:title,
                     type: 2,
@@ -281,8 +281,8 @@
              * @param month 月份
              */
             function saveAs(id,month) {
-                var msg = "结算单另存为"+month;
-                var title = "结算单另存为-"+month;
+                var msg = "结算单另存为"+format_date(month);
+                var title = "结算单另存为-"+format_date(month);
                 layer.confirm(msg, {icon: 3, title:title}, function(index){
                     iSettlement.saveAs(id,0,month,function () {
                         layer.close(index);
@@ -294,7 +294,7 @@
             //保存结算单
             function save(settlement) {
                 var msg = "保存后结算单将被设置为[保存]状态，同时会自动计算社保、医保和个税等，确认保存吗？";
-                var title = "保存结算单-"+settlement.name+settlement.month;
+                var title = "保存结算单-"+settlement.name+format_date(settlement.month);
                 layer.confirm(msg, {icon: 3, title:title}, function(index){
 
                 });
@@ -336,7 +336,7 @@
             }
             //删除结算单
             function del(settlement) {
-                layer.confirm('确定删除'+settlement.name+'的结算单', {icon: 3, title:'删除'}, function(index){
+                layer.confirm('确定删除'+settlement.name+":"+format_date(settlement.month)+'的结算单', {icon: 3, title:'删除'}, function(index){
                     iSettlement.delete(settlement.id,0,function () {
                     layer.close(index);
                     getSettlements();
