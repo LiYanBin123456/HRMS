@@ -120,6 +120,7 @@
 
     function saveInfo(data) {
         var account = data.field;
+        account.role = 1;
         if(op == "insert") {
             iAccount.insert(account, onInsertSuccess);
         }else{

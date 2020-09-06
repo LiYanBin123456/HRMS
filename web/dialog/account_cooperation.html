@@ -90,17 +90,18 @@
         var param = $.query.get("account");
         if (param) {
             var account = JSON.parse(param);
-            form.val('form_account', account_cooperation);
+            form.val('form_account', account);
             op = "update";
         }
     }
 
     function save() {
         var account = form.val('form_account');
+        account.role = 2;
         if(op == "insert") {
-            iAccount.insert(account_cooperation, onInsertSuccess);
+            iAccount.insert(account, onInsertSuccess);
         }else{
-            iAccount.update(account_cooperation,onUpdateSuccess);
+            iAccount.update(account,onUpdateSuccess);
         }
 
         function onInsertSuccess() {
