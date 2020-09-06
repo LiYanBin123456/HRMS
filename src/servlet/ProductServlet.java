@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -79,6 +80,9 @@ public class ProductServlet extends HttpServlet {
 
     private String getList(Connection conn, HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
+        HttpSession session = request.getSession();
+        long rid = (long) session.getAttribute("rid");
+        parameter.addCondition("did","=",rid);
         DaoQueryListResult res = ProductService.getList(conn,parameter);
         return JSONObject.toJSONString(res);
     }

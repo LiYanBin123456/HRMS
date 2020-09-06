@@ -40,7 +40,6 @@ public class FinanceServlet extends HttpServlet {
                 result = getTransactions(conn,request);
                 break;
         }
-
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
         out.print(result);

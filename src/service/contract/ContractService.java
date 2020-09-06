@@ -8,8 +8,8 @@ import database.*;
 import java.sql.Connection;
 
 public class ContractService {
-    public static DaoQueryListResult getList(Connection conn, QueryParameter parameter,String type) {
-     return ContractDao.getList(conn,parameter,type);
+    public static DaoQueryListResult getList(Connection conn, QueryParameter parameter, String type, long rid) {
+     return ContractDao.getList(conn,parameter,type,rid);
     }
 
     public static DaoQueryResult getLast(Connection conn, String id,String type) {

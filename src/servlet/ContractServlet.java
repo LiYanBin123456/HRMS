@@ -14,10 +14,7 @@ import utills.CreateGetNextId;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
+import javax.servlet.http.*;
 import java.io.*;
 import java.sql.Connection;
 
@@ -105,7 +102,6 @@ public class ContractServlet extends HttpServlet {
 
     //获取最新合同
     private String getLast(Connection conn, HttpServletRequest request) {
-
         String bid = (request.getParameter("id"));
         System.out.println("客户id="+bid);
         String type = request.getParameter("type");
@@ -117,7 +113,9 @@ public class ContractServlet extends HttpServlet {
     private String getList(Connection conn, HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         String type=request.getParameter("type");
-        DaoQueryListResult res = ContractService.getList(conn,parameter,type);
+        HttpSession session = request.getSession();
+        long rid = (long) session.getAttribute("rid");
+        DaoQueryListResult res = ContractService.getList(conn,parameter,type,rid);
         return JSONObject.toJSONString(res);
     }
 

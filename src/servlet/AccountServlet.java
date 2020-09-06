@@ -99,7 +99,6 @@ public class AccountServlet extends HttpServlet {
     //获取账号列表
     private String getList(Connection conn, HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
-
         HttpSession session = request.getSession();
         byte role = (byte) session.getAttribute("role");
         long rid = (long) session.getAttribute("rid");

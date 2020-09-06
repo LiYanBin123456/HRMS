@@ -94,6 +94,8 @@ public class ClientServlet extends HttpServlet {
     private String insert(Connection conn,HttpServletRequest request) {
         DaoUpdateResult res = null;
         byte category = Byte.parseByte(request.getParameter("category"));
+        HttpSession session = request.getSession();
+        long rid = (long) session.getAttribute("rid");
         switch (category) {
             case 0://派遣方客户
                 Dispatch dispatch = JSON.parseObject(request.getParameter("client"), Dispatch.class);
@@ -101,10 +103,12 @@ public class ClientServlet extends HttpServlet {
                 break;
             case 1://合作单位客户
                Cooperation cooperation= JSON.parseObject(request.getParameter("client"), Cooperation.class);
+               cooperation.setDid(rid);
                res = CooperationService.insert(cooperation,conn);
                break;
             case 2://派遣单位客户
                 Supplier supplier= JSON.parseObject(request.getParameter("client"), Supplier.class);
+                supplier.setDid(rid);
                 res = SupplierService.insert(supplier,conn);
                 break;
         }
@@ -181,17 +185,19 @@ public class ClientServlet extends HttpServlet {
     private String getList(Connection conn,HttpServletRequest request) {
         DaoQueryListResult res ;
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
-
-
+        HttpSession session = request.getSession();
+        long rid = (long) session.getAttribute("rid");
         byte category= Byte.parseByte(request.getParameter("category"));
         if(category==0){
             //派遣方客户
             res = DispatchService.getList(conn,parameter);
         }else if(category==1){
             //合作单位客户
+            parameter.addCondition("did","=",rid);
             res = CooperationService.getList(conn,parameter);
         }else {
             //供应商客户
+            parameter.addCondition("did","=",rid);
             res = SupplierService.getList(conn,parameter);
         }
 
