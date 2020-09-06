@@ -141,17 +141,23 @@ public class SettlementServlet extends HttpServlet {
     private String insert(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         DaoUpdateResult result = null;
+        HttpSession session = request.getSession();
+        byte role = (byte) session.getAttribute("role");
+        long rid = (long) session.getAttribute("rid");
         switch (category){
             case 0://普通结算单
                 Settlement1 settlement1 = JSONObject.parseObject(request.getParameter("settlement"), Settlement1.class);
+                settlement1.setDid(rid);
                 result = Settlement1Service.insert(conn,settlement1);
                 break;
             case 1://小时工结算单
                 Settlement2 settlement2 = JSONObject.parseObject(request.getParameter("settlement"), Settlement2.class);
+                settlement2.setDid(rid);
                 result = Settlement2Service.insert(conn,settlement2);
                 break;
             case 2://商业保险结算单
                 Settlement3 settlement3 = JSONObject.parseObject(request.getParameter("settlement"), Settlement3.class);
+                settlement3.setDid(rid);
                 result = Settlement3Service.insert(conn,settlement3);
                 break;
         }

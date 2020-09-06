@@ -13,8 +13,8 @@
     <script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
 </head>
 <body>
-<form name="filter_client" id="filter_client">
-<input lay-filter="form_settlement" class="layui-form" style="padding: 10px">
+
+<form lay-filter="form_settlement" class="layui-form" style="padding: 10px">
     <div class="layui-form-item">
         <label class="layui-form-label">
             <span class="x-red">*</span>选择结算单位</label>
@@ -37,23 +37,24 @@
 <script src="../js/interface.js"></script>
 <script>
     var settlement = {};
+    var form;
+    var laydate
 
     loadLayuiModule();
 
     function loadLayuiModule() {
         layui.use(['form', 'laydate', 'jquery'], function () {
-            var form = layui.form;
-            var laydate = layui.laydate;
-
-            form.on('select(filter_client)', function(data){
+            form = layui.form;
+            laydate = layui.laydate;
+            initCoop();
+            form.on('select(filter_cooperation)', function(data){
                 settlement.cid = data.value;
             });
-
             laydate.render({
                 elem: '#month' //指定元素
                 ,type: 'month'
                 ,change: function(value, date, endDate){
-                    settlement.month = value;
+                    settlement.month = value+"-01";
                 }
             });
         });
@@ -72,7 +73,7 @@
                 select_cooperation.append(option);
             }
             form.render('select', 'form_settlement');
-        })
+        });
     }
 
     //向调用页面返回编辑的结算单

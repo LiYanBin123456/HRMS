@@ -252,7 +252,10 @@
             }
 
             function insertSettlement(settlement) {
-                layer.msg("创建结算单，cid:"+settlement.cid+",month:"+format_date(settlement.month));
+                iSettlement.insert(settlement,0,function () {
+                    getSettlements();
+                    layer.msg("创建结算单，cid:"+settlement.cid+",month:"+format_date(settlement.month));
+                });
             }
 
             //打开复制对话框
