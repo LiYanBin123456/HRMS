@@ -129,14 +129,13 @@ public class AccountServlet extends HttpServlet {
     //修改账号
     private String update(Connection conn, HttpServletRequest request) {
         Account account =JSONObject.parseObject(request.getParameter("account"),Account.class);
-        System.out.println("前台传过来的参数："+account);
         DaoUpdateResult res =AccountService.update(conn,account);
         return JSONObject.toJSONString(res);
     }
 
     //设置权限
     private String permit(Connection conn, HttpServletRequest request) {
-        byte permission = Byte.parseByte(request.getParameter("permission"));
+        int permission = Integer.parseInt(request.getParameter("permission"));
         long id = Long.parseLong(request.getParameter("id"));
         DaoUpdateResult res =AccountService.permit(conn,id,permission);
         return JSONObject.toJSONString(res);
