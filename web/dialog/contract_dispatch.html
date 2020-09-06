@@ -75,6 +75,7 @@
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
 <script>
+    var contract;
     var op = "insert";
     var form;//表单对象
     var editer;
@@ -122,7 +123,9 @@
         var param = $.query.get("contract");
         console.log(param);
         if (param) {
-            var contract = JSON.parse(param);
+            contract = JSON.parse(param);
+            contract.start = format_date(contract.start);
+            contract.end = format_date(contract.end);
             form.val('form_contract', contract);
             layedit.setContent(editer, contract.content, false);
             op = "update";
@@ -135,14 +138,25 @@
         iClient.getList({},0,function(result){
             var dispatchs = result.rows;
             var select_dispatch = $("#select_dispatch");
-            select_dispatch.append("<option value='-2' selected disabled hidden>选择合作客户</option>");
+            select_dispatch.append("<option value='-2' disabled hidden>选择合作客户</option>");
             for(var i in dispatchs){
                 var dispatch = dispatchs[i];
                 var option = $("<option>").val(dispatch.id).text(dispatch.name);
+                if(contract && contract.bid == dispatch.id){
+                    $(option).prop("selected",true);
+                }
                 select_dispatch.append(option);
             }
             form.render('select', 'form_contract');
         })
+    }
+
+    function format_date(timestamp) {
+        var d = new Date(timestamp);
+        var year=d.getFullYear();
+        var month=d.getMonth()+1;
+        var date=d.getDate();
+        return year+"-"+month+"-"+date;
     }
 
     function save() {
