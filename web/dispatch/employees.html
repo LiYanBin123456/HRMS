@@ -216,6 +216,7 @@
             }
 
             function getEmployees() {
+                param_query.conditions.keys=[{k:'type',o:'=',v:category}];
                 iEmployee.getList(param_query,0,function (result) {
                     table.reload('tbl_employee', {
                         data:result.rows
