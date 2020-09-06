@@ -10,6 +10,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sound.midi.Soundbank;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -97,9 +98,14 @@ public class AccountServlet extends HttpServlet {
 
     //获取账号列表
     private String getList(Connection conn, HttpServletRequest request) {
-        DaoQueryListResult res;
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
-        res = AccountService.getList(conn,parameter);
+
+        HttpSession session = request.getSession();
+        byte role = (byte) session.getAttribute("role");
+        long rid = (long) session.getAttribute("rid");
+        parameter.addCondition("role","=",role);
+        parameter.addCondition("rid","=",rid);
+        DaoQueryListResult res = AccountService.getList(conn,parameter);
         System.out.println(JSONObject.toJSONString(res));
         return JSONObject.toJSONString(res);
     }

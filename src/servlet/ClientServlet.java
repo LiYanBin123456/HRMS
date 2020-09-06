@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -180,6 +181,8 @@ public class ClientServlet extends HttpServlet {
     private String getList(Connection conn,HttpServletRequest request) {
         DaoQueryListResult res ;
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
+
+
         byte category= Byte.parseByte(request.getParameter("category"));
         if(category==0){
             //派遣方客户
