@@ -65,6 +65,7 @@
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="commit">提交</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reset">重置</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="charge">扣款</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
             </script>
         </div>
         <script src="../js/fieldSet.js"></script>
@@ -76,7 +77,7 @@
             var layer;//弹出窗口
             var element;
             var laydate;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"name",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -149,14 +150,17 @@
                         case 'save':
                             save(settlement);
                             break;
-                        case 'submit':
-                            submit(settlement);
+                        case 'commit':
+                            commit(settlement);
                             break;
                         case 'reset':
                             reset(settlement);
                             break;
                         case 'charge':
                             charge(settlement);
+                            break;
+                        case 'delete':
+                            del(settlement);
                             break;
                     }
                 });
@@ -172,16 +176,10 @@
                             break;
                     };
                 });
-
                 getSettlements();
             }
 
             function getSettlements() {
-                var result = {total:100,rows:[{client:"科技中专",month:"2020-06",salary:"5000",social:"5000",fund:"5000",manage:"5000",tax:"5000",summary:"5000",status:"编辑"},{client:"国棉四厂",month:"2020-06",salary:"12000",social:"12000",fund:"5000",manage:"12000",tax:"12000",summary:"12000",status:"已审核"}]};
-                table.reload('tbl_settlement', {
-                    data:result.rows
-                });
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
                 iSettlement.getList(param_query,0,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows
@@ -270,7 +268,7 @@
                         var month = window["layui-layer-iframe" + index].callbackData();
                         layer.close(index);
                         saveAs(settlement.id,month);
-
+                        getSettlements();
                     },btn2: function(index, layero){
                         layer.close(index);
                     }
@@ -283,7 +281,14 @@
              * @param month 月份
              */
             function saveAs(id,month) {
-                layer.msg("另存为"+month);
+                var msg = "结算单另存为"+month;
+                var title = "结算单另存为-"+month;
+                layer.confirm(msg, {icon: 3, title:title}, function(index){
+                    iSettlement.saveAs(id,0,month,function () {
+                        layer.close(index);
+                        layer.msg('另存为'+month);
+                    });
+                });
             }
 
             //保存结算单
@@ -296,12 +301,13 @@
             }
 
             //提交结算单
-            function submit(settlement) {
-                layer.confirm('提交后结算单将被设置为[提交]状态，确认提交吗？', {icon: 3, title:'提交结算单'}, function(index){
+            function commit(settlement) {
+                layer.confirm('确认提交结算单吗？', {icon: 3, title:'提交结算单'}, function(index){
                     iSettlement.commit(settlement.id,0,function () {
                         layer.close(index);
+                        getSettlements();
                         layer.msg('提交成功');
-                });
+                    });
                 });
             }
 
@@ -310,6 +316,7 @@
                 layer.confirm('重置后结算单将被强制设置为[编辑]状态，确认重置结算单吗？', {icon: 3, title:'重置结算单'}, function(index){
                     iSettlement.reset(settlement.id,0,function () {
                         layer.close(index);
+                        getSettlements();
                         layer.msg('重置成功');
                     });
                 });
@@ -327,10 +334,9 @@
 
                 });
             }
-
             //删除结算单
             function del(settlement) {
-                layer.confirm('确定删除'+settlement.unit+'的结算单', {icon: 3, title:'删除'}, function(index){
+                layer.confirm('确定删除'+settlement.name+'的结算单', {icon: 3, title:'删除'}, function(index){
                     iSettlement.delete(settlement.id,0,function () {
                     layer.close(index);
                     getSettlements();

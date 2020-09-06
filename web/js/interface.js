@@ -756,8 +756,8 @@ var InterfaceSettlement = function () {
      * @param success
      * @param fail
      */
-    this.copy = function (id,category,month,success,fail) {
-        var para = {op:"copy",id:id,month:month,category:category};
+    this.saveAs = function (id,category,month,success,fail) {
+        var para = {op:"saveAs",id:id,month:month,category:category};
         access(url,para,1,success,fail);
     };
     /**

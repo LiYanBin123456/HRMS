@@ -24,7 +24,6 @@ public class DbUtil {
         try {
             result.success = true;
             result.extra= qr.insert(conn,sql,new ScalarHandler<>(),params);
-
         } catch (SQLException e) {
             e.printStackTrace();
             result.success = false;

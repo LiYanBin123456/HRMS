@@ -152,13 +152,13 @@ var columns_settlement1  = [[
     {field:'tax', title: '税费',width:70},
     {field:'summary', title: '总额',width:80},
     {field:'status', title: '状态',width:70,templet:function (d) { return array_value2text(status_settlement,d.status) }},
-    {title:'操作', toolbar: '#bar_settlement',width:450,fixed:"right"}
+    {title:'操作', toolbar: '#bar_settlement',width:500,fixed:"right"}
 ]];
 
 //面向合作普通结算单字段集合
 var columns_settlement10  = [[
     {type:'checkbox',width:30},
-    {field:'month', title: '月份',width:80,fixed:"left"},
+    {field:'month', title: '月份',width:80,fixed:"left",templet:function (d) {return format_date(d.month)}},
     {field:'salary', title: '工资',width:70},
     {field:'social', title: '社保',width:70},
     {field:'fund', title: '公积金',width:80},
@@ -166,55 +166,51 @@ var columns_settlement10  = [[
     {field:'tax', title: '税费',width:70},
     {field:'summary', title: '总额',width:80},
     {field:'status', title: '状态',width:70,templet:function (d) { return array_value2text(status_settlement,d.status) }},
-    {title: '操作', toolbar: '#bar_settlement',width:260,fixed:"right"}
+    {title: '操作', toolbar: '#bar_settlement',width:500,fixed:"right"}
 ]];
 
 //小时工结算单字段集合
 var columns_settlement2  = [[
-    {type:'checkbox',fixed:"left"},
     {field:'name', title: '用工企业',width:180,fixed:"left"},
-    {field:'month', title: '月份',width:80},
+    {field:'month', title: '月份',width:80,templet:function (d) {return format_date(d.month)}},
     {field:'hours', title: '总工时',width:70},
     {field:'price', title: '单价',width:60},
     {field:'traffic', title: '交通费',width:70},
     {field:'extra', title: '附加',width:70},
     {field:'summary', title: '总额',width:80},
     {field:'status', title: '状态',width:70,templet:function (d) { return array_value2text(status_settlement,d.status) }},
-    {title: '操作', toolbar: '#bar_settlement',width:260,fixed:"right"}
+    {title: '操作', toolbar: '#bar_settlement',width:500,fixed:"right"}
 ]];
 
 //面向合作小时工结算单字段集合
 var columns_settlement20  = [[
-    {type:'checkbox',width:30,fixed:"left"},
-    {field:'month', title: '月份',width:80,fixed:"left"},
+    {field:'month', title: '月份',width:80,fixed:"left",templet:function (d) {return format_date(d.month)}},
     {field:'time', title: '总工时',width:70},
     {field:'price', title: '单价',width:70},
     {field:'traffic', title: '交通费',width:70},
     {field:'extra', title: '附加',width:70},
     {field:'summary', title: '总额',width:80},
     {field:'status', title: '状态',width:70,templet:function (d) { return array_value2text(status_settlement,d.status) }},
-    {title: '操作', toolbar: '#bar_settlement',width:260,fixed:"right"}
+    {title: '操作', toolbar: '#bar_settlement',width:500,fixed:"right"}
 ]];
 
 //商业保险结算单字段集合
 var columns_settlement3  = [[
-    {type:'checkbox',fixed:"left"},
-    {field:'client', title: '用工企业',fixed:"left"},
-    {field:'month', title: '月份',width:100},
+    {field:'cname', title: '用工企业',fixed:"left"},
+    {field:'month', title: '月份',width:100,templet:function (d) {return format_date(d.month)}},
     {field:'pname', title: '保险产品',width:180},
     {field:'price', title: '保费',width:100},
     {field:'status', title: '状态',width:100,templet:function (d) { return array_value2text(status_settlement,d.status) }},
-    {title: '操作', toolbar: '#bar_settlement',width:260,fixed:"right"}
+    {title: '操作', toolbar: '#bar_settlement',width:480,fixed:"right"}
 ]];
 
 //面向合作商业保险结算单字段集合
 var columns_settlement30  = [[
-    {type:'checkbox',fixed:"left"},
-    {field:'month', title: '月份',width:100,fixed:"left"},
+    {field:'month', title: '月份',width:100,fixed:"left",templet:function (d) {return format_date(d.month)}},
     {field:'pname', title: '保险产品'},
     {field:'price', title: '保费',width:100},
     {field:'status', title: '状态',width:100,templet:function (d) { return array_value2text(status_settlement,d.status) }},
-    {title: '操作', toolbar: '#bar_settlement',width:260,fixed:"right"}
+    {title: '操作', toolbar: '#bar_settlement',width:480,fixed:"right"}
 ]];
 
 //工资管理明细字段集合（完整模式）
@@ -283,7 +279,7 @@ var columns_detail2_full  = [[
 //商业保险工资管理明细字段集合
 var columns_detail3  = [[
     {field:'cardId', title: '身份证号',width:160},
-    {field:'name', title: '姓名',width:80},
+    {field:'cname', title: '姓名',width:80},
     {field:'place', title: '工作地点',width:80},
     {field:'post', title: '工作岗位',width:80},
     {field:'pname', title: '保险产品',width:100,edit: 'text'},

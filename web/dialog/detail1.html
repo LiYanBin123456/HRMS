@@ -56,13 +56,14 @@
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/jquery.params.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"month",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -137,17 +138,13 @@
                             break;
                 };
                 });
-
                 getDetails();
           }
 
             function getDetails() {
-                /*var result = {total:100,rows:[{cardld:"360402199008230081",name:"张晓国",base:"5000",allowance:"1000",reward:"500",social1:"-100",social2:"200",fund1:"-50",fund2:"150",tax:"-100",f1:"100",f2:"-50",payable:"6600",paid:"6300"},{cardld:"360402199008230081",name:"宋丽",base:"12000",allowance:"2000",reward:"600",social1:"-200",social2:"300",fund1:"-60",fund2:"400",tax:"-300",f1:"600",f2:"-60",payable:"15200",paid:"14900"}]};
-                table.reload('tbl_detail', {
-                    data:result.rows
-                });*/
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                iSettlement.getDetails(param_query,0,function (result) {
+                var id = $.query.get("id");
+                iSettlement.getDetails(param_query,id,0,function (result) {
+                    console.log(result.rows);
                     table.reload('tbl_detail', {
                         data:result.rows
                     });
