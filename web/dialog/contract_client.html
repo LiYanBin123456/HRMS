@@ -144,10 +144,7 @@
                 <div class="layui-form-item layui-hide" name="c4">
                     <label class="layui-form-label">保险产品</label>
                     <div class="layui-input-inline">
-                        <select name="pid" lay-verify="required">
-                            <option value="1">团队意外险</option>
-                            <option value="2">雇主责任险</option>
-                        </select>
+                        <select name="pid" id="select_product" lay-filter="filter_product" lay-verify="required"></select>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -208,6 +205,7 @@
             initPage();
             initTab();
             initCooperation();
+            initProduct();
         });
     }
 
@@ -288,6 +286,23 @@
                 select_cooperation.append(option);
             }
             form.render('select', 'form_contract');
+        })
+    }
+
+    function initProduct(){
+        iProduct.getList({},function(result){
+            var products = result.rows;
+            var select_product = $("#select_product");
+            select_product.append("<option value='-2' disabled hidden>选择合作客户</option>");
+            for(var i in products){
+                var product = products[i];
+                var option1 = $("<option>").val(product.id).text(product.name);
+                if(serve && serve.pid == product.id){
+                    $(option1).prop("selected",true);
+                }
+                select_product.append(option1);
+            }
+            form.render('select', 'form_service');
         })
     }
 

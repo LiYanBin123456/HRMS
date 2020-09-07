@@ -79,7 +79,6 @@
 
             <!--行内工具栏-->
             <script type="text/html" id="bar_insured">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
         </div>
@@ -218,7 +217,7 @@
             }
 
             //打开编辑对话框
-            function showDetailDlg(insured) {
+            /*function showDetailDlg(insured) {
                 var content = "../dialog/dispatch/insured.html?insured="+encodeURIComponent(JSON.stringify(insured));
                 layer.open({
                     title:"详情",
@@ -226,7 +225,7 @@
                     area: ['600px', '500px'],
                     content: content
                 });
-            }
+            }*/
 
             //打开添加对话框
             function showMemberDlg() {
@@ -235,7 +234,7 @@
                 layer.open({
                     title:title,
                     type: 2,
-                    area: ['700px', '500px'],
+                    area: ['54%', '82%'],
                     content: content,
                     btn: ['添加参保', '关闭']
                     ,yes: function(index, layero){

@@ -455,12 +455,12 @@ var period_product = [
     {value:1,text:"24小时"}
 ];
  var allow_product = [
-     {value:0,text:"第一类"},
-     {value:1,text:"第二类"},
-     {value:2,text:"第三类"},
-     {value:3,text:"第四类"},
-     {value:4,text:"第五类"},
-     {value:5,text:"第六类"}
+     {value:1,text:"第一类"},
+     {value:2,text:"第二类"},
+     {value:4,text:"第三类"},
+     {value:8,text:"第四类"},
+     {value:16,text:"第五类"},
+     {value:32,text:"第六类"}
  ];
 
 /**

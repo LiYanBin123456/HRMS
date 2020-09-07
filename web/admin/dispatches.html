@@ -167,7 +167,7 @@
                 layer.open({
                     title:"详情",
                     type: 2,
-                    area: ['800px', '600px'],
+                    area: ['60%', '90%'],
                     content: content
                 });
             }
@@ -178,12 +178,12 @@
                 layer.open({
                     title:"添加新客户",
                     type: 2,
-                    area: ['800px', '600px'],
+                    area: ['60%', '90%'],
                     content: content
                 });
             }
 
-            //删除公告
+            //删除客户
             function del(dispatch) {
                 layer.confirm('确定删除'+dispatch.name, {icon: 3, title:'删除'}, function(index){
                     iClient.delete(dispatch.id,0,0,function () {

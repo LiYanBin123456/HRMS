@@ -139,11 +139,6 @@
             }
 
             function getProducts() {
-                /*var result = {total:100,rows:[{pname:"团队意外险",fin1:"800000",fin2:"200000",allowance:"100元/天",period:"上班时间",allow:"1、2、3、4类",min:"16",max:"70"},{pname:"雇主责任险",fin1:"900000",fin2:"200000",allowance:"100元/天",period:"24小时",allow:"1、2、3类",min:"18",max:"60"}]};
-                table.reload('tbl_product', {
-                    data:result.rows
-                });*/
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
                 iProduct.getList(param_query,function (result) {
                     table.reload('tbl_product', {
                         data:result.rows
@@ -178,7 +173,7 @@
                 layer.open({
                     title:"保险产品详情",
                     type: 2,
-                    area: ['700px', '600px'],
+                    area: ['60%', '90%'],
                     content: content
                 });
             }
@@ -189,7 +184,7 @@
                 layer.open({
                     title:"产品介绍",
                     type: 2,
-                    area: ['600px', '500px'],
+                    area: ['50%', '80%'],
                     content: content
                 });
             }
@@ -200,7 +195,7 @@
                 layer.open({
                     title:"添加产品",
                     type: 2,
-                    area: ['700px', '600px'],
+                    area: ['60%', '90%'],
                     content: content
                 });
             }
