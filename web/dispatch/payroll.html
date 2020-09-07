@@ -64,6 +64,8 @@
     </script>
     <script src="../js/fieldSet.js"></script>
     <script src="../js/interface.js"></script>
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/jquery.params.js"></script>
     <script>
         var category = 0;//记录是显示普通结算单还是小时工结算单
         var table;//数据表格对象
@@ -72,7 +74,7 @@
         var layer;//弹出窗口
         var element;
         var laydate;
-        var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+        var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"month",direction:true},pagination: {need:true,page:1,size:10}};
         $(function () {
             loadLayuiModule();
         });
@@ -175,13 +177,8 @@
         }
 
         function getSettlements() {
-            var result = {total:100,rows:[{client:"科技中专",month:"2020-06",salary:"5000",social:"5000",fund:"5000",manage:"5000",tax:"5000",summary:"5000",status:"编辑"},{client:"国棉四厂",month:"2020-06",salary:"12000",social:"12000",fund:"5000",manage:"12000",tax:"12000",summary:"12000",status:"已审核"}]};
-            table.reload('tbl_settlement', {
-                data:result.rows
-            });
-            //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-            /*iNotice.getList(param_query,function (result) {
-                table.reload('tbl_notice', {
+            iSettlement.getList(param_query,category,function (result) {
+                table.reload('tbl_settlement', {
                     data:result.rows
                 });
                 //初始化分页
@@ -199,7 +196,7 @@
                             }
                         }
                     });
-            });*/
+            });
         }
 
         //模糊查找
@@ -231,13 +228,15 @@
             layer.msg("导出["+settlement.client+settlement.month+"]"+bank+"工资发放表");
         }
 
-        //打开离职对话框
+        //打开工资确认发放对话框
         function confirm(settlement) {
-            var msg = "确认["+settlement.client+settlement.month+"]的工资已发放?";
+            var msg = "确认["+settlement.name+settlement.month+"]的工资已发放?";
             layer.confirm(msg, {icon: 3, title:'确认工资发放'}, function(index){
-                //do something
-
-                layer.close(index);
+                iSettlement.confirm(settlement.id,category,function () {
+                    layer.close(index);
+                    getSettlements();
+                    layer.msg("确认成功");
+                })
             });
         }
 
