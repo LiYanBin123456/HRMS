@@ -21,7 +21,7 @@ public class EmployeeDao {
     public static DaoQueryResult get(Connection conn, long id) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
-        return DbUtil.get(conn,"employee",conditions,Employee.class);
+        return DbUtil.get(conn,"view_employee",conditions,ViewEmployee.class);
     }
 
     //修改
