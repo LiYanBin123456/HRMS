@@ -2,6 +2,7 @@ package service.employee;
 
 
 import bean.employee.Employee;
+import bean.employee.ViewEmployee;
 import dao.employee.EmployeeDao;
 import database.DaoQueryListResult;
 import database.DaoQueryResult;
@@ -24,7 +25,7 @@ public class EmployeeService {
     }
 
     //修改
-    public static DaoUpdateResult update(Connection conn, Employee employee) {
+    public static DaoUpdateResult update(Connection conn, ViewEmployee employee) {
         return EmployeeDao.update(conn,employee);
     }
 

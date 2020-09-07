@@ -170,7 +170,8 @@
 
             //打开添加明细对话框
             function showInsertDlg() {
-                var content = "member.html";
+                var id = $.query.get("id");
+                var content = "member.html?id="+id;
                 layer.open({
                     title:"添加明细",
                     type: 2,

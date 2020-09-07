@@ -227,7 +227,7 @@ public class EmployeeServlet extends HttpServlet {
         DaoUpdateResult res = null;
         byte category = Byte.parseByte(request.getParameter("category"));
         if(category == 0){
-            Employee employee = JSONObject.parseObject(request.getParameter("employee"), Employee.class);
+           ViewEmployee employee = JSONObject.parseObject(request.getParameter("employee"), ViewEmployee.class);
             res = EmployeeService.update(conn,employee);
         }else {
             EmployeeExtra employeeExtra = JSONObject.parseObject(request.getParameter("employee"), EmployeeExtra.class);

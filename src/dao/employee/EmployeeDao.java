@@ -25,11 +25,11 @@ public class EmployeeDao {
     }
 
     //修改
-    public static DaoUpdateResult update(Connection conn, Employee e) {
+    public static DaoUpdateResult update(Connection conn, ViewEmployee e) {
         //需要判断外键是否为0，为0就需要转换成null
         String cid = e.getCid()==0?null:String.valueOf(e.getCid());
-        String sql = "update employee set cid=?,cardId=?,name=?,phone=?,degree=?,type=?,entry=?,status=?,department=?,post=?,category=?,price=? where id=?";
-        Object []params = {cid,e.getCardId(),e.getName(),e.getPhone(),e.getDegree(),e.getType(),e.getEntry(),e.getStatus(),e.getDepartment(),e.getPost(),e.getCategory(),e.getPrice(),e.getId()};
+        String sql = "update employee set cid=?,cardId=?,name=?,phone=?,degree=?,type=?,entry=?,status=?,department=?,post=?,category=?,price=?,rid=?,school=?,major=? where id=?";
+        Object []params = {cid,e.getCardId(),e.getName(),e.getPhone(),e.getDegree(),e.getType(),e.getEntry(),e.getStatus(),e.getDepartment(),e.getPost(),e.getCategory(),e.getPrice(),e.getRid(),e.getSchool(),e.getMajor(),e.getId()};
         return  DbUtil.update(conn,sql,params);
     }
 

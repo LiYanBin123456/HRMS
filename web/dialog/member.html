@@ -35,15 +35,20 @@
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
                     </div>
                     <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-                </form>
+                     </form>
             </div>
-            <table id="tbl_member" lay-filter="filter_tb_member"></table>
+            <table id="tbl_member" lay-filter="filter_tb_member">
+            </table>
             <div id="pager"></div>
+            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-filter="insert"><i class="layui-icon "></i>添加</button>
+
 
             <!--行内工具栏-->
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.params.js"></script>
         <script>
             var table;//数据表格对象
             var member;//存储选中的员工
@@ -52,6 +57,13 @@
             var layer;//弹出窗口
             var element;
             var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
+            var sid = $.query.get("id");//结算单id
+            var details;
+            var date=new Date();
+            var year=date.getFullYear();//当前年份
+            var month=date.getMonth();//当前月份
+            var data=date.getDate();//天
+            var month = year+"-"+month+"-"+data
 
 
             //向调用页面返回选中的月份
@@ -82,13 +94,18 @@
                 });
             }
 
+            function insert() {
+                form.on('submit(insert)', function (data) {
+                    var keyword = data.field.keyword;
+                    search(keyword);
+                });
+            }
             function initTable() {
 
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_member',
                     toolbar: '#top_bar_member', //开启头部工具栏，并为其绑定左侧模板
-
                     title: '列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                     cols: columns_member,
@@ -96,20 +113,23 @@
                 });
                 table.on('checkbox(filter_tb_member)', function(obj){
                     member = table.checkStatus('tbl_member').data;
+                    console.log(member)
+                    details = new Array(member.length);
+                    for (var i in member){
+                        details[i] = {"sid":sid,"eid":member[i].id,"month":month};
+                        console.log(details[i]);
+                    }
                 });
                 getMember();
           }
 
             function getMember() {
-                /*var result = {total:100,rows:[{cardld:"360402199008230081",name:"赵阳",unit:"江西制氧机械"},{cardld:"360402199008230081",name:"李斌",unit:"九江石化"}]};
-                table.reload('tbl_member', {
-                    data:result.rows
-                });*/
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
                 iEmployee.getList(param_query,0,function (result) {
                     table.reload('tbl_member', {
                         data:result.rows
                     });
+                    console.log(result.rows.toString())
                     laypage.render({
                         elem: 'pager'
                         ,curr: param_query.pagination.page

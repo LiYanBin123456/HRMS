@@ -21,7 +21,6 @@ public class Detail1Service {
         //将结算单id赋值给结算单明细中的结算单id
         for(Detail1 detail :details){
               detail.setSid(id);
-            System.out.println(detail);
         }
         return  Detail1Dao.importDetails(conn,details);
     }
