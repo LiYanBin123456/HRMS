@@ -1,6 +1,7 @@
 package dao.employee;
 
 import bean.employee.Employee;
+import bean.employee.ViewEmployee;
 import bean.insurance.Product;
 import database.*;
 
@@ -13,7 +14,7 @@ public class EmployeeDao {
         if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
             param.addCondition("name","like",param.conditions.extra);
         }
-        return DbUtil.getList(conn,"employee",param,Employee.class);
+        return DbUtil.getList(conn,"view_employee",param,ViewEmployee.class);
     }
 
     //获取详情
