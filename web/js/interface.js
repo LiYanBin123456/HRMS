@@ -501,14 +501,14 @@ var InterfaceEmployee = function () {
         access(url,para,0,success,fail);
     };
     /**
-     * 添加员工信息
+     * 插入员工信息
      * @param employee 员工信息
-     * @param category 0-员工信息 1-员工补充信息
-     * @param success
+     * @param extract  员工额外信息
+     * @param success  成功
      * @param fail
      */
-    this.insert = function (employee,category,success,fail) {
-        var para = {op: "insert",employee:JSON.stringify(employee), category:category};
+    this.insert = function (employee,extract,success,fail) {
+        var para = {op: "insert",employee:JSON.stringify(employee), extract:JSON.stringify(extract)};
         access(url,para,1,success,fail);
     };
     /**

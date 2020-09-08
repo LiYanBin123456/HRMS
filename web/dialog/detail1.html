@@ -172,11 +172,25 @@
             function showInsertDlg() {
                 var id = $.query.get("id");
                 var content = "member.html?id="+id;
-                layer.open({
+                /*layer.open({
                     title:"添加明细",
                     type: 2,
                     area: ['800px', '500px'],
                     content: content
+                });*/
+                layer.open({
+                    title:"添加明细",
+                    type: 2,
+                    area: ['30%', '70%'],
+                    content: content,
+                    btn: ['添加', '关闭']
+                    ,yes: function(index, layero){
+                        var member = window["layui-layer-iframe" + index].callbackData();
+                        layer.close(index);
+
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
                 });
             }
 

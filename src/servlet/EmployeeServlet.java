@@ -198,18 +198,19 @@ public class EmployeeServlet extends HttpServlet {
     //插入员工信息
     private String insert(Connection conn, HttpServletRequest request) {
         DaoUpdateResult res = null;
-        byte category = Byte.parseByte(request.getParameter("category"));
         HttpSession session = request.getSession();
+        //获取登录后，管理员所属的公司id
         long did = (long) session.getAttribute("rid");
-        if(category==0){
+
             Employee employee =JSONObject.parseObject(request.getParameter("employee"), Employee.class);
             employee.setDid(did);
             res= EmployeeService.insert(conn,employee);
-        }else {
-            EmployeeExtra employeeExtra =JSONObject.parseObject(request.getParameter("employee"), EmployeeExtra.class);
-            System.out.println("前台传来的数据："+employeeExtra);
-            res = ExtraService.insert(conn,employeeExtra);
-        }
+            if(res.success){//员工插入成功后获取插入后的id
+                long eid = (long) res.extra;
+                EmployeeExtra employeeExtra =JSONObject.parseObject(request.getParameter("extract"), EmployeeExtra.class);
+                employeeExtra.setEid(eid);
+                ExtraService.insert(conn,employeeExtra);
+            }
         return JSONObject.toJSONString(res);
     }
     //获取员工信息
