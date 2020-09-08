@@ -5,6 +5,9 @@ import bean.settlement.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPObject;
+import dao.settlement.Detail1Dao;
+import dao.settlement.Detail2Dao;
+import dao.settlement.Detail3Dao;
 import dao.settlement.Settlement3Dao;
 import database.ConnUtil;
 import database.DaoQueryListResult;
@@ -92,6 +95,9 @@ public class SettlementServlet extends HttpServlet {
             case "getLogs"://查询日志
                 result = getLogs(conn, request);
                 break;
+            case "deleteDetail"://删除结算单明细
+                result = deleteDetail(conn, request);
+                break;
         }
         ConnUtil.closeConnection(conn);
 
@@ -100,6 +106,25 @@ public class SettlementServlet extends HttpServlet {
         out.flush();
         out.close();
 
+    }
+
+    //删除结算单明细
+    private String deleteDetail(Connection conn, HttpServletRequest request) {
+        byte category = Byte.parseByte(request.getParameter("category"));
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoUpdateResult result = null;
+        switch (category){
+            case 0://删除普通结算明细
+                result = Detail1Dao.delete(conn,id);
+                break;
+            case 1://删除小时工结算明细
+                result = Detail2Dao.delete(conn,id);
+                break;
+            case 2://删除商业结算明细
+                result = Detail3Dao.delete(conn,id);
+                break;
+        }
+        return JSONObject.toJSONString(result);
     }
 
     private String getList(Connection conn, HttpServletRequest request) {

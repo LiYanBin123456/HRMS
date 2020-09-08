@@ -35,12 +35,12 @@
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
                     </div>
                     <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-                     </form>
+                </form>
             </div>
             <table id="tbl_member" lay-filter="filter_tb_member">
             </table>
             <div id="pager"></div>
-            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-filter="insert"><i class="layui-icon "></i>添加</button>
+            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-filter="insert" ><i class="layui-icon "></i>添加</button>
 
 
             <!--行内工具栏-->
@@ -57,6 +57,7 @@
             var layer;//弹出窗口
             var element;
             var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
+
             var sid = $.query.get("id");//结算单id
             var details;
             var date=new Date();
@@ -94,14 +95,8 @@
                 });
             }
 
-            function insert() {
-                form.on('submit(insert)', function (data) {
-                    var keyword = data.field.keyword;
-                    search(keyword);
-                });
-            }
-            function initTable() {
 
+            function initTable() {
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_member',
@@ -117,12 +112,15 @@
                     details = new Array(member.length);
                     for (var i in member){
                         details[i] = {"sid":sid,"eid":member[i].id,"month":month};
-                        console.log(details[i]);
                     }
                 });
                 getMember();
           }
-
+            function insert(details) {
+                iSettlement.importDetails(sid,details,0,function () {
+                    layer.msg("添加成功")
+                });
+            }
             function getMember() {
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
                 iEmployee.getList(param_query,0,function (result) {

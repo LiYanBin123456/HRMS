@@ -12,7 +12,7 @@ public class EmployeeDao {
     //获取列表
     public static DaoQueryListResult getList(Connection conn, QueryParameter param){
         if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
-            param.addCondition("name","like",param.conditions.extra);
+            param.addCondition("concat(name,cname)","like",param.conditions.extra);
         }
         return DbUtil.getList(conn,"view_employee",param,ViewEmployee.class);
     }
@@ -36,10 +36,9 @@ public class EmployeeDao {
     //增加
     public static DaoUpdateResult insert(Connection conn, Employee e) {
         //需要判断外键是否为0，为0就需要转换成null
-        String did = e.getDid()==0?null:String.valueOf(e.getDid());
         String cid = e.getCid()==0?null:String.valueOf(e.getCid());
         String sql = "insert employee (did,cid,cardId,name,phone,degree,type,entry,status,department,post,category,price) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        Object []params = {did,cid,e.getCardId(),e.getName(),e.getPhone(),e.getDegree(),e.getType(),e.getEntry(),e.getStatus(),e.getDepartment(),e.getPost(),e.getCategory(),e.getPrice()};
+        Object []params = {e.getDid(),cid,e.getCardId(),e.getName(),e.getPhone(),e.getDegree(),e.getType(),e.getEntry(),e.getStatus(),e.getDepartment(),e.getPost(),e.getCategory(),e.getPrice()};
         return  DbUtil.insert(conn,sql,params);
     }
 

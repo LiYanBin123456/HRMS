@@ -201,12 +201,10 @@
                     content: content
                 });
             }
-
-
-            //删除公告
+            //删除结算单明细
             function del(detail) {
-                layer.confirm('确定删除'+detail.name, {icon: 3, title:'删除'}, function(index){
-                    iSettlement.delete(detail.id,0,function () {
+                layer.confirm('确定删除'+detail.name+"的结算单明细吗", {icon: 3, title:'删除'}, function(index){
+                    iSettlement.deleteDetail(detail.id,0,function () {
                         layer.close(index);
                         getDetails();
                         layer.msg('删除成功');

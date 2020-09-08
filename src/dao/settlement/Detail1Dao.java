@@ -2,10 +2,7 @@ package dao.settlement;
 
 import bean.settlement.Detail1;
 import bean.settlement.ViewDetail1;
-import database.DaoQueryListResult;
-import database.DaoUpdateResult;
-import database.DbUtil;
-import database.QueryParameter;
+import database.*;
 
 
 import java.sql.Connection;
@@ -50,5 +47,11 @@ public class Detail1Dao {
     }
     public static String makeup(Connection conn,Long id,String month){
         return null;
+    }
+
+    public static DaoUpdateResult delete(Connection conn, long id) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id","=",id);
+        return DbUtil.delete(conn,"detail1",conditions);
     }
 }

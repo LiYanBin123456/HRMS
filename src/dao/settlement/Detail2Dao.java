@@ -2,10 +2,7 @@ package dao.settlement;
 
 import bean.settlement.Detail2;
 import bean.settlement.ViewDetail2;
-import database.DaoQueryListResult;
-import database.DaoUpdateResult;
-import database.DbUtil;
-import database.QueryParameter;
+import database.*;
 
 import java.sql.Connection;
 import java.util.List;
@@ -40,5 +37,11 @@ public class Detail2Dao {
     }
     public static String exportDetails(Connection conn,long id){
         return  null;
+    }
+
+    public static DaoUpdateResult delete(Connection conn, long id) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id","=",id);
+        return DbUtil.delete(conn,"detail2",conditions);
     }
 }

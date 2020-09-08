@@ -748,6 +748,18 @@ var InterfaceSettlement = function () {
         var para = {op:"delete",id:id,category:category};
         access(url,para,0,success,fail);
     };
+
+    /**
+     * 删除结算单明细
+     * @param id 结算单明细id
+     * @param category 0-普通结算单 1-小时工结算单 2-商业保险结算单
+     * @param success
+     * @param fail
+     */
+    this.deleteDetail = function (id,category,success,fail) {
+        var para = {op:"deleteDetail",id:id,category:category};
+        access(url,para,0,success,fail);
+    };
     /**
      * 复制结算单
      * @param id 结算单id

@@ -199,8 +199,11 @@ public class EmployeeServlet extends HttpServlet {
     private String insert(Connection conn, HttpServletRequest request) {
         DaoUpdateResult res = null;
         byte category = Byte.parseByte(request.getParameter("category"));
+        HttpSession session = request.getSession();
+        long did = (long) session.getAttribute("rid");
         if(category==0){
             Employee employee =JSONObject.parseObject(request.getParameter("employee"), Employee.class);
+            employee.setDid(did);
             res= EmployeeService.insert(conn,employee);
         }else {
             EmployeeExtra employeeExtra =JSONObject.parseObject(request.getParameter("employee"), EmployeeExtra.class);
