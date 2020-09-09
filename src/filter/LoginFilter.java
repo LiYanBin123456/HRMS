@@ -23,37 +23,12 @@ public class LoginFilter implements Filter {
         String uri = request.getRequestURI();
         String op = req.getParameter("op");
         if(uri.contains("/account")){
-            if("login".equals(op)||"login_mp".equals(op)||"register".equals(op)||"registerCandidate".equals(op)||"registerHR".equals(op)) {
+            if("login".equals(op)) {
                 // 注册和登录，放行
                 chain.doFilter(request, response);
                 return;
             }
-        }else if(uri.contains("/ad")){
-            if("getNow".equals(op) || "getCarousels".equals(op)) {
-                //获取广告，放行
-                chain.doFilter(request, response);
-                return;
-            }
-        }else if(uri.contains("/enterprise")){
-            if("getRecommends".equals(op) || "getEnterprise".equals(op) || "getHr".equals(op)) {
-                //获取推荐企业，放行
-                chain.doFilter(request, response);
-                return;
-            }
-        }else if(uri.contains("/job")){
-            if("getJob".equals(op)) {
-                //获取职位详情，放行
-                chain.doFilter(request, response);
-                return;
-            }
-        }else if(uri.contains("/roof")){
-            if("getNow".equals(op)) {
-                //获取置顶职位，放行
-                chain.doFilter(request, response);
-                return;
-            }
         }
-
         Byte role = (Byte) request.getSession().getAttribute("role");
         if (role == null) {
             PrintWriter out = response.getWriter();

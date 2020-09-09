@@ -20,7 +20,7 @@ import java.sql.Connection;
 import java.util.Date;
 
 //资金管理servlet
-@WebServlet(name = "FinanceServlet" ,urlPatterns = "/finance")
+@WebServlet(name = "FinanceServlet" ,urlPatterns = "/verify/finance")
 public class FinanceServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);

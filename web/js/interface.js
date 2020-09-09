@@ -2,7 +2,7 @@
  * 后台访问接口
  *
  */
-var base = "/hrms" ;
+var base = "/hrms/verify" ;
 
 //客户管理相关接口
 var InterfaceClient = function() {

@@ -20,7 +20,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.util.List;
 
-@WebServlet(urlPatterns = "/client")
+@WebServlet(urlPatterns = "/verify/client")
 public class ClientServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
@@ -122,7 +122,7 @@ public class ClientServlet extends HttpServlet {
         byte category = Byte.parseByte(request.getParameter("category"));
         switch (category) {
             case 0://派遣方客户
-               if(status!=1){//潜在客户，删除合同和附件，删除服务信息,删除客户 A代表平台与派遣方的合同
+               if(status==2){//删除流失客户，删除合同和附件，删除服务信息,删除客户 A代表平台与派遣方的合同
                    List<String> list = ContractDao.deleteContract(conn, id,"A");
                    if(list!=null){
                        if(list!=null){
@@ -132,12 +132,12 @@ public class ClientServlet extends HttpServlet {
                        }
                    }
                    res = DispatchService.deletePot(conn,id,0);
-               }else{//修改合作客户为潜在客户
-                   res = DispatchService.deleteCoop(conn,id);
+               }else{//修改客户状态
+                   res = DispatchService.deleteCoop(conn,id,status);
                }
                 break;
             case 1://合作单位客户
-                if(status!=1){//潜在客户，删除合同和附件，删除服务信息,删除客户 B代表派遣方与合作客户的合同
+                if(status==2){//删除流失客户，删除合同和附件，删除服务信息,删除客户 B代表派遣方与合作客户的合同
                     List<String> list = ContractDao.deleteContract(conn, id,"B");
                     if(list!=null){
                         //调用自定义方法 删除服务器中的合同附件
@@ -145,12 +145,12 @@ public class ClientServlet extends HttpServlet {
                         res.msg +=msg;
                     }
                     res = CooperationService.deletePot(conn,id,1);
-                }else{//修改合作客户为潜在客户
-                    res = CooperationService.deleteCoop(conn,id);
+                }else{//修改客户状态
+                    res = CooperationService.deleteCoop(conn,id,status);
                 }
                 break;
-            case 2://派遣单位客户
-                   res = SupplierService.delete(id,conn);
+            case 2://供应商单位客户
+                   res = SupplierService.delete(id,conn,status);
                 break;
         }
         return JSONObject.toJSONString(res);

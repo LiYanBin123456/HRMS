@@ -28,7 +28,7 @@ import java.util.UUID;
 
 import utills.XlsUtil;
 
-@WebServlet(name = "FileServlet",urlPatterns = "/file")
+@WebServlet(name = "FileServlet",urlPatterns = "/verify/file")
 @MultipartConfig
 public class FileServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

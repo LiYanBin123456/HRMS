@@ -54,6 +54,9 @@
             var layer;//弹出窗口
             var element;
             var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
+
+            var sid = $.query.get("id");//结算单id
+            var month = $.query.get("month");//结算单月份
             $(function () {
                 loadLayuiModule();
             });
@@ -149,19 +152,31 @@
                     });
                 });
             }
-
-            //模糊查找
-
-            //打开详情对话框
-
             //打开添加对话框
             function showInsertDlg() {
-                var content = "member.html";
+                var id = $.query.get("id");
+                var content = "member.html?id="+id;
                 layer.open({
-                    title:"添加",
+                    title:"添加明细",
                     type: 2,
-                    area: ['700px', '500px'],
-                    content: content
+                    area: ['80%', '80%'],
+                    content: content,
+                    btn: ['添加', '关闭']
+                    ,yes: function(index, layero){
+                        var member = window["layui-layer-iframe" + index].callbackData();
+                        layer.close(index);
+                        var  details = new Array(member.length)
+                        for (var i in member){
+                            details[i] = {"sid":sid,"eid":member[i].id,"month":month};
+                            console.log(details)
+                        }
+                        iSettlement.importDetails(sid,details,1,function () {
+                            layer.msg("添加成功")
+                        });
+                        getDetail2s();
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
                 });
             }
 
@@ -171,7 +186,7 @@
                 layer.confirm('确定删除'+detail.name+"的结算单明细吗", {icon: 3, title:'删除'}, function(index){
                     iSettlement.deleteDetail(detail.id,1,function () {
                         layer.close(index);
-                        getDetails();
+                        getDetail2s();
                         layer.msg('删除成功');
                     });
                 });

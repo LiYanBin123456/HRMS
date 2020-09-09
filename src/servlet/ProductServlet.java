@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 
-@WebServlet(name = "ProductServlet",urlPatterns = "/product")
+@WebServlet(name = "ProductServlet",urlPatterns = "/verify/product")
 public class ProductServlet extends HttpServlet {
     private ProductService productService = new ProductService();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

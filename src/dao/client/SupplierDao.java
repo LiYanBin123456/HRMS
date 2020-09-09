@@ -42,4 +42,12 @@ public class SupplierDao {
         return DbUtil.delete(conn,"supplier",conditions);
     }
 
+    // 修改客户状态 合作或者潜在 0_合作，1_流失
+    public static DaoUpdateResult updateStatus(Connection conn, long id,int type){
+        String sql = "update supplier set type=? where id=?";
+        Object []params = {type,id};
+        //调用DbUtil封装的update方法
+        return DbUtil.update(conn,sql,params);
+    }
+
 }

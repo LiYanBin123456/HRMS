@@ -29,7 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 
-@WebServlet(name = "InsuranceServlet",urlPatterns = "/insurance")
+@WebServlet(name = "InsuranceServlet",urlPatterns = "/verify/insurance")
 public class InsuranceServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);

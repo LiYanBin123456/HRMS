@@ -210,7 +210,7 @@
 
             //打开明细对话框
             function showDetailDlg(settlement) {
-                var content = "../dialog/detail1.html?id="+settlement.id;
+                var content = "../dialog/detail1.html?id="+settlement.id+"&month="+settlement.month;
                 layer.open({
                     title:"明细",
                     type: 2,
@@ -237,14 +237,13 @@
                 layer.open({
                     title:"添加",
                     type: 2,
-                    area: ['30%', '85%'],
+                    area: ['40%', '85%'],
                     content: content,
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
                         var settlement = window["layui-layer-iframe" + index].callbackData();
                         layer.close(index);
                         insertSettlement(settlement);
-
                     },btn2: function(index, layero){
                         layer.close(index);
                     }

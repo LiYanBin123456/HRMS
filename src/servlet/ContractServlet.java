@@ -19,7 +19,7 @@ import java.io.*;
 import java.sql.Connection;
 
 
-@WebServlet(urlPatterns = ("/contract"))
+@WebServlet(urlPatterns = ("/verify/contract"))
 @MultipartConfig
 public class ContractServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

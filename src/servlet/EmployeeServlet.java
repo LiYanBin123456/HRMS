@@ -21,7 +21,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
-@WebServlet(name = "EmployeeServlet",urlPatterns = "/employee")
+@WebServlet(name = "EmployeeServlet",urlPatterns = "/verify/employee")
 public class EmployeeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);

@@ -2,6 +2,7 @@ package service.settlement;
 
 import bean.admin.Account;
 import bean.employee.Employee;
+import bean.employee.ViewEmployee;
 import bean.log.Log;
 import bean.settlement.Detail1;
 import bean.settlement.Detail3;
@@ -60,7 +61,7 @@ public class Settlement3Service {
             conditions.add("category", "!=", 2);
             conditions.add("status", "=", 0);
             parameter.conditions = conditions;
-            List<Employee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),Employee.class);
+            List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
             List<Detail3> detail3List = new ArrayList<>();
             for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
                 Detail3 detail3 = new Detail3();
@@ -104,7 +105,7 @@ public class Settlement3Service {
         conditions.add("category", "!=", 2);
         conditions.add("status", "=", 0);
         parameter.conditions = conditions;
-        List<Employee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),Employee.class);
+        List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
         List<Detail3> detail3List = new ArrayList<>();
         for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
             Detail3 detail3 = new Detail3();

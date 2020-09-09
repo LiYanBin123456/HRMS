@@ -52,9 +52,9 @@ public class DispatchDao {
 
 
     //删除合作客户 实际是修改客户状态 合作或者潜在 0_潜在，1_合作，2_流失客户
-    public  static DaoUpdateResult updateStatus(Connection conn, long id,int status){
-        String sql = "update dispatch set status=? where id=?";
-        Object []params = {status,id};
+    public  static DaoUpdateResult updateStatus(Connection conn, long id,int type){
+        String sql = "update dispatch set type=? where id=?";
+        Object []params = {type,id};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
     }

@@ -27,7 +27,7 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.util.List;
 
-@WebServlet(name = "SettlementServlet",urlPatterns = "/settlement")
+@WebServlet(name = "SettlementServlet",urlPatterns = "/verify/settlement")
 public class SettlementServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

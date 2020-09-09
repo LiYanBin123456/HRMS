@@ -64,6 +64,9 @@
             var layer;//弹出窗口
             var element;
             var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
+
+            var sid = $.query.get("id");//结算单id
+            var month = $.query.get("month");//结算单月份
             $(function () {
                 loadLayuiModule();
             });
@@ -95,8 +98,6 @@
 
             function initTable(mode) {
                 var cols = mode==0?columns_detail1_input:columns_detail1_full;
-
-
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_detail',
@@ -172,22 +173,23 @@
             function showInsertDlg() {
                 var id = $.query.get("id");
                 var content = "member.html?id="+id;
-                /*layer.open({
-                    title:"添加明细",
-                    type: 2,
-                    area: ['800px', '500px'],
-                    content: content
-                });*/
                 layer.open({
                     title:"添加明细",
                     type: 2,
-                    area: ['30%', '70%'],
+                    area: ['80%', '80%'],
                     content: content,
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
                         var member = window["layui-layer-iframe" + index].callbackData();
                         layer.close(index);
-
+                        var  details = new Array(member.length)
+                        for (var i in member){
+                            details[i] = {"sid":sid,"eid":member[i].id,"month":month};
+                            console.log(details)
+                        }
+                        iSettlement.importDetails(sid,details,0,function () {
+                            layer.msg("添加成功")
+                        });
                     },btn2: function(index, layero){
                         layer.close(index);
                     }
