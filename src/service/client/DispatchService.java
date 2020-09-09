@@ -28,19 +28,9 @@ public class DispatchService {
         return DispatchDao.insert(conn, dispatch);
     }
 
-    //删除流失客户
-    public static DaoUpdateResult deletePot(Connection conn, long id,int type) {
-        DaoUpdateResult res;
-        res= DispatchDao.delete(conn,id);
-        //删除客户时，也要删除客户的财务服务信息表
-        if(res.success){
-            FinanceDao.delete(conn,id,type);
-        }
-        return res;
-    }
-
-    public static DaoUpdateResult deleteCoop(Connection conn, long id, byte status) {
-        //修改状态，合作客户修改韦潜在客户，潜在客户修改韦流失客户
+    //删除客户实质是修改状态
+    public static DaoUpdateResult delete(Connection conn, long id, byte status) {
+        //修改状态，合作客户修改为潜在客户，潜在客户修改为流失客户
         return DispatchDao.updateStatus(conn,id,status+1);
     }
 

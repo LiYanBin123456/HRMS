@@ -26,26 +26,14 @@ public class CooperationService {
         return CooperationDao.update(conn,cooperation);
     }
 
-    //删除流失客户
-    public static DaoUpdateResult deletePot(Connection conn, long id,int type) {
-        DaoUpdateResult res;
-        //删除客户
-        res= CooperationDao.delete(conn,id);
-        //删除潜在客户时，也要删除客户的财务服务信息表
-        if(res.success){
-            FinanceDao.delete(conn,id,type);
-        }
-        return res;
-    }
-
     //添加客户
     public static DaoUpdateResult insert(Cooperation cooperation, Connection conn){
         return CooperationDao.insert(conn,cooperation);
     }
 
-    //删除客户
-    public static DaoUpdateResult deleteCoop(Connection conn, long id, byte status) {
-        //修改状态,合作客户修改韦潜在客户，潜在客户修改为流失客户
+    //删除客户实质是修改状态
+    public static DaoUpdateResult delete(Connection conn, long id, byte status) {
+        //修改状态,合作客户修改为在客户，潜在客户修改为流失客户
         return CooperationDao.updateStatus(conn,id,status+1);
     }
 

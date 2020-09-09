@@ -122,32 +122,10 @@ public class ClientServlet extends HttpServlet {
         byte category = Byte.parseByte(request.getParameter("category"));
         switch (category) {
             case 0://派遣方客户
-               if(status==2){//删除流失客户，删除合同和附件，删除服务信息,删除客户 A代表平台与派遣方的合同
-                   List<String> list = ContractDao.deleteContract(conn, id,"A");
-                   if(list!=null){
-                       if(list!=null){
-                           //调用自定义方法 删除服务器中的合同附件
-                           String msg =deleteContract(list,request);
-                           res.msg +=msg;
-                       }
-                   }
-                   res = DispatchService.deletePot(conn,id,0);
-               }else{//修改客户状态
-                   res = DispatchService.deleteCoop(conn,id,status);
-               }
+                   res = DispatchService.delete(conn,id,status);
                 break;
             case 1://合作单位客户
-                if(status==2){//删除流失客户，删除合同和附件，删除服务信息,删除客户 B代表派遣方与合作客户的合同
-                    List<String> list = ContractDao.deleteContract(conn, id,"B");
-                    if(list!=null){
-                        //调用自定义方法 删除服务器中的合同附件
-                        String msg =deleteContract(list,request);
-                        res.msg +=msg;
-                    }
-                    res = CooperationService.deletePot(conn,id,1);
-                }else{//修改客户状态
-                    res = CooperationService.deleteCoop(conn,id,status);
-                }
+                    res = CooperationService.delete(conn,id,status);
                 break;
             case 2://供应商单位客户
                    res = SupplierService.delete(id,conn,status);

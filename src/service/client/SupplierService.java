@@ -23,12 +23,7 @@ public class SupplierService {
     }
 
     public static DaoUpdateResult delete(long id, Connection conn,byte status){
-        DaoUpdateResult result ;
-        if(status==0){//修改状态为流失客户
-            result = SupplierDao.updateStatus(conn,id,status+1);
-        }else {//删除供应商客户
-            result = SupplierDao.delete(conn,id);
-        }
+        DaoUpdateResult  result = SupplierDao.updateStatus(conn,id,1);
         return result;
     }
 
