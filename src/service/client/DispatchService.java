@@ -30,7 +30,8 @@ public class DispatchService {
 
     public static DaoUpdateResult deletePot(Connection conn, long id,int type) {
         DaoUpdateResult res;
-        res= DispatchDao.delete(conn,id);
+        //删除潜在客户实质是修改状态为流失客户
+        res= DispatchDao.updateStatus(conn,id,2);
         //删除潜在客户时，也要删除客户的财务服务信息表
         if(res.success){
             FinanceDao.delete(conn,id,type);

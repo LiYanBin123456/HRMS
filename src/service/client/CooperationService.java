@@ -29,7 +29,7 @@ public class CooperationService {
     //删除潜在客户
     public static DaoUpdateResult deletePot(Connection conn, long id,int type) {
         DaoUpdateResult res;
-        res= CooperationDao.delete(conn,id);
+        res= CooperationDao.updateStatus(conn,id,2);
         //删除潜在客户时，也要删除客户的财务服务信息表
         if(res.success){
             FinanceDao.delete(conn,id,type);

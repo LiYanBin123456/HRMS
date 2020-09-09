@@ -62,7 +62,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"name",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -176,7 +176,7 @@
             function showInsertDlg() {
                 var content = "../dialog/dispatch.html";
                 layer.open({
-                    title:"添加新客户",
+                    title:"添加新的合作单位",
                     type: 2,
                     area: ['60%', '90%'],
                     content: content
