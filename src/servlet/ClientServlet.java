@@ -128,7 +128,7 @@ public class ClientServlet extends HttpServlet {
                     res = CooperationService.delete(conn,id,status);
                 break;
             case 2://供应商单位客户
-                   res = SupplierService.delete(id,conn,status);
+                   res = SupplierService.delete(id,conn);
                 break;
         }
         return JSONObject.toJSONString(res);

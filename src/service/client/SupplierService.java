@@ -22,7 +22,7 @@ public class SupplierService {
         return SupplierDao.update(conn,supplier);
     }
 
-    public static DaoUpdateResult delete(long id, Connection conn,byte status){
+    public static DaoUpdateResult delete(long id, Connection conn){
         DaoUpdateResult  result = SupplierDao.updateStatus(conn,id,1);
         return result;
     }
