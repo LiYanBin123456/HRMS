@@ -1,62 +1,62 @@
 <!DOCTYPE html>
 <html class="x-admin-sm">
-    
-    <head>
-        <meta charset="UTF-8">
-        <title>派遣单位详情</title>
-        <meta name="renderer" content="webkit">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
-        <link rel="stylesheet" href="../css/font.css">
-        <link rel="stylesheet" href="../css/xadmin.css">
-        <script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
-        <script type="text/javascript" src="../js/xadmin.js"></script>
-        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
-        <!--[if lt IE 9]>
-            <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-            <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-    </head>
-    <body>
-        <div class="layui-tab layui-tab-brief" lay-filter="tab_dispatch">
-           <ul class="layui-tab-title">
-            <li class="layui-this">基本信息</li>
-            <li>财务信息</li>
-           </ul>
-           <div class="layui-tab-content">
-             <div class="layui-tab-item layui-show">
-                <form lay-filter="form_dispatch" class="layui-form">
-                    <input type='hidden' name='id'/>
-                    <div class="layui-form-item">
-                     <div class="layui-inline">
+
+<head>
+    <meta charset="UTF-8">
+    <title>派遣单位详情</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="layui-tab layui-tab-brief" lay-filter="tab_dispatch">
+    <ul class="layui-tab-title">
+        <li class="layui-this">基本信息</li>
+        <li lay-id="element_finance" >财务信息</li>
+    </ul>
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+            <form lay-filter="form_dispatch" class="layui-form">
+                <input type='hidden' name='id'/>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
                         <label  class="layui-form-label">
                             <span class="x-red">*</span>客户名称</label>
                         <div class="layui-input-inline">
                             <input type="text"  name="name"   placeholder="" autocomplete="off" class="layui-input"></div>
-                     </div>
+                    </div>
                     <div class="layui-inline">
                         <label  class="layui-form-label">
                             <span class="x-red">*</span>简称</label>
                         <div class="layui-input-inline">
                             <input type="text"  name="nickname"  placeholder="" autocomplete="off" class="layui-input"></div>
-                     </div>
                     </div>
-                    <div class="layui-form-item">
-                     <div class="layui-inline">
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
                         <label  class="layui-form-label">
                             <span class="x-red">*</span>联系人</label>
                         <div class="layui-input-inline">
                             <input type="text"  name="contact"   placeholder="" autocomplete="off" class="layui-input"></div>
-                     </div>
-                     <div class="layui-inline">
+                    </div>
+                    <div class="layui-inline">
                         <label  class="layui-form-label">
                             <span class="x-red">*</span>联系电话</label>
                         <div class="layui-input-inline">
                             <input type="text"   name="phone"  placeholder=""  autocomplete="off" class="layui-input"></div>
-                      </div>
                     </div>
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
                         <label  class="layui-form-label">
                             <span class="x-red">*</span>地址</label>
                         <div class="layui-input-inline">
@@ -68,82 +68,82 @@
                         <div class="layui-input-inline">
                             <input type="text"  name="wx"  placeholder="" autocomplete="off" class="layui-input"></div>
                     </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <div class="layui-inline">
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
                         <label  class="layui-form-label">
                             <span class="x-red">*</span>QQ号</label>
                         <div class="layui-input-inline">
                             <input type="text"  name="qq"  placeholder="" autocomplete="off" class="layui-input"></div>
-                        </div>
-                        <div class="layui-inline">
+                    </div>
+                    <div class="layui-inline">
                         <label  class="layui-form-label">
                             <span class="x-red">*</span>邮箱</label>
                         <div class="layui-input-inline">
                             <input type="text"  name="mail"   placeholder="" autocomplete="off" class="layui-input"></div>
                     </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>单位简介</label>
+                    <div class="layui-input-block">
+                        <textarea name="intro" placeholder="" class="layui-textarea"></textarea>
                     </div>
-                    <div class="layui-form-item layui-form-text">
-                        <label  class="layui-form-label">
-                          <span class="x-red">*</span>单位简介</label>
-                        <div class="layui-input-block">
-                            <textarea name="intro" placeholder="" class="layui-textarea"></textarea>
-                        </div>
-                        </div>
-                  <div class="layui-form-item" style="text-align: center">
-                      <button  class="layui-btn" onclick="saveDispatch()">保存</button>
-                      <button  class="layui-btn" onclick="cancel()" >取消</button>
-                  </div>
-              </form> 
-             </div>
-             <div class="layui-tab-item">
-                <form lay-filter="form_finance" class="layui-form">
-                    <input type='hidden' name='id'/>
-                    <input type='hidden' name='cid'/>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>信用代码</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="code" required=""  placeholder="" autocomplete="off" class="layui-input"></div>
-                    </div>
-                   <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>开户行</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="bank" required=""  placeholder="" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>银行账户</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="cardNo" required=""  placeholder="" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>联系人</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="contact" required="" placeholder="" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>联系电话</label>
-                        <div class="layui-input-inline">
-                            <input type="text"   name="phone" required="" placeholder=""  autocomplete="off" class="layui-input"></div>
-                        </div>
-                    <div class="layui-form-item">
-                        <label  class="layui-form-label">
-                            <span class="x-red">*</span>公司地址</label>
-                        <div class="layui-input-inline">
-                            <input type="text"  name="address" required="" placeholder="" autocomplete="off" class="layui-input"></div>
-                    </div>
-                  <div class="layui-form-item" style="text-align: center" >
-                      <button  class="layui-btn" onclick="saveFinance()" >保存</button>
-                      <button  class="layui-btn" onclick="cancel()" >取消</button>
-                  </div>
-              </form>
-             </div>
-           </div>
+                </div>
+                <div class="layui-form-item" style="text-align: center">
+                    <button type="submit" lay-submit lay-filter="submit_dispatch" data-type="tabChange" class="layui-btn" >保存</button>
+                    <button class="layui-btn" onclick="cancel()" >取消</button>
+                </div>
+            </form>
         </div>
+        <div class="layui-tab-item" >
+            <form lay-filter="form_finance" class="layui-form">
+                <input type='hidden' name='id'/>
+                <input type='hidden' name='cid'/>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>信用代码</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="code" required=""  placeholder="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>开户行</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="bank" required=""  placeholder="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>银行账户</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="cardNo" required=""  placeholder="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>联系人</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="contact" required="" placeholder="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>联系电话</label>
+                    <div class="layui-input-inline">
+                        <input type="text"   name="phone" required="" placeholder=""  autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>公司地址</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="address" required="" placeholder="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item" style="text-align: center" >
+                    <button type="submit" lay-submit lay-filter="submit_finance" class="layui-btn" >保存</button>
+                    <button  class="layui-btn" onclick="cancel()" >取消</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
@@ -179,6 +179,21 @@
                     break;
             }
         });
+        /*var active = {
+        tabChange: function() {
+            element.tabChange('tab_dispatch', 'element_finance');
+        }
+        };*/
+        form.on('submit(submit_dispatch)', function(data){
+            saveDispatch(data.field);
+            return false;
+        });
+        form.on('submit(submit_finance)', function(data){
+            saveFinance(data.field);
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+            window.parent.location.reload();
+        });
     }
 
     function getDispatch() {
@@ -194,7 +209,7 @@
 
     function getFinance() {
         if(dispatch && dispatch.id) {
-            iClient.getFinance(id,0, function (result) {
+            iClient.getFinance(dispatch.id,0, function (result) {
                 if(result.data) {
                     finance = result.data;
                     form.val('form_finance', finance);
@@ -204,16 +219,16 @@
     }
 
     function saveDispatch() {
-         var data = form.val('form_dispatch');
+        var data = form.val('form_dispatch');
         if (dispatch) {
-            layer.msg("修改成功");
-             iClient.update(data,0,function (result) {
-                 layer.msg("修改成功");
-             });
+            iClient.update(data,0,function (result) {
+                layer.msg("修改成功");
+            });
         } else {
-             iClient.insert(data,0, function (result) {
-                 dispatch.id = result.extra;
-                 layer.alert("基础信息保存成功，请完善财务信息", {icon: 20});
+            iClient.insert(data,0, function (result) {
+                dispatch.id = result.extra;
+                layer.alert("基础信息保存成功，请完善财务信息", {icon: 20});
+
             });
         }
         dispatch = data;
