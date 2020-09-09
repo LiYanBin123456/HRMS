@@ -23,40 +23,52 @@
                 display:inline;
                 width:300px;
             }
-            .searchboxs{
-                margin-left:600px;
+            .distance{
+                margin-left:20px;
             }
+            .layui-table-page{text-align: center;}
         </style>
     </head>
 
     <body class="layui-layout-body">
         <div style="padding: 5px;">
+            <from class="layui-form" style="display: inline" >
+                <div class="layui-input-inline ">
+                    <div class="layui-inline"><input type="radio" name="category" value="0" title="合作中" lay-filter="category" checked></div>
+                    <div class="layui-inline"><input type="radio" name="category" value="1" title="潜在" lay-filter="category" ></div>
+                    <div class="layui-inline"><input type="radio" name="category" value="2" title="流失" lay-filter="category" ></div>
+                </div>
+            </from>
             <!--顶部工具栏-->
             <div class="layui-hide" id="top_bar_dispatch">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
                 <form class="layui-form searchbox">
-                    <div class="layui-input-inline">
+                    <div style="width: 230px" class="layui-input-inline">
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的客户名称或者联系人">
                     </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-                    <div class="layui-input-inline searchboxs">
-                             <div class="layui-inline"><input type="radio" name="se" value="合作中" title="合作中" checked></div>
-                             <div class="layui-inline"><input type="radio" name="se" value="潜在" title="潜在" ></div>
-                    </div>
+                    <button class="layui-btn layui-btn-normal layui-btn-sm distance " lay-submit lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                 </form>
             </div>
+            <div id="container">
             <table id="tbl_dispatch" lay-filter="filter_tb_dispatch"></table>
-            <div id="pager"></div>
+            </div>
+            <div class="layui-table-page" id="pager"></div>
 
             <!--行内工具栏-->
             <script type="text/html" id="bar_dispatch">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
+            <script type="text/html" id="bar_loss">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            </script>
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.params.js"></script>
         <script>
+            var category = 0;//记录是显示合作客户，潜在客户还是流失客户
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
@@ -79,23 +91,51 @@
             }
 
             function initPage() {
-                initTable();
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    search(keyword);
+                    param_query.conditions.extra = keyword;
+                    getDispatchs();
+                    return false; //阻止表单跳转
                 });
+
+                form.on('radio(category)', function(data){
+                    switchCategory(Number(data.value));
+                });
+                initTable();
+            }
+
+            function switchCategory(value) {
+                $("#container").empty();
+                $("#container").append('<table id="tbl_dispatch" lay-filter="filter_tb_dispatch"></table>');
+
+                category = value;
+                initTable()
             }
 
             function initTable() {
 
+                var cols;
+                var top_bar;
+                switch(Number(category)){
+                    case 0://合作中客户
+                        cols = columns_dispatch_partner;
+                        top_bar = '#top_bar_dispatch';
+                        break;
+                    case 1://潜在客户
+                        cols = columns_dispatch_potential;
+                        top_bar = '#top_bar_dispatch';
+                        break;
+                    case 2://流失客户
+                        cols = columns_dispatch_loss;
+                        break;
+                }
+
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_dispatch',
-                    toolbar: '#top_bar_dispatch', //开启头部工具栏，并为其绑定左侧模板
-
+                    toolbar: top_bar, //开启头部工具栏，并为其绑定左侧模板
                     title: '客户列表',
-                    cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_dispatch,
+                    cols: cols,
                     id: 'tbl_dispatch'
                 });
 
@@ -128,11 +168,7 @@
             }
 
             function getDispatchs() {
-                /*var result = {total:100,rows:[{name:"九江市鲲鹏人力资源有限用丝（5614）",nickname:"鲲鹏人力",contact:"方部长",phone:"15986345868",address:"黑龙江省哈尔滨市",wx:"15986345868",qq:"159535455",mail:"159535455@qq.com",intro:"人力资源",code:"1233010078828217X8",bank:"建设银行",cardNo:"62536525512341241354"},{name:"江西国盛人力资源有限公司（2241）",nickname:"国盛人力",contact:"李经理",phone:"15986345868",address:"黑龙江省哈尔滨市",wx:"15986345868",qq:"159535455",mail:"159535455@qq.com",intro:"人力资源",code:"1233010078828217X8",bank:"建设银行",cardNo:"62536525512341241354"}]};
-                table.reload('tbl_dispatch', {
-                    data:result.rows
-                });*/
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
+                param_query.conditions.keys=[{k:'type',o:'=',v:category}];
                 iClient.getList(param_query,0,function (result) {
                     table.reload('tbl_dispatch', {
                         data:result.rows
@@ -155,11 +191,6 @@
                 });
             }
 
-            //模糊查找
-            function search(keyword) {
-                param_query.conditions.extra = keyword;
-                getDispatchs();
-            }
 
             //打开详情对话框
             function showDetailDlg(dispatch) {
