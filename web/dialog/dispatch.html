@@ -91,7 +91,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item" style="text-align: center">
-                    <button type="submit" lay-submit lay-filter="submit_dispatch" data-type="tabChange" class="layui-btn" >保存</button>
+                    <button type="submit" lay-submit lay-filter="submit_dispatch"  class="layui-btn" >保存</button>
                     <button class="layui-btn" onclick="cancel()" >取消</button>
                 </div>
             </form>
@@ -179,13 +179,9 @@
                     break;
             }
         });
-        /*var active = {
-        tabChange: function() {
-            element.tabChange('tab_dispatch', 'element_finance');
-        }
-        };*/
         form.on('submit(submit_dispatch)', function(data){
             saveDispatch(data.field);
+            element.tabChange('tab_dispatch', 'element_finance');
             return false;
         });
         form.on('submit(submit_finance)', function(data){
@@ -233,6 +229,7 @@
         }
         dispatch = data;
     }
+
 
     function saveFinance() {
         if(!dispatch || !dispatch.id ){
