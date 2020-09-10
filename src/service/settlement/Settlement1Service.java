@@ -263,7 +263,7 @@ public class Settlement1Service {
         parameter.addCondition("category","!=",2);
         parameter.addCondition("status","=",0);
         List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
-        List<Detail1> detail1List = new ArrayList<Detail1>();
+        List<Detail1> detail1List = new ArrayList<>();
         for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
             Detail1 detail1 = new Detail1();
             detail1.setSid(sid);

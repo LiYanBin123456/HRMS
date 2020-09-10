@@ -96,6 +96,22 @@
                 initTable(mode)
             }
 
+            //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
+            iClient.getLastSalaryDefine(id,function (result) {
+                mapSalary = result.data;
+                var items = mapSalary.items;
+                if(items) {
+                    salary_items_defined = items.split(";");
+                    for (var i in salary_items_defined) {
+                        var item = salary_items_defined[i];
+                        var v = item.split(',');
+                        var node = v[1] == '0' ? $("#template [name=salary_item_defined0]").clone() : $("#template [name=salary_item_defined1]").clone();
+                        node.text(v[0]);
+                        node.click(removeSalaryItem);
+                        $("#btn_append").before(node);
+                    }
+                }
+            });
             function initTable(mode) {
                 var cols = mode==0?columns_detail1_input:columns_detail1_full;
                 //初始化数据表格
@@ -143,8 +159,7 @@
           }
 
             function getDetails() {
-                var id = $.query.get("id");
-                iSettlement.getDetails(param_query,id,0,function (result) {
+                iSettlement.getDetails(param_query,sid,0,function (result) {
                     console.log(result.rows);
                     table.reload('tbl_detail', {
                         data:result.rows
@@ -171,8 +186,7 @@
 
             //打开添加明细对话框
             function showInsertDlg() {
-                var id = $.query.get("id");
-                var content = "member.html?id="+id;
+                var content = "member.html?";
                 layer.open({
                     title:"添加明细",
                     type: 2,
@@ -184,7 +198,7 @@
                         layer.close(index);
                         var  details = new Array(member.length)
                         for (var i in member){
-                            details[i] = {"sid":sid,"eid":member[i].id,"month":month};
+                            details[i] = {"eid":member[i].id,"month":month};
                             console.log(details)
                         }
                         iSettlement.importDetails(sid,details,0,function () {

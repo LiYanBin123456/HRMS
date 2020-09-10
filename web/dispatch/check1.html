@@ -54,7 +54,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -94,7 +94,6 @@
                 table.render({
                     elem: '#tbl_settlement',
                     toolbar: '#top_bar_settlement', //开启头部工具栏，并为其绑定左侧模板
-
                     title: '列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                     cols: columns_settlement1,
@@ -103,31 +102,23 @@
 
                 //行内工具栏事件响应
                 table.on('tool(filter_tb_settlement;)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
-                    var data = obj.data; //获得当前行数据
+                    var settlement = obj.data; //获得当前行数据
                     switch (obj.event){
                         case "detail":
-                            showDetailDlg();
+                            showDetailDlg(settlement);
                             break;
                         case "log":
-                            showLogDlg();
+                            showLogs(settlement);
                             break;
                     }
                 });
-
                 //顶部工具栏事件处理
-
-
                 getSettlements();
             }
 
             function getSettlements() {
-                var result = {total:100,rows:[{client:"科技中专",month:"2020-06",salary:"5000",social:"5000",fund:"5000",manage:"5000",tax:"5000",summary:"5000",status:"编辑"},{client:"国棉四厂",month:"2020-06",salary:"12000",social:"12000",fund:"5000",manage:"12000",tax:"12000",summary:"12000",status:"已审核"}]};
-                table.reload('tbl_settlement', {
-                    data:result.rows
-                });
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
-                    table.reload('tbl_notice', {
+                iSettlement.getList(param_query,0,function (result) {
+                    table.reload('tbl_settlement', {
                         data:result.rows
                     });
                     //初始化分页
@@ -145,18 +136,31 @@
                             }
                         }
                     });
-                });*/
+                });
             }
 
             //模糊查找
 
+
             //打开明细对话框
-            function showDetailDlg() {
-                var content = "../dialog/detail.html";
+            function showDetailDlg(settlement) {
+                var content = "../dialog/detail1.html?id="+settlement.id+"&month="+settlement.month;
                 layer.open({
                     title:"明细",
                     type: 2,
                     area: ['90%', '90%'],
+                    content: content
+                });
+            }
+
+            //打开查看日志对话框
+            function showLogs(settlement) {
+                var content = "log.html?category=0&id="+settlement.id;
+                var title = "操作日志-"+settlement.name+format_date(settlement.month);
+                layer.open({
+                    title:title,
+                    type: 2,
+                    area: ['30%', '88%'],
                     content: content
                 });
             }

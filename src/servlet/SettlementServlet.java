@@ -167,7 +167,7 @@ public class SettlementServlet extends HttpServlet {
         byte category = Byte.parseByte(request.getParameter("category"));
         DaoUpdateResult result = null;
         HttpSession session = request.getSession();
-        byte role = (byte) session.getAttribute("role");
+        //获取管理员所属的公司i
         long rid = (long) session.getAttribute("rid");
         switch (category){
             case 0://普通结算单
@@ -413,5 +413,10 @@ public class SettlementServlet extends HttpServlet {
                 break;
         }
      return JSONObject.toJSONString(result);
+    }
+
+    //下载小时工模板
+    private String DownLoadHour(Connection conn, HttpServletRequest request) {
+        return null;
     }
 }

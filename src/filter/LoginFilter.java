@@ -23,7 +23,7 @@ public class LoginFilter implements Filter {
         String uri = request.getRequestURI();
         String op = req.getParameter("op");
         if(uri.contains("/account")){
-            if("login".equals(op)) {
+            if("login".equals(op)||"insert".equals(op)) {
                 // 注册和登录，放行
                 chain.doFilter(request, response);
                 return;
