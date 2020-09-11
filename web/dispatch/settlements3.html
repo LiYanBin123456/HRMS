@@ -202,7 +202,7 @@
             //模糊查找
             function search(keyword) {
                 param_query.conditions.extra = keyword;
-                getSalsrys();
+
             }
 
             //打开添加对话框
@@ -233,7 +233,7 @@
 
             //打开明细对话框
             function showDetailDlg(settlement) {
-                var content = "../dialog/detail3.html?id="+settlement.id;
+                var content = "../dialog/detail3.html?id="+settlement.id+"&pid="+settlement.pid+"&month="+settlement.month;
                 layer.open({
                     title:"明细",
                     type: 2,
@@ -312,7 +312,7 @@
             //重置结算单
             function reset(settlement) {
                 layer.confirm('重置后结算单将被强制设置为[编辑]状态，确认重置结算单吗？', {icon: 3, title:'重置结算单'}, function(index){
-                    iSettlement.reset(settlement.id,1,function () {
+                    iSettlement.reset(settlement.id,2,function () {
                         layer.close(index);
                         getSettlements();
                         layer.msg('重置成功');

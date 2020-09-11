@@ -54,7 +54,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
@@ -106,10 +106,10 @@
                     var data = obj.data; //获得当前行数据
                     switch (obj.event){
                         case "detail":
-                            showDetailDlg();
+                            showDetailDlg(data);
                             break;
                         case "log":
-                            showLogDlg();
+                            showLogDlg(data);
                             break;
                     }
                 });
@@ -121,13 +121,9 @@
             }
 
             function getSettlements() {
-                var result = {total:100,rows:[{client:"蓝科",month:"2020-06",hours:500,price:20,food:100,traffic:"600",extra:"0",accommodation:50,utilities:60,insurance:40,other1:-10,other2:0,summary:"5000",status:"申报中"},{client:"典展",month:"2020-06",hours:"600",price:"18",food:200,traffic:"0",extra:"0",accommodation:50,utilities:60,insurance:40,other1:-10,other2:0,summary:"12000",status:"已审核"}]};
-                table.reload('tbl_settlement', {
-                    data:result.rows
-                });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
-                    table.reload('tbl_notice', {
+                iSettlement.getList(param_query,1,function (result) {
+                    table.reload('tbl_settlement', {
                         data:result.rows
                     });
                     //初始化分页
@@ -145,14 +141,15 @@
                             }
                         }
                     });
-                });*/
+                });
             }
 
             //模糊查找
 
+
             //打开明细对话框
-            function showDetailDlg() {
-                var content = "../dialog/detail.html";
+            function showDetailDlg(settlement) {
+                var content = "../dialog/detail2.html?id="+settlement.id+"&month="+settlement.month;
                 layer.open({
                     title:"明细",
                     type: 2,

@@ -129,8 +129,7 @@
           }
 
             function getDetail2s() {
-                var id = $.query.get("id");
-                iSettlement.getDetails(param_query,id,1,function (result) {
+                iSettlement.getDetails(param_query,sid,1,function (result) {
                     console.log(result)
                     table.reload('tbl_detail', {
                         data:result.rows
@@ -154,8 +153,7 @@
             }
             //打开添加对话框
             function showInsertDlg() {
-                var id = $.query.get("id");
-                var content = "member.html?id="+id;
+                var content = "member.html";
                 layer.open({
                     title:"添加明细",
                     type: 2,
@@ -167,7 +165,7 @@
                         layer.close(index);
                         var  details = new Array(member.length)
                         for (var i in member){
-                            details[i] = {"sid":sid,"eid":member[i].id,"month":month};
+                            details[i] = {"eid":member[i].id,"month":month};
                             console.log(details)
                         }
                         iSettlement.importDetails(sid,details,1,function () {
