@@ -59,6 +59,10 @@
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
+            <script type="text/html" id="bar_potential">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del2"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+            </script>
             <script type="text/html" id="bar_loss">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
             </script>
@@ -149,6 +153,9 @@
                         case "del":
                             del(data);
                             break;
+                        case "del2":
+                            del2(data);
+                            break;
                     }
                 });
 
@@ -218,6 +225,17 @@
             function del(dispatch) {
                 layer.confirm('确定删除'+dispatch.name, {icon: 3, title:'删除'}, function(index){
                     iClient.delete(dispatch.id,0,0,function () {
+                        layer.close(index);
+                        getDispatchs();
+                        layer.msg('删除成功');
+                    });
+                });
+            }
+
+            //删除潜在客户
+            function del2(dispatch) {
+                layer.confirm('确定删除'+dispatch.name, {icon: 3, title:'删除'}, function(index){
+                    iClient.delete(dispatch.id,0,1,function () {
                         layer.close(index);
                         getDispatchs();
                         layer.msg('删除成功');

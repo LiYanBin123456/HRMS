@@ -139,9 +139,11 @@
             var dispatchs = result.rows;
             var select_dispatch = $("#select_dispatch");
             select_dispatch.append("<option value='-2' disabled hidden>选择合作客户</option>");
-            for(var i in dispatchs){
+            for(var i in dispatchs) {
                 var dispatch = dispatchs[i];
+                if (dispatch.type == 0) {
                 var option = $("<option>").val(dispatch.id).text(dispatch.name);
+                }
                 if(contract && contract.bid == dispatch.id){
                     $(option).prop("selected",true);
                 }

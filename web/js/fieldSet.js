@@ -18,7 +18,7 @@ var columns_dispatch_potential = [[
     {field:'name', title: '客户名称'},
     {field:'contact', title: '联系人',width:250},
     {field:'phone', title: '联系电话',width:250},
-    {fixed: 'right', title: '操作', toolbar: '#bar_dispatch',width:300}
+    {fixed: 'right', title: '操作', toolbar: '#bar_potential',width:300}
 ]];
 
 //派遣单位流失客户字段集合

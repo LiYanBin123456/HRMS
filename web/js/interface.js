@@ -137,7 +137,7 @@ var InterfaceClient = function() {
      * 删除客户
      * @param id 客户id
      * @param category 0-派遣方 1-合作单位 2-供应商
-     * @param status 0-潜在客户 1-合作客户
+     * @param status 0-合作客户 1-潜在客户
      * @param success
      * @param fail
      */
