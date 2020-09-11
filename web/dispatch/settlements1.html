@@ -211,7 +211,7 @@
 
             //打开明细对话框
             function showDetailDlg(settlement) {
-                var content = "../dialog/detail1.html?id="+settlement.id+"&month="+settlement.month;
+                var content = "../dialog/detail1.html?id="+settlement.id+"&month="+settlement.month+"&cid="+settlement.cid;
                 layer.open({
                     title:"明细",
                     type: 2,

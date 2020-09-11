@@ -53,7 +53,9 @@
             var layer;//弹出窗口
             var element;
             var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
+
             var sid = $.query.get("id");//结算单id
+            var cid = $.query.get("cid");//合作单位id
             var pid = $.query.get("pid");//产品保险id
             var month = $.query.get("month");//结算单月份
 
@@ -160,7 +162,7 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "member.html";
+                var content = "member.html?category=0&cid="+cid;
                 layer.open({
                     title:"添加明细",
                     type: 2,
