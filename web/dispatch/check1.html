@@ -32,8 +32,8 @@
             <div class="layui-hide" id="top_bar_settlement">
                 <form class="layui-form ">
                     <div class="layui-input-inline">
-                             <div class="layui-inline"><input type="radio" name="se" value="待审核" title="待审核" checked></div>
-                             <div class="layui-inline searchbox"><input type="radio" name="se" value="全部" title="全部" ></div>
+                             <div class="layui-inline"><input type="radio" name="se" value="0" title="待审核" lay-filter="mode" checked="checked"></div>
+                             <div class="layui-inline searchbox"><input type="radio" name="se" value="1" title="全部" lay-filter="mode"  ></div>
                     </div>
                 </form>
             </div>
@@ -48,6 +48,7 @@
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/jquery.params.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -70,7 +71,12 @@
                 });
             }
 
+
+
             function initPage() {
+                form.on('radio(se)', function(data){
+                    console.log(data.value)
+                });
                 initTable();
             }
 
@@ -139,9 +145,6 @@
                 });
             }
 
-            //模糊查找
-
-
             //打开明细对话框
             function showDetailDlg(settlement) {
                 var content = "../dialog/detail1.html?id="+settlement.id+"&month="+settlement.month;
@@ -164,8 +167,6 @@
                     content: content
                 });
             }
-
-
         </script>
     </body>
 </html>
