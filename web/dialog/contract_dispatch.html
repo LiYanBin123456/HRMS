@@ -66,7 +66,7 @@
             <button type="button" class="layui-btn" id="test1">
                 <i class="layui-icon">&#xe67c;</i>上传复印件(PDF)
             </button>
-            <button class="layui-btn"><i class="layui-icon layui-icon-edit"></i>下载复印件</button>
+            <button class="layui-btn" onclick="download()"><i class="layui-icon layui-icon-edit"></i>下载复印件</button>
         </div>
     </div>
 </div>
@@ -93,11 +93,16 @@
             laydate = layui.laydate;
             upload.render({
                 elem: '#test1' //绑定元素
-                , url: '/hrms/file/' //上传接口
+                , url: '/hrms//verify/file' //上传接口
+                , accept: 'file'
+                , exts: 'pdf'
+                , acceptMime: '.pdf'
                 ,before: function(file,id){
-                    this.data={op:"upload",file:JSON.stringify(file),id:id}
+                    this.data={op:"upload",file:JSON.stringify(file),id:contract.id}
                 }
                 , done: function (res) {
+                    layer.msg(res.msg);
+                    console.log(res);
                     //上传完毕回调
                 }
                 , error: function () {
@@ -159,6 +164,10 @@
         var month=d.getMonth()+1;
         var date=d.getDate();
         return year+"-"+month+"-"+date;
+    }
+    function download(){
+        iFile.download(contract.id,function () {
+        });
     }
 
     function save() {

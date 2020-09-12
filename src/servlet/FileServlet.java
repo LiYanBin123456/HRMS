@@ -26,7 +26,6 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 import sun.font.TrueTypeFont;
-import utills.AccessoryUtil;
 import utills.XlsUtil;
 
 @WebServlet(name = "FileServlet",urlPatterns = "/verify/file")
@@ -198,7 +197,7 @@ public class FileServlet extends HttpServlet {
         }
         else {
             result.msg="文件不存在，请确认是否已经插入了合同";
-            result.success=true;
+            result.success=false;
 
             PrintWriter outs = response.getWriter();
             outs.print(JSONObject.toJSONString(result));

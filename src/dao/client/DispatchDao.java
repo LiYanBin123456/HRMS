@@ -17,6 +17,7 @@ public class DispatchDao {
     public static DaoQueryListResult getList(Connection conn, QueryParameter param){
         if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
             param.addCondition("concat(name,contact)","like",param.conditions.extra);
+            System.out.println("param.conditions.extra:"+param.conditions.extra);
         }
         return DbUtil.getList(conn,"dispatch",param, Dispatch.class);
     }

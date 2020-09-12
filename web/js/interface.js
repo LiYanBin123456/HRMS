@@ -1133,7 +1133,7 @@ var InterfaceFile = function () {
      * @param fail
      */
     this.uploadImg = function (file,id,success,fail) {
-        var para = {op: "uploadImg",id:id,file:file};
+        var para = {op: "uploadImg",id:id,file:JSON.stringify(file)};
         access(url,para,1,success,fail);
     };
 };
