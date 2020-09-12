@@ -184,17 +184,20 @@ public class FileServlet extends HttpServlet {
         String fullFileName = getServletContext().getRealPath("/contractFile/" + fileName);
         File file = new File(fullFileName);
         System.out.println(file);
+        List<File> files = new ArrayList<>();
         if(file.exists()){
-            // 创建输入输出流对象
-            InputStream in = new FileInputStream(fullFileName);
-            OutputStream out = response.getOutputStream();
-            // 读写文件
-            int b;
-            while((b=in.read())!= -1) {
-                out.write(b);
-            }
-            out.close();
-            in.close();
+            files.add(file);
+            AccessoryUtil.zipDownload(response,files);
+//            // 创建输入输出流对象
+//            InputStream in = new FileInputStream(fullFileName);
+//            OutputStream out = response.getOutputStream();
+//            // 读写文件
+//            int b;
+//            while((b=in.read())!= -1) {
+//                out.write(b);
+//            }
+//            out.close();
+//            in.close();
         }
         else {
             result.msg="文件不存在，请确认是否已经插入了合同";
@@ -251,6 +254,7 @@ public class FileServlet extends HttpServlet {
         }
         return JSONObject.toJSONString(msg);
     }
+
 
 
     private Part getPart(HttpServletRequest request){
