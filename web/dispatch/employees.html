@@ -241,7 +241,7 @@
 
             //打开详情对话框
             function showDetailDlg(employee) {
-                var content = "../dialog/employee.html?id="+employee.id;
+                var content = "../dialog/employee.html?id="+employee.id+"&type="+employee.type;
                 layer.open({
                     title:"内部员工详情",
                     type: 2,
@@ -311,6 +311,7 @@
                         iEmployee.employ(eid,category,function () {
                             layer.close(index);
                             layer.msg('聘用成功');
+                            getEmployees();
                         })
                     });
                 }

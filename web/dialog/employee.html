@@ -125,8 +125,7 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label"><span class="x-red">*</span>外派单位</label>
                     <div class="layui-input-inline">
-                        <select name="department" lay-verify="required">
-                        </select>
+                        <select name="cid" id="select_cooperation" lay-filter="filter_cooperation" lay-verify="required"></select>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -313,14 +312,19 @@
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
+<script src="../layui/layui.js"></script>
 <script src="../city-picker/city-picker.data.js"></script>
+<script src="../city-picker/city-picker.js"></script>
 <script src="../js/city.js"></script>
 <script>
     var op = "insert";
     var form;//表单对象
     var cityPicker;
+    var element;
     var laydate;
+    var cid;
     var id = $.query.get("id");
+    var type = $.query.get("type");
     var employee,setting,deduct,card;
 
     loadLayuiModule();
@@ -329,9 +333,10 @@
         layui.extend({
             index: 'lib/index' //主入口模块
             , citypicker: '../city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
-        }).use(['form', 'citypicker','laydate'], function () {
+        }).use(['form', 'element','citypicker','laydate'], function () {
             form = layui.form;
             laydate = layui.laydate;
+            element = layui.element;
             var picker = layui.citypicker;
             cityPicker = new picker("#city-picker", {
                 provincename: "provinceId",
@@ -346,7 +351,6 @@
                 ,type: 'date'
             });
             initPage();
-            getEmployee();
             initTab();
         });
     }
@@ -387,54 +391,103 @@
                 $("[name=s1]").addClass("layui-hide");
             }
         });
+        //监听消息列表选择消息标题
+        form.on('select(filter_cooperation)', function(data){
+            cid = data.value;//获取选中的合作单位编号
+        });
+        getEmployee();
+        initCoop();
+    }
+
+    //查询所属的所有合作方
+    function initCoop() {
+        //获取session中的派遣方id
+        iClient.getList({},1,function(result){
+            var cooperations = result.rows;
+            var select_cooperation = $("#select_cooperation");
+            select_cooperation.append("<option value='-2' selected disabled hidden>选择合作客户</option>");
+            for(var i in cooperations){
+                var cooperation = cooperations[i];
+                var option = $("<option>").val(cooperation.id).text(cooperation.name);
+                select_cooperation.append(option);
+            }
+            form.render('select', 'form_expatriate');
+        });
     }
 
     function getEmployee() {
-        iEmployee.get(id,0,function (result) {
-            employee = result.data;
-            form.val('form_expatriate', employee);
-            op = "update";
-        })
+        if(id){
+            iEmployee.get(id,0,function (result) {
+                employee = result.data;
+                form.val('form_expatriate', employee);
+                op = "update";
+            })
+        }
     }
     
     function getEnsureSetting () {
-        iEmployee.getEnsureSetting(id,function (result) {
-            setting = result.data;
-            form.val('form_ensure',setting);
-            if(setting.settingS == 3){
-                $("[name=s1]").removeClass("layui-hide");
-            }
-            if(setting.settingM == 3){
-                $("[name=m1]").removeClass("layui-hide");
-            }
-            var text = getCityText4(setting.city);
-            cityPicker.setValue(text);
-            op = "update";
-        })
+        if(id){
+            iEmployee.getEnsureSetting(id,function (result) {
+                setting = result.data;
+                console.log(result);
+                form.val('form_ensure',setting);
+                if(setting.settingS == 3){
+                    $("[name=s1]").removeClass("layui-hide");
+                }
+                if(setting.settingM == 3){
+                    $("[name=m1]").removeClass("layui-hide");
+                }
+                var text = getCityText4(setting.city);
+                cityPicker.setValue(text);
+                op = "update";
+            })
+        }
     }
 
     function getDeduct() {
-        iEmployee.getDeduct(id,function (result) {
-            deduct = result.data;
-            form.val('form_deduct',deduct);
-            op = "update";
-        })
+        if(id){
+            iEmployee.getDeduct(id,function (result) {
+                deduct = result.data;
+                form.val('form_deduct',deduct);
+                op = "update";
+            })
+        }
     }
     
     function getCard() {
-        iEmployee.getCard(id,function (result) {
-            card = result.data;
-            form.val('form_salary_card',card);
-            op = "update";
-        })
+        if(id){
+            iEmployee.getCard(id,function (result) {
+                card = result.data;
+                form.val('form_salary_card',card);
+                op = "update";
+            })
+        }
     }
     
     function save_expatriate() {
-        var employee = form.val('form_expatriate');
+        var category = $.query.get("category");
+        var employees = form.val('form_expatriate');
+        employees.type = type;
         if (op == "insert") {
-            iEmployee.insert(employee, 0,onInsertSuccess);
+            var employee = {};
+            var extract = {};
+            employee.cardId  = employees.cardId;
+            employee.name = employees.name;
+            employee.phone = employees.phone;
+            employee.degree = employees.degree;
+            employee.type = category;
+            employee.cid = cid;
+            employee.entry = employees.entry;
+            employee.status = employees.status;
+            employee.post = employees.post;
+            employee.category = employees.category;
+            employee.price = employees.price;
+            extract.school = employees.school;
+            extract.major = employees.major;
+            extract.rid = employees.rid;
+            iEmployee.insert(employee, extract,onInsertSuccess);
         } else {
-            iEmployee.update(employee,0, onUpdateSuccess);
+            iEmployee.update(employees,0, onUpdateSuccess);
         }
     }
 

@@ -12,12 +12,9 @@
     <script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
 </head>
 <body>
-    <form class="layui-form">
-        <div class="layui-form-item">
-            <select name="cooperations" lay-filter="filter_cooperation">
-                <option value="0">江西制氧机械</option>
-                <option value="1">九江石化</option>
-            </select>
+    <form class="layui-form" lay-filter="form_cooperation">
+        <div class="layui-input-inline">
+            <select id="select_cooperation" lay-filter="filter_cooperation" lay-verify="required"></select>
         </div>
     </form>
 </body>
@@ -35,6 +32,19 @@
             form = layui.form;
             form.on('select(filter_cooperation)', function(data){
                 cooperation = {id:data.value,name:$(data.elem).find("option:selected").text()};
+            });
+
+            //获取session中的派遣方id
+            iClient.getList({},1,function(result){
+                var cooperations = result.rows;
+                var select_cooperation = $("#select_cooperation");
+                select_cooperation.append("<option value='-2' selected disabled hidden>选择合作客户</option>");
+                for(var i in cooperations){
+                    var cooperation = cooperations[i];
+                    var option = $("<option>").val(cooperation.id).text(cooperation.name);
+                    select_cooperation.append(option);
+                }
+                form.render('select', 'form_cooperation');
             });
         });
     }
