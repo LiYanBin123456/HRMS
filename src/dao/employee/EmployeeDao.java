@@ -26,11 +26,18 @@ public class EmployeeDao {
 
     //修改
     public static DaoUpdateResult update(Connection conn, ViewEmployee e) {
+        DaoUpdateResult result;
         //需要判断外键是否为0，为0就需要转换成null
         String cid = e.getCid()==0?null:String.valueOf(e.getCid());
-        String sql = "update view_employee set cid=?,cardId=?,name=?,phone=?,degree=?,type=?,entry=?,status=?,department=?,post=?,category=?,price=?,rid=?,school=?,major=? where id=?";
-        Object []params = {cid,e.getCardId(),e.getName(),e.getPhone(),e.getDegree(),e.getType(),e.getEntry(),e.getStatus(),e.getDepartment(),e.getPost(),e.getCategory(),e.getPrice(),e.getRid(),e.getSchool(),e.getMajor(),e.getId()};
-        return  DbUtil.update(conn,sql,params);
+        String sql = "update employee set cid=?,cardId=?,name=?,phone=?,degree=?,type=?,entry=?,status=?,department=?,post=?,category=?,price=? where id=?";
+        Object []params = {cid,e.getCardId(),e.getName(),e.getPhone(),e.getDegree(),e.getType(),e.getEntry(),e.getStatus(),e.getDepartment(),e.getPost(),e.getCategory(),e.getPrice(),e.getId()};
+        result = DbUtil.update(conn,sql,params);
+        if(result.success){//修改员工信息成功后修改员工补充信息中的档案编号，学校，主修
+            String sql2 = "update employee_extra set rid=?,school=?,major=? where eid=?";
+            Object []params2 = {e.getRid(),e.getSchool(),e.getMajor(),e.getId()};
+            DbUtil.update(conn,sql2,params2);
+        }
+        return result;
     }
 
     //增加
