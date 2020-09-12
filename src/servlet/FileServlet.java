@@ -54,7 +54,7 @@ public class FileServlet extends HttpServlet {
                 break;
             case "download"://下载合同复印件
                 download(conn,request,response);
-                return;
+                break;
         }
         ConnUtil.closeConnection(conn);
 
@@ -123,7 +123,7 @@ public class FileServlet extends HttpServlet {
     }
 
     private String upload(Connection conn, HttpServletRequest request) throws IOException, ServletException {
-        String  msg = null;
+        DaoUpdateResult result = new DaoUpdateResult();
         String id = request.getParameter("id");
             //将文件上传到服务器并且以合同id命名
             String file = null;
@@ -156,17 +156,17 @@ public class FileServlet extends HttpServlet {
                         fos.close();
                         //删除临时文件
                         part.delete();
-                        msg = "合同插入成功";
+                    result.msg = "合同插入成功";
                 }
                 else {
-                    msg ="格式不正确";
+                    result.msg ="格式不正确";
                 }
             }
-            return JSONObject.toJSONString(msg);
+            return JSONObject.toJSONString(result);
     }
 
     private String download(Connection conn, HttpServletRequest request,HttpServletResponse response) throws IOException {
-        String msg = null;
+       DaoUpdateResult result = new DaoUpdateResult();
         // 获得请求文件名
         String id = request.getParameter("id");
         String fileName = id+".pdf";
@@ -189,13 +189,13 @@ public class FileServlet extends HttpServlet {
                 out.write(b);
             }
             in.close();
-            msg="正在下载";
+            result.msg="正在下载";
         }
         else {
-           msg = "文件不存在";
+            result.msg = "文件不存在";
         }
 
-        return msg;
+        return JSONObject.toJSONString(result);
     }
 
     private String uploadImg(Connection conn, HttpServletRequest request) throws IOException, ServletException {
