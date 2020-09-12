@@ -18,14 +18,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import javax.smartcardio.ResponseAPDU;
 import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
+import sun.font.TrueTypeFont;
+import utills.AccessoryUtil;
 import utills.XlsUtil;
 
 @WebServlet(name = "FileServlet",urlPatterns = "/verify/file")
@@ -54,7 +55,8 @@ public class FileServlet extends HttpServlet {
                 break;
             case "download"://下载合同复印件
                 download(conn,request,response);
-                break;
+                ConnUtil.closeConnection(conn);
+                return;
         }
         ConnUtil.closeConnection(conn);
 
@@ -157,16 +159,18 @@ public class FileServlet extends HttpServlet {
                         //删除临时文件
                         part.delete();
                     result.msg = "合同插入成功";
+                    result.success = true;
                 }
                 else {
                     result.msg ="格式不正确";
+                    result.success = false;
                 }
             }
             return JSONObject.toJSONString(result);
     }
 
-    private String download(Connection conn, HttpServletRequest request,HttpServletResponse response) throws IOException {
-       DaoUpdateResult result = new DaoUpdateResult();
+    private void download(Connection conn, HttpServletRequest request,HttpServletResponse response) throws IOException {
+        DaoUpdateResult result = new DaoUpdateResult();
         // 获得请求文件名
         String id = request.getParameter("id");
         String fileName = id+".pdf";
@@ -179,6 +183,7 @@ public class FileServlet extends HttpServlet {
         // 获取目标文件的绝对路径
         String fullFileName = getServletContext().getRealPath("/contractFile/" + fileName);
         File file = new File(fullFileName);
+        System.out.println(file);
         if(file.exists()){
             // 创建输入输出流对象
             InputStream in = new FileInputStream(fullFileName);
@@ -188,20 +193,24 @@ public class FileServlet extends HttpServlet {
             while((b=in.read())!= -1) {
                 out.write(b);
             }
+            out.close();
             in.close();
-            result.msg="正在下载";
         }
         else {
-            result.msg = "文件不存在";
-        }
+            result.msg="文件不存在，请确认是否已经插入了合同";
+            result.success=true;
 
-        return JSONObject.toJSONString(result);
+            PrintWriter outs = response.getWriter();
+            outs.print(JSONObject.toJSONString(result));
+            outs.flush();
+            outs.close();
+        }
     }
 
     private String uploadImg(Connection conn, HttpServletRequest request) throws IOException, ServletException {
         String  msg = null;
         String id = request.getParameter("id");
-        String file = null;
+        String file ;
         Part part = request.getPart("file");
         if(part!=null){
             //获取文件的名称
@@ -241,6 +250,53 @@ public class FileServlet extends HttpServlet {
             }
         }
         return JSONObject.toJSONString(msg);
+    }
+
+
+    private Part getPart(HttpServletRequest request){
+        Collection<Part> parts = null;
+        try {
+            parts = request.getParts();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+        Part part = (Part) parts.toArray()[1];//第二个才是我们需要的，应该是uploadify对Servlet3支持还不够好
+        return part;
+    }
+
+    /**
+     * 获取上传的文件名
+     * @param part
+     * @return
+     */
+    private String getFileName(Part part) {
+        String header = part.getHeader("content-disposition");
+        /**
+         * String[] tempArr1 = header.split(";");代码执行完之后，在不同的浏览器下，tempArr1数组里面的内容稍有区别
+         * 火狐或者google浏览器下：tempArr1={form-data,name="file",filename="snmp4j--api.zip"}
+         * IE浏览器下：tempArr1={form-data,name="file",filename="E:\snmp4j--api.zip"}
+         */
+        String[] tempArr1 = header.split(";");
+        /**
+         *火狐或者google浏览器下：tempArr2={filename,"snmp4j--api.zip"}
+         *IE浏览器下：tempArr2={filename,"E:\snmp4j--api.zip"}
+         */
+        String[] tempArr2 = tempArr1[2].split("=");
+        //获取文件名，兼容各种浏览器的写法
+        String fileName = tempArr2[1].substring(tempArr2[1].lastIndexOf("\\")+1).replaceAll("\"", "");
+        return fileName;
+    }
+
+    private void exportAccessory(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        String []str = request.getParameter("stuIds").split(",");
+        List<String> cardIds = new ArrayList<>(Arrays.asList(str));
+        byte category = Byte.parseByte(request.getParameter("category"));
+        String folder = request.getServletContext().getRealPath("/accessory");
+
+        //List<File> files = AccessoryUtil.getAccessoryFiles(cardIds,category,folder);
+       // AccessoryUtil.zipDownload(response,files);
     }
 
 }
