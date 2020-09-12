@@ -1,32 +1,23 @@
 package servlet;
 
 import com.alibaba.fastjson.JSONObject;
-import database.ConnUtil;
 import database.DaoUpdateResult;
-import jxl.Workbook;
-import jxl.write.Label;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
 import org.apache.commons.io.IOUtils;
+import utills.XlsUtil;
 
-import javax.management.relation.Role;
 import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import javax.smartcardio.ResponseAPDU;
 import java.io.*;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import sun.font.TrueTypeFont;
-import utills.XlsUtil;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 @WebServlet(name = "FileServlet",urlPatterns = "/verify/file")
 @MultipartConfig
@@ -39,25 +30,25 @@ public class FileServlet extends HttpServlet {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
         String result = "";
-        Connection conn = ConnUtil.getConnection();
 
         String op = request.getParameter("op");
         switch (op) {
             case "readXls"://读取xls数据反馈给前台
-                result = readXls(conn,request);
+                result = readXls(request);
                 break;
             case "upload"://上传合同附件
-                result = upload(conn,request);
+                result = upload(request);
                 break;
             case "uploadImg"://上传员工头像
-                result = uploadImg(conn,request);
+                result = uploadImg(request);
                 break;
-            case "download"://下载合同复印件
-                download(conn,request,response);
-                ConnUtil.closeConnection(conn);
+            case "existContract"://判断合同附件是否存在
+                result = existContract(request);
+                break;
+            case "downloadContract"://下载合同复印件
+                downloadContract(request,response);
                 return;
         }
-        ConnUtil.closeConnection(conn);
 
         PrintWriter out = response.getWriter();
         out.print(result);
@@ -71,13 +62,12 @@ public class FileServlet extends HttpServlet {
      * 2、上传到服务器
      * 3、获取服务器中的excal文件，读取数据
      * 4、删除该文件
-     * @param conn
      * @param request
      * @return
      * @throws IOException
      * @throws ServletException
      */
-    private String readXls(Connection conn, HttpServletRequest request) throws IOException, ServletException {
+    private String readXls(HttpServletRequest request) throws IOException, ServletException {
         String str = null;
         Part part = request.getPart("file");
         String header = part.getHeader("content-disposition");
@@ -123,7 +113,7 @@ public class FileServlet extends HttpServlet {
         return str;
     }
 
-    private String upload(Connection conn, HttpServletRequest request) throws IOException, ServletException {
+    private String upload(HttpServletRequest request) throws IOException, ServletException {
         DaoUpdateResult result = new DaoUpdateResult();
         String id = request.getParameter("id");
             //将文件上传到服务器并且以合同id命名
@@ -168,48 +158,43 @@ public class FileServlet extends HttpServlet {
             return JSONObject.toJSONString(result);
     }
 
-    private void download(Connection conn, HttpServletRequest request,HttpServletResponse response) throws IOException {
-        DaoUpdateResult result = new DaoUpdateResult();
-        // 获得请求文件名
+    private String existContract(HttpServletRequest request) throws IOException {
         String id = request.getParameter("id");
         String fileName = id+".pdf";
-        // 设置文件MIME类型
-        String mimeType = getServletContext().getMimeType(fileName);
-        response.setContentType(mimeType);
-        // 设置Content-Disposition
-        response.setHeader("Content-Disposition", "attachment;filename="+fileName);
-        // 读取目标文件，通过response将目标文件写到客户端
-        // 获取目标文件的绝对路径
         String fullFileName = getServletContext().getRealPath("/contractFile/" + fileName);
         File file = new File(fullFileName);
-        System.out.println(file);
-        List<File> files = new ArrayList<>();
-        if(file.exists()){
-            files.add(file);
-            AccessoryUtil.zipDownload(response,files);
-//            // 创建输入输出流对象
-//            InputStream in = new FileInputStream(fullFileName);
-//            OutputStream out = response.getOutputStream();
-//            // 读写文件
-//            int b;
-//            while((b=in.read())!= -1) {
-//                out.write(b);
-//            }
-//            out.close();
-//            in.close();
-        }
-        else {
-            result.msg="文件不存在，请确认是否已经插入了合同";
-            result.success=false;
 
-            PrintWriter outs = response.getWriter();
-            outs.print(JSONObject.toJSONString(result));
-            outs.flush();
-            outs.close();
-        }
+        JSONObject json = new JSONObject();
+        json.put("success",true);
+        json.put("exist",file.exists()?true:false);
+        return json.toJSONString();
     }
 
-    private String uploadImg(Connection conn, HttpServletRequest request) throws IOException, ServletException {
+    private void downloadContract(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String id = request.getParameter("id");
+        String fileName = id+".pdf";
+        String fullFileName = getServletContext().getRealPath("/contractFile/" + fileName);
+        File file = new File(fullFileName);
+
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment;filename="+fileName);
+
+        ServletOutputStream os = response.getOutputStream();
+        FileInputStream fis = new FileInputStream(file);
+        BufferedInputStream bis = new BufferedInputStream(fis);
+
+        int size=0;
+        byte[] buff = new byte[1024];
+        while ((size=bis.read(buff))!=-1) {
+            os.write(buff, 0, size);
+        }
+
+        os.flush();
+        os.close();
+        bis.close();
+    }
+
+    private String uploadImg(HttpServletRequest request) throws IOException, ServletException {
         String  msg = null;
         String id = request.getParameter("id");
         String file ;
