@@ -49,12 +49,12 @@ public class FileServlet extends HttpServlet {
             case "upload"://上传合同附件
                 result = upload(conn,request);
                 break;
-            case "download"://下载合同复印件
-                result = download(conn,request,response);
-                break;
             case "uploadImg"://上传员工头像
                 result = uploadImg(conn,request);
                 break;
+            case "download"://下载合同复印件
+                download(conn,request,response);
+                return;
         }
         ConnUtil.closeConnection(conn);
 
@@ -156,7 +156,7 @@ public class FileServlet extends HttpServlet {
                         fos.close();
                         //删除临时文件
                         part.delete();
-                        msg = "合共插入成功";
+                        msg = "合同插入成功";
                 }
                 else {
                     msg ="格式不正确";
@@ -168,7 +168,8 @@ public class FileServlet extends HttpServlet {
     private String download(Connection conn, HttpServletRequest request,HttpServletResponse response) throws IOException {
         String msg = null;
         // 获得请求文件名
-        String fileName = request.getParameter("fileName");
+        String id = request.getParameter("id");
+        String fileName = id+".pdf";
         // 设置文件MIME类型
         String mimeType = getServletContext().getMimeType(fileName);
         response.setContentType(mimeType);
