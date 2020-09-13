@@ -168,8 +168,20 @@
         return year+"-"+month+"-"+date;
     }
     function download(){
-        iFile.download(contract.id,function () {
-        });
+        iFile.existContract(contract.id,function (result) {
+            if(!result.exist){
+                layer.msg("附件不存在或已删除");
+                return;
+            }
+
+            var url = "/hrms/verify/file?op=downloadContract&id="+contract.id;
+            var form = $('<form method="POST"></form>');
+            form.attr('action', url);
+            form.appendTo($('body'));
+            form.submit();
+            form.remove();
+        })
+
     }
 
     function save() {

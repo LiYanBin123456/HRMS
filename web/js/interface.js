@@ -1115,14 +1115,26 @@ var InterfaceFile = function () {
         var para = {op: "upload",id:id,file:JSON.stringify(file)};
         access(url,para,1,success,fail);
     };
+
+    /**
+     * 判断合同附件是否存在，返回结果为{success:true/false,exist:true/false}
+     * @param id 合同编号
+     * @param success
+     * @param fail
+     */
+    this.existContract = function (id,success,fail) {
+        var para = {op: "existContract",id:id};
+        access(url,para,1,success,fail);
+    };
+
     /**
      * 下载合同复印件
      * @param id 合同id
      * @param success
      * @param fail
      */
-    this.download = function (id,success,fail) {
-        var para = {op: "download",id:id};
+    this.downloadContract = function (id,success,fail) {
+        var para = {op: "downloadContract",id:id};
         access(url,para,1,success,fail);
     };
     /**
