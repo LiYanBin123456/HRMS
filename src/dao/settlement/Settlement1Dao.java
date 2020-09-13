@@ -11,7 +11,7 @@ public class Settlement1Dao {
     public static DaoQueryListResult getList(Connection conn, QueryParameter param) {
         if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
             //根据地市模糊查询
-            param.addCondition("concat(name,month,status)","like",param.conditions.extra);
+            param.addCondition("name","like",param.conditions.extra);
         }
         return DbUtil.getList(conn, "view_settlement1", param, ViewSettlement1.class);
 
