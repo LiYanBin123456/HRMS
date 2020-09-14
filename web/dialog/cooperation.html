@@ -49,18 +49,13 @@
             <form lay-filter="form_cooperation" class="layui-form">
                 <input type='hidden' name='id'/>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>档案编号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="rid" required="" autocomplete="off" class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
+                <div class="layui-inline">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>客户名称</label>
                     <div class="layui-input-inline">
                         <input type="text" name="name" required="" autocomplete="off" class="layui-input"></div>
                 </div>
-                <div class="layui-form-item">
+                <div class="layui-inline">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>客户性质</label>
                     <div class="layui-input-inline">
@@ -80,45 +75,52 @@
                         </select>
                     </div>
                 </div>
+                </div>
                 <div class="layui-form-item">
+                    <div class="layui-inline">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>联系人</label>
                     <div class="layui-input-inline">
                         <input type="text" name="contact" required=""  autocomplete="off"
                                class="layui-input">
                     </div>
-                </div>
-                <div class="layui-form-item">
+                    </div>
+                    <div class="layui-inline">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>联系电话</label>
                     <div class="layui-input-inline">
                         <input type="text"  name="phone"
                                required="" autocomplete="off" class="layui-input"></div>
+                     </div>
                 </div>
                 <div class="layui-form-item">
+                    <div class="layui-inline">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>微信号</label>
                     <div class="layui-input-inline">
                         <input type="text" name="wx" required="" autocomplete="off" class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
+                     </div>
+                    <div class="layui-inline">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>QQ号</label>
                     <div class="layui-input-inline">
                         <input type="text"  name="qq" required=""
                                autocomplete="off" class="layui-input"></div>
+                    </div>
                 </div>
                 <div class="layui-form-item">
+                    <div class="layui-inline">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>地址</label>
                     <div class="layui-input-inline">
                         <input type="text" name="address" required="" autocomplete="off" class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
+                     </div>
+                    <div class="layui-inline">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>邮箱</label>
                     <div class="layui-input-inline">
                         <input type="text" name="mail" required="" autocomplete="off" class="layui-input"></div>
+                    </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">
@@ -127,8 +129,9 @@
                         <textarea name="intro" placeholder="请输入内容" class="layui-textarea"></textarea>
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <button lay-submit lay-filter="submit_cooperation" class="layui-btn layui-btn-fluid" >保存</button>
+                <div class="layui-form-item" style="text-align: center" >
+                    <button lay-submit lay-filter="submit_cooperation" class="layui-btn " >保存</button>
+                    <button class="layui-btn" onclick="cancel()" >取消</button>
                 </div>
             </form>
         </div>
@@ -138,60 +141,68 @@
                 <input type='hidden' name='cid'/>
                 <input type='hidden' name='type' value="1"/>
                 <div class="layui-form-item">
+                    <div class="layui-inline">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>统一社会信用代码</label>
                     <div class="layui-input-inline">
                         <input type="text" name="code" required="" autocomplete="off"
                                class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
+                     </div>
+                    <div class="layui-inline">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>开户行</label>
                     <div class="layui-input-inline">
                         <input type="text" name="bank" required=""  autocomplete="off"
                                class="layui-input"></div>
+                    </div>
                 </div>
                 <div class="layui-form-item">
+                    <div class="layui-inline">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>银行账户</label>
                     <div class="layui-input-inline">
                         <input type="text"  name="cardNo"
                                required="" autocomplete="off" class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
+                     </div>
+                    <div class="layui-inline">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>联系人</label>
                     <div class="layui-input-inline">
                         <input type="text" name="contact" required=""  autocomplete="off"
                                class="layui-input"></div>
+                    </div>
                 </div>
                 <div class="layui-form-item">
+                    <div class="layui-inline">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>联系电话</label>
                     <div class="layui-input-inline">
                         <input type="text"  name="phone"
                                required="" autocomplete="off" class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
+                     </div>
+                    <div class="layui-inline">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>公司地址</label>
                     <div class="layui-input-inline">
                         <input type="text" name="address" required="" autocomplete="off" class="layui-input"></div>
+                    </div>
                 </div>
                 <div class="layui-form-item">
+                    <div class="layui-inline">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>大额行号</label>
                     <div class="layui-input-inline">
                         <input type="text" name="bankNo" required=""  autocomplete="off"
                                class="layui-input">
                     </div>
-                </div>
-                <div class="layui-form-item">
+                    </div>
+                    <div class="layui-inline">
                     <label class="layui-form-label">
                         <span class="x-red">*</span>公司余额</label>
                     <div class="layui-input-inline">
                         <input type="text" name="balance" required=""  autocomplete="off"
                                class="layui-input"></div>
+                    </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">
@@ -200,8 +211,9 @@
                         <textarea name="intro" placeholder="请输入内容" class="layui-textarea"></textarea>
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <button lay-submit lay-filter="submit_finance" class="layui-btn layui-btn-fluid">保存</button>
+                <div class="layui-form-item" style="text-align: center">
+                    <button type="submit" lay-submit lay-filter="submit_finance" class="layui-btn" >保存</button>
+                    <button class="layui-btn" onclick="cancel()" >取消</button>
                 </div>
             </form>
         </div>
@@ -241,8 +253,8 @@
     var editer;
     var element;
     var id = $.query.get("id");
-    var flag1;//合作单位基本信息是否已经存在
-    var flag2;//合作单位财务信息是否已经存在
+    var cooperation;
+    var finance;
     var salary_items_fixed = ["基本工资", "个人养老", "个人医疗", "个人失业", "个人大病", "个人公积金","单位养老","单位医疗","单位失业","单位工伤","单位大病","单位生育", "单位公积金", "个税", "应发", "实发"];
     var salary_items_defined;//合作企业自定义工资字段
     var mapSalary;
@@ -280,23 +292,31 @@
     function initPage() {
         form.on('submit(submit_cooperation)', function(data){
             saveCooperation(data.field);
+            return false;
         });
         form.on('submit(submit_finance)', function(data){
             saveFinance(data.field);
+            return false;
         });
     }
     function getCooperation() {
-        iClient.get(id,1,function (result) {
-            var cooperation = result.data;
+        if(id) {
+            iClient.get(id, 1, function (result) {
+                cooperation = result.data;
                 form.val('form_cooperation', cooperation);
                 layedit.setContent(editer, cooperation.content, false);
-        });
+            });
+        }
     }
     function getFinance() {
-        iClient.getFinance(id,1,function (result) {
-            var finance = result.data;
-                form.val('form_finance', finance);
-        });
+        if(cooperation && cooperation.id) {
+            iClient.getFinance(id, 1, function (result) {
+                if(result.data) {
+                    finance = result.data;
+                    form.val('form_finance', finance);
+                }
+            });
+        }
     }
 
     function initSalayDefine() {
@@ -414,38 +434,42 @@
         }
     }
 
-    function saveCooperation(cooperation) {
-        if(flag1) {
-            iClient.update(cooperation,1,onUpdateSuccess);
+    function saveCooperation() {
+        var data = form.val('form_cooperation');
+        if(cooperation) {
+            iClient.update(data,1,function (result){
+                layer.msg("修改成功");
+            });
         }else{
-            iClient.insert(cooperation,1,onInsertSuccess);
+            iClient.insert(data,1,function (result){
+                cooperation.id = result.extra;
+                layer.alert("基础信息保存成功，请完善财务信息", {icon: 20});
+            });
         }
-
-        function onInsertSuccess(result) {
-            id = result.extra;//获取插入的主键
-            layer.msg("添加成功");
-        }
-
-        function onUpdateSuccess() {
-            layer.msg("修改成功");
-        }
+        cooperation = data;
     }
 
-    function saveFinance(finance) {
-        console.log(finance);
-        if(flag2) {
-            iClient.updateFinance(finance,onUpdateSuccess);
+    function saveFinance() {
+        if(!cooperation || !cooperation.id ){
+            layer.msg("请先保存合作单位基本信息");
+            return;
+        }
+        var data = form.val('form_finance');
+        data.cid = cooperation.id;
+        if(finance) {
+            iClient.updateFinance(data,function (result){
+                layer.msg("修改成功");
+            });
         }else{
-            iClient.insertFinance(finance,onInsertSuccess);
+            iClient.insertFinance(data,function (result){
+                layer.alert("财务信息保存成功，请完善自定义工资信息", {icon: 20});
+            });
         }
-
-        function onInsertSuccess() {
-            layer.msg("添加成功");
-        }
-
-        function onUpdateSuccess() {
-            layer.msg("修改成功");
-        }
+        finance = data;
+    }
+    function cancel(){
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
     }
 </script>
 

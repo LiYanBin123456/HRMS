@@ -82,13 +82,31 @@ var columns_accounts  = [[
     {fixed: 'right', title: '操作', toolbar: '#bar_accounts'}
 ]];
 
-//合作客户管理字段集合
-var columns_cooperation = [[
+//合作单位合作客户管理字段集合
+var columns_cooperation_partner = [[
     {field:'name', title: '客户名称'},
     {field:'category', title: '客户性质',width:200,templet:function (d) { return array_value2text(categorys_cooperation,d.category) }},
     {field:'contact', title: '联系人',width:200},
     {field:'phone', title: '联系电话',width:200},
     {fixed: 'right', title: '操作', toolbar: '#bar_cooperation',width:300}
+]];
+
+//合作单位潜在客户管理字段集合
+var columns_cooperation_potential = [[
+    {field:'name', title: '客户名称'},
+    {field:'category', title: '客户性质',width:200,templet:function (d) { return array_value2text(categorys_cooperation,d.category) }},
+    {field:'contact', title: '联系人',width:200},
+    {field:'phone', title: '联系电话',width:200},
+    {fixed: 'right', title: '操作', toolbar: '#bar_potential',width:300}
+]];
+
+//合作单位流失客户管理字段集合
+var columns_cooperation_loss = [[
+    {field:'name', title: '客户名称'},
+    {field:'category', title: '客户性质',width:200,templet:function (d) { return array_value2text(categorys_cooperation,d.category) }},
+    {field:'contact', title: '联系人',width:200},
+    {field:'phone', title: '联系电话',width:200},
+    {fixed: 'right', title: '操作', toolbar: '#bar_loss',width:300}
 ]];
 
 //供应商管理字段集合

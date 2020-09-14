@@ -23,6 +23,10 @@
                 display:inline;
                 width:300px;
             }
+            .distance{
+                margin-left:20px;
+            }
+            .layui-table-page{text-align: center;}
         </style>
     </head>
 
@@ -35,11 +39,11 @@
                     <div class="layui-input-inline">
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的合作客户">
                     </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                    <button class="layui-btn layui-btn-normal layui-btn-sm distance " lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                 </form>
             </div>
             <table id="tbl_contract" lay-filter="filter_tb_contract"></table>
-            <div id="pager"></div>
+            <div class="layui-table-page" id="pager"></div>
 
             <!--行内工具栏-->
             <script type="text/html" id="bar_contract">
@@ -75,7 +79,9 @@
                 initTable();
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    search(keyword);
+                    param_query.conditions.extra = keyword;
+                    getContracts();
+                    return false; //阻止表单跳转
                 });
             }
 
@@ -120,11 +126,6 @@
             }
 
             function getContracts() {
-                /*var result = {total:100,rows:[{client:"科技中专",start:"2019-1-29",end:"2020-6-29",service:"劳务外包/派遣",project:"建筑",comments:"暂无"},{client:"国棉四厂",start:"2019-2-12",end:"2020-2-30",service:"小时工",project:"棉花",comments:"暂无",grant:"2020-2-30"}]};
-                table.reload('tbl_contract', {
-                    data:result.rows
-                });*/
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
                 iContract.getList(param_query,"A",function (result) {
                     table.reload('tbl_contract', {
                         data:result.rows
