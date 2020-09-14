@@ -34,10 +34,10 @@
                 </div>
                 <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" id="filter_month" placeholder="按月份过滤">
+                    <input type="text" class="layui-input" autocomplete="off" id="filter_month" lay-filter="filter_month" placeholder="按月份过滤">
                 </div>
                 <div class="layui-input-inline">
-                    <select name="status"   lay-verify="required" >
+                    <select name="status" lay-filter="select" >
                         <option value="">按状态过滤</option>
                         <option value="0">编辑</option>
                         <option value="1">提交</option>
@@ -96,13 +96,32 @@
 
             function initPage() {
                 initTable();
+                var month=null;
+                var status = null;
                 laydate.render({
                     elem: '#filter_month'
                     ,type: 'month'
+                    ,change: function(value, date, endDate){
+                       month = value;
+                    }
                 });
-                form.on('submit(search)', function (data) {
+                form.on('select(select)', function (data) {//获取状态
+                    status = data.value;
+                });
+                form.on('submit(search)', function (data) {//模糊搜索
                     var keyword = data.field.keyword;
-                    search(keyword);
+                    param_query.conditions.extra = keyword;
+                    param_query.conditions.keys=[];//初始化数组
+                    console.log(month,status);
+                    if (status!=null&&status!=""){
+                        param_query.conditions.keys.push({k:"status",o:"=",v:status})
+                    }
+                    if (month!=null&&month!=""){
+                        param_query.conditions.keys.push({k:"month",o:"like",v:"%"+month+"%"})
+                    }
+                    getSettlements();
+                    param_query.conditions.keys.length=0;//查询结束后，清空数组，以便下次重新操作
+                    return false; //阻止表单跳转
                 });
             }
 

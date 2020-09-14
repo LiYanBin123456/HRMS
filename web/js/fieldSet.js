@@ -248,16 +248,16 @@ var columns_detail1_full  = [[
 ]];
 
 //工资管理明细字段集合(录入模式）
-var columns_detail1_input  = [[
-    {field:'cardId', title: '身份证号',width:160},
-    {field:'name', title: '姓名',width:80},
-    {field:'base', title: '基本工资',width:80,edit: 'text'},
-    {field:'reward', title: '绩效奖金',width:80,edit: 'text'},
-    {field:'allowance', title: '岗位补贴',width:80,edit: 'text'},
-    {field:'f1', title: '交通补助',width:80,edit: 'text'},
-    {field:'f2', title: '考勤扣款',width:80,edit: 'text'},
-    {fixed: 'right', title: '操作', toolbar: '#bar_detail'}
-]];
+// var columns_detail1_input  = [[
+//     {field:'cardId', title: '身份证号',width:160},
+//     {field:'name', title: '姓名',width:80},
+//     {field:'base', title: '基本工资',width:80,edit: 'text'},
+//     {field:'reward', title: '绩效奖金',width:80,edit: 'text'},
+//     {field:'allowance', title: '岗位补贴',width:80,edit: 'text'},
+//     {field:'f1', title: '交通补助',width:80,edit: 'text'},
+//     {field:'f2', title: '考勤扣款',width:80,edit: 'text'},
+//     {fixed: 'right', title: '操作', toolbar: '#bar_detail'}
+// ]];
 
 //小时工工资管理明细字段集合(录入模式)
 var columns_detail2_input  = [[

@@ -13,7 +13,7 @@ public class Settlement3Dao {
     public static DaoQueryListResult getList(Connection conn, QueryParameter param) {
         if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
             //根据地市模糊查询
-            param.addCondition("concat(cname,month,status)","like",param.conditions.extra);
+            param.addCondition("cname","like",param.conditions.extra);
         }
         return DbUtil.getList(conn, "view_settlement3", param, ViewSettlement3.class);
 
