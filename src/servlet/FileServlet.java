@@ -42,6 +42,9 @@ public class FileServlet extends HttpServlet {
             case "uploadImg"://上传员工头像
                 result = uploadImg(request);
                 break;
+            case "readExcel"://读取xls数据反馈给前台
+                result = readExcel(request);
+                break;
             case "existContract"://判断合同附件是否存在
                 result = existContract(request);
                 break;
@@ -68,85 +71,51 @@ public class FileServlet extends HttpServlet {
      * @throws ServletException
      */
     private String readXls(HttpServletRequest request) throws IOException, ServletException {
-        String str = null;
+        String result = null;
         Part part = request.getPart("file");
-        String header = part.getHeader("content-disposition");
-        //截取字符串获取文件名称
-        String filename = header.substring(header.indexOf("filename")+10, header.length()-1);
-        //获取后缀名
-        String suffixName=filename.substring(filename.indexOf(".")+1);
-        String s="xls";
-        if(suffixName.equals(s)){//判断后缀，上传服务器
-            InputStream put = part.getInputStream();
-            //获取文件夹的真实路径
-            String url = request.getServletContext().getRealPath("/excelFile");
-            File uploadDir = new File(url);
-            // 如果该文件夹不存在则创建
-            if (!uploadDir.exists()) {
-                uploadDir.mkdirs();
-            }
-            //建立对拷流
-            FileOutputStream fos = new FileOutputStream(new File(url, filename));
-            IOUtils.copy(put, fos);
-            String path = url+"\\"+filename;
-            System.out.println(path);
-            put.close();
-            fos.close();
-            //删除临时文件
-            part.delete();
-            try {//获取服务器中文件，读取数据
-                InputStream in = new FileInputStream(path);
-                List<JSONObject> data = XlsUtil.read(in,"信息表","元数据");
-                str = JSONObject.toJSONString(data);
-                System.out.println(str);
+            try {//获取part中的文件，读取数据
+                InputStream is = part.getInputStream();
+                List<JSONObject> data = XlsUtil.read(is,"信息表","元数据");
+                if(null == data){
+                    result = "{\"success\":false,\"msg\":\"xls文件不符合要求，请下载模板再重新填写\"}";
+                }else{
+                    JSONObject json = new JSONObject();
+                    json.put("success",true);
+                    json.put("data",data);
+                    result = json.toJSONString();
+                }
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            //删除文件
-            File fileName = new File(path);
-            if(fileName.exists()){
-                fileName.delete();
-            }
-        }else {
-            str = "文件必须是xls格式";
-        }
-        return str;
+        System.out.println(result);
+        return result;
     }
 
     private String upload(HttpServletRequest request) throws IOException, ServletException {
         DaoUpdateResult result = new DaoUpdateResult();
         String id = request.getParameter("id");
             //将文件上传到服务器并且以合同id命名
-            String file = null;
+            String file;
             Part part = request.getPart("file");
-            if(part!=null){
-                //获取文件的名称
+            if(part!=null){//获取文件的名称
                 String header = part.getHeader("content-disposition");
-                System.out.println(header);
-                //截取字符串获取文件名称
-                String headername = header.substring(header.indexOf("filename")+10, header.length()-1);
-                System.out.println(headername);
-                //获取文件名后缀
-                String suffixName=headername.substring(headername.indexOf(".")+1);
+                String headerName = header.substring(header.indexOf("filename")+10, header.length()-1); //截取字符串获取文件名称
+                String suffixName=headerName.substring(headerName.indexOf(".")+1); //获取文件名后缀
                 String s="pdf";
                 if(suffixName.equals(s)){
-                    //获取文件流
-                    InputStream put = part.getInputStream();
-                    //获取文件夹的真实路径
-                    String url = request.getServletContext().getRealPath("/contractFile");
+                    InputStream put = part.getInputStream();  //获取文件流
+                    String url = request.getServletContext().getRealPath("/contractFile"); //获取文件夹的真实路径
                     File uploadDir = new File(url);
-                    // 如果该文件夹不存在则创建
-                    if (!uploadDir.exists()) {
+                    if (!uploadDir.exists()) { // 如果该文件夹不存在则创建
                         uploadDir.mkdirs();
                     }
+
                     file = id+"."+suffixName;
-                        //建立对拷流
-                        FileOutputStream fos = new FileOutputStream(new File(url, file));
-                        IOUtils.copy(put, fos);
-                        put.close();
-                        fos.close();
-                        //删除临时文件
-                        part.delete();
+                    FileOutputStream fos = new FileOutputStream(new File(url, file));   //建立对拷流
+                    IOUtils.copy(put, fos);
+                    put.close();
+                    fos.close();
+                    part.delete();
                     result.msg = "合同插入成功";
                     result.success = true;
                 }
@@ -202,10 +171,8 @@ public class FileServlet extends HttpServlet {
         if(part!=null){
             //获取文件的名称
             String header = part.getHeader("content-disposition");
-            System.out.println(header);
             //截取字符串获取文件名称
             String headername = header.substring(header.indexOf("filename")+10, header.length()-1);
-            System.out.println(headername);
             //获取文件名后缀
             String suffixName=headername.substring(headername.indexOf(".")+1);
             String jpg="jpg";
@@ -239,7 +206,27 @@ public class FileServlet extends HttpServlet {
         return JSONObject.toJSONString(msg);
     }
 
+    private String readExcel(HttpServletRequest request) {
+        String result;
+        try {
+            Part part = getPart(request);
+            InputStream is = part.getInputStream();
+            List<JSONObject> data = XlsUtil.read(is,"学员信息表","元数据");
+            if(null == data){
+                result = "{\"success\":false,\"msg\":\"xls文件不符合要求，请下载模板再重新填写\"}";
+            }else{
+                JSONObject json = new JSONObject();
+                json.put("success",true);
+                json.put("data",data);
+                result = json.toJSONString();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = "{\"success\":false,\"msg\":\"读取Excel错误，请联系开发人员\"}";
+        }
 
+        return result;
+    }
 
     private Part getPart(HttpServletRequest request){
         Collection<Part> parts = null;
