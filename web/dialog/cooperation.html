@@ -292,10 +292,12 @@
     function initPage() {
         form.on('submit(submit_cooperation)', function(data){
             saveCooperation(data.field);
+            element.tabChange('tab_info', 'finance');
             return false;
         });
         form.on('submit(submit_finance)', function(data){
             saveFinance(data.field);
+            element.tabChange('tab_info', 'salary_define');
             return false;
         });
     }
