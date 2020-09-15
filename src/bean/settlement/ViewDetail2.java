@@ -9,8 +9,8 @@ public class ViewDetail2 extends Detail2{
     public ViewDetail2() {
     }
 
-    public ViewDetail2(long id, long sid, long eid, Date month, byte status, int hours, float price, float food, float traffic, float accommodation, float utilities, float insurance, float tax, float other1, float other2, float payable, float paid, String cardId, String name) {
-        super(id, sid, eid, month, status, hours, price, food, traffic, accommodation, utilities, insurance, tax, other1, other2, payable, paid);
+    public ViewDetail2(long id, long sid, long eid, Date month, int hours, float price, float food, float traffic, float accommodation, float utilities, float insurance, float tax, float other1, float other2, float payable, float paid, String cardId, String name) {
+        super(id, sid, eid, month, hours, price, food, traffic, accommodation, utilities, insurance, tax, other1, other2, payable, paid);
         this.cardId = cardId;
         this.name = name;
     }

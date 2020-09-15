@@ -18,9 +18,7 @@ public class EmployeeDao {
     }
 
     //获取详情
-    public static DaoQueryResult get(Connection conn, long id) {
-        QueryConditions conditions = new QueryConditions();
-        conditions.add("id","=",id);
+    public static DaoQueryResult get(Connection conn, QueryConditions conditions) {
         return DbUtil.get(conn,"view_employee",conditions,ViewEmployee.class);
     }
 

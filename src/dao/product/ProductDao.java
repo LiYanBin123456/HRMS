@@ -12,9 +12,7 @@ public class ProductDao {
         return DbUtil.getList(conn,"product",param, Product.class);
     }
 
-    public static DaoQueryResult get(Connection conn, long id) {
-        QueryConditions conditions = new QueryConditions();
-        conditions.add("id","=",id);
+    public static DaoQueryResult get(Connection conn,  QueryConditions conditions) {
         return DbUtil.get(conn,"product",conditions,Product.class);
     }
 

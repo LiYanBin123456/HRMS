@@ -14,10 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @WebServlet(name = "FileServlet",urlPatterns = "/verify/file")
 @MultipartConfig
@@ -48,8 +45,14 @@ public class FileServlet extends HttpServlet {
             case "existContract"://判断合同附件是否存在
                 result = existContract(request);
                 break;
+            case "existModel"://判断合同附件是否存在
+                result = existModel(request);
+                break;
             case "downloadContract"://下载合同复印件
                 downloadContract(request,response);
+                return;
+            case "downloadModel"://下载模板
+                downloadModel(request,response);
                 return;
         }
 
@@ -57,6 +60,54 @@ public class FileServlet extends HttpServlet {
         out.print(result);
         out.flush();
         out.close();
+    }
+
+    //判断模板是否存在
+    private String existModel(HttpServletRequest request) throws IOException {
+        int category = Integer.parseInt(request.getParameter("category"));
+        String fileName=null;
+
+        if(category==0){//小时工模板
+            fileName = "detail2"+".xls";
+        }else{
+            fileName = "detail3"+".xls";
+        }
+        String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
+        File file = new File(fullFileName);
+
+        JSONObject json = new JSONObject();
+        json.put("success",true);
+        json.put("exist",file.exists()?true:false);
+        return json.toJSONString();
+    }
+
+    private void downloadModel(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int category = Integer.parseInt(request.getParameter("category"));
+        String fileName=null;
+        if(category==0){//小时工模板
+             fileName = "detail2"+".xls";
+        }else{
+            fileName = "detail3"+".xls";
+        }
+        String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
+        File file = new File(fullFileName);
+
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment;filename="+fileName);
+
+        ServletOutputStream os = response.getOutputStream();
+        FileInputStream fis = new FileInputStream(file);
+        BufferedInputStream bis = new BufferedInputStream(fis);
+
+        int size=0;
+        byte[] buff = new byte[1024];
+        while ((size=bis.read(buff))!=-1) {
+            os.write(buff, 0, size);
+        }
+
+        os.flush();
+        os.close();
+        bis.close();
     }
 
     /**

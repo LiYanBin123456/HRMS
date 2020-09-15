@@ -42,16 +42,11 @@
             var element;
             var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
 
-            var sid = $.query.get("id");//结算单id
-            var cid = $.query.get("cid");//合作单位id
-            var details2 =  $.query.get("details2");//导入的明细2
+            var details3 =  $.query.get("details3");//导入的明细2
             $(function () {
                 loadLayuiModule();
             });
-            //向调用页面返回选中的员工
-            var callbackData = function () {
-                return details2;
-            };
+
             function loadLayuiModule() {
                 layui.use(['table','form','element','layer','upload','laypage'], function() {
                     table = layui.table;
@@ -68,8 +63,7 @@
             }
 
             function initTable() {
-                var cols =columns_detail2_full;
-                console.log("details2:"+details2);
+                var cols =columns_detail3;
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_detail',
@@ -87,12 +81,12 @@
                     layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
                   });
                 table.reload('tbl_detail', {
-                    data:JSON.parse(details2)
+                    data:JSON.parse(details3)
                 });
                 laypage.render({
                     elem: 'pager'
                     ,curr:param_query.pagination.page
-                    ,count: details2.length //数据总数
+                    ,count: details3.length //数据总数
                     ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
                     ,jump: function(obj,first){
                         //首次不执行
@@ -103,6 +97,11 @@
                     }
                 });
           }
+
+            //向调用页面返回选中的员工
+            var callbackData = function () {
+                return details3;
+            };
         </script>
     </body>
 </html>

@@ -1,6 +1,6 @@
 package servlet;
 
-import bean.employee.Employee;
+
 import bean.settlement.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -276,12 +276,12 @@ public class SettlementServlet extends HttpServlet {
                 result = Detail1Service.importDetails(conn,id,detail1s);
                 break;
             case 1://小时工结算单明细
-                List<Detail2> detail2s = JSONArray.parseArray(request.getParameter("details"),Detail2.class);
-                result = Detail2Service.importDetails(conn,id,detail2s);
+                List<ViewDetail2> ViewDetail2s = JSONArray.parseArray(request.getParameter("details"),ViewDetail2.class);
+                result = Detail2Service.importDetails(conn,id,ViewDetail2s);
                 break;
             case 2://商业保险结算单明细
-                List<Detail3> detail3s = JSONArray.parseArray(request.getParameter("details"),Detail3.class);
-                result = Detail3Service.importDetails(conn,id,detail3s);
+                List<ViewDetail3> viewDetail3s = JSONArray.parseArray(request.getParameter("details"),ViewDetail3.class);
+                result = Detail3Service.importDetails(conn,id,viewDetail3s);
                 break;
         }
         return JSONObject.toJSONString(result);

@@ -23,11 +23,12 @@
         <div style="padding: 5px;">
             <!--顶部工具栏-->
             <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
+            <button class="layui-btn" id="download" onclick="download()" style="display: none"><i class="layui-icon layui-icon-edit"></i>下载复印件</button>
             <div class="layui-hide" id="top_bar_detail">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
                 <button class="layui-btn layui-btn-sm" lay-event="export" id="export"><i class="layui-icon "></i> 导出</button>
                 <button class="layui-btn layui-btn-sm" lay-event="import" ><i class="layui-icon "></i> 导入</button>
-                <button class="layui-btn layui-btn-sm" lay-event="download" id="download"><i class="layui-icon "></i> 下载模板</button>
+                <button class="layui-btn layui-btn-sm" lay-event="download" ><i class="layui-icon "></i> 下载模板</button>
             </div>
                 <form class="layui-form" style="display: inline">
                     <div class="layui-input-inline">
@@ -152,6 +153,9 @@
                         case 'import':
                              $("#import").click();
                             break;
+                        case 'download':
+                            $("#download").click();
+                            break;
                 };
 
                 });
@@ -185,6 +189,7 @@
             //核对导入的数据
             function showImportDlg(details2) {
                 var content = "importDetails2.html?details2="+encodeURIComponent(JSON.stringify(details2));
+                console.log("s2:"+details2);
                 layer.open({
                     title:"核对明细",
                     type: 2,
@@ -192,7 +197,13 @@
                     content: content,
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
-
+                        var detail2s = window["layui-layer-iframe" + index].callbackData();
+                        console.log("2s:"+detail2s);
+                        iSettlement.importDetails(sid,detail2s,1,function () {
+                            layer.close(index);
+                            layer.msg("导入成功");
+                            getDetail2s();
+                        })
                     },btn2: function(index, layero){
                         layer.close(index);
                     }
@@ -235,6 +246,22 @@
                         layer.msg('删除成功');
                     });
                 });
+            }
+
+            function download() {
+                iFile.existModel(0,function (result) {
+                    if(!result.exist){
+                        layer.msg("附件不存在或已删除");
+                        return;
+                    }
+
+                    var url = "/hrms/verify/file?op=downloadModel&category=0";
+                    var form = $('<form method="POST"></form>');
+                    form.attr('action', url);
+                    form.appendTo($('body'));
+                    form.submit();
+                    form.remove();
+                })
             }
 
         </script>

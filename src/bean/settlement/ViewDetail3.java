@@ -11,8 +11,8 @@ public class ViewDetail3 extends Detail3 {
     public ViewDetail3() {
     }
 
-    public ViewDetail3(long id, long sid, long eid, Date month, byte status, Long pid, String place, float price, String cname, String pname, String cardId, String post) {
-        super(id, sid, eid, month, status, pid, place, price);
+    public ViewDetail3(long id, long sid, long eid, Date month, Long pid, String place, float price, String cname, String pname, String cardId, String post) {
+        super(id, sid, eid, month, pid, place, price);
         this.cname = cname;
         this.pname = pname;
         this.cardId = cardId;

@@ -3,10 +3,7 @@ package service.product;
 import bean.insurance.Product;
 import bean.rule.RuleFund;
 import dao.product.ProductDao;
-import database.DaoQueryListResult;
-import database.DaoQueryResult;
-import database.DaoUpdateResult;
-import database.QueryParameter;
+import database.*;
 
 import java.sql.Connection;
 
@@ -16,7 +13,9 @@ public class ProductService {
     }
 
     public static DaoQueryResult get(Connection conn, long id) {
-        return ProductDao.get(conn,id);
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id","=",id);
+        return ProductDao.get(conn,conditions);
     }
 
     public static DaoUpdateResult update(Connection conn, Product product) {

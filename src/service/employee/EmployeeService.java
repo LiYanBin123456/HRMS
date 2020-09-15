@@ -4,10 +4,7 @@ package service.employee;
 import bean.employee.Employee;
 import bean.employee.ViewEmployee;
 import dao.employee.EmployeeDao;
-import database.DaoQueryListResult;
-import database.DaoQueryResult;
-import database.DaoUpdateResult;
-import database.QueryParameter;
+import database.*;
 
 import java.sql.Connection;
 import java.util.List;
@@ -21,7 +18,9 @@ public class EmployeeService {
 
     //获取详情
     public static DaoQueryResult get(Connection conn, long id) {
-        return EmployeeDao.get(conn,id);
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id","=",id);
+        return EmployeeDao.get(conn,conditions);
     }
 
     //修改

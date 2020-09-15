@@ -6,10 +6,7 @@ import bean.employee.EnsureSetting;
 import dao.employee.DeductDao;
 import dao.employee.EmployeeDao;
 import dao.employee.SettingDao;
-import database.DaoQueryListResult;
-import database.DaoQueryResult;
-import database.DaoUpdateResult;
-import database.QueryParameter;
+import database.*;
 
 import java.sql.Connection;
 import java.util.List;
@@ -31,7 +28,9 @@ public class DeductService {
         if(!DeductDao.exist(conn,deduct.getEid()).exist){
            result = DeductDao.insert(conn,deduct);
         }else {
-            Employee employee = (Employee) EmployeeDao.get(conn,deduct.getEid()).data;
+            QueryConditions conditions = new QueryConditions();
+            conditions.add("id","=",deduct.getEid());
+            Employee employee = (Employee) EmployeeDao.get(conn,conditions).data;
             result.msg = "员工"+employee.getName()+"个税已存在，请勿重复添加";
         }
         return result;
@@ -53,7 +52,9 @@ public class DeductService {
             if(!DeductDao.exist(conn,deduct.getEid()).exist){
                 result = DeductDao.importDeducts(conn,deducts);
             }else {
-                Employee employee = (Employee) EmployeeDao.get(conn,deduct.getEid()).data;
+                QueryConditions conditions = new QueryConditions();
+                conditions.add("id","=",deduct.getEid());
+                Employee employee = (Employee) EmployeeDao.get(conn,conditions).data;
                 result.msg = "员工"+employee.getName()+"个税已存在，请勿重复添加";
             }
         }

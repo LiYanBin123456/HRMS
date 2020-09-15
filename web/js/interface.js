@@ -804,7 +804,7 @@ var InterfaceSettlement = function () {
      * @param fail
      */
     this.importDetails = function (id,details,category,success,fail) {
-        var para = {op: "importDetails",id:id,details:JSON.stringify(details), category:category};
+        var para = {op: "importDetails",id:id,details:details, category:category};
         access(url,para,1,success,fail);
     };
     /**
@@ -1113,6 +1113,16 @@ var InterfaceFile = function () {
      */
     this.upload = function (file,id,success,fail) {
         var para = {op: "upload",id:id,file:JSON.stringify(file)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 判断模板附件是否存在，返回结果为{success:true/false,exist:true/false}
+     * @param category 0 小时工模板  1  商业保险模板
+     * @param success
+     * @param fail
+     */
+    this.existModel = function (category,success,fail) {
+        var para = {op: "existModel",category:category};
         access(url,para,1,success,fail);
     };
 
