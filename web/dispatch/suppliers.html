@@ -23,6 +23,10 @@
                 display:inline;
                 width:300px;
             }
+            .distance{
+                margin-left:20px;
+            }
+            .layui-table-page{text-align: center;}
         </style>
     </head>
         <body class="layui-layout-body">
@@ -34,11 +38,11 @@
                     <div class="layui-input-inline">
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的供应商">
                     </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                    <button class="layui-btn layui-btn-normal layui-btn-sm distance " lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                 </form>
             </div>
             <table id="tbl_supplier" lay-filter="filter_tb_supplier"></table>
-            <div id="pager1"></div>
+            <div class="layui-table-page" id="pager1"></div>
 
             <!--行内工具栏-->
             <script type="text/html" id="bar_supplier">
@@ -48,6 +52,8 @@
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.params.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -74,7 +80,9 @@
                 initTable1();
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    search(keyword);
+                    param_query.conditions.extra = keyword;
+                    getSuppliers();
+                    return false; //阻止表单跳转
                 });
             }
 
@@ -142,11 +150,6 @@
             });
             }
 
-            //模糊查找
-            function search(keyword) {
-                param_query.conditions.extra = keyword;
-                getSuppliers();
-            }
 
             //打开详情对话框
             function showDetailDlg1(supplier) {
@@ -170,7 +173,7 @@
                 });
             }
 
-            //删除公告
+            //删除供应商
             function del(supplier) {
                 layer.confirm('确定删除'+supplier.name, {icon: 3, title:'删除'}, function(index){
                     iClient.delete(supplier.id,2,0,function () {

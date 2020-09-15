@@ -12,43 +12,6 @@
         <script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
         <style type="text/css">
-
-.frm-layout{
-
-    width: 100%;
-
-    border-collapse: separate;
-
-    border-spacing: 10px;
-
-}
-
-.frm-layout td.title{
-
-    text-align: right;
-
-    padding-right: 10px;
-
-    width: 85px;
-
-}
-
-/* 防止下拉框的下拉列表被隐藏---必须设置--- */
-
-.frm-layout .layui-table-cell { overflow: visible !important; }
-
-/* 使得下拉框与单元格刚好合适 */
-
-.frm-layout td .layui-form-select{
-
-    margin-top: 0px;
-
-    margin-left: 0px;
-
-    margin-right: 0px;
-
-}
-
 </style>
         <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
         <!--[if lt IE 9]>
@@ -57,100 +20,84 @@
         <![endif]-->
     </head>
     <body>
-        <form id="frmEdit" lay-filter="form_supplier" class="layui-form" lay-filter="frm">
-
+    <div class="layui-tab layui-tab-brief" lay-filter="tab_dispatch">
+        <form lay-filter="form_supplier" class="layui-form">
             <input type='hidden' name='id'/>
-
-    <table class="frm-layout" >
-            <tr>
-                    <td class="title">名称</td>
-
-            <td style="width: 180px;"><input type="text" name="name" lay-verify="" placeholder=""
-
-                    autocomplete="off" class="layui-input date " value=""></td>
-            </tr>
-                    
-
-            <tr>    
-                <td class="title">地址</td>
-
-            <td><input type="text" name="address" lay-verify="" placeholder=""
-
-                    autocomplete="off" class="layui-input " value=""></td>
-
-            <td class="title">联系人</td>
-
-            <td style="width: 180px;"><input type="text" name="contact" lay-verify="" placeholder=""
-
-                    autocomplete="off" class="layui-input date " value=""></td>
-            </tr>
-            <tr>
-                    <td class="title">性质</td>
-                            <td class="layui-input-inline">
-                                <select name="nature" >
-                                    <option value=""></option>
-                                    <option value="0">政府部门</option>
-                                    <option value="1">事业单位</option>
-                                    <option value="2">人才市场</option>
-                                    <option value="3">学校</option>
-                                    <option value="4">内资企业</option>
-                                    <option value="5">外资企业</option>
-                                    <option value="6">港澳台企业</option>
-                                    <option value="7">内资工厂</option>
-                                    <option value="8">外资工厂</option>
-                                    <option value="9">港澳台工厂</option>
-                                    <option value="10">其他</option>
-                            </select>
-                    </td>
-
-            <td class="title">联系电话</td>
-
-            <td style="width: 180px;"><input type="text" name="phone" lay-verify="" placeholder=""
-
-                    autocomplete="off" class="layui-input date " value=""></td>
-            </tr>
-            <tr>
-                <td class="title">类别</td>
-                            <td class="layui-input-inline">
-                                <select name="business" lay-verify="required">
-                                    <option value=""></option>
-                                    <option value="0">顶岗实习</option>
-                                    <option value="1">就业安置</option>
-                                    <option value="2">其他</option>
-                            </select>
-                    </td>
-
-            <td class="title">微信号</td>
-
-            <td style="width: 180px;"><input type="text" name="wx" lay-verify="" placeholder=""
-
-                    autocomplete="off" class="layui-input date " value=""></td>
-            </tr>
-            <tr>
-                    <td class="title">业务</td>
-
-            <td><input type="text" name="business2" lay-verify="" placeholder=""
-
-                    autocomplete="off" class="layui-input " value=""></td>
-
-            <td class="title">QQ</td>
-
-            <td style="width: 180px;"><input type="text" name="qq" lay-verify="" placeholder=""
-
-                    autocomplete="off" class="layui-input date " value=""></td>
-            </tr>
-            <tr>
-                <td class="title">备注</td>
-                <td class="layui-input-block">
-                   <textarea name="intro"  placeholder="请输入正文" class="layui-textarea"></textarea>
-                </td>
-            </tr>
-            <tr>
-               <td colspan="4" style="text-align: center;">
-                        <button class="layui-btn" lay-filter="add" onclick="save()" lay-submit="">添加</button></td>
-                        </tr>
-                </table>
-                </form>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="name"   placeholder="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>类别</label>
+                    <div class="layui-input-inline">
+                        <select name="business" lay-verify="required">
+                            <option value=""></option>
+                            <option value="0">顶岗实习</option>
+                            <option value="1">就业安置</option>
+                            <option value="2">其他</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>联系人</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="contact"  placeholder="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-inline">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>联系电话</label>
+                    <div class="layui-input-inline">
+                        <input type="text"   name="phone"  placeholder=""  autocomplete="off" class="layui-input"></div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>QQ</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="qq"   placeholder="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-inline">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>微信号</label>
+                    <div class="layui-input-inline">
+                        <input type="text"   name="wx"  placeholder=""  autocomplete="off" class="layui-input"></div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>邮箱</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="mail"   placeholder="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-inline">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>地址</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="address"   placeholder="" autocomplete="off" class="layui-input"></div>
+                </div>
+            </div>
+            <div class="layui-form-item layui-form-text">
+                <label  class="layui-form-label">
+                    <span class="x-red">*</span>单位简介</label>
+                <div class="layui-input-block">
+                    <textarea name="intro" placeholder="" class="layui-textarea"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item" style="text-align: center">
+                <button type="submit" lay-submit lay-filter="submit_supplier" class="layui-btn" >保存</button>
+                <button class="layui-btn" onclick="cancel()" >取消</button>
+            </div>
+        </form>
+    </div>
 </body>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
@@ -168,12 +115,23 @@
             form = layui.form;
             layedit = layui.layedit;
             editer = layedit.build('content'); //建立编辑器
+            initPage();
             initData();
         });
     }
 
-    var id = $.query.get("id");
+    function initPage(){
+        form.on('submit(submit_supplier)', function(data){
+            saveSupplier(data.field);
+            var index = parent.layer.getFrameIndex(window.name);
+            parent.layer.close(index);
+            window.parent.location.reload();
+        });
+
+    }
+
     function initData() {
+        var id = $.query.get("id");
         iClient.get(id,2,function (result) {
             supplier = result.data;
             form.val('form_supplier', supplier);
@@ -181,30 +139,17 @@
         })
     }
 
-    function save() {
+    function saveSupplier() {
         var supplier = form.val('form_supplier');
         if(op == "insert") {
-            iClient.insert(supplier,2, onInsertSuccess);
+            iClient.insert(supplier,2, function (result){
+                layer.msg("添加成功");
+            });
         }else{
-            iClient.update(supplier,2,onUpdateSuccess);
+            iClient.update(supplier,2,function (result){
+                layer.msg("修改成功");
+            });
         }
-
-        function onInsertSuccess() {
-            layer.alert("添加成功", {icon: 6}, refresh());
-        }
-
-        function onUpdateSuccess() {
-            layer.alert("修改成功", {icon: 6}, refresh());
-        }
-
-    }
-    function refresh() {
-        // 获得frame索引
-        var index = parent.layer.getFrameIndex(window.name);
-        //关闭当前frame
-        parent.layer.close(index);
-        //修改成功后刷新父界面
-        window.parent.location.reload();
     }
 </script>
 

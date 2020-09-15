@@ -159,10 +159,12 @@
             </form>
         </div>
         <div class="layui-tab-item">
+            <form  class="layui-form">
             <button type="button" class="layui-btn" id="test1">
                 <i class="layui-icon">&#xe67c;</i>上传复印件(PDF)
             </button>
-            <button class="layui-btn"><i class="layui-icon layui-icon-edit"></i>下载复印件</button>
+            <button class="layui-btn" onclick="download()" ><i class="layui-icon layui-icon-edit"></i>下载复印件</button>
+            </form>
         </div>
     </div>
 </div>
@@ -188,8 +190,16 @@
             laydate = layui.laydate;
             upload.render({
                 elem: '#test1' //绑定元素
-                , url: '/upload/' //上传接口
+                , url: '/hrms//verify/file' //上传接口
+                , accept: 'file'
+                , exts: 'pdf'
+                , acceptMime: '.pdf'
+                ,before: function(file,id){
+                    this.data={op:"upload",file:JSON.stringify(file),id:contract.id}
+                }
                 , done: function (res) {
+                    layer.msg(res.msg);
+                    console.log(res);
                     //上传完毕回调
                 }
                 , error: function () {
@@ -279,7 +289,9 @@
             select_cooperation.append("<option value='-2' disabled hidden>选择合作客户</option>");
             for(var i in cooperations){
                 var cooperation = cooperations[i];
-                var option = $("<option>").val(cooperation.id).text(cooperation.name);
+                if (cooperation.type == 0) {
+                    var option = $("<option>").val(cooperation.id).text(cooperation.name);
+                }
                 if(contract && contract.bid == cooperation.id){
                     $(option).prop("selected",true);
                 }
@@ -312,6 +324,23 @@
         var month=d.getMonth()+1;
         var date=d.getDate();
         return year+"-"+month+"-"+date;
+    }
+
+    function download(){
+        iFile.existContract(contract.id,function (result) {
+            if(!result.exist){
+                layer.msg("附件不存在或已删除");
+                return;
+            }
+
+            var url = "/hrms/verify/file?op=downloadContract&id="+contract.id;
+            var form = $('<form method="POST"></form>');
+            form.attr('action', url);
+            form.appendTo($('body'));
+            form.submit();
+            form.remove();
+        })
+
     }
 
     function saveContract() {

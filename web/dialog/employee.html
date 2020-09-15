@@ -542,7 +542,6 @@
         if(!city){
             layer.msg("请先选择社保所在地");
         }
-        console.log(city);
         iRule.getLast(city,0,function (result) {
             if(base < result.data.base){
                 layer.msg("自定义医保基数不能低于最低基数"+result.data.base);
@@ -565,6 +564,7 @@
         if(!city){
             layer.msg("请先选择社保所在地");
         }
+        console.log(city);
         iRule.getLast(city,2,function (result) {
             if(base < result.data.min || base > result.data.max){
                 layer.msg("公积金基数必须介于["+result.data.min+","+result.data.max+"]");
@@ -576,6 +576,7 @@
         if(!city){
             layer.msg("请先选择社保所在地");
         }
+        console.log(city);
         iRule.getLast(city,2,function (result) {
             if(per < result.data.per1 || per > result.data.per2){
                 layer.msg("公积金缴纳比例必须介于["+result.data.per1+","+result.data.per2+"]");

@@ -312,7 +312,7 @@
     }
     function getFinance() {
         if(cooperation && cooperation.id) {
-            iClient.getFinance(id, 1, function (result) {
+            iClient.getFinance(cooperation.id, 1, function (result) {
                 if(result.data) {
                     finance = result.data;
                     form.val('form_finance', finance);
@@ -392,7 +392,13 @@
 
     //保存工资定义
     function saveSalaryDefine() {
+        if(!cooperation || !cooperation.id ){
+            layer.msg("请先保存合作单位基本信息");
+            return;
+        }
         var items = salary_items_defined.join(";");
+        mapSalary.items = items;
+        mapSalary.cid = cooperation.id;
         if(items == mapSalary.items){
             layer.msg("未改变，无需保存");
         }else {

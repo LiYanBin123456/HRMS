@@ -119,11 +119,6 @@
             }
 
             function getContracts() {
-                /*var result = {total:100,rows:[{client:"科技中专",start:"2019-1-29",end:"2020-6-29",service:"劳务外包/派遣",project:"建筑",comments:"暂无"},{client:"国棉四厂",start:"2019-2-12",end:"2020-2-30",service:"小时工",project:"棉花",comments:"暂无",grant:"2020-2-30"}]};
-                table.reload('tbl_contract', {
-                    data:result.rows
-                });*/
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
                 iContract.getList(param_query,"B",function (result) {
                     table.reload('tbl_contract', {
                         data:result.rows
