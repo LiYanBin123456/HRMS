@@ -162,7 +162,7 @@ var columns_employee_expatriate = [[
     {field:'name', title: '姓名',width:80},
     {field:'degree', title: '学历',width:100,templet:function (d) { return array_value2text(degrees_employee,d.degree) }},
     {field:'phone', title: '联系电话',width:120},
-    {field:'department', title: '派遣单位'},
+    {field:'cname', title: '派遣单位'},
     { title: '操作', toolbar: '#bar_employee',width:400,fixed:"right"}
 ]];
 

@@ -22,11 +22,12 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
+            <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
             <div class="layui-hide" id="top_bar_detail">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
-                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导出</button>
-                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导入</button>
-                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 下载模板</button>
+                <button class="layui-btn layui-btn-sm" lay-event="export" id="export"><i class="layui-icon "></i> 导出</button>
+                <button class="layui-btn layui-btn-sm" lay-event="import" ><i class="layui-icon "></i> 导入</button>
+                <button class="layui-btn layui-btn-sm" lay-event="download" id="download"><i class="layui-icon "></i> 下载模板</button>
             </div>
                 <form class="layui-form" style="display: inline">
                     <div class="layui-input-inline">
@@ -53,6 +54,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
+            var upload;
             var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
 
             var sid = $.query.get("id");//结算单id
@@ -63,12 +65,35 @@
             });
 
             function loadLayuiModule() {
-                layui.use(['table','form','element','layer','laypage'], function() {
+                layui.use(['table','form','element','layer','upload','laypage'], function() {
                     table = layui.table;
                     layer = layui.layer;
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
+                    upload = layui.upload;
+                    upload.render({
+                        elem: '#import' //绑定元素
+                        , url: '/hrms/verify/file' //上传接口
+                        , accept: 'file'
+                        , exts: 'xls'
+                        , acceptMime: '.xls'
+                        ,before: function(file){
+                            this.data={op:"readXls",file:JSON.stringify(file)}
+                        }
+                        , done: function (res) {
+                            if (res.success){
+                                var details2 = res.data;
+                                showImportDlg(details2);
+                            }else {
+                                layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                            }
+                        }
+                        , error: function () {
+                            //请求异常回调
+                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                        }
+                    });
                     initPage();
                 });
             }
@@ -124,17 +149,21 @@
                         case 'insert':
                             showInsertDlg();
                             break;
+                        case 'import':
+                             $("#import").click();
+                            break;
                 };
+
                 });
                 getDetail2s();
           }
-
             function getDetail2s() {
                 iSettlement.getDetails(param_query,sid,1,function (result) {
                     console.log(result)
                     table.reload('tbl_detail', {
                         data:result.rows
                     });
+                    console.log("result.rows:"+result.rows)
                     //初始化分页
                     laypage.render({
                         elem: 'pager'
@@ -150,6 +179,23 @@
                             }
                         }
                     });
+                });
+            }
+
+            //核对导入的数据
+            function showImportDlg(details2) {
+                var content = "importDetails2.html?details2="+encodeURIComponent(JSON.stringify(details2));
+                layer.open({
+                    title:"核对明细",
+                    type: 2,
+                    area: ['80%', '80%'],
+                    content: content,
+                    btn: ['添加', '关闭']
+                    ,yes: function(index, layero){
+
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
                 });
             }
             //打开添加对话框
