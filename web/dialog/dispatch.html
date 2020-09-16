@@ -36,7 +36,7 @@
                     </div>
                     <div class="layui-inline">
                         <label  class="layui-form-label">
-                            <span class="x-red">*</span>简称</label>
+                            <span ></span>简称</label>
                         <div class="layui-input-inline">
                             <input type="text"  name="nickname"  placeholder="" autocomplete="off" class="layui-input"></div>
                     </div>
@@ -181,14 +181,11 @@
         });
         form.on('submit(submit_dispatch)', function(data){
             saveDispatch(data.field);
-            element.tabChange('tab_dispatch', 'element_finance');
             return false;
         });
         form.on('submit(submit_finance)', function(data){
             saveFinance(data.field);
-            var index = parent.layer.getFrameIndex(window.name);
-            parent.layer.close(index);
-            window.parent.location.reload();
+            return false;
         });
     }
 
@@ -216,17 +213,50 @@
 
     function saveDispatch() {
         var data = form.val('form_dispatch');
+        if(data.name == ""){
+            layer.msg("请填写客户名称信息");
+            return;
+        }
+        if(data.contact == ""){
+            layer.msg("请填写联系人信息");
+            return;
+        }
+        if(data.phone == ""){
+            layer.msg("请填写联系电话信息");
+            return;
+        }
+        if(data.address == ""){
+            layer.msg("请填写地址信息");
+            return;
+        }
+        if(data.wx == ""){
+            layer.msg("请填写微信信息");
+            return;
+        }
+        if(data.qq == ""){
+            layer.msg("请填写QQ信息");
+            return;
+        }
+        if(data.mail == ""){
+            layer.msg("请填写邮箱信息");
+            return;
+        }
+        if(data.intro == ""){
+            layer.msg("请填写简介信息");
+            return;
+        }
         if (dispatch) {
             iClient.update(data,0,function (result) {
                 layer.msg("修改成功");
             });
         } else {
             iClient.insert(data,0, function (result) {
-                dispatch.id = result.extra;
-                layer.alert("基础信息保存成功，请完善财务信息", {icon: 20});
+                    dispatch.id = result.extra;
+                    element.tabChange('tab_dispatch', 'element_finance');
+                    layer.alert("基础信息保存成功，请完善财务信息", {icon: 20});
 
-            });
-        }
+                });
+            }
         dispatch = data;
     }
 
@@ -237,6 +267,30 @@
             return;
         }
         var data = form.val('form_finance');
+        if(data.code == ""){
+            layer.msg("请填写信用代码信息");
+            return;
+        }
+        if(data.bank == ""){
+            layer.msg("请填写开户行信息");
+            return;
+        }
+        if(data.cardNo == ""){
+            layer.msg("请填写银行账户信息");
+            return;
+        }
+        if(data.contact == ""){
+            layer.msg("请填写联系人信息");
+            return;
+        }
+        if(data.phone == ""){
+            layer.msg("请填写联系电话信息");
+            return;
+        }
+        if(data.address == ""){
+            layer.msg("请填写简介信息");
+            return;
+        }
         data.cid = dispatch.id;
         if (finance) {
             iClient.updateFinance(data,function (result) {
@@ -245,6 +299,9 @@
         } else {
             iClient.insertFinance(data, function (result) {
                 layer.msg("添加成功");
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.location.reload();
             });
         }
         finance = data;
