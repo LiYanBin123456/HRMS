@@ -270,18 +270,20 @@ public class SettlementServlet extends HttpServlet {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
         DaoUpdateResult result = null;
+        HttpSession session = request.getSession();
+        long did = (long) session.getAttribute("rid");//当前操作的管理员所属公司id
         switch (category){
             case 0://普通结算单明细
                 List<Detail1> detail1s = JSONArray.parseArray(request.getParameter("details"),Detail1.class);
-                result = Detail1Service.importDetails(conn,id,detail1s);
+                result = Detail1Service.importDetails(conn,id,detail1s,did);
                 break;
             case 1://小时工结算单明细
                 List<ViewDetail2> ViewDetail2s = JSONArray.parseArray(request.getParameter("details"),ViewDetail2.class);
-                result = Detail2Service.importDetails(conn,id,ViewDetail2s);
+                result = Detail2Service.importDetails(conn,id,ViewDetail2s,did);
                 break;
             case 2://商业保险结算单明细
                 List<ViewDetail3> viewDetail3s = JSONArray.parseArray(request.getParameter("details"),ViewDetail3.class);
-                result = Detail3Service.importDetails(conn,id,viewDetail3s);
+                result = Detail3Service.importDetails(conn,id,viewDetail3s,did);
                 break;
         }
         return JSONObject.toJSONString(result);

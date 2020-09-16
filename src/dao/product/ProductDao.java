@@ -12,6 +12,10 @@ public class ProductDao {
         return DbUtil.getList(conn,"product",param, Product.class);
     }
 
+    public static DaoExistResult exist(Connection conn, QueryConditions conditions) {
+        return DbUtil.exist(conn,"product",conditions);
+    }
+
     public static DaoQueryResult get(Connection conn,  QueryConditions conditions) {
         return DbUtil.get(conn,"product",conditions,Product.class);
     }

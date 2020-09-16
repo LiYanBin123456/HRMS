@@ -17,7 +17,7 @@ public class Detail1Service {
     public static DaoUpdateResult update(Connection conn, List<Detail1> details ){
         return  Detail1Dao.update(conn,details);
     }
-    public static DaoUpdateResult importDetails(Connection conn, long id, List<Detail1> details){
+    public static DaoUpdateResult importDetails(Connection conn, long id, List<Detail1> details, long did){
         //将结算单id赋值给结算单明细中的结算单id
         for(Detail1 detail :details){
               detail.setSid(id);

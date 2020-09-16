@@ -14,8 +14,8 @@ public class Detail3 extends Detail {
     }
 
 
-    public Detail3(long id, long sid, long eid, Date month, Long pid, String place, float price) {
-        super(id, sid, eid, month);
+    public Detail3(long id, long sid, long eid, Long pid, String place, float price) {
+        super(id, sid, eid);
         this.pid = pid;
         this.place = place;
         this.price = price;

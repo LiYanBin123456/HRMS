@@ -21,8 +21,8 @@ public class Detail2 extends Detail {
     public Detail2() {
     }
 
-    public Detail2(long id, long sid, long eid, Date month,  int hours, float price, float food, float traffic, float accommodation, float utilities, float insurance, float tax, float other1, float other2, float payable, float paid) {
-        super(id, sid, eid, month);
+    public Detail2(long id, long sid, long eid,  int hours, float price, float food, float traffic, float accommodation, float utilities, float insurance, float tax, float other1, float other2, float payable, float paid) {
+        super(id, sid, eid);
         this.hours = hours;
         this.price = price;
         this.food = food;

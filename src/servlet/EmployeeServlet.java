@@ -201,7 +201,6 @@ public class EmployeeServlet extends HttpServlet {
         HttpSession session = request.getSession();
         //获取登录后，管理员所属的公司id
         long did = (long) session.getAttribute("rid");
-
             Employee employee =JSONObject.parseObject(request.getParameter("employee"), Employee.class);
             employee.setDid(did);
             res= EmployeeService.insert(conn,employee);
@@ -260,24 +259,11 @@ public class EmployeeServlet extends HttpServlet {
 
     //批量插入
     private String insertBatch(Connection conn, HttpServletRequest request) {
-        /**
-         * 流程
-         * 1、先批量插入员工信息
-         * 2、返回插入后的员工id集合  eids[]
-         * 3、员工补充信息添加对应eid
-         * 4、批量插入员工补充信息
-         */
         DaoUpdateResult res;
-        List<Employee> employees = JSONArray.parseArray(request.getParameter("employees"),Employee.class);
-        List<EmployeeExtra> extracts = JSONArray.parseArray(request.getParameter("extracts"),EmployeeExtra.class);
-        res=EmployeeService.insertBatch(conn,employees);
-        if(res.success){//将返回的员工ids集合，循环插入到员工补充表中的eid；
-            int[] ids = (int[]) res.extra;
-            for (int i = 0;i<ids.length;i++){
-                extracts.get(i).setEid((long)ids[i]);
-            }
-            ExtraDao.insertBatch(conn,extracts);
-        }
+        HttpSession session = request.getSession();
+        long did = (long) session.getAttribute("rid");//当前操作的管理员所属公司id
+        List<ViewEmployee> viewEmployees = JSONArray.parseArray(request.getParameter("employees"),ViewEmployee.class);
+        res = EmployeeService.insertBatch(conn,viewEmployees,did);
         return  JSONObject.toJSONString(res);
     }
 

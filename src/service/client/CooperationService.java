@@ -3,17 +3,16 @@ package service.client;
 import bean.client.Cooperation;
 import dao.client.CooperationDao;
 import dao.client.FinanceDao;
-import database.DaoQueryListResult;
-import database.DaoQueryResult;
-import database.DaoUpdateResult;
-import database.QueryParameter;
+import database.*;
 
 import java.sql.Connection;
 
 public class CooperationService {
    //获取客户详情
     public static DaoQueryResult get(long id, Connection conn){
-        return CooperationDao.get(conn,id);
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id","=",id);
+        return CooperationDao.get(conn,conditions);
     }
 
     //获取客户列表

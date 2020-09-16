@@ -2,7 +2,6 @@ package dao.employee;
 
 import bean.employee.Employee;
 import bean.employee.ViewEmployee;
-import bean.insurance.Product;
 import database.*;
 
 import java.sql.Connection;
@@ -15,6 +14,11 @@ public class EmployeeDao {
             param.addCondition("concat(name,cname)","like",param.conditions.extra);
         }
         return DbUtil.getList(conn,"view_employee",param,ViewEmployee.class);
+    }
+
+    //判断是否存在
+    public static DaoExistResult exist(Connection conn, QueryConditions conditions) {
+        return DbUtil.exist(conn,"employee",conditions);
     }
 
     //获取详情
@@ -63,13 +67,16 @@ public class EmployeeDao {
     }
 
     //批量插入
-    public static DaoUpdateResult insertBatch(Connection conn, List<Employee> employees) {
+    public static DaoUpdateResult insertBatch(Connection conn, List<Employee> es) {
         String sql = "insert employee (did,cid,cardId,name,phone,degree,type,entry,status,department,post,category,price) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        Object [][]params = new Object[employees.size()][];
-        for (int i = 0; i < employees.size(); i++) {
-            params[i] = new Object[]{employees.get(i).getDid(),employees.get(i).getCid(),employees.get(i).getCardId(),employees.get(i).getName(),employees.get(i).getPhone(),
-                    employees.get(i).getDegree(),employees.get(i).getType(),employees.get(i).getEntry(),employees.get(i).getStatus(),employees.get(i).getDepartment(),employees.get(i).getPost(),
-                    employees.get(i).getCategory(),employees.get(i).getPrice()
+        Object [][]params = new Object[es.size()][];
+        for (int i = 0; i < es.size(); i++) {
+            //需要判断外键是否为0，为0就需要转换成null
+            String cid = es.get(i).getCid()==0?null:String.valueOf(es.get(i).getCid());
+
+            params[i] = new Object[]{es.get(i).getDid(),cid,es.get(i).getCardId(),es.get(i).getName(),es.get(i).getPhone(),
+                    es.get(i).getDegree(),es.get(i).getType(),es.get(i).getEntry(),es.get(i).getStatus(),es.get(i).getDepartment(),es.get(i).getPost(),
+                    es.get(i).getCategory(),es.get(i).getPrice()
             };
         }
         return DbUtil.insertBatch(conn,sql,params);

@@ -54,6 +54,8 @@ public class FileServlet extends HttpServlet {
             case "downloadModel"://下载模板
                 downloadModel(request,response);
                 return;
+            default:
+                result = "{\"success\":false,\"msg\":\"参数错误\"}";
         }
 
         PrintWriter out = response.getWriter();
@@ -67,10 +69,16 @@ public class FileServlet extends HttpServlet {
         int category = Integer.parseInt(request.getParameter("category"));
         String fileName=null;
 
-        if(category==0){//小时工模板
-            fileName = "detail2"+".xls";
-        }else{
-            fileName = "detail3"+".xls";
+        switch (category){
+            case 0://小时工模板
+                fileName = "detail2"+".xls";
+                break;
+            case 1://商业保险结算单明细模板
+                fileName = "detail3"+".xls";
+                break;
+            case 2://员工模板
+                fileName = "employee"+".xls";
+                break;
         }
         String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
         File file = new File(fullFileName);
@@ -84,10 +92,16 @@ public class FileServlet extends HttpServlet {
     private void downloadModel(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int category = Integer.parseInt(request.getParameter("category"));
         String fileName=null;
-        if(category==0){//小时工模板
-             fileName = "detail2"+".xls";
-        }else{
-            fileName = "detail3"+".xls";
+        switch (category){
+            case 0://小时工模板
+                fileName = "detail2"+".xls";
+                break;
+            case 1://商业保险结算单明细模板
+                fileName = "detail3"+".xls";
+                break;
+            case 2://员工模板
+                fileName = "employee"+".xls";
+                break;
         }
         String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
         File file = new File(fullFileName);
@@ -262,7 +276,7 @@ public class FileServlet extends HttpServlet {
         try {
             Part part = getPart(request);
             InputStream is = part.getInputStream();
-            List<JSONObject> data = XlsUtil.read(is,"学员信息表","元数据");
+            List<JSONObject> data = XlsUtil.read(is,"信息表","元数据");
             if(null == data){
                 result = "{\"success\":false,\"msg\":\"xls文件不符合要求，请下载模板再重新填写\"}";
             }else{

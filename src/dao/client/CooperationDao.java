@@ -2,17 +2,18 @@ package dao.client;
 
 import bean.client.Cooperation;
 
-import bean.client.Dispatch;
 import database.*;
 
 import java.sql.Connection;
 
 public class CooperationDao {
 
-    public static DaoQueryResult get(Connection conn, long id) {
-        QueryConditions conditions = new QueryConditions();
-        conditions.add("id","=",id);
+    public static DaoQueryResult get(Connection conn,  QueryConditions conditions) {
         return  DbUtil.get(conn,"cooperation",conditions, Cooperation.class);
+    }
+
+    public static DaoExistResult exist(Connection conn, QueryConditions conditions) {
+        return  DbUtil.exist(conn,"cooperation",conditions);
     }
 
     public static DaoQueryListResult getList(Connection conn, QueryParameter param){

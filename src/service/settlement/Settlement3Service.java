@@ -67,7 +67,6 @@ public class Settlement3Service {
                 Detail3 detail3 = new Detail3();
                 detail3.setSid(sid);
                 detail3.setEid(employeeList.get(i).getId());
-                detail3.setMonth(month);
                 detail3.setPid(pid);
                 detail3List.add(i,detail3);
             }
@@ -111,7 +110,6 @@ public class Settlement3Service {
             Detail3 detail3 = new Detail3();
             detail3.setSid(sid);
             detail3.setEid(employeeList.get(i).getId());
-            detail3.setMonth(month);
             detail3.setPid(pid);
             detail3List.add(i,detail3);
         }

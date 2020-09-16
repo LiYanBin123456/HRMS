@@ -46,7 +46,6 @@ public class Settlement2Service {
             long sid = (long) result.extra;//结算单id
             long cid = settlement2.getCid();//合作单位id
             long did = settlement2.getDid();//派遣方id
-            Date month = settlement2.getMonth();//月份
             //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派员工，用工性质是小时工，在职
             QueryParameter parameter = new QueryParameter();
             parameter.addCondition("cid","=",cid);
@@ -60,7 +59,6 @@ public class Settlement2Service {
                 Detail2 detail2 = new Detail2();
                 detail2.setSid(sid);
                 detail2.setEid(employeeList.get(i).getId());
-                detail2.setMonth(month);
                 //员工表中单价
                 detail2.setPrice(employeeList.get(i).getPrice());
                 detail2List.add(i,detail2);
@@ -99,7 +97,6 @@ public class Settlement2Service {
             Detail2 detail2 = new Detail2();
             detail2.setSid(sid);
             detail2.setEid(employeeList.get(i).getId());
-            detail2.setMonth(month);
             //员工表中单价
             detail2.setPrice(employeeList.get(i).getPrice());
             detail2List.add(i,detail2);

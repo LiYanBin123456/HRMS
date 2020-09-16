@@ -518,8 +518,8 @@ var InterfaceEmployee = function () {
      * @param success
      * @param fail
      */
-    this.insertBatch = function (employees,extracts,success,fail) {
-        var para = {op: "insertBatch",employees:JSON.stringify(employees),extracts:JSON.stringify(extracts)};
+    this.insertBatch = function (employees,success,fail) {
+        var para = {op: "insertBatch",employees:employees};
         access(url,para,1,success,fail);
     };
     /**
@@ -1117,7 +1117,7 @@ var InterfaceFile = function () {
     };
     /**
      * 判断模板附件是否存在，返回结果为{success:true/false,exist:true/false}
-     * @param category 0 小时工模板  1  商业保险模板
+     * @param category 0 小时工模板  1  商业保险模板   2员工模板
      * @param success
      * @param fail
      */

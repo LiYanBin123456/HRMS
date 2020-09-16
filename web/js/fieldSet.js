@@ -175,6 +175,30 @@ var columns_employee_spare = [[
     {field: 'right', title: '操作', toolbar: '#bar_spare',width:200,fixed:"right"}
 ]];
 
+//员工所有信息字段集合
+var columns_employees = [[
+    {fixed: 'left', type: 'checkbox'},
+    {field:'cardId', title: '身份证号',width:170},
+    {field:'name', title: '姓名',width:80},
+    {field:'degree', title: '学历',width:80,templet:function (d) { return array_value2text(degrees_employee,d.degree) }},
+    {field:'phone', title: '联系电话',width:120},
+    {field:'type', title: '员工类型',width:120,templet:function (d) { return array_value2text(type_employee,d.type) }},
+    {field:'entry', title: '入职时间',width:120,templet:function (d) {return format_date(d.entry)}},
+    {field:'status', title: '在职状态',width:120,templet:function (d) { return array_value2text(status_employee,d.status) }},
+    {field:'department', title: '部门',width:120},
+    {field:'post', title: '岗位',width:120},
+    {field:'category', title: '用工性质',width:120,templet:function (d) { return array_value2text(category_employee,d.category) }},
+    {field:'price', title: '时间报酬',width:120},
+    {field:'school', title: '毕业院校',width:120},
+    {field:'major', title: '毕业专业',width:120},
+    {field:'cname', title: '外派单位',width:120},
+    {field:'household', title: '户口性质',width:120,templet:function (d) { return array_value2text(household_employee,d.household) }},
+    {field:'address', title: '户籍地址',width:120},
+    {field:'date1', title: '离职时间',width:120,templet:function (d) {return format_date(d.date1)}},
+    {field:'date2', title: '退休时间',width:120,templet:function (d) {return format_date(d.date2)}},
+    {field:'reason', title: '离职原因',width:120,templet:function (d) { return array_value2text(reason_employee,d.reason) }},
+]];
+
 //普通结算单字段集合
 var columns_settlement1  = [[
     {field:'name', title: '用工企业',width:180,fixed:"left"},
@@ -248,22 +272,22 @@ var columns_settlement30  = [[
 ]];
 
 //工资管理明细字段集合（完整模式）
-var columns_detail1_full  = [[
-    {field:'cardId', title: '身份证号',width:160},
-    {field:'name', title: '姓名',width:80},
-    {field:'base', title: '基本工资',width:80},
-    {field:'reward', title: '绩效奖金',width:80},
-    {field:'allowance', title: '岗位补贴',width:80},
-    {field:'social1', title: '个人社保',width:80},
-    {field:'social2', title: '单位社保',width:80},
-    {field:'fund1', title: '个人公积金',width:80},
-    {field:'fund2', title: '单位公积金',width:80},
-    {field:'tax', title: '个税',width:80},
-    {field:'f1', title: '交通补助',width:80},
-    {field:'f2', title: '考勤扣款',width:80},
-    {field:'payable', title: '应发',width:80},
-    {field:'paid', title: '实发',width:80}
-]];
+// var columns_detail1_full  = [[
+//     {field:'cardId', title: '身份证号',width:160},
+//     {field:'name', title: '姓名',width:80},
+//     {field:'base', title: '基本工资',width:80},
+//     {field:'reward', title: '绩效奖金',width:80},
+//     {field:'allowance', title: '岗位补贴',width:80},
+//     {field:'social1', title: '个人社保',width:80},
+//     {field:'social2', title: '单位社保',width:80},
+//     {field:'fund1', title: '个人公积金',width:80},
+//     {field:'fund2', title: '单位公积金',width:80},
+//     {field:'tax', title: '个税',width:80},
+//     {field:'f1', title: '交通补助',width:80},
+//     {field:'f2', title: '考勤扣款',width:80},
+//     {field:'payable', title: '应发',width:80},
+//     {field:'paid', title: '实发',width:80}
+// ]];
 
 //工资管理明细字段集合(录入模式）
 // var columns_detail1_input  = [[
@@ -468,6 +492,53 @@ var degrees_employee = [
     {value:4,text:"本科"},
     {value:5,text:"硕士"},
     {value:6,text:"博士"}
+];
+var type_employee = [
+    {value:0,text:"内部员工"},
+    {value:1,text:"外派员工"},
+    {value:2,text:"人才库"}
+];
+var status_employee = [
+    {value:0,text:"在职"},
+    {value:1,text:"离职"},
+    {value:2,text:"退休"},
+    {value:3,text:"其他"}
+];
+
+var category_employee = [
+    {value:0,text:"派遣"},
+    {value:1,text:"外包"},
+    {value:2,text:"小时工"}
+];
+
+var household_employee = [
+    {value:0,text:"外地城镇"},
+    {value:1,text:"本地城镇"},
+    {value:2,text:"外地农村"},
+    {value:3,text:"城镇"},
+    {value:4,text:"农村"},
+    {value:5,text:"港澳台"},
+    {value:6,text:"外籍"}
+];
+var reason_employee = [
+    {value:0,text:"合同到期"},
+    {value:1,text:"被用人单位解除劳动合同"},
+    {value:2,text:"被用人单位开除"},
+    {value:3,text:"被用人单位除名"},
+    {value:4,text:"被用人单位辞退"},
+    {value:5,text:"公司倒闭"},
+    {value:6,text:"公司破产"},
+    {value:7,text:"单位人员减少"},
+    {value:8,text:"养老在职转退休"},
+    {value:9,text:"参军"},
+    {value:10,text:"入学"},
+    {value:11,text:"劳改劳教"},
+    {value:12,text:"出国定居"},
+    {value:13,text:"异地转移"},
+    {value:14,text:"不足缴费年限"},
+    {value:15,text:"人员失踪"},
+    {value:16,text:"错误申报"},
+    {value:17,text:"其他原因减少"}
 ];
 var status_settlement = [
     {value:0,text:"编辑"},

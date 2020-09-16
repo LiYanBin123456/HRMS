@@ -28,18 +28,18 @@
 
     <body class="layui-layout-body">
         <div style="padding: 5px;">
+            <button class="layui-btn layui-btn-sm" lay-event="" id="import"><i class="layui-icon "></i> 批量导入</button>
+            <button class="layui-btn layui-btn-sm" lay-event="" onclick="download()"><i class="layui-icon "></i> 下载模板</button>
             <form class="layui-form" style="display: inline">
                 <div class="layui-input-inline">
                     <input type="radio" name="category" title="内部员工" value="0" lay-filter="category" checked="checked">
                     <input type="radio" name="category" title="外派员工" value="1" lay-filter="category" >
                     <input type="radio" name="category" title="人才库" value="2" lay-filter="category" >
-                </div>
+                     </div>
             </form>
             <!--顶部工具栏-->
             <div class="layui-hide" id="top_bar_internal">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加员工</button>
-                <button class="layui-btn layui-btn-sm" lay-event="" onclick="downLoad()"><i class="layui-icon "></i> 批量导入</button>
-                <button class="layui-btn layui-btn-sm" lay-event="" onclick="downLoad()"><i class="layui-icon "></i> 下载模板</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
                         <input name="keyword" type="text" class="layui-input" placeholder="请输入要查找的员工">
@@ -50,8 +50,6 @@
 
             <div class="layui-hide" id="top_bar_expatriate">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加外派员工</button>
-                <button class="layui-btn layui-btn-sm" lay-event="" onclick="downLoad()" ><i class="layui-icon "></i> 批量导入</button>
-                <button class="layui-btn layui-btn-sm" lay-event="" onclick="downLoad()" ><i class="layui-icon "></i> 下载模板</button>
                 <button class="layui-btn layui-btn-sm" lay-event="dispatch"><i class="layui-icon "></i> 批量派遣</button>
                 <form class="layui-form searchbox" lay-filter="form_top_bar">
                     <div class="layui-input-inline">
@@ -93,18 +91,42 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
+            var upload;
             var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
 
             function loadLayuiModule() {
-                layui.use(['table','form','element','layer','laypage'], function() {
+                layui.use(['table','form','upload','element','layer','laypage'], function() {
                     table = layui.table;
                     layer = layui.layer;
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
+                    upload = layui.upload;
+                    upload.render({
+                        elem: '#import' //绑定元素
+                        , url: '/hrms/verify/file' //上传接口
+                        , accept: 'file'
+                        , exts: 'xls'
+                        , acceptMime: '.xls'
+                        ,before: function(file){
+                            this.data={op:"readXls",file:JSON.stringify(file)}
+                        }
+                        , done: function (res) {
+                            if (res.success){
+                                var employees = res.data;
+                                showImportDlg(employees);
+                            }else {
+                                layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                            }
+                        }
+                        , error: function () {
+                            //请求异常回调
+                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                        }
+                    });
                     initPage();
                 });
             }
@@ -213,6 +235,9 @@
                         case "dispatch":
                             showSelectCooperationDlg();
                             break;
+                        case 'import':
+                            $("#import").click();
+                            break;
                     }
                 });
 
@@ -273,6 +298,28 @@
                     type: 2,
                     area: ['35%', '60%'],
                     content: content
+                });
+            }
+            //核对导入的数据
+            function showImportDlg(employees) {
+                var content = "../dialog/importEmployee.html?employees="+encodeURIComponent(JSON.stringify(employees));
+                layer.open({
+                    title:"核对明细",
+                    type: 2,
+                    area: ['80%', '80%'],
+                    content: content,
+                    btn: ['添加', '关闭']
+                    ,yes: function(index, layero){
+                      var emploeess = window["layui-layer-iframe" + index].callbackData();
+                      iEmployee.insertBatch(emploeess,function () {
+                            layer.close(index);
+                            layer.msg("导入成功");
+                        },function (res) {
+                          layer.msg(res.msg);
+                      })
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
                 });
             }
 
@@ -366,14 +413,20 @@
                 });
             }
 
-            function downLoad() {
-                var curWwwPath = window.document.location.href;
-                var pathName = window.document.location.pathname;
-                var pos = curWwwPath.indexOf(pathName);
-                var localhostPath = curWwwPath.substring(0, pos);
-                var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-                var url = localhostPath + projectName + "/劳务派遣内部员工.xls";
-                window.open(url);
+            function download() {
+                iFile.existModel(2,function (result) {
+                    if(!result.exist){
+                        layer.msg("附件不存在或已删除");
+                        return;
+                    }
+
+                    var url = "/hrms/verify/file?op=downloadModel&category=2";
+                    var form = $('<form method="POST"></form>');
+                    form.attr('action', url);
+                    form.appendTo($('body'));
+                    form.submit();
+                    form.remove();
+                })
             }
 
         </script>

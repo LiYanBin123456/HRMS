@@ -12,7 +12,7 @@ public class ViewDetail3 extends Detail3 {
     }
 
     public ViewDetail3(long id, long sid, long eid, Date month, Long pid, String place, float price, String cname, String pname, String cardId, String post) {
-        super(id, sid, eid, month, pid, place, price);
+        super(id, sid, eid, pid, place, price);
         this.cname = cname;
         this.pname = pname;
         this.cardId = cardId;
