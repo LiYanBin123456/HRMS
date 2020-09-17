@@ -88,7 +88,6 @@ public class InsuranceServlet extends HttpServlet {
         parameter.addCondition("status","=",status);
         DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
-        System.out.println(rows);
         List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());

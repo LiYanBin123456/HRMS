@@ -26,7 +26,7 @@
             <button class="layui-btn" id="download" onclick="download()" style="display: none"><i class="layui-icon layui-icon-edit"></i>下载复印件</button>
             <div class="layui-hide" id="top_bar_detail">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
-                <button class="layui-btn layui-btn-sm" lay-event="export" id="export"><i class="layui-icon "></i> 导出</button>
+                <button class="layui-btn layui-btn-sm" lay-event="export" id="export" onclick="exports()"><i class="layui-icon "></i> 导出</button>
                 <button class="layui-btn layui-btn-sm" lay-event="import" ><i class="layui-icon "></i> 导入</button>
                 <button class="layui-btn layui-btn-sm" lay-event="download" ><i class="layui-icon "></i> 下载模板</button>
             </div>
@@ -247,7 +247,17 @@
                     });
                 });
             }
+            //导出
+            function exports(){
+                var url = "/hrms/verify/file?op=exportDetail2&id="+sid;
+                var form = $('<form method="POST"></form>');
+                form.attr('action', url);
+                form.appendTo($('body'));
+                form.submit();
+                form.remove();
+            }
 
+            //下载模板
             function download() {
                 iFile.existModel(0,function (result) {
                     if(!result.exist){

@@ -1,10 +1,7 @@
 package dao.client;
 
 import bean.client.MapSalary;
-import database.DaoQueryResult;
-import database.DaoUpdateResult;
-import database.DbUtil;
-import database.QueryConditions;
+import database.*;
 
 import java.sql.Connection;
 
@@ -18,6 +15,12 @@ public class MapSalaryDao {
         return DbUtil.getLast(conn, "map_salary", conditions,MapSalary.class,order);
     }
 
+    //判断是否存在
+    public static DaoExistResult exist(long id, Connection conn){
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("cid", "=", id);
+        return DbUtil.exist(conn, "map_salary", conditions);
+    }
     //获取最新自定义工资
     public static DaoQueryResult getLast(long id, Connection conn){
         QueryConditions conditions = new QueryConditions();

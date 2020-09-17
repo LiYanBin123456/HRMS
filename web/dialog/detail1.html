@@ -29,13 +29,14 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
+            <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
             <div class="layui-hide" id="top_bar_detail">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
                 <button class="layui-btn layui-btn-sm" lay-event="append"><i class="layui-icon "></i> 社保补缴</button>
                 <button class="layui-btn layui-btn-sm" lay-event="balance"><i class="layui-icon "></i> 社保补差</button>
-                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导出</button>
-                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 导入</button>
-                <button class="layui-btn layui-btn-sm" lay-event=""><i class="layui-icon "></i> 下载模板</button>
+                <button class="layui-btn layui-btn-sm" lay-event="" onclick="exports()" ><i class="layui-icon " ></i> 导出</button>
+                <button class="layui-btn layui-btn-sm" lay-event="import"><i class="layui-icon "></i> 导入</button>
+                <button class="layui-btn layui-btn-sm" lay-event="" onclick="download()"><i class="layui-icon "></i> 下载模板</button>
 
             </div>
             <form class="layui-form" style="display: inline">
@@ -68,18 +69,41 @@
             var sid = $.query.get("id");//结算单id
             var cid = $.query.get("cid");//合作单位id
             var month = $.query.get("month");//结算单月份
-
+            var upload;
             $(function () {
                 loadLayuiModule();
             });
 
             function loadLayuiModule() {
-                layui.use(['table','form','element','layer','laypage'], function() {
+                layui.use(['table','form','element','upload','layer','laypage'], function() {
                     table = layui.table;
                     layer = layui.layer;
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
+                    upload = layui.upload;
+                    upload.render({
+                        elem: '#import' //绑定元素
+                        , url: '/hrms/verify/file' //上传接口
+                        , accept: 'file'
+                        , exts: 'xls'
+                        , acceptMime: '.xls'
+                        ,before: function(file){
+                            this.data={op:"readXls",file:JSON.stringify(file)}
+                        }
+                        , done: function (res) {
+                            if (res.success){
+                                var detail1s = res.data;
+                                showImportDlg(detail1s);
+                            }else {
+                                layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                            }
+                        }
+                        , error: function () {
+                            //请求异常回调
+                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                        }
+                    });
                     initPage();
                 });
             }
@@ -139,6 +163,9 @@
                         case 'balance':
                             showBalanceDlg();
                             break;
+                        case 'import':
+                            $("#import").click();
+                            break;
                 };
                 });
                 getDetails();
@@ -168,7 +195,28 @@
                 });
             }
 
-            //模糊查找
+            //核对导入的数据
+            function showImportDlg(detail1s) {
+                var content = "importDetails1.html?detail1s="+encodeURIComponent(JSON.stringify(detail1s))+"cid="+cid;
+                console.log("s2:"+detail1s);
+                layer.open({
+                    title:"核对明细",
+                    type: 2,
+                    area: ['80%', '80%'],
+                    content: content,
+                    btn: ['添加', '关闭']
+                    ,yes: function(index, layero){
+                        var detail1s = window["layui-layer-iframe" + index].callbackData();
+                        iSettlement.importDetails(sid,detail1s,0,function () {
+                            layer.close(index);
+                            layer.msg("导入成功");
+                            getDetail2s();
+                        })
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
+                });
+            }
 
             //打开添加明细对话框
             function showInsertDlg() {
@@ -233,9 +281,20 @@
                 var columns_detail1_input =[[
                     {field:'cardId', title: '身份证号',width:160},
                     {field:'name', title: '姓名',width:80},
-                    {field:'base', title: '基本工资',width:80,edit: 'text'},
-                    {field:'reward', title: '绩效奖金',width:80,edit: 'text'},
-                    {field:'allowance', title: '岗位补贴',width:80,edit: 'text'}
+                    {field:'base', title: '基本工资',width:80},
+                    {field:'pension1', title: '个人养老',width:80},
+                    {field:'medicare1', title: '个人医疗',width:80},
+                    {field:'unemployment1', title: '个人失业',width:80},
+                    {field:'disease1', title: '个人大病',width:80},
+                    {field:'fund1', title: '个人公积金',width:80},
+                    {field:'pension2', title: '单位养老',width:80},
+                    {field:'medicare2', title: '单位医疗',width:80},
+                    {field:'unemployment2', title: '单位失业',width:80},
+                    {field:'injury', title: '单位工伤',width:80},
+                    {field:'disease2', title: '单位大病',width:80},
+                    {field:'birth', title: '单位生育',width:80},
+                    {field:'fund2', title: '单位公积金',width:80},
+                    {field:'tax', title: '个税',width:80},
                 ]];
                 //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
                 iClient.getLastSalaryDefine(cid,function (result) {
@@ -266,11 +325,17 @@
                     {field:'cardId', title: '身份证号',width:160},
                     {field:'name', title: '姓名',width:80},
                     {field:'base', title: '基本工资',width:80},
-                    {field:'reward', title: '绩效奖金',width:80},
-                    {field:'allowance', title: '岗位补贴',width:80},
-                    {field:'social1', title: '个人社保',width:80},
-                    {field:'social2', title: '单位社保',width:80},
+                    {field:'pension1', title: '个人养老',width:80},
+                    {field:'medicare1', title: '个人医疗',width:80},
+                    {field:'unemployment1', title: '个人失业',width:80},
+                    {field:'disease1', title: '个人大病',width:80},
                     {field:'fund1', title: '个人公积金',width:80},
+                    {field:'pension2', title: '单位养老',width:80},
+                    {field:'medicare2', title: '单位医疗',width:80},
+                    {field:'unemployment2', title: '单位失业',width:80},
+                    {field:'injury', title: '单位工伤',width:80},
+                    {field:'disease2', title: '单位大病',width:80},
+                    {field:'birth', title: '单位生育',width:80},
                     {field:'fund2', title: '单位公积金',width:80},
                     {field:'tax', title: '个税',width:80},
                 ]];
@@ -295,6 +360,26 @@
                     }
                 });
                 return columns_detail1_full;
+            }
+
+            //导出
+            function exports(){
+                var url = "/hrms/verify/file?op=exportDetail1&id="+sid;
+                var form = $('<form method="POST"></form>');
+                form.attr('action', url);
+                form.appendTo($('body'));
+                form.submit();
+                form.remove();
+            }
+
+            //下载模板
+            function download() {
+                    var url = "/hrms/verify/file?op=downloadDetail1&id="+sid;
+                    var form = $('<form method="POST"></form>');
+                    form.attr('action', url);
+                    form.appendTo($('body'));
+                    form.submit();
+                    form.remove();
             }
 
         </script>

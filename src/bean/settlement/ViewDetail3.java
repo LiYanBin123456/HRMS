@@ -1,6 +1,5 @@
 package bean.settlement;
 
-import java.sql.Date;
 
 public class ViewDetail3 extends Detail3 {
     private String cname;//员工姓名
@@ -11,7 +10,7 @@ public class ViewDetail3 extends Detail3 {
     public ViewDetail3() {
     }
 
-    public ViewDetail3(long id, long sid, long eid, Date month, Long pid, String place, float price, String cname, String pname, String cardId, String post) {
+    public ViewDetail3(long id, long sid, long eid,  Long pid, String place, float price, String cname, String pname, String cardId, String post) {
         super(id, sid, eid, pid, place, price);
         this.cname = cname;
         this.pname = pname;

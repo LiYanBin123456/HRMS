@@ -1,19 +1,37 @@
 package servlet;
 
+import bean.client.MapSalary;
+import bean.insurance.ViewInsurance;
+import bean.settlement.ViewDetail1;
+import bean.settlement.ViewDetail2;
+import bean.settlement.ViewDetail3;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import database.DaoUpdateResult;
+import dao.client.MapSalaryDao;
+import dao.insurance.InsuranceDao;
+import dao.settlement.Detail1Dao;
+import dao.settlement.Detail2Dao;
+import dao.settlement.Detail3Dao;
+import database.*;
+import jxl.Workbook;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
 import org.apache.commons.io.IOUtils;
 import utills.XlsUtil;
 
+import javax.lang.model.element.VariableElement;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
+import javax.servlet.http.*;
 import java.io.*;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.sql.Connection;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @WebServlet(name = "FileServlet",urlPatterns = "/verify/file")
@@ -27,6 +45,7 @@ public class FileServlet extends HttpServlet {
         request.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=utf-8");
         String result = "";
+        Connection conn = ConnUtil.getConnection();
 
         String op = request.getParameter("op");
         switch (op) {
@@ -54,6 +73,18 @@ public class FileServlet extends HttpServlet {
             case "downloadModel"://下载模板
                 downloadModel(request,response);
                 return;
+            case "downloadDetail1"://下载商业保险结算单明细
+                downloadDetail1(conn,request,response);
+                return;
+            case "exportDetail1"://下载商业保险结算单明细
+                    exportDetail1(conn,request,response);
+                return;
+            case "exportDetail2"://下载小时工结算单明细
+                exportDetail2(conn,request,response);
+                return;
+            case "exportDetail3"://下载商业保险结算单明细
+                exportDetail3(conn,request,response);
+                return;
             default:
                 result = "{\"success\":false,\"msg\":\"参数错误\"}";
         }
@@ -62,6 +93,359 @@ public class FileServlet extends HttpServlet {
         out.print(result);
         out.flush();
         out.close();
+    }
+
+    private void downloadDetail1(Connection conn, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.setHeader("Content-Disposition", "attachment; filename=detailModel.xls");
+        HttpSession session = request.getSession();
+
+        long did = (long) session.getAttribute("rid");//获取管理员所属公司id
+        boolean flag=MapSalaryDao.exist(did,conn).exist;//判断客户是否有自定义工资项
+
+        long sid = Long.parseLong(request.getParameter("id"));//结算单id
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("sid","=",sid);
+        DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
+        String rows = JSONObject.toJSONString(result.rows);
+        List< ViewDetail1> detail1s = JSONArray.parseArray(rows, ViewDetail1.class);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
+        WritableSheet sheet1 = book.createSheet("信息表", 0);
+        WritableSheet sheet2 = book.createSheet("元数据", 1);
+        try {
+            sheet1.addCell(new Label(0, 0, "员工姓名"));
+            sheet1.addCell(new Label(1, 0, "身份证号码"));
+            sheet1.addCell(new Label(2, 0, "基本工资"));
+            sheet1.addCell(new Label(3, 0, "个人养老"));
+            sheet1.addCell(new Label(4, 0, "个人医疗"));
+            sheet1.addCell(new Label(5, 0, "个人失业"));
+            sheet1.addCell(new Label(6, 0, "个人大病"));
+            sheet1.addCell(new Label(7, 0, "个人公积金"));
+            sheet1.addCell(new Label(8, 0, "单位养老"));
+            sheet1.addCell(new Label(9, 0, "单位医疗"));
+            sheet1.addCell(new Label(10, 0, "单位失业"));
+            sheet1.addCell(new Label(11, 0, "单位工伤"));
+            sheet1.addCell(new Label(12, 0, "单位大病"));
+            sheet1.addCell(new Label(13, 0, "单位生育"));
+            sheet1.addCell(new Label(14, 0, "单位公积金"));
+            sheet1.addCell(new Label(15, 0, "个税"));
+            if(flag){
+                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(did,conn).data;
+                String map = mapSalary.getItems();
+                String[] maps = map.split(";");//maps[{加班工资,1},{考勤扣款,0}];
+                int  c = 0;
+                for(int i = 0;i<maps.length;i++){
+                    c = i+16;
+                    sheet1.addCell(new Label(c, 0, maps[i]));
+                }
+                sheet1.addCell(new Label(c+1, 0, "应付"));
+                sheet1.addCell(new Label(c+2, 0, "实付"));
+            }else {
+                sheet1.addCell(new Label(16, 0, "应付"));
+                sheet1.addCell(new Label(17, 0, "实付"));
+            }
+
+            sheet2.addCell(new Label(0, 0, "字段名"));
+            sheet2.addCell(new Label(0, 1, "name"));
+            sheet2.addCell(new Label(0, 2, "cardId"));
+            sheet2.addCell(new Label(0, 3, "base"));
+            sheet2.addCell(new Label(0, 4, "pension1"));
+            sheet2.addCell(new Label(0, 5, "medicare1"));
+            sheet2.addCell(new Label(0, 6, "unemployment1"));
+            sheet2.addCell(new Label(0, 7, "disease1"));
+            sheet2.addCell(new Label(0, 8, "fund1"));
+            sheet2.addCell(new Label(0, 9, "pension2"));
+            sheet2.addCell(new Label(0, 10, "medicare2"));
+            sheet2.addCell(new Label(0, 11, "unemployment2"));
+            sheet2.addCell(new Label(0, 12, "injury"));
+            sheet2.addCell(new Label(0, 13, "disease2"));
+            sheet2.addCell(new Label(0, 14, "birth"));
+            sheet2.addCell(new Label(0, 15, "fund2"));
+            sheet2.addCell(new Label(0, 16, "tax"));
+            if(flag){
+                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(did,conn).data;
+                String map = mapSalary.getItems();
+                String[] maps = map.split(";");//maps[{加班工资,1},{考勤扣款,0}];
+                int  c = 0;
+                for(int i = 0;i<maps.length;i++){
+                    c = i+17;
+                    String name = "f"+(i+1);
+                    sheet2.addCell(new Label(0, c, name));
+                }
+                sheet2.addCell(new Label(0,c+1,  "payable"));
+                sheet2.addCell(new Label(0,c+2,  "paid"));
+            }else {
+                sheet2.addCell(new Label(0,17,  "payable"));
+                sheet2.addCell(new Label(0,18,  "paid"));
+            }
+
+
+            sheet2.addCell(new Label(1, 0, "类型"));
+            sheet2.addCell(new Label(1, 1, "string"));
+            sheet2.addCell(new Label(1, 2, "string"));
+            sheet2.addCell(new Label(1, 3, "float"));
+            sheet2.addCell(new Label(1, 4, "float"));
+            sheet2.addCell(new Label(1, 5, "float"));
+            sheet2.addCell(new Label(1, 6, "float"));
+            sheet2.addCell(new Label(1, 7, "float"));
+            sheet2.addCell(new Label(1, 8, "float"));
+            sheet2.addCell(new Label(1, 9, "float"));
+            sheet2.addCell(new Label(1, 10, "float"));
+            sheet2.addCell(new Label(1, 11, "float"));
+            sheet2.addCell(new Label(1, 12, "float"));
+            sheet2.addCell(new Label(1, 13, "float"));
+            sheet2.addCell(new Label(1, 14, "float"));
+            sheet2.addCell(new Label(1, 15, "float"));
+            sheet2.addCell(new Label(1, 16, "float"));
+            if(flag){
+                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(did,conn).data;
+                String map = mapSalary.getItems();
+                String[] maps = map.split(";");//maps[{加班工资,1},{考勤扣款,0}];
+                int  c = 0;
+                for(int i = 0;i<maps.length;i++){
+                    c = i+17;
+                    sheet2.addCell(new Label(1, c, "float"));
+                }
+                sheet2.addCell(new Label(1,c+1,  "float"));
+                sheet2.addCell(new Label(1,c+2,  "float"));
+            }else {
+                sheet2.addCell(new Label(1,17,  "float"));
+                sheet2.addCell(new Label(1,18,  "float"));
+            }
+            book.write();
+            book.close();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        ConnUtil.closeConnection(conn);
+    }
+
+    private void exportDetail1(Connection conn, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.setHeader("Content-Disposition", "attachment; filename=details1.xls");
+        HttpSession session = request.getSession();
+
+        long did = (long) session.getAttribute("rid");//获取管理员所属公司id
+        boolean flag=MapSalaryDao.exist(did,conn).exist;//判断客户是否有自定义工资项
+
+        long sid = Long.parseLong(request.getParameter("id"));//结算单id
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("sid","=",sid);
+        DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
+        String rows = JSONObject.toJSONString(result.rows);
+        List< ViewDetail1> detail1s = JSONArray.parseArray(rows, ViewDetail1.class);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
+        WritableSheet sheet1 = book.createSheet("结算单明细", 0);
+        try {
+            sheet1.addCell(new Label(0, 0, "员工姓名"));
+            sheet1.addCell(new Label(1, 0, "身份证号码"));
+            sheet1.addCell(new Label(2, 0, "基本工资"));
+            sheet1.addCell(new Label(3, 0, "个人养老"));
+            sheet1.addCell(new Label(4, 0, "个人医疗"));
+            sheet1.addCell(new Label(5, 0, "个人失业"));
+            sheet1.addCell(new Label(6, 0, "个人大病"));
+            sheet1.addCell(new Label(7, 0, "个人公积金"));
+            sheet1.addCell(new Label(8, 0, "单位养老"));
+            sheet1.addCell(new Label(9, 0, "单位医疗"));
+            sheet1.addCell(new Label(10, 0, "单位失业"));
+            sheet1.addCell(new Label(11, 0, "单位工伤"));
+            sheet1.addCell(new Label(12, 0, "单位大病"));
+            sheet1.addCell(new Label(13, 0, "单位生育"));
+            sheet1.addCell(new Label(14, 0, "单位公积金"));
+            sheet1.addCell(new Label(15, 0, "个税"));
+            if(flag){
+                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(did,conn).data;
+                String map = mapSalary.getItems();
+                String[] maps = map.split(";");//maps[{加班工资,1},{考勤扣款,0}];
+                int  c = 0;
+                for(int i = 0;i<maps.length;i++){
+                    c = i+16;
+                    sheet1.addCell(new Label(c, 0, maps[i]));
+                }
+                sheet1.addCell(new Label(c+1, 0, "应付"));
+                sheet1.addCell(new Label(c+2, 0, "实付"));
+            }else {
+                sheet1.addCell(new Label(16, 0, "应付"));
+                sheet1.addCell(new Label(17, 0, "实付"));
+            }
+            int index = 1;
+            for( ViewDetail1 detail1:detail1s){
+                sheet1.addCell(new Label(0, index, detail1.getName()));
+                sheet1.addCell(new Label(1, index, detail1.getCardId()));
+                sheet1.addCell(new jxl.write.Number(2, index, detail1.getBase()));
+                sheet1.addCell(new jxl.write.Number(3, index, detail1.getPension1()));
+                sheet1.addCell(new jxl.write.Number(4, index, detail1.getMedicare1()));
+                sheet1.addCell(new jxl.write.Number(5, index, detail1.getUnemployment1()));
+                sheet1.addCell(new jxl.write.Number(6, index, detail1.getDisease1()));
+                sheet1.addCell(new jxl.write.Number(7, index, detail1.getFund1()));
+                sheet1.addCell(new jxl.write.Number(8, index, detail1.getPension2()));
+                sheet1.addCell(new jxl.write.Number(9, index, detail1.getMedicare2()));
+                sheet1.addCell(new jxl.write.Number(10, index, detail1.getUnemployment2()));
+                sheet1.addCell(new jxl.write.Number(11, index, detail1.getInjury()));
+                sheet1.addCell(new jxl.write.Number(12, index, detail1.getDisease2()));
+                sheet1.addCell(new jxl.write.Number(13, index, detail1.getBirth()));
+                sheet1.addCell(new jxl.write.Number(14, index, detail1.getFund2()));
+                sheet1.addCell(new jxl.write.Number(15, index, detail1.getTax()));
+                if(flag) {//判断客户是否存在自定义字段
+                    MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(did, conn).data;
+                    String map = mapSalary.getItems();
+                    String[] maps = map.split(";");//maps[{加班工资,1},{考勤扣款,0}];
+                    int c2 = 0;
+                    for (int i = 0; i < maps.length; i++) {
+                        c2 = i + 16;
+                        int in = i + 1;
+                        String name = "getF" + in;
+                        String value = null;
+                        Method method;
+                        try {//通过反射获取对应的值
+                            method = detail1.getClass().getSuperclass().getMethod(name);
+                            value = method.invoke(detail1).toString();
+                            System.out.println(value);
+                        } catch (NoSuchMethodException e) {
+                            e.printStackTrace();
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        } catch (InvocationTargetException e) {
+                            e.printStackTrace();
+                        }
+                        sheet1.addCell(new Label(c2, index, value));
+                    }
+                    sheet1.addCell(new jxl.write.Number(c2 + 1, index, detail1.getTax()));
+                    sheet1.addCell(new jxl.write.Number(c2 + 2, index, detail1.getTax()));
+                }else {
+                    sheet1.addCell(new jxl.write.Number( 15, index, detail1.getTax()));
+                    sheet1.addCell(new jxl.write.Number( 16, index, detail1.getTax()));
+                }
+                index++;
+            }
+            book.write();
+            book.close();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        ConnUtil.closeConnection(conn);
+    }
+
+    private void exportDetail2(Connection conn, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.setHeader("Content-Disposition", "attachment; filename=details2.xls");
+
+        long sid = Long.parseLong(request.getParameter("id"));//结算单id
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("sid","=",sid);
+        DaoQueryListResult result = Detail2Dao.getList(conn,parameter);
+        String rows = JSONObject.toJSONString(result.rows);
+
+        List<ViewDetail2> detail2s = JSONArray.parseArray(rows, ViewDetail2.class);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
+        WritableSheet sheet1 = book.createSheet("小时工结算单明细", 0);
+        try {
+            sheet1.addCell(new Label(0, 0, "员工姓名"));
+            sheet1.addCell(new Label(1, 0, "身份证号码"));
+            sheet1.addCell(new Label(2, 0, "工时"));
+            sheet1.addCell(new Label(3, 0, "单价"));
+            sheet1.addCell(new Label(4, 0, "餐费"));
+            sheet1.addCell(new Label(5, 0, "交通费"));
+            sheet1.addCell(new Label(6, 0, "住宿费"));
+            sheet1.addCell(new Label(7, 0, "水电费"));
+            sheet1.addCell(new Label(8, 0, "保险费"));
+            sheet1.addCell(new Label(9, 0, "个税"));
+            sheet1.addCell(new Label(10, 0, "其他1"));
+            sheet1.addCell(new Label(11, 0, "其他2"));
+            sheet1.addCell(new Label(12, 0, "应付"));
+            sheet1.addCell(new Label(13, 0, "实付"));
+
+            int index = 1;
+            for(ViewDetail2 detail2:detail2s){
+                sheet1.addCell(new Label(0, index, detail2.getName()));
+                sheet1.addCell(new Label(1, index, detail2.getCardId()));
+                sheet1.addCell(new jxl.write.Number(2, index, detail2.getHours()));
+                sheet1.addCell(new jxl.write.Number(3, index, detail2.getPrice()));
+                sheet1.addCell(new jxl.write.Number(4, index, detail2.getFood()));
+                sheet1.addCell(new jxl.write.Number(5, index, detail2.getTraffic()));
+                sheet1.addCell(new jxl.write.Number(6, index, detail2.getAccommodation()));
+                sheet1.addCell(new jxl.write.Number(7, index, detail2.getUtilities()));
+                sheet1.addCell(new jxl.write.Number(8, index, detail2.getInsurance()));
+                sheet1.addCell(new jxl.write.Number(9, index, detail2.getTax()));
+                sheet1.addCell(new jxl.write.Number(10, index, detail2.getOther1()));
+                sheet1.addCell(new jxl.write.Number(11, index, detail2.getOther2()));
+                sheet1.addCell(new jxl.write.Number(12, index, detail2.getPayable()));
+                sheet1.addCell(new jxl.write.Number(13, index, detail2.getPaid()));
+                index++;
+            }
+            //设置列宽
+            sheet1.setColumnView(0,10);
+            sheet1.setColumnView(1,20);
+            sheet1.setColumnView(2,10);
+            sheet1.setColumnView(3,10);
+            sheet1.setColumnView(4,10);
+            sheet1.setColumnView(5,10);
+            sheet1.setColumnView(6,10);
+            sheet1.setColumnView(7,10);
+            sheet1.setColumnView(8,10);
+            sheet1.setColumnView(9,10);
+            sheet1.setColumnView(10,10);
+            sheet1.setColumnView(11,10);
+            sheet1.setColumnView(12,10);
+            sheet1.setColumnView(13,15);
+            sheet1.setColumnView(14,15);
+            book.write();
+            book.close();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        ConnUtil.closeConnection(conn);
+    }
+
+    private void exportDetail3(Connection conn, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.setHeader("Content-Disposition", "attachment; filename=details3.xls");
+
+        long sid = Long.parseLong(request.getParameter("id"));//结算单id
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("sid","=",sid);
+        DaoQueryListResult result = Detail3Dao.getList(conn,parameter);
+        String rows = JSONObject.toJSONString(result.rows);
+
+        List<ViewDetail3> detail3s = JSONArray.parseArray(rows, ViewDetail3.class);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
+        WritableSheet sheet1 = book.createSheet("商业保险结算单明细", 0);
+        try {
+            sheet1.addCell(new Label(0, 0, "员工姓名"));
+            sheet1.addCell(new Label(1, 0, "身份证号码"));
+            sheet1.addCell(new Label(2, 0, "保险产品"));
+            sheet1.addCell(new Label(3, 0, "工作地点"));
+            sheet1.addCell(new Label(4, 0, "工作岗位"));
+            sheet1.addCell(new Label(5, 0, "保费"));
+
+
+            int index = 1;
+            for(ViewDetail3 detail3:detail3s){
+                sheet1.addCell(new Label(0, index, detail3.getCname()));
+                sheet1.addCell(new Label(1, index, detail3.getCardId()));
+                sheet1.addCell(new Label(1, index, detail3.getPname()));
+                sheet1.addCell(new Label(1, index, detail3.getPlace()));
+                sheet1.addCell(new Label(1, index, detail3.getPost()));
+                sheet1.addCell(new jxl.write.Number(5, index, detail3.getPrice()));
+                index++;
+            }
+            //设置列宽
+            sheet1.setColumnView(0,10);
+            sheet1.setColumnView(1,10);
+            sheet1.setColumnView(2,10);
+            sheet1.setColumnView(3,10);
+            sheet1.setColumnView(4,10);
+            sheet1.setColumnView(5,10);
+            book.write();
+            book.close();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        ConnUtil.closeConnection(conn);
     }
 
     //判断模板是否存在
