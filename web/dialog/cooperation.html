@@ -447,6 +447,8 @@
         if(cooperation) {
             iClient.update(data,1,function (result){
                 layer.msg("修改成功");
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
             });
         }else{
             iClient.insert(data,1,function (result){
@@ -467,6 +469,8 @@
         if(finance) {
             iClient.updateFinance(data,function (result){
                 layer.msg("修改成功");
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
             });
         }else{
             iClient.insertFinance(data,function (result){
