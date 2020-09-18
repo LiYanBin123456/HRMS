@@ -114,11 +114,6 @@
             }
 
             function getAccounts() {
-                /*var result = {total:100,rows:[{nickname:"赵斌",username:"stuff001",password:"123456"},{nickname:"李小刚",username:"stuff002",password:"123456"}]};
-                table.reload('tbl_account', {
-                    data:result.rows
-                });*/
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
                 iAccount.getList(param_query,function (result) {
                     table.reload('tbl_account', {
                         data:result.rows
@@ -178,7 +173,7 @@
 
             //删除
             function del(account) {
-                layer.confirm('确定删除'+account.title, {icon: 3, title:'删除公告'}, function(index){
+                layer.confirm('确定删除管理员'+account.nickname, {icon: 3, title:'删除管理员'}, function(index){
                     iAccount.delete(account.id,function () {
                         layer.close(index);
                         getAccounts();

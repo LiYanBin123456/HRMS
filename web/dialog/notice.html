@@ -32,6 +32,13 @@
             <input type="text"  name="publisher" required="" autocomplete="off" class="layui-input">
         </div>
     </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">
+            <span class="x-red">*</span>发布时间</label>
+        <div class="layui-input-inline">
+            <input type="text" name="date" required="" id="notice_date" placeholder="" autocomplete="off"
+                   class="layui-input"></div>
+    </div>
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label"><span class="x-red">*</span>摘要信息</label>
         <div class="layui-input-block">
@@ -41,11 +48,12 @@
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label"><span class="x-red">*</span>正文</label>
         <div class="layui-input-block">
-            <textarea name="content" id="content" placeholder="请输入正文" class="layui-textarea"></textarea>
+            <textarea name="content"  placeholder="请输入正文" class="layui-textarea"></textarea>
         </div>
     </div>
-    <div class="layui-form-item">
-        <button type="button" class="layui-btn layui-btn-fluid" onclick="save()">保存</button>
+    <div class="layui-form-item" style="text-align: center" >
+        <button type="button" class="layui-btn " onclick="save()">保存</button>
+        <button  class="layui-btn" onclick="cancel()" >取消</button>
     </div>
 </form>
 </body>
@@ -56,14 +64,19 @@
     var op = "insert";
     var form;//表单对象
     var editer;
+    var laydate;
 
     loadLayuiModule();
 
     function loadLayuiModule() {
-        layui.use(['form', 'layedit','jquery'], function () {
+        layui.use(['form', 'layedit','jquery','laydate'], function () {
             form = layui.form;
             layedit = layui.layedit;
             editer = layedit.build('content'); //建立编辑器
+            laydate = layui.laydate;
+            laydate.render({
+                elem: '#notice_date'
+            });
             initData();
         });
     }
@@ -102,6 +115,12 @@
             //修改成功后刷新父界面
             window.parent.location.reload();
         }
+    }
+
+    function cancel(){
+        var index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+        window.parent.location.reload();
     }
 </script>
 
