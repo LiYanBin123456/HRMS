@@ -95,6 +95,9 @@ public class ContractServlet extends HttpServlet {
         }
         contract.setId(id);
         System.out.println(contract);
+        HttpSession session = request.getSession();
+        long rid = (long) session.getAttribute("rid");
+        contract.setAid(rid);
         res = ContractService.insert(conn,contract);
         res.extra = id;
         System.out.println(res);
