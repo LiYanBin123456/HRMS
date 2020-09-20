@@ -323,7 +323,7 @@
 
     function initSalayDefine() {
         //如果已经有基本信息就忽略
-        if (salary_items_defined) {
+        if (salary_items_defined && salary_items_defined.length > 0) {
             return;
         }
         //显示固定项
@@ -338,9 +338,8 @@
         //此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
         iClient.getLastSalaryDefine(id,function (result) {
             mapSalary = result.data;
-            var items = mapSalary.items;
-            if(items) {
-                salary_items_defined = items.split(";");
+            if(mapSalary && mapSalary.items) {
+                salary_items_defined = mapSalary.items.split(";");
                 for (var i in salary_items_defined) {
                     var item = salary_items_defined[i];
                     var v = item.split(',');
@@ -349,6 +348,9 @@
                     node.click(removeSalaryItem);
                     $("#btn_append").before(node);
                 }
+            }else{
+                mapSalary = {};
+                salary_items_defined = [];
             }
         });
 
@@ -397,16 +399,17 @@
             return;
         }
         var items = salary_items_defined.join(";");
-        mapSalary.items = items;
-        mapSalary.cid = cooperation.id;
         if(items == mapSalary.items){
             layer.msg("未改变，无需保存");
-        }else {
-            mapSalary.items = items;
-            iClient.insertSalaryDefine(mapSalary, function (result) {
-                layer.msg("保存成功");
-            });
+            return;
         }
+
+
+        mapSalary.items = items;
+        mapSalary.cid = cooperation.id;
+        iClient.insertSalaryDefine(mapSalary, function (result) {
+            layer.msg("保存成功");
+        });
     }
 
     //预览工资定义
@@ -453,6 +456,9 @@
         }else{
             iClient.insert(data,1,function (result){
                 cooperation.id = result.extra;
+                finance = {};
+                mapSalary = {};
+                salary_items_defined = [];
                 layer.alert("基础信息保存成功，请完善财务信息", {icon: 20});
             });
         }
