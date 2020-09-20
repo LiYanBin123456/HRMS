@@ -23,7 +23,7 @@ public class Detail3Dao {
     }
 
     public static DaoUpdateResult importDetails(Connection conn, List<Detail3> details){
-        String sql = "insert detail3 (sid,eid,pid,place,price) values (?,?,?,?,?,?)";
+        String sql = "insert detail3 (sid,eid,pid,place,price) values (?,?,?,?,?)";
         Object [][]params = new Object[details.size()][];
         for (int i = 0; i < details.size(); i++) {
             params[i] = new Object[]{details.get(i).getSid(),details.get(i).getEid(),details.get(i).getPid(),details.get(i).getPlace()

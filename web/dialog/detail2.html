@@ -191,7 +191,6 @@
             //核对导入的数据
             function showImportDlg(details2) {
                 var content = "importDetails2.html?details2="+encodeURIComponent(JSON.stringify(details2));
-                console.log("s2:"+details2);
                 layer.open({
                     title:"核对明细",
                     type: 2,
@@ -200,8 +199,8 @@
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
                         var detail2s = window["layui-layer-iframe" + index].callbackData();
-                        console.log("2s:"+detail2s);
-                        iSettlement.importDetails(sid,detail2s,1,function () {
+                        console.log("2s:"+JSON.stringify(detail2s));
+                        iSettlement.importDetails(sid,JSON.stringify(detail2s),1,function () {
                             layer.close(index);
                             layer.msg("导入成功");
                             getDetail2s();
