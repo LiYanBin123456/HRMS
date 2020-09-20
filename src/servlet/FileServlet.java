@@ -95,21 +95,217 @@ public class FileServlet extends HttpServlet {
         out.close();
     }
 
+
+    //判断模板是否存在
+    private String existModel(HttpServletRequest request) throws IOException {
+        int category = Integer.parseInt(request.getParameter("category"));
+        String fileName=null;
+
+        switch (category){
+            case 0://小时工模板
+                fileName = "detail2"+".xls";
+                break;
+            case 1://商业保险结算单明细模板
+                fileName = "detail3"+".xls";
+                break;
+            case 2://员工模板
+                fileName = "employee"+".xls";
+                break;
+        }
+        String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
+        File file = new File(fullFileName);
+
+        JSONObject json = new JSONObject();
+        json.put("success",true);
+        json.put("exist",file.exists()?true:false);
+        return json.toJSONString();
+    }
+
+    //下载模板
+    private void downloadModel(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        int category = Integer.parseInt(request.getParameter("category"));
+        String fileName=null;
+        switch (category){
+            case 0://小时工模板
+                fileName = "detail2"+".xls";
+                break;
+            case 1://商业保险结算单明细模板
+                fileName = "detail3"+".xls";
+                break;
+            case 2://员工模板
+                fileName = "employee"+".xls";
+                break;
+        }
+        String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
+        File file = new File(fullFileName);
+
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment;filename="+fileName);
+
+        ServletOutputStream os = response.getOutputStream();
+        FileInputStream fis = new FileInputStream(file);
+        BufferedInputStream bis = new BufferedInputStream(fis);
+
+        int size=0;
+        byte[] buff = new byte[1024];
+        while ((size=bis.read(buff))!=-1) {
+            os.write(buff, 0, size);
+        }
+
+        os.flush();
+        os.close();
+        bis.close();
+    }
+
+    //读取excel表
+    private String readXls(HttpServletRequest request) throws IOException, ServletException {
+        String result = null;
+        Part part = request.getPart("file");
+            try {//获取part中的文件，读取数据
+                InputStream is = part.getInputStream();
+                List<JSONObject> data = XlsUtil.read(is,"信息表","元数据");
+                if(null == data){
+                    result = "{\"success\":false,\"msg\":\"xls文件不符合要求，请下载模板再重新填写\"}";
+                }else{
+                    JSONObject json = new JSONObject();
+                    json.put("success",true);
+                    json.put("data",data);
+                    result = json.toJSONString();
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        System.out.println(result);
+        return result;
+    }
+
+    //上传合同文件
+    private String upload(HttpServletRequest request) throws IOException, ServletException {
+        DaoUpdateResult result = new DaoUpdateResult();
+        String id = request.getParameter("id");
+            //将文件上传到服务器并且以合同id命名
+            String file;
+            Part part = request.getPart("file");
+            if(part!=null){//获取文件的名称
+                String header = part.getHeader("content-disposition");
+                String headerName = header.substring(header.indexOf("filename")+10, header.length()-1); //截取字符串获取文件名称
+                String suffixName=headerName.substring(headerName.indexOf(".")+1); //获取文件名后缀
+                String s="pdf";
+                if(suffixName.equals(s)){
+                    InputStream put = part.getInputStream();  //获取文件流
+                    String url = request.getServletContext().getRealPath("/contractFile"); //获取文件夹的真实路径
+                    File uploadDir = new File(url);
+                    if (!uploadDir.exists()) { // 如果该文件夹不存在则创建
+                        uploadDir.mkdirs();
+                    }
+
+                    file = id+"."+suffixName;
+                    FileOutputStream fos = new FileOutputStream(new File(url, file));   //建立对拷流
+                    IOUtils.copy(put, fos);
+                    put.close();
+                    fos.close();
+                    part.delete();
+                    result.msg = "合同插入成功";
+                    result.success = true;
+                }
+                else {
+                    result.msg ="格式不正确";
+                    result.success = false;
+                }
+            }
+            return JSONObject.toJSONString(result);
+    }
+
+    //判断合同文件是否存在
+    private String existContract(HttpServletRequest request) throws IOException {
+        String id = request.getParameter("id");
+        String fileName = id+".pdf";
+        String fullFileName = getServletContext().getRealPath("/contractFile/" + fileName);
+        File file = new File(fullFileName);
+
+        JSONObject json = new JSONObject();
+        json.put("success",true);
+        json.put("exist",file.exists()?true:false);
+        return json.toJSONString();
+    }
+
+    //下载合同文件
+    private void downloadContract(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String id = request.getParameter("id");
+        String fileName = id+".pdf";
+        String fullFileName = getServletContext().getRealPath("/contractFile/" + fileName);
+        File file = new File(fullFileName);
+
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment;filename="+fileName);
+
+        ServletOutputStream os = response.getOutputStream();
+        FileInputStream fis = new FileInputStream(file);
+        BufferedInputStream bis = new BufferedInputStream(fis);
+
+        int size=0;
+        byte[] buff = new byte[1024];
+        while ((size=bis.read(buff))!=-1) {
+            os.write(buff, 0, size);
+        }
+
+        os.flush();
+        os.close();
+        bis.close();
+    }
+
+    //上传员工头像
+    private String uploadImg(HttpServletRequest request) throws IOException, ServletException {
+        String  msg = null;
+        String id = request.getParameter("id");
+        String file ;
+        Part part = request.getPart("file");
+        if(part!=null){
+            //获取文件的名称
+            String header = part.getHeader("content-disposition");
+            //截取字符串获取文件名称
+            String headername = header.substring(header.indexOf("filename")+10, header.length()-1);
+            //获取文件名后缀
+            String suffixName=headername.substring(headername.indexOf(".")+1);
+            String jpg="jpg";
+            String jpeg = "jpeg";
+            if(suffixName.equals(jpg)||suffixName.equals(jpeg)){
+                //获取文件流
+                InputStream put = part.getInputStream();
+                //获取文件夹的真实路径
+                String url = request.getServletContext().getRealPath("/headImg");
+                File uploadDir = new File(url);
+                // 如果该文件夹不存在则创建
+                if (!uploadDir.exists()) {
+                    uploadDir.mkdirs();
+                }
+                file = id+"."+suffixName;
+                //建立对拷流
+                FileOutputStream fos = new FileOutputStream(new File(url, file));
+                IOUtils.copy(put, fos);
+                put.close();
+                fos.close();
+                //删除临时文件
+                part.delete();
+                String img = getServletContext().getRealPath("/headImg/" + file);
+                System.out.println(img);
+                msg = "头像插入成功,地址："+img;
+            }
+            else {
+                msg ="格式不正确";
+            }
+        }
+        return JSONObject.toJSONString(msg);
+    }
+
+    //下载普通结算单明细
     private void downloadDetail1(Connection conn, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.setHeader("Content-Disposition", "attachment; filename=detailModel.xls");
-        HttpSession session = request.getSession();
 
-        long did = (long) session.getAttribute("rid");//获取管理员所属公司id
-        boolean flag=MapSalaryDao.exist(did,conn).exist;//判断客户是否有自定义工资项
+        long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
+        boolean flag=MapSalaryDao.exist(cid,conn).exist;//判断客户是否有自定义工资项
 
-        long sid = Long.parseLong(request.getParameter("id"));//结算单id
-        QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("sid","=",sid);
-        DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
-        String rows = JSONObject.toJSONString(result.rows);
-        List< ViewDetail1> detail1s = JSONArray.parseArray(rows, ViewDetail1.class);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("信息表", 0);
         WritableSheet sheet2 = book.createSheet("元数据", 1);
@@ -131,7 +327,7 @@ public class FileServlet extends HttpServlet {
             sheet1.addCell(new Label(14, 0, "单位公积金"));
             sheet1.addCell(new Label(15, 0, "个税"));
             if(flag){
-                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(did,conn).data;
+                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(cid,conn).data;
                 String map = mapSalary.getItems();
                 String[] maps = map.split(";");//maps[{加班工资,1},{考勤扣款,0}];
                 int  c = 0;
@@ -164,7 +360,7 @@ public class FileServlet extends HttpServlet {
             sheet2.addCell(new Label(0, 15, "fund2"));
             sheet2.addCell(new Label(0, 16, "tax"));
             if(flag){
-                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(did,conn).data;
+                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(cid,conn).data;
                 String map = mapSalary.getItems();
                 String[] maps = map.split(";");//maps[{加班工资,1},{考勤扣款,0}];
                 int  c = 0;
@@ -179,7 +375,6 @@ public class FileServlet extends HttpServlet {
                 sheet2.addCell(new Label(0,17,  "payable"));
                 sheet2.addCell(new Label(0,18,  "paid"));
             }
-
 
             sheet2.addCell(new Label(1, 0, "类型"));
             sheet2.addCell(new Label(1, 1, "string"));
@@ -199,7 +394,7 @@ public class FileServlet extends HttpServlet {
             sheet2.addCell(new Label(1, 15, "float"));
             sheet2.addCell(new Label(1, 16, "float"));
             if(flag){
-                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(did,conn).data;
+                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(cid,conn).data;
                 String map = mapSalary.getItems();
                 String[] maps = map.split(";");//maps[{加班工资,1},{考勤扣款,0}];
                 int  c = 0;
@@ -213,6 +408,40 @@ public class FileServlet extends HttpServlet {
                 sheet2.addCell(new Label(1,17,  "float"));
                 sheet2.addCell(new Label(1,18,  "float"));
             }
+
+
+            sheet2.addCell(new Label(2, 0, "是否允许为空"));
+            sheet2.addCell(new Label(2, 1, "False"));
+            sheet2.addCell(new Label(2, 2, "False"));
+            sheet2.addCell(new Label(2, 3, "False"));
+            sheet2.addCell(new Label(2, 4, "False"));
+            sheet2.addCell(new Label(2, 5, "False"));
+            sheet2.addCell(new Label(2, 6, "False"));
+            sheet2.addCell(new Label(2, 7, "False"));
+            sheet2.addCell(new Label(2, 8, "False"));
+            sheet2.addCell(new Label(2, 9, "False"));
+            sheet2.addCell(new Label(2, 10, "False"));
+            sheet2.addCell(new Label(2, 11, "False"));
+            sheet2.addCell(new Label(2, 12, "False"));
+            sheet2.addCell(new Label(2, 13, "False"));
+            sheet2.addCell(new Label(2, 14, "False"));
+            sheet2.addCell(new Label(2, 15, "False"));
+            sheet2.addCell(new Label(2, 16, "False"));
+            if(flag){
+                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(cid,conn).data;
+                String map = mapSalary.getItems();
+                String[] maps = map.split(";");//maps[{加班工资,1},{考勤扣款,0}];
+                int  c = 0;
+                for(int i = 0;i<maps.length;i++){
+                    c = i+17;
+                    sheet2.addCell(new Label(2, c, "False"));
+                }
+                sheet2.addCell(new Label(2,c+1,  "False"));
+                sheet2.addCell(new Label(2,c+2,  "False"));
+            }else {
+                sheet2.addCell(new Label(2,17,  "False"));
+                sheet2.addCell(new Label(2,18,  "False"));
+            }
             book.write();
             book.close();
         } catch (WriteException e) {
@@ -221,15 +450,15 @@ public class FileServlet extends HttpServlet {
         ConnUtil.closeConnection(conn);
     }
 
+    //导出普通结算单明细
     private void exportDetail1(Connection conn, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.setHeader("Content-Disposition", "attachment; filename=details1.xls");
-        HttpSession session = request.getSession();
 
-        long did = (long) session.getAttribute("rid");//获取管理员所属公司id
-        boolean flag=MapSalaryDao.exist(did,conn).exist;//判断客户是否有自定义工资项
+        long cid = Long.parseLong(request.getParameter("cid"));//获取合作客户的id
+        boolean flag=MapSalaryDao.exist(cid,conn).exist;//判断客户是否有自定义工资项
 
-        long sid = Long.parseLong(request.getParameter("id"));//结算单id
+        long sid = Long.parseLong(request.getParameter("sid"));//结算单id
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid","=",sid);
         DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
@@ -256,7 +485,7 @@ public class FileServlet extends HttpServlet {
             sheet1.addCell(new Label(14, 0, "单位公积金"));
             sheet1.addCell(new Label(15, 0, "个税"));
             if(flag){
-                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(did,conn).data;
+                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(cid,conn).data;
                 String map = mapSalary.getItems();
                 String[] maps = map.split(";");//maps[{加班工资,1},{考勤扣款,0}];
                 int  c = 0;
@@ -289,7 +518,7 @@ public class FileServlet extends HttpServlet {
                 sheet1.addCell(new jxl.write.Number(14, index, detail1.getFund2()));
                 sheet1.addCell(new jxl.write.Number(15, index, detail1.getTax()));
                 if(flag) {//判断客户是否存在自定义字段
-                    MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(did, conn).data;
+                    MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(cid, conn).data;
                     String map = mapSalary.getItems();
                     String[] maps = map.split(";");//maps[{加班工资,1},{考勤扣款,0}];
                     int c2 = 0;
@@ -328,6 +557,7 @@ public class FileServlet extends HttpServlet {
         ConnUtil.closeConnection(conn);
     }
 
+    //导出小时工结算的明细
     private void exportDetail2(Connection conn, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.setHeader("Content-Disposition", "attachment; filename=details2.xls");
@@ -400,6 +630,7 @@ public class FileServlet extends HttpServlet {
         ConnUtil.closeConnection(conn);
     }
 
+    //导出商业保险结算单明细
     private void exportDetail3(Connection conn, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.setHeader("Content-Disposition", "attachment; filename=details3.xls");
@@ -448,212 +679,7 @@ public class FileServlet extends HttpServlet {
         ConnUtil.closeConnection(conn);
     }
 
-    //判断模板是否存在
-    private String existModel(HttpServletRequest request) throws IOException {
-        int category = Integer.parseInt(request.getParameter("category"));
-        String fileName=null;
 
-        switch (category){
-            case 0://小时工模板
-                fileName = "detail2"+".xls";
-                break;
-            case 1://商业保险结算单明细模板
-                fileName = "detail3"+".xls";
-                break;
-            case 2://员工模板
-                fileName = "employee"+".xls";
-                break;
-        }
-        String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
-        File file = new File(fullFileName);
-
-        JSONObject json = new JSONObject();
-        json.put("success",true);
-        json.put("exist",file.exists()?true:false);
-        return json.toJSONString();
-    }
-
-    private void downloadModel(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int category = Integer.parseInt(request.getParameter("category"));
-        String fileName=null;
-        switch (category){
-            case 0://小时工模板
-                fileName = "detail2"+".xls";
-                break;
-            case 1://商业保险结算单明细模板
-                fileName = "detail3"+".xls";
-                break;
-            case 2://员工模板
-                fileName = "employee"+".xls";
-                break;
-        }
-        String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
-        File file = new File(fullFileName);
-
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment;filename="+fileName);
-
-        ServletOutputStream os = response.getOutputStream();
-        FileInputStream fis = new FileInputStream(file);
-        BufferedInputStream bis = new BufferedInputStream(fis);
-
-        int size=0;
-        byte[] buff = new byte[1024];
-        while ((size=bis.read(buff))!=-1) {
-            os.write(buff, 0, size);
-        }
-
-        os.flush();
-        os.close();
-        bis.close();
-    }
-
-    /**
-     * 读取excal中的数据返回前台
-     * 1、获取excal文件
-     * 2、上传到服务器
-     * 3、获取服务器中的excal文件，读取数据
-     * 4、删除该文件
-     * @param request
-     * @return
-     * @throws IOException
-     * @throws ServletException
-     */
-    private String readXls(HttpServletRequest request) throws IOException, ServletException {
-        String result = null;
-        Part part = request.getPart("file");
-            try {//获取part中的文件，读取数据
-                InputStream is = part.getInputStream();
-                List<JSONObject> data = XlsUtil.read(is,"信息表","元数据");
-                if(null == data){
-                    result = "{\"success\":false,\"msg\":\"xls文件不符合要求，请下载模板再重新填写\"}";
-                }else{
-                    JSONObject json = new JSONObject();
-                    json.put("success",true);
-                    json.put("data",data);
-                    result = json.toJSONString();
-                }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        System.out.println(result);
-        return result;
-    }
-
-    private String upload(HttpServletRequest request) throws IOException, ServletException {
-        DaoUpdateResult result = new DaoUpdateResult();
-        String id = request.getParameter("id");
-            //将文件上传到服务器并且以合同id命名
-            String file;
-            Part part = request.getPart("file");
-            if(part!=null){//获取文件的名称
-                String header = part.getHeader("content-disposition");
-                String headerName = header.substring(header.indexOf("filename")+10, header.length()-1); //截取字符串获取文件名称
-                String suffixName=headerName.substring(headerName.indexOf(".")+1); //获取文件名后缀
-                String s="pdf";
-                if(suffixName.equals(s)){
-                    InputStream put = part.getInputStream();  //获取文件流
-                    String url = request.getServletContext().getRealPath("/contractFile"); //获取文件夹的真实路径
-                    File uploadDir = new File(url);
-                    if (!uploadDir.exists()) { // 如果该文件夹不存在则创建
-                        uploadDir.mkdirs();
-                    }
-
-                    file = id+"."+suffixName;
-                    FileOutputStream fos = new FileOutputStream(new File(url, file));   //建立对拷流
-                    IOUtils.copy(put, fos);
-                    put.close();
-                    fos.close();
-                    part.delete();
-                    result.msg = "合同插入成功";
-                    result.success = true;
-                }
-                else {
-                    result.msg ="格式不正确";
-                    result.success = false;
-                }
-            }
-            return JSONObject.toJSONString(result);
-    }
-
-    private String existContract(HttpServletRequest request) throws IOException {
-        String id = request.getParameter("id");
-        String fileName = id+".pdf";
-        String fullFileName = getServletContext().getRealPath("/contractFile/" + fileName);
-        File file = new File(fullFileName);
-
-        JSONObject json = new JSONObject();
-        json.put("success",true);
-        json.put("exist",file.exists()?true:false);
-        return json.toJSONString();
-    }
-
-    private void downloadContract(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String id = request.getParameter("id");
-        String fileName = id+".pdf";
-        String fullFileName = getServletContext().getRealPath("/contractFile/" + fileName);
-        File file = new File(fullFileName);
-
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment;filename="+fileName);
-
-        ServletOutputStream os = response.getOutputStream();
-        FileInputStream fis = new FileInputStream(file);
-        BufferedInputStream bis = new BufferedInputStream(fis);
-
-        int size=0;
-        byte[] buff = new byte[1024];
-        while ((size=bis.read(buff))!=-1) {
-            os.write(buff, 0, size);
-        }
-
-        os.flush();
-        os.close();
-        bis.close();
-    }
-
-    private String uploadImg(HttpServletRequest request) throws IOException, ServletException {
-        String  msg = null;
-        String id = request.getParameter("id");
-        String file ;
-        Part part = request.getPart("file");
-        if(part!=null){
-            //获取文件的名称
-            String header = part.getHeader("content-disposition");
-            //截取字符串获取文件名称
-            String headername = header.substring(header.indexOf("filename")+10, header.length()-1);
-            //获取文件名后缀
-            String suffixName=headername.substring(headername.indexOf(".")+1);
-            String jpg="jpg";
-            String jpeg = "jpeg";
-            if(suffixName.equals(jpg)||suffixName.equals(jpeg)){
-                //获取文件流
-                InputStream put = part.getInputStream();
-                //获取文件夹的真实路径
-                String url = request.getServletContext().getRealPath("/headImg");
-                File uploadDir = new File(url);
-                // 如果该文件夹不存在则创建
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-                file = id+"."+suffixName;
-                //建立对拷流
-                FileOutputStream fos = new FileOutputStream(new File(url, file));
-                IOUtils.copy(put, fos);
-                put.close();
-                fos.close();
-                //删除临时文件
-                part.delete();
-                String img = getServletContext().getRealPath("/headImg/" + file);
-                System.out.println(img);
-                msg = "头像插入成功,地址："+img;
-            }
-            else {
-                msg ="格式不正确";
-            }
-        }
-        return JSONObject.toJSONString(msg);
-    }
 
     private String readExcel(HttpServletRequest request) {
         String result;

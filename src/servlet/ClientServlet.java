@@ -114,6 +114,7 @@ public class ClientServlet extends HttpServlet {
         }
         return JSONObject.toJSONString(res);
     }
+
     //删除
     private String delete(Connection conn, HttpServletRequest request) {
         DaoUpdateResult res=new DaoUpdateResult();

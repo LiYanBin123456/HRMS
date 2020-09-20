@@ -78,6 +78,10 @@
             var element;
             var laydate;
             var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
+
+            var month=null;
+            var status = null;
+
             $(function () {
                 loadLayuiModule();
             });
@@ -96,31 +100,28 @@
 
             function initPage() {
                 initTable();
-                var month=null;
-                var status = null;
                 laydate.render({
                     elem: '#filter_month'
                     ,type: 'month'
                     ,change: function(value, date, endDate){
-                       month = value;
+                        month = value;
+                        getSettlements();
+                    },
+                    done: function(value, date, endDate){
+                        if (!value){
+                            month = "";
+                            getSettlements();
+                        }
                     }
                 });
                 form.on('select(select)', function (data) {//获取状态
                     status = data.value;
+                    getSettlements();
                 });
                 form.on('submit(search)', function (data) {//模糊搜索
                     var keyword = data.field.keyword;
                     param_query.conditions.extra = keyword;
-                    param_query.conditions.keys=[];//初始化数组
-                    console.log(month,status);
-                    if (status!=null&&status!=""){
-                        param_query.conditions.keys.push({k:"status",o:"=",v:status})
-                    }
-                    if (month!=null&&month!=""){
-                        param_query.conditions.keys.push({k:"month",o:"like",v:"%"+month+"%"})
-                    }
                     getSettlements();
-                    param_query.conditions.keys.length=0;//查询结束后，清空数组，以便下次重新操作
                     return false; //阻止表单跳转
                 });
             }
@@ -190,16 +191,25 @@
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
-                            break;
+                            break;/*
                         case 'search':
                             search();
-                            break;
+                            break;*/
                     };
                 });
                 getSettlements();
             }
 
             function getSettlements() {
+                param_query.conditions.keys=[];//初始化数组
+                console.log(month,status);
+                if (status !="null" && status != "" && status != null){
+                    param_query.conditions.keys.push({k:"status",o:"=",v:status})
+                }
+                if (month!=null&&month!=""){
+                    param_query.conditions.keys.push({k:"month",o:"like",v:"%"+month+"%"})
+                }
+
                 iSettlement.getList(param_query,0,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows
@@ -222,11 +232,11 @@
                 });
             }
 
-            //模糊查找
+           /* //模糊查找
             function search(keyword) {
                 param_query.conditions.extra = keyword;
                 getSettlements();
-            }
+            }*/
 
             //打开明细对话框
             function showDetailDlg(settlement) {
@@ -234,7 +244,7 @@
                 layer.open({
                     title:"明细",
                     type: 2,
-                    area: ['90%', '90%'],
+                    area: ['95%', '95%'],
                     content: content
                 });
             }

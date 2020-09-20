@@ -20,7 +20,6 @@ public class EmployeeExtra {
      4_农村、
      5_港澳台、
      6_外籍
-     *
      */
     private byte household;
     //户籍地址

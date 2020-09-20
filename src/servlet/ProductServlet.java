@@ -53,31 +53,38 @@ public class ProductServlet extends HttpServlet {
         out.flush();
         out.close();
     }
-
+    //插入保险产品
     private String insert(Connection conn, HttpServletRequest request) {
         Product product = JSONObject.parseObject(request.getParameter("product"),Product.class);
+        HttpSession session = request.getSession();
+        long did = (long) session.getAttribute("rid");//当前操作的管理员所属公司id
+        product.setDid(did);
         DaoUpdateResult res = ProductService.insert(conn,product);
         return JSONObject.toJSONString(res);
     }
 
+    //修改保险产品
     private String update(Connection conn, HttpServletRequest request) {
         Product product = JSONObject.parseObject(request.getParameter("product"),Product.class);
         DaoUpdateResult res = ProductService.update(conn,product);
         return JSONObject.toJSONString(res);
     }
 
+    //删除保险产品
     private String delete(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
         DaoUpdateResult res = ProductService.delete(conn,id);
         return JSONObject.toJSONString(res);
     }
 
+    //获取保险产品
     private String get(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
         DaoQueryResult res = ProductService.get(conn,id);
         return JSONObject.toJSONString(res);
     }
 
+    //获取保险产品列表
     private String getList(Connection conn, HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         HttpSession session = request.getSession();

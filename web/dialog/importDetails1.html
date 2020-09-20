@@ -41,14 +41,15 @@
             var layer;//弹出窗口
             var element;
             var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
-            var cid = $.query.get("cid");//获取cid
+            var cid = $.query.get("cid");//合作单位id
             var detail1s =  $.query.get("detail1s");//导入的明细1
             $(function () {
                 loadLayuiModule();
             });
             //向调用页面返回选中的员工
             var callbackData = function () {
-                return detail1s;
+                var details = layui.table.cache.tbl_detail;//获取表格中的数据
+                return details;
             };
             function loadLayuiModule() {
                 layui.use(['table','form','element','layer','upload','laypage'], function() {
@@ -66,6 +67,7 @@
             }
 
             function initTable() {
+                console.log("cid:"+cid);
                 var cols =getColumnsfull(cid);
                 //初始化数据表格
                 table.render({
@@ -83,6 +85,7 @@
                     ,field = obj.field; //得到字段
                     layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
                   });
+
                 table.reload('tbl_detail', {
                     data:JSON.parse(detail1s)
                 });

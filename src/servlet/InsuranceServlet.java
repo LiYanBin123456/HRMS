@@ -77,6 +77,7 @@ public class InsuranceServlet extends HttpServlet {
         return  null;
     }
 
+    //导出
     private void export(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.setHeader("Content-Disposition", "attachment; filename=insurance.xls");
@@ -139,8 +140,6 @@ public class InsuranceServlet extends HttpServlet {
             }
         ConnUtil.closeConnection(conn);
     }
-
-
 
     //获取
     private String get(Connection conn, HttpServletRequest request) {

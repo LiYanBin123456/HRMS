@@ -8,13 +8,11 @@ public class EnsureSetting {
      1_实际工资
      2_不交纳
      3_定义基数
-     *
      */
     private byte settingM;
     /**自定义的医保基数（不能低于最低标准）
      默认为null
      只有选择了自定义才有用
-     *
      */
     private float valM;
     /**社保设置
@@ -22,7 +20,6 @@ public class EnsureSetting {
      1_实际工资
      2_不交纳
      3自定义基数
-     *
      */
     private byte settingS;
     /**自定义社保基数（不能低于最低标准）

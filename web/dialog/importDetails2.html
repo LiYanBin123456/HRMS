@@ -48,7 +48,8 @@
             });
             //向调用页面返回选中的员工
             var callbackData = function () {
-                return details2;
+                var details = layui.table.cache.tbl_detail;
+                return details;
             };
             function loadLayuiModule() {
                 layui.use(['table','form','element','layer','upload','laypage'], function() {
@@ -66,7 +67,7 @@
             }
 
             function initTable() {
-                var cols =columns_detail2_full;
+                var cols =columns_detail2_input;
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_detail',
