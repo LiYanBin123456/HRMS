@@ -16,7 +16,7 @@ var InterfaceClient = function() {
      */
     this.getList = function(param,category,success,fail){
         var para = {op: "getList", param:JSON.stringify(param),category: category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 获取待分配管理员的客户列表
@@ -26,7 +26,7 @@ var InterfaceClient = function() {
      */
     this.getAllocating = function(category,success,fail){
         var para = {op: "getAllocating", category: category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 获取管理员管理的客户列表
@@ -36,7 +36,7 @@ var InterfaceClient = function() {
      */
     this.getAllocated = function(aid,category,success,fail){
         var para = {op: "getAllocated", aid:aid, category: category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 添加客户
@@ -58,7 +58,7 @@ var InterfaceClient = function() {
      */
     this.get = function (id,category,success,fail) {
         var para = {op:"get",id:id, category: category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 修改客户信息
@@ -79,7 +79,7 @@ var InterfaceClient = function() {
      */
     this.getLastSalaryDefine = function (id,success,fail) {
         var para = {op:"getLastSalaryDefine",id:id};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 根据月份获取自定义工资
@@ -90,7 +90,7 @@ var InterfaceClient = function() {
      */
     this.getSalaryDefine = function (id,month,success,fail) {
         var para = {op:"getSalaryDefine",id:id,month:month};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 添加自定义工资
@@ -111,7 +111,7 @@ var InterfaceClient = function() {
      */
     this.getFinance = function (id,category,success,fail) {
         var para = {op:"getFinance",id:id,category:category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 添加财务信息
@@ -143,7 +143,7 @@ var InterfaceClient = function() {
      */
     this.delete = function (id,category,status,success,fail) {
         var para = {op:"delete",id:id, category: category,status: status};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 分配管理员
@@ -165,7 +165,7 @@ var InterfaceClient = function() {
      */
     this.getFinances = function (param,success,fail) {
         var para = {op:"getFinances",param:JSON.stringify(param)};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
 };
 
@@ -181,7 +181,7 @@ var InterfaceRule = function() {
      */
     this.getList = function(param,category,success,fail){
         var para = {op: "getList", param:JSON.stringify(param),category:category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 添加规则
@@ -203,7 +203,7 @@ var InterfaceRule = function() {
      */
     this.delete = function (id,category,success,fail) {
         var para = {op:"delete",id:id,category:category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 修改规则
@@ -225,7 +225,7 @@ var InterfaceRule = function() {
      */
     this.get = function (id,category,success,fail) {
         var para = {op:"get",id:id,category:category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 获取最新规则
@@ -236,7 +236,7 @@ var InterfaceRule = function() {
      */
     this.getLast = function (city,category,success,fail) {
         var para = {op:"getLast",city:city,category:category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
 };
 
@@ -252,7 +252,7 @@ var InterfaceContract = function() {
      */
     this.getList = function(param,type,success,fail){
         var para = {op: "getList", param:JSON.stringify(param),type:type};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 获取最新合同
@@ -263,7 +263,7 @@ var InterfaceContract = function() {
      */
     this.getLast = function(id,type,success,fail){
         var para = {op: "getLast", id:id,type:type};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 修改合同
@@ -293,7 +293,7 @@ var InterfaceContract = function() {
      */
     this.get = function (id,success,fail) {
         var para = {op:"get",id:id};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 删除合同
@@ -303,7 +303,7 @@ var InterfaceContract = function() {
      */
     this.delete = function (id,success,fail) {
         var para = {op:"delete",id:id};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 添加服务项目
@@ -323,7 +323,7 @@ var InterfaceContract = function() {
      */
     this.getService = function (id,success,fail) {
         var para = {op: "getService",id:id};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 修改服务项目
@@ -344,7 +344,7 @@ var InterfaceContract = function() {
      */
     this.getServiceList = function (param,id,success,fail) {
         var para = {op: "getServiceList",param:JSON.stringify(param),id:id};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
 };
 
@@ -379,7 +379,7 @@ var InterfaceAccount = function () {
      */
     this.getList = function(param,success,fail){
         var para = {op: "getList", param:JSON.stringify(param)};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 添加账号
@@ -399,7 +399,7 @@ var InterfaceAccount = function () {
      */
     this.delete = function (id,success,fail) {
         var para = {op: "delete",id:id};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 获取账号详情
@@ -409,7 +409,7 @@ var InterfaceAccount = function () {
      */
     this.get = function (id,success,fail) {
         var para = {op:"get",id:id};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 修改账号
@@ -442,7 +442,7 @@ var InterfaceNotice = function() {
      */
     this.getList = function(param,success,fail){
         var para = {op: "getList", param:JSON.stringify(param)};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 添加公告
@@ -462,7 +462,7 @@ var InterfaceNotice = function() {
      */
     this.delete = function (id,success,fail) {
         var para = {op:"delete",id:id};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 获取公告详情
@@ -472,7 +472,7 @@ var InterfaceNotice = function() {
      */
     this.get = function (id,success,fail) {
         var para = {op:"get",id:id};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 修改公告
@@ -498,7 +498,7 @@ var InterfaceEmployee = function () {
      */
     this.getList = function(param,category,success,fail){
         var para = {op: "getList", param:JSON.stringify(param), category:category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 插入员工信息
@@ -531,7 +531,7 @@ var InterfaceEmployee = function () {
      */
     this.get = function (id,category,success,fail) {
         var para = {op: "get",id:id, category:category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 修改员工
@@ -566,7 +566,7 @@ var InterfaceEmployee = function () {
      */
     this.delete = function (id,category,success,fail) {
         var para = {op:"delete",id:id, category:category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 添加社保设置
@@ -636,7 +636,7 @@ var InterfaceEmployee = function () {
      */
     this.getEnsureSetting = function (id,success,fail) {
         var para = {op: "getEnsureSetting",id:id};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 获取个税扣除
@@ -646,7 +646,7 @@ var InterfaceEmployee = function () {
      */
     this.getDeduct = function (id,success,fail) {
         var para = {op: "getDeduct",id:id};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 获取员工工资卡详情
@@ -656,7 +656,7 @@ var InterfaceEmployee = function () {
      */
     this.getCard = function (id,success,fail) {
         var para = {op: "getCard",id:id};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 修改员工工资卡
@@ -698,7 +698,7 @@ var InterfaceEmployee = function () {
      */
     this.getDeducts = function (param,success,fail) {
         var para = {op:"getDeducts",param:JSON.stringify(param)};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 删除员工个税
@@ -708,7 +708,7 @@ var InterfaceEmployee = function () {
      */
     this.deleteDeduct = function (id,success,fail) {
         var para = {op:"deleteDeduct",id:id};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
 };
 
@@ -724,7 +724,7 @@ var InterfaceSettlement = function () {
      */
     this.getList = function(param,category,success,fail){
         var para = {op: "getList", param:JSON.stringify(param),category:category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 添加结算单
@@ -746,7 +746,7 @@ var InterfaceSettlement = function () {
      */
     this.delete = function (id,category,success,fail) {
         var para = {op:"delete",id:id,category:category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
 
     /**
@@ -758,7 +758,7 @@ var InterfaceSettlement = function () {
      */
     this.deleteDetail = function (id,category,success,fail) {
         var para = {op:"deleteDetail",id:id,category:category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 复制结算单
@@ -782,7 +782,7 @@ var InterfaceSettlement = function () {
      */
     this.getDetails = function(param,id,category,success,fail){
         var para = {op: "getDetails", param:JSON.stringify(param),id:id,category:category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 修改结算单明细
@@ -918,7 +918,7 @@ var InterfaceSettlement = function () {
      */
     this.getLogs = function (param,id,category,success,fail) {
         var para = {op: "getLogs",param:JSON.stringify(param),id:id,category:category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
 };
 
@@ -934,7 +934,7 @@ var InterfaceInsurance = function () {
      */
     this.getList = function(param,category,success,fail){
         var para = {op: "getList", param:JSON.stringify(param),category:category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 导出参保单
@@ -966,7 +966,7 @@ var InterfaceInsurance = function () {
      */
     this.delete = function (id,category,success,fail) {
         var para = {op:"delete",id:id,category:category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 添加参保单
@@ -987,7 +987,7 @@ var InterfaceInsurance = function () {
      */
     this.get = function(id,category,success,fail){
         var para = {op: "get", id:id,category:category};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 修改参保单
@@ -1012,7 +1012,7 @@ var InterfaceProduct = function () {
      */
     this.getList = function(param,success,fail){
         var para = {op: "getList", param:JSON.stringify(param)};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 删除保险产品
@@ -1022,7 +1022,7 @@ var InterfaceProduct = function () {
      */
     this.delete = function (id,success,fail) {
         var para = {op:"delete",id:id};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 添加保险产品
@@ -1042,7 +1042,7 @@ var InterfaceProduct = function () {
      */
     this.get = function (id,success,fail) {
         var para = {op:"get",id:id};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 修改保险产品详情
@@ -1079,7 +1079,7 @@ var InterfaceFinance = function () {
      */
     this.getTransactions = function(param,cid,success,fail){
         var para = {op: "getTransactions",param:JSON.stringify(param),cid:cid};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 导出个税申报
@@ -1102,7 +1102,7 @@ var InterfaceFile = function () {
      */
     this.readXls = function(success,fail){
         var para = {op: "readXls"};
-        access(url,para,0,success,fail);
+        access(url,para,1,success,fail);
     };
     /**
      * 上传合同附件
