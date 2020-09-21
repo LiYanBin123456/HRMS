@@ -2,6 +2,7 @@ package utills;
 
 import com.alibaba.fastjson.JSONObject;
 
+import jxl.Cell;
 import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
@@ -68,25 +69,32 @@ public class XlsUtil {
      */
     private static List<JSONObject> readData(Sheet sheet, List<Map<String, String>> meta) {
         List<JSONObject> data = new ArrayList<>();
-        out:for(int i=1; ; i++) {
+        out:for(int line=1; ; line++) {
             int colIndex = 0;
             JSONObject o = new JSONObject();
-            for(Map<String,String> map:meta){
-                String v = sheet.getCell(colIndex++, i).getContents();
-                if(v.trim().isEmpty()){
+
+            for(Map<String,String> map:meta){//遍历元数据
+                String v = null;//这里经常会出现数组越界问题
+                try {
+                    Cell cell = sheet.getCell(colIndex++,line);
+                    v = cell.getContents();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if(v==null){//判断数据是否为空，为空则跳出循环，这里导致所填数据字段不能为空
                     break out;
                 }
 
                 String field = map.get("field");
                 String type = map.get("type");
-                Object value = convert(v, type);
-                if(type.equals("enum")){
-                    String[] values = (String[]) value;
-                    o.put(field, values[1]);
-                    o.put(field+"String", values[0]);
-                }else {
-                    o.put(field, value);
+                String isNull = map.get("isNull");
+
+                if(isNull.equals("false") && v.trim().isEmpty()){//判断数据是否为空，为空则跳出循环，这里导致所填数据字段不能为空
+                    break out;
                 }
+
+                Object value = convert(v, type);//数据类型转换
+                o.put(field, value);//封装对象
             }
             data.add(o);
         }
@@ -100,17 +108,18 @@ public class XlsUtil {
      */
     private static List<Map<String,String>> readMeta(Sheet sheet){
         List<Map<String,String>> meta = new ArrayList<>();
-        String field,type;
+        String field,type,isNull;
         for(int i=1; i<sheet.getRows(); i++) {
-            field = sheet.getCell(0, i).getContents();
-            type = sheet.getCell(1, i).getContents();
-            if(field.isEmpty()){
+            field = sheet.getCell(0, i).getContents();//字段名
+            type = sheet.getCell(1, i).getContents();//类型
+            isNull = sheet.getCell(2, i).getContents().toLowerCase();//是否允许为空
+            if(field.isEmpty()){//如果字段为空，跳出循环
                 break;
             }
-
-            Map<String,String> map = new HashMap<>();
+            Map<String,String> map = new HashMap<>();//使用map封装字段名和类型
             map.put("field",field);
             map.put("type",type);
+            map.put("isNull",isNull);
             meta.add(map);
         }
         return meta;
@@ -127,13 +136,13 @@ public class XlsUtil {
             case "string":
                 return value;
             case "enum":
-                return value.split("_");
+                return Integer.parseInt(value.split("_")[1]);
             case "integer":
-                return Integer.parseInt(value);
+                return value.isEmpty()?0:Integer.parseInt(value);
             case "float":
-                return Float.parseFloat(value);
+                return value.isEmpty()?0:Float.parseFloat(value);
             case "double":
-                return Double.parseDouble(value);
+                return value.isEmpty()?0:Double.parseDouble(value);
         }
         return null;
     }

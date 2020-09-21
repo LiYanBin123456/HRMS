@@ -80,6 +80,8 @@
             $(function () {
                 loadLayuiModule();
             });
+            var month=null;
+            var status = null;
 
             function loadLayuiModule() {
                 layui.use(['table','form','element','layer','laypage','laydate'], function() {
@@ -95,31 +97,29 @@
 
             function initPage() {
                 initTable();
-                var month=null;
-                var status = null;
+
                 laydate.render({
                     elem: '#filter_month'
                     ,type: 'month'
                     ,change: function(value, date, endDate){
                         month = value;
+                    },
+                    done: function(value, date, endDate){
+                        if (!value){
+                            month = "";
+                            getSettlements();
+                        }
                     }
                 });
                 form.on('select(select)', function (data) {//获取状态
                     status = data.value;
+                    getSettlements();
                 });
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
                     param_query.conditions.extra = keyword;
-                    param_query.conditions.keys=[];//初始化数组
-                    if (status!=null){
-                        param_query.conditions.keys.push({k:"status",o:"=",v:status})
-                    }
-                    if (month!=null){
-                        param_query.conditions.keys.push({k:"month",o:"like",v:"%"+month+"%"})
-                    }
                     getSettlements();
-                    param_query.conditions.keys.length=0;//查询结束后，清空数组，以便下次重新操作
-                    return false; //阻止表单跳转
+                   return false; //阻止表单跳转
                 });
             }
 
@@ -193,7 +193,16 @@
             }
 
             function getSettlements() {
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
+
+                param_query.conditions.keys=[];//初始化数组
+                console.log(month,status);
+                if (status !="null"&&status!=null&&status!=""){
+                    param_query.conditions.keys.push({k:"status",o:"=",v:status})
+                }
+                if (month!=null&&month!=""){
+                    param_query.conditions.keys.push({k:"month",o:"like",v:"%"+month+"%"})
+                }
+
                 iSettlement.getList(param_query,2,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows

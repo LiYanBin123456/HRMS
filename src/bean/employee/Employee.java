@@ -5,19 +5,45 @@ import java.sql.Date;
 //员工表
 public class Employee {
    private long id;
-    private long did;
-    private long cid;
-    private String  cardId;
-    private String name;
-    private String phone;
-    private byte degree;
-    private byte type;
-    private Date entry;
-    private byte status;
-    private String department;
-    private String post;
+    private long did;//派遣方id
+    private long cid;//合作单位id
+    private String  cardId;//身份证号
+    private String name;//姓名
+    private String phone;//电话
+    /**
+     * 高中以下_0
+     高中_1
+     中专_2
+     大专_3
+     本科_4
+     研究生_5
+     博士生_6
+     */
+    private byte degree;//学历
+    /**
+     * 内部员工_0
+     外派员工_1
+     人才库_2
+     */
+    private byte type;//类型
+    private Date entry;//入职时间
+    private byte status;//在职状态
+    /**
+     * 在职_0
+     离职_1
+     退休_2
+     其他_3
+     */
+    private String department;//部门
+    private String post;//岗位
+    /**户口性质
+     0_null、
+     1_外派、
+     2_派遣、
+     3_小时工、
+     */
     private byte category;
-    private float price;
+    private float price;//小时工时间报酬
 
     public Employee() {
     }

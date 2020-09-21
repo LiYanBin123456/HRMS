@@ -36,6 +36,7 @@
                 <button class="layui-btn layui-btn-sm" lay-event="export" onclick="exports()"><i class="layui-icon "></i> 导出</button>
                 <button class="layui-btn layui-btn-sm" lay-event="import"><i class="layui-icon "></i> 导入</button>
                 <button class="layui-btn layui-btn-sm" lay-event="download"><i class="layui-icon "></i> 下载模板</button>
+                <button class="layui-btn layui-btn-sm" lay-event="save" onclick="save()"><i class="layui-icon "></i> 保存</button>
             </div>
             <table id="tbl_detail" lay-filter="filter_tb_detail"></table>
             <div id="pager"></div>
@@ -202,7 +203,8 @@
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
                         var detail3s = window["layui-layer-iframe" + index].callbackData();
-                        iSettlement.importDetails(sid,detail3s,2,function () {
+                        console.log(detail3s);
+                        iSettlement.importDetails(sid,JSON.stringify(detail3s),2,function () {
                             layer.close(index);
                             layer.msg("导入成功");
                             getDetails();
@@ -278,6 +280,19 @@
                 })
             }
 
+            //保存
+            function  save() {
+                var details = layui.table.cache.tbl_detail;
+                var msg = "保存后结算单将被设置为[保存]状态，同时会自动计算社保、医保和个税等，确认保存吗？";
+                var title = "保存结算单明细";
+                layer.confirm(msg, {icon: 3, title:title}, function(index){
+                    iSettlement.updateDetails(details,2,function () {
+                        layer.close(index);
+                        layer.msg("修改成功");
+                        getDetails();
+                    })
+                });
+            };
         </script>
     </body>
 </html>

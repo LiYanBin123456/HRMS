@@ -108,25 +108,7 @@ public class SettlementServlet extends HttpServlet {
 
     }
 
-    //删除结算单明细
-    private String deleteDetail(Connection conn, HttpServletRequest request) {
-        byte category = Byte.parseByte(request.getParameter("category"));
-        long id = Long.parseLong(request.getParameter("id"));
-        DaoUpdateResult result = null;
-        switch (category){
-            case 0://删除普通结算明细
-                result = Detail1Dao.delete(conn,id);
-                break;
-            case 1://删除小时工结算明细
-                result = Detail2Dao.delete(conn,id);
-                break;
-            case 2://删除商业结算明细
-                result = Detail3Dao.delete(conn,id);
-                break;
-        }
-        return JSONObject.toJSONString(result);
-    }
-
+    //获取列表
     private String getList(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         QueryParameter param = JSONObject.parseObject(request.getParameter("param"),QueryParameter.class);
@@ -163,6 +145,7 @@ public class SettlementServlet extends HttpServlet {
         return JSONObject.toJSONString(result);
     }
 
+    //插入结算单
     private String insert(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         DaoUpdateResult result = null;
@@ -189,6 +172,7 @@ public class SettlementServlet extends HttpServlet {
         return JSONObject.toJSONString(result);
     }
 
+    //删除结算单
     private String delete(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
@@ -207,6 +191,7 @@ public class SettlementServlet extends HttpServlet {
         return JSONObject.toJSONString(result);
     }
 
+    //另存为结算单
     private String saveAs(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
@@ -227,6 +212,7 @@ public class SettlementServlet extends HttpServlet {
         return JSONObject.toJSONString(result);
     }
 
+    //批量修改明细
     private String updateDetails(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         DaoUpdateResult result = null;
@@ -247,6 +233,7 @@ public class SettlementServlet extends HttpServlet {
         return JSONObject.toJSONString(result);
     }
 
+    //获取明细
     private String getDetails(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
@@ -266,6 +253,7 @@ public class SettlementServlet extends HttpServlet {
         return JSONObject.toJSONString(result);
     }
 
+    //导入明细
     private String importDetails(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
@@ -274,7 +262,7 @@ public class SettlementServlet extends HttpServlet {
         long did = (long) session.getAttribute("rid");//当前操作的管理员所属公司id
         switch (category){
             case 0://普通结算单明细
-                List<Detail1> detail1s = JSONArray.parseArray(request.getParameter("details"),Detail1.class);
+                List<ViewDetail1> detail1s = JSONArray.parseArray(request.getParameter("details"),ViewDetail1.class);
                 result = Detail1Service.importDetails(conn,id,detail1s,did);
                 break;
             case 1://小时工结算单明细
@@ -289,18 +277,22 @@ public class SettlementServlet extends HttpServlet {
         return JSONObject.toJSONString(result);
     }
 
+    //导出明细
     private String exportDetails(Connection conn, HttpServletRequest request) {
         return null;
     }
 
+    //补差
     private String backup(Connection conn, HttpServletRequest request) {
         return null;
     }
 
+    //补缴
     private String makeup(Connection conn, HttpServletRequest request) {
         return null;
     }
 
+    //提交
     private String commit(Connection conn, HttpServletRequest request) {
         Long aid = (Long) request.getSession().getAttribute("id");
         byte category = Byte.parseByte(request.getParameter("category"));
@@ -320,6 +312,7 @@ public class SettlementServlet extends HttpServlet {
         return JSONObject.toJSONString(result);
     }
 
+    //审核
     private String check(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
@@ -340,6 +333,7 @@ public class SettlementServlet extends HttpServlet {
         return JSONObject.toJSONString(result);
     }
 
+    //重置
     private String reset(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
@@ -359,6 +353,7 @@ public class SettlementServlet extends HttpServlet {
         return JSONObject.toJSONString(result);
     }
 
+    //确认扣款
     private String deduct(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
@@ -378,6 +373,7 @@ public class SettlementServlet extends HttpServlet {
         return JSONObject.toJSONString(result);
     }
 
+    //确认到账
     private String confirm(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
@@ -394,10 +390,12 @@ public class SettlementServlet extends HttpServlet {
         return JSONObject.toJSONString(result);
     }
 
+    //导出银行
     private String exportBank(Connection conn, HttpServletRequest request) {
      return null;
     }
 
+    //获取日志
     private String getLogs(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
@@ -417,8 +415,23 @@ public class SettlementServlet extends HttpServlet {
      return JSONObject.toJSONString(result);
     }
 
-    //下载小时工模板
-    private String DownLoadHour(Connection conn, HttpServletRequest request) {
-        return null;
+    //删除明细
+    private String deleteDetail(Connection conn, HttpServletRequest request) {
+        byte category = Byte.parseByte(request.getParameter("category"));
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoUpdateResult result = null;
+        switch (category){
+            case 0://删除普通结算明细
+                result = Detail1Dao.delete(conn,id);
+                break;
+            case 1://删除小时工结算明细
+                result = Detail2Dao.delete(conn,id);
+                break;
+            case 2://删除商业结算明细
+                result = Detail3Dao.delete(conn,id);
+                break;
+        }
+        return JSONObject.toJSONString(result);
     }
+
 }

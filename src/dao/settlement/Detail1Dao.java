@@ -39,9 +39,6 @@ public class Detail1Dao {
         }
         return DbUtil.insertBatch(conn,sql,params);
     }
-    public static String exportDetails(Connection conn,long id){
-        return  null;
-    }
     public static String backup(Connection conn,Long id,String month){
         return null;
     }

@@ -29,6 +29,8 @@
                 <button class="layui-btn layui-btn-sm" lay-event="export" id="export" onclick="exports()"><i class="layui-icon "></i> 导出</button>
                 <button class="layui-btn layui-btn-sm" lay-event="import" ><i class="layui-icon "></i> 导入</button>
                 <button class="layui-btn layui-btn-sm" lay-event="download" ><i class="layui-icon "></i> 下载模板</button>
+                <button class="layui-btn layui-btn-sm" lay-event="save" onclick="save()"><i class="layui-icon "></i> 保存</button>
+
             </div>
                 <form class="layui-form" style="display: inline">
                     <div class="layui-input-inline">
@@ -189,7 +191,6 @@
             //核对导入的数据
             function showImportDlg(details2) {
                 var content = "importDetails2.html?details2="+encodeURIComponent(JSON.stringify(details2));
-                console.log("s2:"+details2);
                 layer.open({
                     title:"核对明细",
                     type: 2,
@@ -198,8 +199,8 @@
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
                         var detail2s = window["layui-layer-iframe" + index].callbackData();
-                        console.log("2s:"+detail2s);
-                        iSettlement.importDetails(sid,detail2s,1,function () {
+                        console.log("2s:"+JSON.stringify(detail2s));
+                        iSettlement.importDetails(sid,JSON.stringify(detail2s),1,function () {
                             layer.close(index);
                             layer.msg("导入成功");
                             getDetail2s();
@@ -274,6 +275,19 @@
                 })
             }
 
+            //保存
+            function  save() {
+                var details = layui.table.cache.tbl_detail;
+                var msg = "保存后结算单将被设置为[保存]状态，同时会自动计算社保、医保和个税等，确认保存吗？";
+                var title = "保存结算单明细";
+                layer.confirm(msg, {icon: 3, title:title}, function(index){
+                    iSettlement.updateDetails(details,1,function () {
+                        layer.close(index);
+                        layer.msg("修改成功");
+                        getDetails();
+                    })
+                });
+            };
         </script>
     </body>
 </html>

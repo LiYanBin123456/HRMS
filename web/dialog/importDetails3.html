@@ -100,7 +100,8 @@
 
             //向调用页面返回选中的员工
             var callbackData = function () {
-                return details3;
+                var details = layui.table.cache.tbl_detail;
+                return details;
             };
         </script>
     </body>

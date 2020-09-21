@@ -32,7 +32,7 @@ public class Detail3Service {
     }
 
     public static DaoUpdateResult importDetails(Connection conn, long sid, List<ViewDetail3> ViewDetail3s, long did) {
-        DaoUpdateResult result = null;
+        DaoUpdateResult result = new DaoUpdateResult();
         List<Detail3> detail3s =new ArrayList<>();
 
         for(ViewDetail3 v3 :ViewDetail3s){
@@ -45,9 +45,9 @@ public class Detail3Service {
             }
             Employee employee = (Employee) EmployeeDao.get(conn,conditions).data; //根据员工身份证获取员工
             QueryConditions conditions2 = new QueryConditions();
-            conditions.add("name","=",v3.getPname());
-            conditions.add("did","=",did);
-            if(!ProductDao.exist(conn,conditions).exist){
+            conditions2.add("name","=",v3.getPname());
+            conditions2.add("did","=",did);
+            if(!ProductDao.exist(conn,conditions2).exist){
                 result.msg = "保险产品"+v3.getPname()+"不存在，请核对";
                 return  result;
             }
