@@ -19,7 +19,7 @@
     <![endif]-->
 </head>
 <body>
-<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+<div class="layui-tab layui-tab-brief" lay-filter="tab_contract">
     <ul class="layui-tab-title">
         <li class="layui-this">基础信息</li>
         <li lay-id="element_upload" >复印件</li>
@@ -57,8 +57,9 @@
                         <textarea name="comments" placeholder="请输入内容" class="layui-textarea"></textarea>
                     </div>
                 </div>
-                <div class="layui-form-item">
-                    <button ltype="button" class="layui-btn layui-btn-fluid" onclick="save()">保存</button>
+                <div class="layui-form-item" style="text-align: center">
+                    <button type="submit" lay-submit lay-filter="submit_contract"  class="layui-btn">保存</button>
+                    <button  class="layui-btn" onclick="cancel()" >取消</button>
                 </div>
             </form>
         </div>
@@ -78,7 +79,6 @@
 <script src="../js/interface.js"></script>
 <script>
     var contract;
-    var op = "insert";
     var form;//表单对象
     var editer;
     var upload;
@@ -87,9 +87,10 @@
     loadLayuiModule();
 
     function loadLayuiModule() {
-        layui.use(['form', 'layedit', 'jquery', 'upload','laydate'], function () {
+        layui.use(['form', 'layedit','element', 'jquery', 'upload','laydate'], function () {
             form = layui.form;
             layedit = layui.layedit;
+            element = layui.element;
             editer = layedit.build('content'); //建立编辑器
             upload = layui.upload;
             laydate = layui.laydate;
@@ -115,7 +116,8 @@
                 elem: '#contract_dispatch_start'
             });
             laydate.render({
-                elem: '#contract_dispatch_end'
+                elem: '#contract_dispatch_end',
+                trigger: 'click'
             });
             initPage();
             initdispatch();
@@ -123,21 +125,25 @@
     }
 
     function initPage() {
+        form.on('submit(submit_contract)', function(data){
+            saveContract(data.field);
+            return false;
+        });
         initData();
     }
 
     function initData() {
-        var param = $.query.get("contract");
-        console.log(param);
-        if (param) {
-            contract = JSON.parse(param);
-            contract.start = format_date(contract.start);
-            contract.end = format_date(contract.end);
-            form.val('form_contract', contract);
-            layedit.setContent(editer, contract.content, false);
-            op = "update";
-            $("[name=client]").attr("disabled", 'disabled');
-            form.render('select', 'form_contract');
+        var id = $.query.get("id");
+        if(id){
+            iContract.get(id,function (result) {
+                contract = result.data;
+                contract.start = format_date(contract.start);
+                contract.end = format_date(contract.end);
+                form.val('form_contract', contract);
+                layedit.setContent(editer, contract.content, false);
+                $("[name=client]").attr("disabled", 'disabled');
+                form.render('select', 'form_contract');
+            });
         }
     }
 
@@ -184,32 +190,21 @@
 
     }
 
-    function save() {
-        var contract = form.val('form_contract');
-        if (op == "insert") {
-            iContract.insert(contract, onInsertSuccess);
+    function saveContract() {
+        var data = form.val('form_contract');
+        if (contract) {
+            iContract.update(data,function (result) {
+                layer.msg("修改成功");
+            });
         } else {
-            iContract.update(contract, onUpdateSuccess);
-        }
+            iContract.insert(data, function (result) {
+                contract.id = result.extra;
+                element.tabChange('tab_contract', 'element_upload');
+                layer.alert("合同保存成功，请上传复印件", {icon: 20});
 
-        function onInsertSuccess() {
-            layer.alert("添加成功", {icon: 6});
-            element.tabChange('docDemoTabBrief', 'element_upload');
-            return false;
+            });
         }
-
-        function onUpdateSuccess() {
-            layer.alert("修改成功", {icon: 6}, refresh());
-        }
-
-        function refresh() {
-            // 获得frame索引
-            var index = parent.layer.getFrameIndex(window.name);
-            //关闭当前frame
-            parent.layer.close(index);
-            //修改成功后刷新父界面
-            window.parent.location.reload();
-        }
+        contract = data;
     }
 </script>
 

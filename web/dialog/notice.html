@@ -48,7 +48,7 @@
     <div class="layui-form-item layui-form-text">
         <label class="layui-form-label"><span class="x-red">*</span>正文</label>
         <div class="layui-input-block">
-            <textarea name="content"  placeholder="请输入正文" class="layui-textarea"></textarea>
+            <textarea name="content" id="content" placeholder="请输入正文" class="layui-textarea"></textarea>
         </div>
     </div>
     <div class="layui-form-item" style="text-align: center" >
@@ -65,6 +65,7 @@
     var form;//表单对象
     var editer;
     var laydate;
+    var layedit;
 
     loadLayuiModule();
 
@@ -72,11 +73,13 @@
         layui.use(['form', 'layedit','jquery','laydate'], function () {
             form = layui.form;
             layedit = layui.layedit;
+            $ = layui.jquery;
             editer = layedit.build('content'); //建立编辑器
             laydate = layui.laydate;
             laydate.render({
                 elem: '#notice_date'
             });
+            layedit.getContent(editer);
             initData();
         });
     }
@@ -85,13 +88,23 @@
         var param = $.query.get("notice");
         if (param) {
             var notice = JSON.parse(param);
+            notice.date = format_date(notice.date);
             form.val('form_notice', notice);
             layedit.setContent(editer, notice.content, false);
             op = "update";
         }
     }
 
+    function format_date(timestamp) {
+        var d = new Date(timestamp);
+        var year=d.getFullYear();
+        var month=d.getMonth()+1;
+        var date=d.getDate();
+        return year+"-"+month+"-"+date;
+    }
+
     function save() {
+        layedit.getContent(editer);
         var notice = form.val('form_notice');
         if(op == "insert") {
             iNotice.insert(notice, onInsertSuccess);

@@ -157,7 +157,7 @@
 
             //打开详情对话框
             function showDetailDlg(contract) {
-                var content = "../dialog/contract_dispatch.html?contract="+encodeURIComponent(JSON.stringify(contract));
+                var content = "../dialog/contract_dispatch.html?id="+contract.id;
                 layer.open({
                     title:'合同-'+contract.name,
                     type: 2,
