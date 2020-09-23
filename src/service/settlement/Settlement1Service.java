@@ -50,26 +50,7 @@ public class Settlement1Service {
         DaoUpdateResult result;
         result = Settlement1Dao.insert(conn,settlement1);
         if(result.success){
-            long sid = (long) result.extra;//结算单id
-            long cid = settlement1.getCid();//合作单位id
-            long did = settlement1.getDid();//派遣方id
-            //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派员工，用工性质不是小时工，在职
-            QueryParameter parameter = new QueryParameter();
-            parameter.addCondition("cid","=",cid);
-            parameter.addCondition("did","=",did);
-            parameter.addCondition("type","=",1);
-            parameter.addCondition("category","!=",2);
-            parameter.addCondition("status","=",0);
-            List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
-            List<Detail1> detail1List = new ArrayList<Detail1>();
-            for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
-                Detail1 detail1 = new Detail1();
-                detail1.setSid(sid);
-                detail1.setEid(employeeList.get(i).getId());
-                detail1List.add(i,detail1);
-            }
-            //插入明细
-            Detail1Dao.importDetails(conn,detail1List);
+
         }
         return result;
     }
@@ -272,5 +253,26 @@ public class Settlement1Service {
         DaoUpdateResult result = Detail1Dao.importDetails(conn,detail1List);
 
         return result;
+    }
+
+    //自动生成明细
+    public static DaoUpdateResult autoCreate(Connection conn,long sid,long cid,long did){
+        //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派员工，用工性质不是小时工，在职
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("cid","=",cid);
+        parameter.addCondition("did","=",did);
+        parameter.addCondition("type","=",1);
+        parameter.addCondition("category","!=",2);
+        parameter.addCondition("status","=",0);
+        List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
+        List<Detail1> detail1List = new ArrayList<Detail1>();
+        for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
+            Detail1 detail1 = new Detail1();
+            detail1.setSid(sid);
+            detail1.setEid(employeeList.get(i).getId());
+            detail1List.add(i,detail1);
+        }
+        //插入明细
+        return Detail1Dao.importDetails(conn,detail1List);
     }
 }

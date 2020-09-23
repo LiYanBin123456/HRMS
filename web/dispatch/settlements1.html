@@ -232,12 +232,6 @@
                 });
             }
 
-           /* //模糊查找
-            function search(keyword) {
-                param_query.conditions.extra = keyword;
-                getSettlements();
-            }*/
-
             //打开明细对话框
             function showDetailDlg(settlement) {
                 var content = "../dialog/detail1.html?id="+settlement.id+"&month="+settlement.month+"&cid="+settlement.cid;
@@ -267,7 +261,7 @@
                 layer.open({
                     title:"添加",
                     type: 2,
-                    area: ['40%', '85%'],
+                    area: ['60%', '95%'],
                     content: content,
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){

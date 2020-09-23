@@ -379,6 +379,7 @@ var columns_deduct  = [[
     {field:'deduct4', title: '大病医疗',width:80},
     {field:'deduct5', title: '住房贷款利息',width:110},
     {field:'deduct6', title: '住房租金',width:80},
+    {field:'deduct7', title: '累计个人缴税总额',width:80},
     {title: '操作', toolbar: '#bar_deduct'}
 ]];
 

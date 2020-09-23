@@ -920,6 +920,19 @@ var InterfaceSettlement = function () {
         var para = {op: "getLogs",param:JSON.stringify(param),id:id,category:category};
         access(url,para,1,success,fail);
     };
+
+    /**
+     * 自动生成结算明细
+     * @param sid 结算单id
+     * @param cid 合作单位id
+     * @param category  0—结算单  1—小时工结算单  2—商业保险结算单
+     * @param success
+     * @param fail
+     */
+    this.autoCreate = function (sid,cid,category,success,fail) {
+        var para = {op: "autoCreate",sid:sid,cid:cid,category:category};
+        access(url,para,1,success,fail);
+    }
 };
 
 //参保单管理相关接口

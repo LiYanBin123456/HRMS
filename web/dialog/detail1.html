@@ -32,7 +32,7 @@
             <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
             <div class="layui-hide" id="top_bar_detail">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
-                <button class="layui-btn layui-btn-sm" lay-event="autoGet" onclick="autoGet()"><i class="layui-icon "></i> 自动生成明细</button>
+                <button class="layui-btn layui-btn-sm" lay-event="autoGet" onclick="autoCreate()"><i class="layui-icon "></i> 自动生成明细</button>
                 <button class="layui-btn layui-btn-sm" lay-event="append"><i class="layui-icon "></i> 社保补缴</button>
                 <button class="layui-btn layui-btn-sm" lay-event="balance"><i class="layui-icon "></i> 社保补差</button>
                 <button class="layui-btn layui-btn-sm" lay-event="" onclick="exports()" ><i class="layui-icon " ></i> 导出</button>
@@ -375,7 +375,7 @@
 
             //下载模板
             function download() {
-                    var url = "/hrms/verify/file?op=downloadDetail1&cid="+cid;
+                    var url = "/hrms/verify/file?op=downloadDetail1&cid="+cid+"&sid="+sid;
                     var form = $('<form method="POST"></form>');
                     form.attr('action', url);
                     form.appendTo($('body'));
@@ -384,11 +384,16 @@
             }
 
             //自动生成明细
-            function autoGet() {
+            function autoCreate() {
                 var msg = "点击后会根据结算单，自动生成员工工资明细";
                 var title = "自动生成明细";
                 layer.confirm(msg, {icon: 3, title:title}, function(index){
-
+                iSettlement.autoCreate(sid,cid,0,function () {
+                  layer.close(index);
+                    layer.close(index);
+                    getDetails();
+                    layer.msg('自动生成功');
+                })
                 });
             }
 

@@ -13,7 +13,7 @@ public class ContractDao {
     public static DaoQueryListResult getList(Connection conn, QueryParameter parameter, String type, long rid) {
         DaoQueryListResult res = null;
         if(parameter.conditions.extra!=null && !parameter.conditions.extra.isEmpty()) {
-            parameter.addCondition("name","like",parameter.conditions.extra);
+            parameter.addCondition("concat(name,comments)","like",parameter.conditions.extra);
         }
         switch(type){
             case "A":

@@ -50,7 +50,6 @@ public class Settlement3Service {
             long did = settlement3.getDid();//合作单位id
             long cid = settlement3.getCid();//合作单位id
             long pid = settlement3.getPid();//产品id
-            Date month = settlement3.getMonth();//月份
 
             //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派员工，用工性质不是小时工，在职
             QueryParameter parameter = new QueryParameter();

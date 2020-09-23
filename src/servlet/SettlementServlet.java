@@ -5,10 +5,7 @@ import bean.settlement.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.JSONPObject;
-import dao.settlement.Detail1Dao;
-import dao.settlement.Detail2Dao;
-import dao.settlement.Detail3Dao;
-import dao.settlement.Settlement3Dao;
+import dao.settlement.*;
 import database.ConnUtil;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;
@@ -98,6 +95,9 @@ public class SettlementServlet extends HttpServlet {
             case "deleteDetail"://删除结算单明细
                 result = deleteDetail(conn, request);
                 break;
+            case "autoCreate"://自动生成结算单明细
+                result = autoCreate(conn, request);
+                break;
         }
         ConnUtil.closeConnection(conn);
 
@@ -107,6 +107,8 @@ public class SettlementServlet extends HttpServlet {
         out.close();
 
     }
+
+
 
     //获取列表
     private String getList(Connection conn, HttpServletRequest request) {
@@ -256,7 +258,7 @@ public class SettlementServlet extends HttpServlet {
     //导入明细
     private String importDetails(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
-        long id = Long.parseLong(request.getParameter("id"));
+        long id = Long.parseLong(request.getParameter("id"));//结算单id
         DaoUpdateResult result = null;
         HttpSession session = request.getSession();
         long did = (long) session.getAttribute("rid");//当前操作的管理员所属公司id
@@ -432,6 +434,26 @@ public class SettlementServlet extends HttpServlet {
                 break;
         }
         return JSONObject.toJSONString(result);
+    }
+
+    //自动生成结算单明细
+    private String autoCreate(Connection conn, HttpServletRequest request) {
+        long sid = Long.parseLong(request.getParameter("sid"));//结算单id
+        long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
+        int category = Integer.parseInt(request.getParameter("category"));
+        HttpSession session = request.getSession();
+        long did = (long) session.getAttribute("rid");//所属公司id
+        DaoUpdateResult result = null;
+        switch (category){
+            case 0://普通结算单
+                result = Settlement1Service.autoCreate(conn,sid,cid,did);
+                break;
+            case 1://小时工结算单
+                break;
+            case 2://商业保险结算单
+                break;
+        }
+         return JSONObject.toJSONString(result);
     }
 
 }

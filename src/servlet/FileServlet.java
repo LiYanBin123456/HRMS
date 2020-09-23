@@ -1,38 +1,42 @@
 package servlet;
 
 import bean.client.MapSalary;
-import bean.insurance.ViewInsurance;
+
+import bean.employee.ViewEmployee;
+import bean.settlement.Detail1;
 import bean.settlement.ViewDetail1;
 import bean.settlement.ViewDetail2;
 import bean.settlement.ViewDetail3;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.client.MapSalaryDao;
-import dao.insurance.InsuranceDao;
+import dao.employee.EmployeeDao;
+
 import dao.settlement.Detail1Dao;
 import dao.settlement.Detail2Dao;
 import dao.settlement.Detail3Dao;
 import database.*;
 import jxl.Workbook;
+import jxl.write.*;
 import jxl.write.Label;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
 import org.apache.commons.io.IOUtils;
 import utills.XlsUtil;
+import utills.Calculate;
 
-import javax.lang.model.element.VariableElement;
+
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+import java.awt.*;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.List;
 
 @WebServlet(name = "FileServlet",urlPatterns = "/verify/file")
 @MultipartConfig
@@ -76,7 +80,7 @@ public class FileServlet extends HttpServlet {
             case "downloadDetail1"://下载商业保险结算单明细
                 downloadDetail1(conn,request,response);
                 return;
-            case "exportDetail1"://下载商业保险结算单明细
+            case "exportDetail1"://导出商业保险结算单明细
                     exportDetail1(conn,request,response);
                 return;
             case "exportDetail2"://下载小时工结算单明细
@@ -303,44 +307,103 @@ public class FileServlet extends HttpServlet {
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.setHeader("Content-Disposition", "attachment; filename=detailModel.xls");
 
+        HttpSession session = request.getSession();
+        long did = (long) session.getAttribute("rid");//当前操作的管理员所属公司id
         long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
+
         boolean flag=MapSalaryDao.exist(cid,conn).exist;//判断客户是否有自定义工资项
+        String[] maps = new String[0];
+        if(flag){//如果有，定义maps
+            MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(cid, conn).data;
+            maps = mapSalary.getItems().split(";");//maps[{加班工资,1},{考勤扣款,0}];
+        }
+
+        //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派或者派遣员工，用工性质不是小时工，在职
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("cid","=",cid);
+        parameter.addCondition("did","=",did);
+        parameter.addCondition("type","=",1);
+        parameter.addCondition("category","!=",2);
+        parameter.addCondition("status","=",0);
+        List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
 
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("信息表", 0);
         WritableSheet sheet2 = book.createSheet("元数据", 1);
+
+        WritableCellFormat wcf = new WritableCellFormat();
+        Color color = Color.decode("#d6dae0"); // 自定义的颜色
+        book.setColourRGB(Colour.ORANGE, color.getRed(),
+        color.getGreen(), color.getBlue());
         try {
-            sheet1.addCell(new Label(0, 0, "员工姓名"));
-            sheet1.addCell(new Label(1, 0, "身份证号码"));
-            sheet1.addCell(new Label(2, 0, "基本工资"));
-            sheet1.addCell(new Label(3, 0, "个人养老"));
-            sheet1.addCell(new Label(4, 0, "个人医疗"));
-            sheet1.addCell(new Label(5, 0, "个人失业"));
-            sheet1.addCell(new Label(6, 0, "个人大病"));
-            sheet1.addCell(new Label(7, 0, "个人公积金"));
-            sheet1.addCell(new Label(8, 0, "单位养老"));
-            sheet1.addCell(new Label(9, 0, "单位医疗"));
-            sheet1.addCell(new Label(10, 0, "单位失业"));
-            sheet1.addCell(new Label(11, 0, "单位工伤"));
-            sheet1.addCell(new Label(12, 0, "单位大病"));
-            sheet1.addCell(new Label(13, 0, "单位生育"));
-            sheet1.addCell(new Label(14, 0, "单位公积金"));
-            sheet1.addCell(new Label(15, 0, "个税"));
+            wcf.setBackground(Colour.ORANGE);
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        try {
+            sheet1.addCell(new Label(0, 0, "员工姓名",wcf));
+            sheet1.addCell(new Label(1, 0, "身份证号码",wcf));
+            sheet1.addCell(new Label(2, 0, "基本工资",wcf));
+            sheet1.addCell(new Label(3, 0, "个人养老",wcf));
+            sheet1.addCell(new Label(4, 0, "个人医疗",wcf));
+            sheet1.addCell(new Label(5, 0, "个人失业",wcf));
+            sheet1.addCell(new Label(6, 0, "个人大病",wcf));
+            sheet1.addCell(new Label(7, 0, "个人公积金",wcf));
+            sheet1.addCell(new Label(8, 0, "单位养老",wcf));
+            sheet1.addCell(new Label(9, 0, "单位医疗",wcf));
+            sheet1.addCell(new Label(10, 0, "单位失业",wcf));
+            sheet1.addCell(new Label(11, 0, "单位工伤",wcf));
+            sheet1.addCell(new Label(12, 0, "单位大病",wcf));
+            sheet1.addCell(new Label(13, 0, "单位生育",wcf));
+            sheet1.addCell(new Label(14, 0, "单位公积金",wcf));
+            sheet1.addCell(new Label(15, 0, "个税",wcf));
             if(flag){
-                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(cid,conn).data;
-                String map = mapSalary.getItems();
-                String[] maps = map.split(";");//maps[{加班工资,1},{考勤扣款,0}];
                 int  c = 0;
                 for(int i = 0;i<maps.length;i++){
                     c = i+16;
-                    sheet1.addCell(new Label(c, 0, maps[i]));
+                    sheet1.addCell(new Label(c, 0, maps[i],wcf));
                 }
-                sheet1.addCell(new Label(c+1, 0, "应付"));
-                sheet1.addCell(new Label(c+2, 0, "实付"));
+                sheet1.addCell(new Label(c+1, 0, "应付",wcf));
+                sheet1.addCell(new Label(c+2, 0, "实付",wcf));
             }else {
-                sheet1.addCell(new Label(16, 0, "应付"));
-                sheet1.addCell(new Label(17, 0, "实付"));
+                sheet1.addCell(new Label(16, 0, "应付",wcf));
+                sheet1.addCell(new Label(17, 0, "实付",wcf));
             }
+            int index = 1;
+            for( ViewEmployee viewEmployee:employeeList){//根据员工生成明细，如果没有员工则不生成
+                Detail1 detail = Calculate.calculateInsurance(viewEmployee.getId());
+
+                sheet1.addCell(new Label(0, index, viewEmployee.getName()));
+                sheet1.addCell(new Label(1, index, viewEmployee.getCardId()));
+                sheet1.addCell(new jxl.write.Number(2, index, 0));
+                sheet1.addCell(new jxl.write.Number(3, index, detail.getPension1()));
+                sheet1.addCell(new jxl.write.Number(4, index, detail.getMedicare1()));
+                sheet1.addCell(new jxl.write.Number(5, index, detail.getUnemployment1()));
+                sheet1.addCell(new jxl.write.Number(6, index, detail.getDisease1()));
+                sheet1.addCell(new jxl.write.Number(7, index, detail.getFund1()));
+                sheet1.addCell(new jxl.write.Number(8, index, detail.getPension2()));
+                sheet1.addCell(new jxl.write.Number(9, index, detail.getMedicare2()));
+                sheet1.addCell(new jxl.write.Number(10, index, detail.getUnemployment2()));
+                sheet1.addCell(new jxl.write.Number(11, index, detail.getInjury()));
+                sheet1.addCell(new jxl.write.Number(12, index, detail.getDisease2()));
+                sheet1.addCell(new jxl.write.Number(13, index, detail.getBirth()));
+                sheet1.addCell(new jxl.write.Number(14, index, detail.getFund2()));
+                sheet1.addCell(new jxl.write.Number(15, index, 0));
+                if(flag) {//判断客户是否存在自定义字段
+                     int c2 = 0;
+                    for (int i = 0; i < maps.length; i++) {
+                        c2 = i + 16;
+                        sheet1.addCell(new jxl.write.Number(c2 , index, 0));
+                    }
+                    sheet1.addCell(new jxl.write.Number(c2 + 1, index, 0));
+                    sheet1.addCell(new jxl.write.Number(c2 + 2, index, 0));
+                }else {
+                    sheet1.addCell(new jxl.write.Number( 15, index, 0));
+                    sheet1.addCell(new jxl.write.Number( 16, index,0));
+                }
+                index++;
+            }
+
 
             sheet2.addCell(new Label(0, 0, "字段名"));
             sheet2.addCell(new Label(0, 1, "name"));
@@ -361,8 +424,6 @@ public class FileServlet extends HttpServlet {
             sheet2.addCell(new Label(0, 16, "tax"));
             if(flag){
                 MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(cid,conn).data;
-                String map = mapSalary.getItems();
-                String[] maps = map.split(";");//maps[{加班工资,1},{考勤扣款,0}];
                 int  c = 0;
                 for(int i = 0;i<maps.length;i++){
                     c = i+17;
@@ -394,9 +455,6 @@ public class FileServlet extends HttpServlet {
             sheet2.addCell(new Label(1, 15, "float"));
             sheet2.addCell(new Label(1, 16, "float"));
             if(flag){
-                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(cid,conn).data;
-                String map = mapSalary.getItems();
-                String[] maps = map.split(";");//maps[{加班工资,1},{考勤扣款,0}];
                 int  c = 0;
                 for(int i = 0;i<maps.length;i++){
                     c = i+17;
@@ -428,9 +486,6 @@ public class FileServlet extends HttpServlet {
             sheet2.addCell(new Label(2, 15, "False"));
             sheet2.addCell(new Label(2, 16, "False"));
             if(flag){
-                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(cid,conn).data;
-                String map = mapSalary.getItems();
-                String[] maps = map.split(";");//maps[{加班工资,1},{考勤扣款,0}];
                 int  c = 0;
                 for(int i = 0;i<maps.length;i++){
                     c = i+17;
@@ -464,7 +519,6 @@ public class FileServlet extends HttpServlet {
         DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
         List< ViewDetail1> detail1s = JSONArray.parseArray(rows, ViewDetail1.class);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("结算单明细", 0);
         try {
@@ -569,7 +623,6 @@ public class FileServlet extends HttpServlet {
         String rows = JSONObject.toJSONString(result.rows);
 
         List<ViewDetail2> detail2s = JSONArray.parseArray(rows, ViewDetail2.class);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("小时工结算单明细", 0);
         try {

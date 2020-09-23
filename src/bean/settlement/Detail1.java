@@ -51,6 +51,21 @@ public class Detail1 extends Detail {
     public Detail1() {
     }
 
+    public Detail1(float pension1, float medicare1, float unemployment1, float disease1, float fund1, float pension2, float medicare2, float unemployment2, float injury, float disease2, float birth, float fund2) {
+        this.pension1 = pension1;
+        this.medicare1 = medicare1;
+        this.unemployment1 = unemployment1;
+        this.disease1 = disease1;
+        this.fund1 = fund1;
+        this.pension2 = pension2;
+        this.medicare2 = medicare2;
+        this.unemployment2 = unemployment2;
+        this.injury = injury;
+        this.disease2 = disease2;
+        this.birth = birth;
+        this.fund2 = fund2;
+    }
+
     public Detail1(long id, long sid, long eid, float base, float pension1, float medicare1, float unemployment1, float disease1, float fund1, float pension2, float medicare2, float unemployment2, float injury, float disease2, float birth, float fund2, float tax, float payable, float paid, float f1, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9, float f10, float f11, float f12, float f13, float f14, float f15, float f16, float f17, float f18, float f19, float f20, byte status) {
         super(id, sid, eid);
         this.base = base;

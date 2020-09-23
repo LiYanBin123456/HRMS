@@ -5,7 +5,7 @@ import java.sql.Date;
 //结算单基类
 public class Settlemet {
     private long id;//
-    private long did;//派遣单id
+    private long did;//派遣方id
     private long cid;//合作客户id
     private Date month;//月份
     /**状态
