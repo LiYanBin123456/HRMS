@@ -123,6 +123,7 @@ var columns_contract_dispatch = [[
     {field:'name', title: '合作客户'},
     {field:'start', title: '生效时间',width:130,templet:function (d) {return format_date(d.start)}},
     {field:'end', title: '到期时间',width:130,templet:function (d) {return format_date(d.end)}},
+    {field:'comments', title: '备注'},
     {fixed:'right', title: '操作', toolbar: '#bar_contract',width:200}
 ]];
 
