@@ -160,10 +160,16 @@
         </div>
         <div class="layui-tab-item">
             <form  class="layui-form">
-            <button type="button" class="layui-btn" id="test1">
-                <i class="layui-icon">&#xe67c;</i>上传复印件(PDF)
-            </button>
-            <button class="layui-btn" onclick="download()" ><i class="layui-icon layui-icon-edit"></i>下载复印件</button>
+                <div class="layui-upload">
+                    <div class="layui-upload-list">
+                        <img class="layui-upload-img" id="demo1" width="150px">
+                        <p id="demoText"></p>
+                    </div>
+                    <button type="button" class="layui-btn" id="test1">
+                        <i class="layui-icon">&#xe67c;</i>上传复印件(PDF)
+                     </button>
+                     <button class="layui-btn" onclick="download()" ><i class="layui-icon layui-icon-edit"></i>下载复印件</button>
+                </div>
             </form>
         </div>
     </div>
@@ -172,6 +178,7 @@
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
+<script src="../lib/layui/layui.js"></script>
 <script>
     var contract;
     var serve;
@@ -194,7 +201,10 @@
                 , accept: 'file'
                 , exts: 'pdf'
                 , acceptMime: '.pdf'
-                ,before: function(file,id){
+                ,before: function(obj,file,id){
+                    obj.preview(function(index, file, result){
+                        $('#demo1').attr('src', "../images/PDF.png"); //图片链接（base64）
+                    });
                     this.data={op:"upload",file:JSON.stringify(file),id:contract.id}
                 }
                 , done: function (res) {
@@ -245,6 +255,13 @@
                op = "update";
             })
         }
+        iFile.existContract(id,function (result) {
+            if(result.exist){
+                $('#demo1').attr('src', "../images/PDF.png");
+                return;
+            }
+        });
+
         form.on('select(service)', function(data){
             showContent(Number(data.value));
         });

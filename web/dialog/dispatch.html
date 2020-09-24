@@ -137,12 +137,6 @@
                     <div class="layui-input-inline">
                         <input type="text"   name="phone" required="" placeholder=""  autocomplete="off" class="layui-input"></div>
                 </div>
-                <div class="layui-form-item">
-                    <label  class="layui-form-label">
-                        <span class="x-red">*</span>公司地址</label>
-                    <div class="layui-input-inline">
-                        <input type="text"  name="address" required="" placeholder="" autocomplete="off" class="layui-input"></div>
-                </div>
                 <div class="layui-form-item" style="text-align: center" >
                     <button type="submit" lay-submit lay-filter="submit_finance" class="layui-btn" >保存</button>
                     <button  class="layui-btn" onclick="cancel()" >取消</button>
@@ -248,13 +242,12 @@
             layer.msg("请填写邮箱信息");
             return;
         }
-        if(data.intro == ""){
-            layer.msg("请填写简介信息");
-            return;
-        }
         if (dispatch) {
             iClient.update(data,0,function (result) {
                 layer.msg("修改成功");
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.location.reload();
             });
         } else {
             iClient.insert(data,0, function (result) {

@@ -22,7 +22,7 @@
 <div class="layui-tab layui-tab-brief" lay-filter="tab_contract">
     <ul class="layui-tab-title">
         <li class="layui-this">基础信息</li>
-        <li lay-id="element_upload" >复印件</li>
+        <li lay-id="element_upload" >电子合同</li>
     </ul>
     <div class="layui-tab-content">
         <div class="layui-tab-item layui-show">
@@ -65,10 +65,16 @@
         </div>
         <div class="layui-tab-item">
             <form  class="layui-form">
-            <button type="button" class="layui-btn" id="test1">
-                <i class="layui-icon">&#xe67c;</i>上传复印件(PDF)
-            </button>
-            <button class="layui-btn" onclick="download()"><i class="layui-icon layui-icon-edit"></i>下载复印件</button>
+                <div class="layui-upload">
+                  <div class="layui-upload-list">
+                    <img class="layui-upload-img" id="demo1" width="150px">
+                      <p id="demoText"></p>
+                  </div>
+                  <button type="button" class="layui-btn" id="test1">
+                    <i class="layui-icon">&#xe67c;</i>上传电子合同(PDF)
+                  </button>
+                  <button class="layui-btn" onclick="download()"><i class="layui-icon layui-icon-edit"></i>下载电子合同</button>
+                </div>
             </form>
         </div>
     </div>
@@ -76,6 +82,7 @@
 </body>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
+<script src="../lib/layui/layui.js"></script>
 <script src="../js/interface.js"></script>
 <script>
     var contract;
@@ -100,7 +107,10 @@
                 , accept: 'file'
                 , exts: 'pdf'
                 , acceptMime: '.pdf'
-                ,before: function(file,id){
+                ,before: function(obj,file,id){
+                    obj.preview(function(index, file, result){
+                        $('#demo1').attr('src', "../images/PDF.png"); //图片链接（base64）
+                    });
                     this.data={op:"upload",file:JSON.stringify(file),id:contract.id}
                 }
                 , done: function (res) {
@@ -145,6 +155,12 @@
                 form.render('select', 'form_contract');
             });
         }
+        iFile.existContract(id,function (result) {
+            if(result.exist){
+                $('#demo1').attr('src', "../images/PDF.png");
+                return;
+            }
+        })
     }
 
     function initdispatch() {
