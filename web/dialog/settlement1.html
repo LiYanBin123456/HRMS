@@ -30,6 +30,16 @@
             <input type="text" class="layui-input" id="month" autocomplete="off">
         </div>
     </div>
+
+    <form class="layui-form" style="display: inline">
+        <label class="layui-form-label">
+            <span class="x-red">*</span>是否自动生成明细
+        </label>
+        <div class="layui-input-inline">
+            <input type="radio" name="mode" title="否" value="0" lay-filter="mode" checked="checked">
+            <input type="radio" name="mode" title="是" value="1" lay-filter="mode" >
+        </div>
+    </form>
 </form>
 </body>
 <script src="../js/jquery.min.js"></script>
@@ -49,6 +59,9 @@
             initCoop();
             form.on('select(filter_cooperation)', function(data){
                 settlement.cid = data.value;
+            });
+            form.on('radio(mode)', function(data){
+                settlement.mode = data.value;
             });
             laydate.render({
                 elem: '#month' //指定元素

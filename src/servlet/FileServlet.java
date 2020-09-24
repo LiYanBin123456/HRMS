@@ -1,5 +1,6 @@
 package servlet;
 
+import bean.client.Items;
 import bean.client.MapSalary;
 
 import bean.employee.ViewEmployee;
@@ -312,10 +313,10 @@ public class FileServlet extends HttpServlet {
         long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
 
         boolean flag=MapSalaryDao.exist(cid,conn).exist;//判断客户是否有自定义工资项
-        String[] maps = new String[0];
-        if(flag){//如果有，定义maps
+        List<Items> itemList = new ArrayList<>();
+        if(flag){//如果有
             MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(cid, conn).data;
-            maps = mapSalary.getItems().split(";");//maps[{加班工资,1},{考勤扣款,0}];
+            itemList = mapSalary.getItemList();
         }
 
         //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派或者派遣员工，用工性质不是小时工，在职
@@ -359,9 +360,9 @@ public class FileServlet extends HttpServlet {
             sheet1.addCell(new Label(15, 0, "个税",wcf));
             if(flag){
                 int  c = 0;
-                for(int i = 0;i<maps.length;i++){
+                for(int i = 0;i<itemList.size();i++){
                     c = i+16;
-                    sheet1.addCell(new Label(c, 0, maps[i],wcf));
+                    sheet1.addCell(new Label(c, 0, itemList.get(i).getField(),wcf));
                 }
                 sheet1.addCell(new Label(c+1, 0, "应付",wcf));
                 sheet1.addCell(new Label(c+2, 0, "实付",wcf));
@@ -391,7 +392,7 @@ public class FileServlet extends HttpServlet {
                 sheet1.addCell(new jxl.write.Number(15, index, 0));
                 if(flag) {//判断客户是否存在自定义字段
                      int c2 = 0;
-                    for (int i = 0; i < maps.length; i++) {
+                    for (int i = 0; i < itemList.size(); i++) {
                         c2 = i + 16;
                         sheet1.addCell(new jxl.write.Number(c2 , index, 0));
                     }
@@ -423,9 +424,8 @@ public class FileServlet extends HttpServlet {
             sheet2.addCell(new Label(0, 15, "fund2"));
             sheet2.addCell(new Label(0, 16, "tax"));
             if(flag){
-                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(cid,conn).data;
                 int  c = 0;
-                for(int i = 0;i<maps.length;i++){
+                for(int i = 0;i<itemList.size();i++){
                     c = i+17;
                     String name = "f"+(i+1);
                     sheet2.addCell(new Label(0, c, name));
@@ -456,7 +456,7 @@ public class FileServlet extends HttpServlet {
             sheet2.addCell(new Label(1, 16, "float"));
             if(flag){
                 int  c = 0;
-                for(int i = 0;i<maps.length;i++){
+                for(int i = 0;i<itemList.size();i++){
                     c = i+17;
                     sheet2.addCell(new Label(1, c, "float"));
                 }
@@ -487,7 +487,7 @@ public class FileServlet extends HttpServlet {
             sheet2.addCell(new Label(2, 16, "False"));
             if(flag){
                 int  c = 0;
-                for(int i = 0;i<maps.length;i++){
+                for(int i = 0;i<itemList.size();i++){
                     c = i+17;
                     sheet2.addCell(new Label(2, c, "False"));
                 }

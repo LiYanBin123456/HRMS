@@ -277,7 +277,7 @@
             }
 
             function insertSettlement(settlement) {
-                iSettlement.insert(settlement,1,function () {
+                iSettlement.insert(settlement,1,settlement.mode,function () {
                     getSettlements();
                     layer.msg("创建结算单，cid:"+settlement.cid+",month:"+format_date(settlement.month));
                 });

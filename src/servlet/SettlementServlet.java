@@ -95,9 +95,6 @@ public class SettlementServlet extends HttpServlet {
             case "deleteDetail"://删除结算单明细
                 result = deleteDetail(conn, request);
                 break;
-            case "autoCreate"://自动生成结算单明细
-                result = autoCreate(conn, request);
-                break;
         }
         ConnUtil.closeConnection(conn);
 
@@ -149,7 +146,8 @@ public class SettlementServlet extends HttpServlet {
 
     //插入结算单
     private String insert(Connection conn, HttpServletRequest request) {
-        byte category = Byte.parseByte(request.getParameter("category"));
+        byte category = Byte.parseByte(request.getParameter("category"));//结算单类型
+        byte type = Byte.parseByte(request.getParameter("type"));//是否自动生成明细 0 不 1 自动生成
         DaoUpdateResult result = null;
         HttpSession session = request.getSession();
         //获取管理员所属的公司i
@@ -158,17 +156,17 @@ public class SettlementServlet extends HttpServlet {
             case 0://普通结算单
                 Settlement1 settlement1 = JSONObject.parseObject(request.getParameter("settlement"), Settlement1.class);
                 settlement1.setDid(rid);
-                result = Settlement1Service.insert(conn,settlement1);
+                result = Settlement1Service.insert(conn,settlement1,type);
                 break;
             case 1://小时工结算单
                 Settlement2 settlement2 = JSONObject.parseObject(request.getParameter("settlement"), Settlement2.class);
                 settlement2.setDid(rid);
-                result = Settlement2Service.insert(conn,settlement2);
+                result = Settlement2Service.insert(conn,settlement2,type);
                 break;
             case 2://商业保险结算单
                 Settlement3 settlement3 = JSONObject.parseObject(request.getParameter("settlement"), Settlement3.class);
                 settlement3.setDid(rid);
-                result = Settlement3Service.insert(conn,settlement3);
+                result = Settlement3Service.insert(conn,settlement3,type);
                 break;
         }
         return JSONObject.toJSONString(result);
@@ -434,26 +432,6 @@ public class SettlementServlet extends HttpServlet {
                 break;
         }
         return JSONObject.toJSONString(result);
-    }
-
-    //自动生成结算单明细
-    private String autoCreate(Connection conn, HttpServletRequest request) {
-        long sid = Long.parseLong(request.getParameter("sid"));//结算单id
-        long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
-        int category = Integer.parseInt(request.getParameter("category"));
-        HttpSession session = request.getSession();
-        long did = (long) session.getAttribute("rid");//所属公司id
-        DaoUpdateResult result = null;
-        switch (category){
-            case 0://普通结算单
-                result = Settlement1Service.autoCreate(conn,sid,cid,did);
-                break;
-            case 1://小时工结算单
-                break;
-            case 2://商业保险结算单
-                break;
-        }
-         return JSONObject.toJSONString(result);
     }
 
 }

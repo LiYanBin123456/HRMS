@@ -730,10 +730,11 @@ var InterfaceSettlement = function () {
      * 添加结算单
      * @param settlement 结算单信息
      * @param category 0-普通结算单 1-小时工结算单 2-商业保险结算单
+     * @param type 0_不生成明细 1_自动生成明细
      * @param success
      * @param fail
      */
-    this.insert = function (settlement,category,success,fail) {
+    this.insert = function (settlement,category,type,success,fail) {
         var para = {op: "insert",settlement:JSON.stringify(settlement), category:category};
         access(url,para,1,success,fail);
     };

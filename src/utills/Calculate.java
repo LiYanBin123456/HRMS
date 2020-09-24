@@ -1,6 +1,8 @@
 package utills;
 
+import bean.client.Items;
 import bean.client.MapSalary;
+import bean.contract.Serve;
 import bean.employee.Employee;
 import bean.employee.EnsureSetting;
 import bean.rule.RuleMedicare;
@@ -20,6 +22,7 @@ import database.QueryConditions;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
+import java.util.List;
 
 public class Calculate {
 
@@ -133,12 +136,14 @@ public class Calculate {
     }
 
     /**
-     * 计算五险一金
+     * 计算结算单明细中的五险一金
      * @param v 结算单明细
-     * @return v 计算好五险一金后的明细
+     * @param medicare 对应地市的医保规则
+     * @param social  对应地市的社保规则
+     * @param setting 对应员工的社保设置
+     * @return
      */
-    public static  ViewDetail1 calculateInsurance(ViewDetail1 v){
-        Connection conn = ConnUtil.getConnection();
+    public static  ViewDetail1 calculateInsurance(ViewDetail1 v, RuleMedicare medicare, RuleSocial social,EnsureSetting setting){
         //初始化数据
         float pension1=0;//个人养老
         float medicare1=0;//个人医疗
@@ -152,21 +157,6 @@ public class Calculate {
         float disease2=0;//单位大病
         float birth=0;//单位生育
         float fund2;//单位公积金
-
-
-        QueryConditions conditions = new QueryConditions();//根据身份证获取员工
-        conditions.add("cardId","=",v.getCardId());
-        Employee employee=(Employee)EmployeeDao.get(conn,conditions).data;
-
-        long eid = employee.getId();//员工id
-        boolean existSetting=SettingDao.exist(conn,eid).exist;//员工设置是否存在
-        if(!existSetting){//不存在，直接返回
-            return  v;
-        }
-        EnsureSetting setting = (EnsureSetting) SettingDao.get(conn,eid).data;//员工设置
-        String city = setting.getCity();//员工地市
-        RuleMedicare medicare= (RuleMedicare) RuleMedicareDao.getLast(conn,city).data;//获取该地市的最新医保
-        RuleSocial social = (RuleSocial) RuleSocialDao.getLast(conn,city).data;//获取该地市的最新社保
 
         float base = v.getBase();//实际工资
 
@@ -260,21 +250,16 @@ public class Calculate {
     }
 
     /**
-     * 计算普通结算单明细应付金额
-     * @param v  结算单明细
-     * @return v 计算好应付金额的明细
+     *计算普通结算单应发工资
+     * @param v 结算单明细
+     * @param mapSalary 自定义工资
+     * @return
      */
-    public static  ViewDetail1 calculatePayable(ViewDetail1 v){
-        Connection conn = ConnUtil.getConnection();
-        long sid = v.getSid();//结算单id
-        Settlement1 settlement1 =(Settlement1) Settlement1Dao.get(conn,sid).data;
+    public static  ViewDetail1 calculatePayable(ViewDetail1 v, MapSalary mapSalary){
+        float payable = 0;
+        List<Items> itemList = mapSalary.getItemList();
 
-        long cid = settlement1.getCid();//合作单位id
-        float payable = v.getBase();
-        //查询自定义工资
-        MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(cid,conn).data;
-        String[] maps = mapSalary.getItems().split(";");//maps[{加班工资,1},{考勤扣款,0}];
-        for (int i = 0; i < maps.length; i++) {
+        for (int i = 0; i <itemList.size(); i++) {
             int index = i + 1;
             String name = "getF" + index;
             float value2 = 0;
@@ -289,9 +274,7 @@ public class Calculate {
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
-
-            String[] value = maps[i].split(",");//[value加班工资,1];
-            if(value[1].equals(0)){//减项
+            if(itemList.get(i).getType()==0){//减项
                payable-=value2;
             }else {//加项
                 payable+=value2;
@@ -300,4 +283,46 @@ public class Calculate {
         v.setPayable(payable);
       return v;
     }
+
+    /**
+     * 计算普通结算单的个税
+     * @param v 结算单明细
+     * @return v
+     */
+    public static ViewDetail1 calculateTax(ViewDetail1 v){
+        return v;
+    }
+
+    /**
+     * 计算普通结算单的管理费
+     * @param serve 合同
+     * @param viewDetail1s  结算单明细视图集合
+     * @return
+     */
+    public static float calculateManage(Serve serve, List<ViewDetail1> viewDetail1s){
+        float manage=0;//管理费
+        int type = serve.getType();//合同服务项目类型
+        int category = serve.getCategory();//结算方式
+        float value = serve.getValue();//对应的值
+        float tax = serve.getTax();//税费比例
+        if(type == 0){//劳务外包派遣
+           switch (category){
+               case 0://按人数收取
+                   manage = value*viewDetail1s.size();
+                   break;
+               case 1://按费用总额比例收取
+                   for (ViewDetail1 vs:viewDetail1s){
+                       manage += (vs.getPayable()+vs.getDisease2()+vs.getFund2()+vs.getMedicare2()+vs.getPension2()+vs.getUnemployment2()
+                               +vs.getInjury()+vs.getBirth())*tax;
+                   }
+                   break;
+               case 2://外包整体核算(暂时不考虑)
+                   break;
+               }
+        }else if (type==1){//人事服务代理
+            manage = value*viewDetail1s.size();
+        }
+        return manage;
+    }
+
 }

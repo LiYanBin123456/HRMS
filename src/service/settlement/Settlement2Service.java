@@ -39,10 +39,10 @@ public class Settlement2Service {
     }
 
     //插入结算单
-    public static DaoUpdateResult insert(Connection conn, Settlement2 settlement2) {
+    public static DaoUpdateResult insert(Connection conn, Settlement2 settlement2, byte type) {
         DaoUpdateResult result = null;
         result = Settlement2Dao.insert(conn,settlement2);
-        if(result.success){
+        if(result.success&&type==1){
             long sid = (long) result.extra;//结算单id
             long cid = settlement2.getCid();//合作单位id
             long did = settlement2.getDid();//派遣方id

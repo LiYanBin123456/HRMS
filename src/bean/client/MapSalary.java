@@ -1,6 +1,8 @@
 package bean.client;
 
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 //客户自定义工资
 public class MapSalary {
@@ -39,6 +41,25 @@ public class MapSalary {
 
     public void setDate(Date date) {
         this.date = date;
+    }
+
+    /**
+     * 获取Items集合
+     * 返回结果[{type:1,field:考勤扣款},{type:0,field:加班工资}]
+     * @return itemList；
+     */
+    public List<Items> getItemList(){
+        List<Items> itemList = new ArrayList<>();
+        Items items = new Items();
+        String str = getItems();
+        String maps[] = str.split(";");
+        for (String map:maps){
+            String value[] = map.split(",");
+            items.setField(value[0]);
+            items.setType(Short.parseShort(value[1]));
+        }
+        itemList.add(items);
+        return itemList;
     }
     
 }

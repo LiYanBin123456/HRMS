@@ -36,7 +36,7 @@ public class Settlement3Service {
     }
 
     //添加
-    public static DaoUpdateResult insert(Connection conn, Settlement3 settlement3) {
+    public static DaoUpdateResult insert(Connection conn, Settlement3 settlement3, byte type) {
         /**
          * 1、插入结算单 返回id
          * 2、根据cid查询出派遣到该单位的所有员工(不包括小时工)
@@ -44,7 +44,7 @@ public class Settlement3Service {
          * 4、批量插入商业保险结算单明细
          **/
         DaoUpdateResult result = Settlement3Dao.insert(conn,settlement3);
-        if(result.success) {
+        if(result.success&&type==1) {
             long sid = (long) result.extra;//返回插入后的主键
             System.out.println("sid:" + sid);
             long did = settlement3.getDid();//合作单位id
