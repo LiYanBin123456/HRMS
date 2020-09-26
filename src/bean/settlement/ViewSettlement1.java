@@ -9,8 +9,8 @@ public class ViewSettlement1 extends Settlement1{
 
     }
 
-    public ViewSettlement1(long id, long did, long cid, Date month, byte status, byte source, float salary, float social, float fund, float manage, float tax, float summary, String name) {
-        super(id, did, cid, month, status, source, salary, social, fund, manage, tax, summary);
+    public ViewSettlement1(long id, long did, long cid, Date month, byte status, byte source, float salary, float social, float medicare, float fund, float manage, float tax, float summary, String name) {
+        super(id, did, cid, month, status, source, salary, social, medicare, fund, manage, tax, summary);
         this.name = name;
     }
 

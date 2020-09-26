@@ -1,11 +1,15 @@
 package dao.settlement;
 
-import bean.settlement.Settlement1;
-import bean.settlement.Settlement3;
-import bean.settlement.ViewSettlement1;
+import bean.contract.Contract;
+import bean.contract.Serve;
+import bean.settlement.*;
+import dao.contract.ContractDao;
+import dao.contract.ServeDao;
 import database.*;
+import utills.Calculate;
 
 import java.sql.Connection;
+import java.util.List;
 
 public class Settlement1Dao {
     public static DaoQueryListResult getList(Connection conn, QueryParameter param) {
@@ -18,8 +22,8 @@ public class Settlement1Dao {
     }
 
     public static DaoUpdateResult insert(Connection conn, Settlement1 s) {
-        String sql = "insert into settlement1 (did,cid,month,salary,social,fund,manage,tax,summary,status,source) values (?,?,?,?,?,?,?,?,?,?,?)";
-        Object []params = {s.getDid(),s.getCid(),s.getMonth(),s.getSalary(),s.getSocial(),s.getFund(),s.getManage(),s.getTax(),s.getSummary(),s.getStatus(),s.getSource()};
+        String sql = "insert into settlement1 (did,cid,month,salary,social,medicare,fund,manage,tax,summary,status,source) values (?,?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {s.getDid(),s.getCid(),s.getMonth(),s.getSalary(),s.getSocial(),s.getMedicare(),s.getFund(),s.getManage(),s.getTax(),s.getSummary(),s.getStatus(),s.getSource()};
         return DbUtil.insert(conn,sql,params);
     }
 
@@ -103,5 +107,13 @@ public class Settlement1Dao {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
         return DbUtil.get(conn,"settlement1",conditions,Settlement1.class);
+    }
+
+
+    //修改结算单
+    public static DaoUpdateResult update(Connection conn, Settlement1 s) {
+        String sql = "update settlement1 set did=?,cid=?,month=?,salary=?,social=?,medicare=?,fund=? ,manage=?,tax=?,summary=?,status=?,source=? where id = ?";
+        Object []params = {s.getDid(),s.getCid(),s.getMonth(),s.getSalary(),s.getSocial(),s.getMedicare(),s.getFund(),s.getManage(),s.getTax(),s.getSummary(),s.getStatus(),s.getSource(),s.getId()};
+        return DbUtil.update(conn,sql,params);
     }
 }

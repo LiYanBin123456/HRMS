@@ -10,8 +10,8 @@ public class ViewContractEmployee extends Contract{
     public ViewContractEmployee() {
     }
 
-    public ViewContractEmployee(String id, long aid, long bid, String type, Date start, Date end, byte status, String comments, byte invoice, String project, byte times, String cardId, String name) {
-        super(id, aid, bid, type, start, end, status, comments, invoice, project, times);
+    public ViewContractEmployee(String id, long aid, long bid, String type, Date start, Date end, byte status, String comments, byte invoice, String project, float per, byte times, String cardId, String name) {
+        super(id, aid, bid, type, start, end, status, comments, invoice, project, per, times);
         this.cardId = cardId;
         this.name = name;
     }

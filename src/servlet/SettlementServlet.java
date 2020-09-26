@@ -95,6 +95,12 @@ public class SettlementServlet extends HttpServlet {
             case "deleteDetail"://删除结算单明细
                 result = deleteDetail(conn, request);
                 break;
+            case "saveSettlement"://保存结算单
+                result = saveSettlement(conn, request);
+                break;
+            case "saveDetail"://保存结算单明细
+                result = saveDetail(conn, request);
+                break;
         }
         ConnUtil.closeConnection(conn);
 
@@ -105,6 +111,39 @@ public class SettlementServlet extends HttpServlet {
 
     }
 
+    private String saveDetail(Connection conn, HttpServletRequest request) {
+        int category = Integer.parseInt(request.getParameter("category"));//类别
+        long sid = Long.parseLong(request.getParameter("sid"));//结算单id
+        long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
+        DaoUpdateResult result = null;
+        switch (category){
+            case 0://普通结算单明细
+                result = Detail1Service.saveDetail(conn,sid,cid);
+                break;
+            case 1://小时工结算单明细
+                break;
+            case 2://结算单明细
+                break;
+        }
+        return JSONObject.toJSONString(result);
+    }
+
+    private String saveSettlement(Connection conn, HttpServletRequest request) {
+        int category = Integer.parseInt(request.getParameter("category"));
+        long sid = Long.parseLong(request.getParameter("sid"));
+        long cid = Long.parseLong(request.getParameter("cid"));
+        DaoUpdateResult result = null;
+        switch (category){
+            case 0://普通结算单
+                result =Settlement1Service.saveSettlement(conn,cid,sid);
+                break;
+            case 1://小时工结算单
+                break;
+            case 2://商业保险结算单
+                break;
+        }
+        return JSONObject.toJSONString(result);
+    }
 
 
     //获取列表

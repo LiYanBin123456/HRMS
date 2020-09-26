@@ -4,9 +4,10 @@ import java.sql.Date;
 
 //结算单
 public class Settlement1 extends Settlemet{
-    private float salary;//工资
-    private float social;//社保
-    private float fund;//公积金
+    private float salary;//应发工资总额
+    private float social;//单位社保总额
+    private float medicare;//单位医保总额
+    private float fund;//单位公积金总额
     private float manage;//管理费
     private float tax;//税费
     private float summary;//总额
@@ -14,10 +15,11 @@ public class Settlement1 extends Settlemet{
     public Settlement1() {
     }
 
-    public Settlement1(long id, long did, long cid, Date month, byte status, byte source, float salary, float social, float fund, float manage, float tax, float summary) {
+    public Settlement1(long id, long did, long cid, Date month, byte status, byte source, float salary, float social, float medicare, float fund, float manage, float tax, float summary) {
         super(id, did, cid, month, status, source);
         this.salary = salary;
         this.social = social;
+        this.medicare = medicare;
         this.fund = fund;
         this.manage = manage;
         this.tax = tax;
@@ -38,6 +40,14 @@ public class Settlement1 extends Settlemet{
 
     public void setSocial(float social) {
         this.social = social;
+    }
+
+    public float getMedicare() {
+        return medicare;
+    }
+
+    public void setMedicare(float medicare) {
+        this.medicare = medicare;
     }
 
     public float getFund() {

@@ -25,6 +25,7 @@ public class Contract {
      */
     private byte invoice;
     private String project;//开票项目（派遣公司） 其他类型默认为null
+    private float per;//税费比例（选择增值税专用发票（全额）需要用到）
     private byte times;//签订次数（员工） 其他类型合同默认为null
 
     public String getId() {
@@ -107,6 +108,14 @@ public class Contract {
         this.invoice = invoice;
     }
 
+    public float getPer() {
+        return per;
+    }
+
+    public void setPer(float per) {
+        this.per = per;
+    }
+
     public String getProject() {
         return project;
     }
@@ -120,7 +129,7 @@ public class Contract {
     public Contract() {
     }
 
-    public Contract(String id, long aid, long bid, String type, Date start, Date end, byte status, String comments, byte invoice, String project, byte times) {
+    public Contract(String id, long aid, long bid, String type, Date start, Date end, byte status, String comments, byte invoice, String project, float per, byte times) {
         this.id = id;
         this.aid = aid;
         this.bid = bid;
@@ -131,6 +140,7 @@ public class Contract {
         this.comments = comments;
         this.invoice = invoice;
         this.project = project;
+        this.per = per;
         this.times = times;
     }
 
@@ -141,12 +151,13 @@ public class Contract {
                 ", aid=" + aid +
                 ", bid=" + bid +
                 ", type='" + type + '\'' +
-                ", start='" + start + '\'' +
-                ", end='" + end + '\'' +
+                ", start=" + start +
+                ", end=" + end +
                 ", status=" + status +
-
+                ", comments='" + comments + '\'' +
                 ", invoice=" + invoice +
                 ", project='" + project + '\'' +
+                ", per=" + per +
                 ", times=" + times +
                 '}';
     }

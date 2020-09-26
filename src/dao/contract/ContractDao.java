@@ -40,7 +40,7 @@ public class ContractDao {
     }
 
     //查询最新合同
-    public  static DaoQueryResult getLast(Connection conn, String bid,String type) {
+    public  static DaoQueryResult getLast(Connection conn, long bid,String type) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("bid", "=", bid);
         conditions.add("type", "=", type);
@@ -51,15 +51,15 @@ public class ContractDao {
 
     //插入合同
     public static DaoUpdateResult insert(Connection conn, Contract c) {
-        String sql = "insert into contract (id,aid,bid,type,start,end,status,comments,invoice,project,times) values (?,?,?,?,?,?,?,?,?,?,?)";
-        Object []params = {c.getId(),c.getAid(),c.getBid(),c.getType(),c.getStart(),c.getEnd(),c.getStatus(),c.getComments(),c.getInvoice(),c.getProject(),c.getTimes()};
+        String sql = "insert into contract (id,aid,bid,type,start,end,status,comments,invoice,project,per,times) values (?,?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {c.getId(),c.getAid(),c.getBid(),c.getType(),c.getStart(),c.getEnd(),c.getStatus(),c.getComments(),c.getInvoice(),c.getProject(),c.getPer(),c.getTimes()};
         return DbUtil.insert(conn,sql,params);
     }
 
     //修改合同
     public  static DaoUpdateResult update(Connection conn, Contract c){
-        String sql = "update contract set type=?,start=?,end=?,status=?,comments=?,invoice=?,project=?,times=? where id =?";
-        Object []params = {c.getType(),c.getStart(),c.getEnd(),c.getStatus(), c.getComments(), c.getInvoice(),c.getProject(),c.getTimes(),c.getId()};
+        String sql = "update contract set type=?,start=?,end=?,status=?,comments=?,invoice=?,project=?,per=?,times=? where id =?";
+        Object []params = {c.getType(),c.getStart(),c.getEnd(),c.getStatus(), c.getComments(), c.getInvoice(),c.getProject(),c.getPer(),c.getTimes(),c.getId()};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
     }

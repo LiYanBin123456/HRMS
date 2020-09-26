@@ -1,17 +1,28 @@
 package service.settlement;
 
+import bean.client.MapSalary;
+import bean.employee.Deduct;
 import bean.employee.Employee;
+import bean.employee.EnsureSetting;
+import bean.rule.RuleMedicare;
+import bean.rule.RuleSocial;
 import bean.settlement.Detail1;
 import bean.settlement.Detail2;
 import bean.settlement.ViewDetail1;
 import bean.settlement.ViewDetail2;
+import dao.client.MapSalaryDao;
+import dao.employee.DeductDao;
 import dao.employee.EmployeeDao;
+import dao.employee.SettingDao;
+import dao.rule.RuleMedicareDao;
+import dao.rule.RuleSocialDao;
 import dao.settlement.Detail1Dao;
 import dao.settlement.Detail2Dao;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.QueryConditions;
 import database.QueryParameter;
+import utills.Calculate;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -51,5 +62,33 @@ public class Detail1Service {
     }
     public static String makeup(Connection conn,Long id,String month){
         return null;
+    }
+
+
+    //计算结算单并修改
+    public static DaoUpdateResult saveDetail(Connection conn,long sid, long cid) {
+
+        QueryParameter param = new QueryParameter();
+        param.conditions.add("sid","=",sid);
+        DaoQueryListResult result1 = Detail1Dao.getList(conn,param);//查询数据库中属于该结算单的所有明细
+        List<Detail1> detail1s = (List<Detail1>) result1.rows;//所有明细
+
+        List<Detail1> detail1List  = new ArrayList<>();//新建一个集合用于存放计算好后的明细
+        for(Detail1 d:detail1s){
+
+            EnsureSetting setting = (EnsureSetting) SettingDao.get(conn,d.getEid()).data;//员工设置
+            String city = setting.getCity();//员工所处地市
+            RuleMedicare medicare= (RuleMedicare) RuleMedicareDao.getLast(conn,city).data;//获取该地市的最新医保
+            RuleSocial social = (RuleSocial) RuleSocialDao.getLast(conn,city).data;//获取该地市的最新社保
+
+            MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(cid,conn).data;//获取当月结算单
+            Deduct deduct = (Deduct) DeductDao.get(conn,d.getEid()).data;//获取员工个税专项扣除
+
+            Detail1 detail1 = Calculate.calculateDetail1(d,medicare,social,setting,mapSalary,deduct);//计算结算单明细
+
+            detail1List.add(detail1);
+
+        }
+        return  Detail1Dao.update(conn,detail1List);
     }
 }

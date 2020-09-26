@@ -2,6 +2,10 @@ package bean.employee;
 
 public class Deduct {
     private long eid;//员工外键
+    private float income;//累计收入总额
+    private float free;//累计减免扣除
+    private float prepaid;//累计已预缴税额
+    private float deduct;//累计专项扣除总额
     private float deduct1;//子女教育扣除额
     private float deduct2;//赡养老人
     private float deduct3;//继续教育
@@ -12,8 +16,12 @@ public class Deduct {
     public Deduct() {
     }
 
-    public Deduct(long eid, float deduct1, float deduct2, float deduct3, float deduct4, float deduct5, float deduct6) {
+    public Deduct(long eid, float income, float free, float prepaid, float deduct, float deduct1, float deduct2, float deduct3, float deduct4, float deduct5, float deduct6) {
         this.eid = eid;
+        this.income = income;
+        this.free = free;
+        this.prepaid = prepaid;
+        this.deduct = deduct;
         this.deduct1 = deduct1;
         this.deduct2 = deduct2;
         this.deduct3 = deduct3;
@@ -28,6 +36,38 @@ public class Deduct {
 
     public void setEid(long eid) {
         this.eid = eid;
+    }
+
+    public float getIncome() {
+        return income;
+    }
+
+    public void setIncome(float income) {
+        this.income = income;
+    }
+
+    public float getFree() {
+        return free;
+    }
+
+    public void setFree(float free) {
+        this.free = free;
+    }
+
+    public float getPrepaid() {
+        return prepaid;
+    }
+
+    public void setPrepaid(float prepaid) {
+        this.prepaid = prepaid;
+    }
+
+    public float getDeduct() {
+        return deduct;
+    }
+
+    public void setDeduct(float deduct) {
+        this.deduct = deduct;
     }
 
     public float getDeduct1() {
@@ -77,6 +117,7 @@ public class Deduct {
     public void setDeduct6(float deduct6) {
         this.deduct6 = deduct6;
     }
+
 
     @Override
     public String toString() {

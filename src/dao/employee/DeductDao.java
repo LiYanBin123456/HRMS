@@ -18,15 +18,15 @@ public class DeductDao {
 
     //修改
     public static DaoUpdateResult update(Connection conn, Deduct d) {
-            String sql = "update deduct set deduct1=?,deduct2=?,deduct3=?,deduct4=?,deduct5=?,deduct6=? where eid=? ";
-            Object []params = {d.getDeduct1(),d.getDeduct2(),d.getDeduct3(),d.getDeduct4(),d.getDeduct5(),d.getDeduct6(),d.getEid()};
+            String sql = "update deduct set income=?,free=?,prepaid=?,deduct=?,deduct1=?,deduct2=?,deduct3=?,deduct4=?,deduct5=?,deduct6=? where eid=? ";
+            Object []params = {d.getIncome(),d.getFree(),d.getPrepaid(),d.getDeduct(),d.getDeduct1(),d.getDeduct2(),d.getDeduct3(),d.getDeduct4(),d.getDeduct5(),d.getDeduct6(),d.getEid()};
         return  DbUtil.update(conn,sql,params);
     }
 
     //增加
     public static DaoUpdateResult insert(Connection conn,  Deduct d) {
-        String sql = "insert deduct (eid,deduct1,deduct2,deduct3,deduct4,deduct5,deduct6) values (?,?,?,?,?,?,?)";
-        Object []params = {d.getEid(),d.getDeduct1(),d.getDeduct2(),d.getDeduct3(),d.getDeduct4(),d.getDeduct5(),d.getDeduct6()};
+        String sql = "insert deduct (eid,income,free,prepaid,deduct,deduct1,deduct2,deduct3,deduct4,deduct5,deduct6) values (?,?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {d.getEid(),d.getIncome(),d.getFree(),d.getPrepaid(),d.getDeduct(),d.getDeduct1(),d.getDeduct2(),d.getDeduct3(),d.getDeduct4(),d.getDeduct5(),d.getDeduct6()};
         return  DbUtil.insert(conn,sql,params);
     }
 
@@ -53,10 +53,11 @@ public class DeductDao {
     }
 
     public static DaoUpdateResult importDeducts(Connection conn, List<Deduct> d) {
-        String sql = "insert deduct (eid,deduct1,deduct2,deduct3,deduct4,deduct5,deduct6) values (?,?,?,?,?,?,?)";
+        String sql = "insert deduct (eid,income,free,prepaid,deduct,deduct1,deduct2,deduct3,deduct4,deduct5,deduct6) values (?,?,?,?,?,?,?)";
         Object [][]params = new Object[d.size()][];
         for (int i = 0; i < d.size(); i++) {
-            params[i] = new Object[]{d.get(i).getEid(),d.get(i).getDeduct1(),d.get(i).getDeduct2(),d.get(i).getDeduct3(),d.get(i).getDeduct4(),d.get(i).getDeduct5(),d.get(i).getDeduct6()};
+            params[i] = new Object[]{d.get(i).getEid(),d.get(i).getIncome(),d.get(i).getFree(),d.get(i).getPrepaid(),d.get(i).getDeduct()
+                    ,d.get(i).getDeduct1(),d.get(i).getDeduct2(),d.get(i).getDeduct3(),d.get(i).getDeduct4(),d.get(i).getDeduct5(),d.get(i).getDeduct6()};
         }
         return DbUtil.insertBatch(conn,sql,params);
     }

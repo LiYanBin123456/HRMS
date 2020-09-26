@@ -25,13 +25,13 @@ public class DeductService {
     //增加
     public static DaoUpdateResult insert(Connection conn, Deduct deduct) {
         DaoUpdateResult result = new DaoUpdateResult();
+        //计算专项扣除总额
+        float deducts = deduct.getDeduct1()+deduct.getDeduct2()+deduct.getDeduct3()+deduct.getDeduct4()+deduct.getDeduct5()+deduct.getDeduct6();
+        deduct.setDeduct(deducts);
         if(!DeductDao.exist(conn,deduct.getEid()).exist){
            result = DeductDao.insert(conn,deduct);
-        }else {
-            QueryConditions conditions = new QueryConditions();
-            conditions.add("id","=",deduct.getEid());
-            Employee employee = (Employee) EmployeeDao.get(conn,conditions).data;
-            result.msg = "员工"+employee.getName()+"个税已存在，请勿重复添加";
+        }else {//已存在则修改
+            result = DeductDao.update(conn,deduct);
         }
         return result;
     }

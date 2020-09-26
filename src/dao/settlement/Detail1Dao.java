@@ -1,17 +1,33 @@
 package dao.settlement;
 
+import bean.client.MapSalary;
+import bean.employee.Deduct;
+import bean.employee.Employee;
+import bean.employee.EnsureSetting;
+import bean.rule.RuleMedicare;
+import bean.rule.RuleSocial;
 import bean.settlement.Detail1;
 import bean.settlement.ViewDetail1;
+import dao.client.MapSalaryDao;
+import dao.employee.DeductDao;
+import dao.employee.EmployeeDao;
+import dao.employee.SettingDao;
+import dao.rule.RuleMedicareDao;
+import dao.rule.RuleSocialDao;
 import database.*;
+import utills.Calculate;
 
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Detail1Dao {
+
     public static DaoQueryListResult getList(Connection conn, QueryParameter param){
         return DbUtil.getList(conn,"view_detail1",param, ViewDetail1.class);
     }
+
     public static DaoUpdateResult update(Connection conn, List<Detail1> details){
         String sql = "update detail1 set base=?,pension1=?,medicare1=?,unemployment1=?,disease1=?,fund1=?,pension2=?,medicare2=?,unemployment2=?,injury=?,disease2=?,birth=?,fund2=?,tax=?,payable=?,paid=?,f1=?,f2=?,f3=?,f4=?,f5=?,f6=?,f7=?,f8=?,f9=?,f10=?,f11=?,f12=?,f13=?,f14=?,f15=?,f16=?,f17=?,f18=?,f19=?,f20=? where id = ?";
         Object [][]params = new Object[details.size()][];
@@ -51,4 +67,5 @@ public class Detail1Dao {
         conditions.add("id","=",id);
         return DbUtil.delete(conn,"detail1",conditions);
     }
+
 }

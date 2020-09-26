@@ -1,23 +1,25 @@
 package service.settlement;
 
 import bean.admin.Account;
+import bean.contract.Contract;
+import bean.contract.Serve;
 import bean.employee.Employee;
 import bean.employee.ViewEmployee;
 import bean.log.Log;
-import bean.settlement.Detail1;
-import bean.settlement.Detail3;
-import bean.settlement.Settlement1;
-import bean.settlement.Settlement3;
+import bean.settlement.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.LogDao;
 import dao.admin.AccountDao;
+import dao.contract.ContractDao;
+import dao.contract.ServeDao;
 import dao.employee.EmployeeDao;
 import dao.settlement.Detail1Dao;
 import dao.settlement.Detail3Dao;
 import dao.settlement.Settlement1Dao;
 import dao.settlement.Settlement3Dao;
 import database.*;
+import utills.Calculate;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -276,4 +278,23 @@ public class Settlement1Service {
     }
 
 
+    //保存结算单；实质是计算结算单并且修改
+    public static DaoUpdateResult saveSettlement(Connection conn, long sid,long cid) {
+        //派遣方与合作单位的最新合同
+        Contract contract = (Contract) ContractDao.getLast(conn,cid,"B").data;
+        //合同的服务项目
+        Serve serve = (Serve) ServeDao.get(conn,contract.getId()).data;
+        //结算单
+        Settlement1 settlement1 = (Settlement1) Settlement1Dao.get(conn,sid).data;
+
+        QueryParameter parm = new QueryParameter();
+        parm.addCondition("sid","=",sid);
+        //该结算单中的所有明细
+        List<ViewDetail1> viewDetail1s = (List<ViewDetail1>) Detail1Dao.getList(conn,parm).rows;
+
+        //计算结算单
+        Settlement1 settlement11 = Calculate.calculateSettlement1(settlement1,contract,serve,viewDetail1s);
+
+        return Settlement1Dao.update(conn,settlement11);
+    }
 }

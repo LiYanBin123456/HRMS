@@ -12,7 +12,7 @@ public class ContractService {
      return ContractDao.getList(conn,parameter,type,rid);
     }
 
-    public static DaoQueryResult getLast(Connection conn, String id,String type) {
+    public static DaoQueryResult getLast(Connection conn, long id,String type) {
         return ContractDao.getLast(conn,id,type);
     }
 

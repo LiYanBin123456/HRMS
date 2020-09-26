@@ -106,7 +106,7 @@ public class ContractServlet extends HttpServlet {
 
     //获取最新合同
     private String getLast(Connection conn, HttpServletRequest request) {
-        String bid = (request.getParameter("id"));
+        long bid = Long.parseLong(request.getParameter("id"));
         System.out.println("客户id="+bid);
         String type = request.getParameter("type");
         DaoQueryResult res = ContractService.getLast(conn,bid,type);
