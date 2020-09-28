@@ -187,6 +187,7 @@
     var form;//表单对象
     var editer;
     var upload;
+    var element;
     var laydate;
     loadLayuiModule();
 
@@ -196,6 +197,7 @@
             layedit = layui.layedit;
             editer = layedit.build('content'); //建立编辑器
             upload = layui.upload;
+            element = layui.element;
             laydate = layui.laydate;
             upload.render({
                 elem: '#test1' //绑定元素
