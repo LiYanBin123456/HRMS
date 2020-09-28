@@ -62,6 +62,7 @@
             });
             form.on('radio(mode)', function(data){
                 settlement.mode = data.value;
+                console.log( settlement.mode);
             });
             laydate.render({
                 elem: '#month' //指定元素

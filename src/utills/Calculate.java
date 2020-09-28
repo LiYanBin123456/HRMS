@@ -8,10 +8,7 @@ import bean.employee.Deduct;
 import bean.employee.EnsureSetting;
 import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
-import bean.settlement.Detail;
-import bean.settlement.Detail1;
-import bean.settlement.Settlement1;
-import bean.settlement.ViewDetail1;
+import bean.settlement.*;
 import dao.employee.SettingDao;
 import dao.rule.RuleMedicareDao;
 import dao.rule.RuleSocialDao;
@@ -251,7 +248,7 @@ public class Calculate {
 
 
         //计算应发工资
-        float payable = 0;
+        float payable =base;//初始是基本工资
         List<Items> itemList = mapSalary.getItemList();
 
         for (int i = 0; i <itemList.size(); i++) {
@@ -446,6 +443,77 @@ public class Calculate {
         }
 
         return tax;
+    }
+
+    /**
+     * 计算小时工结算单明细
+     * @param d 小时工结算单明细
+     * @param deduct 所属员工的各项扣除
+     * @return 计算好的结算单明细
+     */
+    public static Detail2 calculatteDetail2(Detail2 d,Deduct deduct){
+        float payable;//应付金额
+        float paid;//实付金额
+
+        payable = d.getHours()*d.getPrice();//应付=工时*单价
+
+        double tax=0;//个税 = 应税额*税率（A） – 速算扣除（B） – 累计已预缴税额（C）
+        float income1;//本期收入 = 本月应发（G）
+        float taxDue;//应税额 = 累计收入额（D）+ 本期收入 – 个税累计专项扣除（E）– 累计减除费用（F）
+
+        income1 = payable;
+        taxDue=deduct.getIncome()+income1-deduct.getDeduct()-deduct.getFree();
+
+        if(taxDue>0&&taxDue<=36000){//根据个税比例报表计算个税
+            tax = taxDue*0.03-deduct.getPrepaid();
+        }else if(taxDue>36000&&taxDue<=144000){
+            tax = taxDue*0.1-2520-deduct.getPrepaid();
+        }else if(taxDue>144000&&taxDue<=300000){
+            tax = taxDue*0.2-16920-deduct.getPrepaid();
+        }else if(taxDue>300000&&taxDue<=420000){
+            tax = taxDue*0.25-31920-deduct.getPrepaid();
+        }else if(taxDue>420000&&taxDue<=660000){
+            tax = taxDue*0.3-52920-deduct.getPrepaid();
+        }else if(taxDue>660000&&taxDue<=960000){
+            tax = taxDue*0.35-85920-deduct.getPrepaid();
+        }else if(taxDue>960000){
+            tax = taxDue*0.45-181920-deduct.getPrepaid();
+        }
+
+        paid = payable-d.getInsurance()-d.getTraffic()-d.getUtilities()-d.getAccommodation()-d.getFood()-d.getOther1()-d.getOther2()-(float) tax;
+
+        d.setPayable(payable);
+        d.setTax((float) tax);
+        d.setPaid(paid);
+       return d;
+    }
+
+
+    /**
+     * 计算小时工结算单
+     * @param settlement2   小时工结算单
+     * @param detail2s  小时工结算明细列表
+     * @return  计算好的结算单
+     */
+    public static Settlement2 calculateSettlement2(Settlement2 settlement2,List<Detail2> detail2s){
+         int hours=0;//总工时
+         float traffic=0;//交通费
+         float extra=0;//附加
+         float summary=0;//总额
+
+        for (Detail2 detail2:detail2s){
+            hours+=detail2.getHours();
+            traffic+=detail2.getTraffic();
+            extra+=(detail2.getOther1()+detail2.getOther2());
+        }
+
+        summary=hours*settlement2.getPrice();
+        settlement2.setHours(hours);
+        settlement2.setSummary(summary);
+        settlement2.setExtra(extra);
+        settlement2.setTraffic(traffic);
+
+        return settlement2;
     }
 
 }

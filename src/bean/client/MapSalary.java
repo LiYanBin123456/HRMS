@@ -50,15 +50,15 @@ public class MapSalary {
      */
     public List<Items> getItemList(){
         List<Items> itemList = new ArrayList<>();
-        Items items = new Items();
         String str = getItems();
         String maps[] = str.split(";");
         for (String map:maps){
             String value[] = map.split(",");
+            Items items = new Items();
             items.setField(value[0]);
             items.setType(Short.parseShort(value[1]));
+            itemList.add(items);
         }
-        itemList.add(items);
         return itemList;
     }
     

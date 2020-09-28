@@ -21,6 +21,7 @@ import database.DaoQueryListResult;
 import database.DaoQueryResult;
 import database.DaoUpdateResult;
 import database.QueryParameter;
+import utills.Calculate;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -40,7 +41,8 @@ public class Settlement2Service {
 
     //插入结算单
     public static DaoUpdateResult insert(Connection conn, Settlement2 settlement2, byte type) {
-        DaoUpdateResult result = null;
+        DaoUpdateResult result ;
+        //需要获取合同中的小时工单价
         result = Settlement2Dao.insert(conn,settlement2);
         if(result.success&&type==1){
             long sid = (long) result.extra;//结算单id
@@ -279,4 +281,12 @@ public class Settlement2Service {
     }
 
 
+    public static DaoUpdateResult saveSettlement(Connection conn, long sid) {
+        Settlement2 settlement2 = (Settlement2) Settlement2Dao.get(conn,sid).data;
+        QueryParameter param = new QueryParameter();
+        param.addCondition("sid","=",sid);
+        List<Detail2> detail2List = (List<Detail2>) Detail2Dao.getList(conn,param).rows;
+
+        return Settlement2Dao.update(conn,Calculate.calculateSettlement2(settlement2,detail2List));
+    }
 }

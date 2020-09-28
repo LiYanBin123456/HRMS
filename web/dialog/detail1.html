@@ -32,13 +32,13 @@
             <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
             <div class="layui-hide" id="top_bar_detail">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
-                <button class="layui-btn layui-btn-sm" lay-event="autoGet" onclick="autoCreate()"><i class="layui-icon "></i> 自动生成明细</button>
                 <button class="layui-btn layui-btn-sm" lay-event="append"><i class="layui-icon "></i> 社保补缴</button>
                 <button class="layui-btn layui-btn-sm" lay-event="balance"><i class="layui-icon "></i> 社保补差</button>
                 <button class="layui-btn layui-btn-sm" lay-event="" onclick="exports()" ><i class="layui-icon " ></i> 导出</button>
                 <button class="layui-btn layui-btn-sm" lay-event="import"><i class="layui-icon "></i> 导入</button>
                 <button class="layui-btn layui-btn-sm" lay-event="" onclick="download()"><i class="layui-icon "></i> 下载模板</button>
-                <button class="layui-btn layui-btn-sm" lay-event="" onclick="save()"><i class="layui-icon "></i> 保存</button>
+                <button class="layui-btn layui-btn-sm" lay-event="" onclick="updateDetail()"><i class="layui-icon "></i> 修改</button>
+                <button class="layui-btn layui-btn-sm" lay-event="" onclick="saveDetail()"><i class="layui-icon "></i> 保存</button>
             </div>
             <form class="layui-form" style="display: inline">
                 <div class="layui-input-inline">
@@ -171,14 +171,29 @@
                 });
                 getDetails();
           }
-            function  save() {
+            //修改结算单明细
+            function  updateDetail() {
                 var details = layui.table.cache.tbl_detail;
-                var msg = "保存后结算单将被设置为[保存]状态，同时会自动计算社保、医保和个税等，确认保存吗？";
-                var title = "保存结算单明细";
+                var msg = "修改结算单";
+                var title = "修改结算单结算单明细";
                 layer.confirm(msg, {icon: 3, title:title}, function(index){
                     iSettlement.updateDetails(details,0,function () {
                         layer.close(index);
                         layer.msg("修改成功");
+                        getDetails();
+                    })
+                });
+            };
+
+
+            //保存结算单明细并且计算
+            function  saveDetail() {
+                var msg = "保存后结算单将被设置为[保存]状态，同时会自动计算社保、医保和个税等，确认保存吗？";
+                var title = "保存结算单明细";
+                layer.confirm(msg, {icon: 3, title:title}, function(index){
+                    iSettlement.saveDetail(sid,cid,0,function () {
+                        layer.close(index);
+                        layer.msg("保存成功");
                         getDetails();
                     })
                 });
@@ -382,21 +397,6 @@
                     form.submit();
                     form.remove();
             }
-
-            //自动生成明细
-            function autoCreate() {
-                var msg = "点击后会根据结算单，自动生成员工工资明细";
-                var title = "自动生成明细";
-                layer.confirm(msg, {icon: 3, title:title}, function(index){
-                iSettlement.autoCreate(sid,cid,0,function () {
-                  layer.close(index);
-                    layer.close(index);
-                    getDetails();
-                    layer.msg('自动生成功');
-                })
-                });
-            }
-
         </script>
     </body>
 </html>

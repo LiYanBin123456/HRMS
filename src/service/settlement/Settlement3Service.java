@@ -247,4 +247,13 @@ public class Settlement3Service {
         return LogDao.getList(conn,id,parameter);
     }
 
+    public static DaoUpdateResult saveSettlement(Connection conn, long sid) {
+        Settlement3 settlement3 = (Settlement3) Settlement3Dao.get(conn,sid).data;
+        QueryParameter param = new QueryParameter();
+        param.addCondition("sid","=",sid);
+        List<Detail3> detail3List = (List<Detail3>) Detail3Dao.getList(conn,param).rows;
+        int num = detail3List.size();//数量
+        float price = 0;//保费
+        return null;
+    }
 }

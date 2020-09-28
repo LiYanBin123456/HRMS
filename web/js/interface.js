@@ -735,7 +735,7 @@ var InterfaceSettlement = function () {
      * @param fail
      */
     this.insert = function (settlement,category,type,success,fail) {
-        var para = {op: "insert",settlement:JSON.stringify(settlement), category:category};
+        var para = {op: "insert",settlement:JSON.stringify(settlement), category:category,type:type};
         access(url,para,1,success,fail);
     };
     /**
@@ -923,17 +923,30 @@ var InterfaceSettlement = function () {
     };
 
     /**
-     * 自动生成结算明细
+     * 保存结算单并且自动计算结算单明细
      * @param sid 结算单id
      * @param cid 合作单位id
-     * @param category  0—结算单  1—小时工结算单  2—商业保险结算单
+     * @param category 0_普通结算单 1_小时工结算单  2_商业保险结算单
      * @param success
      * @param fail
      */
-    this.autoCreate = function (sid,cid,category,success,fail) {
-        var para = {op: "autoCreate",sid:sid,cid:cid,category:category};
+    this.saveDetail = function (sid,cid,category,success,fail) {
+        var para = {op: "saveDetail",sid:sid,cid:cid,category:category};
         access(url,para,1,success,fail);
-    }
+    };
+
+    /**
+     * 保存并且计算结算单
+     * @param sid 结算单id
+     * @param cid 合作单位id
+     * @param category 0_普通结算单 1_小时工结算单 2_商业保险结算单
+     * @param success
+     * @param fail
+     */
+    this.saveSettlement = function (sid,cid,category,success,fail) {
+        var para = {op: "saveSettlement",sid:sid,cid:cid,category:category};
+        access(url,para,1,success,fail);
+    };
 };
 
 //参保单管理相关接口

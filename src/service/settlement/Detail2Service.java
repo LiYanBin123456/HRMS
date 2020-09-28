@@ -1,8 +1,10 @@
 package service.settlement;
 
+import bean.employee.Deduct;
 import bean.employee.Employee;
 import bean.settlement.Detail2;
 import bean.settlement.ViewDetail2;
+import dao.employee.DeductDao;
 import dao.employee.EmployeeDao;
 import dao.settlement.Detail2Dao;
 import dao.settlement.Detail3Dao;
@@ -10,6 +12,7 @@ import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.QueryConditions;
 import database.QueryParameter;
+import utills.Calculate;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -46,8 +49,16 @@ public class Detail2Service {
         result =Detail2Dao.importDetails(conn,detail2s);
         return  result;
     }
-    public static String exportDetails(Connection conn,long id){
-        return  null;
-    }
 
+    public static DaoUpdateResult saveDetail(Connection conn, long sid) {
+        QueryParameter param = new QueryParameter();
+        param.addCondition("sid","=",sid);
+        List<Detail2> detail2List = (List<Detail2>) Detail2Dao.getList(conn,param).rows;
+        List<Detail2> detail2s = new ArrayList<>();
+        for(Detail2 detail2:detail2List){
+            Deduct deduct = (Deduct) DeductDao.get(conn,detail2.getEid()).data;
+            detail2s.add(Calculate.calculatteDetail2(detail2,deduct));
+        }
+        return Detail2Dao.update(conn,detail2s);
+    }
 }

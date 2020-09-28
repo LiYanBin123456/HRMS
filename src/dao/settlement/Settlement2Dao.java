@@ -105,4 +105,11 @@ public class Settlement2Dao {
         return null;
     }
 
+    //修改结算单
+    public static DaoUpdateResult update(Connection conn, Settlement2 settlement2) {
+        String sql = "update settlement2 set did=?,cid=?,month=?,hours=?,price=?,traffic=?,extra=?,summary=?,status=?,source=?  where id = ?";
+        Object []params = {settlement2.getDid(),settlement2.getCid(),settlement2.getMonth(),settlement2.getHours(),settlement2.getPrice()
+        ,settlement2.getTraffic(),settlement2.getExtra(),settlement2.getSummary(),settlement2.getStatus(),settlement2.getSource(),settlement2.getId()};
+        return DbUtil.update(conn,sql,params);
+    }
 }

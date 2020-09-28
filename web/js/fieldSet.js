@@ -234,7 +234,7 @@ var columns_settlement2  = [[
     {field:'name', title: '用工企业',width:180,fixed:"left"},
     {field:'month', title: '月份',width:90,templet:function (d) {return format_date(d.month)}},
     {field:'hours', title: '总工时',width:70},
-    {field:'price', title: '单价',width:60},
+    {field:'price', title: '单价',width:60,edit: 'text'},
     {field:'traffic', title: '交通费',width:70},
     {field:'extra', title: '附加',width:70},
     {field:'summary', title: '总额',width:80},
@@ -246,7 +246,7 @@ var columns_settlement2  = [[
 var columns_settlement20  = [[
     {field:'month', title: '月份',width:90,fixed:"left",templet:function (d) {return format_date(d.month)}},
     {field:'time', title: '总工时',width:70},
-    {field:'price', title: '单价',width:70},
+    {field:'price', title: '单价',width:70,edit: 'text'},
     {field:'traffic', title: '交通费',width:70},
     {field:'extra', title: '附加',width:70},
     {field:'summary', title: '总额',width:80},
@@ -259,7 +259,7 @@ var columns_settlement3  = [[
     {field:'cname', title: '用工企业',fixed:"left"},
     {field:'month', title: '月份',width:100,templet:function (d) {return format_date(d.month)}},
     {field:'pname', title: '保险产品',width:180},
-    {field:'price', title: '保费',width:100},
+    {field:'price', title: '保费',width:100,edit: 'text'},
     {field:'status', title: '状态',width:100,templet:function (d) { return array_value2text(status_settlement,d.status) }},
     {title: '操作', toolbar: '#bar_settlement',width:480,fixed:"right"}
 ]];
@@ -268,7 +268,7 @@ var columns_settlement3  = [[
 var columns_settlement30  = [[
     {field:'month', title: '月份',width:100,fixed:"left",templet:function (d) {return format_date(d.month)}},
     {field:'pname', title: '保险产品'},
-    {field:'price', title: '保费',width:100},
+    {field:'price', title: '保费',width:100,edit: 'text'},
     {field:'status', title: '状态',width:100,templet:function (d) { return array_value2text(status_settlement,d.status) }},
     {title: '操作', toolbar: '#bar_settlement',width:480,fixed:"right"}
 ]];
@@ -386,19 +386,43 @@ var columns_deduct  = [[
 
 //个税申报字段集合
 var columns_tax  = [[
-    {field:'cardId', title: '身份证号',width:160,fixed:"left"},
+    {field:'id', title: '工号',width:80,fixed:"left"},
     {field:'name', title: '姓名',width:80,fixed:"left"},
-    {field:'payable', title: '本期收入',width:80},
-    {field:'pension', title: '基本养老',width:80},
-    {field:'medicare', title: '基本医疗',width:80},
-    {field:'unemployment', title: '失业险',width:70},
-    {field:'fund', title: '公积金',width:70},
-    {field:'deduct1', title: '子女教育',width:80},
-    {field:'deduct2', title: '赡养老人',width:80},
-    {field:'deduct3', title: '继续教育',width:80},
-    {field:'deduct4', title: '大病医疗',width:80},
-    {field:'deduct5', title: '房贷利息',width:80},
-    {field:'deduct6', title: '住房租金',width:80}
+    {field:'type', title: '证照类型',width:120},
+    {field:'cardId', title: '身份证号',width:160},
+    {field:'start', title: '税款所属期起',width:120},
+    {field:'end', title: '税款所属期止',width:120},
+    {field:'', title: '所得项目',width:120},
+    {field:'', title: '本期收入',width:120},
+    {field:'', title: '本期费用',width:120},
+    {field:'', title: '本期免税收入',width:120},
+    {field:'pension', title: '本期基本养老保险费',width:120},
+    {field:'medicare', title: '本期基本医疗费',width:120},
+    {field:'unemployment', title: '本期失业保险费',width:120},
+    {field:'fund', title: '本期住房公积金',width:120},
+    {field:'', title: '本期企业(职业)年金',width:120},
+    {field:'', title: '本期健康保险费',width:120},
+    {field:'', title: '本期税延养保险费',width:120},
+    {field:'', title: '本期其他扣除(其他)',width:120},
+    {field:'income', title: '累计收入额',width:120},
+    {field:'', title: '累计免税收入',width:120},
+    {field:'free', title: '累计减除费用',width:120},
+    {field:'deduct', title: '累计专项扣除',width:120},
+    {field:'deduct1', title: '累计子女教育支出扣除',width:130},
+    {field:'deduct3', title: '累计继续教育支出扣除',width:130},
+    {field:'deduct5', title: '累计住房贷款利息支出扣除',width:130},
+    {field:'deduct6', title: '累计住房租金支出扣除',width:130},
+    {field:'deduct2', title: '累计赡养老人支出扣除',width:130},
+    {field:'', title: '累计准予扣除的捐赠',width:130},
+    {field:'', title: '累计应纳税所得额',width:130},
+    {field:'tax', title: '税率',width:120},
+    {field:'deduction', title: '速算扣除数',width:120},
+    {field:'deduct6', title: '累计应纳税额',width:120},
+    {field:'free', title: '累计减免税额',width:140},
+    {field:'', title: '累计应扣缴税额',width:120},
+    {field:'prepaid', title: '累计已预缴税额',width:120},
+    {field:'', title: '累计应补(退)税额',width:130},
+    {field:'', title: '备注',width:120}
 ]];
 
 //医/社保参保字段集合

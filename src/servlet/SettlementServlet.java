@@ -111,6 +111,7 @@ public class SettlementServlet extends HttpServlet {
 
     }
 
+    //保存并且计算结算单明细
     private String saveDetail(Connection conn, HttpServletRequest request) {
         int category = Integer.parseInt(request.getParameter("category"));//类别
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
@@ -121,6 +122,7 @@ public class SettlementServlet extends HttpServlet {
                 result = Detail1Service.saveDetail(conn,sid,cid);
                 break;
             case 1://小时工结算单明细
+                result = Detail2Service.saveDetail(conn,sid);
                 break;
             case 2://结算单明细
                 break;
@@ -128,6 +130,7 @@ public class SettlementServlet extends HttpServlet {
         return JSONObject.toJSONString(result);
     }
 
+    //保存并且计算结算单
     private String saveSettlement(Connection conn, HttpServletRequest request) {
         int category = Integer.parseInt(request.getParameter("category"));
         long sid = Long.parseLong(request.getParameter("sid"));
@@ -138,13 +141,14 @@ public class SettlementServlet extends HttpServlet {
                 result =Settlement1Service.saveSettlement(conn,cid,sid);
                 break;
             case 1://小时工结算单
+                result =Settlement2Service.saveSettlement(conn,sid);
                 break;
             case 2://商业保险结算单
+                result =Settlement3Service.saveSettlement(conn,sid);
                 break;
         }
         return JSONObject.toJSONString(result);
     }
-
 
     //获取列表
     private String getList(Connection conn, HttpServletRequest request) {
