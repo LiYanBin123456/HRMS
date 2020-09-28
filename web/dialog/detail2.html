@@ -200,7 +200,6 @@
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
                         var detail2s = window["layui-layer-iframe" + index].callbackData();
-                        console.log("2s:"+JSON.stringify(detail2s));
                         iSettlement.importDetails(sid,JSON.stringify(detail2s),1,function () {
                             layer.close(index);
                             layer.msg("导入成功");

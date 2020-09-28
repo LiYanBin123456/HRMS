@@ -1,6 +1,7 @@
 package servlet;
 
 import bean.employee.*;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
@@ -95,7 +96,7 @@ public class EmployeeServlet extends HttpServlet {
             case "getDeducts"://获取个税设置列表
                 result = getDeducts(conn,request);
                 break;
-            case "deleteDeduct"://获取个税设置列表
+            case "deleteDeduct"://删除个税设置
                 result = deleteDeduct(conn,request);
                 break;
         }
@@ -106,6 +107,7 @@ public class EmployeeServlet extends HttpServlet {
         out.flush();
         out.close();
     }
+
 
     //删除
     private String deleteDeduct(Connection conn, HttpServletRequest request) {
@@ -168,7 +170,7 @@ public class EmployeeServlet extends HttpServlet {
 
     //导入个税扣除
     private String importDeducts(Connection conn, HttpServletRequest request) {
-        List<Deduct> deducts = JSONArray.parseArray(request.getParameter("deducts"),Deduct.class);
+        List<ViewDeduct> deducts = JSONArray.parseArray(request.getParameter("deducts"),ViewDeduct.class);
         DaoUpdateResult result = DeductService.importDeducts(conn,deducts);
         return  JSONObject.toJSONString(result);
     }
