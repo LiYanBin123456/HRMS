@@ -70,27 +70,24 @@
         </div>
     </div>
     <div class="layui-form-item" pane="">
-    <div class="layui-input-block">
-      <input type="checkbox" name="" lay-skin="primary" title="1类" checked="">
-      <input type="checkbox" name="" lay-skin="primary" title="2类" checked="">
-      <input type="checkbox" name="" lay-skin="primary" title="3类" checked="">
-    </div>
-  </div>
-  <div class="layui-form-item" pane="">
-    <div class="layui-input-block">
-      <input type="checkbox" name="" lay-skin="primary" title="4类" checked="">
-      <input type="checkbox" name="" lay-skin="primary" title="5类" checked="">
-      <input type="checkbox" name="" lay-skin="primary" title="6类" checked="">
+    <div class="layui-input-block" id="allow" >
+      <input type="checkbox"  name="people" lay-skin="primary"  >
+      <input type="checkbox"  name="people" lay-skin="primary"   >
+      <input type="checkbox" name="people" lay-skin="primary"   >
+      <input type="checkbox" name="people" lay-skin="primary"  >
+      <input type="checkbox" name="people" lay-skin="primary"   >
+      <input type="checkbox" name="people" lay-skin="primary"   >
     </div>
   </div>
     <div class="layui-form-item">
-        <button ype="button" class="layui-btn layui-btn-fluid" onclick="save()">保存</button>
+        <button type="button" class="layui-btn layui-btn-fluid" onclick="save()">保存</button>
     </div>
 </form>
 </body>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
+<script src="../js/fieldSet.js"></script>
 <script>
     var op = "insert";
     var form;//表单对象
@@ -112,6 +109,15 @@
         if (param) {
             var product = JSON.parse(param);
             form.val('form_product', product);
+            for(var i in allow_product){
+                var p = allow_product[i];
+                var o = $("<input type='checkbox' name='people' lay-skin='primary'>").val(p.value).attr('title',p.text);
+                if((product.allow&p.value) != 0){
+                    $(o).attr("checked",true);
+                }
+                $("#allow").append(o);
+            }
+            form.render('checkbox');
             layedit.setContent(editer, product.content, false);
             op = "update";
         }

@@ -76,7 +76,9 @@
                 initTable();
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    search(keyword);
+                    param_query.conditions.extra = keyword;
+                    getProducts();
+                    return false; //阻止表单跳转
                 });
             }
 
@@ -147,11 +149,6 @@
                 });
             }
 
-            //模糊查找
-            function search(keyword) {
-                param_query.conditions.extra = keyword;
-                getProducts();
-            }
 
             //打开详情对话框
             function showDetailDlg(product) {
@@ -186,9 +183,9 @@
                 });
             }
 
-            //删除公告
+            //删除保险铲平
             function del(product) {
-                layer.confirm('确定删除'+product.title, {icon: 3, title:'删除公告'}, function(index){
+                layer.confirm('确定删除'+product.name, {icon: 3, title:'删除公告'}, function(index){
                     iProduct.delete(product.id,function () {
                         layer.close(index);
                         getProducts();
