@@ -64,6 +64,7 @@ public class DeductService {
             //计算个人专项扣除总额
             float deducts = viewDeduct.getDeduct1()+viewDeduct.getDeduct2()+viewDeduct.getDeduct3()+viewDeduct.getDeduct4()+viewDeduct.getDeduct5()+viewDeduct.getDeduct6();
             Deduct deduct = viewDeduct;//将视图的数据赋值给员工各项扣除
+            deduct.setEid(eid);
             deduct.setDeduct(deducts);
             if(!DeductDao.exist(conn,eid).exist){//如果不存在则插入
                 result = DeductDao.insert(conn,deduct);

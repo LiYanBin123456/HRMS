@@ -65,6 +65,9 @@ public class ContractServlet extends HttpServlet {
             case "getServiceList"://获取合同服务项目列表
                 result = getServiceList(conn,request);
                 break;
+            case "getContracts"://获取合同视图
+                result = getContracts(conn,request);
+                break;
 
         }
         ConnUtil.closeConnection(conn);
@@ -72,6 +75,19 @@ public class ContractServlet extends HttpServlet {
         out.print(result);
         out.flush();
         out.close();
+    }
+
+    //根据合作客户和服务项目类型获取派遣方与合作方的合同
+    private String getContracts(Connection conn, HttpServletRequest request) {
+        long id = Long.parseLong(request.getParameter("id"));//合作单位id
+        int type = Integer.parseInt(request.getParameter("type"));//类型 0_劳务外包结算单，1_人事代理，2_小时工结算单，3_商业保险结算单
+        QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
+        parameter.addCondition("did","=",id);
+        parameter.addCondition("stype","=",type);
+        HttpSession session = request.getSession();
+        long rid = (long) session.getAttribute("rid");
+        DaoQueryListResult res = ContractService.getList(conn,parameter,"B",rid);
+        return JSONObject.toJSONString(res);
     }
 
     //插入合同

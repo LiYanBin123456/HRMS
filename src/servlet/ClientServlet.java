@@ -3,6 +3,8 @@ package servlet;
 
 import bean.client.*;
 import com.alibaba.fastjson.*;
+import dao.client.CooperationDao;
+import dao.client.DispatchDao;
 import dao.contract.ContractDao;
 import database.*;
 import service.client.*;
@@ -16,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.Date;
 import java.util.List;
@@ -80,14 +83,32 @@ public class ClientServlet extends HttpServlet {
             case "getFinances"://修改客户服务信息
                 result = getFinances(conn,request);
                 break;
-
-
+            case "updateStatus"://修改客户类型
+                result = updateStatus(conn,request);
+                break;
 }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
         out.print(result);
         out.flush();
         out.close();
+    }
+
+    //修改客户状态
+    private String updateStatus(Connection conn, HttpServletRequest request) {
+        int category = Integer.parseInt(request.getParameter("category"));
+        long id = Long.parseLong(request.getParameter("id"));//要修改的客户id
+        int type = Integer.parseInt(request.getParameter("type"));//修改的类型 0 合作 1 潜在 2 流失
+        DaoUpdateResult result = null;
+        switch (category){
+            case 0://管理单位客户
+                result = DispatchDao.updateStatus(conn,id, type);
+                break;
+            case 1://合作单位客户
+                result = CooperationDao.updateStatus(conn,id, type);
+                break;
+        }
+        return JSONObject.toJSONString(result);
     }
 
     //添加

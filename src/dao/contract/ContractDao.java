@@ -33,6 +33,7 @@ public class ContractDao {
         }
         return res;
     }
+
     public static DaoQueryResult get(Connection conn,String id) {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id", "=", id);

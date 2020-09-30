@@ -167,6 +167,7 @@ var columns_employee_expatriate = [[
     { title: '操作', toolbar: '#bar_employee',width:400,fixed:"right"}
 ]];
 
+
 //人才库字段集合
 var columns_employee_spare = [[
     {field:'cardId', title: '身份证号',width:200},
@@ -317,6 +318,8 @@ var columns_detail3  = [[
     {field:'price', title: '保费',width:80,edit: 'text'},
     {fixed: 'right', title: '操作', toolbar: '#bar_detail'}
 ]];
+
+
 
 //资金明细字段集合
 var columns_detail4  = [[

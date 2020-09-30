@@ -71,6 +71,19 @@ var InterfaceClient = function() {
         var para = {op:"update",client:JSON.stringify(client), category: category};
         access(url,para,1,success,fail);
     };
+
+    /**
+     *
+     * @param id 要修改状态的客户id
+     * @param category 客户类别 0—派遣方 1—合作客户
+     * @param type  要修改的状态 0—合作 1—潜在 2—流失；
+     * @param success
+     * @param fail
+     */
+    this.updateStatus = function (id,category,type,success,fail) {
+        var para = {op:"updateStatus",id:id, category: category,type:type};
+        access(url,para,1,success,fail);
+    };
     /**
      * 获取客户最新自定义工资
      * @param id 客户id
