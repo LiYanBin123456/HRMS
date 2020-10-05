@@ -80,7 +80,7 @@
                         , exts: 'xls'
                         , acceptMime: '.xls'
                         ,before: function(file){
-                            this.data={op:"readXls",file:JSON.stringify(file)}
+                            this.data={op:"readDeduct",file:JSON.stringify(file)}
                         }
                         , done: function (res) {
                             if (res.success){

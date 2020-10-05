@@ -62,6 +62,92 @@ public class XlsUtil {
     }
 
     /**
+     * 读取综合所得申报税款计算表中数据
+     * @param is 文件输入流
+     * @param sheetName_data xls文件中提供数据的表格名称
+     * @return
+     */
+    public static List<JSONObject> readDeduct(InputStream is, String sheetName_data) {
+        Workbook workbook ;
+        try {
+            workbook = Workbook.getWorkbook(is);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        //读取数据
+        Sheet sheet_data = workbook.getSheet(sheetName_data);
+        if(null == sheet_data){
+            return null;
+        }
+
+        return readDeduct(sheet_data);
+    }
+
+    /**
+     * 解析数据
+     * @param sheet
+     * @return
+     */
+    private static List<JSONObject> readDeduct(Sheet sheet) {
+        List<JSONObject> data = new ArrayList<>();
+        out:for(int line=1; ; line++) {
+            JSONObject o = new JSONObject();
+            String v=null;
+            try {
+                v = sheet.getCell(1,line).getContents();
+                if(v==null||v==""||v.trim().isEmpty()){//判断数据是否为空，为空则跳出循环，这里导致所填数据字段不能为空
+                    break out;
+                }
+                o.put("name", v);//封装员工姓名
+
+
+                v = sheet.getCell(3,line).getContents();
+                o.put("cardId", v);//封装员工身份证号码
+
+
+
+                v = sheet.getCell(18,line).getContents();
+                o.put("income", v);//累计收入
+
+
+                v = sheet.getCell(20,line).getContents();
+                o.put("free", v);//累计减免费用
+
+
+                v = sheet.getCell(22,line).getContents();
+                o.put("deduct1", v);//累计子女教育扣除额
+
+
+                v = sheet.getCell(23,line).getContents();
+                o.put("deduct3", v);//累计继续教育扣除额
+
+
+                v = sheet.getCell(24,line).getContents();
+                o.put("deduct5", v);//累计住房贷款利息
+
+
+                v = sheet.getCell(25,line).getContents();
+                o.put("deduct6", v);//累计住房租金
+
+
+                v = sheet.getCell(26,line).getContents();
+                o.put("deduct2", v);//累计赡养老人
+
+
+                v = sheet.getCell(35,line).getContents();
+                o.put("prepaid", v);//累计已预缴税额
+
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            data.add(o);
+        }
+        return data;
+    }
+    /**
      * 按照元数据解析数据
      * @param sheet 存储有数据的表
      * @param meta 元数据
@@ -146,4 +232,6 @@ public class XlsUtil {
         }
         return null;
     }
+
+
 }

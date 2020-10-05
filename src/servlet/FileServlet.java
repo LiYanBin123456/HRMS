@@ -63,8 +63,8 @@ public class FileServlet extends HttpServlet {
             case "uploadImg"://上传员工头像
                 result = uploadImg(request);
                 break;
-            case "readExcel"://读取xls数据反馈给前台
-                result = readExcel(request);
+            case "readDeduct"://读取个税表中的数据
+                result = readDeduct(request);
                 break;
             case "existContract"://判断合同附件是否存在
                 result = existContract(request);
@@ -734,12 +734,12 @@ public class FileServlet extends HttpServlet {
 
 
 
-    private String readExcel(HttpServletRequest request) {
-        String result;
-        try {
-            Part part = getPart(request);
+    private String readDeduct(HttpServletRequest request)throws IOException, ServletException {
+        String result = null;
+        Part part = request.getPart("file");
+        try {//获取part中的文件，读取数据
             InputStream is = part.getInputStream();
-            List<JSONObject> data = XlsUtil.read(is,"信息表","元数据");
+            List<JSONObject> data = XlsUtil.readDeduct(is,"综合所得申报税款计算");
             if(null == data){
                 result = "{\"success\":false,\"msg\":\"xls文件不符合要求，请下载模板再重新填写\"}";
             }else{
@@ -748,11 +748,10 @@ public class FileServlet extends HttpServlet {
                 json.put("data",data);
                 result = json.toJSONString();
             }
-        } catch (Exception e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
-            result = "{\"success\":false,\"msg\":\"读取Excel错误，请联系开发人员\"}";
         }
-
+        System.out.println(result);
         return result;
     }
 
