@@ -41,10 +41,12 @@
         </div>
     </form>
 
-    <table id="tbl_detail" lay-filter="filter_tb_detail"></table>
+    <table id="tbl_member" lay-filter="filter_tb_member">
+    </table>
     <div id="pager"></div>
 </form>
 </body>
+<script src="../js/fieldSet.js"></script>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
@@ -54,19 +56,26 @@
     var laydate;
     var table;
     var laypage;
+    var element;
+    var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
+    var flag = false;//用于判断管理员是否选择了合作单位,默认为false
+
     loadLayuiModule();
 
     function loadLayuiModule() {
-        layui.use(['form', 'laydate', 'jquery','laypage','table'], function () {
+        layui.use(['form', 'laydate', 'jquery','laypage','table','element'], function () {
             form = layui.form;
             laydate = layui.laydate;
+            element = layui.element;
+            table = layui.table;
+            laypage = layui.laypage;
             initCoop();
             form.on('select(filter_cooperation)', function(data){
                 settlement.cid = data.value;
+                initTable(data.value);
             });
             form.on('radio(mode)', function(data){
                 settlement.mode = data.value;
-                console.log( settlement.mode);
             });
             laydate.render({
                 elem: '#month' //指定元素
@@ -76,33 +85,48 @@
                 }
             });
         });
-        initTable();
+
     }
 
-    function initTable() {
-        //初始化分页
-        laypage.render({
-            elem: 'pager'
-            ,count: 10 //数据总数
-            ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-            ,jump: function(obj,first){
-                //首次不执行
-                if(!first){
-                    param_query.pagination.page = obj.curr;
-                    param_query.pagination.size = obj.limit;
-                    getContracts();
-                }
-            }
-        });
-
+    function initTable(cid) {
         //初始化数据表格
         table.render({
-            elem: '#tbl_detail',
-            toolbar: '#top_bar_detail', //开启头部工具栏，并为其绑定左侧模板
-            title: '列表',
-            cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-            cols: columns_detail3,
-            id: 'tbl_detail'
+            elem: '#tbl_member',
+            cellMinWidth: 50, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            cols: colums_contract,
+            id: 'tbl_member'
+        });
+        table.on('checkbox(filter_tb_member)', function(obj){
+
+        });
+        getContracts(cid);
+    }
+
+    //获取派遣方与合作客户的合同
+    function getContracts(cid) {
+        //category ：0 普通结算单  1 人事代理结算单   2 小时工结算单
+        var category =  $.query.get("category");
+        param_query.conditions.keys=[{k:"bid",o:"=",v:cid},{k:"stype",o:"=",v:category}];
+
+        iContract.getList(param_query,"B",function (result) {//获取派遣方与合作客户的合同
+            table.reload('tbl_member', {
+                data:result.rows
+            });
+
+            laypage.render({
+                elem: 'pager'
+                ,curr: param_query.pagination.page
+                ,count: result.total //数据总数
+                ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                ,jump: function(obj,first){
+                    //首次不执行
+                    if(!first){
+                        param_query.pagination.page = obj.curr;
+                        param_query.pagination.size = obj.limit;
+                        getContracts();
+                    }
+                }
+            });
         });
     }
 

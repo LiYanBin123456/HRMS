@@ -1121,6 +1121,17 @@ var InterfaceFinance = function () {
         var para = {op: "getTransactions",param:JSON.stringify(param),cid:cid};
         access(url,para,1,success,fail);
     };
+
+    /**
+     * 获取个税申报表列表
+     * @param param 查询参数
+     * @param success
+     * @param fail
+     */
+    this.getTaxs = function(param,success,fail){
+        var para = {op: "getTaxs",param:JSON.stringify(param)};
+        access(url,para,1,success,fail);
+    };
     /**
      * 导出个税申报
      * @param success

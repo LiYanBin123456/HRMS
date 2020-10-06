@@ -4,22 +4,23 @@ import bean.client.Items;
 import bean.client.MapSalary;
 
 import bean.employee.ViewEmployee;
-import bean.settlement.Detail1;
-import bean.settlement.ViewDetail1;
-import bean.settlement.ViewDetail2;
-import bean.settlement.ViewDetail3;
+import bean.settlement.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.client.MapSalaryDao;
 import dao.employee.EmployeeDao;
 
+import dao.finance.FinanceDao;
 import dao.settlement.Detail1Dao;
 import dao.settlement.Detail2Dao;
 import dao.settlement.Detail3Dao;
 import database.*;
+import jxl.Sheet;
 import jxl.Workbook;
+import jxl.read.biff.BiffException;
 import jxl.write.*;
 import jxl.write.Label;
+import jxl.write.biff.RowsExceededException;
 import org.apache.commons.io.IOUtils;
 import utills.XlsUtil;
 import utills.Calculate;
@@ -90,6 +91,9 @@ public class FileServlet extends HttpServlet {
             case "exportDetail3"://下载商业保险结算单明细
                 exportDetail3(conn,request,response);
                 return;
+            case "exportTax"://导出个税申报表
+                exportTax(conn,request,response);
+                return;
             default:
                 result = "{\"success\":false,\"msg\":\"参数错误\"}";
         }
@@ -98,6 +102,70 @@ public class FileServlet extends HttpServlet {
         out.print(result);
         out.flush();
         out.close();
+    }
+
+    //导出个税申报表
+    private void exportTax(Connection conn, HttpServletRequest request, HttpServletResponse response)  {
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.setHeader("Content-Disposition", "attachment; filename=tax.xls");
+
+        //读取模板
+        String fileName = "tax.xls";
+        String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
+        File file = new File(fullFileName);
+        Workbook book = null;
+
+        //查询出所有个税申报，但是目前还不清出需要那些条件限制
+        QueryParameter parameter = new QueryParameter();
+        List<ViewTax> viewTaxes = (List<ViewTax>) FinanceDao.getTaxs(conn,parameter).rows;
+        try {
+            //获取模板
+            book = Workbook.getWorkbook(file);
+
+            // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
+            //WritableWorkbook如果直接createWorkbook模版文件会覆盖原有的文件
+            WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
+            WritableSheet sheet = workbook.getSheet(0);//获取第一个sheet
+
+            int index = 1;
+            for(ViewTax v:viewTaxes){
+                sheet.addCell(new Label(0, index, ""));//工号
+                sheet.addCell(new Label(1, index, v.getName()));//姓名
+                sheet.addCell(new Label(2, index, "居民身份证"));//证件类型
+                sheet.addCell(new Label(3, index, v.getCardId()));//证件号码
+                sheet.addCell(new jxl.write.Number(4, index, v.getPayable()));//本期收入
+                sheet.addCell(new jxl.write.Number(5, index, 0));//本期免税收入
+                sheet.addCell(new jxl.write.Number(6, index, v.getPension1()));//基本养老保险费
+                sheet.addCell(new jxl.write.Number(7, index, v.getMedicare1()));//基本医疗保险费
+                sheet.addCell(new jxl.write.Number(8, index, v.getUnemployment1()));//失业保险费
+                sheet.addCell(new jxl.write.Number(9, index, v.getFund1()));//住房公积金
+                sheet.addCell(new jxl.write.Number(10, index, v.getDeduct1()));//累计子女教育
+                sheet.addCell(new jxl.write.Number(11, index, v.getDeduct3()));//累计继续教育
+                sheet.addCell(new jxl.write.Number(12, index, v.getDeduct5()));//累计住房贷款利息
+                sheet.addCell(new jxl.write.Number(13, index, v.getDeduct6()));//累计住房租金
+                sheet.addCell(new jxl.write.Number(14, index, v.getDeduct2()));//累计赡养老人
+                sheet.addCell(new jxl.write.Number(15, index, 0));//企业(职业)年金
+                sheet.addCell(new jxl.write.Number(16, index, 0));//商业健康保险
+                sheet.addCell(new jxl.write.Number(17, index, 0));//税延养老保险
+                sheet.addCell(new jxl.write.Number(18, index, 0));//其他
+                sheet.addCell(new jxl.write.Number(19, index, 0));//准予扣除的捐赠额
+                sheet.addCell(new jxl.write.Number(20, index, 0));//减免税额
+                sheet.addCell(new Label(21, index, ""));//备注
+                index++;
+            }
+            workbook.write();
+            workbook.close();
+            book.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BiffException e) {
+            e.printStackTrace();
+        } catch (RowsExceededException e) {
+            e.printStackTrace();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        ConnUtil.closeConnection(conn);
     }
 
 

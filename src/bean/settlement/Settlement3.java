@@ -16,6 +16,12 @@ public class Settlement3 extends Settlemet {
         this.price = price;
     }
 
+    public Settlement3(long id, long did, long cid, String ccid, Date month, byte status, byte source, long pid, float price) {
+        super(id, did, cid, ccid, month, status, source);
+        this.pid = pid;
+        this.price = price;
+    }
+
     public long getPid() {
         return pid;
     }

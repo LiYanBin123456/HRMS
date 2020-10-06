@@ -215,7 +215,15 @@ var columns_settlement1  = [[
     {field:'status', title: '状态',width:70,templet:function (d) { return array_value2text(status_settlement,d.status) }},
     {title:'操作', toolbar: '#bar_settlement',width:500,fixed:"right"}
 ]];
-
+//添加结算单中的合同字段集合
+var colums_contract =[[
+    {type:'checkbox'},
+    {field:'id', title: '合同id',width:200},
+    {field:'name', title: '合同名称',width:200},
+    {field:'invoice', title: '发票类型',width:200},
+    {field:'stype', title: '服务项目',width:200},
+    {field:'comment', title: '备注',width:200},
+]]
 //面向合作普通结算单字段集合
 var columns_settlement10  = [[
     {type:'checkbox',width:30},
@@ -361,46 +369,34 @@ var columns_deduct  = [[
     {title: '操作', toolbar: '#bar_deduct'}
 ]];
 
+
 //个税申报字段集合
 var columns_tax  = [[
     {field:'id', title: '工号',width:80,fixed:"left"},
     {field:'name', title: '姓名',width:80,fixed:"left"},
-    {field:'type', title: '证照类型',width:120},
-    {field:'cardId', title: '身份证号',width:160},
-    {field:'start', title: '税款所属期起',width:120},
-    {field:'end', title: '税款所属期止',width:120},
-    {field:'', title: '所得项目',width:120},
-    {field:'', title: '本期收入',width:120},
-    {field:'', title: '本期费用',width:120},
-    {field:'', title: '本期免税收入',width:120},
-    {field:'pension', title: '本期基本养老保险费',width:120},
-    {field:'medicare', title: '本期基本医疗费',width:120},
-    {field:'unemployment', title: '本期失业保险费',width:120},
-    {field:'fund', title: '本期住房公积金',width:120},
-    {field:'', title: '本期企业(职业)年金',width:120},
-    {field:'', title: '本期健康保险费',width:120},
-    {field:'', title: '本期税延养保险费',width:120},
-    {field:'', title: '本期其他扣除(其他)',width:120},
-    {field:'income', title: '累计收入额',width:120},
-    {field:'', title: '累计免税收入',width:120},
-    {field:'free', title: '累计减除费用',width:120},
-    {field:'deduct', title: '累计专项扣除',width:120},
-    {field:'deduct1', title: '累计子女教育支出扣除',width:130},
-    {field:'deduct3', title: '累计继续教育支出扣除',width:130},
-    {field:'deduct5', title: '累计住房贷款利息支出扣除',width:130},
-    {field:'deduct6', title: '累计住房租金支出扣除',width:130},
-    {field:'deduct2', title: '累计赡养老人支出扣除',width:130},
-    {field:'', title: '累计准予扣除的捐赠',width:130},
-    {field:'', title: '累计应纳税所得额',width:130},
-    {field:'tax', title: '税率',width:120},
-    {field:'deduction', title: '速算扣除数',width:120},
-    {field:'deduct6', title: '累计应纳税额',width:120},
-    {field:'free', title: '累计减免税额',width:140},
-    {field:'', title: '累计应扣缴税额',width:120},
-    {field:'prepaid', title: '累计已预缴税额',width:120},
-    {field:'', title: '累计应补(退)税额',width:130},
-    {field:'', title: '备注',width:120}
+    {field:'', title: '证照类型',width:120,text:"居民身份证"},
+    {field:'cardId', title: '证照号码',width:160},
+    {field:'month', title: '月份',width:160,templet:function (d) {return format_date(d.month)}},
+    {field:'payable', title: '本期收入',width:120},
+    {field:'', title: '本期免税收入',width:120,text:0},
+    {field:'pension1', title: '基本养老保险费',width:120},
+    {field:'medicare1', title: '基本医疗保险费',width:120},
+    {field:'unemployment1', title: '失业保险费',width:120},
+    {field:'fund1', title: '住房公积金',width:120},
+    {field:'deduct1', title: '累计子女教育',width:120},
+    {field:'deduct3', title: '累计继续教育',width:120},
+    {field:'deduct5', title: '累计住房贷款利息',width:120},
+    {field:'deduct6', title: '累计住房租金',width:120},
+    {field:'deduct2', title: '累计赡养老人',width:120},
+    {field:'', title: '企业(职业)年金',width:120,text:0},
+    {field:'', title: '商业健康保险',width:120,text:0},
+    {field:'', title: '税延养老保险',width:120,text:0},
+    {field:'', title: '其他',width:120,text:0},
+    {field:'', title: '准予扣除的捐赠额',width:120,text:0},
+    {field:'', title: '减免税额',width:120,text:0},
+    {field:'', title: '备注',width:120,text:0}
 ]];
+
 
 //医/社保参保字段集合
 var columns_insured1  = [[

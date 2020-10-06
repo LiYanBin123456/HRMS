@@ -39,12 +39,21 @@ public class FinanceServlet extends HttpServlet {
             case "getTransactions"://获取资金往来明细
                 result = getTransactions(conn,request);
                 break;
+            case "getTaxs"://获取个税申报列表
+                result = getTaxs(conn,request);
+                break;
         }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
         out.print(result);
         out.flush();
         out.close();
+    }
+
+    private String getTaxs(Connection conn, HttpServletRequest request) {
+        QueryParameter param = JSONObject.parseObject(request.getParameter("param"),QueryParameter.class);
+        DaoQueryListResult result = FinanceDao.getTaxs(conn,param);
+        return JSONObject.toJSONString(result);
     }
 
     //到帐确认

@@ -48,7 +48,7 @@
             var layer;//弹出窗口
             var element;
             var laydate;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
 
             $(function () {
                 loadLayuiModule();
@@ -124,13 +124,9 @@
             }
 
             function getTaxes() {
-                var result = {total:100,rows:[{cardId:"3604021198501233645",name:"赵阳",payable:4000,pension:200,medicare:50,unemployment:7,fund:160,deduct1:"200",deduct2:"180",deduct3:"0",deduct4:"700",deduct5:"0",deduct6:"500"},{cardId:"3604021198501233645",name:"李斌",payable:4000,pension:200,medicare:50,unemployment:7,fund:160,deduct1:"150",deduct2:"220",deduct3:"50",deduct4:"0",deduct5:"500",deduct6:"0"}]};
-                table.reload('tbl_tax', {
-                    data:result.rows
-                });
                 //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
-                    table.reload('tbl_notice', {
+                iFinance.getTaxs(param_query,function (result) {
+                    table.reload('tbl_tax', {
                         data:result.rows
                     });
                     //初始化分页
@@ -148,7 +144,7 @@
                             }
                         }
                     });
-                });*/
+                });
             }
 
             //打开添加对话框
@@ -156,8 +152,13 @@
                 layer.msg("导出个税申报名单");
             }
 
-            function export1() {
-                layer.msg("导出个税申报表");
+            function export2() {
+                var url = "/hrms/verify/file?op=exportTax"
+                var form = $('<form method="POST"></form>');
+                form.attr('action', url);
+                form.appendTo($('body'));
+                form.submit();
+                form.remove();
             }
 
         </script>
