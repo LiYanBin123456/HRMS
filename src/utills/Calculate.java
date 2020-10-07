@@ -4,6 +4,7 @@ import bean.client.Items;
 import bean.client.MapSalary;
 import bean.contract.Contract;
 import bean.contract.Serve;
+import bean.contract.ViewContractCooperation;
 import bean.employee.Deduct;
 import bean.employee.EnsureSetting;
 import bean.rule.RuleMedicare;
@@ -307,14 +308,13 @@ public class Calculate {
 
 
     /**
-     * 计算普通结算单
-     * @param settlement1 普通结算单
-     * @param contract   派遣方与合作单位最新合同
-     * @param serve      合同的服务项目
-     * @param detail1s   明细集合
-     * @return  settlement1  计算好后的结算单
+     *计算普通结算单
+     * @param settlement1 结算单
+     * @param vc 合同视图
+     * @param detail1s 明细
+     * @return
      */
-    public static Settlement1 calculateSettlement1(Settlement1 settlement1,Contract contract,Serve serve,List<ViewDetail1> detail1s){
+    public static Settlement1 calculateSettlement1(Settlement1 settlement1, ViewContractCooperation vc, List<ViewDetail1> detail1s){
         float salary=0;//应发总额
         float social=0;//单位社保
         float medicare=0;//单位医保
@@ -334,11 +334,11 @@ public class Calculate {
            fund+=viewDetail1.getFund2();
         }
 
-        int type = serve.getType();//合同服务项目中的类型
-        int category = serve.getCategory();//合同服务项目中的结算方式
-        int invoice = contract.getInvoice();//合同基础信息中的发票类型
-        float per = contract.getPer();//税费比例（选择增值税专用发票（全额）需要用到）
-        float value = serve.getValue();//结算值，根据结算方式的不同，代表的意义不同
+        int type = vc.getStype();//合同服务项目中的类型
+        int category = vc.getCategory();//合同服务项目中的结算方式
+        int invoice = vc.getInvoice();//合同基础信息中的发票类型
+        float per = vc.getPer();//税费比例（选择增值税专用发票（全额）需要用到）
+        float value = vc.getValue();//结算值，根据结算方式的不同，代表的意义不同
 
         float num = detail1s.size();//总人数
         switch (type){

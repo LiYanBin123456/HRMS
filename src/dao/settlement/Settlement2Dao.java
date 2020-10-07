@@ -24,8 +24,8 @@ public class Settlement2Dao {
         return DbUtil.get(conn,"settlement2",conditions,Settlement2.class);
     }
     public static DaoUpdateResult insert(Connection conn, Settlement2 s) {
-        String sql = "insert into settlement2 (did,cid,month,hours,price,traffic,extra,summary,status,source) values (?,?,?,?,?,?,?,?,?,?)";
-        Object []params = {s.getDid(),s.getCid(),s.getMonth(),s.getHours(),s.getPrice(),s.getTraffic(),s.getExtra(),s.getSummary(),s.getStatus(),s.getSource()};
+        String sql = "insert into settlement2 (did,cid,ccid,month,hours,price,traffic,extra,summary,status,source) values (?,?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {s.getDid(),s.getCid(),s.getCcid(),s.getMonth(),s.getHours(),s.getPrice(),s.getTraffic(),s.getExtra(),s.getSummary(),s.getStatus(),s.getSource()};
         return DbUtil.insert(conn,sql,params);
     }
 

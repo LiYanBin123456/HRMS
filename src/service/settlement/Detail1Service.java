@@ -81,7 +81,7 @@ public class Detail1Service {
             RuleMedicare medicare= (RuleMedicare) RuleMedicareDao.getLast(conn,city).data;//获取该地市的最新医保
             RuleSocial social = (RuleSocial) RuleSocialDao.getLast(conn,city).data;//获取该地市的最新社保
 
-            MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(cid,conn).data;//获取当月结算单
+            MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(cid,conn).data;//获取最新自定义的工资
             Deduct deduct = (Deduct) DeductDao.get(conn,d.getEid()).data;//获取员工个税专项扣除
 
             Detail1 detail1 = Calculate.calculateDetail1(d,medicare,social,setting,mapSalary,deduct);//计算结算单明细

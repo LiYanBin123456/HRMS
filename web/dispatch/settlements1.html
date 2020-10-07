@@ -78,7 +78,7 @@
             var element;
             var laydate;
             var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
-
+            var type = 0;//区分结算单类型  0 普通结算单  1 人事代理结算单  2 小时工
             var month=null;
             var status = null;
 
@@ -254,7 +254,7 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/settlement1.html?category=0";
+                var content = "../dialog/settlement1.html?type="+type;
                 layer.open({
                     title:"添加",
                     type: 2,

@@ -9,8 +9,8 @@ public class ViewServeCooperation extends Serve {
     public ViewServeCooperation() {
     }
 
-    public ViewServeCooperation(String cid, byte type, byte category, byte payment, byte settlement, byte receipt, long pid, float value, float tax, long id, String name, byte status) {
-        super(cid, type, category, payment, settlement, receipt, pid, value, tax);
+    public ViewServeCooperation(String cid, byte type, byte category, byte payment, byte settlement, byte receipt, long pid, float value,  long id, String name, byte status) {
+        super(cid, type, category, payment, settlement, receipt, pid, value);
         this.id = id;
         this.name = name;
         this.status = status;

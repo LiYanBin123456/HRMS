@@ -22,8 +22,8 @@ public class Settlement1Dao {
     }
 
     public static DaoUpdateResult insert(Connection conn, Settlement1 s) {
-        String sql = "insert into settlement1 (did,cid,month,salary,social,medicare,fund,manage,tax,summary,status,source) values (?,?,?,?,?,?,?,?,?,?,?)";
-        Object []params = {s.getDid(),s.getCid(),s.getMonth(),s.getSalary(),s.getSocial(),s.getMedicare(),s.getFund(),s.getManage(),s.getTax(),s.getSummary(),s.getStatus(),s.getSource()};
+        String sql = "insert into settlement1 (did,cid,ccid,type,month,salary,social,medicare,fund,manage,tax,summary,status,source) values (?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {s.getDid(),s.getCid(),s.getCcid(),s.getType(),s.getMonth(),s.getSalary(),s.getSocial(),s.getMedicare(),s.getFund(),s.getManage(),s.getTax(),s.getSummary(),s.getStatus(),s.getSource()};
         return DbUtil.insert(conn,sql,params);
     }
 

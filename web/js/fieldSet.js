@@ -216,14 +216,15 @@ var columns_settlement1  = [[
     {title:'操作', toolbar: '#bar_settlement',width:500,fixed:"right"}
 ]];
 //添加结算单中的合同字段集合
-var colums_contract =[[
+var columns_contract =[[
     {type:'checkbox'},
     {field:'id', title: '合同id',width:200},
     {field:'name', title: '合同名称',width:200},
-    {field:'invoice', title: '发票类型',width:200},
-    {field:'stype', title: '服务项目',width:200},
+    {field:'invoice', title: '发票类型',width:200,templet:function (d) { return array_value2text(invoice_contract,d.invoice) }},
+    {field:'stype', title: '服务项目',width:200,templet:function (d) { return array_value2text(stype_contract,d.stype) }},
     {field:'comment', title: '备注',width:200},
-]]
+]];
+
 //面向合作普通结算单字段集合
 var columns_settlement10  = [[
     {type:'checkbox',width:30},
@@ -567,6 +568,19 @@ var period_product = [
      {value:16,text:"五类"},
      {value:32,text:"六类"}
  ];
+//合同发票类型
+var invoice_contract = [
+    {value:0,text:"增值税发票(全额)"},
+    {value:1,text:"增值税发票(差额)"},
+    {value:2,text:"普通发票"}
+];
+//合同服务项目类型
+var stype_contract = [
+    {value:0,text:"劳务派遣"},
+    {value:1,text:"人事服务代理"},
+    {value:2,text:"小时工"},
+    {value:3,text:"商业保险"}
+];
 
 /**
  * 管理员权限列表

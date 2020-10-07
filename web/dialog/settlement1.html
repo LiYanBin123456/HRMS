@@ -58,7 +58,6 @@
     var laypage;
     var element;
     var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
-    var flag = false;//用于判断管理员是否选择了合作单位,默认为false
 
     loadLayuiModule();
 
@@ -93,7 +92,7 @@
         table.render({
             elem: '#tbl_member',
             cellMinWidth: 50, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-            cols: colums_contract,
+            cols: columns_contract,
             id: 'tbl_member'
         });
         table.on('checkbox(filter_tb_member)', function(obj){
@@ -104,9 +103,9 @@
 
     //获取派遣方与合作客户的合同
     function getContracts(cid) {
-        //category ：0 普通结算单  1 人事代理结算单   2 小时工结算单
-        var category =  $.query.get("category");
-        param_query.conditions.keys=[{k:"bid",o:"=",v:cid},{k:"stype",o:"=",v:category}];
+        //type ：0 普通结算单  1 人事代理结算单   2 小时工结算单
+        var type =  $.query.get("type");
+        param_query.conditions.keys=[{k:"bid",o:"=",v:cid},{k:"stype",o:"=",v:type}];
 
         iContract.getList(param_query,"B",function (result) {//获取派遣方与合作客户的合同
             table.reload('tbl_member', {
