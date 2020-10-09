@@ -30,10 +30,10 @@ public class AccountServlet extends HttpServlet {
         String op = request.getParameter("op");
         switch (op) {
             case "login"://登录
-                result = login(conn,request,response);
+                result = login(conn,request);
                 break;
             case "quit"://退出
-                result = quit(conn,request);
+                result = quit(request);
                 break;
             case "getList"://获取账号列表
                 result = getList(conn,request);
@@ -63,35 +63,17 @@ public class AccountServlet extends HttpServlet {
     }
 
     //登录
-    private String login(Connection conn, HttpServletRequest request,HttpServletResponse response)  {
-        DaoQueryResult res;
+    private String login(Connection conn, HttpServletRequest request)  {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        res = AccountService.login(conn,username);
-        Account account = (Account) res.data;
-        if(account!=null){
-            if(account.getPassword().equals(password)){
-                res.msg ="账号密码正确";
-                res.success=true;
-                request.getSession().setAttribute("id", account.getId());
-                request.getSession().setAttribute("nickname", account.getNickname());
-                request.getSession().setAttribute("role", account.getRole());
-                request.getSession().setAttribute("rid", account.getRid());
-                request.getSession().setAttribute("permission", account.getPermission());
-                return JSONObject.toJSONString(res);
-            }else {
-                res.msg="密码错误";
-            }
-        }
-        res.success=false;
-        return JSONObject.toJSONString(res);
+        return AccountService.login(conn,username,password,request.getSession());
     }
 
     //退出
-    private String quit(Connection conn, HttpServletRequest request) {
+    private String quit(HttpServletRequest request) {
         request.getSession().invalidate();
-        DaoUpdateResult res=null;
-        res.msg+="退出";
+        DaoUpdateResult res = new DaoUpdateResult();
+        res.msg = "退出";
         res.success = true;
         return JSONObject.toJSONString(res);
     }
@@ -119,16 +101,15 @@ public class AccountServlet extends HttpServlet {
     //插入账号
     private String insert(Connection conn, HttpServletRequest request) {
         Account account =JSONObject.parseObject(request.getParameter("account"),Account.class);
-        System.out.println("前台传过来的参数："+account);
-        DaoUpdateResult res = AccountService.insert(conn,account);
-        return JSONObject.toJSONString(res);
+        return AccountService.insert(conn,account);
     }
 
     //获取账号详情
     private String get(Connection conn, HttpServletRequest request) {
-        long id = Long.parseLong(request.getParameter("id"));
-        DaoQueryResult res = AccountService.get(conn,id);
-        return JSONObject.toJSONString(res);
+        HttpSession session = request.getSession();
+
+        long id = (long) session.getAttribute("id");
+        return AccountService.get(conn,id);
     }
 
     //修改账号
@@ -145,6 +126,4 @@ public class AccountServlet extends HttpServlet {
         DaoUpdateResult res =AccountService.permit(conn,id,permission);
         return JSONObject.toJSONString(res);
     }
-
-
 }

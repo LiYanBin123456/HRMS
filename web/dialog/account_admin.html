@@ -114,6 +114,13 @@
             form.render('checkbox');
 
             op = "update";
+        }else{
+            for(var i in permissions_admin){
+                var p = permissions_admin[i];
+                var o = $("<input type='checkbox' name='permit' lay-skin='primary'>").val(p.value).attr('title',p.text);
+                $("#permissions").append(o);
+            }
+            form.render('checkbox');
         }
     }
 

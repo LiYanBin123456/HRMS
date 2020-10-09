@@ -420,8 +420,8 @@ var InterfaceAccount = function () {
      * @param success
      * @param fail
      */
-    this.get = function (id,success,fail) {
-        var para = {op:"get",id:id};
+    this.get = function (success,fail) {
+        var para = {op:"get"};
         access(url,para,1,success,fail);
     };
     /**

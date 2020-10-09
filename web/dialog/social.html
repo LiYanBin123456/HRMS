@@ -58,7 +58,7 @@
         <![endif]-->
     </head>
     <body>
-    <form id="frmEdit" lay-filter="form_social" class="layui-form" lay-filter="frm">
+    <form id="frmEdit" lay-filter="form_social" class="layui-form" lay-filter="frm" style="padding: 20px">
     <input type="hidden" name="id" lay-verify="" placeholder="" autocomplete="off" class="layui-input" value="">
         <div class="layui-form-item">
             <label  class="layui-form-label">
@@ -173,7 +173,7 @@
             var social = JSON.parse(param);
             social.start = format_date(social.start);
             form.val('form_social', social);
-            var city = getCityText4(social.city);
+            var city = getCityText3(social.city);
             cityPicker.setValue(city);
             layedit.setContent(editer, social.content, false);
             op = "update";

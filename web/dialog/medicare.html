@@ -58,7 +58,7 @@
         <![endif]-->
     </head>
     <body>
-    <form id="frmEdit" lay-filter="form_medicare" class="layui-form" lay-filter="frm">
+    <form id="frmEdit" lay-filter="form_medicare" class="layui-form" lay-filter="frm" style="padding: 20px">
 
     <input type="hidden" name="id" lay-verify="" placeholder="" autocomplete="off" class="layui-input" value="">
         <div class="layui-form-item">
@@ -168,7 +168,7 @@
             var medicare = JSON.parse(param);
             medicare.start = format_date(medicare.start);
             form.val('form_medicare', medicare);
-            var city = getCityText4(medicare.city);
+            var city = getCityText3(medicare.city);
             cityPicker.setValue(city);
             layedit.setContent(editer, medicare.content, false);
             op = "update";

@@ -1,14 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <c3p0-config>
-	<named-config name="myc3p0_recruit">
+	<named-config name="myc3p0_hrms">
 		<property name="driverClass">com.mysql.jdbc.Driver</property>
 		<property name="jdbcUrl">
 			<![CDATA[
-				jdbc:mysql://127.0.1:3306/hrms?useUnicode=true&characterEncoding=UTF8&useServerPrepStmts=true&prepStmtCacheSqlLimit=256&cachePrepStmts=true&prepStmtCacheSize=256&rewriteBatchedStatements=true
+				jdbc:mysql://localhost:3306/hrms?useUnicode=true&characterEncoding=UTF8&useServerPrepStmts=true&prepStmtCacheSqlLimit=256&cachePrepStmts=true&prepStmtCacheSize=256&rewriteBatchedStatements=true
 			]]>
 		</property>
 		<property name="user">root</property>
-		<property name="password">123</property>
+		<property name="password">root</property>
 		<!-- 如果池中数据连接不够时一次增长多少个 -->
 		<property name="acquireIncrement">5</property>
 		<property name="initialPoolSize">20</property>
@@ -16,5 +16,11 @@
 		<property name="maxPoolSize">40</property>
 		<property name="maxStatements">0</property>
 		<property name="maxStatementsPerConnection">5</property>
+		<!--idleConnectionTestPeriod：每18000秒检查所有连接池中的空闲连接。-->
+		<property name="idleConnectionTestPeriod">18000</property>
+		<!--maxIdleTime：最大空闲时间,25000秒内未使用则连接被丢弃。若为0则永不丢弃。-->
+		<property name="maxIdleTime">25000</property>
+		<!--testConnectionOnCheckin：如果设为true那么在取得连接的同时将校验连接的有效性。Default: false -->
+		<property name="testConnectionOnCheckin">true</property>
 	</named-config>
 </c3p0-config>

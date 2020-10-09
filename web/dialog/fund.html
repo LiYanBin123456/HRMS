@@ -58,7 +58,7 @@
         <![endif]-->
     </head>
     <body>
-        <form id="frmEdit" lay-filter="form_fund" class="layui-form" lay-filter="frm">
+        <form id="frmEdit" lay-filter="form_fund" class="layui-form" lay-filter="frm" style="padding: 20px">
 
     <input type="hidden" name="id" lay-verify="" placeholder="" autocomplete="off" class="layui-input" value="">
             <div class="layui-form-item">
@@ -155,7 +155,7 @@
             var fund = JSON.parse(param);
             fund.start = format_date(fund.start);
             form.val('form_fund', fund);
-            var city = getCityText4(fund.city);
+            var city = getCityText3(fund.city);
             cityPicker.setValue(city);
             layedit.setContent(editer, fund.content, false);
             op = "update";

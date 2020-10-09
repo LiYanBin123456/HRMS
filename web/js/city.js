@@ -14212,13 +14212,3 @@ function getCityText3(id) {
         }
     }
 }
-
-/**
- * 根据编号获取城市名
- * @param id 编号
- * @returns String 城市名
- */
-function getCityText4(id) {
-    var arr = getCityText3(id);
-    return arr[0]+"/"+arr[1];
-}

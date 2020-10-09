@@ -130,7 +130,6 @@
 <script>
     var form;//表单对象
     var layer;
-    var xx;
     $(function () {
         loadLayuiModule();
     });
@@ -144,7 +143,7 @@
     function login() {
         var data = form.val("form_login");
         iAccount.login(data.username,data.password,function (result) {
-            var role = result.data.role;
+            var role = result.role;
             console.log(role);
             switch (role){
                 case 0:
