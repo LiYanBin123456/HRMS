@@ -217,12 +217,11 @@ var columns_settlement1  = [[
 ]];
 //添加结算单中的合同字段集合
 var columns_contract =[[
-    {type:'checkbox'},
-    {field:'id', title: '合同id',width:200},
+    {field:'id', title: '合同id',width:160},
     {field:'name', title: '合同名称',width:200},
-    {field:'invoice', title: '发票类型',width:200,templet:function (d) { return array_value2text(invoice_contract,d.invoice) }},
-    {field:'stype', title: '服务项目',width:200,templet:function (d) { return array_value2text(stype_contract,d.stype) }},
-    {field:'comment', title: '备注',width:200},
+    {field:'invoice', title: '发票类型',width:120,templet:function (d) { return array_value2text(invoice_contract,d.invoice) }},
+    {field:'stype', title: '服务项目',width:120,templet:function (d) { return array_value2text(stype_contract,d.stype) }},
+    {field:'comment', title: '备注'}
 ]];
 
 //面向合作普通结算单字段集合

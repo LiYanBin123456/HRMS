@@ -27,24 +27,30 @@
             <span class="x-red">*</span>选择结算月份
         </label>
         <div class="layui-input-inline" >
-            <input type="text" class="layui-input" id="month" autocomplete="off">
+            <input type="text" class="layui-input" name="month" id="month" autocomplete="off">
         </div>
     </div>
-
-    <form class="layui-form" style="display: inline">
+    <div class="layui-form-item">
         <label class="layui-form-label">
             <span class="x-red">*</span>是否自动生成明细
         </label>
-        <div class="layui-input-inline">
+        <div class="layui-input-inline" >
             <input type="radio" name="mode" title="否" value="0" lay-filter="mode" checked="checked">
             <input type="radio" name="mode" title="是" value="1" lay-filter="mode" >
         </div>
-    </form>
-
-    <table id="tbl_member" lay-filter="filter_tb_member">
-    </table>
-    <div class="layui-table-page" id="pager"></div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">
+            <span class="x-red">*</span>选择合同
+        </label>
+        <div class="layui-input-inline" >
+            <input type="text" name="ccid" class="layui-input" readonly>
+        </div>
+    </div>
 </form>
+<table id="tbl_contract" lay-filter="filter_tb_contract">
+</table>
+<div class="layui-table-page" id="pager"></div>
 </body>
 <script src="../js/fieldSet.js"></script>
 <script src="../js/jquery.min.js"></script>
@@ -58,6 +64,8 @@
     var laypage;
     var element;
     var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
+    //type ：0 普通结算单  1 人事代理结算单   2 小时工结算单
+    var type =  $.query.get("type");
 
     loadLayuiModule();
 
@@ -68,6 +76,7 @@
             element = layui.element;
             table = layui.table;
             laypage = layui.laypage;
+
             initCoop();
             form.on('select(filter_cooperation)', function(data){
                 settlement.cid = data.value;
@@ -90,25 +99,24 @@
     function initTable(cid) {
         //初始化数据表格
         table.render({
-            elem: '#tbl_member',
+            elem: '#tbl_contract',
             cellMinWidth: 50, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
             cols: columns_contract,
-            id: 'tbl_member'
+            id: 'tbl_contract'
         });
-        table.on('checkbox(filter_tb_member)', function(obj){
-
+        table.on('row(filter_tb_contract)', function(obj){
+            var contact = obj.data;
+            $("[name=ccid]").val(contact.id);
+            settlement.ccid = contact.id;
         });
         getContracts(cid);
     }
 
     //获取派遣方与合作客户的合同
     function getContracts(cid) {
-        //type ：0 普通结算单  1 人事代理结算单   2 小时工结算单
-        var type =  $.query.get("type");
         param_query.conditions.keys=[{k:"bid",o:"=",v:cid},{k:"stype",o:"=",v:type}];
-
         iContract.getList(param_query,"B",function (result) {//获取派遣方与合作客户的合同
-            table.reload('tbl_member', {
+            table.reload('tbl_contract', {
                 data:result.rows
             });
 
@@ -147,6 +155,7 @@
 
     //向调用页面返回编辑的结算单
     var callbackData = function () {
+        settlement.type = type;
         return settlement;
     }
 </script>

@@ -59,7 +59,7 @@ public class ContractDao {
 
     //插入合同
     public static DaoUpdateResult insert(Connection conn, Contract c) {
-        String sql = "insert into contract (id,aid,bid,type,start,end,status,comments,invoice,project,per,times) values (?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into contract (id,aid,bid,type,start,end,status,comments,invoice,project,per,times) values (?,?,?,?,?,?,?,?,?,?,?,?)";
         Object []params = {c.getId(),c.getAid(),c.getBid(),c.getType(),c.getStart(),c.getEnd(),c.getStatus(),c.getComments(),c.getInvoice(),c.getProject(),c.getPer(),c.getTimes()};
         return DbUtil.insert(conn,sql,params);
     }
