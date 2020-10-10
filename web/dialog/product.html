@@ -71,12 +71,6 @@
     </div>
     <div class="layui-form-item" pane="">
     <div class="layui-input-block" id="allow" >
-      <input type="checkbox"  name="people" lay-skin="primary"  >
-      <input type="checkbox"  name="people" lay-skin="primary"   >
-      <input type="checkbox" name="people" lay-skin="primary"   >
-      <input type="checkbox" name="people" lay-skin="primary"  >
-      <input type="checkbox" name="people" lay-skin="primary"   >
-      <input type="checkbox" name="people" lay-skin="primary"   >
     </div>
   </div>
     <div class="layui-form-item">
@@ -92,13 +86,15 @@
     var op = "insert";
     var form;//表单对象
     var editer;
+    var table;
 
     loadLayuiModule();
 
     function loadLayuiModule() {
-        layui.use(['form', 'layedit','jquery'], function () {
+        layui.use(['table','form', 'layedit','jquery'], function () {
             form = layui.form;
             layedit = layui.layedit;
+            table = layui.table;
             editer = layedit.build('content'); //建立编辑器
             initData();
         });
@@ -120,10 +116,22 @@
             form.render('checkbox');
             layedit.setContent(editer, product.content, false);
             op = "update";
+        }else{
+            for(var i in allow_product){
+                var p = allow_product[i];
+                var o = $("<input type='checkbox' name='people' lay-skin='primary'>").val(p.value).attr('title',p.text);
+                $("#allow").append(o);
+            }
+            form.render('checkbox');
         }
     }
     function save() {
         var product = form.val('form_product');
+        var people = 0;
+        $("input:checkbox[name='people']:checked").each(function(i){
+            people += Number($(this).val());
+        });
+        product.allow=people;
         if(op == "insert") {
             iProduct.insert(product, onInsertSuccess);
         }else{
