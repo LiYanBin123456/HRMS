@@ -341,7 +341,7 @@ var columns_detail3  = [[
 //资金明细字段集合
 var columns_detail4  = [[
     {field:'time', title: '日期',templet:function (d) {return format_date(d.time)}},
-    {field:'balance', title: '金额',width:100},
+    {field:'money', title: '金额',width:100},
     {field:'comments', title: '事项',width:200}
 ]];
 
