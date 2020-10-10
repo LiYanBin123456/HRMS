@@ -46,9 +46,21 @@
             <input type="radio" name="mode" title="否" value="0" lay-filter="mode" checked="checked">
             <input type="radio" name="mode" title="是" value="1" lay-filter="mode" >
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>选择合同
+            </label>
+            <div class="layui-input-inline" >
+                <input type="text" name="ccid" class="layui-input" readonly>
+            </div>
+        </div>
     </form>
+    <table id="tbl_contract" lay-filter="filter_tb_contract">
+    </table>
+    <div class="layui-table-page" id="pager"></div>
 </form>
 </body>
+<script src="../js/fieldSet.js"></script>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
@@ -57,17 +69,23 @@
     loadLayuiModule();
     var form ;
     var laydate ;
+    var table;
+    var laypage;
+
+    var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
 
     function loadLayuiModule() {
-        layui.use(['form', 'laydate'], function () {
+        layui.use(['form','laypage','table','laydate'], function () {
              form = layui.form;
              laydate = layui.laydate;
-
+            laypage = layui.laypage;
+            table = layui.table;
             initCoop();
             initProduct();
 
             form.on('select(filter_cooperation)', function(data){
                 settlement.cid = data.value;
+                initTable(data.value);
             });
 
             form.on('radio(mode)', function(data){
@@ -86,6 +104,46 @@
             });
         });
     }
+    function initTable(cid) {
+        //初始化数据表格
+        table.render({
+            elem: '#tbl_contract',
+            cellMinWidth: 50, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+            cols: columns_contract,
+            id: 'tbl_contract'
+        });
+        table.on('row(filter_tb_contract)', function(obj){
+            var contact = obj.data;
+            $("[name=ccid]").val(contact.id);
+            settlement.ccid = contact.id;
+        });
+        getContracts(cid);
+    }
+    //获取派遣方与合作客户的合同
+    function getContracts(cid) {
+        param_query.conditions.keys=[{k:"bid",o:"=",v:cid},{k:"stype",o:"=",v:3}];
+        iContract.getList(param_query,"B",function (result) {//获取派遣方与合作客户的合同
+            table.reload('tbl_contract', {
+                data:result.rows
+            });
+
+            laypage.render({
+                elem: 'pager'
+                ,curr: param_query.pagination.page
+                ,count: result.total //数据总数
+                ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                ,jump: function(obj,first){
+                    //首次不执行
+                    if(!first){
+                        param_query.pagination.page = obj.curr;
+                        param_query.pagination.size = obj.limit;
+                        getContracts();
+                    }
+                }
+            });
+        });
+    }
+
 
     //查询所属的所有合作方
     function initCoop() {
