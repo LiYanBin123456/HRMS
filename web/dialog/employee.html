@@ -527,6 +527,7 @@
 
             iEmployee.insert(employee, extract);
             layer.alert("基础信息保存成功，请完善社保信息", {icon: 20});
+            window.parent.location.reload();
         } else {
             iEmployee.update(employees,0, onUpdateSuccess);
         }
