@@ -434,7 +434,7 @@ var columns_product = [[
     {field:'fin2', title: '医疗保额',width:80},
     {field:'allowance', title: '住院津贴',width:80},
     {field:'period', title: '保障时段',width:100,templet:function (d) { return array_value2text(period_product,d.period) }},
-    {field:'allow', title: '可参保人员',width:130,templet:function (d) { return array_value2text(allow_product,d.allow) }},
+    {field:'allow', title: '可参保人员',width:130,templet:function (d) { return format_product_allow(d.allow)}},
     {field:'min', title: '年龄下限',width:100},
     {field:'max', title: '年龄上限',width:100},
     {fixed: 'right', title: '操作', toolbar: '#bar_product'}
@@ -559,6 +559,7 @@ var period_product = [
     {value:0,text:"上班时间"},
     {value:1,text:"24小时"}
 ];
+
  var allow_product = [
      {value:1,text:"一类"},
      {value:2,text:"二类"},
@@ -567,6 +568,7 @@ var period_product = [
      {value:16,text:"五类"},
      {value:32,text:"六类"}
  ];
+
 //合同发票类型
 var invoice_contract = [
     {value:0,text:"增值税发票(全额)"},
@@ -627,6 +629,19 @@ function format_dateTime(timestamp) {
     var hour=time.getHours();
     var minute=time.getMinutes();
     return year+"-"+month+"-"+date+" "+hour+":"+minute;
+}
+
+function format_product_allow(v) {
+    var str = "";
+    for(var i in allow_product){
+        if((allow_product[i].value&v) != 0){
+            str += allow_product[i].text+",";
+        }
+    }
+    if(str.length>0){
+        str = str.substr(0,str.length-1);
+    }
+    return str;
 }
 
 /**
