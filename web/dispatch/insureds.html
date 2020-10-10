@@ -38,7 +38,7 @@
                     <input type="radio" name="category" title="公积金" value="2" lay-filter="category" >
                 </div>
             </form>
-            <form class="layui-form searchbox">
+            <form lay-filter="form_insureds" class="layui-form searchbox">
                 <div class="layui-input-inline">
                     <select lay-filter="filter_status" >
                         <option value="">按状态过滤</option>
@@ -49,11 +49,7 @@
                     </select>
                 </div>
                 <div class="layui-input-inline">
-                    <select lay-filter="filter_client" >
-                        <option value="">按合作单位过滤</option>
-                        <option value="0">单位1</option>
-                        <option value="1">单位2</option>
-                        <option value="2">单位3</option>
+                    <select id="select_cooperation" lay-filter="filter_cooperation" >
                     </select>
                 </div>
                 <div class="layui-input-inline searchboxs">
@@ -75,7 +71,7 @@
                 <button type="button" class="layui-btn layui-btn-sm" lay-event=""  id="" ><i class="layui-icon "></i> 校对</button>
             </div>
             <table id="tbl_insured" lay-filter="filter_tb_insured"></table>
-            <div id="pager"></div>
+            <div class="layui-table-page" id="pager"></div>
 
             <!--行内工具栏-->
             <script type="text/html" id="bar_insured">
@@ -106,6 +102,7 @@
                     upload = layui.upload;
                     form = layui.form;
                     initPage();
+                    initCooperation();
                 });
             }
 
@@ -153,6 +150,7 @@
                         top_bar = '#top_bar2';
                         break;
                 };
+
 
                 //初始化数据表格
                 table.render({
@@ -216,6 +214,23 @@
                 });
             }
 
+            function initCooperation() {
+                iClient.getList({},1,function(result){
+                    var cooperations = result.rows;
+                    var select_cooperation = $("#select_cooperation");
+                    select_cooperation.append("<option value='-2' disabled hidden>选择合作客户</option>");
+                    for(var i in cooperations){
+                        var cooperation = cooperations[i];
+                        if (cooperation.type == 0) {
+                            var option = $("<option>").val(cooperation.id).text(cooperation.name);
+                        }
+                        select_cooperation.append(option);
+                    }
+                    form.render('select', 'form_insureds');
+                })
+            }
+
+
             //打开编辑对话框
             /*function showDetailDlg(insured) {
                 var content = "../dialog/dispatch/insured.html?insured="+encodeURIComponent(JSON.stringify(insured));
@@ -267,7 +282,7 @@
             }
             //删除
             function del(insured) {
-                layer.confirm('确定删除'+insured.title, {icon: 3, title:'删除公告'}, function(index){
+                layer.confirm('确定删除'+insured.name+'的参保单', {icon: 3, title:'删除参保单'}, function(index){
                     iInsurance.delete(insured.eid,0,function () {
                         layer.close(index);
                         getInsureds();

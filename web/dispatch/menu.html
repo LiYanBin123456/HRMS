@@ -51,19 +51,9 @@
     </ul>
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
-            <a href="javascript:;">登录用户名</a>
-            <dl class="layui-nav-child">
-                <!-- 二级菜单 -->
-                <dd>
-                    <a onclick="xadmin.open('个人信息','http://www.baidu.com')">个人信息</a></dd>
-                <dd>
-                    <a onclick="xadmin.open('切换帐号','http://www.baidu.com')">切换帐号</a></dd>
-                <dd>
-                    <a href="../login.html">退出</a></dd>
-            </dl>
+            <a id="loginName">登录用户名</a>
         </li>
-        <li class="layui-nav-item to-index">
-            <a href="/">前台首页</a></li>
+        <li class="layui-nav-item"><a href="#" onclick="quit()">退出</a></li>
     </ul>
 </div>
 <!-- 顶部结束 -->
@@ -133,6 +123,11 @@
                         <a onclick="xadmin.add_tab('商业保险结算单','settlements3.html')">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>商业保险结算单</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('普通结算单','settlements4.html')">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>人事服务代理结算单</cite></a>
                     </li>
                     <li>
                         <a onclick="xadmin.add_tab('结算单审核','check1.html')">
@@ -221,7 +216,26 @@
 <style id="theme_style"></style>
 <!-- 右侧主体结束 -->
 <!-- 中部结束 -->
+<script src="../js/jquery.min.js"></script>
+<script src="../js/interface.js"></script>
 <script>
+    $(function () {
+        getLoginInfo();
+    });
+
+    function getLoginInfo() {
+        iAccount.get(function (result) {
+            $("#loginName").html(result.data.nickname);
+        });
+    }
+
+
+
+    function quit() {
+        iAccount.quit(function (result) {
+            window.location.href = "../login.html";
+        });
+    }
 </script>
 </body>
 

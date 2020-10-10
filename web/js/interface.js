@@ -75,8 +75,8 @@ var InterfaceClient = function() {
     /**
      *
      * @param id 要修改状态的客户id
-     * @param category 客户类别 0—派遣方 1—合作客户
-     * @param type  要修改的状态 0—合作 1—潜在 2—流失；
+     * @param category 客户类别 0—派遣方 1—合作客户 2_供应商
+     * @param type  要修改的状态 0—合作 1—潜在 2—流失； 供应商 0 合作 1 流失
      * @param success
      * @param fail
      */
@@ -420,8 +420,8 @@ var InterfaceAccount = function () {
      * @param success
      * @param fail
      */
-    this.get = function (id,success,fail) {
-        var para = {op:"get",id:id};
+    this.get = function (success,fail) {
+        var para = {op:"get"};
         access(url,para,1,success,fail);
     };
     /**
@@ -1119,6 +1119,17 @@ var InterfaceFinance = function () {
      */
     this.getTransactions = function(param,cid,success,fail){
         var para = {op: "getTransactions",param:JSON.stringify(param),cid:cid};
+        access(url,para,1,success,fail);
+    };
+
+    /**
+     * 获取个税申报表列表
+     * @param param 查询参数
+     * @param success
+     * @param fail
+     */
+    this.getTaxs = function(param,success,fail){
+        var para = {op: "getTaxs",param:JSON.stringify(param)};
         access(url,para,1,success,fail);
     };
     /**

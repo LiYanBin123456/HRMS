@@ -7,6 +7,7 @@ public class Settlemet {
     private long id;//
     private long did;//派遣方id
     private long cid;//合作客户id
+    private String ccid;//合同id
     private Date month;//月份
     /**状态
      0_编辑
@@ -31,6 +32,16 @@ public class Settlemet {
         this.id = id;
         this.did = did;
         this.cid = cid;
+        this.month = month;
+        this.status = status;
+        this.source = source;
+    }
+
+    public Settlemet(long id, long did, long cid, String ccid, Date month, byte status, byte source) {
+        this.id = id;
+        this.did = did;
+        this.cid = cid;
+        this.ccid = ccid;
         this.month = month;
         this.status = status;
         this.source = source;
@@ -82,6 +93,14 @@ public class Settlemet {
 
     public void setSource(byte source) {
         this.source = source;
+    }
+
+    public String getCcid() {
+        return ccid;
+    }
+
+    public void setCcid(String ccid) {
+        this.ccid = ccid;
     }
 
     @Override

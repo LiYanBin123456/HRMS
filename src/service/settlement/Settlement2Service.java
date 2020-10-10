@@ -17,10 +17,7 @@ import dao.settlement.Detail1Dao;
 import dao.settlement.Detail2Dao;
 import dao.settlement.Settlement1Dao;
 import dao.settlement.Settlement2Dao;
-import database.DaoQueryListResult;
-import database.DaoQueryResult;
-import database.DaoUpdateResult;
-import database.QueryParameter;
+import database.*;
 import utills.Calculate;
 
 import java.sql.Connection;
@@ -41,6 +38,9 @@ public class Settlement2Service {
 
     //插入结算单
     public static DaoUpdateResult insert(Connection conn, Settlement2 settlement2, byte type) {
+        //关闭自动提交
+        ConnUtil.closeAutoCommit(conn);
+
         DaoUpdateResult result ;
         //需要获取合同中的小时工单价
         result = Settlement2Dao.insert(conn,settlement2);
@@ -66,9 +66,20 @@ public class Settlement2Service {
                 detail2List.add(i,detail2);
             }
             //插入明细
-            Detail2Dao.importDetails(conn,detail2List);
+            DaoUpdateResult result1 = Detail2Dao.importDetails(conn,detail2List);
+            //事务处理
+            if(result1.success){
+                ConnUtil.commit(conn);
+                return result;
+            }else {//回滚
+                ConnUtil.rollback(conn);
+                result1.msg = "明细插入失败";
+                return result1;
+            }
+        }else {//不自动生成明细，提交事务
+            ConnUtil.commit(conn);
+            return result;
         }
-        return result;
     }
 
     //另存为

@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class ConnUtil {
     protected static DataSource ds = null;
     static {
-        ds = new ComboPooledDataSource("myc3p0_recruit");
+        ds = new ComboPooledDataSource("myc3p0_hrms");
     }
 
     /**

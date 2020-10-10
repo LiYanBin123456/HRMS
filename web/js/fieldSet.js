@@ -31,34 +31,34 @@ var columns_dispatch_loss = [[
 
 //医保规则字段集合
 var columns_medicare = [[
-    {field:'city', title: '所属城市',width:150,templet:function (d) {return getCityText4(d.city)}},
-    {field:'start', title: '生效时间',width:100,templet:function (d) {return format_date(d.start)}},
-    {field:'base', title: '基数',width:80},
-    {field:'per1', title: '医疗单位比例',width:105,templet:function (d) {return format_percent(d.per1)}},
-    {field:'per2', title: '医疗个人比例',width:105,templet:function (d) {return format_percent(d.per2)}},
-    {field:'fin1', title: '大病单位',width:90},
-    {field:'fin2', title: '大病个人',width:90},
-    {field:'per3', title: '生育单位比例',width:105,templet:function (d) {return format_percent(d.per3)}},
+    {field:'city', title: '所属城市',width:130,templet:function (d) {return getCityText2(d.city)}},
+    {field:'start', title: '生效时间',width:90,templet:function (d) {return format_date(d.start)}},
+    {field:'base', title: '基数(元)',width:80},
+    {field:'per1', title: '单位医疗(%)',width:100,templet:function (d) {return format_percent(d.per1)}},
+    {field:'per2', title: '个人医疗(%)',width:100,templet:function (d) {return format_percent(d.per2)}},
+    {field:'fin1', title: '单位大病(元)',width:100},
+    {field:'fin2', title: '个人大病(元)',width:105},
+    {field:'per3', title: '单位生育(%)',width:100,templet:function (d) {return format_percent(d.per3)}},
     {fixed: 'right', title: '操作', toolbar: '#bar_medicare'}
 ]];
 
 //社保规则字段集合
 var columns_social = [[
-    {field:'city', title: '所属城市',width:150,templet:function (d) {return getCityText4(d.city)}},
-    {field:'start', title: '生效时间',width:100,templet:function (d) {return format_date(d.start)}},
-    {field:'base', title: '基数',width:80},
-    {field:'per1', title: '养老单位比例',width:105,templet:function (d) {return format_percent(d.per1)}},
-    {field:'per2', title: '养老个人比例',width:105,templet:function (d) {return format_percent(d.per2)}},
-    {field:'per3', title: '工伤单位比例',width:105,templet:function (d) {return format_percent(d.per3)}},
-    {field:'extra', title: '工伤补充',width:95},
-    {field:'per4', title: '失业单位比例',width:105,templet:function (d) {return format_percent(d.per4)}},
-    {field:'per5', title: '失业个人比例',width:105,templet:function (d) {return format_percent(d.per5)}},
+    {field:'city', title: '所属城市',width:130,templet:function (d) {return getCityText2(d.city)}},
+    {field:'start', title: '生效时间',width:90,templet:function (d) {return format_date(d.start)}},
+    {field:'base', title: '基数(元)',width:80},
+    {field:'per1', title: '单位养老(%)',width:100,templet:function (d) {return format_percent(d.per1)}},
+    {field:'per2', title: '个人养老(%)',width:100,templet:function (d) {return format_percent(d.per2)}},
+    {field:'per3', title: '单位工伤(%)',width:100,templet:function (d) {return format_percent(d.per3)}},
+    {field:'extra', title: '工伤补充(元)',width:105},
+    {field:'per4', title: '单位失业(%)',width:100,templet:function (d) {return format_percent(d.per4)}},
+    {field:'per5', title: '个人失业(%)',width:100,templet:function (d) {return format_percent(d.per5)}},
     {fixed: 'right', title: '操作', toolbar: '#bar_social'}
 ]];
 
 //公积金规则字段集合
 var columns_fund = [[
-    {field:'city', title: '所属城市',width:150,templet:function (d) {return getCityText4(d.city)}},
+    {field:'city', title: '所属城市',width:130,templet:function (d) {return getCityText2(d.city)}},
     {field:'start', title: '生效时间',width:100,templet:function (d) {return format_date(d.start)}},
     {field:'min', title: '基金下限',width:80},
     {field:'max', title: '基金上限',width:80},
@@ -110,12 +110,21 @@ var columns_cooperation_loss = [[
 ]];
 
 //供应商管理字段集合
-var columns_supplier = [[
+var columns_supplier_partner = [[
     {field:'name', title: '名称'},
     {field:'business', title: '业务类别',width:90,templet:function (d) { return array_value2text(business_supplier,d.business) }},
     {field:'contact', title: '联系人',width:100},
     {field:'phone', title: '联系电话',width:150},
     {fixed: 'right', title: '操作', toolbar: '#bar_supplier',width:200}
+]];
+
+//供应商管理字段集合
+var columns_supplier_loss = [[
+    {field:'name', title: '名称'},
+    {field:'business', title: '业务类别',width:90,templet:function (d) { return array_value2text(business_supplier,d.business) }},
+    {field:'contact', title: '联系人',width:100},
+    {field:'phone', title: '联系电话',width:150},
+    {fixed: 'right', title: '操作', toolbar: '#bar_loss',width:200}
 ]];
 
 //派遣方客户合同字段集合
@@ -214,6 +223,14 @@ var columns_settlement1  = [[
     {field:'summary', title: '总额',width:80},
     {field:'status', title: '状态',width:70,templet:function (d) { return array_value2text(status_settlement,d.status) }},
     {title:'操作', toolbar: '#bar_settlement',width:500,fixed:"right"}
+]];
+//添加结算单中的合同字段集合
+var columns_contract =[[
+    {field:'id', title: '合同id',width:160},
+    {field:'name', title: '合同名称',width:200},
+    {field:'invoice', title: '发票类型',width:120,templet:function (d) { return array_value2text(invoice_contract,d.invoice) }},
+    {field:'stype', title: '服务项目',width:120,templet:function (d) { return array_value2text(stype_contract,d.stype) }},
+    {field:'comment', title: '备注'}
 ]];
 
 //面向合作普通结算单字段集合
@@ -357,50 +374,38 @@ var columns_deduct  = [[
     {field:'deduct4', title: '累计大病医疗',width:120},
     {field:'deduct5', title: '累计住房贷款利息',width:120},
     {field:'deduct6', title: '累计住房租金',width:120},
-    {field:'deduct', title: '累计个人缴税总额',width:120},
+    {field:'deduct', title: '累计扣除总额',width:120},
     {title: '操作', toolbar: '#bar_deduct'}
 ]];
+
 
 //个税申报字段集合
 var columns_tax  = [[
     {field:'id', title: '工号',width:80,fixed:"left"},
     {field:'name', title: '姓名',width:80,fixed:"left"},
-    {field:'type', title: '证照类型',width:120},
-    {field:'cardId', title: '身份证号',width:160},
-    {field:'start', title: '税款所属期起',width:120},
-    {field:'end', title: '税款所属期止',width:120},
-    {field:'', title: '所得项目',width:120},
-    {field:'', title: '本期收入',width:120},
-    {field:'', title: '本期费用',width:120},
-    {field:'', title: '本期免税收入',width:120},
-    {field:'pension', title: '本期基本养老保险费',width:120},
-    {field:'medicare', title: '本期基本医疗费',width:120},
-    {field:'unemployment', title: '本期失业保险费',width:120},
-    {field:'fund', title: '本期住房公积金',width:120},
-    {field:'', title: '本期企业(职业)年金',width:120},
-    {field:'', title: '本期健康保险费',width:120},
-    {field:'', title: '本期税延养保险费',width:120},
-    {field:'', title: '本期其他扣除(其他)',width:120},
-    {field:'income', title: '累计收入额',width:120},
-    {field:'', title: '累计免税收入',width:120},
-    {field:'free', title: '累计减除费用',width:120},
-    {field:'deduct', title: '累计专项扣除',width:120},
-    {field:'deduct1', title: '累计子女教育支出扣除',width:130},
-    {field:'deduct3', title: '累计继续教育支出扣除',width:130},
-    {field:'deduct5', title: '累计住房贷款利息支出扣除',width:130},
-    {field:'deduct6', title: '累计住房租金支出扣除',width:130},
-    {field:'deduct2', title: '累计赡养老人支出扣除',width:130},
-    {field:'', title: '累计准予扣除的捐赠',width:130},
-    {field:'', title: '累计应纳税所得额',width:130},
-    {field:'tax', title: '税率',width:120},
-    {field:'deduction', title: '速算扣除数',width:120},
-    {field:'deduct6', title: '累计应纳税额',width:120},
-    {field:'free', title: '累计减免税额',width:140},
-    {field:'', title: '累计应扣缴税额',width:120},
-    {field:'prepaid', title: '累计已预缴税额',width:120},
-    {field:'', title: '累计应补(退)税额',width:130},
-    {field:'', title: '备注',width:120}
+    {field:'', title: '证照类型',width:120,text:"居民身份证"},
+    {field:'cardId', title: '证照号码',width:160},
+    {field:'month', title: '月份',width:160,templet:function (d) {return format_date(d.month)}},
+    {field:'payable', title: '本期收入',width:120},
+    {field:'', title: '本期免税收入',width:120,text:0},
+    {field:'pension1', title: '基本养老保险费',width:120},
+    {field:'medicare1', title: '基本医疗保险费',width:120},
+    {field:'unemployment1', title: '失业保险费',width:120},
+    {field:'fund1', title: '住房公积金',width:120},
+    {field:'deduct1', title: '累计子女教育',width:120},
+    {field:'deduct3', title: '累计继续教育',width:120},
+    {field:'deduct5', title: '累计住房贷款利息',width:120},
+    {field:'deduct6', title: '累计住房租金',width:120},
+    {field:'deduct2', title: '累计赡养老人',width:120},
+    {field:'', title: '企业(职业)年金',width:120,text:0},
+    {field:'', title: '商业健康保险',width:120,text:0},
+    {field:'', title: '税延养老保险',width:120,text:0},
+    {field:'', title: '其他',width:120,text:0},
+    {field:'', title: '准予扣除的捐赠额',width:120,text:0},
+    {field:'', title: '减免税额',width:120,text:0},
+    {field:'', title: '备注',width:120,text:0}
 ]];
+
 
 //医/社保参保字段集合
 var columns_insured1  = [[
@@ -438,7 +443,7 @@ var columns_product = [[
     {field:'fin2', title: '医疗保额',width:80},
     {field:'allowance', title: '住院津贴',width:80},
     {field:'period', title: '保障时段',width:100,templet:function (d) { return array_value2text(period_product,d.period) }},
-    {field:'allow', title: '可参保人员',width:130,templet:function (d) { return array_value2text(allow_product,d.allow) }},
+    {field:'allow', title: '可参保人员',width:130,templet:function (d) { return format_product_allow(d.allow)}},
     {field:'min', title: '年龄下限',width:100},
     {field:'max', title: '年龄上限',width:100},
     {fixed: 'right', title: '操作', toolbar: '#bar_product'}
@@ -563,6 +568,7 @@ var period_product = [
     {value:0,text:"上班时间"},
     {value:1,text:"24小时"}
 ];
+
  var allow_product = [
      {value:1,text:"一类"},
      {value:2,text:"二类"},
@@ -571,6 +577,20 @@ var period_product = [
      {value:16,text:"五类"},
      {value:32,text:"六类"}
  ];
+
+//合同发票类型
+var invoice_contract = [
+    {value:0,text:"增值税发票(全额)"},
+    {value:1,text:"增值税发票(差额)"},
+    {value:2,text:"普通发票"}
+];
+//合同服务项目类型
+var stype_contract = [
+    {value:0,text:"劳务派遣"},
+    {value:1,text:"人事服务代理"},
+    {value:2,text:"小时工"},
+    {value:3,text:"商业保险"}
+];
 
 /**
  * 管理员权限列表
@@ -600,7 +620,7 @@ function format_date(timestamp) {
     return year+"-"+month+"-"+date;
 }
 function format_percent(value) {
-    return (value*100)+"%";
+    return value+"%";
 }
 
 function format_number() {
@@ -618,6 +638,19 @@ function format_dateTime(timestamp) {
     var hour=time.getHours();
     var minute=time.getMinutes();
     return year+"-"+month+"-"+date+" "+hour+":"+minute;
+}
+
+function format_product_allow(v) {
+    var str = "";
+    for(var i in allow_product){
+        if((allow_product[i].value&v) != 0){
+            str += allow_product[i].text+",";
+        }
+    }
+    if(str.length>0){
+        str = str.substr(0,str.length-1);
+    }
+    return str;
 }
 
 /**

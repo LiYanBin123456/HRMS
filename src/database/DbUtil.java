@@ -400,7 +400,7 @@ public class DbUtil {
             List<Object> values = conditions.extraValues();
             long n = qr.query(conn,sql, new ScalarHandler<Long>(),values.toArray());
             result.success = true;
-            result.exist = n==1;
+            result.exist = n>=1;
         } catch (SQLException e) {
             e.printStackTrace();
             result.success = false;

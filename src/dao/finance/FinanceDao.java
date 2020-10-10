@@ -1,6 +1,7 @@
 package dao.finance;
 
 import bean.log.Transaction;
+import bean.settlement.ViewTax;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.DbUtil;
@@ -42,5 +43,9 @@ public class FinanceDao {
         String sql = "insert into transaction (cid, time, money, comments) values (?,?,?,?)";
         Object[] params = {t.getCid(), t.getTime(), t.getMoney(), t.getComments()};
         return DbUtil.insert(conn, sql, params);
+    }
+
+    public static  DaoQueryListResult getTaxs(Connection conn,QueryParameter parameter){
+        return DbUtil.getList(conn,"view_tax",parameter, ViewTax.class);
     }
 }

@@ -43,6 +43,9 @@ public class Settlement3Service {
          * 3、根据员工的个数 封装好商业保险单明细集合
          * 4、批量插入商业保险结算单明细
          **/
+        //关闭自动提交
+        ConnUtil.closeAutoCommit(conn);
+
         DaoUpdateResult result = Settlement3Dao.insert(conn,settlement3);
         if(result.success&&type==1) {
             long sid = (long) result.extra;//返回插入后的主键
@@ -70,9 +73,21 @@ public class Settlement3Service {
                 detail3List.add(i,detail3);
             }
             //插入明细
-            Detail3Dao.importDetails(conn,detail3List);
+           DaoUpdateResult result1 =  Detail3Dao.importDetails(conn,detail3List);
+
+            //事务处理
+            if(result1.success){
+                ConnUtil.commit(conn);
+                return result;
+            }else {//回滚
+                ConnUtil.rollback(conn);
+                result1.msg = "明细插入失败";
+                return result1;
+            }
+        }else {//不自动生成明细，提交事务
+            ConnUtil.commit(conn);
+            return result;
         }
-        return result;
     }
 
     public static DaoUpdateResult delete(Connection conn, Long id) {

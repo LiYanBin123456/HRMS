@@ -406,11 +406,13 @@
         var data = form.val('form_contract');
         if (contract) {
             iContract.update(data,function (result) {
+                window.parent.location.reload();
                 layer.msg("修改成功");
             });
         } else {
             iContract.insert(data, function (result) {
                 contract.id = result.extra;
+                window.parent.location.reload();
                 layer.alert("添加成功", {icon: 6});
             });
         }

@@ -14142,9 +14142,9 @@ var provinces = [
 /**
  * 根据编号获取城市名(数组形式)
  * @param id 编号
- * @returns [String] 城市名(省/市/区县)
+ * @returns [String] 城市名[省,市,区县]
  */
-function getCityText1(id) {
+function getCityArray1(id) {
     if(!id){
       return "";
     }
@@ -14177,21 +14177,11 @@ function getCityText1(id) {
 
 
 /**
- * 根据编号获取城市名
- * @param id 编号
- * @returns String 城市名
- */
-function getCityText2(id) {
-  var arr = getCityText1(id);
-  return arr[0]+"/"+arr[1]+"/"+arr[2];
-}
-
-/**
  * 根据编号获取城市名(数组形式)
  * @param id 编号
- * @returns [String] 城市名(省/市)
+ * @returns [String] 城市名[省,市]
  */
-function getCityText3(id) {
+function getCityArray2(id) {
     if(!id){
         return [];
     }
@@ -14216,9 +14206,18 @@ function getCityText3(id) {
 /**
  * 根据编号获取城市名
  * @param id 编号
- * @returns String 城市名
+ * @returns String 城市名(省,市,区县)
  */
-function getCityText4(id) {
-    var arr = getCityText3(id);
+function getCityText1(id) {
+  var arr = getCityArray1(id);
+  return arr[0]+"/"+arr[1]+"/"+arr[2];
+}
+/**
+ * 根据编号获取城市名
+ * @param id 编号
+ * @returns String 城市名(省,市,区县)
+ */
+function getCityText2(id) {
+    var arr = getCityArray2(id);
     return arr[0]+"/"+arr[1];
 }

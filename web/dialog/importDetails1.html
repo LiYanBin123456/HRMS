@@ -24,7 +24,7 @@
             <div id="container">
             <table id="tbl_detail" lay-filter="filter_tb_detail"></table>
             </div>
-            <div id="pager"></div>
+            <div class="layui-table-page" id="pager"></div>
 
             <!--行内工具栏-->
             <script type="text/html" id="bar_detail">
@@ -51,6 +51,7 @@
                 var details = layui.table.cache.tbl_detail;//获取表格中的数据
                 return details;
             };
+
             function loadLayuiModule() {
                 layui.use(['table','form','element','layer','upload','laypage'], function() {
                     table = layui.table;

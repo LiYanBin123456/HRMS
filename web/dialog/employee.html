@@ -429,7 +429,8 @@
     //查询所属的所有合作方
     function initCoop() {
         //获取session中的派遣方id
-        iClient.getList({},1,function(result){
+        var param_query ={conditions: {keys:[{k:"type",o:"=",v:0}]},order: {need:false},pagination: {need:false}};
+        iClient.getList(param_query,1,function(result){
             var cooperations = result.rows;
             var select_cooperation = $("#select_cooperation");
             select_cooperation.append("<option value='-2' selected disabled hidden>选择合作客户</option>");
@@ -464,7 +465,7 @@
                     if(setting.settingM == 3){
                         $("[name=m1]").removeClass("layui-hide");
                     }
-                    var text = getCityText4(setting.city);
+                    var text = getCityArray2(setting.city);
                     cityPicker.setValue(text);
                     op = "update";
                 }else {
@@ -526,6 +527,7 @@
 
             iEmployee.insert(employee, extract);
             layer.alert("基础信息保存成功，请完善社保信息", {icon: 20});
+            window.parent.location.reload();
         } else {
             iEmployee.update(employees,0, onUpdateSuccess);
         }

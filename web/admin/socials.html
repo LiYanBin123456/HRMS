@@ -18,34 +18,24 @@
           <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
           <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
-        <style>
-            .searchbox{
-                margin-left:400px;
-                display:inline;
-                width:300px;
-            }
-        </style>
+
     </head>
 
     <body class="layui-layout-body">
         <div style="padding: 5px;">
+            <form class="layui-form">
+                <div class="layui-input-inline">
+                    <div class="layui-input-block">
+                        <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city-picker" readonly="readonly" data-toggle="city-picker" placeholder="按城市过滤">
+                    </div>
+                </div>
+            </form>
             <!--顶部工具栏-->
             <div class="layui-hide" id="top_bar_social">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
-                <form class="layui-form searchbox">
-                    <div class="layui-input-inline">
-                        <div class="layui-form-item">
-                            <label  class="layui-form-label">
-                                <span class="x-red">*</span>地市</label>
-                            <div class="layui-input-block">
-                                <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city-picker" readonly="readonly" data-toggle="city-picker" placeholder="请选择">
-                            </div>
-                        </div>
-                    </div>
-                </form>
             </div>
             <table id="tbl_social" lay-filter="filter_tb_social"></table>
-            <div id="pager"></div>
+            <div class="layui-table-page" id="pager"></div>
 
             <!--行内工具栏-->
             <script type="text/html" id="bar_social">
@@ -57,6 +47,7 @@
         <script src="../js/interface.js"></script>
         <script src="../js/jquery.min.js"></script>
         <script src="../js/jquery.params.js"></script>
+        <script src="../js/queryParam.js"></script>
         <script src="../city-picker/city-picker.data.js"></script>
         <script src="../js/city.js"></script>
         <script>
@@ -65,18 +56,34 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"start",direction:false},pagination: {need:true,page:1,size:10}};
+
+            var param_query = new QueryParam();
+            param_query.setOrder("start",false);
+            param_query.setPagination(1,10);
             $(function () {
                 loadLayuiModule();
             });
 
             function loadLayuiModule() {
-                layui.use(['table','form','element','layer','laypage'], function() {
+                layui.extend({
+                    index: 'lib/index' //主入口模块
+                    , citypicker: '../city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
+                }).use(['table','form','element','layer','laypage','citypicker'], function() {
                     table = layui.table;
                     layer = layui.layer;
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
+                    var picker = layui.citypicker;
+                    cityPicker = new picker("#city-picker", {
+                        provincename:"provinceId",
+                        cityname:"city",
+                        level: 'city',// 级别
+                        onCitySelected:function (code) {
+                            param_query.addCondition("city","=",code);
+                            getSocials();
+                        }
+                    });
                     initPage();
                 });
             }
@@ -178,7 +185,7 @@
                 layer.open({
                     title:"详情",
                     type: 2,
-                    area: ['60%', '90%'],
+                    area: ['40%', '90%'],
                     content: content
                 });
             }
@@ -189,7 +196,7 @@
                 layer.open({
                     title:"添加规则",
                     type: 2,
-                    area: ['60%', '90%'],
+                    area: ['40%', '90%'],
                     content: content
                 });
             }
@@ -197,7 +204,7 @@
             //删除公告
             function del(data) {
                 var start = format_date(data.start);
-                var city = getCityText4(data.city);
+                var city = getCityArray2(data.city);
                 layer.confirm('确定删除'+'   '+city+'    '+start+'   '+'的社保规则', {icon: 3, title:'删除'}, function(index){
                     iRule.delete(data.id,1,function () {
                         layer.close(index);

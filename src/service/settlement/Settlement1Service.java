@@ -3,6 +3,7 @@ package service.settlement;
 import bean.admin.Account;
 import bean.contract.Contract;
 import bean.contract.Serve;
+import bean.contract.ViewContractCooperation;
 import bean.employee.Employee;
 import bean.employee.ViewEmployee;
 import bean.log.Log;
@@ -46,12 +47,14 @@ public class Settlement1Service {
      * 插入结算单，插入后根据返回的id，自动生成明细
      * @param conn
      * @param settlement1
-     * @param type
+     * @param type 0 不自动生成明细  1 自动生成明细
      * @return
      */
     public static DaoUpdateResult insert(Connection conn, Settlement1 settlement1, byte type) {
-        DaoUpdateResult result;
-        result = Settlement1Dao.insert(conn,settlement1);
+        //关闭自动提交
+        ConnUtil.closeAutoCommit(conn);
+
+        DaoUpdateResult result = Settlement1Dao.insert(conn,settlement1);
 
         if(result.success&&type == 1){//自动生成结算单明细
             long sid = (Long) result.extra;
@@ -72,9 +75,20 @@ public class Settlement1Service {
                 detail1.setEid(employeeList.get(i).getId());
                 detail1List.add(i,detail1);
             }
-            Detail1Dao.importDetails(conn,detail1List);
+            DaoUpdateResult result1 = Detail1Dao.importDetails(conn,detail1List);
+            //事务处理
+            if(result1.success){
+                ConnUtil.commit(conn);
+                return result;
+            }else {//回滚
+                ConnUtil.rollback(conn);
+                result1.msg = "明细插入失败";
+                return result1;
+            }
+        }else {//不自动生成明细，提交事务
+            ConnUtil.commit(conn);
+            return result;
         }
-        return result;
     }
 
     //删除结算单
@@ -280,20 +294,18 @@ public class Settlement1Service {
 
     //保存结算单；实质是计算结算单并且修改
     public static DaoUpdateResult saveSettlement(Connection conn, long sid,long cid) {
-        //派遣方与合作单位的最新合同
-        Contract contract = (Contract) ContractDao.getLast(conn,cid,"B").data;
-        //合同的服务项目
-        Serve serve = (Serve) ServeDao.get(conn,contract.getId()).data;
+
         //结算单
         Settlement1 settlement1 = (Settlement1) Settlement1Dao.get(conn,sid).data;
-
+        //获取合作客户的合同视图
+        ViewContractCooperation viewContractCooperation = (ViewContractCooperation) ContractDao.getViewContractCoop(conn,settlement1.getCcid()).data;
         QueryParameter parm = new QueryParameter();
         parm.addCondition("sid","=",sid);
         //该结算单中的所有明细
         List<ViewDetail1> viewDetail1s = (List<ViewDetail1>) Detail1Dao.getList(conn,parm).rows;
 
         //计算结算单
-        Settlement1 settlement11 = Calculate.calculateSettlement1(settlement1,contract,serve,viewDetail1s);
+        Settlement1 settlement11 = Calculate.calculateSettlement1(settlement1,viewContractCooperation,viewDetail1s);
 
         return Settlement1Dao.update(conn,settlement11);
     }

@@ -40,6 +40,13 @@ public class ContractDao {
         return DbUtil.get(conn,"contract",conditions,Contract.class);
     }
 
+    //获取合作客户的合同视图
+    public static DaoQueryResult getViewContractCoop(Connection conn,String id) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id", "=", id);
+        return DbUtil.get(conn,"view_contract_cooperation",conditions,ViewContractCooperation.class);
+    }
+
     //查询最新合同
     public  static DaoQueryResult getLast(Connection conn, long bid,String type) {
         QueryConditions conditions = new QueryConditions();
@@ -52,7 +59,7 @@ public class ContractDao {
 
     //插入合同
     public static DaoUpdateResult insert(Connection conn, Contract c) {
-        String sql = "insert into contract (id,aid,bid,type,start,end,status,comments,invoice,project,per,times) values (?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into contract (id,aid,bid,type,start,end,status,comments,invoice,project,per,times) values (?,?,?,?,?,?,?,?,?,?,?,?)";
         Object []params = {c.getId(),c.getAid(),c.getBid(),c.getType(),c.getStart(),c.getEnd(),c.getStatus(),c.getComments(),c.getInvoice(),c.getProject(),c.getPer(),c.getTimes()};
         return DbUtil.insert(conn,sql,params);
     }

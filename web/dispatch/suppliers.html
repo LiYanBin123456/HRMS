@@ -31,6 +31,14 @@
     </head>
         <body class="layui-layout-body">
               <div style="padding: 5px;">
+                  <form class="layui-form " style="display: inline">
+                      <div class="layui-input-inline">
+                          <div class="layui-input-inline ">
+                              <div class="layui-inline"><input type="radio" name="category" value="0" title="合作中" lay-filter="category" checked></div>
+                              <div class="layui-inline"><input type="radio" name="category" value="1" title="流失" lay-filter="category" ></div>
+                          </div>
+                      </div>
+                  </form>
             <!--顶部工具栏-->
             <div class="layui-hide" id="top_bar_supplier">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
@@ -49,12 +57,17 @@
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
+             <script type="text/html" id="bar_loss">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="update"><i class="layui-icon layui-icon-edit"></i> 合作</a>
+             </script>
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/jquery.min.js"></script>
         <script src="../js/jquery.params.js"></script>
         <script>
+            var category = 0;//记录是显示供应商，流失供应商
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
@@ -84,18 +97,41 @@
                     getSuppliers();
                     return false; //阻止表单跳转
                 });
+                form.on('radio(category)', function(data){
+                    switchCategory(Number(data.value));
+                });
+            }
+            function switchCategory(value) {
+                $("#container").empty();
+                $("#container").append('<table id="tbl_supplier" lay-filter="filter_tb_supplier"></table>');
+
+                category = value;
+                initTable1()
             }
 
             function initTable1() {
 
+                var cols;
+                var top_bar;
+                switch(Number(category)){
+                    case 0://供应商
+                        cols = columns_supplier_partner;
+                        top_bar = '#top_bar_supplier';
+                        break;
+                    case 1://流失供应商
+                        cols = columns_supplier_loss;
+                        top_bar = '#top_bar_supplier';
+                        break;
+                }
+
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_supplier',
-                    toolbar: '#top_bar_supplier', //开启头部工具栏，并为其绑定左侧模板
+                    toolbar: top_bar, //开启头部工具栏，并为其绑定左侧模板
 
                     title: '供应商列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_supplier,
+                    cols: cols,
                     id: 'tbl_supplier'
                 });
 
@@ -108,6 +144,9 @@
                             break;
                         case "del":
                             del(data);
+                            break;
+                        case "update":
+                            update(data);
                             break;
                     }
                 });
@@ -128,6 +167,7 @@
             }
 
             function getSuppliers() {
+                param_query.conditions.keys=[{k:'type',o:'=',v:category}];
                 iClient.getList(param_query,2,function (result) {
                     table.reload('tbl_supplier', {
                         data:result.rows
@@ -180,6 +220,17 @@
                         layer.close(index);
                         getSuppliers();
                         layer.msg('删除成功');
+                    });
+                });
+            }
+
+            //修改为供应商
+            function update(coop){
+                layer.confirm('确定修改'+coop.name+"为合作供应商?", {icon: 3, title:'修改为合作供应商'}, function(index) {
+                    iClient.updateStatus(coop.id, 2, 0, function () {
+                        layer.close(index);
+                        getSuppliers();
+                        layer.msg('修改成功');
                     });
                 });
             }

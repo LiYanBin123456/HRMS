@@ -42,7 +42,7 @@
                 </form>
             </div>
             <table id="tbl_deduct" lay-filter="filter_tb_deduct"></table>
-            <div id="pager"></div>
+            <div class="layui-table-page" id="pager"></div>
 
             <!--行内工具栏-->
             <script type="text/html" id="bar_deduct">
@@ -80,7 +80,7 @@
                         , exts: 'xls'
                         , acceptMime: '.xls'
                         ,before: function(file){
-                            this.data={op:"readXls",file:JSON.stringify(file)}
+                            this.data={op:"readDeduct",file:JSON.stringify(file)}
                         }
                         , done: function (res) {
                             if (res.success){

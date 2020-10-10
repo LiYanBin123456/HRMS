@@ -58,7 +58,7 @@
         <![endif]-->
     </head>
     <body>
-    <form id="frmEdit" lay-filter="form_social" class="layui-form" lay-filter="frm">
+    <form id="frmEdit" lay-filter="form_social" class="layui-form" lay-filter="frm" style="padding: 20px">
     <input type="hidden" name="id" lay-verify="" placeholder="" autocomplete="off" class="layui-input" value="">
         <div class="layui-form-item">
             <label  class="layui-form-label">
@@ -76,56 +76,56 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
-                <span class="x-red">*</span>基数</label>
+                <span class="x-red">*</span>基数(元)</label>
             <div class="layui-input-block">
                 <input type="text" name="base" autocomplete="off" placeholder="" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
-                <span class="x-red">*</span>养老单位比例</label>
+                <span class="x-red">*</span>单位养老(%)</label>
             <div class="layui-input-block">
-                <input type="text" name="per1" autocomplete="off" placeholder="%" class="layui-input">
+                <input type="text" name="per1" autocomplete="off" placeholder="比如21%，就输入21" class="layui-input">
             </div>
         </div>
          <div class="layui-form-item">
             <label class="layui-form-label">
-                <span class="x-red">*</span>养老个人比例</label>
+                <span class="x-red">*</span>个人养老(%)</label>
             <div class="layui-input-block">
-                <input type="text" name="per2" autocomplete="off" placeholder="%" class="layui-input">
+                <input type="text" name="per2" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
-                <span class="x-red">*</span>工伤单位比例</label>
+                <span class="x-red">*</span>单位工伤(%)</label>
             <div class="layui-input-block">
-                <input type="text" name="per3" autocomplete="off" placeholder="%" class="layui-input">
+                <input type="text" name="per3" autocomplete="off" class="layui-input">
             </div>
         </div>
          <div class="layui-form-item">
             <label class="layui-form-label">
-                <span class="x-red">*</span>工伤补充</label>
+                <span class="x-red">*</span>工伤补充(元)</label>
             <div class="layui-input-block">
-                <input type="text" name="extra" autocomplete="off" placeholder="元" class="layui-input">
+                <input type="text" name="extra" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
-                <span class="x-red">*</span>失业单位比例</label>
+                <span class="x-red">*</span>单位失业(%)</label>
             <div class="layui-input-block">
-                <input type="text" name="per4" autocomplete="off" placeholder="%" class="layui-input">
+                <input type="text" name="per4" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
-                <span class="x-red">*</span>失业个人比例</label>
+                <span class="x-red">*</span>个人失业(%)</label>
             <div class="layui-input-block">
-                <input type="text" name="per5" autocomplete="off" placeholder="%" class="layui-input">
+                <input type="text" name="per5" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item" >
             <div class="layui-input-block">
-                <button type="button" class="layui-btn " onclick="save()">保存</button>
+                <button type="button" class="layui-btn" onclick="save()">保存</button>
             </div>
         </div>
     </form>
@@ -139,7 +139,6 @@
 <script>
     var op = "insert";
     var form;//表单对象
-    var editer;
     var cityPicker;
     var laydate;
     loadLayuiModule();
@@ -148,9 +147,8 @@
         layui.extend({
             index: 'lib/index' //主入口模块
             , citypicker: '../city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
-        }).use(['form', 'layedit','jquery','citypicker','laydate'], function () {
+        }).use(['form','jquery','citypicker','laydate'], function () {
             form = layui.form;
-            layedit = layui.layedit;
             laydate = layui.laydate;
             var picker = layui.citypicker;
             cityPicker = new picker("#city-picker", {
@@ -162,7 +160,6 @@
                 elem: '#start'
                 ,type: 'date'
             });
-            editer = layedit.build('content'); //建立编辑器
             initData();
         });
     }
@@ -173,9 +170,8 @@
             var social = JSON.parse(param);
             social.start = format_date(social.start);
             form.val('form_social', social);
-            var city = getCityText4(social.city);
+            var city = getCityText2(social.city);
             cityPicker.setValue(city);
-            layedit.setContent(editer, social.content, false);
             op = "update";
         }
     }

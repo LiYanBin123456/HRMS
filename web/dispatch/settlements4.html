@@ -34,10 +34,10 @@
                 </div>
                 <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" autocomplete="off" id="filter_month" placeholder="按月份过滤">
+                    <input type="text" class="layui-input" autocomplete="off" id="filter_month" lay-filter="filter_month" placeholder="按月份过滤">
                 </div>
                 <div class="layui-input-inline">
-                    <select name="status"  lay-filter="select"   >
+                    <select name="status" lay-filter="select" >
                         <option value="">按状态过滤</option>
                         <option value="0">编辑</option>
                         <option value="1">提交</option>
@@ -58,12 +58,13 @@
 
             <!--行内工具栏-->
             <script type="text/html" id="bar_settlement">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>明细</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log"><i class="layui-icon layui-icon-edit"></i>日志</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">明细</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log">日志</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="save">保存</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="saveAs">另存为</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="commit">提交</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reset">重置</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="charge">扣款</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
             </script>
         </div>
@@ -77,11 +78,13 @@
             var element;
             var laydate;
             var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
+            var type = 1;//区分结算单类型  0 普通结算单  1 人事代理结算单 小时工结算单
+            var month=null;
+            var status = null;
+
             $(function () {
                 loadLayuiModule();
             });
-            var month=null;
-            var status = null;
 
             function loadLayuiModule() {
                 layui.use(['table','form','element','layer','laypage','laydate'], function() {
@@ -97,12 +100,12 @@
 
             function initPage() {
                 initTable();
-
                 laydate.render({
                     elem: '#filter_month'
                     ,type: 'month'
                     ,change: function(value, date, endDate){
                         month = value;
+                        getSettlements();
                     },
                     done: function(value, date, endDate){
                         if (!value){
@@ -115,11 +118,11 @@
                     status = data.value;
                     getSettlements();
                 });
-                form.on('submit(search)', function (data) {
+                form.on('submit(search)', function (data) {//模糊搜索
                     var keyword = data.field.keyword;
                     param_query.conditions.extra = keyword;
                     getSettlements();
-                   return false; //阻止表单跳转
+                    return false; //阻止表单跳转
                 });
             }
 
@@ -143,9 +146,8 @@
                 table.render({
                     elem: '#tbl_settlement',
                     toolbar: '#top_bar_settlement', //开启头部工具栏，并为其绑定左侧模板
-
                     title: '列表',
-                    cols: columns_settlement3,
+                    cols: columns_settlement1,
                     id: 'tbl_settlement'
                 });
 
@@ -159,6 +161,9 @@
                         case "log":
                             showLogs(settlement);
                             break;
+                        case "del":
+                            del(settlement);
+                            break;
                         case 'saveAs':
                             showCopyDlg(settlement);
                             break;
@@ -171,6 +176,9 @@
                         case 'reset':
                             reset(settlement);
                             break;
+                        case 'charge':
+                            charge(settlement);
+                            break;
                         case 'delete':
                             del(settlement);
                             break;
@@ -179,31 +187,29 @@
 
                 //顶部工具栏事件处理
                 table.on('toolbar(filter_tb_settlement)', function(obj){
+
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
                             break;
-                        case 'search':
-                            search();
-                            break;
                     };
                 });
-
                 getSettlements();
             }
 
             function getSettlements() {
-
                 param_query.conditions.keys=[];//初始化数组
-                console.log(month,status);
-                if (status !="null"&&status!=null&&status!=""){
+                //添加获取人事代理结算单的条件
+                param_query.conditions.keys.push({k:"type",o:"=",v:type});
+
+                if (status !="null" && status != "" && status != null){
                     param_query.conditions.keys.push({k:"status",o:"=",v:status})
                 }
                 if (month!=null&&month!=""){
                     param_query.conditions.keys.push({k:"month",o:"like",v:"%"+month+"%"})
                 }
 
-                iSettlement.getList(param_query,2,function (result) {
+                iSettlement.getList(param_query,0,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows
                     });
@@ -225,53 +231,21 @@
                 });
             }
 
-            //模糊查找
-            function search(keyword) {
-                param_query.conditions.extra = keyword;
-
-            }
-
-            //打开添加对话框
-            function showInsertDlg() {
-                var content = "../dialog/settlement3.html";
-                layer.open({
-                    title:"添加",
-                    type: 2,
-                    area: ['60%', '95%'],
-                    content: content,
-                    btn: ['添加', '关闭']
-                    ,yes: function(index, layero){
-                        var settlement = window["layui-layer-iframe" + index].callbackData();
-                        layer.close(index);
-                        insertSettlement(settlement);
-
-                    },btn2: function(index, layero){
-                        layer.close(index);
-                    }
-                });
-            }
-
-            function insertSettlement(settlement) {
-                iSettlement.insert(settlement,2,settlement.mode,function () {
-                    getSettlements();
-                    layer.msg("创建结算单，cid:"+settlement.cid+",month:"+format_date(settlement.month));
-                });}
-
             //打开明细对话框
             function showDetailDlg(settlement) {
-                var content = "../dialog/detail3.html?id="+settlement.id+"&pid="+settlement.pid+"&month="+settlement.month+"&cid"+settlement.cid;
+                var content = "../dialog/detail1.html?id="+settlement.id+"&month="+settlement.month+"&cid="+settlement.cid;
                 layer.open({
                     title:"明细",
                     type: 2,
-                    area: ['90%', '90%'],
+                    area: ['95%', '95%'],
                     content: content
                 });
             }
 
             //打开查看日志对话框
             function showLogs(settlement) {
-                var content = "log.html?category=2&id="+settlement.id;
-                var title = "操作日志-"+settlement.cname+format_date(settlement.month);
+                var content = "log.html?category=0&id="+settlement.id;
+                var title = "操作日志-"+settlement.name+format_date(settlement.month);
                 layer.open({
                     title:title,
                     type: 2,
@@ -280,9 +254,36 @@
                 });
             }
 
+            //打开添加对话框
+            function showInsertDlg() {
+                var content = "../dialog/settlement1.html?type="+type;
+                layer.open({
+                    title:"添加",
+                    type: 2,
+                    area: ['95%', '95%'],
+                    content: content,
+                    btn: ['添加', '关闭']
+                    ,yes: function(index, layero){
+                        var settlement = window["layui-layer-iframe" + index].callbackData();
+                        layer.close(index);
+                        insertSettlement(settlement);
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
+                });
+            }
+
+            //添加结算单
+            function insertSettlement(settlement) {
+                iSettlement.insert(settlement,0,settlement.mode,function () {
+                    getSettlements();
+                    layer.msg("创建结算单，cid:"+settlement.cid+",month:"+format_date(settlement.month));
+                });
+            }
+
             //打开复制对话框
             function showCopyDlg(settlement) {
-                var title = "另存["+settlement.cname+format_date(settlement.month)+"]为";
+                var title = "另存["+settlement.name+format_date(settlement.month)+"]为";
                 layer.open({
                     title:title,
                     type: 2,
@@ -293,10 +294,11 @@
                         var month = window["layui-layer-iframe" + index].callbackData();
                         layer.close(index);
                         saveAs(settlement.id,month);
+                        getSettlements();
                     },btn2: function(index, layero){
                         layer.close(index);
                     }
-                })
+                });
             }
 
             /**
@@ -308,26 +310,30 @@
                 var msg = "结算单另存为"+format_date(month);
                 var title = "结算单另存为-"+format_date(month);
                 layer.confirm(msg, {icon: 3, title:title}, function(index){
-                    iSettlement.saveAs(id,2,month,function () {
+                    iSettlement.saveAs(id,0,month,function () {
                         layer.close(index);
-                        getSettlements();
                         layer.msg('另存为'+month);
                     });
                 });
             }
 
-
             //保存结算单
             function save(settlement) {
-                layer.confirm('保存后结算单将被设置为[保存]状态，确认保存吗？', {icon: 3, title:'保存结算单'}, function(index){
-
+                var msg = "保存后结算单将被设置为[保存]状态，同时会自动计算社保、医保和个税等，确认保存吗？";
+                var title = "保存结算单-"+settlement.name+format_date(settlement.month);
+                layer.confirm(msg, {icon: 3, title:title}, function(index){
+                    iSettlement.saveSettlement(settlement.id,settlement.cid,0,function () {
+                        layer.close(index);
+                        layer.msg("保存成功");
+                        getSettlements();
+                    });
                 });
             }
 
             //提交结算单
             function commit(settlement) {
-                layer.confirm('提交后结算单将被设置为[提交]状态，确认提交吗？', {icon: 3, title:'提交结算单'}, function(index){
-                    iSettlement.commit(settlement.id,2,function () {
+                layer.confirm('确认提交结算单吗？', {icon: 3, title:'提交结算单'}, function(index){
+                    iSettlement.commit(settlement.id,0,function () {
                         layer.close(index);
                         getSettlements();
                         layer.msg('提交成功');
@@ -338,7 +344,7 @@
             //重置结算单
             function reset(settlement) {
                 layer.confirm('重置后结算单将被强制设置为[编辑]状态，确认重置结算单吗？', {icon: 3, title:'重置结算单'}, function(index){
-                    iSettlement.reset(settlement.id,2,function () {
+                    iSettlement.reset(settlement.id,0,function () {
                         layer.close(index);
                         getSettlements();
                         layer.msg('重置成功');
@@ -346,16 +352,29 @@
                 });
             }
 
-            //删除结算单
-            function del(settlement) {
-                layer.confirm('确定删除'+settlement.cname+":"+format_date(settlement.month)+'的结算单', {icon: 3, title:'删除'}, function(index){
-                    iSettlement.delete(settlement.id,2,function () {
+            //扣款
+            function charge(settlement) {
+                layer.confirm('确认执行扣款？', {icon: 3, title:'扣款'}, function(index){
+                    iSettlement.deduct(settlement.id,0,function () {
                         layer.close(index);
                         getSettlements();
-                        layer.msg('删除成功');
+                        layer.msg('扣款成功');
+
                     });
+
                 });
             }
+            //删除结算单
+            function del(settlement) {
+                layer.confirm('确定删除'+settlement.name+":"+format_date(settlement.month)+'的结算单', {icon: 3, title:'删除'}, function(index){
+                    iSettlement.delete(settlement.id,0,function () {
+                    layer.close(index);
+                    getSettlements();
+                    layer.msg('删除成功');
+                });
+                });
+            }
+
         </script>
     </body>
 </html>

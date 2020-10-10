@@ -4,6 +4,8 @@ import java.sql.Date;
 
 //结算单
 public class Settlement1 extends Settlemet{
+
+    private byte type;//0 普通结算  1 人事代理结算单
     private float salary;//应发工资总额
     private float social;//单位社保总额
     private float medicare;//单位医保总额
@@ -24,6 +26,26 @@ public class Settlement1 extends Settlemet{
         this.manage = manage;
         this.tax = tax;
         this.summary = summary;
+    }
+
+    public Settlement1(long id, long did, long cid, String ccid, Date month, byte status, byte source, byte type, float salary, float social, float medicare, float fund, float manage, float tax, float summary) {
+        super(id, did, cid, ccid, month, status, source);
+        this.type = type;
+        this.salary = salary;
+        this.social = social;
+        this.medicare = medicare;
+        this.fund = fund;
+        this.manage = manage;
+        this.tax = tax;
+        this.summary = summary;
+    }
+
+    public byte getType() {
+        return type;
+    }
+
+    public void setType(byte type) {
+        this.type = type;
     }
 
     public float getSalary() {
