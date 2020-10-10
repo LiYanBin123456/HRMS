@@ -77,7 +77,9 @@
                 initTable();
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    search(keyword);
+                    param_query.conditions.extra = keyword;
+                    getContracts();
+                    return false; //阻止表单跳转
                 });
             }
 
@@ -146,11 +148,6 @@
                 });
             }
 
-            //模糊查找
-            function search(keyword) {
-                param_query.conditions.extra = keyword;
-                getContracts();
-            }
 
             //打开详情对话框
             function showDetailDlg(contract) {
