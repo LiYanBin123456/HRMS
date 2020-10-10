@@ -51,6 +51,8 @@
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.params.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -151,7 +153,7 @@
 
             //打开详情对话框
             function showDetailDlg(contract) {
-                var content = "../dialog/contract_employee.html?id="+contract.id;
+                var content = "../dialog/contract_employee.html?contract="+encodeURIComponent(JSON.stringify(contract));
                 layer.open({
                     title:'合同-'+contract.name,
                     type: 2,
