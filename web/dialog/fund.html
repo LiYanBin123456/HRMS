@@ -122,7 +122,6 @@
     var form;//表单对象
     var cityPicker;
     var laydate;
-    var editer;
 
     loadLayuiModule();
 
@@ -130,9 +129,8 @@
         layui.extend({
             index: 'lib/index' //主入口模块
             , citypicker: '../city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
-        }).use(['form', 'layedit','jquery','citypicker','laydate'], function () {
+        }).use(['form','jquery','citypicker','laydate'], function () {
             form = layui.form;
-            layedit = layui.layedit;
             laydate = layui.laydate;
             var picker = layui.citypicker;
             cityPicker = new picker("#city-picker", {
@@ -144,7 +142,6 @@
                 elem: '#start'
                 ,type: 'date'
             });
-            editer = layedit.build('content'); //建立编辑器
             initData();
         });
     }
@@ -155,9 +152,8 @@
             var fund = JSON.parse(param);
             fund.start = format_date(fund.start);
             form.val('form_fund', fund);
-            var city = getCityText3(fund.city);
+            var city = getCityText2(fund.city);
             cityPicker.setValue(city);
-            layedit.setContent(editer, fund.content, false);
             op = "update";
         }
     }
