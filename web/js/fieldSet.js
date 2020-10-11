@@ -110,12 +110,21 @@ var columns_cooperation_loss = [[
 ]];
 
 //供应商管理字段集合
-var columns_supplier = [[
+var columns_supplier_partner = [[
     {field:'name', title: '名称'},
     {field:'business', title: '业务类别',width:90,templet:function (d) { return array_value2text(business_supplier,d.business) }},
     {field:'contact', title: '联系人',width:100},
     {field:'phone', title: '联系电话',width:150},
     {fixed: 'right', title: '操作', toolbar: '#bar_supplier',width:200}
+]];
+
+//供应商管理字段集合
+var columns_supplier_loss = [[
+    {field:'name', title: '名称'},
+    {field:'business', title: '业务类别',width:90,templet:function (d) { return array_value2text(business_supplier,d.business) }},
+    {field:'contact', title: '联系人',width:100},
+    {field:'phone', title: '联系电话',width:150},
+    {fixed: 'right', title: '操作', toolbar: '#bar_loss',width:200}
 ]];
 
 //派遣方客户合同字段集合
@@ -332,7 +341,7 @@ var columns_detail3  = [[
 //资金明细字段集合
 var columns_detail4  = [[
     {field:'time', title: '日期',templet:function (d) {return format_date(d.time)}},
-    {field:'balance', title: '金额',width:100},
+    {field:'money', title: '金额',width:100},
     {field:'comments', title: '事项',width:200}
 ]];
 

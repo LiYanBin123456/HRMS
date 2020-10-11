@@ -5,6 +5,7 @@ import bean.client.*;
 import com.alibaba.fastjson.*;
 import dao.client.CooperationDao;
 import dao.client.DispatchDao;
+import dao.client.SupplierDao;
 import dao.contract.ContractDao;
 import database.*;
 import service.client.*;
@@ -106,6 +107,9 @@ public class ClientServlet extends HttpServlet {
                 break;
             case 1://合作单位客户
                 result = CooperationDao.updateStatus(conn,id, type);
+                break;
+            case 2://合作单位客户
+                result = SupplierDao.updateStatus(conn,id, type);
                 break;
         }
         return JSONObject.toJSONString(result);

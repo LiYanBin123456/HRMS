@@ -75,8 +75,8 @@ var InterfaceClient = function() {
     /**
      *
      * @param id 要修改状态的客户id
-     * @param category 客户类别 0—派遣方 1—合作客户
-     * @param type  要修改的状态 0—合作 1—潜在 2—流失；
+     * @param category 客户类别 0—派遣方 1—合作客户 2_供应商
+     * @param type  要修改的状态 0—合作 1—潜在 2—流失； 供应商 0 合作 1 流失
      * @param success
      * @param fail
      */
