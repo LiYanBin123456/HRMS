@@ -156,7 +156,7 @@
                 layer.open({
                     title:"保险产品详情",
                     type: 2,
-                    area: ['60%', '90%'],
+                    area: ['80%', '90%'],
                     content: content
                 });
             }
@@ -178,14 +178,14 @@
                 layer.open({
                     title:"添加产品",
                     type: 2,
-                    area: ['60%', '90%'],
+                    area: ['80%', '90%'],
                     content: content
                 });
             }
 
             //删除保险铲平
             function del(product) {
-                layer.confirm('确定删除'+product.name, {icon: 3, title:'删除公告'}, function(index){
+                layer.confirm('确定删除'+product.name, {icon: 3, title:'删除保险产品'}, function(index){
                     iProduct.delete(product.id,function () {
                         layer.close(index);
                         getProducts();

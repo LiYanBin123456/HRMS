@@ -29,9 +29,7 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
             <div class="layui-hide" id="top_bar_deduct">
-                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
                 <button class="layui-btn layui-btn-sm" lay-event="import"><i class="layui-icon "></i> 导入</button>
                 <button class="layui-btn layui-btn-sm" lay-event="" onclick="downLoad()" ><i class="layui-icon "></i> 下载模板</button>
                 <form class="layui-form searchbox">
@@ -177,17 +175,6 @@
                             }
                         }
                     });
-                });
-            }
-
-            //打开添加对话框
-            function showInsertDlg() {
-                var content = "../dialog/deduct.html?";
-                layer.open({
-                    title:"添加",
-                    type: 2,
-                    area: ['40%', '80%'],
-                    content: content
                 });
             }
 

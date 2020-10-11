@@ -101,7 +101,7 @@ public class AccountServlet extends HttpServlet {
     //插入账号
     private String insert(Connection conn, HttpServletRequest request) {
         Account account =JSONObject.parseObject(request.getParameter("account"),Account.class);
-        return AccountService.insert(conn,account);
+        return AccountService.insert(conn,account,request.getSession());
     }
 
     //获取账号详情

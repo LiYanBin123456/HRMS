@@ -45,11 +45,15 @@ public class AccountService {
         return AccountDao.update(conn,account);
     }
 
-    public static String insert(Connection conn, Account account) {
+    public static String insert(Connection conn, Account account,HttpSession session) {
         DaoExistResult res1 = AccountDao.isExist(conn,account.getUsername());
         if(res1.exist){
             return DaoResult.fail("该账号已经存在");
         }
+        byte role = (byte) session.getAttribute("role");
+        long rid  = (long) session.getAttribute("rid");
+        account.setRole(role);
+        account.setRid(rid);
         DaoUpdateResult res2 = AccountDao.insert(conn,account);
         return JSONObject.toJSONString(res2);
     }

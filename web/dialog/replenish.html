@@ -29,7 +29,7 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_staff">
+            <div class="layui-hide" id="top_bar_employee">
                 <button class="layui-btn layui-btn-sm" lay-event="append"><i class="layui-icon "></i> 社保补缴</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
@@ -45,7 +45,7 @@
                     <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                 </form>
             </div>
-            <table id="tbl_staff" lay-filter="filter_tb_staff"></table>
+            <table id="tbl_employee" lay-filter="filter_tb_employee"></table>
             <div class="layui-table-page" id="pager"></div>
 
             <!--行内工具栏-->
@@ -100,18 +100,18 @@
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_staff',
-                    toolbar: '#top_bar_staff', //开启头部工具栏，并为其绑定左侧模板
+                    elem: '#tbl_employee',
+                    toolbar: '#top_bar_employee', //开启头部工具栏，并为其绑定左侧模板
                     title: '列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                     cols: columns_staff_with_base,
-                    id: 'tbl_staff'
+                    id: 'tbl_employee'
                 });
 
                 //行内工具栏事件响应
 
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_staff)', function(obj){
+                table.on('toolbar(filter_tb_employee)', function(obj){
                     switch(obj.event){
                         case 'append':
                             replenish();
@@ -122,16 +122,11 @@
           }
 
             function getStaffs() {
-                var result = {total:100,rows:[{ID:"360402199008230081",name:"赵阳",unit:"江西制氧机械"},{ID:"360402199008230081",name:"李斌",unit:"九江石化"}]};
-                table.reload('tbl_staff', {
-                    data:result.rows
-                });
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
-                    table.reload('tbl_notice', {
+                iEmployee.getList(param_query,function (result) {
+                    table.reload('tbl_employee', {
                         data:result.rows
                     });
-                });*/
+                });
             }
 
             //模糊查找
