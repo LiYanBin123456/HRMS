@@ -570,6 +570,16 @@
         var setting = form.val('form_ensure');
         setting.eid = employee.id;
         setting.city = city;
+        var medicares = 0;
+        var socials = 0;
+        $("input:checkbox[name='medicares']:checked").each(function (i) {
+            medicares += Number($(this).val());
+        });
+        $("input:checkbox[name='socials']:checked").each(function (i) {
+            socials += Number($(this).val());
+        });
+        setting.medicare=medicares;
+        setting.social=socials;
         if(op == "insert"){
             iEmployee.insertEnsureSetting(setting);
             layer.alert("社保信息保存成功，请完善个人专项扣除", {icon: 20});
