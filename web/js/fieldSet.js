@@ -578,6 +578,18 @@ var period_product = [
      {value:32,text:"六类"}
  ];
 
+ var medicare_employee =[
+     {value:1,text:"医疗保险"},
+     {value:2,text:"大病保险"},
+     {value:4,text:"生育保险"}
+ ];
+
+ var social_employee = [
+     {value:1,text:"养老保险"},
+     {value:2,text:"失业保险"},
+     {value:4,text:"工伤保险"}
+ ]
+
 //合同发票类型
 var invoice_contract = [
     {value:0,text:"增值税发票(全额)"},

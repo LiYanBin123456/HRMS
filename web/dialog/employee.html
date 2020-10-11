@@ -169,10 +169,7 @@
                                 <input type="text" name="valM" required="" placeholder="自定义基数" autocomplete="off" class="layui-input " onchange="verifyMedicalBase(this.value)">
                             </div>
                         </div>
-                        <div class="layui-field-box">
-                            <input type="checkbox" lay-skin="primary" title="医疗保险" checked>
-                            <input type="checkbox" lay-skin="primary" title="大病保险" checked>
-                            <input type="checkbox" lay-skin="primary" title="生育保险" checked>
+                        <div class="layui-field-box" id="medicare">
                         </div>
                     </fieldset>
                 </div>
@@ -190,10 +187,7 @@
                                 <input type="text" name="valS" required="" placeholder="自定义基数" autocomplete="off" class="layui-input" onchange="verifySocialBase(this.value)" >
                             </div>
                         </div>
-                        <div class="layui-field-box">
-                            <input type="checkbox" lay-skin="primary" title="养老保险" checked>
-                            <input type="checkbox" lay-skin="primary" title="失业保险" checked>
-                            <input type="checkbox" lay-skin="primary" title="工伤保险" checked>
+                        <div class="layui-field-box" id="social">
                         </div>
                     </fieldset>
                 </div>
@@ -349,7 +343,7 @@
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
-<script src="../layui/layui.js"></script>
+<script src="../lib/layui/layui.js"></script>
 <script src="../city-picker/city-picker.data.js"></script>
 <script src="../city-picker/city-picker.js"></script>
 <script src="../js/city.js"></script>
@@ -477,10 +471,39 @@
                     }
                     var text = getCityArray2(setting.city);
                     cityPicker.setValue(text);
+                    for (var i in medicare_employee) {
+                        var p = medicare_employee[i];
+                        var o = $("<input type='checkbox' name='medicares' lay-skin='primary'>").val(p.value).attr('title', p.text);
+                        if ((setting.medicare & p.value) != 0) {
+                            $(o).attr("checked", true);
+                        }
+                        $("#medicare").append(o);
+                    }
+                    for (var m in social_employee) {
+                        var n = social_employee[m];
+                        var q = $("<input type='checkbox' name='socials' lay-skin='primary'>").val(n.value).attr('title', n.text);
+                        if ((setting.social & n.value) != 0) {
+                            $(q).attr("checked", true);
+                        }
+                        $("#social").append(q);
+                    }
+                    form.render('checkbox');
                     op = "update";
                 }else {
+                    for(var i in medicare_employee){
+                        var p = medicare_employee[i];
+                        var o = $("<input type='checkbox' name='medicares' lay-skin='primary'>").val(p.value).attr('title',p.text);
+                        $("#medicare").append(o);
+                    }
+                    for (var m in social_employee) {
+                        var n = social_employee[m];
+                        var q = $("<input type='checkbox' name='socials' lay-skin='primary'>").val(n.value).attr('title', n.text);
+                        $("#social").append(q);
+                    }
+                    form.render('checkbox');
                     op = "insert"
                 }
+
             })
         }
     }
