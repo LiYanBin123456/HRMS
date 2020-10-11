@@ -452,6 +452,7 @@
                 layer.msg("修改成功");
                 var index = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(index);
+                window.parent.location.reload();
             });
         }else{
             iClient.insert(data,1,function (result){
@@ -460,6 +461,7 @@
                 mapSalary = {};
                 salary_items_defined = [];
                 layer.alert("基础信息保存成功，请完善财务信息", {icon: 20});
+                window.parent.location.reload();
             });
         }
         cooperation = data;

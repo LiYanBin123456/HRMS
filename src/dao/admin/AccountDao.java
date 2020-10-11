@@ -31,8 +31,8 @@ public class AccountDao {
     }
 
     public static DaoUpdateResult update(Connection conn, Account a) {
-        String sql = "update account set nickname=?,username=?,password=?,role=?,rid=?,permission=? where id=?";
-        Object []params = {a.getNickname(),a.getUsername(),a.getPassword(),a.getRole(),a.getRid(),a.getPermission(),a.getId()};
+        String sql = "update account set nickname=?,username=?,password=? where id=?";
+        Object []params = {a.getNickname(),a.getUsername(),a.getPassword(),a.getId()};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
     }
