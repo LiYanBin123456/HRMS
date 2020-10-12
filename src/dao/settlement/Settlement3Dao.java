@@ -27,7 +27,7 @@ public class Settlement3Dao {
 
     //添加结算单
     public static DaoUpdateResult insert(Connection conn, Settlement3 s) {
-        String sql = "insert into settlement3 (did,cid,ccid,pid,month,price,status,source) values (?,?,?,?,?,?,?)";
+        String sql = "insert into settlement3 (did,cid,ccid,pid,month,price,status,source) values (?,?,?,?,?,?,?,?)";
         Object []params = {s.getDid(),s.getCid(),s.getCcid(),s.getPid(),s.getMonth(),s.getPrice(),s.getStatus(),s.getSource()};
         return DbUtil.insert(conn,sql,params);
     }

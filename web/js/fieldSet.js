@@ -141,6 +141,7 @@ var columns_contract_cooperation = [[
     {field:'name', title: '合作客户'},
     {field:'start', title: '生效时间',width:130,templet:function (d) {return format_date(d.start)}},
     {field:'end', title: '到期时间',width:130,templet:function (d) {return format_date(d.end)}},
+    {field:'comments', title: '备注',width:130},
     {fixed:'right', title: '操作', toolbar: '#bar_contract',width:200}
 ]];
 
@@ -328,7 +329,6 @@ var columns_detail3  = [[
     {field:'cardId', title: '身份证号',width:160},
     {field:'cname', title: '姓名',width:80},
     {field:'place', title: '工作地点',width:80},
-    {field:'post', title: '工作岗位',width:80},
     {field:'pname', title: '保险产品',width:100,edit: 'text'},
     {field:'price', title: '保费',width:80,edit: 'text'},
     {fixed: 'right', title: '操作', toolbar: '#bar_detail'}
