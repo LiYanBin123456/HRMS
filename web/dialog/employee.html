@@ -347,6 +347,7 @@
 <script src="../city-picker/city-picker.data.js"></script>
 <script src="../city-picker/city-picker.js"></script>
 <script src="../js/city.js"></script>
+<script src="../js/fieldSet.js"></script>
 <script>
     var op = "insert";
     var form;//表单对象
@@ -490,21 +491,22 @@
                     form.render('checkbox');
                     op = "update";
                 }else {
-                    for(var i in medicare_employee){
-                        var p = medicare_employee[i];
-                        var o = $("<input type='checkbox' name='medicares' lay-skin='primary'>").val(p.value).attr('title',p.text);
-                        $("#medicare").append(o);
-                    }
-                    for (var m in social_employee) {
-                        var n = social_employee[m];
-                        var q = $("<input type='checkbox' name='socials' lay-skin='primary'>").val(n.value).attr('title', n.text);
-                        $("#social").append(q);
-                    }
-                    form.render('checkbox');
                     op = "insert"
                 }
 
             })
+        }else{
+            for(var i in medicare_employee){
+                var p = medicare_employee[i];
+                var o = $("<input type='checkbox' name='medicares' lay-skin='primary'>").val(p.value).attr('title',p.text);
+                $("#medicare").append(o);
+            }
+            for (var m in social_employee) {
+                var n = social_employee[m];
+                var q = $("<input type='checkbox' name='socials' lay-skin='primary'>").val(n.value).attr('title', n.text);
+                $("#social").append(q);
+            }
+            form.render('checkbox');
         }
     }
 

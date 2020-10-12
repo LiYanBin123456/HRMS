@@ -588,7 +588,7 @@ var period_product = [
      {value:1,text:"养老保险"},
      {value:2,text:"失业保险"},
      {value:4,text:"工伤保险"}
- ]
+ ];
 
 //合同发票类型
 var invoice_contract = [
