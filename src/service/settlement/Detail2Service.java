@@ -40,7 +40,7 @@ public class Detail2Service {
             }
 
             Employee employee = (Employee) EmployeeDao.get(conn,conditions).data; //根据员工身份证获取员工id
-            Detail2 detail2 = new Detail2(0,sid,employee.getId(),v2.getHours(),v2.getPrice(),v2.getFood()
+            Detail2 detail2 = new Detail2(0,sid,employee.getId(),v2.getHours(),employee.getPrice(),v2.getFood()
             ,v2.getTraffic(),v2.getAccommodation(),v2.getUtilities(),v2.getInsurance(),v2.getTax(),v2.getOther1()
             ,v2.getOther2(),v2.getPayable(),v2.getPaid());
             detail2s.add(detail2);//封装detail2

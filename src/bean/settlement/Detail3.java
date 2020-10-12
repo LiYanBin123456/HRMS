@@ -21,6 +21,7 @@ public class Detail3 extends Detail {
         this.price = price;
     }
 
+
     public Long getPid() {
         return pid;
     }

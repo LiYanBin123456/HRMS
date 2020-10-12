@@ -45,10 +45,10 @@ public class SettlementServlet extends HttpServlet {
             case "getList"://获取所有客户清单
                 result = getList(conn, request);
                 break;
-            case "insert"://添加一个客户
+            case "insert"://添加
                 result = insert(conn, request);
                 break;
-            case "delete"://删除客户
+            case "delete"://删除
                 result = delete(conn, request);
                 break;
             case "saveAs"://复制
@@ -194,7 +194,7 @@ public class SettlementServlet extends HttpServlet {
         byte type = Byte.parseByte(request.getParameter("type"));//是否自动生成明细 0 不 1 自动生成
         DaoUpdateResult result = null;
         HttpSession session = request.getSession();
-        //获取管理员所属的公司i
+        //获取管理员所属的公司id
         long rid = (long) session.getAttribute("rid");
         switch (category){
             case 0://普通结算单
