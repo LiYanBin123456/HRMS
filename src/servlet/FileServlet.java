@@ -184,6 +184,9 @@ public class FileServlet extends HttpServlet {
             case 2://员工模板
                 fileName = "employee"+".xls";
                 break;
+            case 3://员工模板
+                fileName = "EmployeeContract"+".xls";
+                break;
         }
         String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
         File file = new File(fullFileName);
@@ -207,6 +210,9 @@ public class FileServlet extends HttpServlet {
                 break;
             case 2://员工模板
                 fileName = "employee"+".xls";
+                break;
+            case 3://员工合同模板
+                fileName = "EmployeeContract"+".xls";
                 break;
         }
         String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);

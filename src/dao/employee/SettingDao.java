@@ -17,15 +17,15 @@ public class SettingDao {
 
     //修改
     public static DaoUpdateResult update(Connection conn, EnsureSetting s) {
-        String sql = "update ensureSetting set city=?,settingM=?,valM=?,settingS=?,vaLS=?,fundPer=?,fundBase=?,product=? where eid=? ";
-        Object []params = {s.getCity(),s.getSettingM(),s.getValM(),s.getSettingS(),s.getValS(),s.getFundPer(),s.getFundBase(),s.getProduct(),s.getEid()};
+        String sql = "update ensureSetting set city=?,settingM=?,valM=?,medicare=?,settingS=?,vaLS=?,social=?,fundPer=?,fundBase=?,product=? where eid=? ";
+        Object []params = {s.getCity(),s.getSettingM(),s.getValM(),s.getMedicare(),s.getSettingS(),s.getValS(),s.getSocial(),s.getFundPer(),s.getFundBase(),s.getProduct(),s.getEid()};
         return  DbUtil.update(conn,sql,params);
     }
 
     //增加
     public static DaoUpdateResult insert(Connection conn, EnsureSetting s) {
-        String sql = "insert ensureSetting (eid,city,settingM,valM,settingS,valS,fundPer,fundBase,product) values (?,?,?,?,?,?,?,?,?)";
-        Object []params = {s.getEid(),s.getCity(),s.getSettingM(),s.getValM(),s.getSettingS(),s.getValS(),s.getFundPer(),s.getFundBase(),s.getProduct()};
+        String sql = "insert ensureSetting (eid,city,settingM,valM,medicare,settingS,valS,social,fundPer,fundBase,product) values (?,?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {s.getEid(),s.getCity(),s.getSettingM(),s.getValM(),s.getMedicare(),s.getSettingS(),s.getValS(),s.getSocial(),s.getFundPer(),s.getFundBase(),s.getProduct()};
         return  DbUtil.insert(conn,sql,params);
     }
 

@@ -2,20 +2,18 @@ package utills;
 
 import bean.client.Items;
 import bean.client.MapSalary;
-import bean.contract.Contract;
-import bean.contract.Serve;
 import bean.contract.ViewContractCooperation;
 import bean.employee.Deduct;
 import bean.employee.EnsureSetting;
 import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
 import bean.settlement.*;
+import com.alibaba.fastjson.JSONObject;
 import dao.employee.SettingDao;
 import dao.rule.RuleMedicareDao;
 import dao.rule.RuleSocialDao;
 import database.ConnUtil;
 
-import java.awt.geom.FlatteningPathIterator;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
@@ -50,6 +48,7 @@ public class Calculate {
         if(!existSetting){//不存在则养老等字段为0，直接返回
             return  detail;
         }
+
         EnsureSetting setting = (EnsureSetting) SettingDao.get(conn,eid).data;//员工设置
         String city = setting.getCity();//员工地市
         RuleMedicare medicare= (RuleMedicare) RuleMedicareDao.getLast(conn,city).data;//获取该地市的最新医保
@@ -57,13 +56,15 @@ public class Calculate {
 
         //先获取医保相关
         int SettingM = setting.getSettingM();//员工医保设置
+        JSONObject object;
         switch (SettingM){
             case 0://最低标准
-                medicare1 = medicare.getBase()*medicare.getPer2();//个人医疗
-                medicare2 = medicare.getBase()*medicare.getPer1();//单位医疗
-                birth = medicare.getBase()*medicare.getPer3();//单位生育
-                disease1 = medicare.getFin2();//个人大病
-                disease2 = medicare.getFin1();//单位大病
+                object = calculateMedicare(setting,medicare.getBase(),medicare);
+                medicare1 = Float.parseFloat(object.getString("medicare1"));//个人医疗
+                medicare2 = Float.parseFloat(object.getString("medicare2"));//单位医疗
+                birth = Float.parseFloat(object.getString("birth"));//单位生育
+                disease1 = Float.parseFloat(object.getString("disease1"));//个人大病
+                disease2 = Float.parseFloat(object.getString("disease2"));//单位大病
                 break;
             case 1://实际工资，因为模板中暂时没有实际工资，为0
                 medicare1 =0;//个人医疗
@@ -81,11 +82,12 @@ public class Calculate {
                 break;
             case 3://自定义基数
                 float ValM = setting.getValM();//自定义的基数
-                medicare1 = ValM*medicare.getPer2();//个人医疗
-                medicare2 =ValM*medicare.getPer1();//单位医疗
-                birth = ValM*medicare.getPer3();//单位生育
-                disease1 = medicare.getFin2();//个人大病
-                disease2 = medicare.getFin1();//单位大病
+                object = calculateMedicare(setting,ValM,medicare);
+                medicare1 = Float.parseFloat(object.getString("medicare1"));//个人医疗
+                medicare2 = Float.parseFloat(object.getString("medicare2"));//单位医疗
+                birth = Float.parseFloat(object.getString("birth"));//单位生育
+                disease1 = Float.parseFloat(object.getString("disease1"));//个人大病
+                disease2 = Float.parseFloat(object.getString("disease2"));//单位大病
                 break;
         }
 
@@ -134,7 +136,7 @@ public class Calculate {
 
 
     /**
-     * 计算普通结算单
+     * 计算普通结算单明细
      * @param detail1 //结算单明细
      * @param medicare //所在地市的医保规则
      * @param social //所在地市的社保规则
@@ -162,20 +164,24 @@ public class Calculate {
 
         //计算医保相关
         int SettingM = setting.getSettingM();//员工医保设置
+        JSONObject object;
         switch (SettingM){
             case 0://最低标准
-                medicare1 = medicare.getBase()*medicare.getPer2();//个人医疗
-                medicare2 = medicare.getBase()*medicare.getPer1();//单位医疗
-                birth = medicare.getBase()*medicare.getPer3();//单位生育
-                disease1 = medicare.getFin2();//个人大病
-                disease2 = medicare.getFin1();//单位大病
+                object = calculateMedicare(setting,medicare.getBase(),medicare);
+                medicare1 = Float.parseFloat(object.getString("medicare1"));//个人医疗
+                medicare2 = Float.parseFloat(object.getString("medicare2"));//单位医疗
+                birth = Float.parseFloat(object.getString("birth"));//单位生育
+                disease1 = Float.parseFloat(object.getString("disease1"));//个人大病
+                disease2 = Float.parseFloat(object.getString("disease2"));//单位大病
                 break;
             case 1://实际工资
-                medicare1 = base*medicare.getPer2();//个人医疗
-                medicare2 = base*medicare.getPer1();//单位医疗
-                birth = base*medicare.getPer3();//单位生育
-                disease1 = medicare.getFin2();//个人大病
-                disease2 = medicare.getFin1();//单位大病
+                object = calculateMedicare(setting,base,medicare);
+                medicare1 = Float.parseFloat(object.getString("medicare1"));//个人医疗
+                medicare2 = Float.parseFloat(object.getString("medicare2"));//单位医疗
+                birth = Float.parseFloat(object.getString("birth"));//单位生育
+                disease1 = Float.parseFloat(object.getString("disease1"));//个人大病
+                disease2 = Float.parseFloat(object.getString("disease2"));//单位大病
+
                 break;
             case 2://不交纳，为0
                 medicare1 =0;//个人医疗
@@ -186,30 +192,35 @@ public class Calculate {
                 break;
             case 3://自定义基数
                 float ValM = setting.getValM();//自定义的基数
-                medicare1 = ValM*medicare.getPer2();//个人医疗
-                medicare2 =ValM*medicare.getPer1();//单位医疗
-                birth = ValM*medicare.getPer3();//单位生育
-                disease1 = medicare.getFin2();//个人大病
-                disease2 = medicare.getFin1();//单位大病
+                object = calculateMedicare(setting,ValM,medicare);
+                medicare1 = Float.parseFloat(object.getString("medicare1"));//个人医疗
+                medicare2 = Float.parseFloat(object.getString("medicare2"));//单位医疗
+                birth = Float.parseFloat(object.getString("birth"));//单位生育
+                disease1 = Float.parseFloat(object.getString("disease1"));//个人大病
+                disease2 = Float.parseFloat(object.getString("disease2"));//单位大病
+
                 break;
         }
 
         //计算社保相关
         int SettingS = setting.getSettingS();//员工社保设置
+        JSONObject object2;
         switch (SettingS){
             case 0://最低标准
-                pension1=social.getBase()*social.getPer2();//个人养老
-                unemployment1=social.getBase()*social.getPer5();//个人失业
-                pension2=social.getBase()*social.getPer1();//单位养老
-                unemployment2=social.getBase()*social.getPer4();//单位失业
-                injury=social.getBase()*social.getPer3();//单位工伤
+                object2 = calculateSocial(setting,social.getBase(),social);
+                pension1 = Float.parseFloat(object2.getString("pension1"));
+                unemployment1 = Float.parseFloat(object2.getString("unemployment1"));
+                pension2 = Float.parseFloat(object2.getString("pension2"));
+                unemployment2 = Float.parseFloat(object2.getString("unemployment2"));
+                injury = Float.parseFloat(object2.getString("injury"));
                 break;
             case 1://实际工资
-                pension1=base*social.getPer2();//个人养老
-                unemployment1=base*social.getPer5();//个人失业
-                pension2=base*social.getPer1();//单位养老
-                unemployment2=base*social.getPer4();//单位失业
-                injury=base*social.getPer3();//单位工伤
+                object2 = calculateSocial(setting,base,social);
+                pension1 = Float.parseFloat(object2.getString("pension1"));
+                unemployment1 = Float.parseFloat(object2.getString("unemployment1"));
+                pension2 = Float.parseFloat(object2.getString("pension2"));
+                unemployment2 = Float.parseFloat(object2.getString("unemployment2"));
+                injury = Float.parseFloat(object2.getString("injury"));
                 break;
             case 2://不缴纳，为0
                 pension1=0;//个人养老
@@ -220,17 +231,20 @@ public class Calculate {
                 break;
             case 3://自定义基数
                 float ValS=setting.getValS();//自定义的基数
-                pension1=ValS*social.getPer2();//个人养老
-                unemployment1=ValS*social.getPer5();//个人失业
-                pension2=ValS*social.getPer1();//单位养老
-                unemployment2=ValS*social.getPer4();//单位失业
-                injury=ValS*social.getPer3();//单位工伤
+
+                object2 = calculateSocial(setting,ValS,social);
+                pension1 = Float.parseFloat(object2.getString("pension1"));
+                unemployment1 = Float.parseFloat(object2.getString("unemployment1"));
+                pension2 = Float.parseFloat(object2.getString("pension2"));
+                unemployment2 = Float.parseFloat(object2.getString("unemployment2"));
+                injury = Float.parseFloat(object2.getString("injury"));
                 break;
         }
 
         //计算公积金相关
         float FundBase = setting.getFundBase();//自定义的公积金基数
         float FundPer  = setting.getFundPer();//自定义公积金比例
+
         fund1=FundBase*FundPer;//个人公积金
         fund2=FundBase*FundPer;//单位公积金
 
@@ -306,6 +320,128 @@ public class Calculate {
         return  detail1;
     }
 
+    /**
+     * 计算医保
+     * @param setting 员工设置
+     * @param base 基数
+     * @param ruleMedicare  所属地方的医保
+     * @return
+     */
+    public static JSONObject calculateMedicare(EnsureSetting setting, float base, RuleMedicare ruleMedicare){
+
+        float medicare1=0;//个人医疗
+        float disease1=0;//个人大病
+        float medicare2=0;//单位医疗
+        float disease2=0;//单位大病
+        float birth=0;//单位生育
+
+        byte medicare = setting.getMedicare();//要计算的医保类别
+        switch (medicare){
+            case 7://医疗 大病 生育
+                medicare1 = base*ruleMedicare.getPer2();//个人医疗
+                medicare2 =base*ruleMedicare.getPer1();//单位医疗
+                birth = base*ruleMedicare.getPer3();//单位生育
+                disease1 = ruleMedicare.getFin2();//个人大病
+                disease2 = ruleMedicare.getFin1();//单位大病
+                break;
+            case 6://医疗 大病
+                medicare1 = base*ruleMedicare.getPer2();//个人医疗
+                medicare2 =base*ruleMedicare.getPer1();//单位医疗
+                disease1 = ruleMedicare.getFin2();//个人大病
+                disease2 = ruleMedicare.getFin1();//单位大病
+                break;
+            case 4://医疗
+                medicare1 = base*ruleMedicare.getPer2();//个人医疗
+                medicare2 =base*ruleMedicare.getPer1();//单位医疗
+                break;
+            case 3://大病 生育
+                birth = base*ruleMedicare.getPer3();//单位生育
+                disease1 = ruleMedicare.getFin2();//个人大病
+                disease2 = ruleMedicare.getFin1();//单位大病
+                break;
+            case 2://大病
+                disease1 = ruleMedicare.getFin2();//个人大病
+                disease2 = ruleMedicare.getFin1();//单位大病
+                break;
+            case 1://生育
+                birth = base*ruleMedicare.getPer3();//单位生育
+                break;
+            case 0://都不选
+                break;
+        }
+
+        JSONObject o = new JSONObject();
+        o.put("medicare1",medicare1);
+        o.put("disease1",disease1);
+        o.put("medicare2",medicare2);
+        o.put("disease2",disease2);
+        o.put("birth",birth);
+
+        return o;
+
+    }
+
+
+    /**
+     * 计算社保
+     * @param setting 员工设置
+     * @param base 基数
+     * @param ruleSocial  所属地方的社保
+     * @return
+     */
+
+    public static JSONObject calculateSocial(EnsureSetting setting, float base,RuleSocial ruleSocial){
+
+        float pension1=0;//个人养老
+        float unemployment1=0;//个人失业
+        float pension2=0;//单位养老
+        float unemployment2=0;//单位失业
+        float injury=0;//单位工伤
+
+        byte social = setting.getSocial();//要计算的医保类别
+        switch (social){
+            case 7://养老 失业 工伤
+                pension1=base*ruleSocial.getPer2();//个人养老
+                unemployment1=base*ruleSocial.getPer5();//个人失业
+                pension2=base*ruleSocial.getPer1();//单位养老
+                unemployment2=base*ruleSocial.getPer4();//单位失业
+                injury=base*ruleSocial.getPer3();//单位工伤
+                break;
+            case 6://养老 失业
+                pension1=base*ruleSocial.getPer2();//个人养老
+                unemployment1=base*ruleSocial.getPer5();//个人失业
+                pension2=base*ruleSocial.getPer1();//单位养老
+                unemployment2=base*ruleSocial.getPer4();//单位失业
+                break;
+            case 4://养老
+                pension1=base*ruleSocial.getPer2();//个人养老
+                pension2=base*ruleSocial.getPer1();//单位养老
+                break;
+            case 3:// 失业 工伤
+                unemployment1=base*ruleSocial.getPer5();//个人失业
+                unemployment2=base*ruleSocial.getPer4();//单位失业
+                injury=base*ruleSocial.getPer3();//单位工伤
+                break;
+            case 2:// 失业
+                unemployment1=base*ruleSocial.getPer5();//个人失业
+                unemployment2=base*ruleSocial.getPer4();//单位失业
+                break;
+            case 1:// 工伤
+                injury=base*ruleSocial.getPer3();//单位工伤
+                break;
+            case 0://都不选
+                break;
+        }
+
+        JSONObject o = new JSONObject();
+        o.put("pension1",pension1);
+        o.put("unemployment1",unemployment1);
+        o.put("pension2",pension2);
+        o.put("unemployment2",unemployment2);
+        o.put("injury",injury);
+
+        return o;
+    }
 
     /**
      *计算普通结算单
