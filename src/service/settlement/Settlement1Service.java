@@ -96,9 +96,6 @@ public class Settlement1Service {
         return Settlement1Dao.delete(conn,id);
     }
 
-    public static String copy(Connection conn, long id,String month) {
-        return null;
-    }
 
     public static DaoUpdateResult commit(Connection conn, long id, long aid) {
         /**流程

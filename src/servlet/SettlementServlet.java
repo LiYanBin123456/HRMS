@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "SettlementServlet",urlPatterns = "/verify/settlement")
@@ -74,7 +75,7 @@ public class SettlementServlet extends HttpServlet {
             case "commit"://提交
                 result = commit(conn, request);
                 break;
-            case "check"://获取客户服务信息
+            case "check"://审核
                 result = check(conn, request);
                 break;
             case "reset"://重置
@@ -327,6 +328,12 @@ public class SettlementServlet extends HttpServlet {
 
     //补差
     private String backup(Connection conn, HttpServletRequest request) {
+        String start = request.getParameter("start");//起始月份
+        String end = request.getParameter("end");//结束月份
+        long sid = Long.parseLong(request.getParameter("sid"));//结算单id
+        String[] eids = request.getParameterValues("eids[]");//员工id集合
+
+        Detail1Service.backup(conn,eids,start,end,sid);
         return null;
     }
 

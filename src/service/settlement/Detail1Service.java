@@ -57,9 +57,7 @@ public class Detail1Service {
         result = Detail1Dao.importDetails(conn,detail1s);
         return  result;
     }
-    public static String backup(Connection conn,Long id,String month){
-       return null;
-    }
+
     public static String makeup(Connection conn,Long id,String month){
         return null;
     }
@@ -90,5 +88,15 @@ public class Detail1Service {
 
         }
         return  Detail1Dao.update(conn,detail1List);
+    }
+
+    //社保补缴
+    public static void backup(Connection conn, String[] eids, String start, String end, long sid) {
+    for(int i = 0 ; i <eids.length; i++){
+        long eid = Long.parseLong(eids[i]);//员工id
+        EnsureSetting setting = (EnsureSetting) SettingDao.get(conn,eid).data;
+
+    }
+
     }
 }

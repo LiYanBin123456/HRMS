@@ -1,7 +1,11 @@
 package dao.contract;
 
 import bean.contract.*;
+import bean.employee.Employee;
+import dao.employee.EmployeeDao;
 import database.*;
+import sun.plugin2.main.server.ResultID;
+import utills.CreateGetNextId;
 
 import javax.servlet.http.HttpSession;
 import javax.sound.midi.Soundbank;
@@ -103,5 +107,37 @@ public class ContractDao {
     }
 
 
+    public static DaoUpdateResult insertContracts(List<ViewContractEmployee> contractList, Connection conn, long rid) {
+        DaoUpdateResult result = new DaoUpdateResult();
+        for(ViewContractEmployee contract:contractList){
+              contract.setAid(rid);
 
+              QueryConditions conditions = new QueryConditions();
+              conditions.add("cardId","=",contract.getCardId());
+             if(!EmployeeDao.exist(conn,conditions).exist){
+                 result.msg = contract.getName()+"未找到，请核对";
+                 return result;
+             }
+            Employee employee = (Employee) EmployeeDao.get(conn,conditions).data;
+            contract.setBid(employee.getId());
+
+            //自增id
+            QueryConditions conditions1 = new QueryConditions();
+            String type = "C";
+            conditions.add("type", "=", type);
+            //查寻出数据库中类型为type的最后一条合同的id
+            String id = DbUtil.getLast(conn, "contract", conditions1);
+            if(id!=null){
+                //合同id+1
+                id = CreateGetNextId.NextId(id,type);
+            }else {
+                //id=null表示还没有该类型的合同
+                id = CreateGetNextId.NextId(0, type);
+            }
+            contract.setId(id);
+            contract.setType(type);
+            result = ContractDao.insert(conn,contract);
+        }
+        return result;
+    }
 }

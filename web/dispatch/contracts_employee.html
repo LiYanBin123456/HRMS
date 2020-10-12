@@ -29,10 +29,11 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
+            <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
             <div class="layui-hide" id="top_bar_contract">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加合同</button>
-                <button class="layui-btn layui-btn-sm" lay-event="" onclick="downLoad()" ><i class="layui-icon "></i> 批量导入</button>
-                <button class="layui-btn layui-btn-sm" lay-event="" onclick="downLoad()" ><i class="layui-icon "></i> 下载模板</button>
+                <button class="layui-btn layui-btn-sm" lay-event="import" ><i class="layui-icon "></i> 批量导入</button>
+                <button class="layui-btn layui-btn-sm" lay-event="" onclick="download()" ><i class="layui-icon "></i> 下载模板</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
@@ -59,18 +60,42 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
+            var upload;
             var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"start",direction:false},pagination: {need:true,page:1,size:10}};
             $(function () {
                 loadLayuiModule();
             });
 
             function loadLayuiModule() {
-                layui.use(['table','form','element','layer','laypage'], function() {
+                layui.use(['table','form','upload','element','layer','laypage'], function() {
                     table = layui.table;
                     layer = layui.layer;
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
+                    upload = layui.upload;
+                    upload.render({
+                        elem: '#import' //绑定元素
+                        , url: '/hrms/verify/file' //上传接口
+                        , accept: 'file'
+                        , exts: 'xls'
+                        , acceptMime: '.xls'
+                        ,before: function(file){
+                            this.data={op:"readXls",file:JSON.stringify(file)}
+                        }
+                        , done: function (res) {
+                            if (res.success){
+                                var contracts = res.data;
+                                showImportDlg(contracts);
+                            }else {
+                                layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                            }
+                        }
+                        , error: function () {
+                            //请求异常回调
+                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                        }
+                    });
                     initPage();
                 });
             }
@@ -120,10 +145,33 @@
                         case 'search':
                             search();
                             break;
+                        case 'import':
+                            $("#import").click();
+                            break;
                     };
                 });
-
                 getContracts();
+            }
+            //核对导入的数据
+            function showImportDlg(contracts) {
+                var content = "../dialog/importEmployeeContract.html?contracts="+encodeURIComponent(JSON.stringify(contracts));
+                layer.open({
+                    title:"核对明细",
+                    type: 2,
+                    area: ['95%', '95%'],
+                    content: content,
+                    btn: ['添加', '关闭']
+                    ,yes: function(index, layero){
+                        var contracts = window["layui-layer-iframe" + index].callbackData();
+                        iContract.insertContracts(contracts,function () {
+                            layer.close(index);
+                            layer.msg("导入成功");
+                            getContracts();
+                        })
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
+                });
             }
 
             function getContracts() {
@@ -184,14 +232,20 @@
                 });
             }
 
-            function downLoad() {
-                var curWwwPath = window.document.location.href;
-                var pathName = window.document.location.pathname;
-                var pos = curWwwPath.indexOf(pathName);
-                var localhostPath = curWwwPath.substring(0, pos);
-                var projectName = pathName.substring(0, pathName.substr(1).indexOf('/') + 1);
-                var url = localhostPath + projectName + "/劳务派遣员工合同.xls";
-                window.open(url);
+            function download() {
+                iFile.existModel(3,function (result) {
+                    if(!result.exist){
+                        layer.msg("附件不存在或已删除");
+                        return;
+                    }
+
+                    var url = "/hrms/verify/file?op=downloadModel&category=3";
+                    var form = $('<form method="POST"></form>');
+                    form.attr('action', url);
+                    form.appendTo($('body'));
+                    form.submit();
+                    form.remove();
+                })
             }
 
         </script>
