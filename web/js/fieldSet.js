@@ -223,6 +223,34 @@ var columns_settlement1  = [[
     {title:'操作', toolbar: '#bar_settlement',width:500,fixed:"right"}
 ]];
 
+var columns_settlement1_check  = [[
+    {field:'name', title: '用工企业',width:180,fixed:"left"},
+    {field:'month', title: '月份',width:90,templet:function (d) {return format_date(d.month)}},
+    {field:'salary', title: '应发工资',width:70},
+    {field:'social', title: '单位社保',width:70},
+    {field:'medicare', title: '单位医保',width:70},
+    {field:'fund', title: '单位公积金',width:80},
+    {field:'manage', title: '管理费',width:70},
+    {field:'tax', title: '税费',width:70},
+    {field:'summary', title: '总额',width:80},
+    {field:'status', title: '状态',width:70,templet:function (d) { return array_value2text(status_settlement,d.status) }},
+    {title:'操作', toolbar: '#bar_settlement',width:500,fixed:"right"}
+]];
+
+var columns_settlement1_portion  = [[
+    {field:'name', title: '用工企业',width:180,fixed:"left"},
+    {field:'month', title: '月份',width:90,templet:function (d) {return format_date(d.month)}},
+    {field:'salary', title: '应发工资',width:70},
+    {field:'social', title: '单位社保',width:70},
+    {field:'medicare', title: '单位医保',width:70},
+    {field:'fund', title: '单位公积金',width:80},
+    {field:'manage', title: '管理费',width:70},
+    {field:'tax', title: '税费',width:70},
+    {field:'summary', title: '总额',width:80},
+    {field:'status', title: '状态',width:70,templet:function (d) { return array_value2text(status_settlement,d.status) }},
+    {title:'操作', toolbar: '#bar_settlement',width:500,fixed:"right"}
+]];
+
 //添加结算单中的合同字段集合
 var columns_contract =[[
     {field:'id', title: '合同id',width:160},
