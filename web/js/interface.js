@@ -359,6 +359,17 @@ var InterfaceContract = function() {
         var para = {op: "getServiceList",param:JSON.stringify(param),id:id};
         access(url,para,1,success,fail);
     };
+
+    /**
+     * 批量插入员工合同
+     * @param contracts 员工合同集合
+     * @param success
+     * @param fail
+     */
+    this.insertContracts = function (contracts,success,fail) {
+        var para = {op: "insertContracts",contracts:contracts};
+        access(url,para,1,success,fail);
+    }
 };
 
 //账号管理相关接口

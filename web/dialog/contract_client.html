@@ -364,7 +364,7 @@
         iProduct.getList({},function(result){
             var products = result.rows;
             var select_product = $("#select_product");
-            select_product.append("<option value='-2' disabled hidden>选择合作客户</option>");
+            select_product.append("<option value='-2' disabled hidden>选择商业保险</option>");
             for(var i in products){
                 var product = products[i];
                 var option1 = $("<option>").val(product.id).text(product.name);

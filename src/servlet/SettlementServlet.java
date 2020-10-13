@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "SettlementServlet",urlPatterns = "/verify/settlement")
@@ -44,10 +45,10 @@ public class SettlementServlet extends HttpServlet {
             case "getList"://获取所有客户清单
                 result = getList(conn, request);
                 break;
-            case "insert"://添加一个客户
+            case "insert"://添加
                 result = insert(conn, request);
                 break;
-            case "delete"://删除客户
+            case "delete"://删除
                 result = delete(conn, request);
                 break;
             case "saveAs"://复制
@@ -74,7 +75,7 @@ public class SettlementServlet extends HttpServlet {
             case "commit"://提交
                 result = commit(conn, request);
                 break;
-            case "check"://获取客户服务信息
+            case "check"://审核
                 result = check(conn, request);
                 break;
             case "reset"://重置
@@ -193,7 +194,7 @@ public class SettlementServlet extends HttpServlet {
         byte type = Byte.parseByte(request.getParameter("type"));//是否自动生成明细 0 不 1 自动生成
         DaoUpdateResult result = null;
         HttpSession session = request.getSession();
-        //获取管理员所属的公司i
+        //获取管理员所属的公司id
         long rid = (long) session.getAttribute("rid");
         switch (category){
             case 0://普通结算单
@@ -327,6 +328,12 @@ public class SettlementServlet extends HttpServlet {
 
     //补差
     private String backup(Connection conn, HttpServletRequest request) {
+        String start = request.getParameter("start");//起始月份
+        String end = request.getParameter("end");//结束月份
+        long sid = Long.parseLong(request.getParameter("sid"));//结算单id
+        String[] eids = request.getParameterValues("eids[]");//员工id集合
+
+        Detail1Service.backup(conn,eids,start,end,sid);
         return null;
     }
 

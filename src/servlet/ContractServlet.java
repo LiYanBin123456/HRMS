@@ -2,7 +2,9 @@ package servlet;
 
 import bean.contract.Contract;
 import bean.contract.Serve;
+import bean.contract.ViewContractEmployee;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.contract.ContractDao;
 import database.*;
@@ -17,6 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.*;
 import java.sql.Connection;
+import java.util.List;
 
 
 @WebServlet(urlPatterns = ("/verify/contract"))
@@ -68,6 +71,9 @@ public class ContractServlet extends HttpServlet {
             case "getContracts"://获取合同视图
                 result = getContracts(conn,request);
                 break;
+            case "insertContracts"://批量入员工合同
+                result = insertContracts(conn,request);
+                break;
 
         }
         ConnUtil.closeConnection(conn);
@@ -75,6 +81,15 @@ public class ContractServlet extends HttpServlet {
         out.print(result);
         out.flush();
         out.close();
+    }
+
+    //批量插入员工合同
+    private String insertContracts(Connection conn, HttpServletRequest request) {
+        List<ViewContractEmployee> contractList = JSONArray.parseArray(request.getParameter("contracts"),ViewContractEmployee.class);//
+        HttpSession session = request.getSession();
+        long rid = (long) session.getAttribute("rid");
+        DaoUpdateResult result = ContractDao.insertContracts(contractList,conn,rid);
+        return JSONObject.toJSONString(result);
     }
 
     //根据合作客户和服务项目类型获取派遣方与合作方的合同
@@ -101,7 +116,7 @@ public class ContractServlet extends HttpServlet {
         conditions.add("type", "=", type);
         //查寻出数据库中类型为type的最后一条合同的id
         String id = DbUtil.getLast(conn, "contract", conditions);
-        System.out.println("===="+id);
+
         if(id!=null){
             //合同id+1
             id = CreateGetNextId.NextId(id,contract.getType());
@@ -110,13 +125,13 @@ public class ContractServlet extends HttpServlet {
             id = CreateGetNextId.NextId(0, contract.getType());
         }
         contract.setId(id);
-        System.out.println(contract);
+
         HttpSession session = request.getSession();
         long rid = (long) session.getAttribute("rid");
         contract.setAid(rid);
         res = ContractService.insert(conn,contract);
         res.extra = id;
-        System.out.println(res);
+
         return JSONObject.toJSONString(res);
     }
 

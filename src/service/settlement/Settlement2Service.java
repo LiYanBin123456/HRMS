@@ -1,6 +1,7 @@
 package service.settlement;
 
 import bean.admin.Account;
+import bean.contract.Serve;
 import bean.employee.Employee;
 import bean.employee.ViewEmployee;
 import bean.log.Log;
@@ -12,6 +13,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.LogDao;
 import dao.admin.AccountDao;
+import dao.contract.ServeDao;
 import dao.employee.EmployeeDao;
 import dao.settlement.Detail1Dao;
 import dao.settlement.Detail2Dao;
@@ -42,8 +44,12 @@ public class Settlement2Service {
         ConnUtil.closeAutoCommit(conn);
 
         DaoUpdateResult result ;
-        //需要获取合同中的小时工单价
+        //获取合同中的服务项目
+        Serve serve = (Serve) ServeDao.get(conn,settlement2.getCcid()).data;
+        float price = serve.getValue();//获取合同中的小时工价格
+        settlement2.setPrice(price);
         result = Settlement2Dao.insert(conn,settlement2);
+
         if(result.success&&type==1){
             long sid = (long) result.extra;//结算单id
             long cid = settlement2.getCid();//合作单位id

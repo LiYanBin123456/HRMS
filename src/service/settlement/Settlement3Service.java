@@ -1,6 +1,8 @@
 package service.settlement;
 
 import bean.admin.Account;
+import bean.contract.Contract;
+import bean.contract.Serve;
 import bean.employee.Employee;
 import bean.employee.ViewEmployee;
 import bean.log.Log;
@@ -11,6 +13,8 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.LogDao;
 import dao.admin.AccountDao;
+import dao.contract.ContractDao;
+import dao.contract.ServeDao;
 import dao.employee.EmployeeDao;
 import dao.settlement.Detail1Dao;
 import dao.settlement.Detail3Dao;
@@ -38,7 +42,8 @@ public class Settlement3Service {
     //添加
     public static DaoUpdateResult insert(Connection conn, Settlement3 settlement3, byte type) {
         /**
-         * 1、插入结算单 返回id
+         * 获取合同服务项目中的商业保险id
+         * 1、插入结算单 返回id，判断是否需要自动生成明细
          * 2、根据cid查询出派遣到该单位的所有员工(不包括小时工)
          * 3、根据员工的个数 封装好商业保险单明细集合
          * 4、批量插入商业保险结算单明细
@@ -46,10 +51,14 @@ public class Settlement3Service {
         //关闭自动提交
         ConnUtil.closeAutoCommit(conn);
 
+        //获取合同服务项目
+        Serve serve = (Serve) ServeDao.get(conn,settlement3.getCcid()).data;
+        settlement3.setPid(serve.getPid());//设置商业保险id
+        settlement3.setPrice(serve.getValue());//设置商业保险的价格
+
         DaoUpdateResult result = Settlement3Dao.insert(conn,settlement3);
         if(result.success&&type==1) {
             long sid = (long) result.extra;//返回插入后的主键
-            System.out.println("sid:" + sid);
             long did = settlement3.getDid();//合作单位id
             long cid = settlement3.getCid();//合作单位id
             long pid = settlement3.getPid();//产品id
@@ -67,9 +76,10 @@ public class Settlement3Service {
             List<Detail3> detail3List = new ArrayList<>();
             for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
                 Detail3 detail3 = new Detail3();
-                detail3.setSid(sid);
-                detail3.setEid(employeeList.get(i).getId());
-                detail3.setPid(pid);
+                detail3.setSid(sid);//结算单id
+                detail3.setEid(employeeList.get(i).getId());//员工id
+                detail3.setPid(pid);//商业保险id
+                detail3.setPrice(serve.getValue());//商业保险价格
                 detail3List.add(i,detail3);
             }
             //插入明细

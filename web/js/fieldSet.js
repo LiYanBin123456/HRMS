@@ -141,6 +141,7 @@ var columns_contract_cooperation = [[
     {field:'name', title: '合作客户'},
     {field:'start', title: '生效时间',width:130,templet:function (d) {return format_date(d.start)}},
     {field:'end', title: '到期时间',width:130,templet:function (d) {return format_date(d.end)}},
+    {field:'comments', title: '备注',width:130},
     {fixed:'right', title: '操作', toolbar: '#bar_contract',width:200}
 ]];
 
@@ -188,26 +189,23 @@ var columns_employee_spare = [[
 //员工所有信息字段集合
 var columns_employees = [[
     {fixed: 'left', type: 'checkbox'},
-    {field:'cardId', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
+    {field:'cardId', title: '身份证号',width:170},
     {field:'degree', title: '学历',width:80,templet:function (d) { return array_value2text(degrees_employee,d.degree) }},
     {field:'phone', title: '联系电话',width:120},
     {field:'type', title: '员工类型',width:120,templet:function (d) { return array_value2text(type_employee,d.type) }},
     {field:'entry', title: '入职时间',width:120,templet:function (d) {return format_date(d.entry)}},
     {field:'status', title: '在职状态',width:120,templet:function (d) { return array_value2text(status_employee,d.status) }},
+    {field:'category', title: '用工性质',width:120,templet:function (d) { return array_value2text(category_employee,d.category) }},
+    {field:'household', title: '户口性质',width:120,templet:function (d) { return array_value2text(household_employee,d.household) }},
+    {field:'address', title: '户籍地址',width:120},
     {field:'department', title: '部门',width:120},
     {field:'post', title: '岗位',width:120},
-    {field:'category', title: '用工性质',width:120,templet:function (d) { return array_value2text(category_employee,d.category) }},
-    {field:'price', title: '时间报酬',width:120},
     {field:'school', title: '毕业院校',width:120},
     {field:'major', title: '毕业专业',width:120},
     {field:'cname', title: '外派单位',width:120},
-    {field:'household', title: '户口性质',width:120,templet:function (d) { return array_value2text(household_employee,d.household) }},
-    {field:'address', title: '户籍地址',width:120},
-    {field:'date1', title: '离职时间',width:120,templet:function (d) {return format_date(d.date1)}},
-    {field:'date2', title: '退休时间',width:120,templet:function (d) {return format_date(d.date2)}},
-    {field:'reason', title: '离职原因',width:120,templet:function (d) { return array_value2text(reason_employee,d.reason) }},
-]];
+    {field:'price', title: '时间报酬',width:120}
+  ]];
 
 //普通结算单字段集合
 var columns_settlement1  = [[
@@ -223,6 +221,35 @@ var columns_settlement1  = [[
     {field:'status', title: '状态',width:70,templet:function (d) { return array_value2text(status_settlement,d.status) }},
     {title:'操作', toolbar: '#bar_settlement',width:500,fixed:"right"}
 ]];
+
+var columns_settlement1_check  = [[
+    {field:'name', title: '用工企业',width:180,fixed:"left"},
+    {field:'month', title: '月份',width:90,templet:function (d) {return format_date(d.month)}},
+    {field:'salary', title: '应发工资',width:70},
+    {field:'social', title: '单位社保',width:70},
+    {field:'medicare', title: '单位医保',width:70},
+    {field:'fund', title: '单位公积金',width:80},
+    {field:'manage', title: '管理费',width:70},
+    {field:'tax', title: '税费',width:70},
+    {field:'summary', title: '总额',width:80},
+    {field:'status', title: '状态',width:70,templet:function (d) { return array_value2text(status_settlement,d.status) }},
+    {title:'操作', toolbar: '#bar_settlement',width:500,fixed:"right"}
+]];
+
+var columns_settlement1_portion  = [[
+    {field:'name', title: '用工企业',width:180,fixed:"left"},
+    {field:'month', title: '月份',width:90,templet:function (d) {return format_date(d.month)}},
+    {field:'salary', title: '应发工资',width:70},
+    {field:'social', title: '单位社保',width:70},
+    {field:'medicare', title: '单位医保',width:70},
+    {field:'fund', title: '单位公积金',width:80},
+    {field:'manage', title: '管理费',width:70},
+    {field:'tax', title: '税费',width:70},
+    {field:'summary', title: '总额',width:80},
+    {field:'status', title: '状态',width:70,templet:function (d) { return array_value2text(status_settlement,d.status) }},
+    {title:'操作', toolbar: '#bar_settlement',width:500,fixed:"right"}
+]];
+
 //添加结算单中的合同字段集合
 var columns_contract =[[
     {field:'id', title: '合同id',width:160},
@@ -329,7 +356,6 @@ var columns_detail3  = [[
     {field:'cardId', title: '身份证号',width:160},
     {field:'cname', title: '姓名',width:80},
     {field:'place', title: '工作地点',width:80},
-    {field:'post', title: '工作岗位',width:80},
     {field:'pname', title: '保险产品',width:100,edit: 'text'},
     {field:'price', title: '保费',width:80,edit: 'text'},
     {fixed: 'right', title: '操作', toolbar: '#bar_detail'}
@@ -575,6 +601,18 @@ var period_product = [
      {value:8,text:"四类"},
      {value:16,text:"五类"},
      {value:32,text:"六类"}
+ ];
+
+ var medicare_employee =[
+     {value:1,text:"医疗保险"},
+     {value:2,text:"大病保险"},
+     {value:4,text:"生育保险"}
+ ];
+
+ var social_employee = [
+     {value:1,text:"养老保险"},
+     {value:2,text:"失业保险"},
+     {value:4,text:"工伤保险"}
  ];
 
 //合同发票类型

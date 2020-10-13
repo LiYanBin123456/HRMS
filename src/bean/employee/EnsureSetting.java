@@ -1,4 +1,7 @@
 package bean.employee;
+
+import java.awt.geom.FlatteningPathIterator;
+
 //员工个税专项扣除
 public class EnsureSetting {
     private long eid;//员工id
@@ -15,6 +18,13 @@ public class EnsureSetting {
      只有选择了自定义才有用
      */
     private float valM;
+    /**
+     医保  采用位运算
+     第一位 医疗保险
+     第二位 大病医疗
+     第三位 生育保险
+     */
+    private byte medicare;
     /**社保设置
      0_最低标准
      1_实际工资
@@ -28,10 +38,13 @@ public class EnsureSetting {
      *
      */
     private float valS;
-    /**公积金设置
-     0_按比例
-     1_自定义
+    /**
+     社保采用位运算
+     第一位 养老保险
+     第二位 失业保险
+     第三位 工商保险
      */
+    private byte social;
     private float fundPer;//公积金比例
     private float fundBase;//公积金基数
     private float product;//保险产品 0 无   1 购买
@@ -50,6 +63,22 @@ public class EnsureSetting {
         this.fundPer = fundPer;
         this.fundBase = fundBase;
         this.product = product;
+    }
+
+    public byte getMedicare() {
+        return medicare;
+    }
+
+    public void setMedicare(byte medicare) {
+        this.medicare = medicare;
+    }
+
+    public byte getSocial() {
+        return social;
+    }
+
+    public void setSocial(byte social) {
+        this.social = social;
     }
 
     public long getEid() {

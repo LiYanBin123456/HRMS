@@ -28,16 +28,15 @@
 
     <body class="layui-layout-body">
         <div style="padding: 5px;">
-            <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_settlement">
-                <form class="layui-form ">
+                <form class="layui-form " style="display: inline">
                     <div class="layui-input-inline">
-                             <input type="radio" name="se" value="0" title="待审核" lay-filter="se" checked="checked" >
-                             <input type="radio" name="se" value="1" title="全部" lay-filter="se" >
+                             <input type="radio" name="category" value="0" title="待审核" lay-filter="category" checked="checked" >
+                             <input type="radio" name="category" value="1" title="全部" lay-filter="category" >
                     </div>
                 </form>
-            </div>
+            <div id="container">
             <table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>
+            </div>
             <div class="layui-table-page" id="pager"></div>
  
             <!--行内工具栏-->
@@ -49,7 +48,9 @@
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/jquery.params.js"></script>
+        <script src="../js/jquery.min.js"></script>
         <script>
+            var category = 0; //显示待审核和全部
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
@@ -74,35 +75,38 @@
 
 
             function initPage() {
-                form.on('radio(se)', function(data){
-                    initTable(data.value);
+                initTable();
+                form.on('radio(category)', function(data){
+                    switchCategory(Number(data.value));
                 });
-                initTable(0);
             }
 
-            function initTable(value) {
-                //初始化分页
-                laypage.render({
-                    elem: 'pager'
-                    ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
-                            getSettlements(value);
-                        }
-                    }
-                });
+            function switchCategory(value) {
+                $("#container").empty();
+                $("#container").append('<table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>');
+
+                category = value;
+                initTable()
+            }
+
+            function initTable() {
+
+                var cols;
+                switch(Number(category)){
+                    case 0://待审核
+                        cols = columns_settlement1_check;
+                        break;
+                    case 1://全部
+                        cols = columns_settlement1_portion;
+                        break;
+                }
 
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_settlement',
-                    toolbar: '#top_bar_settlement', //开启头部工具栏，并为其绑定左侧模板
+                    elem: '#tbl_settlement', //开启头部工具栏，并为其绑定左侧模板
                     title: '列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_settlement1,
+                    cols: cols,
                     id: 'tbl_settlement'
                 });
 
@@ -119,11 +123,11 @@
                     }
                 });
                 //顶部工具栏事件处理
-                getSettlements(value);
+                getSettlements();
             }
 
-            function getSettlements(value) {
-                param_query.conditions.keys = value == 1?[]:[{k:"status",o:"=",v:3}];
+            function getSettlements() {
+                param_query.conditions.keys = category == 1?[]:[{k:"status",o:"=",v:3}];
                 iSettlement.getList(param_query,0,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows
@@ -139,7 +143,7 @@
                             if(!first){
                                 param_query.pagination.page = obj.curr;
                                 param_query.pagination.size = obj.limit;
-                                getSettlements(value);
+                                getSettlements();
                             }
                         }
                     });
