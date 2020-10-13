@@ -24,124 +24,192 @@
 <div class="layui-tab layui-tab-brief" lay-filter="tab_employ">
     <ul class="layui-tab-title">
         <li class="layui-this">基础信息</li>
+        <li>补充信息</li>
         <li>社保设置</li>
         <li>个人专项扣除</li>
         <li>工资卡</li>
     </ul>
     <div class="layui-tab-content">
         <div class="layui-tab-item layui-show">
-            <form lay-filter="form_expatriate" class="layui-form">
+            <form lay-filter="form_employee" class="layui-form layui-row">
+                <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+                    <input type="hidden" name="id">
+                    <input type="hidden" name="type">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">
+                            <span class="x-red">*</span>身份证号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="cardId" required="" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">
+                            <span class="x-red">*</span>姓名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="name" required="" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">
+                            <span class="x-red">*</span>联系电话</label>
+                        <div class="layui-input-inline">
+                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="phone"
+                                   required="" autocomplete="off" class="layui-input"></div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="x-red">*</span>学历</label>
+                        <div class="layui-input-inline">
+                            <select name="degree" lay-verify="required">
+                                <option value="0">高中以下</option>
+                                <option value="1">高中</option>
+                                <option value="2">中专</option>
+                                <option value="3">大专</option>
+                                <option value="4">本科</option>
+                                <option value="5">硕士</option>
+                                <option value="6">博士</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">
+                            <span class="x-red">*</span>入职时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" id="entry" name="entry" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-hide" name="t1">
+                        <label class="layui-form-label"><span class="x-red">*</span>用工性质</label>
+                        <div class="layui-input-inline">
+                            <select name="category" lay-verify="required" lay-filter="filter_category">
+                                <option value=""></option>
+                                <option value="0">派遣</option>
+                                <option value="1">外包</option>
+                                <option value="2">小时工</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-hide" name="t2">
+                        <label class="layui-form-label"><span class="x-red">*</span>小时工报酬</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="price" required="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-hide" name="t1">
+                        <label class="layui-form-label"><span class="x-red">*</span>外派单位</label>
+                        <div class="layui-input-inline">
+                            <select name="cid" id="select_cooperation" lay-filter="filter_cooperation" lay-verify="required"></select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">
+                            <span class="x-red">*</span>岗位</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="post" required="" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label"><span class="x-red">*</span>在职状态</label>
+                        <div class="layui-input-inline">
+                            <select name="status" lay-verify="required">
+                                <option value=""></option>
+                                <option value="0">在职</option>
+                                <option value="1">离职</option>
+                                <option value="2">退休</option>
+                                <option value="3">其他</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item" >
+                    <div class="layui-input-block">
+                        <button type="button" class="layui-btn " onclick="saveEmployee()">保存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="layui-tab-item">
+            <form lay-filter="form_extra" class="layui-form layui-row">
                 <input type="hidden" name="id">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>档案编号</label>
+                    <label class="layui-form-label">档案编号</label>
                     <div class="layui-input-inline">
                         <input type="text" name="rid" required="" autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>身份证号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="cardId" required="" autocomplete="off" class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>姓名</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="name" required="" autocomplete="off" class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>联系电话</label>
-                    <div class="layui-input-inline">
-                        <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="phone"
-                               required="" autocomplete="off" class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><span class="x-red">*</span>学历</label>
-                    <div class="layui-input-inline">
-                        <select name="degree" lay-verify="required">
-                            <option value="0">高中以下</option>
-                            <option value="1">高中</option>
-                            <option value="2">中专</option>
-                            <option value="3">大专</option>
-                            <option value="4">本科</option>
-                            <option value="5">硕士</option>
-                            <option value="6">博士</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>毕业学校</label>
+                    <label class="layui-form-label">毕业学校</label>
                     <div class="layui-input-inline">
                         <input type="text" name="school" required="" autocomplete="off"
                                class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>毕业专业</label>
+                    <label class="layui-form-label">毕业专业</label>
                     <div class="layui-input-inline">
                         <input type="text" name="major" required="" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>入职时间</label>
-                    <div class="layui-input-block">
-                        <input type="text" id="entry" name="entry" class="layui-input" style="width: 200px">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><span class="x-red">*</span>用工性质</label>
+                    <label class="layui-form-label">户口性质</label>
                     <div class="layui-input-inline">
-                        <select name="category" lay-verify="required">
+                        <select name="household">
                             <option value=""></option>
-                            <option value="0">派遣</option>
-                            <option value="1">外包</option>
-                            <option value="2">小时工</option>
+                            <option value="0">外地城镇</option>
+                            <option value="1">本地城镇</option>
+                            <option value="2">外地农村</option>
+                            <option value="3">城镇</option>
+                            <option value="4">农村</option>
+                            <option value="5">港澳台</option>
+                            <option value="6">外籍</option>
                         </select>
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label"><span class="x-red">*</span>小时工报酬</label>
+                    <label class="layui-form-label">户籍地址</label>
                     <div class="layui-input-inline">
-                        <input type="text" name="price" required="" autocomplete="off" class="layui-input">
+                        <input type="text" name="address" class="layui-input">
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <label class="layui-form-label"><span class="x-red">*</span>在职状态</label>
+                    <label class="layui-form-label">离职时间</label>
                     <div class="layui-input-inline">
-                        <select name="status" lay-verify="required">
+                        <input type="text" id="date1" name="date1" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">退休时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="date2" name="date2" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">离职原因</label>
+                    <div class="layui-input-inline">
+                        <select name="household">
                             <option value=""></option>
-                            <option value="0">在职</option>
-                            <option value="1">离职</option>
-                            <option value="2">退休</option>
-                            <option value="3">其他</option>
+                            <option value="0">合同到期</option>
+                            <option value="1">被用人单位解除劳动合同</option>
+                            <option value="2">被用人单位开除</option>
+                            <option value="3">被用人单位除名</option>
+                            <option value="4">被用人单位辞退</option>
+                            <option value="5">公司倒闭</option>
+                            <option value="6">公司破产</option>
+                            <option value="7">单位人员减少</option>
+                            <option value="8">养老在职转退休</option>
+                            <option value="9">参军</option>
+                            <option value="10">入学</option>
+                            <option value="11">劳改劳教</option>
+                            <option value="12">出国定居</option>
+                            <option value="13">异地转移</option>
+                            <option value="14">不足缴费年限</option>
+                            <option value="15">人员失踪</option>
+                            <option value="16">错误申报</option>
+                            <option value="17">其他原因减少</option>
                         </select>
                     </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><span class="x-red">*</span>外派单位</label>
-                    <div class="layui-input-inline">
-                        <select name="cid" id="select_cooperation" lay-filter="filter_cooperation" lay-verify="required"></select>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>岗位</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="post" required="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"></label>
-                    <button type="button" class="layui-btn" id="test1"><i class="layui-icon">&#xe67c;</i>上传照片</button>
                 </div>
                 <div class="layui-form-item" >
                     <div class="layui-input-block">
-                        <button type="button" class="layui-btn " onclick="save_expatriate()">保存</button>
+                        <button type="button" class="layui-btn " onclick="saveExtra()">保存</button>
                     </div>
                 </div>
             </form>
@@ -170,9 +238,9 @@
                             </div>
                         </div>
                         <div class="layui-field-box">
-                            <input type="checkbox" lay-skin="primary" title="医疗保险" checked>
-                            <input type="checkbox" lay-skin="primary" title="大病保险" checked>
-                            <input type="checkbox" lay-skin="primary" title="生育保险" checked>
+                            <input type="checkbox" lay-skin="primary" name="bMedicare" value="1" title="医疗保险" checked>
+                            <input type="checkbox" lay-skin="primary" name="bMedicare" value="2" title="大病保险" checked>
+                            <input type="checkbox" lay-skin="primary" name="bMedicare" value="4" title="生育保险" checked>
                         </div>
                     </fieldset>
                 </div>
@@ -191,9 +259,9 @@
                             </div>
                         </div>
                         <div class="layui-field-box">
-                            <input type="checkbox" lay-skin="primary" title="养老保险" checked>
-                            <input type="checkbox" lay-skin="primary" title="失业保险" checked>
-                            <input type="checkbox" lay-skin="primary" title="工伤保险" checked>
+                            <input type="checkbox" lay-skin="primary" name="bSocial" value="1" title="养老保险" checked>
+                            <input type="checkbox" lay-skin="primary" name="bSocial" value="2" title="失业保险" checked>
+                            <input type="checkbox" lay-skin="primary" name="bSocial" value="4" title="工伤保险" checked>
                         </div>
                     </fieldset>
                 </div>
@@ -224,7 +292,7 @@
                     </fieldset>
                 </div>
                 <div class="layui-form-item">
-                    <button class="layui-btn" onclick="save_ensure()" type="button">保存</button>
+                    <button class="layui-btn" onclick="saveEnsureSetting()" type="button">保存</button>
                 </div>
             </form>
         </div>
@@ -299,7 +367,7 @@
                         <input type="text" name="deduct6" required="" autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
-                    <button type="button" class="layui-btn" onclick="save_deduct()">保存</button>
+                    <button type="button" class="layui-btn" onclick="saveDeduct()">保存</button>
                 </div>
             </form>
         </div>
@@ -339,7 +407,7 @@
                     </div>
                 </div>
                 <div class="layui-form-item">
-                    <button type="button" class="layui-btn" onclick="save_card()">保存</button>
+                    <button type="button" class="layui-btn" onclick="saveCard()">保存</button>
                 </div>
             </form>
         </div>
@@ -349,9 +417,9 @@
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
-<script src="../layui/layui.js"></script>
+<script src="../js/xadmin.js"></script>
 <script src="../city-picker/city-picker.data.js"></script>
-<script src="../city-picker/city-picker.js"></script>
+<script src="../js/fieldSet.js"></script>
 <script src="../js/city.js"></script>
 <script>
     var op = "insert";
@@ -359,10 +427,9 @@
     var cityPicker;
     var element;
     var laydate;
-    var cid;
-    var id = $.query.get("id");
-    var type = $.query.get("type");
-    var employee,setting,deduct,card,city;
+    var employee = {degree:1,category:0,status:0,entry:new Date().getTime()};
+
+    var extra,setting,deduct,card,city;
 
     loadLayuiModule();
 
@@ -385,7 +452,12 @@
             });
             laydate.render({
                 elem: '#entry'
-                ,type: 'date'
+            });
+            laydate.render({
+                elem: '#date1'
+            });
+            laydate.render({
+                elem: '#date2'
             });
             initPage();
             initTab();
@@ -399,12 +471,15 @@
                     getEmployee();//获取员工基础信息
                     break;
                 case 1:
-                    getEnsureSetting();//获取社保设置
+                    getExtra();//获取员工补充信息
                     break;
                 case 2:
-                    getDeduct();//获取个人专项扣除
+                    getEnsureSetting();//获取社保设置
                     break;
                 case 3:
+                    getDeduct();//获取个人专项扣除
+                    break;
+                case 4:
                     getCard();//获取工资卡详情
                     break;
             }
@@ -428,16 +503,22 @@
                 $("[name=s1]").addClass("layui-hide");
             }
         });
-        //监听消息列表选择消息标题
-        form.on('select(filter_cooperation)', function(data){
-            cid = data.value;//获取选中的合作单位编号
+
+        //监听用工性质选项变化
+        form.on('select(filter_category)', function(data){
+            var category = data.value;
+            if(category == 2){
+                $("[name=t2]").removeClass("layui-hide");
+            }else{
+                $("[name=t2]").addClass("layui-hide");
+            }
         });
         getEmployee();
-        initCoop();
+        initCooperationList();
     }
 
     //查询所属的所有合作方
-    function initCoop() {
+    function initCooperationList() {
         //获取session中的派遣方id
         var param_query ={conditions: {keys:[{k:"type",o:"=",v:0}]},order: {need:false},pagination: {need:false}};
         iClient.getList(param_query,1,function(result){
@@ -449,23 +530,48 @@
                 var option = $("<option>").val(cooperation.id).text(cooperation.name);
                 select_cooperation.append(option);
             }
-            form.render('select', 'form_expatriate');
+            form.render('select', 'form_employee');
         });
     }
 
     function getEmployee() {
+        var id = $.query.get("id");
         if(id){
-            iEmployee.get(id,0,function (result) {
+            iEmployee.get(id,function (result) {
                 employee = result.data;
-                form.val('form_expatriate', employee);
+                showEmployee(employee);
                 op = "update";
-            })
+            });
+        }else{
+            var type = $.query.get("type");
+            employee.type = type;
+            showEmployee(employee);
+        }
+
+        function showEmployee(employee) {
+            employee.entry = format_date(employee.entry);
+            if(employee.type == 1){
+                $("[name=t1]").removeClass("layui-hide");
+                if(employee && employee.category==2){
+                    $("[name=t2]").removeClass("layui-hide");
+                }
+            }
+            form.val('form_employee', employee);
+        }
+    }
+
+    function getExtra() {
+        if(employee.id){
+            iEmployee.getExtra(employee.id,function (result) {
+                extra = result.data;
+                form.val('form_extra', extra);
+            });
         }
     }
     
     function getEnsureSetting () {
-        if(id){
-            iEmployee.getEnsureSetting(id,function (result) {
+        if(employee.id){
+            iEmployee.getEnsureSetting(employee.id,function (result) {
                 setting = result.data;
                 if(setting){
                     form.val('form_ensure',setting);
@@ -477,76 +583,75 @@
                     }
                     var text = getCityArray2(setting.city);
                     cityPicker.setValue(text);
-                    op = "update";
-                }else {
-                    op = "insert"
                 }
-            })
+            });
         }
     }
 
     function getDeduct() {
-        if(id){
-            iEmployee.getDeduct(id,function (result) {
+        if(employee.id){
+            iEmployee.getDeduct(employee.id,function (result) {
                 deduct = result.data;
                 if(deduct){
                     form.val('form_deduct',deduct);
-                    op = "update";
-                }else {
-                    op = "insert";
                 }
             })
         }
     }
     
     function getCard() {
-        if(id){
-            iEmployee.getCard(id,function (result) {
+        if(employee.id){
+            iEmployee.getCard(employee.id,function (result) {
                 card = result.data;
                 if(card){
                     form.val('form_salary_card',card);
-                    op = "update";
-                }else {
-                    op = "insert";
                 }
             })
         }
     }
     
-    function save_expatriate() {
-        var category = $.query.get("category");
-        var employees = form.val('form_expatriate');
-        employees.type = type;
-        if (op == "insert") {
-            var employee = {};
-            var extract = {};
-            employee.cardId  = employees.cardId;
-            employee.name = employees.name;
-            employee.phone = employees.phone;
-            employee.degree = employees.degree;
-            employee.type = category;
-            employee.cid = cid;
-            employee.entry = employees.entry;
-            employee.status = employees.status;
-            employee.post = employees.post;
-            employee.category = employees.category;
-            employee.price = employees.price;
-            extract.school = employees.school;
-            extract.major = employees.major;
-            extract.rid = employees.rid;
-
+    function saveEmployee() {
+        var employee = form.val('form_employee');
+        var extract = {};
+        extract.school = employees.school;
+        extract.major = employees.major;
+        extract.rid = employees.rid;
+        if(employee.id){
+            iEmployee.update(employees,0, onUpdateSuccess);
+            layer.alert("基础信息保存成功", {icon: 20});
+        } else {
             iEmployee.insert(employee, extract);
             layer.alert("基础信息保存成功，请完善社保信息", {icon: 20});
-            window.parent.location.reload();
-        } else {
-            iEmployee.update(employees,0, onUpdateSuccess);
+        }
+        window.parent.location.reload();
+    }
+
+    function saveExtra() {
+        var extra = form.val('form_extra');
+        extra.eid = employee.id;
+        if(op == "insert"){
+            iEmployee.insertExtra(extra);
+            layer.alert("社保信息保存成功，请完善个人专项扣除", {icon: 20});
+        }else{
+            iEmployee.updateExtra(extra,onUpdateSuccess);
         }
     }
 
-    function save_ensure() {
+    function saveEnsureSetting() {
         var setting = form.val('form_ensure');
+        if(!setting.city){
+            layer.alert("请选择社保所在地", {icon: 20});
+            return;
+        }
         setting.eid = employee.id;
-        setting.city = city;
+        setting.medicare = 0;
+        $('input[name=bMedicare]:checked').each(function() {
+            setting.medicare += Number($(this).val());
+        });
+        setting.social = 0;
+        $('input[name=bSocial]:checked').each(function() {
+            setting.social += Number($(this).val());
+        });
         if(op == "insert"){
             iEmployee.insertEnsureSetting(setting);
             layer.alert("社保信息保存成功，请完善个人专项扣除", {icon: 20});
@@ -555,7 +660,7 @@
         }
     }
 
-    function save_deduct() {
+    function saveDeduct() {
         var deduct = form.val('form_deduct');
         deduct.eid = employee.id;
         if(op ==  "insert"){
@@ -567,7 +672,7 @@
 
     }
 
-    function save_card() {
+    function saveCard() {
         var payCard = form.val('form_salary_card');
         payCard.eid = employee.id;
         if(op == "insert"){

@@ -32,6 +32,10 @@ QueryParam.prototype = {
         }
     },
 
+    setExtra:function (extra) {
+        this.conditions.extra = extra;
+    },
+
     removeCondition:function (k) {
       var index = this.findCondition(k);
       if(index != -1){

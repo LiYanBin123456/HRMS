@@ -1,11 +1,11 @@
 package service.employee;
 
+import bean.employee.Employee;
 import bean.employee.EmployeeExtra;
+import com.alibaba.fastjson.JSONObject;
+import dao.employee.EmployeeDao;
 import dao.employee.ExtraDao;
-import database.DaoQueryListResult;
-import database.DaoQueryResult;
-import database.DaoUpdateResult;
-import database.QueryParameter;
+import database.*;
 
 import java.sql.Connection;
 import java.sql.Date;
@@ -42,10 +42,4 @@ public class ExtraService {
     public static DaoUpdateResult insertBatch(Connection conn, List<EmployeeExtra> extras) {
         return  ExtraDao.insertBatch(conn,extras);
     }
-
-    //离职或者退休
-    public static DaoUpdateResult leave(Connection conn, long id, byte category, byte reason, Date date) {
-        return  ExtraDao.leave(conn,id,category,reason,date);
-    }
-
 }

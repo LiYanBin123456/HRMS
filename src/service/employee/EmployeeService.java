@@ -6,6 +6,7 @@ import bean.employee.Employee;
 import bean.employee.EmployeeExtra;
 import bean.employee.ViewEmployee;
 import bean.settlement.Detail3;
+import com.alibaba.fastjson.JSONObject;
 import dao.client.CooperationDao;
 import dao.employee.EmployeeDao;
 import dao.employee.ExtraDao;
@@ -14,6 +15,7 @@ import database.*;
 import javax.lang.model.element.VariableElement;
 import javax.servlet.http.HttpSession;
 import java.sql.Connection;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +34,7 @@ public class EmployeeService {
     }
 
     //修改
-    public static DaoUpdateResult update(Connection conn, ViewEmployee employee) {
+    public static DaoUpdateResult update(Connection conn, Employee employee) {
         return EmployeeDao.update(conn,employee);
     }
 
@@ -109,5 +111,20 @@ public class EmployeeService {
     //雇用
     public static DaoUpdateResult employ(Connection conn, long id,byte category) {
         return  EmployeeDao.employ(conn,id,category);
+    }
+
+    //离职或者退休
+    public static String leave(Connection conn, long id, byte category, byte reason, Date date) {
+        ConnUtil.closeAutoCommit(conn);
+        DaoUpdateResult res1 = EmployeeDao.updateStatus(conn,id,category==0? Employee.OUTGOING:Employee.RETIRE);
+        DaoUpdateResult res2 = ExtraDao.leave(conn,id,category,reason,date);
+        if(!res1.success || !res2.success){
+            ConnUtil.rollback(conn);
+            JSONObject json = new JSONObject();
+            json.put("success",false);
+            json.put("msg","操作失败");
+            return json.toJSONString();
+        }
+        return res1.toString();
     }
 }

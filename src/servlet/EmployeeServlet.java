@@ -42,11 +42,20 @@ public class EmployeeServlet extends HttpServlet {
             case "insert"://添加
                 result = insert(conn,request);
                 break;
+            case "insertExtra"://添加补充信息
+                result = insertExtra(conn,request);
+                break;
             case "get"://获取详情
                 result = get(conn,request);
                 break;
+            case "getExtra"://获取详情
+                result = getExtra(conn,request);
+                break;
             case "update"://修改
                 result = update(conn,request);
+                break;
+            case "updateExtra"://修改补充信息
+                result = updateExtra(conn,request);
                 break;
             case "leave"://离职或者退休
                 result = leave(conn,request);
@@ -108,40 +117,27 @@ public class EmployeeServlet extends HttpServlet {
         out.close();
     }
 
+    //插入员工信息
+    private String insert(Connection conn, HttpServletRequest request) {
+        long did = (long) request.getSession().getAttribute("rid");
+        Employee employee = JSONObject.parseObject(request.getParameter("employee"), Employee.class);
+        employee.setDid(did);
+        DaoUpdateResult res = EmployeeService.insert(conn, employee);
 
-    //删除
-    private String deleteDeduct(Connection conn, HttpServletRequest request) {
-        long id = Long.parseLong(request.getParameter("id"));
-        DaoUpdateResult result = DeductService.delete(conn,id);
-        return JSONObject.toJSONString(result);
+        return JSONObject.toJSONString(res);
     }
 
-    //导入个税专项扣除
-    private String getDeducts(Connection conn, HttpServletRequest request) {
-        DaoQueryListResult res;
-        QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
-        res = DeductService.getList(conn, parameter);
-        return  JSONObject.toJSONString(res);
+    //插入员工补充信息
+    private String insertExtra(Connection conn, HttpServletRequest request) {
+        EmployeeExtra employeeExtra =JSONObject.parseObject(request.getParameter("extract"), EmployeeExtra.class);
+        DaoUpdateResult res = ExtraService.insert(conn,employeeExtra);
+        return JSONObject.toJSONString(res);
     }
 
     //插入社保设置信息
     private String insertEnsureSetting(Connection conn, HttpServletRequest request) {
         EnsureSetting setting = JSONObject.parseObject(request.getParameter("setting"),EnsureSetting.class);
         DaoUpdateResult result = SettingService.insert(conn, setting);
-        return  JSONObject.toJSONString(result);
-    }
-
-    //修改社保设置信息
-    private String updateEnsureSetting(Connection conn, HttpServletRequest request) {
-        EnsureSetting setting = JSONObject.parseObject(request.getParameter("setting"),EnsureSetting.class);
-        DaoUpdateResult result = SettingService.update(conn, setting);
-        return  JSONObject.toJSONString(result);
-    }
-
-    //获取社保设置信息
-    private String getEnsureSetting(Connection conn, HttpServletRequest request) {
-        long id = Long.parseLong(request.getParameter("id"));
-        DaoQueryResult result = SettingService.get(conn,id);
         return  JSONObject.toJSONString(result);
     }
 
@@ -153,10 +149,67 @@ public class EmployeeServlet extends HttpServlet {
         return  JSONObject.toJSONString(result);
     }
 
+    //插入员工工资卡
+    private String insertCard(Connection conn, HttpServletRequest request) {
+        PayCard payCard = JSONObject.parseObject(request.getParameter("payCard"), PayCard.class);
+        DaoUpdateResult res = PayCardService.insert(conn,payCard);
+        return  JSONObject.toJSONString(res);
+    }
+
+    //删除
+    private String deleteDeduct(Connection conn, HttpServletRequest request) {
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoUpdateResult result = DeductService.delete(conn,id);
+        return JSONObject.toJSONString(result);
+    }
+
+    //修改员工信息
+    private String update(Connection conn, HttpServletRequest request) {
+        ViewEmployee employee = JSONObject.parseObject(request.getParameter("employee"), ViewEmployee.class);
+        DaoUpdateResult res = EmployeeService.update(conn,employee);
+        return JSONObject.toJSONString(res);
+    }
+
+    //修改员工补充信息
+    private String updateExtra(Connection conn, HttpServletRequest request) {
+        EmployeeExtra extra = JSONObject.parseObject(request.getParameter("EmployeeExtra"), EmployeeExtra.class);
+        DaoUpdateResult res = ExtraService.update(conn,extra);
+        return JSONObject.toJSONString(res);
+    }
+
+    //修改社保设置信息
+    private String updateEnsureSetting(Connection conn, HttpServletRequest request) {
+        EnsureSetting setting = JSONObject.parseObject(request.getParameter("setting"),EnsureSetting.class);
+        DaoUpdateResult result = SettingService.update(conn, setting);
+        return  JSONObject.toJSONString(result);
+    }
+
     //修改个税扣除
     private String updateDeduct(Connection conn, HttpServletRequest request) {
         Deduct deduct = JSONObject.parseObject(request.getParameter("deduct"), Deduct.class);
         DaoUpdateResult result = DeductService.update(conn, deduct);
+        return  JSONObject.toJSONString(result);
+    }
+
+    //更改员工工资卡
+    private String updateCard(Connection conn, HttpServletRequest request) {
+        PayCard payCard = JSONObject.parseObject(request.getParameter("payCard"), PayCard.class);
+        DaoUpdateResult res = PayCardService.update(conn,payCard);
+        return  JSONObject.toJSONString(res);
+    }
+
+    //导入个税专项扣除
+    private String getDeducts(Connection conn, HttpServletRequest request) {
+        DaoQueryListResult res;
+        QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
+        res = DeductService.getList(conn, parameter);
+        return  JSONObject.toJSONString(res);
+    }
+
+    //获取社保设置信息
+    private String getEnsureSetting(Connection conn, HttpServletRequest request) {
+        long id = Long.parseLong(request.getParameter("id"));
+        DaoQueryResult result = SettingService.get(conn,id);
         return  JSONObject.toJSONString(result);
     }
 
@@ -166,7 +219,6 @@ public class EmployeeServlet extends HttpServlet {
         DaoQueryResult result = DeductService.get(conn,id);
         return  JSONObject.toJSONString(result);
     }
-
 
     //导入个税扣除
     private String importDeducts(Connection conn, HttpServletRequest request) {
@@ -197,47 +249,17 @@ public class EmployeeServlet extends HttpServlet {
         return JSONObject.toJSONString(res);
     }
 
-    //插入员工信息
-    private String insert(Connection conn, HttpServletRequest request) {
-        DaoUpdateResult res = null;
-        HttpSession session = request.getSession();
-        //获取登录后，管理员所属的公司id
-        long did = (long) session.getAttribute("rid");
-            Employee employee =JSONObject.parseObject(request.getParameter("employee"), Employee.class);
-            employee.setDid(did);
-            res= EmployeeService.insert(conn,employee);
-            if(res.success){//员工插入成功后获取插入后的id
-                long eid = (long) res.extra;
-                EmployeeExtra employeeExtra =JSONObject.parseObject(request.getParameter("extract"), EmployeeExtra.class);
-                employeeExtra.setEid(eid);
-                ExtraService.insert(conn,employeeExtra);
-            }
-        return JSONObject.toJSONString(res);
-    }
     //获取员工信息
     private String get(Connection conn, HttpServletRequest request) {
-        DaoQueryResult res = null;
-        byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong((request.getParameter("id")));
-        if(category==0){
-           res = EmployeeService.get(conn,id);
-        }else {
-           res = ExtraService.get(conn,id);
-        }
+        DaoQueryResult res = EmployeeService.get(conn,id);
         return JSONObject.toJSONString(res);
     }
 
-    //修改员工信息
-    private String update(Connection conn, HttpServletRequest request) {
-        DaoUpdateResult res = null;
-        byte category = Byte.parseByte(request.getParameter("category"));
-        if(category == 0){
-           ViewEmployee employee = JSONObject.parseObject(request.getParameter("employee"), ViewEmployee.class);
-            res = EmployeeService.update(conn,employee);
-        }else {
-            EmployeeExtra employeeExtra = JSONObject.parseObject(request.getParameter("employee"), EmployeeExtra.class);
-            res = ExtraService.update(conn,employeeExtra);
-        }
+    //获取员工补充信息
+    private String getExtra(Connection conn, HttpServletRequest request) {
+        long id = Long.parseLong((request.getParameter("id")));
+        DaoQueryResult res = ExtraService.get(conn,id);
         return JSONObject.toJSONString(res);
     }
 
@@ -247,8 +269,7 @@ public class EmployeeServlet extends HttpServlet {
         long id = Long.parseLong((request.getParameter("id")));
         Date date = Date.valueOf(request.getParameter("date"));
         byte reason = Byte.parseByte(request.getParameter("reason"));
-        DaoUpdateResult res = ExtraService.leave(conn,id,category,reason,date);
-        return JSONObject.toJSONString(res);
+        return EmployeeService.leave(conn,id,category,reason,date);
     }
 
     //删除
@@ -269,24 +290,10 @@ public class EmployeeServlet extends HttpServlet {
         return  JSONObject.toJSONString(res);
     }
 
-    //插入员工工资卡
-    private String insertCard(Connection conn, HttpServletRequest request) {
-        PayCard payCard = JSONObject.parseObject(request.getParameter("payCard"), PayCard.class);
-        DaoUpdateResult res = PayCardService.insert(conn,payCard);
-        return  JSONObject.toJSONString(res);
-    }
-
     //获取员工工资卡
     private String getCard(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
         DaoQueryResult res = PayCardService.get(conn, id);
-        return  JSONObject.toJSONString(res);
-    }
-
-    //更改员工工资卡
-    private String updateCard(Connection conn, HttpServletRequest request) {
-        PayCard payCard = JSONObject.parseObject(request.getParameter("payCard"), PayCard.class);
-        DaoUpdateResult res = PayCardService.update(conn,payCard);
         return  JSONObject.toJSONString(res);
     }
 

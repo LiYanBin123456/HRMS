@@ -4,6 +4,10 @@ import java.sql.Date;
 
 //员工表
 public class Employee {
+    public static final byte WORKING = 0;
+    public static final byte OUTGOING = 1;
+    public static final byte RETIRE = 2;
+    public static final byte OTHER = 3;
    private long id;
     private long did;//派遣方id
     private long cid;//合作单位id

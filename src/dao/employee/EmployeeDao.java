@@ -1,6 +1,7 @@
 package dao.employee;
 
 import bean.employee.Employee;
+import bean.employee.EmployeeExtra;
 import bean.employee.ViewEmployee;
 import database.*;
 
@@ -23,23 +24,16 @@ public class EmployeeDao {
 
     //获取详情
     public static DaoQueryResult get(Connection conn, QueryConditions conditions) {
-        return DbUtil.get(conn,"view_employee",conditions,ViewEmployee.class);
+        return DbUtil.get(conn,"employee",conditions,Employee.class);
     }
 
     //修改
-    public static DaoUpdateResult update(Connection conn, ViewEmployee e) {
-        DaoUpdateResult result;
+    public static DaoUpdateResult update(Connection conn, Employee e) {
         //需要判断外键是否为0，为0就需要转换成null
         String cid = e.getCid()==0?null:String.valueOf(e.getCid());
         String sql = "update employee set cid=?,cardId=?,name=?,phone=?,degree=?,type=?,entry=?,status=?,department=?,post=?,category=?,price=? where id=?";
         Object []params = {cid,e.getCardId(),e.getName(),e.getPhone(),e.getDegree(),e.getType(),e.getEntry(),e.getStatus(),e.getDepartment(),e.getPost(),e.getCategory(),e.getPrice(),e.getId()};
-        result = DbUtil.update(conn,sql,params);
-        if(result.success){//修改员工信息成功后修改员工补充信息中的档案编号，学校，主修
-            String sql2 = "update employee_extra set rid=?,school=?,major=? where eid=?";
-            Object []params2 = {e.getRid(),e.getSchool(),e.getMajor(),e.getId()};
-            DbUtil.update(conn,sql2,params2);
-        }
-        return result;
+        return DbUtil.update(conn,sql,params);
     }
 
     //增加
@@ -99,4 +93,9 @@ public class EmployeeDao {
         return  DbUtil.update(conn,sql,params);
     }
 
+    public static DaoUpdateResult updateStatus(Connection conn, long id, byte status) {
+        String sql = "update employee set status=? where id=?";
+        Object []params = {status,id};
+        return  DbUtil.update(conn,sql,params);
+    }
 }

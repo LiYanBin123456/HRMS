@@ -524,6 +524,17 @@ var InterfaceEmployee = function () {
         var para = {op: "insert",employee:JSON.stringify(employee), extract:JSON.stringify(extract)};
         access(url,para,1,success,fail);
     };
+
+    /**
+     * 插入员工补充信息
+     * @param extract  员工补充信息
+     * @param success  成功
+     * @param fail
+     */
+    this.insertExtra = function (extra,success,fail) {
+        var para = {op: "insertExtra",extract:JSON.stringify(extra)};
+        access(url,para,1,success,fail);
+    };
     /**
      * 批量导入员工信息
      * @param employees 员工信息集合
@@ -538,12 +549,20 @@ var InterfaceEmployee = function () {
     /**
      * 获取员工详情
      * @param id 员工id
-     * @param category 0-员工信息 1-员工补充信息
      * @param success
      * @param fail
      */
-    this.get = function (id,category,success,fail) {
-        var para = {op: "get",id:id, category:category};
+    this.get = function (id,success,fail) {
+        var para = {op: "get",id:id};
+        access(url,para,1,success,fail);
+    };/**
+     * 获取员工补充信息
+     * @param id 员工id
+     * @param success
+     * @param fail
+     */
+    this.getExtra = function (id,success,fail) {
+        var para = {op: "getExtra",id:id};
         access(url,para,1,success,fail);
     };
     /**
@@ -557,6 +576,18 @@ var InterfaceEmployee = function () {
         var para = {op: "update",employee:JSON.stringify(employee), category:category};
         access(url,para,1,success,fail);
     };
+
+    /**
+     * 修改员工补充信息
+     * @param extra 员工补充信息
+     * @param success
+     * @param fail
+     */
+    this.updateExtra = function (extra,success,fail) {
+        var para = {op: "update",extra:JSON.stringify(extra)};
+        access(url,para,1,success,fail);
+    };
+
     /**
      * 离职退休
      * @param reason 离职原因信息
@@ -1242,7 +1273,11 @@ function access(url,para,reqType,success,fail) {
                 if(fail) {
                     fail(data);
                 }else{
-                    layer.msg(data.msg);
+                    if(data.code == 0){
+                        window.location.href = "/hrms/login.html";
+                    }else {
+                        layer.msg(data.msg);
+                    }
                 }
             }else{
                 if(success) {
