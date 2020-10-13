@@ -165,7 +165,7 @@ public class EmployeeServlet extends HttpServlet {
 
     //修改员工信息
     private String update(Connection conn, HttpServletRequest request) {
-        ViewEmployee employee = JSONObject.parseObject(request.getParameter("employee"), ViewEmployee.class);
+        Employee employee = JSONObject.parseObject(request.getParameter("employee"), Employee.class);
         DaoUpdateResult res = EmployeeService.update(conn,employee);
         return JSONObject.toJSONString(res);
     }

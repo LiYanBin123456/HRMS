@@ -429,7 +429,6 @@
     var laydate;
     var employee = {degree:1,category:0,status:0,entry:new Date().getTime()};
 
-    var extra,setting,deduct,card,city;
 
     loadLayuiModule();
 
@@ -445,10 +444,7 @@
             cityPicker = new picker("#city-picker", {
                 provincename: "provinceId",
                 cityname: "city",
-                level: 'city',
-                onCitySelected:function (code) {
-                    city = code;
-                }
+                level: 'city'
             });
             laydate.render({
                 elem: '#entry'
@@ -563,7 +559,7 @@
     function getExtra() {
         if(employee.id){
             iEmployee.getExtra(employee.id,function (result) {
-                extra = result.data;
+                var extra = result.data;
                 form.val('form_extra', extra);
             });
         }
@@ -572,26 +568,40 @@
     function getEnsureSetting () {
         if(employee.id){
             iEmployee.getEnsureSetting(employee.id,function (result) {
-                setting = result.data;
+                var setting = result.data;
                 if(setting){
-                    form.val('form_ensure',setting);
-                    if(setting.settingS == 3){
-                        $("[name=s1]").removeClass("layui-hide");
-                    }
-                    if(setting.settingM == 3){
-                        $("[name=m1]").removeClass("layui-hide");
-                    }
-                    var text = getCityArray2(setting.city);
-                    cityPicker.setValue(text);
+                    showEnsureSetting(setting)
                 }
             });
+        }
+
+        function showEnsureSetting(setting) {
+            if(setting.settingS == 3){
+                $("[name=s1]").removeClass("layui-hide");
+            }
+            if(setting.settingM == 3){
+                $("[name=m1]").removeClass("layui-hide");
+            }
+            var text = getCityText2(setting.city);
+            cityPicker.setValue(text);
+
+            $('input[name=bMedicare]').each(function() {
+                var checked = (setting.medicare&Number(this.value)) != 0;
+                $(this).attr("checked",checked);
+            });
+
+            $('input[name=bSocial]').each(function() {
+                var checked = (setting.social&Number(this.value)) != 0;
+                $(this).attr("checked",checked);
+            });
+            form.val('form_ensure',setting);
         }
     }
 
     function getDeduct() {
         if(employee.id){
             iEmployee.getDeduct(employee.id,function (result) {
-                deduct = result.data;
+                var  deduct = result.data;
                 if(deduct){
                     form.val('form_deduct',deduct);
                 }
@@ -602,7 +612,7 @@
     function getCard() {
         if(employee.id){
             iEmployee.getCard(employee.id,function (result) {
-                card = result.data;
+                var card = result.data;
                 if(card){
                     form.val('form_salary_card',card);
                 }
@@ -612,18 +622,16 @@
     
     function saveEmployee() {
         var employee = form.val('form_employee');
-        var extract = {};
-        extract.school = employees.school;
-        extract.major = employees.major;
-        extract.rid = employees.rid;
         if(employee.id){
-            iEmployee.update(employees,0, onUpdateSuccess);
-            layer.alert("基础信息保存成功", {icon: 20});
+            iEmployee.update(employee,function () {
+                layer.alert("基础信息保存成功", {icon: 20});
+            });
         } else {
-            iEmployee.insert(employee, extract);
-            layer.alert("基础信息保存成功，请完善社保信息", {icon: 20});
+            iEmployee.insert(employee, function (result) {
+                employee.id = result.extra;
+                layer.alert("基础信息保存成功，请完善社保信息", {icon: 20});
+            });
         }
-        window.parent.location.reload();
     }
 
     function saveExtra() {
@@ -683,10 +691,12 @@
     }
 
     function verifyMedicalBase(base) {
-        if(!city){
-            layer.msg("请先选择社保所在地");
+        var setting = form.val('form_ensure');
+        if(!setting.city){
+            layer.alert("请选择社保所在地", {icon: 20});
+            return;
         }
-        iRule.getLast(city,0,function (result) {
+        iRule.getLast(setting.city,0,function (result) {
             if(base < result.data.base){
                 layer.msg("自定义医保基数不能低于最低基数"+result.data.base);
             };
@@ -694,10 +704,12 @@
     }
 
     function verifySocialBase(base) {
-        if(!city){
-            layer.msg("请先选择社保所在地");
+        var setting = form.val('form_ensure');
+        if(!setting.city){
+            layer.alert("请选择社保所在地", {icon: 20});
+            return;
         }
-        iRule.getLast(city,1,function (result) {
+        iRule.getLast(setting.city,1,function (result) {
             if(base < result.data.base){
                 layer.msg("自定义社保基数不能低于最低基数"+result.data.base);
             };
@@ -705,11 +717,12 @@
     }
 
     function verifyFundBase(base) {
-        if(!city){
-            layer.msg("请先选择社保所在地");
+        var setting = form.val('form_ensure');
+        if(!setting.city){
+            layer.alert("请选择社保所在地", {icon: 20});
+            return;
         }
-        console.log(city);
-        iRule.getLast(city,2,function (result) {
+        iRule.getLast(setting.city,2,function (result) {
             if(base < result.data.min || base > result.data.max){
                 layer.msg("公积金基数必须介于["+result.data.min+","+result.data.max+"]");
             };
@@ -717,11 +730,12 @@
     }
 
     function verifyFundPer(per) {
-        if(!city){
-            layer.msg("请先选择社保所在地");
+        var setting = form.val('form_ensure');
+        if(!setting.city){
+            layer.alert("请选择社保所在地", {icon: 20});
+            return;
         }
-        console.log(city);
-        iRule.getLast(city,2,function (result) {
+        iRule.getLast(setting.city,2,function (result) {
             if(per < result.data.per1 || per > result.data.per2){
                 layer.msg("公积金缴纳比例必须介于["+result.data.per1+","+result.data.per2+"]");
             };

@@ -531,8 +531,8 @@ var InterfaceEmployee = function () {
      * @param success  成功
      * @param fail
      */
-    this.insert = function (employee,extract,success,fail) {
-        var para = {op: "insert",employee:JSON.stringify(employee), extract:JSON.stringify(extract)};
+    this.insert = function (employee,success,fail) {
+        var para = {op: "insert",employee:JSON.stringify(employee)};
         access(url,para,1,success,fail);
     };
 
@@ -583,8 +583,8 @@ var InterfaceEmployee = function () {
      * @param success
      * @param fail
      */
-    this.update = function (employee,category,success,fail) {
-        var para = {op: "update",employee:JSON.stringify(employee), category:category};
+    this.update = function (employee,success,fail) {
+        var para = {op: "update",employee:JSON.stringify(employee)};
         access(url,para,1,success,fail);
     };
 
