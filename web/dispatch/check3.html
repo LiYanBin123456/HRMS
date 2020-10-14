@@ -29,14 +29,12 @@
     <body class="layui-layout-body">
         <div style="padding: 5px;">
             <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_settlement">
                 <form class="layui-form ">
-                    <div class="layui-input-inline">
-                            <input type="radio" name="se" value="0" title="待审核" lay-filter="se" checked>
-                            <input type="radio" name="se" value="1" title="全部" lay-filter="se" >
+                    <div class="layui-input-inline" style="display: inline">
+                            <input type="radio" name="category" value="0" title="待审核" lay-filter="category" checked>
+                            <input type="radio" name="category" value="1" title="全部" lay-filter="category" >
                     </div>
                 </form>
-            </div>
             <table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>
             <div class="layui-table-page" id="pager"></div>
  
@@ -50,6 +48,7 @@
         <script src="../js/interface.js"></script>
         <script>
             var table;//数据表格对象
+            var category = 0; //显示待审核和全部
             var laypage;//分页对象
             var form;//分页对象
             var layer;//弹出窗口
@@ -71,14 +70,21 @@
             }
 
             function initPage() {
-                form.on('radio(se)', function(data){
-                    console.log(data.value);
-                    initTable(data.value);
+                initTable();
+                form.on('radio(category)', function(data){
+                    switchCategory(Number(data.value));
                 });
-                initTable(0);
             }
 
-            function initTable(value) {
+            function switchCategory(value) {
+                $("#container").empty();
+                $("#container").append('<table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>');
+
+                category = value;
+                initTable();
+            }
+
+            function initTable() {
                 //初始化分页
                 laypage.render({
                     elem: 'pager'
@@ -89,7 +95,7 @@
                         if(!first){
                             param_query.pagination.page = obj.curr;
                             param_query.pagination.size = obj.limit;
-                            getSettlements(value);
+                            getSettlements(category);
                         }
                     }
                 });
@@ -118,11 +124,11 @@
                     }
                 });
                 //顶部工具栏事件处理
-                getSettlements(value);
+                getSettlements(category);
             }
 
-            function getSettlements(value) {
-                param_query.conditions.keys = value == 1?[]:[{k:"status",o:"=",v:3}];
+            function getSettlements() {
+                param_query.conditions.keys = category == 1?[]:[{k:"status",o:"=",v:3}];
                 iSettlement.getList(param_query,2,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows
@@ -138,7 +144,7 @@
                             if(!first){
                                 param_query.pagination.page = obj.curr;
                                 param_query.pagination.size = obj.limit;
-                                getSettlements(value);
+                                getSettlements(category);
                             }
                         }
                     });

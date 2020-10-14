@@ -21,19 +21,18 @@ public class Insurance {
      3_停保
      */
     private byte status;
-    private String reason;//变更原因
 
     public Insurance() {
     }
 
-    public Insurance(long eid, byte type, String code, Date start, float money, byte status, String reason) {
+    public Insurance(long eid, byte type, String code, Date start, float money, byte status) {
         this.eid = eid;
         this.type = type;
         this.code = code;
         this.start = start;
         this.money = money;
         this.status = status;
-        this.reason = reason;
+
     }
 
     public long getEid() {
@@ -84,13 +83,6 @@ public class Insurance {
         this.status = status;
     }
 
-    public String getReason() {
-        return reason;
-    }
-
-    public void setReason(String reason) {
-        this.reason = reason;
-    }
 
     @Override
     public String toString() {
@@ -101,7 +93,6 @@ public class Insurance {
                 ", start=" + start +
                 ", money=" + money +
                 ", status=" + status +
-                ", reason='" + reason + '\'' +
                 '}';
     }
 }

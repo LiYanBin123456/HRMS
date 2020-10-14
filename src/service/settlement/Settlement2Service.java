@@ -90,40 +90,32 @@ public class Settlement2Service {
 
     //另存为
     public static DaoUpdateResult saveAs(Connection conn, long id, Date month) {
-        /**流程
-         * 1、查询出结算单，修改结算月份
-         * 2、插入结算单，返回主键id
-         * 3、根据cid查询出派遣到该单位的所有员工(不包括小时工)
-         * 4、根据员工的个数 封装好明细集合
-         * 5、批量结算单明细
-         */
+
         Settlement2 settlement2 = (Settlement2) Settlement2Dao.get(conn, id).data;
         settlement2.setMonth(month);
-        long sid = (long) Settlement2Dao.insert(conn, settlement2).extra;
-        long did = settlement2.getDid();
-        long cid = settlement2.getCid();
 
-        //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派员工，用工性质是小时工，在职
+        DaoUpdateResult result = Settlement2Dao.insert(conn, settlement2);
+        long sid = (long) result.extra;
+
         QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("cid","=",cid);
-        parameter.addCondition("did","=",did);
-        parameter.addCondition("type","=",1);
-        parameter.addCondition("category","=",2);
-        parameter.addCondition("status","=",0);
-        List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
-        List<Detail2> detail2List = new ArrayList<>();
-        for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
-            Detail2 detail2 = new Detail2();
+        parameter.addCondition("sid","=",id);
+        //根据复制的结算单id查询出所有的结算单明细
+        List<Detail2> detail2List = (List<Detail2>) Detail2Dao.getList(conn,parameter).rows;
+        for(Detail2 detail2 :detail2List){
+            //重新赋结算单id
             detail2.setSid(sid);
-            detail2.setEid(employeeList.get(i).getId());
-            //员工表中单价
-            detail2.setPrice(employeeList.get(i).getPrice());
-            detail2List.add(i,detail2);
         }
-        //插入明细
-        DaoUpdateResult result = Detail2Dao.importDetails(conn,detail2List);
+        //重新插入数据库
+        DaoUpdateResult result1 =Detail2Dao.importDetails(conn,detail2List);
 
-        return result;
+        if(result.success&&result1.success){//事务
+            ConnUtil.commit(conn);
+            return result;
+        }else {//回滚
+            ConnUtil.rollback(conn);
+            result1.msg = "另存为失败";
+            return result1;
+        }
     }
     //删除结算单
     public static DaoUpdateResult delete(Connection conn, Long id) {

@@ -31,8 +31,8 @@ public class InsuranceDao {
 
     //修改
     public static DaoUpdateResult update(Connection conn, Insurance i) {
-        String sql = "update insurance set code=?,start=?,money=?,status=?,reason=? where eid=? and type = ?";
-        Object[] params = {i.getCode(), i.getStart(), i.getMoney(), i.getStatus(), i.getReason(), i.getEid(), i.getType()};
+        String sql = "update insurance set code=?,start=?,money=?,status=? where eid=? and type = ?";
+        Object[] params = {i.getCode(), i.getStart(), i.getMoney(), i.getStatus(), i.getEid(), i.getType()};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn, sql, params);
     }
@@ -57,10 +57,10 @@ public class InsuranceDao {
 
     //批量插入
     public static DaoUpdateResult insertBatch(Connection conn, List<Insurance> in) {
-        String sql = "insert insurance (eid,type,code,start,money,status,reason) values(?,?,?,?,?,?,?)";
+        String sql = "insert insurance (eid,type,code,start,money,status) values(?,?,?,?,?,?)";
         Object[][] params = new Object[in.size()][];
         for (int i = 0; i < in.size(); i++) {
-            params[i] = new Object[]{in.get(i).getEid(), in.get(i).getType(), in.get(i).getCode(), in.get(i).getStart(), in.get(i).getMoney(), in.get(i).getStatus(), in.get(i).getReason()};
+            params[i] = new Object[]{in.get(i).getEid(), in.get(i).getType(), in.get(i).getCode(), in.get(i).getStart(), in.get(i).getMoney(), in.get(i).getStatus()};
         }
         return DbUtil.insertBatch(conn, sql, params);
     }
