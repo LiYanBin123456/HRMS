@@ -145,12 +145,14 @@
             }
 
             function initTable() {
+                console.log(type);
                 var cols;
                 var top_bar;
                 switch(type){
                     case 0:
                         cols = columns_insured1;
                         top_bar = '#top_bar0';
+                        break;
                     case 1:
                         cols = columns_insured1;
                         top_bar = '#top_bar1';
@@ -202,7 +204,7 @@
             }
 
             function getInsureds() {
-                iInsurance.getList(param_query,0,function (result) {
+                iInsurance.getList(param_query,type,function (result) {
                     table.reload('tbl_insured', {
                         data:result.rows
                     });
@@ -293,7 +295,7 @@
             //删除
             function del(insured) {
                 layer.confirm('确定删除'+insured.name+'的参保单', {icon: 3, title:'删除参保单'}, function(index){
-                    iInsurance.delete(insured.eid,0,function () {
+                    iInsurance.delete(insured.eid,type,function () {
                         layer.close(index);
                         getInsureds();
                         layer.msg('删除成功');

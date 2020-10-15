@@ -438,7 +438,7 @@ var columns_insured1  = [[
     {field:'name', title: '姓名',width:80},
     {field:'start', title: '参保时间',width:80,templet:function (d) {return format_date(d.start)}},
     {field:'money', title: '月缴费工资',width:100},
-    {field:'entry', title: '工作时间',width:100},
+    {field:'entry', title: '工作时间',width:100,templet:function (d) {return format_date(d.entry)}},
     {field:'status', title: '参保状态',width:80,templet:function (d) { return array_value2text(status_insurance,d.status) }},
     {fixed: 'right', title: '操作', toolbar: '#bar_insured'}
 ]];

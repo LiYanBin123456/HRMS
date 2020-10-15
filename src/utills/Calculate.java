@@ -93,13 +93,15 @@ public class Calculate {
 
         //获取社保相关
         int SettingS = setting.getSettingS();//员工社保设置
+        JSONObject object2;
         switch (SettingS){
             case 0://最低标准
-                pension1=social.getBase()*social.getPer2();//个人养老
-                unemployment1=social.getBase()*social.getPer5();//个人失业
-                pension2=social.getBase()*social.getPer1();//单位养老
-                unemployment2=social.getBase()*social.getPer4();//单位失业
-                injury=social.getBase()*social.getPer3();//单位工伤
+                object2 = calculateSocial(setting,social.getBase(),social);
+                pension1 = Float.parseFloat(object2.getString("pension1"));
+                unemployment1 = Float.parseFloat(object2.getString("unemployment1"));
+                pension2 = Float.parseFloat(object2.getString("pension2"));
+                unemployment2 = Float.parseFloat(object2.getString("unemployment2"));
+                injury = Float.parseFloat(object2.getString("injury"));
                 break;
             case 1://实际工资
                 pension1=0;//个人养老
@@ -117,11 +119,12 @@ public class Calculate {
                 break;
             case 3://自定义基数
                 float ValS=setting.getValS();//自定义的基数
-                pension1=ValS*social.getPer2();//个人养老
-                unemployment1=ValS*social.getPer5();//个人失业
-                pension2=ValS*social.getPer1();//单位养老
-                unemployment2=ValS*social.getPer4();//单位失业
-                injury=ValS*social.getPer3();//单位工伤
+                object2 = calculateSocial(setting,ValS,social);
+                pension1 = Float.parseFloat(object2.getString("pension1"));
+                unemployment1 = Float.parseFloat(object2.getString("unemployment1"));
+                pension2 = Float.parseFloat(object2.getString("pension2"));
+                unemployment2 = Float.parseFloat(object2.getString("unemployment2"));
+                injury = Float.parseFloat(object2.getString("injury"));
                 break;
         }
 

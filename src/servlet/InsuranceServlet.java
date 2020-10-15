@@ -142,8 +142,4 @@ public class InsuranceServlet extends HttpServlet {
         return  JSONObject.toJSONString(result);
     }
 
-
-
-
-
 }
