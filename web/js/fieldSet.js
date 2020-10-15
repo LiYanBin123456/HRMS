@@ -210,7 +210,7 @@ var columns_employees = [[
 //普通结算单字段集合
 var columns_settlement1  = [[
     {field:'name', title: '用工企业',width:180,fixed:"left"},
-    {field:'month', title: '月份',width:90,templet:function (d) {return format_date(d.month)}},
+    {field:'month', title: '月份',width:90,templet:function (d) {return format_month(d.month)}},
     {field:'salary', title: '应发工资',width:70},
     {field:'social', title: '单位社保',width:70},
     {field:'medicare', title: '单位医保',width:70},
@@ -224,7 +224,7 @@ var columns_settlement1  = [[
 
 var columns_settlement1_check  = [[
     {field:'name', title: '用工企业',width:180,fixed:"left"},
-    {field:'month', title: '月份',width:90,templet:function (d) {return format_date(d.month)}},
+    {field:'month', title: '月份',width:90,templet:function (d) {return format_month(d.month)}},
     {field:'salary', title: '应发工资',width:70},
     {field:'social', title: '单位社保',width:70},
     {field:'medicare', title: '单位医保',width:70},
@@ -238,7 +238,7 @@ var columns_settlement1_check  = [[
 
 var columns_settlement1_portion  = [[
     {field:'name', title: '用工企业',width:180,fixed:"left"},
-    {field:'month', title: '月份',width:90,templet:function (d) {return format_date(d.month)}},
+    {field:'month', title: '月份',width:90,templet:function (d) {return format_month(d.month)}},
     {field:'salary', title: '应发工资',width:70},
     {field:'social', title: '单位社保',width:70},
     {field:'medicare', title: '单位医保',width:70},
@@ -262,7 +262,7 @@ var columns_contract =[[
 //面向合作普通结算单字段集合
 var columns_settlement10  = [[
     {type:'checkbox',width:30},
-    {field:'month', title: '月份',width:90,fixed:"left",templet:function (d) {return format_date(d.month)}},
+    {field:'month', title: '月份',width:90,fixed:"left",templet:function (d) {return format_month(d.month)}},
     {field:'salary', title: '工资',width:70},
     {field:'social', title: '社保',width:70},
     {field:'fund', title: '公积金',width:80},
@@ -276,7 +276,7 @@ var columns_settlement10  = [[
 //小时工结算单字段集合
 var columns_settlement2  = [[
     {field:'name', title: '用工企业',width:180,fixed:"left"},
-    {field:'month', title: '月份',width:90,templet:function (d) {return format_date(d.month)}},
+    {field:'month', title: '月份',width:90,templet:function (d) {return format_month(d.month)}},
     {field:'hours', title: '总工时',width:70},
     {field:'price', title: '单价',width:60,edit: 'text'},
     {field:'traffic', title: '交通费',width:70},
@@ -288,7 +288,7 @@ var columns_settlement2  = [[
 
 //面向合作小时工结算单字段集合
 var columns_settlement20  = [[
-    {field:'month', title: '月份',width:90,fixed:"left",templet:function (d) {return format_date(d.month)}},
+    {field:'month', title: '月份',width:90,fixed:"left",templet:function (d) {return format_month(d.month)}},
     {field:'time', title: '总工时',width:70},
     {field:'price', title: '单价',width:70,edit: 'text'},
     {field:'traffic', title: '交通费',width:70},
@@ -301,7 +301,7 @@ var columns_settlement20  = [[
 //商业保险结算单字段集合
 var columns_settlement3  = [[
     {field:'cname', title: '用工企业',fixed:"left"},
-    {field:'month', title: '月份',width:100,templet:function (d) {return format_date(d.month)}},
+    {field:'month', title: '月份',width:100,templet:function (d) {return format_month(d.month)}},
     {field:'pname', title: '保险产品',width:180},
     {field:'price', title: '保费',width:100,edit: 'text'},
     {field:'status', title: '状态',width:100,templet:function (d) { return array_value2text(status_settlement,d.status) }},
@@ -310,7 +310,7 @@ var columns_settlement3  = [[
 
 //面向合作商业保险结算单字段集合
 var columns_settlement30  = [[
-    {field:'month', title: '月份',width:100,fixed:"left",templet:function (d) {return format_date(d.month)}},
+    {field:'month', title: '月份',width:100,fixed:"left",templet:function (d) {return format_month(d.month)}},
     {field:'pname', title: '保险产品'},
     {field:'price', title: '保费',width:100,edit: 'text'},
     {field:'status', title: '状态',width:100,templet:function (d) { return array_value2text(status_settlement,d.status) }},
@@ -409,7 +409,7 @@ var columns_tax  = [[
     {field:'id', title: '工号',width:80,fixed:"left"},
     {field:'name', title: '姓名',width:80,fixed:"left"},
     {field:'cardId', title: '证照号码',width:160},
-    {field:'month', title: '月份',width:160,templet:function (d) {return format_date(d.month)}},
+    {field:'month', title: '月份',width:160,templet:function (d) {return format_month(d.month)}},
     {field:'payable', title: '本期收入',width:120},
     {field:'', title: '本期免税收入',width:120,text:0},
     {field:'pension1', title: '基本养老保险费',width:120},
@@ -658,6 +658,17 @@ function format_date(timestamp) {
     }
     return "";
 }
+
+function format_month(timestamp) {
+    if(timestamp) {
+        var d = new Date(timestamp);
+        var year = d.getFullYear();
+        var month = d.getMonth() + 1;
+        return year + "-" + month;
+    }
+    return "";
+}
+
 function format_percent(value) {
     return value+"%";
 }

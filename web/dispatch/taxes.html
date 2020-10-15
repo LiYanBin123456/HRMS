@@ -23,7 +23,7 @@
         <div style="padding: 5px;">
             <form class="layui-form">
                 <div class="layui-input-inline">
-                    <input type="text" class="layui-input" id="filter_month" placeholder="按月份过滤">
+                    <input type="text" class="layui-input" autocomplete="off" id="filter_month" lay-filter="filter_month" placeholder="按月份过滤">
                 </div>
                 <div class="layui-input-inline">
                     <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
@@ -72,11 +72,18 @@
             function initPage() {
 
                 laydate.render({
-                    elem: '#filter_month',
-                    type: 'month',
-                    done: function(value, date, endDate) {
-                        param_query.conditions.keys = [{k:"month",o:"=",v:value}];
+                    elem: '#filter_month'
+                    ,type: 'month'
+                    ,change: function(value, date, endDate){
+                        var month = value+"-01";
+                        param_query.addCondition("month","=",month);
                         getTaxes();
+                    },
+                    done: function(value, date, endDate){
+                        if (!value){
+                            param_query.removeCondition("month");
+                            getTaxes();
+                        }
                     }
                 });
                 form.on('submit(search)', function (data) {
