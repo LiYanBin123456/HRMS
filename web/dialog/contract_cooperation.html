@@ -29,12 +29,12 @@
         <div class="layui-tab-item layui-show">
             <form lay-filter="form_contract" class="layui-form">
                 <input type='hidden' name='id'/>
-                <input type='hidden' name='type' value="B"/>
+                <input type='hidden' name='bid'/>
+                <input type='hidden' name='type'/>
                 <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>合作客户</label>
+                    <label class="layui-form-label">合作客户</label>
                     <div class="layui-input-inline">
-                        <select name="bid" id="select_cooperation" lay-filter="filter_cooperation" lay-verify="required"></select>
+                        <input type="text" name="name" class="layui-input" readonly disabled>
                     </div>
                 </div>
                 <div class="layui-form-item">
@@ -70,8 +70,7 @@
                         <input type="text" name="project" required="" autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item layui-form-text">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>备注</label>
+                    <label class="layui-form-label">备注</label>
                     <div class="layui-input-block">
                         <textarea name="comments" placeholder="请输入内容" class="layui-textarea"></textarea>
                     </div>
@@ -161,16 +160,12 @@
             </form>
         </div>
         <div class="layui-tab-item">
-            <form  class="layui-form">
-                <div class="layui-upload">
-                    <div class="layui-upload-list">
-                        <img class="layui-upload-img" id="demo1" width="150px">
-                        <p id="demoText"></p>
-                    </div>
-                    <button type="button" class="layui-btn" id="test1">
-                        <i class="layui-icon">&#xe67c;</i>上传复印件(PDF)
-                     </button>
-                     <button class="layui-btn" onclick="download()" ><i class="layui-icon layui-icon-edit"></i>下载复印件</button>
+            <form class="layui-form" >
+                <div id="container_contract" class="layui-form-item layui-form-text">
+                    <embed id="preview_contact" class="preview_contact"></embed>
+                </div>
+                <div class="layui-form-item" style="text-align: center">
+                    <button type="button" class="layui-btn" id="btn_upload"><i class="layui-icon">&#xe67c;</i>上传pdf</button>
                 </div>
             </form>
         </div>
@@ -180,6 +175,7 @@
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
+<script src="../js/fieldSet.js"></script>
 <script src="../lib/layui/layui.js"></script>
 <script>
     var contract;
@@ -189,6 +185,8 @@
     var upload;
     var element;
     var laydate;
+    var contract;
+
     loadLayuiModule();
 
     function loadLayuiModule() {
@@ -207,9 +205,9 @@
                 , acceptMime: '.pdf'
                 ,before: function(obj,file,id){
                     obj.preview(function(index, file, result){
-                        $('#demo1').attr('src', "../images/PDF.png"); //图片链接（base64）
+                        $('#preview_contact').attr('src', "../images/PDF.png"); //图片链接（base64）
                     });
-                    this.data={op:"upload",file:JSON.stringify(file),id:contract.id}
+                    this.data={op:"upload",category:2,id:contract.id}
                 }
                 , done: function (res) {
                     layer.msg(res.msg);
@@ -248,21 +246,17 @@
 
 
     function initPage() {
-        var id = $.query.get("id");
-        if(id){
-            iContract.get(id,function (result) {
-                contract = result.data;
-                contract.start = format_date(contract.start);
-                contract.end = format_date(contract.end);
-                form.val('form_contract', contract);
-                layedit.setContent(editer, contract.content, false);
-               op = "update";
-            })
-        }
-        iFile.existContract(id,function (result) {
+        contract = JSON.parse($.query.get("contract"));
+        contract.start = format_date(contract.start);
+        contract.end = format_date(contract.end);
+        form.val('form_contract', contract);
+        layedit.setContent(editer, contract.content, false);
+        iFile.exist(contract.id,2,function (result) {
             if(result.exist){
-                $('#demo1').attr('src', "../images/PDF.png");
-                return;
+                var src = "../accessory/contract2/"+contract.id+".pdf";
+                $('#preview_contact').attr('src', src); //图片预览
+            }else {
+                $("#preview_contact").text("合同附件不存在，请上传");
             }
         });
 
@@ -377,14 +371,6 @@
         })
     }
 
-    function format_date(timestamp) {
-        var d = new Date(timestamp);
-        var year=d.getFullYear();
-        var month=d.getMonth()+1;
-        var date=d.getDate();
-        return year+"-"+month+"-"+date;
-    }
-
     function download(){
         iFile.existContract(contract.id,function (result) {
             if(!result.exist){
@@ -403,20 +389,17 @@
     }
 
     function saveContract() {
-        var data = form.val('form_contract');
-        if (contract) {
-            iContract.update(data,function (result) {
-                window.parent.location.reload();
+        var contract = form.val('form_contract');
+        if(contract.id) {
+            iContract.update(contract,function (result) {
                 layer.msg("修改成功");
             });
         } else {
-            iContract.insert(data, function (result) {
+            iContract.insert(contract, function (result) {
                 contract.id = result.extra;
-                window.parent.location.reload();
                 layer.alert("添加成功", {icon: 6});
             });
         }
-        contract = data;
     }
 
     function saveService() {

@@ -31,7 +31,8 @@
          <div class="layui-tab-item layui-show">
             <form lay-filter="form_contract" class="layui-form">
                 <input type='hidden' name='id'/>
-                <input type='hidden' name='type' value="C"/>
+                <input type='hidden' name='bid'/>
+                <input type='hidden' name='type'/>
                 <div class="layui-form-item">
                     <label class="layui-form-label">身份证号</label>
                     <div class="layui-input-inline">
@@ -48,13 +49,13 @@
                     <label  class="layui-form-label">
                         <span class="x-red">*</span>生效时间</label>
                     <div class="layui-input-inline">
-                        <input type="text"  id="contract_employee_start" name="start" class="layui-input"></div>
+                        <input type="text"  id="contract_employee_start" name="start" autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label  class="layui-form-label">
                         <span class="x-red">*</span>到期时间</label>
                     <div class="layui-input-inline">
-                        <input type="text"  id="contract_employee_end" name="end" class="layui-input"></div>
+                        <input type="text"  id="contract_employee_end" name="end" autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label  class="layui-form-label">
@@ -76,7 +77,7 @@
          </div>
          <div class="layui-tab-item">
              <form class="layui-form" >
-                 <div class="layui-form-item layui-form-text">
+                 <div id="container_contract" class="layui-form-item layui-form-text">
                      <embed id="preview_contact" class="preview_contact"></embed>
                  </div>
                  <div class="layui-form-item" style="text-align: center">
@@ -92,7 +93,6 @@
 <script src="../lib/layui/layui.js"></script>
 <script src="../js/fieldSet.js"></script>
 <script>
-    var op = "insert";
     var form;//表单对象
     var editer;
     var upload;
@@ -103,6 +103,7 @@
 
     function loadLayuiModule() {
         layui.use(['form', 'layedit','element','laydate','upload'], function () {
+            var element = layui.element;
             form = layui.form;
             layedit = layui.layedit;
             editer = layedit.build('content'); //建立编辑器
@@ -120,8 +121,11 @@
                     this.data={op:"upload",category:3,id:contract.id}
                 }
                 , done: function (res) {
-                    var src = "../accessory/contract3/"+contract.id+".pdf?t="+Math.random();
-                    $('#preview_contact').attr('src', src); //图片预览
+                    //直接修改src无法刷新，只能重新操作dom
+                    var src = "../accessory/contract3/"+contract.id+".pdf";
+                    $('#preview_contact').parent().empty();
+                    $('#container_contract').append("<embed id='preview_contact' class='preview_contact' src='"+src+"'></embed>");
+
                 }
                 , error: function () {
                     //请求异常回调
@@ -152,30 +156,17 @@
                 $("#preview_contact").text("合同附件不存在，请上传");
             }
         });
-        op = "update";
     }
 
     function save() {
         var contract = form.val('form_contract');
-        if(op == "insert") {
-            iContract.insert(contract, onInsertSuccess);
-        }else{
-            iContract.update(contract,onUpdateSuccess);
-        }
-
-        function onInsertSuccess() {
-            layer.alert("添加成功", {icon: 6,time:2000},function () {
-                var index = parent.layer.getFrameIndex(window.name);
-                parent.layer.close(index);
-                window.parent.location.reload();
+        if(contract.id) {
+            iContract.update(contract,function (result) {
+                layer.alert("修改成功", {icon: 6,time:2000});
             });
-        }
-
-        function onUpdateSuccess() {
-            layer.alert("修改成功", {icon: 6,time:2000},function () {
-                var index = parent.layer.getFrameIndex(window.name);
-                parent.layer.close(index);
-                window.parent.location.reload();
+        }else{
+            iContract.insert(contract, function (result) {
+                layer.alert("添加成功", {icon: 6,time:2000});
             });
         }
     }

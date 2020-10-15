@@ -51,6 +51,7 @@
         <script src="../js/interface.js"></script>
         <script src="../js/jquery.min.js"></script>
         <script src="../js/jquery.params.js"></script>
+        <script src="../js/queryParam.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -58,7 +59,10 @@
             var layer;//弹出窗口
             var element;
             var upload;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
+
+            var param_query = new QueryParam();
+            param_query.setPagination(1,10);
+
             $(function () {
                 loadLayuiModule();
             });
@@ -101,8 +105,9 @@
                 initTable();
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    param_query.conditions.extra = keyword;
+                    param_query.addKeyword(keyword);
                     getDeducts();
+                    return false; //阻止表单跳转
                 });
             }
 

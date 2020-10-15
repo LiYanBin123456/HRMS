@@ -128,14 +128,11 @@ public class DbUtil {
         DaoQueryListResult result = new DaoQueryListResult();
         try {
             Object[] values = param.conditions.extraValues().toArray();
-            System.out.println(values.toString());
             result.success = true;
             result.rows = qr.query(conn, sql1, new BeanListHandler<>(c), values);
             if(param.pagination.need) {
                 result.total = qr.query(conn, sql2, new ScalarHandler<Long>(), values);
             }
-            System.out.println("getList===sql=="+sql1);
-            System.out.println("getList===sql=="+sql2);
         }catch (SQLException e){
             result.success = false;
             result.msg = "数据库操作错误";

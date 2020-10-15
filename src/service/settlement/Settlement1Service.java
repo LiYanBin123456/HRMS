@@ -42,20 +42,20 @@ public class Settlement1Service {
     /**
      * 插入结算单，插入后根据返回的id，自动生成明细
      * @param conn
-     * @param settlement1
+     * @param settlement
      * @param type 0 不自动生成明细  1 自动生成明细
      * @return
      */
-    public static DaoUpdateResult insert(Connection conn, Settlement1 settlement1, byte type) {
+    public static DaoUpdateResult insert(Connection conn, Settlement1 settlement, byte type) {
         //关闭自动提交
         ConnUtil.closeAutoCommit(conn);
 
-        DaoUpdateResult result = Settlement1Dao.insert(conn,settlement1);
+        DaoUpdateResult result = Settlement1Dao.insert(conn,settlement);
 
         if(result.success&&type == 1){//自动生成结算单明细
             long sid = (Long) result.extra;
-            long cid = settlement1.getCid();
-            long did = settlement1.getDid();
+            long cid = settlement.getCid();
+            long did = settlement.getDid();
             //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派员工，用工性质不是小时工，在职
             QueryParameter parameter = new QueryParameter();
             parameter.addCondition("cid","=",cid);

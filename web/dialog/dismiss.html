@@ -12,6 +12,13 @@
     <link rel="stylesheet" href="../css/xadmin.css">
     <script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../js/xadmin.js"></script>
+    <style>
+        .accessory{
+            width: 200px;
+            height: 300px;
+            border: 1px solid grey;
+        }
+    </style>
 </head>
 <body>
 <form class="layui-form" lay-filter="form_leave">
@@ -43,58 +50,80 @@
         </div>
     </div>
     <div class="layui-form-item">
-        <label class="layui-form-label">
-            <span class="x-red">*</span>离职时间</label>
+        <label class="layui-form-label"><span class="x-red">*</span>离职时间</label>
         <div class="layui-input-inline">
-            <input type="text" id="departure_time" name="departure_time" class="layui-input">
+            <input type="text" id="date" name="date" class="layui-input">
+        </div>
+    </div>
+    <div class="layui-form-item" >
+        <label class="layui-form-label">离职证明</label>
+        <div class="layui-input-block">
+            <img id="accessory" alt="请上传离职证明" class="accessory">
         </div>
     </div>
     <div class="layui-form-item">
-        <button type="button" class="layui-btn" id="test1">上传辞职证明</button>
+        <button type="button" class="layui-btn" id="btn_upload">上传辞职证明</button>
         <button class="layui-btn searchbox" onclick="save()" type="button">保存</button>
     </div>
 </form>
-<script>
-    layui.use('upload', function () {
-        var upload = layui.upload;
-        //执行实例
-        var uploadInst = upload.render({
-            elem: '#test1' //绑定元素
-            , url: '/upload/' //上传接口
-            , done: function (res) {
-                //上传完毕回调
-            }
-            , error: function () {
-                //请求异常回调
-            }
-        });
-    });
-</script>
 </body>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
+<script src="../js/fieldSet.js"></script>
 <script>
     var form;//表单对象
     var laydate;
-    loadLayuiModule();
+    var eid;
 
+    $(function () {
+        loadLayuiModule();
+    });
     function loadLayuiModule() {
-        layui.use(['form', 'jquery','laydate'], function () {
+        layui.extend({
+            index: 'lib/index' //主入口模块
+            , citypicker: '../city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
+        }).use(['form', 'element','laydate', 'upload'], function () {
             form = layui.form;
             laydate = layui.laydate;
-            laydate.render({
-                elem: '#departure_time'
-                ,type: 'date'
+            element = layui.element;
+            var upload = layui.upload;
+            upload.render({
+                elem: '#btn_upload' //绑定元素
+                , url: '/hrms//verify/file' //上传接口
+                , accept: 'file'
+                , exts: 'jpg'
+                , acceptMime: '.jpg'
+                , before: function (obj, file, id) {
+                    obj.preview(function (index, file, result) {
+                        $('#accessory').attr('src', result); //图片预览
+                    });
+                    this.data = {op: "upload", category: 4, id: eid}
+                }
+                , done: function (res) {
+                    layer.msg(res.success?"上传成功":"上传失败");
+                }
+                , error: function () {
+                    //请求异常回调
+                }
             });
+            laydate.render({
+                elem: '#date'
+            });
+            initPage();
         });
     }
+
+    function initPage() {
+        eid = $.query.get("id");
+        var data = {leave:0,date:format_date(new Date().getTime())};
+        form.val('form_leave',data);
+    }
     function save() {
-        var id = $.query.get("id");
         var data = form.val('form_leave');
         var leave = data.leave;
-        var date = data.departure_time;
-        iEmployee.leave(id,leave,date,0,onUpdateSuccess);
+        var date = data.date;
+        iEmployee.leave(eid,leave,date,0,onUpdateSuccess);
     }
     function onUpdateSuccess() {
         layer.msg("操作成功", {icon: 6,time:1000}, function() {

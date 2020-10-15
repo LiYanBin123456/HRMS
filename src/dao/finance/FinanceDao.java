@@ -45,7 +45,10 @@ public class FinanceDao {
         return DbUtil.insert(conn, sql, params);
     }
 
-    public static  DaoQueryListResult getTaxs(Connection conn,QueryParameter parameter){
-        return DbUtil.getList(conn,"view_tax",parameter, ViewTax.class);
+    public static  DaoQueryListResult getTaxs(Connection conn,QueryParameter param){
+        if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
+            param.addCondition("name","like",param.conditions.extra);
+        }
+        return DbUtil.getList(conn,"view_tax",param, ViewTax.class);
     }
 }

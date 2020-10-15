@@ -59,6 +59,7 @@
         <!--行内工具栏-->
         <script type="text/html" id="bar_cooperation">
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="addContract"><i class="layui-icon layui-icon-edit"></i>添加合同</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
         </script>
             <script type="text/html" id="bar_potential">
@@ -156,6 +157,9 @@
                         case "detail":
                             showDetailDlg(data);
                             break;
+                        case "addContract":
+                            addContract(data);
+                            break;
                         case "del":
                             del(data);
                             break;
@@ -218,7 +222,11 @@
                     title:"详情合作客户",
                     type: 2,
                     area: ['60%', '90%'],
-                    content: content
+                    content: content,
+                    cancel:function (index) {
+                        layer.close(index);
+                        getCooperations();
+                    }
                 });
             }
 
@@ -229,7 +237,28 @@
                     title:"添加合作客户",
                     type: 2,
                     area: ['60%', '90%'],
-                    content: content
+                    content: content,
+                    cancel:function (index) {
+                        layer.close(index);
+                        getCooperations();
+                    }
+                });
+            }
+
+
+            //打开合同对话框
+            function addContract(cooperation) {
+                var contract = {bid:cooperation.id,name:cooperation.name,type:"B"};
+                var content = "../dialog/contract_cooperation.html?contract="+encodeURIComponent(JSON.stringify(contract));
+                layer.open({
+                    title:'合同-'+contract.name,
+                    type: 2,
+                    area: ['60%', '90%'],
+                    content: content,
+                    cancel:function (index) {
+                        layer.close(index);
+                        getContracts();
+                    }
                 });
             }
 

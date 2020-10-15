@@ -191,13 +191,16 @@ public class ClientServlet extends HttpServlet {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         HttpSession session = request.getSession();
         long rid = (long) session.getAttribute("rid");
+        long aid = (long) session.getAttribute("id");
         byte category= Byte.parseByte(request.getParameter("category"));
         if(category==0){
             //派遣方客户
+            parameter.addCondition("aid","=",aid);
             res = DispatchService.getList(conn,parameter);
         }else if(category==1){
             //合作单位客户
             parameter.addCondition("did","=",rid);
+            parameter.addCondition("aid","=",aid);
             res = CooperationService.getList(conn,parameter);
         }else {
             //供应商客户

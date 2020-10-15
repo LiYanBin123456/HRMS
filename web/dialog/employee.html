@@ -179,39 +179,19 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">离职时间</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="date1" name="date1" class="layui-input">
+                            <input type="text" id="date1" name="date1" class="layui-input" readonly disabled>
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">退休时间</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="date2" name="date2" class="layui-input">
+                            <input type="text" id="date2" name="date2" class="layui-input" readonly disabled>
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">离职原因</label>
                         <div class="layui-input-inline">
-                            <select name="household">
-                                <option value=""></option>
-                                <option value="0">合同到期</option>
-                                <option value="1">被用人单位解除劳动合同</option>
-                                <option value="2">被用人单位开除</option>
-                                <option value="3">被用人单位除名</option>
-                                <option value="4">被用人单位辞退</option>
-                                <option value="5">公司倒闭</option>
-                                <option value="6">公司破产</option>
-                                <option value="7">单位人员减少</option>
-                                <option value="8">养老在职转退休</option>
-                                <option value="9">参军</option>
-                                <option value="10">入学</option>
-                                <option value="11">劳改劳教</option>
-                                <option value="12">出国定居</option>
-                                <option value="13">异地转移</option>
-                                <option value="14">不足缴费年限</option>
-                                <option value="15">人员失踪</option>
-                                <option value="16">错误申报</option>
-                                <option value="17">其他原因减少</option>
-                            </select>
+                            <input type="text" name="reason" class="layui-input" readonly disabled>
                         </div>
                     </div>
                     <div class="layui-form-item" >
@@ -481,9 +461,7 @@
                     this.data={op:"upload",category:0,id:employee.id}
                 }
                 , done: function (res) {
-                    layer.msg(res.msg);
-                    console.log(res);
-                    //上传完毕回调
+                    layer.msg(res.success?"上传成功":"上传失败");
                 }
                 , error: function () {
                     //请求异常回调
@@ -610,6 +588,7 @@
         function showExtra(extra) {
             extra.date1 = format_date(extra.date1);
             extra.date2 = format_date(extra.date2);
+            extra.reason = array_value2text(reason_employee,extra.reason);
             form.val('form_extra', extra);
 
             var src = "../accessory/headImg/"+employee.id+".jpg?t="+Math.random();
@@ -674,6 +653,10 @@
     
     function saveEmployee() {
         var employee = form.val('form_employee');
+        if(employee.type==1 && employee.cid<1){
+            layer.alert("请选择外派单位", {icon: 20});
+            return;
+        }
         if(employee.id){
             iEmployee.update(employee,function () {
                 layer.alert("基础信息保存成功", {icon: 20});

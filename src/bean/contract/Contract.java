@@ -9,9 +9,8 @@ public class Contract {
     private long bid;//乙方id  客户id
     /**合同类型
      * A平台和人力资源派遣单位的合同
-     * B平台和用人单位之间的合同
-     * C人力资源和合作单位之间的合同
-     * D人力资源派遣单位和员工之间的合同
+     * B人力资源和合作单位之间的合同
+     * C人力资源派遣单位和员工之间的合同
      */
     private String type;
     private Date start;//合同生效时间

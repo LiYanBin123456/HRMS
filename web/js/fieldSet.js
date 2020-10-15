@@ -408,7 +408,6 @@ var columns_deduct  = [[
 var columns_tax  = [[
     {field:'id', title: '工号',width:80,fixed:"left"},
     {field:'name', title: '姓名',width:80,fixed:"left"},
-    {field:'', title: '证照类型',width:120,text:"居民身份证"},
     {field:'cardId', title: '证照号码',width:160},
     {field:'month', title: '月份',width:160,templet:function (d) {return format_date(d.month)}},
     {field:'payable', title: '本期收入',width:120},

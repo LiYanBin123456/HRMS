@@ -91,10 +91,10 @@ public class EmployeeService {
                     , v.getStatus(), v.getDepartment(), v.getPost(), v.getCategory(), v.getPrice());
             employees.add(employee);
 
-            //封装员工补充信息
+            /*//封装员工补充信息
             EmployeeExtra extra = new EmployeeExtra(0, v.getRid(), v.getSchool(), v.getMajor(), v.getHousehold(), v.getAddress(), v.getDate1()
                     , v.getDate2(), v.getReason());
-            extras.add(extra);
+            extras.add(extra);*/
         }
 
         result = EmployeeDao.insertBatch(conn,employees);//批量插入员工数据
@@ -137,6 +137,7 @@ public class EmployeeService {
             json.put("msg","操作失败");
             return json.toJSONString();
         }
-        return res1.toString();
+        ConnUtil.commit(conn);
+        return JSONObject.toJSONString(res1);
     }
 }

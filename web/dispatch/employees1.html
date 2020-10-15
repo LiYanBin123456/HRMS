@@ -66,7 +66,6 @@
             var upload;
             var param_query = new QueryParam();
             param_query.setPagination(1,10);
-            param_query.addCondition("type","=",0);
 
             $(function () {
                 loadLayuiModule();
@@ -109,7 +108,7 @@
             function initPage() {
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    param_query.setExtra(keyword)
+                    param_query.addKeyword(keyword)
                     getEmployees();
                     return false; //阻止表单跳转
                 });
@@ -168,7 +167,7 @@
             }
 
             function getEmployees() {
-                iEmployee.getList(param_query,function (result) {
+                iEmployee.getList(param_query,0,function (result) {
                     table.reload('tbl_employee', {
                         data:result.rows
                     });
@@ -197,14 +196,18 @@
                     title:"内部员工详情",
                     type: 2,
                     area: ['80%', '90%'],
-                    content: content
+                    content: content,
+                    cancel:function (index) {
+                        layer.close(index);
+                        getEmployees();
+                    }
                 });
             }
 
 
-            //打开详情对话框
+            //打开合同对话框
             function addContract(employee) {
-                var contract = {cardId:employee.cardId,name:employee.name};
+                var contract = {bid:employee.id,cardId:employee.cardId,name:employee.name,type:"C"};
                 var content = "../dialog/contract_employee.html?contract="+encodeURIComponent(JSON.stringify(contract));
                 layer.open({
                     title:'合同-'+contract.name,
@@ -220,7 +223,7 @@
                 layer.open({
                     title:"离职",
                     type: 2,
-                    area: ['35%', '60%'],
+                    area: ['35%', '80%'],
                     content: content
                 });
             }
@@ -266,7 +269,11 @@
                     title:"添加员工",
                     type: 2,
                     area: ['80%', '90%'],
-                    content: content
+                    content: content,
+                    cancel:function (index) {
+                        layer.close(index);
+                        getEmployees();
+                    }
                 });
             }
 

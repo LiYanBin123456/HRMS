@@ -30,7 +30,6 @@
         <div style="padding: 5px;">
             <!--顶部工具栏-->
             <div class="layui-hide" id="top_bar_contract">
-                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加合同</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的合作客户">
@@ -108,9 +107,6 @@
                 //顶部工具栏事件处理
                 table.on('toolbar(filter_tb_contract)', function(obj){
                     switch(obj.event){
-                        case 'insert':
-                            showInsertDlg();
-                            break;
                         case 'search':
                             search();
                             break;
@@ -147,23 +143,16 @@
 
             //打开详情对话框
             function showDetailDlg(contract) {
-                var content = "../dialog/contract_client.html?id="+contract.id;
+                var content = "../dialog/contract_cooperation.html?contract="+encodeURIComponent(JSON.stringify(contract));
                 layer.open({
                     title:'合同-'+contract.name,
                     type: 2,
                     area: ['60%', '90%'],
-                    content: content
-                });
-            }
-
-            //打开添加对话框
-            function showInsertDlg() {
-                var content = "../dialog/contract_client.html";
-                layer.open({
-                    title:"添加合同",
-                    type: 2,
-                    area: ['60%', '90%'],
-                    content: content
+                    content: content,
+                    cancel:function (index) {
+                        layer.close(index);
+                        getContracts();
+                    }
                 });
             }
 

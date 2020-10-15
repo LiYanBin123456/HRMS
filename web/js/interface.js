@@ -520,8 +520,8 @@ var InterfaceEmployee = function () {
      * @param success
      * @param fail
      */
-    this.getList = function(param,success,fail){
-        var para = {op: "getList", param:JSON.stringify(param)};
+    this.getList = function(param,type,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param),type:type};
         access(url,para,1,success,fail);
     };
     /**
@@ -1198,8 +1198,8 @@ var InterfaceFile = function () {
         access(url,para,1,success,fail);
     };
     /**
-     * 判断模板附件是否存在，返回结果为{success:true/false,exist:true/false}
-     * @param category 0 小时工模板  1  商业保险模板   2员工模板
+     * 判断附件是否存在，返回结果为{success:true/false,exist:true/false}
+     * @param category 0-员工头像；1-平台与派遣单位的合同；2-派遣单位与合作单位的合同；3-派遣单位与员工的合同；4-员工离职证明
      * @param success
      * @param fail
      */
@@ -1216,17 +1216,6 @@ var InterfaceFile = function () {
      */
     this.downloadContract = function (id,success,fail) {
         var para = {op: "downloadContract",id:id};
-        access(url,para,1,success,fail);
-    };
-    /**
-     * 上传员工头像
-     * @param file 头像图片
-     * @param id 员工id
-     * @param success
-     * @param fail
-     */
-    this.uploadImg = function (file,id,success,fail) {
-        var para = {op: "uploadImg",id:id,file:JSON.stringify(file)};
         access(url,para,1,success,fail);
     };
 };

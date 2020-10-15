@@ -131,7 +131,6 @@
                 </div>
                 <div class="layui-form-item" style="text-align: center" >
                     <button lay-submit lay-filter="submit_cooperation" class="layui-btn " >保存</button>
-                    <button class="layui-btn" onclick="cancel()" >取消</button>
                 </div>
             </form>
         </div>
@@ -213,7 +212,6 @@
                 </div>
                 <div class="layui-form-item" style="text-align: center">
                     <button type="submit" lay-submit lay-filter="submit_finance" class="layui-btn" >保存</button>
-                    <button class="layui-btn" onclick="cancel()" >取消</button>
                 </div>
             </form>
         </div>
@@ -450,9 +448,6 @@
         if(cooperation) {
             iClient.update(data,1,function (result){
                 layer.msg("修改成功");
-                var index = parent.layer.getFrameIndex(window.name);
-                parent.layer.close(index);
-                window.parent.location.reload();
             });
         }else{
             iClient.insert(data,1,function (result){
@@ -461,7 +456,6 @@
                 mapSalary = {};
                 salary_items_defined = [];
                 layer.alert("基础信息保存成功，请完善财务信息", {icon: 20});
-                window.parent.location.reload();
             });
         }
         cooperation = data;
@@ -477,8 +471,6 @@
         if(finance) {
             iClient.updateFinance(data,function (result){
                 layer.msg("修改成功");
-                var index = parent.layer.getFrameIndex(window.name);
-                parent.layer.close(index);
             });
         }else{
             iClient.insertFinance(data,function (result){
@@ -486,10 +478,6 @@
             });
         }
         finance = data;
-    }
-    function cancel(){
-        var index = parent.layer.getFrameIndex(window.name);
-        parent.layer.close(index);
     }
 </script>
 

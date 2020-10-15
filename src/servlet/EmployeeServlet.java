@@ -231,15 +231,30 @@ public class EmployeeServlet extends HttpServlet {
     private String getList(Connection conn, HttpServletRequest request) {
         DaoQueryListResult res;
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
-
+        byte type = Byte.parseByte(request.getParameter("type"));
+        parameter.addCondition("type","=",type);
         HttpSession session = request.getSession();
         byte role = (byte) session.getAttribute("role");
         long rid = (long) session.getAttribute("rid");
-        if(role==1){//派遣方管理员
-            parameter.addCondition("did","=",rid);
-        }else if(role == 2) {//合作方管理员
-            parameter.addCondition("cid","=",rid);
+        long aid = (long) session.getAttribute("id");
+        switch (type){
+            case 0://内部员工
+            case 2://人才库
+                if(role==1) {
+                    parameter.addCondition("did", "=", rid);//获取派遣单位的内部员工或者人才库
+                }
+                break;
+            case 1://派遣员工
+                if(role==1){//派遣方管理员
+                    parameter.addCondition("aid","=",aid);
+                }else if(role == 2) {//合作方管理员
+                    parameter.addCondition("cid","=",rid);
+                }
+                break;
+            default:
+                return "";
         }
+
         res = EmployeeService.getList(conn,parameter);
         return JSONObject.toJSONString(res);
     }
