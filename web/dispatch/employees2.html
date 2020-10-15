@@ -27,14 +27,17 @@
     </head>
 
     <body class="layui-layout-body">
-        <!--顶部工具栏-->
         <div class="layui-hide" id="top_bar">
-            <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加员工</button>
+            <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加外派员工</button>
             <button class="layui-btn layui-btn-sm" lay-event="import" id="import"><i class="layui-icon "></i> 批量导入</button>
-            <button class="layui-btn layui-btn-sm" lay-event="download" ><i class="layui-icon "></i> 下载模板</button>
-            <form class="layui-form searchbox">
+            <button class="layui-btn layui-btn-sm" lay-event="" onclick="download()"><i class="layui-icon "></i> 下载模板</button>
+            <button class="layui-btn layui-btn-sm" lay-event="dispatch"><i class="layui-icon "></i> 批量派遣</button>
+            <form class="layui-form searchbox" lay-filter="form_top_bar">
                 <div class="layui-input-inline">
-                    <input name="keyword" type="text" class="layui-input" placeholder="请输入要查找的员工">
+                    <select id="select_cooperation" lay-filter="filter_cooperation"></select>
+                </div>
+                <div class="layui-input-inline">
+                    <input name="keyword" class="layui-input"  type="text" placeholder="请输入要查找的员工">
                 </div>
                 <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
             </form>
@@ -66,7 +69,6 @@
             var upload;
             var param_query = new QueryParam();
             param_query.setPagination(1,10);
-
             $(function () {
                 loadLayuiModule();
             });
@@ -91,7 +93,7 @@
                         , done: function (res) {
                             if (res.success){
                                 var employees = res.data;
-                                showImportDlg(employees1);
+                                showImportDlg(employees);
                             }else {
                                 layer.msg("xls文件不符合要求，请下载模板再重新填写");
                             }
@@ -106,6 +108,7 @@
             }
 
             function initPage() {
+
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
                     param_query.addKeyword(keyword);
@@ -113,7 +116,19 @@
                     return false; //阻止表单跳转
                 });
 
+                form.on('select(filter_cooperation)', function(data){
+                     var cid = data.value;//获取选中的合作单位编号
+                    if(cid == -1){
+                        param_query.removeCondition("cid");
+                    }else{
+                        param_query.addCondition("cid","=",cid);
+                    }
+                    getEmployees();
+                });
+
                 initTable();
+                initCooperationList();
+                getEmployees();
             }
 
             function initTable() {
@@ -121,8 +136,8 @@
                 table.render({
                     elem: '#tbl_employee',
                     toolbar: '#top_bar',
-                    title: '内部员工列表',
-                    cols: columns_employee_internal,
+                    title: '外派员工列表',
+                    cols: columns_employee_expatriate,
                     id: 'tbl_employee'
                 });
 
@@ -157,17 +172,35 @@
                         case 'import':
                             $("#import").click();
                             break;
+                        case "dispatch":
+                            batchDispatch();
+                            break;
                         case 'download':
                             download();
                             break;
                     }
                 });
+            }
 
-                getEmployees();
+            function initCooperationList() {
+                var param = new QueryParam();
+                param.addCondition("type","=",0);
+                iClient.getList(param,1,function (result) {
+                    var cooperations = result.rows;
+                    var select_cooperation = $("#select_cooperation");
+                    select_cooperation.append("<option selected disabled hidden>按合作单位筛选</option>");
+                    select_cooperation.append("<option value='-1'>不限</option>");
+                    for (var i in cooperations) {
+                        var cooperation = cooperations[i];
+                        var option = $("<option>").val(cooperation.id).text(cooperation.name);
+                        select_cooperation.append(option);
+                    }
+                    form.render('select', 'form_top_bar');
+                });
             }
 
             function getEmployees() {
-                iEmployee.getList(param_query,0,function (result) {
+                iEmployee.getList(param_query,1,function (result) {
                     table.reload('tbl_employee', {
                         data:result.rows
                     });
@@ -204,6 +237,7 @@
                 });
             }
 
+
             //打开合同对话框
             function addContract(employee) {
                 var contract = {bid:employee.id,cardId:employee.cardId,name:employee.name,type:"C"};
@@ -222,7 +256,7 @@
                 layer.open({
                     title:"离职",
                     type: 2,
-                    area: ['35%', '80%'],
+                    area: ['35%', '60%'],
                     content: content
                 });
             }
@@ -237,7 +271,6 @@
                     content: content
                 });
             }
-
             //核对导入的数据
             function showImportDlg(employees) {
                 var content = "../dialog/importEmployee.html?employees="+encodeURIComponent(JSON.stringify(employees));
@@ -263,7 +296,7 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/employee.html?type=0";
+                var content = "../dialog/employee.html?type=1";
                 layer.open({
                     title:"添加员工",
                     type: 2,
@@ -285,6 +318,41 @@
                         layer.msg('删除成功');
                     });
                 });
+            }
+
+            //打开派遣对话框
+            function batchDispatch() {
+                var employees = table.checkStatus('tbl_employee').data;
+                if(employees.length<1){
+                    layer.msg("请至少选择一个员工进行操作");
+                    return;
+                }
+                layer.open({
+                    title:"派遣至",
+                    type: 2,
+                    area: ['40%', '70%'],
+                    content: "../dialog/selectCooperation.html",
+                    btn: ['派遣', '关闭']
+                    ,yes: function(index, layero){
+                        var cooperation = window["layui-layer-iframe" + index].callbackData();
+                        layer.close(index);
+                        dispatch(employees,cooperation);
+
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
+                });
+
+                function dispatch(employees,cooperation){
+                    var msg = "确认将选中的"+employees.length+"个员工派遣至"+cooperation.name+"?";
+                    layer.confirm(msg, {icon: 3, title:'批量派遣'}, function(index){
+                        var ids = getKeyArray(employees,"id");
+                        iEmployee.dispatch(ids,cooperation.id,function () {
+                            layer.close(index);
+                            layer.msg('派遣成功');
+                        })
+                    });
+                }
             }
 
             function download() {
