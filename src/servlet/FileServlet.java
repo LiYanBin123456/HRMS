@@ -58,17 +58,17 @@ public class FileServlet extends HttpServlet {
             case "readXls"://读取xls数据反馈给前台
                 result = readXls(request);
                 break;
-            case "upload"://上传合同附件
+            case "upload"://上传文件
                 result = upload(request);
                 break;
-            case "uploadImg"://上传员工头像
+            /*case "uploadImg"://上传员工头像
                 result = uploadImg(request);
-                break;
+                break;*/
             case "readDeduct"://读取个税表中的数据
                 result = readDeduct(request);
                 break;
-            case "existContract"://判断合同附件是否存在
-                result = existContract(request);
+            case "exist"://判断合同附件是否存在
+                result = exist(request);
                 break;
             case "existModel"://判断合同附件是否存在
                 result = existModel(request);
@@ -258,8 +258,54 @@ public class FileServlet extends HttpServlet {
         return result;
     }
 
-    //上传合同文件
+
+    //上传员工头像
     private String upload(HttpServletRequest request) throws IOException, ServletException {
+        String id = request.getParameter("id");
+        byte category = Byte.parseByte(request.getParameter("category"));
+        Part part = request.getPart("file");
+        JSONObject json = new JSONObject();
+        if(part!=null){
+            String header = part.getHeader("content-disposition");//获取文件的名称
+            String headername = header.substring(header.indexOf("filename")+10, header.length()-1);//截取字符串获取文件名称
+            String suffixName=headername.substring(headername.indexOf(".")+1);//获取文件名后缀
+
+            String file = id+"."+suffixName;
+            String folder = "";
+            switch (category){
+                case 0:
+                    folder = request.getServletContext().getRealPath("/accessory/headImg");
+                    break;
+                case 1:
+                    folder = request.getServletContext().getRealPath("/accessory/contract1");
+                    break;
+                case 2:
+                    folder = request.getServletContext().getRealPath("/accessory/contract2");
+                    break;
+                case 3:
+                    folder = request.getServletContext().getRealPath("/accessory/contract3");
+                    break;
+                case 4:
+                    folder = request.getServletContext().getRealPath("/accessory/leave");
+                    break;
+            }
+            FileOutputStream fos = new FileOutputStream(new File(folder, file));
+            InputStream put = part.getInputStream();//获取文件流
+            IOUtils.copy(put, fos);
+            put.close();
+            fos.close();
+            //删除临时文件
+            part.delete();
+            json.put("success",true);
+        }else{
+            json.put("success",false);
+            json.put("msg","上传文件错误");
+        }
+        return json.toJSONString();
+    }
+
+    //上传合同文件
+    /*private String upload(HttpServletRequest request) throws IOException, ServletException {
         DaoUpdateResult result = new DaoUpdateResult();
         String id = request.getParameter("id");
             //将文件上传到服务器并且以合同id命名
@@ -293,14 +339,38 @@ public class FileServlet extends HttpServlet {
                 }
             }
             return JSONObject.toJSONString(result);
-    }
+    }*/
 
     //判断合同文件是否存在
-    private String existContract(HttpServletRequest request) throws IOException {
+    private String exist(HttpServletRequest request) throws IOException {
         String id = request.getParameter("id");
-        String fileName = id+".pdf";
-        String fullFileName = getServletContext().getRealPath("/contractFile/" + fileName);
-        File file = new File(fullFileName);
+        byte category = Byte.parseByte(request.getParameter("category"));
+        String folder = "";
+        String suffix = "";
+        switch (category){
+            case 0:
+                folder = request.getServletContext().getRealPath("/accessory/headImg");
+                suffix = "jpg";
+                break;
+            case 1:
+                folder = request.getServletContext().getRealPath("/accessory/contract1");
+                suffix = "pdf";
+                break;
+            case 2:
+                folder = request.getServletContext().getRealPath("/accessory/contract2");
+                suffix = "pdf";
+                break;
+            case 3:
+                folder = request.getServletContext().getRealPath("/accessory/contract3");
+                suffix = "pdf";
+                break;
+            case 4:
+                folder = request.getServletContext().getRealPath("/accessory/leave");
+                suffix = "jpg";
+                break;
+        }
+        String fileName = String.format("%s/%s.%s",folder,id,suffix);
+        File file = new File(fileName);
 
         JSONObject json = new JSONObject();
         json.put("success",true);
@@ -331,50 +401,6 @@ public class FileServlet extends HttpServlet {
         os.flush();
         os.close();
         bis.close();
-    }
-
-    //上传员工头像
-    private String uploadImg(HttpServletRequest request) throws IOException, ServletException {
-        String  msg = null;
-        String id = request.getParameter("id");
-        String file ;
-        Part part = request.getPart("file");
-        if(part!=null){
-            //获取文件的名称
-            String header = part.getHeader("content-disposition");
-            //截取字符串获取文件名称
-            String headername = header.substring(header.indexOf("filename")+10, header.length()-1);
-            //获取文件名后缀
-            String suffixName=headername.substring(headername.indexOf(".")+1);
-            String jpg="jpg";
-            String jpeg = "jpeg";
-            if(suffixName.equals(jpg)||suffixName.equals(jpeg)){
-                //获取文件流
-                InputStream put = part.getInputStream();
-                //获取文件夹的真实路径
-                String url = request.getServletContext().getRealPath("/headImg");
-                File uploadDir = new File(url);
-                // 如果该文件夹不存在则创建
-                if (!uploadDir.exists()) {
-                    uploadDir.mkdirs();
-                }
-                file = id+"."+suffixName;
-                //建立对拷流
-                FileOutputStream fos = new FileOutputStream(new File(url, file));
-                IOUtils.copy(put, fos);
-                put.close();
-                fos.close();
-                //删除临时文件
-                part.delete();
-                String img = getServletContext().getRealPath("/headImg/" + file);
-                System.out.println(img);
-                msg = "头像插入成功,地址："+img;
-            }
-            else {
-                msg ="格式不正确";
-            }
-        }
-        return JSONObject.toJSONString(msg);
     }
 
     //下载普通结算单明细
@@ -864,15 +890,4 @@ public class FileServlet extends HttpServlet {
         String fileName = tempArr2[1].substring(tempArr2[1].lastIndexOf("\\")+1).replaceAll("\"", "");
         return fileName;
     }
-
-    private void exportAccessory(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        String []str = request.getParameter("stuIds").split(",");
-        List<String> cardIds = new ArrayList<>(Arrays.asList(str));
-        byte category = Byte.parseByte(request.getParameter("category"));
-        String folder = request.getServletContext().getRealPath("/accessory");
-
-        //List<File> files = AccessoryUtil.getAccessoryFiles(cardIds,category,folder);
-       // AccessoryUtil.zipDownload(response,files);
-    }
-
 }

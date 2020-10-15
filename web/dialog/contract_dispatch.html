@@ -111,7 +111,7 @@
                     obj.preview(function(index, file, result){
                         $('#demo1').attr('src', "../images/PDF.png"); //图片链接（base64）
                     });
-                    this.data={op:"upload",file:JSON.stringify(file),id:contract.id}
+                    this.data={op:"upload",category:2,id:contract.id}
                 }
                 , done: function (res) {
                     layer.msg(res.msg);

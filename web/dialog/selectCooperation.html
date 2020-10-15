@@ -20,6 +20,7 @@
 </body>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
+<script src="../js/queryParam.js"></script>
 <script src="../js/interface.js"></script>
 <script>
     var cooperation;
@@ -35,7 +36,8 @@
             });
 
             //获取session中的派遣方id
-            var param ={conditions: {keys:[{k:"type",o:"=",v:1}],extra:""},order: {need:false},pagination: {need:false}};
+            var param = new QueryParam();
+            param.addCondition("type","=",0);
             iClient.getList(param,1,function(result){
                 var cooperations = result.rows;
                 var select_cooperation = $("#select_cooperation");

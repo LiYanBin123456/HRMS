@@ -520,8 +520,8 @@ var InterfaceEmployee = function () {
      * @param success
      * @param fail
      */
-    this.getList = function(param,category,success,fail){
-        var para = {op: "getList", param:JSON.stringify(param), category:category};
+    this.getList = function(param,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param)};
         access(url,para,1,success,fail);
     };
     /**
@@ -1198,35 +1198,13 @@ var InterfaceFile = function () {
         access(url,para,1,success,fail);
     };
     /**
-     * 上传合同附件
-     * @param file 合同附件，只能是pdf格式
-     * @param id 合同id
-     * @param success
-     * @param fail
-     */
-    this.upload = function (file,id,success,fail) {
-        var para = {op: "upload",id:id,file:JSON.stringify(file)};
-        access(url,para,1,success,fail);
-    };
-    /**
      * 判断模板附件是否存在，返回结果为{success:true/false,exist:true/false}
      * @param category 0 小时工模板  1  商业保险模板   2员工模板
      * @param success
      * @param fail
      */
-    this.existModel = function (category,success,fail) {
-        var para = {op: "existModel",category:category};
-        access(url,para,1,success,fail);
-    };
-
-    /**
-     * 判断合同附件是否存在，返回结果为{success:true/false,exist:true/false}
-     * @param id 合同编号
-     * @param success
-     * @param fail
-     */
-    this.existContract = function (id,success,fail) {
-        var para = {op: "existContract",id:id};
+    this.exist = function (id,category,success,fail) {
+        var para = {op: "exist",id:id,category:category};
         access(url,para,1,success,fail);
     };
 

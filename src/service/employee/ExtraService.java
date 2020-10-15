@@ -1,21 +1,14 @@
 package service.employee;
 
-import bean.employee.Employee;
 import bean.employee.EmployeeExtra;
-import com.alibaba.fastjson.JSONObject;
-import dao.employee.EmployeeDao;
 import dao.employee.ExtraDao;
-import database.*;
+import database.DaoQueryResult;
+import database.DaoUpdateResult;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.util.List;
 
 public class ExtraService {
-    //获取列表
-    public static DaoQueryListResult getList(Connection conn, QueryParameter param){
-        return ExtraDao.getList(conn,param);
-    }
 
     //获取详情
     public static DaoQueryResult get(Connection conn, long id) {

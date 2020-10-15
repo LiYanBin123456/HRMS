@@ -132,11 +132,13 @@
 
     function initData() {
         var id = $.query.get("id");
-        iClient.get(id,2,function (result) {
-            supplier = result.data;
-            form.val('form_supplier', supplier);
-            op = "update";
-        })
+        if(id) {
+            iClient.get(id, 2, function (result) {
+                supplier = result.data;
+                form.val('form_supplier', supplier);
+                op = "update";
+            });
+        }
     }
 
     function saveSupplier() {

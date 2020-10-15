@@ -650,11 +650,14 @@ var permissions_dispatch = [
 
 
 function format_date(timestamp) {
-    var d = new Date(timestamp);
-    var year=d.getFullYear();
-    var month=d.getMonth()+1;
-    var date=d.getDate();
-    return year+"-"+month+"-"+date;
+    if(timestamp) {
+        var d = new Date(timestamp);
+        var year = d.getFullYear();
+        var month = d.getMonth() + 1;
+        var date = d.getDate();
+        return year + "-" + month + "-" + date;
+    }
+    return "";
 }
 function format_percent(value) {
     return value+"%";

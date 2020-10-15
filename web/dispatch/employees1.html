@@ -46,6 +46,7 @@
         <!--行内工具栏-->
         <script type="text/html" id="bar_employee">
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="addContract"><i class="layui-icon layui-icon-edit"></i>添加合同</a>
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dimission"><i class="layui-icon layui-icon-edit"></i> 离职</a>
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="retire"><i class="layui-icon layui-icon-edit"></i> 退休</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 移入人才库</a>
@@ -133,6 +134,9 @@
                         case "detail":
                             showDetailDlg(employee);
                             break;
+                        case "addContract":
+                            addContract(employee);
+                            break;
                         case "dimission":
                             showDimissionDlg(employee);
                             break;
@@ -164,7 +168,7 @@
             }
 
             function getEmployees() {
-                iEmployee.getList(param_query,0,function (result) {
+                iEmployee.getList(param_query,function (result) {
                     table.reload('tbl_employee', {
                         data:result.rows
                     });
@@ -193,6 +197,19 @@
                     title:"内部员工详情",
                     type: 2,
                     area: ['80%', '90%'],
+                    content: content
+                });
+            }
+
+
+            //打开详情对话框
+            function addContract(employee) {
+                var contract = {cardId:employee.cardId,name:employee.name};
+                var content = "../dialog/contract_employee.html?contract="+encodeURIComponent(JSON.stringify(contract));
+                layer.open({
+                    title:'合同-'+contract.name,
+                    type: 2,
+                    area: ['60%', '90%'],
                     content: content
                 });
             }

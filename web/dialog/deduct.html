@@ -90,7 +90,7 @@
     }
 
     function initNameList() {
-        iEmployee.getList({},0,function (result) {
+        iEmployee.getList({},function (result) {
             var employees = result.rows;
             var select_name = $("#select_name");
             select_name.append("<option value='-1' selected disabled hidden>请选择姓名</option>");

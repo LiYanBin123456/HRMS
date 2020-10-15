@@ -113,7 +113,7 @@
                }else {//查询除出该单位，类型在职，用工性质是小时工，状态在职的员工列表
                    param_query.conditions.keys=[{k:"cid",o:"=",v:cid},{k:"type",o:"=",v:1},{k:"category",o:"=",v:2},{k:"status",o:"=",v:0}]
                }
-                iEmployee.getList(param_query,0,function (result) {
+                iEmployee.getList(param_query,function (result) {
                     table.reload('tbl_member', {
                         data:result.rows
                     });
