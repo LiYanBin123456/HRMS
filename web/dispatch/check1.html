@@ -91,22 +91,12 @@
 
             function initTable() {
 
-                var cols;
-                switch(Number(category)){
-                    case 0://待审核
-                        cols = columns_settlement1_check;
-                        break;
-                    case 1://全部
-                        cols = columns_settlement1_portion;
-                        break;
-                }
-
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_settlement', //开启头部工具栏，并为其绑定左侧模板
                     title: '列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: cols,
+                    cols: columns_settlement1,
                     id: 'tbl_settlement'
                 });
 

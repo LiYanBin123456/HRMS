@@ -33,10 +33,6 @@ public class Settlement1Service {
     static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
     static String date = df.format(new Date(System.currentTimeMillis()));
     static  Date time = Date.valueOf(date);//获取当前时间
-    public static void main(String[] args) {
-        Connection conn = ConnUtil.getConnection();
-        commit(conn,1,1);
-    }
 
     //获取普通结算单列表
     public static DaoQueryListResult getList(Connection conn, QueryParameter param) {
@@ -257,35 +253,39 @@ public class Settlement1Service {
         /**流程
          * 1、查询出结算单，修改结算月份
          * 2、插入结算单，返回主键id
-         * 3、根据cid查询出派遣到该单位的所有员工(不包括小时工)
-         * 4、根据员工的个数 封装好明细集合
+         * 3、根据原来结算单id查询出所有的结算单明细
+         * 4、修改结算单明细中的结算单id
          * 5、批量结算单明细
          */
         Settlement1 settlement1 = (Settlement1) Settlement1Dao.get(conn, id).data;
         settlement1.setMonth(month);
-        long sid = (long) Settlement1Dao.insert(conn, settlement1).extra;
-        long did = settlement1.getDid();
-        long cid = settlement1.getCid();
 
-        //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派员工，用工性质不是小时工，在职
+        //关闭自动提交
+        ConnUtil.closeAutoCommit(conn);
+        //插入结算单
+        DaoUpdateResult result = Settlement1Dao.insert(conn, settlement1);
+        //返回结算单id
+        long sid = (long)result.extra;
+
         QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("cid","=",cid);
-        parameter.addCondition("did","=",did);
-        parameter.addCondition("type","=",1);
-        parameter.addCondition("category","!=",2);
-        parameter.addCondition("status","=",0);
-        List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
-        List<Detail1> detail1List = new ArrayList<>();
-        for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
-            Detail1 detail1 = new Detail1();
-            detail1.setSid(sid);
-            detail1.setEid(employeeList.get(i).getId());
-            detail1List.add(i,detail1);
+        parameter.addCondition("sid","=",id);
+        //根据复制的结算单id查询出所有的结算单明细
+        List<Detail1> detail1List = (List<Detail1>) Detail1Dao.getList(conn,parameter).rows;
+        for(Detail1 detail1 :detail1List){
+            //重新赋结算单id
+           detail1.setSid(sid);
         }
-        //插入明细
-        DaoUpdateResult result = Detail1Dao.importDetails(conn,detail1List);
+        //重新插入数据库
+        DaoUpdateResult result1 = Detail1Dao.importDetails(conn,detail1List);
 
-        return result;
+        if(result.success&&result1.success){//事务
+            ConnUtil.commit(conn);
+            return result;
+        }else {//回滚
+            ConnUtil.rollback(conn);
+            result1.msg = "另存为失败";
+            return result1;
+        }
     }
 
 

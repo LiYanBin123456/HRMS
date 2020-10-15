@@ -337,34 +337,34 @@ public class Calculate {
 
         byte medicare = setting.getMedicare();//要计算的医保类别
         switch (medicare){
-            case 7://医疗 大病 生育
+            case 7://生育 大病 医疗
                 medicare1 = base*ruleMedicare.getPer2();//个人医疗
                 medicare2 =base*ruleMedicare.getPer1();//单位医疗
                 birth = base*ruleMedicare.getPer3();//单位生育
                 disease1 = ruleMedicare.getFin2();//个人大病
                 disease2 = ruleMedicare.getFin1();//单位大病
                 break;
-            case 6://医疗 大病
-                medicare1 = base*ruleMedicare.getPer2();//个人医疗
-                medicare2 =base*ruleMedicare.getPer1();//单位医疗
-                disease1 = ruleMedicare.getFin2();//个人大病
-                disease2 = ruleMedicare.getFin1();//单位大病
-                break;
-            case 4://医疗
-                medicare1 = base*ruleMedicare.getPer2();//个人医疗
-                medicare2 =base*ruleMedicare.getPer1();//单位医疗
-                break;
-            case 3://大病 生育
+            case 6://生育 大病
                 birth = base*ruleMedicare.getPer3();//单位生育
                 disease1 = ruleMedicare.getFin2();//个人大病
                 disease2 = ruleMedicare.getFin1();//单位大病
+                break;
+            case 4://生育
+                birth = base*ruleMedicare.getPer3();//单位生育
+                break;
+            case 3://大病 医疗
+                disease1 = ruleMedicare.getFin2();//个人大病
+                disease2 = ruleMedicare.getFin1();//单位大病
+                medicare1 = base*ruleMedicare.getPer2();//个人医疗
+                medicare2 =base*ruleMedicare.getPer1();//单位医疗
                 break;
             case 2://大病
                 disease1 = ruleMedicare.getFin2();//个人大病
                 disease2 = ruleMedicare.getFin1();//单位大病
                 break;
-            case 1://生育
-                birth = base*ruleMedicare.getPer3();//单位生育
+            case 1://医疗
+                medicare1 = base*ruleMedicare.getPer2();//个人医疗
+                medicare2 =base*ruleMedicare.getPer1();//单位医疗
                 break;
             case 0://都不选
                 break;
@@ -400,34 +400,34 @@ public class Calculate {
 
         byte social = setting.getSocial();//要计算的医保类别
         switch (social){
-            case 7://养老 失业 工伤
+            case 7://工伤  失业 养老
+                injury=base*ruleSocial.getPer3();//单位工伤
                 pension1=base*ruleSocial.getPer2();//个人养老
                 unemployment1=base*ruleSocial.getPer5();//个人失业
                 pension2=base*ruleSocial.getPer1();//单位养老
                 unemployment2=base*ruleSocial.getPer4();//单位失业
+                break;
+            case 6://工伤 失业
+                injury=base*ruleSocial.getPer3();//单位工伤
+                unemployment1=base*ruleSocial.getPer5();//个人失业
+                unemployment2=base*ruleSocial.getPer4();//单位失业
+                break;
+            case 4://工伤
                 injury=base*ruleSocial.getPer3();//单位工伤
                 break;
-            case 6://养老 失业
-                pension1=base*ruleSocial.getPer2();//个人养老
-                unemployment1=base*ruleSocial.getPer5();//个人失业
-                pension2=base*ruleSocial.getPer1();//单位养老
-                unemployment2=base*ruleSocial.getPer4();//单位失业
-                break;
-            case 4://养老
-                pension1=base*ruleSocial.getPer2();//个人养老
-                pension2=base*ruleSocial.getPer1();//单位养老
-                break;
-            case 3:// 失业 工伤
+            case 3:// 失业 养老
                 unemployment1=base*ruleSocial.getPer5();//个人失业
                 unemployment2=base*ruleSocial.getPer4();//单位失业
-                injury=base*ruleSocial.getPer3();//单位工伤
+                pension1=base*ruleSocial.getPer2();//个人养老
+                pension2=base*ruleSocial.getPer1();//单位养老
                 break;
             case 2:// 失业
                 unemployment1=base*ruleSocial.getPer5();//个人失业
                 unemployment2=base*ruleSocial.getPer4();//单位失业
                 break;
-            case 1:// 工伤
-                injury=base*ruleSocial.getPer3();//单位工伤
+            case 1:// 养老
+                pension1=base*ruleSocial.getPer2();//个人养老
+                pension2=base*ruleSocial.getPer1();//单位养老
                 break;
             case 0://都不选
                 break;
@@ -461,7 +461,7 @@ public class Calculate {
 
         for(ViewDetail1 viewDetail1:detail1s){
             //应发总额+=明细中的应发总额
-           salary+=viewDetail1.getPaid();
+           salary+=viewDetail1.getPayable();
             //单位社保总额+=（单位失业+单位养老+单位工商）
            social+=(viewDetail1.getPension2()+viewDetail1.getUnemployment2()+viewDetail1.getInjury());
            //单位医保总额+=（单位医保+单位大病+单位生育）

@@ -139,7 +139,7 @@ public class SettlementServlet extends HttpServlet {
         DaoUpdateResult result = null;
         switch (category){
             case 0://普通结算单
-                result =Settlement1Service.saveSettlement(conn,cid,sid);
+                result =Settlement1Service.saveSettlement(conn,sid,cid);
                 break;
             case 1://小时工结算单
                 result =Settlement2Service.saveSettlement(conn,sid);
@@ -333,13 +333,19 @@ public class SettlementServlet extends HttpServlet {
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
         String[] eids = request.getParameterValues("eids[]");//员工id集合
 
-        Detail1Service.backup(conn,eids,start,end,sid);
         return null;
     }
 
     //补缴
     private String makeup(Connection conn, HttpServletRequest request) {
+        String start = request.getParameter("start");//起始月份
+        String end = request.getParameter("end");//结束月份
+        long sid = Long.parseLong(request.getParameter("sid"));//结算单id
+        String[] eids = request.getParameterValues("eids[]");//员工id集合
+
+        Detail1Service.makeup(conn,eids,start,end,sid);
         return null;
+
     }
 
     //提交

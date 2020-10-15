@@ -59,6 +59,7 @@ public class Detail2Service {
             Deduct deduct = (Deduct) DeductDao.get(conn,detail2.getEid()).data;
             detail2s.add(Calculate.calculatteDetail2(detail2,deduct));
         }
+
         return Detail2Dao.update(conn,detail2s);
     }
 }

@@ -66,10 +66,18 @@
             </div>
             <div class="layui-hide" id="top_bar1">
                 <button class="layui-btn layui-btn-sm" lay-event="add"><i class="layui-icon "></i> 添加</button>
-                <button class="layui-btn layui-btn-sm" lay-event="export0"><i class="layui-icon "></i> 导出新增</button>
-                <button class="layui-btn layui-btn-sm" lay-event="export1"><i class="layui-icon "></i> 导出停保</button>
-                <button type="button" class="layui-btn layui-btn-sm" lay-event=""  id="" ><i class="layui-icon "></i> 校对</button>
+                <button class="layui-btn layui-btn-sm" lay-event="export0" onclick="exportMedicare1()"><i class="layui-icon "></i> 导出续保</button>
+                <button class="layui-btn layui-btn-sm" lay-event="export1" onclick="exportMedicare2()"><i class="layui-icon "></i> 导出停保</button>
+                <button type="button" class="layui-btn layui-btn-sm" lay-event=""   ><i class="layui-icon "></i> 校对</button>
             </div>
+
+            <div class="layui-hide" id="top_bar0">
+                <button class="layui-btn layui-btn-sm" lay-event="add"><i class="layui-icon "></i> 添加</button>
+                <button class="layui-btn layui-btn-sm" lay-event="export0" onclick="exportSocial1()"><i class="layui-icon "></i> 导出新增</button>
+                <button class="layui-btn layui-btn-sm" lay-event="export1" onclick="exportSocial2()"><i class="layui-icon "></i> 导出停保</button>
+                <button type="button" class="layui-btn layui-btn-sm" lay-event=""  ><i class="layui-icon "></i> 校对</button>
+            </div>
+
             <table id="tbl_insured" lay-filter="filter_tb_insured"></table>
             <div class="layui-table-page" id="pager"></div>
 
@@ -141,6 +149,8 @@
                 var top_bar;
                 switch(type){
                     case 0:
+                        cols = columns_insured1;
+                        top_bar = '#top_bar0';
                     case 1:
                         cols = columns_insured1;
                         top_bar = '#top_bar1';
@@ -294,6 +304,44 @@
             //导出参保单
             function exportInsurance() {
 
+            }
+            //导出
+            function exportSocial1(){
+                var url = "/hrms/verify/insurance?op=export&category=0&status=0";
+                var form = $('<form method="POST"></form>');
+                form.attr('action', url);
+                form.appendTo($('body'));
+                form.submit();
+                form.remove();
+            }
+            //导出
+            function exportSocial2(){
+                var url = "/hrms/verify/insurance?op=export&category=0&status=1";
+                var form = $('<form method="POST"></form>');
+                form.attr('action', url);
+                form.appendTo($('body'));
+                form.submit();
+                form.remove();
+            }
+
+            //导出续保医保单
+            function exportMedicare1(){
+                var url = "/hrms/verify/insurance?op=export&category=1&status=0";
+                var form = $('<form method="POST"></form>');
+                form.attr('action', url);
+                form.appendTo($('body'));
+                form.submit();
+                form.remove();
+            }
+
+            //导出停保医保单
+            function exportMedicare2(){
+                var url = "/hrms/verify/insurance?op=export&category=1&status=1";
+                var form = $('<form method="POST"></form>');
+                form.attr('action', url);
+                form.appendTo($('body'));
+                form.submit();
+                form.remove();
             }
         </script>
     </body>

@@ -90,13 +90,18 @@ public class Detail1Service {
         return  Detail1Dao.update(conn,detail1List);
     }
 
-    //社保补缴
+    //社保补差
     public static void backup(Connection conn, String[] eids, String start, String end, long sid) {
     for(int i = 0 ; i <eids.length; i++){
         long eid = Long.parseLong(eids[i]);//员工id
         EnsureSetting setting = (EnsureSetting) SettingDao.get(conn,eid).data;
 
     }
+
+    }
+
+    //社保补缴
+    public static void makeup(Connection conn, String[] eids, String start, String end, long sid) {
 
     }
 }

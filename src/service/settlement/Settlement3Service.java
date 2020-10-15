@@ -105,42 +105,33 @@ public class Settlement3Service {
     }
 
     public static DaoUpdateResult saveAs(Connection conn, long id,Date month) {
-        /**流程
-         * 1、查询出结算单，修改结算月份
-         * 2、插入结算单，返回主键id
-         * 3、根据cid查询出派遣到该单位的所有员工(不包括小时工)
-         * 4、根据员工的个数 封装好商业保险单明细集合
-         * 5、批量插入商业保险结算单明细
-         */
+
         Settlement3 settlement3 = (Settlement3) Settlement3Dao.get(conn, id).data;
         settlement3.setMonth(month);
-        long sid = (long) Settlement3Dao.insert(conn, settlement3).extra;
-        long did = settlement3.getDid();
-        long cid = settlement3.getCid();
-        long pid = settlement3.getPid();
 
-        //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派员工，用工性质不是小时工，在职
+        DaoUpdateResult result = Settlement3Dao.insert(conn, settlement3);
+        long sid = (long) result.extra;
+
         QueryParameter parameter = new QueryParameter();
-        QueryConditions conditions = new QueryConditions();
-        conditions.add("did", "=", did);
-        conditions.add("cid", "=", cid);
-        conditions.add("type", "=", 1);
-        conditions.add("category", "!=", 2);
-        conditions.add("status", "=", 0);
-        parameter.conditions = conditions;
-        List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
-        List<Detail3> detail3List = new ArrayList<>();
-        for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
-            Detail3 detail3 = new Detail3();
+        parameter.addCondition("sid","=",id);
+        //根据复制的结算单id查询出所有的结算单明细
+        List<Detail3> detail3List = (List<Detail3>) Detail3Dao.getList(conn,parameter).rows;
+        for(Detail3 detail3 :detail3List){
+            //重新赋结算单id
             detail3.setSid(sid);
-            detail3.setEid(employeeList.get(i).getId());
-            detail3.setPid(pid);
-            detail3List.add(i,detail3);
         }
-        //插入明细
-        DaoUpdateResult result =Detail3Dao.importDetails(conn,detail3List);
 
-        return result;
+        //重新插入数据库
+        DaoUpdateResult result1 = Detail3Dao.importDetails(conn,detail3List);
+
+        if(result.success&&result1.success){//事务
+            ConnUtil.commit(conn);
+            return result;
+        }else {//回滚
+            ConnUtil.rollback(conn);
+            result1.msg = "另存为失败";
+            return result1;
+        }
     }
 
     //提交
