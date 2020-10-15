@@ -442,9 +442,9 @@ public class FileServlet extends HttpServlet {
             e.printStackTrace();
         }
         try {
-            sheet1.addCell(new Label(0, 0, "员工姓名",wcf));
-            sheet1.addCell(new Label(1, 0, "身份证号码",wcf));
-            sheet1.addCell(new Label(2, 0, "基本工资",wcf));
+            sheet1.addCell(new Label(0, 0, "员工姓名*",wcf));
+            sheet1.addCell(new Label(1, 0, "身份证号码*",wcf));
+            sheet1.addCell(new Label(2, 0, "基本工资*",wcf));
             sheet1.addCell(new Label(3, 0, "个人养老",wcf));
             sheet1.addCell(new Label(4, 0, "个人医疗",wcf));
             sheet1.addCell(new Label(5, 0, "个人失业",wcf));
@@ -572,30 +572,30 @@ public class FileServlet extends HttpServlet {
             sheet2.addCell(new Label(2, 1, "False"));
             sheet2.addCell(new Label(2, 2, "False"));
             sheet2.addCell(new Label(2, 3, "False"));
-            sheet2.addCell(new Label(2, 4, "False"));
-            sheet2.addCell(new Label(2, 5, "False"));
-            sheet2.addCell(new Label(2, 6, "False"));
-            sheet2.addCell(new Label(2, 7, "False"));
-            sheet2.addCell(new Label(2, 8, "False"));
-            sheet2.addCell(new Label(2, 9, "False"));
-            sheet2.addCell(new Label(2, 10, "False"));
-            sheet2.addCell(new Label(2, 11, "False"));
-            sheet2.addCell(new Label(2, 12, "False"));
-            sheet2.addCell(new Label(2, 13, "False"));
-            sheet2.addCell(new Label(2, 14, "False"));
-            sheet2.addCell(new Label(2, 15, "False"));
-            sheet2.addCell(new Label(2, 16, "False"));
+            sheet2.addCell(new Label(2, 4, "TRUE"));
+            sheet2.addCell(new Label(2, 5, "TRUE"));
+            sheet2.addCell(new Label(2, 6, "TRUE"));
+            sheet2.addCell(new Label(2, 7, "TRUE"));
+            sheet2.addCell(new Label(2, 8, "TRUE"));
+            sheet2.addCell(new Label(2, 9, "TRUE"));
+            sheet2.addCell(new Label(2, 10, "TRUE"));
+            sheet2.addCell(new Label(2, 11, "TRUE"));
+            sheet2.addCell(new Label(2, 12, "TRUE"));
+            sheet2.addCell(new Label(2, 13, "TRUE"));
+            sheet2.addCell(new Label(2, 14, "TRUE"));
+            sheet2.addCell(new Label(2, 15, "TRUE"));
+            sheet2.addCell(new Label(2, 16, "TRUE"));
             if(flag){
                 int  c = 0;
                 for(int i = 0;i<itemList.size();i++){
                     c = i+17;
-                    sheet2.addCell(new Label(2, c, "False"));
+                    sheet2.addCell(new Label(2, c, "TRUE"));
                 }
-                sheet2.addCell(new Label(2,c+1,  "False"));
-                sheet2.addCell(new Label(2,c+2,  "False"));
+                sheet2.addCell(new Label(2,c+1,  "TRUE"));
+                sheet2.addCell(new Label(2,c+2,  "TRUE"));
             }else {
-                sheet2.addCell(new Label(2,17,  "False"));
-                sheet2.addCell(new Label(2,18,  "False"));
+                sheet2.addCell(new Label(2,17,  "TRUE"));
+                sheet2.addCell(new Label(2,18,  "TRUE"));
             }
             book.write();
             book.close();
