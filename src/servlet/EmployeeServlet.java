@@ -246,7 +246,7 @@ public class EmployeeServlet extends HttpServlet {
                 break;
             case 1://派遣员工
                 if(role==1){//派遣方管理员
-                    parameter.addCondition("aid","=",aid);
+                    parameter.addCondition("did","=",rid);
                 }else if(role == 2) {//合作方管理员
                     parameter.addCondition("cid","=",rid);
                 }
@@ -295,7 +295,8 @@ public class EmployeeServlet extends HttpServlet {
         DaoUpdateResult res;
         HttpSession session = request.getSession();
         long did = (long) session.getAttribute("rid");//当前操作的管理员所属公司id
-        List<ViewEmployee> viewEmployees = JSONArray.parseArray(request.getParameter("employees"),ViewEmployee.class);
+        List<JSONObject> viewEmployees = JSONArray.parseArray(request.getParameter("employees"),JSONObject.class);
+
         res = EmployeeService.insertBatch(conn,viewEmployees,did);
         return  JSONObject.toJSONString(res);
     }

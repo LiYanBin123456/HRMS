@@ -54,6 +54,15 @@ public class EmployeeExtra {
     public EmployeeExtra() {
     }
 
+    public EmployeeExtra(long eid, String rid, String school, String major, byte household, String address) {
+        this.eid = eid;
+        this.rid = rid;
+        this.school = school;
+        this.major = major;
+        this.household = household;
+        this.address = address;
+    }
+
     public EmployeeExtra(long eid, String rid, String school, String major, byte household, String address, Date date1, Date date2, byte reason) {
         this.eid = eid;
         this.rid = rid;

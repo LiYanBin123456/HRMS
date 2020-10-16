@@ -76,6 +76,7 @@ public class Detail1Service {
 
             EnsureSetting setting = (EnsureSetting) SettingDao.get(conn,d.getEid()).data;//员工设置
             String city = setting.getCity();//员工所处地市
+
             RuleMedicare medicare= (RuleMedicare) RuleMedicareDao.getLast(conn,city).data;//获取该地市的最新医保
             RuleSocial social = (RuleSocial) RuleSocialDao.getLast(conn,city).data;//获取该地市的最新社保
 
