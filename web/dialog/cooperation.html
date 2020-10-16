@@ -18,9 +18,6 @@
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
     <style>
-        .salary_priview {
-            border: 1px solid grey;
-        }
 
         [name=salary_item_defined]:after {
             content: "×";
@@ -48,6 +45,7 @@
         <div class="layui-tab-item layui-show">
             <form lay-filter="form_cooperation" class="layui-form">
                 <input type='hidden' name='id'/>
+                <input type='hidden' name='type'/>
                 <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">
@@ -123,14 +121,13 @@
                     </div>
                 </div>
                 <div class="layui-form-item layui-form-text">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>客户简介</label>
+                    <label class="layui-form-label">客户简介</label>
                     <div class="layui-input-block">
                         <textarea name="intro" placeholder="请输入内容" class="layui-textarea"></textarea>
                     </div>
                 </div>
                 <div class="layui-form-item" style="text-align: center" >
-                    <button lay-submit lay-filter="submit_cooperation" class="layui-btn " >保存</button>
+                    <button lay-submit lay-filter="submit_cooperation" class="layui-btn" >保存</button>
                 </div>
             </form>
         </div>
@@ -250,7 +247,6 @@
     var layer;
     var editer;
     var element;
-    var id = $.query.get("id");
     var cooperation;
     var finance;
     var salary_items_fixed = ["基本工资", "个人养老", "个人医疗", "个人失业", "个人大病", "个人公积金","单位养老","单位医疗","单位失业","单位工伤","单位大病","单位生育", "单位公积金", "个税", "应发", "实发"];
@@ -271,9 +267,6 @@
             element.on('tab(tab_info)', function () {
                 var id = this.getAttribute('lay-id');
                 switch (id) {
-                    case "base":
-                        getCooperation();
-                        break;
                     case "finance":
                         getFinance();
                         break;
@@ -283,11 +276,11 @@
                 }
             });
             initPage();
-            getCooperation();
         });
     }
 
     function initPage() {
+        showCooperation();
         form.on('submit(submit_cooperation)', function(data){
             saveCooperation(data.field);
             element.tabChange('tab_info', 'finance');
@@ -299,17 +292,16 @@
             return false;
         });
     }
-    function getCooperation() {
-        if(id) {
-            iClient.get(id, 1, function (result) {
-                cooperation = result.data;
-                form.val('form_cooperation', cooperation);
-                layedit.setContent(editer, cooperation.content, false);
-            });
-        }
+
+    function showCooperation() {
+        cooperation = JSON.parse($.query.get("cooperation"));
+        form.val('form_cooperation', cooperation);
+        layedit.setContent(editer, cooperation.content, false);
+
     }
+
     function getFinance() {
-        if(cooperation && cooperation.id) {
+        if(cooperation.id) {
             iClient.getFinance(cooperation.id, 1, function (result) {
                 if(result.data) {
                     finance = result.data;
@@ -444,13 +436,13 @@
     }
 
     function saveCooperation() {
-        var data = form.val('form_cooperation');
-        if(cooperation) {
-            iClient.update(data,1,function (result){
+        cooperation = form.val('form_cooperation');
+        if(cooperation.id) {
+            iClient.update(cooperation,1,function (result){
                 layer.msg("修改成功");
             });
         }else{
-            iClient.insert(data,1,function (result){
+            iClient.insert(cooperation,1,function (result){
                 cooperation.id = result.extra;
                 finance = {};
                 mapSalary = {};
@@ -458,11 +450,10 @@
                 layer.alert("基础信息保存成功，请完善财务信息", {icon: 20});
             });
         }
-        cooperation = data;
     }
 
     function saveFinance() {
-        if(!cooperation || !cooperation.id ){
+        if(!cooperation.id ){
             layer.msg("请先保存合作单位基本信息");
             return;
         }

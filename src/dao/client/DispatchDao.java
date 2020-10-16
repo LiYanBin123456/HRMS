@@ -53,7 +53,7 @@ public class DispatchDao {
 
 
     //修改客户状态 合作或者潜在 0_潜在，1_合作，2_流失客户
-    public  static DaoUpdateResult updateStatus(Connection conn, long id,int type){
+    public  static DaoUpdateResult updateType(Connection conn, long id,byte type){
         String sql = "update dispatch set type=? where id=?";
         Object []params = {type,id};
         //调用DbUtil封装的update方法

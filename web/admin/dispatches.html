@@ -56,16 +56,16 @@
             <!--行内工具栏-->
             <script type="text/html" id="bar_dispatch">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="updateType1"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
             <script type="text/html" id="bar_potential">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="update1"><i class="layui-icon layui-icon-edit"></i>合作</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del2"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="updateType2"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="updateType3"><i class="layui-icon layui-icon-edit"></i>合作</a>
             </script>
             <script type="text/html" id="bar_loss">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="update2"><i class="layui-icon layui-icon-edit"></i>合作</a>
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="updateType3"><i class="layui-icon layui-icon-edit"></i>合作</a>
             </script>
         </div>
         <script src="../js/fieldSet.js"></script>
@@ -151,17 +151,14 @@
                         case "detail":
                             showDetailDlg(data);
                             break;
-                        case "del":
-                            del(data);
+                        case "updateType1":
+                            updateType(data,1);
                             break;
-                        case "del2":
-                            del2(data);
+                        case "updateType2":
+                            updateType(data,2);
                             break;
-                        case "update1":
-                            update(data);
-                            break;
-                        case "update2":
-                            update(data);
+                        case "updateType3":
+                            updateType(data,0);
                             break;
                     }
                 });
@@ -253,9 +250,31 @@
             //修改为合作客户
             function update(dispatch){
                 layer.confirm('确定修改'+dispatch.name+"为合作客户?", {icon: 3, title:'修改为合作客户'}, function(index) {
-                    iClient.updateStatus(dispatch.id,0,0, function () {
+                    iClient.updateType(dispatch.id,0,0, function () {
                         layer.close(index);
                         getDispatchs();
+                        layer.msg('修改成功');
+                    });
+                });
+            }
+            //修改为合作客户类型（合作/潜在/流失）
+            function updateType(d,type){
+                var msg;
+                switch (type) {
+                    case 0:
+                        msg = "确定调整为合作客户?";
+                        break;
+                    case 1:
+                        msg = "确定调整为潛在客户?";
+                        break;
+                    case 2:
+                        msg = "确定调整为流失客户?";
+                        break;
+                }
+                layer.confirm(msg, {icon: 3, title:'修改为合作客户'}, function(index) {
+                    iClient.updateType(d.id, 0, type, function () {
+                        layer.close(index);
+                        getCooperations();
                         layer.msg('修改成功');
                     });
                 });

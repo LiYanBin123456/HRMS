@@ -10,7 +10,7 @@ var InterfaceClient = function() {
     /**
      * 获取客户列表
      * @param param 查询参数
-     * @param category 0-派遣方 1-合作单位 2-供应商
+     * @param category 0-派遣单位 1-合作单位 2-供应商
      * @param success
      * @param fail
      */
@@ -80,8 +80,8 @@ var InterfaceClient = function() {
      * @param success
      * @param fail
      */
-    this.updateStatus = function (id,category,type,success,fail) {
-        var para = {op:"updateStatus",id:id, category: category,type:type};
+    this.updateType = function (id, category, type, success, fail) {
+        var para = {op:"updateType",id:id, category: category,type:type};
         access(url,para,1,success,fail);
     };
     /**
@@ -150,12 +150,12 @@ var InterfaceClient = function() {
      * 删除客户
      * @param id 客户id
      * @param category 0-派遣方 1-合作单位 2-供应商
-     * @param status 0-合作客户 1-潜在客户
+     * @param type 0-合作单位  1-潜在合作单位(当category=0/1时才有效)
      * @param success
      * @param fail
      */
-    this.delete = function (id,category,status,success,fail) {
-        var para = {op:"delete",id:id, category: category,status: status};
+    this.delete = function (id,category,type,success,fail) {
+        var para = {op:"delete",id:id, category: category,type: type};
         access(url,para,1,success,fail);
     };
     /**

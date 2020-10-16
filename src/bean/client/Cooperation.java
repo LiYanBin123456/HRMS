@@ -5,8 +5,9 @@ public class Cooperation extends Client{
 
     private long did;//派遣方id
     /**
-     * 0  潜在客户
-     * 1  合作客户
+     * 0  合作客户
+     * 1  潜在客户
+     * 2  流失客户
      */
     private byte type;
     /**客户性质

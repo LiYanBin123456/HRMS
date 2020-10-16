@@ -227,7 +227,7 @@
             //修改为供应商
             function update(coop){
                 layer.confirm('确定修改'+coop.name+"为合作供应商?", {icon: 3, title:'修改为合作供应商'}, function(index) {
-                    iClient.updateStatus(coop.id, 2, 0, function () {
+                    iClient.updateType(coop.id, 2, 0, function () {
                         layer.close(index);
                         getSuppliers();
                         layer.msg('修改成功');

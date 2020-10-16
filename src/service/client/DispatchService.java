@@ -29,9 +29,9 @@ public class DispatchService {
     }
 
     //删除客户实质是修改状态
-    public static DaoUpdateResult delete(Connection conn, long id, byte status) {
+    public static DaoUpdateResult delete(Connection conn, long id, byte type) {
         //修改状态，合作客户修改为潜在客户，潜在客户修改为流失客户
-        return DispatchDao.updateStatus(conn,id,status+1);
+        return DispatchDao.updateType(conn,id,(byte)(type+1));
     }
 
     public static DaoUpdateResult allocateAdmin(Connection conn, String[] cids, long aid) {

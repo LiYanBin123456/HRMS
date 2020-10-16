@@ -144,7 +144,6 @@
         var data = form.val("form_login");
         iAccount.login(data.username,data.password,function (result) {
             var role = result.role;
-            console.log(role);
             switch (role){
                 case 0:
                     top.location = "admin/menu.html";

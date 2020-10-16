@@ -35,9 +35,9 @@
           <form class="layui-form " style="display: inline">
               <div class="layui-input-inline">
                   <div class="layui-input-inline ">
-                      <div class="layui-inline"><input type="radio" name="category" value="0" title="合作中" lay-filter="category" checked></div>
-                      <div class="layui-inline"><input type="radio" name="category" value="1" title="潜在" lay-filter="category" ></div>
-                      <div class="layui-inline"><input type="radio" name="category" value="2" title="流失" lay-filter="category" ></div>
+                      <div class="layui-inline"><input type="radio" name="type" value="0" title="合作中" lay-filter="type" checked></div>
+                      <div class="layui-inline"><input type="radio" name="type" value="1" title="潜在" lay-filter="type" ></div>
+                      <div class="layui-inline"><input type="radio" name="type" value="2" title="流失" lay-filter="type" ></div>
                   </div>
               </div>
           </form>
@@ -60,30 +60,34 @@
         <script type="text/html" id="bar_cooperation">
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="addContract"><i class="layui-icon layui-icon-edit"></i>添加合同</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="updateType1"><i class="layui-icon layui-icon-delete"></i> 删除</a>
         </script>
             <script type="text/html" id="bar_potential">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del2"><i class="layui-icon layui-icon-delete"></i> 删除</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="update1"><i class="layui-icon layui-icon-edit"></i> 合作</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="updateType2"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="updateType3"><i class="layui-icon layui-icon-edit"></i> 合作</a>
             </script>
             <script type="text/html" id="bar_loss">
                 <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="update2"><i class="layui-icon layui-icon-edit"></i> 合作</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="updateType3"><i class="layui-icon layui-icon-edit"></i> 合作</a>
             </script>
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/jquery.min.js"></script>
         <script src="../js/jquery.params.js"></script>
+        <script src="../js/queryParam.js"></script>
         <script>
-            var category = 0;//记录是显示合作客户，潜在客户还是流失客户
+            var type = 0;//记录是显示合作客户，潜在客户还是流失客户
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"name",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query = new QueryParam();
+            param_query.setOrder("name",false);
+            param_query.setPagination(1,10);
+
             $(function () {
                 loadLayuiModule();
             });
@@ -103,29 +107,29 @@
                 initTable();
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    param_query.conditions.extra = keyword;
+                    param_query.addKeyword(keyword);
                     getCooperations();
                     return false; //阻止表单跳转
                 });
 
-                form.on('radio(category)', function(data){
-                    switchCategory(Number(data.value));
+                form.on('radio(type)', function(data){
+                    switchType(Number(data.value));
                 });
             }
 
-            function switchCategory(value) {
+            function switchType(value) {
                 $("#container").empty();
                 $("#container").append('<table id="tbl_cooperation" lay-filter="filter_tb_cooperation"></table>');
 
-                category = value;
+                type = value;
+                param_query.addCondition("type","=",type);
                 initTable()
             }
 
             function initTable() {
-
                 var cols;
                 var top_bar;
-                switch(Number(category)){
+                switch(Number(type)){
                     case 0://合作中客户
                         cols = columns_cooperation_partner;
                         top_bar = '#top_bar_cooperation';
@@ -160,17 +164,14 @@
                         case "addContract":
                             addContract(data);
                             break;
-                        case "del":
-                            del(data);
+                        case "updateType1":
+                            updateType(data,1);
                             break;
-                        case "del2":
-                            del2(data);
+                        case "updateType2":
+                            updateType(data,2);
                             break;
-                        case "update1":
-                            update(data);
-                            break;
-                        case "update2":
-                            update(data);
+                        case "updateType3":
+                            updateType(data,0);
                             break;
                     }
                 });
@@ -191,7 +192,6 @@
             }
 
             function getCooperations() {
-                param_query.conditions.keys=[{k:'type',o:'=',v:category}];
                 iClient.getList(param_query,1,function (result) {
                     table.reload('tbl_cooperation', {
                         data:result.rows
@@ -205,8 +205,7 @@
                         ,jump: function(obj,first){
                             //首次不执行
                             if(!first){
-                                param_query.pagination.page = obj.curr;
-                                param_query.pagination.size = obj.limit;
+                                param_query.setPagination(obj.curr,obj.limit);
                                 getCooperations();
                             }
                         }
@@ -217,7 +216,7 @@
 
             //打开详情对话框
             function showDetailDlg(cooperation) {
-                var content = "../dialog/cooperation.html?id="+cooperation.id;
+                var content = "../dialog/cooperation.html?cooperation="+encodeURIComponent(JSON.stringify(cooperation));
                 layer.open({
                     title:"详情合作客户",
                     type: 2,
@@ -232,7 +231,8 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/cooperation.html";
+                var cooperation = {type:type,category:1};
+                var content = "../dialog/cooperation.html?cooperation="+encodeURIComponent(JSON.stringify(cooperation));
                 layer.open({
                     title:"添加合作客户",
                     type: 2,
@@ -262,32 +262,22 @@
                 });
             }
 
-            //删除公告
-            function del(cooperation) {
-                layer.confirm('确定删除'+cooperation.name, {icon: 3, title:'删除'}, function(index){
-                    iClient.delete(cooperation.id,1,0,function () {
-                        layer.close(index);
-                        getCooperations();
-                        layer.msg('删除成功');
-                    });
-                });
-            }
-
-            //删除潜在客户
-            function del2(cooperation) {
-                layer.confirm('确定删除'+cooperation.name, {icon: 3, title:'删除'}, function(index){
-                    iClient.delete(cooperation.id,1,1,function () {
-                        layer.close(index);
-                        getCooperations();
-                        layer.msg('删除成功');
-                    });
-                });
-            }
-
-            //修改为合作客户
-           function update(coop){
-               layer.confirm('确定修改'+coop.name+"为合作客户?", {icon: 3, title:'修改为合作客户'}, function(index) {
-                   iClient.updateStatus(coop.id, 1, 0, function () {
+            //修改为合作客户类型（合作/潜在/流失）
+           function updateType(c,type){
+               var msg;
+               switch (type) {
+                   case 0:
+                       msg = "确定调整为合作客户?";
+                       break;
+                   case 1:
+                       msg = "确定调整为潛在客户?";
+                       break;
+                   case 2:
+                       msg = "确定调整为流失客户?";
+                       break;
+               }
+               layer.confirm(msg, {icon: 3, title:'修改为合作客户'}, function(index) {
+                   iClient.updateType(c.id, 1, type, function () {
                        layer.close(index);
                        getCooperations();
                        layer.msg('修改成功');

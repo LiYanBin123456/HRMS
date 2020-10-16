@@ -66,7 +66,8 @@
                 <a href="javascript:;">
                     <i class="iconfont">&#xe70b;</i>
                     <cite>客户管理</cite>
-                    <i class="iconfont nav_right">&#xe697;</i></a>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
                 <ul class="sub-menu">
                     <li>
                         <a onclick="xadmin.add_tab('合作单位','cooperations.html')">
@@ -228,6 +229,7 @@
 <!-- 中部结束 -->
 <script src="../js/jquery.min.js"></script>
 <script src="../js/interface.js"></script>
+<script src="../js/menu.js"></script>
 <script>
     $(function () {
         getLoginInfo();
@@ -235,7 +237,9 @@
 
     function getLoginInfo() {
         iAccount.get(function (result) {
-            $("#loginName").html(result.data.nickname);
+            var account = result.data;
+            $("#loginName").html(account.nickname);
+            //$("#nav").html(loadMenuDispatch(account.permission));
         });
     }
 

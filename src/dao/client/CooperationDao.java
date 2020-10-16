@@ -46,7 +46,7 @@ public class CooperationDao {
 
 
     //修改客户状态 0_潜在，1_合作,2_流失
-    public static DaoUpdateResult updateStatus(Connection conn, long id,int type){
+    public static DaoUpdateResult updateType(Connection conn, long id,byte type){
         String sql = "update cooperation set type=? where id=?";
         Object []params = {type,id};
         //调用DbUtil封装的update方法

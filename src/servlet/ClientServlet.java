@@ -84,8 +84,8 @@ public class ClientServlet extends HttpServlet {
             case "getFinances"://修改客户服务信息
                 result = getFinances(conn,request);
                 break;
-            case "updateStatus"://修改客户类型
-                result = updateStatus(conn,request);
+            case "updateType"://修改客户类型
+                result = updateType(conn,request);
                 break;
 }
         ConnUtil.closeConnection(conn);
@@ -96,17 +96,17 @@ public class ClientServlet extends HttpServlet {
     }
 
     //修改客户状态
-    private String updateStatus(Connection conn, HttpServletRequest request) {
+    private String updateType(Connection conn, HttpServletRequest request) {
         int category = Integer.parseInt(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));//要修改的客户id
-        int type = Integer.parseInt(request.getParameter("type"));//修改的类型 0 合作 1 潜在 2 流失
+        byte type = Byte.parseByte(request.getParameter("type"));//修改的类型 0 合作 1 潜在 2 流失
         DaoUpdateResult result = null;
         switch (category){
             case 0://管理单位客户
-                result = DispatchDao.updateStatus(conn,id, type);
+                result = DispatchDao.updateType(conn,id, type);
                 break;
             case 1://合作单位客户
-                result = CooperationDao.updateStatus(conn,id, type);
+                result = CooperationDao.updateType(conn,id, type);
                 break;
             case 2://合作单位客户
                 result = SupplierDao.updateStatus(conn,id, type);
@@ -122,16 +122,17 @@ public class ClientServlet extends HttpServlet {
         HttpSession session = request.getSession();
         long rid = (long) session.getAttribute("rid");
         switch (category) {
-            case 0://派遣方客户
+            case 0://派遣单位客户
                 Dispatch dispatch = JSON.parseObject(request.getParameter("client"), Dispatch.class);
                 res = DispatchService.insert(conn, dispatch);
                 break;
             case 1://合作单位客户
                Cooperation cooperation= JSON.parseObject(request.getParameter("client"), Cooperation.class);
+               cooperation.setAid(0);//当前用户为其管理员
                cooperation.setDid(rid);
                res = CooperationService.insert(cooperation,conn);
                break;
-            case 2://派遣单位客户
+            case 2://供应商客户
                 Supplier supplier= JSON.parseObject(request.getParameter("client"), Supplier.class);
                 supplier.setDid(rid);
                 res = SupplierService.insert(supplier,conn);
@@ -144,14 +145,14 @@ public class ClientServlet extends HttpServlet {
     private String delete(Connection conn, HttpServletRequest request) {
         DaoUpdateResult res=new DaoUpdateResult();
         long id = Long.parseLong(request.getParameter("id"));
-        byte status = Byte.parseByte(request.getParameter("status"));
         byte category = Byte.parseByte(request.getParameter("category"));
+        byte type = Byte.parseByte(request.getParameter("type"));
         switch (category) {
             case 0://派遣方客户
-                   res = DispatchService.delete(conn,id,status);
+                   res = DispatchService.delete(conn,id,type);
                 break;
             case 1://合作单位客户
-                    res = CooperationService.delete(conn,id,status);
+                    res = CooperationService.delete(conn,id,type);
                 break;
             case 2://供应商单位客户
                    res = SupplierService.delete(id,conn);
