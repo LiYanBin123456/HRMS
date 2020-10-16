@@ -270,8 +270,11 @@
                     ,yes: function(index, layero){
                         var settlement = window["layui-layer-iframe" + index].callbackData();
                         layer.close(index);
-                        insertSettlement(settlement);
-
+                        if (settlement.month != null&&month!=""&&settlement.ccid!=null&&settlement.ccid!=""){
+                            insertSettlement(settlement);
+                        }else {
+                            layer.msg("插入失败,请选择月份或者合同");
+                        }
                     },btn2: function(index, layero){
                         layer.close(index);
                     }
