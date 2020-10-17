@@ -137,7 +137,7 @@
         <div class="layui-tab-item">
             <form lay-filter="form_extra" class="layui-form layui-row">
                 <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
-                    <input type="hidden" name="id">
+                    <input type="hidden" name="eid">
                     <div class="layui-form-item">
                         <label class="layui-form-label">档案编号</label>
                         <div class="layui-input-inline">
@@ -179,19 +179,20 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">离职时间</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="date1" name="date1" class="layui-input" readonly disabled>
+                            <input type="text" id="date1" name="date1" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">退休时间</label>
                         <div class="layui-input-inline">
-                            <input type="text" id="date2" name="date2" class="layui-input" readonly disabled>
+                            <input type="text" id="date2" name="date2" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                     <div class="layui-form-item">
                         <label class="layui-form-label">离职原因</label>
                         <div class="layui-input-inline">
-                            <input type="text" name="reason" class="layui-input" readonly disabled>
+                            <input type="hidden" name="reason">
+                            <input type="text" name="reasonText" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                     <div class="layui-form-item" >
@@ -470,12 +471,6 @@
             laydate.render({
                 elem: '#entry'
             });
-            laydate.render({
-                elem: '#date1'
-            });
-            laydate.render({
-                elem: '#date2'
-            });
             initPage();
             initTab();
         });
@@ -533,8 +528,6 @@
         getEmployee();
     }
 
-
-
     function getEmployee() {
         var id = $.query.get("id");
         if(id){
@@ -588,7 +581,7 @@
         function showExtra(extra) {
             extra.date1 = format_date(extra.date1);
             extra.date2 = format_date(extra.date2);
-            extra.reason = array_value2text(reason_employee,extra.reason);
+            extra.reasonText = array_value2text(reason_employee,extra.reason);
             form.val('form_extra', extra);
 
             var src = "../accessory/headImg/"+employee.id+".jpg?t="+Math.random();
@@ -602,6 +595,8 @@
                 var setting = result.data;
                 if(setting){
                     showEnsureSetting(setting)
+                }else{
+                    layer.alert("尚未设置社保信息，请设置并保存", {icon: 20});
                 }
             });
         }
@@ -658,25 +653,19 @@
             return;
         }
         if(employee.id){
-            iEmployee.update(employee,function () {
-                layer.alert("基础信息保存成功", {icon: 20});
-            });
+            iEmployee.update(employee,onSaveSuccess);
         } else {
-            iEmployee.insert(employee, function (result) {
-                employee.id = result.extra;
-                layer.alert("基础信息保存成功，请完善社保信息", {icon: 20});
-            });
+            iEmployee.insert(employee, onSaveSuccess);
         }
     }
 
     function saveExtra() {
         var extra = form.val('form_extra');
-        extra.eid = employee.id;
-        if(op == "insert"){
-            iEmployee.insertExtra(extra);
-            layer.alert("社保信息保存成功，请完善个人专项扣除", {icon: 20});
+        if(extra.eid){
+            iEmployee.updateExtra(extra,onSaveSuccess);
         }else{
-            iEmployee.updateExtra(extra,onUpdateSuccess);
+            extra.eid = employee.id;
+            iEmployee.insertExtra(extra,onSaveSuccess);
         }
     }
 
@@ -686,7 +675,6 @@
             layer.alert("请选择社保所在地", {icon: 20});
             return;
         }
-        setting.eid = employee.id;
         setting.medicare = 0;
         $('input[name=bMedicare]:checked').each(function() {
             setting.medicare += Number($(this).val());
@@ -695,33 +683,32 @@
         $('input[name=bSocial]:checked').each(function() {
             setting.social += Number($(this).val());
         });
-        if(op == "insert"){
-            iEmployee.insertEnsureSetting(setting);
-            layer.alert("社保信息保存成功，请完善个人专项扣除", {icon: 20});
+        if(setting.eid){
+            iEmployee.updateEnsureSetting(setting,onSaveSuccess);
         }else{
-            iEmployee.updateEnsureSetting(setting,onUpdateSuccess);
+            setting.eid = employee.id;
+            iEmployee.insertEnsureSetting(setting,onSaveSuccess);
         }
     }
 
     function saveDeduct() {
         var deduct = form.val('form_deduct');
-        deduct.eid = employee.id;
-        if(op ==  "insert"){
-            iEmployee.insertDeduct(deduct);
-            layer.alert("个人专项扣除信息保存成功，请完善工资卡信息", {icon: 20});
+        if(deduct.eid){
+            iEmployee.updateDeduct(deduct,onSaveSuccess);
         }else {
-            iEmployee.updateDeduct(deduct,onUpdateSuccess);
+            deduct.eid = employee.id;
+            iEmployee.insertDeduct(deduct,onSaveSuccess);
         }
 
     }
 
     function saveCard() {
         var payCard = form.val('form_salary_card');
-        payCard.eid = employee.id;
-        if(op == "insert"){
-            iEmployee.insertCard(payCard,onInsertSuccess);
+        if(payCard.eid){
+            iEmployee.updateCard(payCard,onSaveSuccess);
         }else {
-            iEmployee.updateCard(payCard,onUpdateSuccess);
+            payCard.eid = employee.id;
+            iEmployee.insertCard(payCard,onSaveSuccess);
         }
     }
 
@@ -777,12 +764,8 @@
         });
     }
 
-    function onInsertSuccess() {
-        layer.alert("添加成功", {icon: 6,time:2000},function () {
-            var index = parent.layer.getFrameIndex(window.name);
-            parent.layer.close(index);
-            window.parent.location.reload();
-        });
+    function onSaveSuccess() {
+        layer.msg("保存成功");
     }
 
     function onUpdateSuccess() {

@@ -456,8 +456,8 @@ var columns_insured2  = [[
 //公积金参保添加字段集合
 var columns_member  = [[
     {type:'checkbox'},
-    {field:'cardId', title: '身份证号',width:400},
-    {field:'name', title: '姓名',width:200},
+    {field:'cardId', title: '身份证号',width:200},
+    {field:'name', title: '姓名',width:80},
 ]];
 
 //保险产品字段集合

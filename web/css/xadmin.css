@@ -17,7 +17,6 @@ html{
 body{
     width: 100%;
     min-height: 100%;
-    padding-left: 10px;
     background: #fff;
 }
 .x-red{
@@ -315,7 +314,7 @@ body{
     top: 36px;
     bottom: 0px;
     width: 100%;
-    padding: 0px;
+    padding: 5px;
     overflow: hidden;
 }
 .page-content .layui-tab-content .layui-tab-item{

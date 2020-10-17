@@ -32,28 +32,27 @@
             <input type="radio" name="category" title="小时工" value="1" lay-filter="category" >
         </div>
     </form>
-    <!--顶部工具栏-->
-        <form class="layui-form searchbox">
-            <div class="layui-input-inline">
-                <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
-            </div>
-            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-            <div class="layui-input-inline">
-                <input type="text" class="layui-input" id="filter_month" placeholder="按月份过滤">
-            </div>
-            <div class="layui-input-inline">
-                <select name="state"   lay-verify="required" >
-                    <option value="">按状态过滤</option>
-                    <option value="0">编辑</option>
-                    <option value="1">提交</option>
-                    <option value="2">一审</option>
-                    <option value="3">二审</option>
-                    <option value="4">三审</option>
-                    <option value="5">扣款</option>
-                    <option value="6">发放</option>
-                </select>
-            </div>
-        </form>
+    <form class="layui-form searchbox">
+        <div class="layui-input-inline">
+            <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
+        </div>
+        <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+        <div class="layui-input-inline">
+            <input type="text" class="layui-input" id="filter_month" placeholder="按月份过滤">
+        </div>
+        <div class="layui-input-inline">
+            <select name="state"   lay-verify="required" >
+                <option value="">按状态过滤</option>
+                <option value="0">编辑</option>
+                <option value="1">提交</option>
+                <option value="2">一审</option>
+                <option value="3">二审</option>
+                <option value="4">三审</option>
+                <option value="5">扣款</option>
+                <option value="6">发放</option>
+            </select>
+        </div>
+    </form>
     <table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>
     <div class="layui-table-page" id="pager"></div>
 

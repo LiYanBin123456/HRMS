@@ -49,6 +49,7 @@
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/jquery.params.js"></script>
+        <script src="../js/queryParam.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -56,7 +57,10 @@
             var layer;//弹出窗口
             var element;
             var upload;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
+
+            var param_query = new QueryParam();
+            param_query.setPagination(1,10);
+            param_query.setOrder("id",true);
 
             var sid = $.query.get("id");//结算单id
             var cid = $.query.get("cid");//合作单位id
@@ -114,8 +118,7 @@
                     ,jump: function(obj,first){
                         //首次不执行
                         if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
+                            param_query.setPagination(obj.curr,obj.limit);
                             getDetails();
                         }
                     }
@@ -180,8 +183,7 @@
                         ,jump: function(obj,first){
                             //首次不执行
                             if(!first){
-                                param_query.pagination.page = obj.curr;
-                                param_query.pagination.size = obj.limit;
+                                param_query.setPagination(obj.curr,obj.limit);
                                 getDetails();
                             }
                         }
@@ -216,7 +218,12 @@
             }
             //打开添加对话框
             function showInsertDlg() {
-                var content = "member.html?category=0&cid="+cid;
+                var param = new QueryParam();
+                param.addCondition("cid","=",cid);
+                param.addCondition("type","=",1);
+                param.addCondition("status","=",0);
+                param.addCondition("category","!=",2);
+                var content = "member.html?param="+encodeURIComponent(JSON.stringify(param));
                 layer.open({
                     title:"添加明细",
                     type: 2,

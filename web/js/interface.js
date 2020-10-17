@@ -516,7 +516,7 @@ var InterfaceEmployee = function () {
     /**
      * 获取员工列表
      * @param param 查询参数
-     * @param category 0-员工信息 1-员工补充信息
+     * @param type 0 内部员工   1 外派员工 2人才库
      * @param success
      * @param fail
      */
@@ -543,7 +543,7 @@ var InterfaceEmployee = function () {
      * @param fail
      */
     this.insertExtra = function (extra,success,fail) {
-        var para = {op: "insertExtra",extract:JSON.stringify(extra)};
+        var para = {op: "insertExtra",extra:JSON.stringify(extra)};
         access(url,para,1,success,fail);
     };
     /**
@@ -595,7 +595,7 @@ var InterfaceEmployee = function () {
      * @param fail
      */
     this.updateExtra = function (extra,success,fail) {
-        var para = {op: "update",extra:JSON.stringify(extra)};
+        var para = {op: "updateExtra",extra:JSON.stringify(extra)};
         access(url,para,1,success,fail);
     };
 

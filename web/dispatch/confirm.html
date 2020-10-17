@@ -17,46 +17,37 @@
           <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
           <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
-        <style>
-            .searchbox{
-                margin-left:100px;
-                display:inline;
-                width:300px;
-            }
-        </style>
     </head>
 
     <body class="layui-layout-body">
-        <div style="padding: 5px;">
-            <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_confirm">
-                <form class="layui-form ">
-                    <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入企业名称">
-                    </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-                </form>
+        <form class="layui-form">
+            <div class="layui-input-inline">
+                <input name="keyword" class="layui-input" placeholder="请输入企业名称">
             </div>
-            <table id="tbl_confirm" lay-filter="filter_tb_confirm"></table>
-            <div class="layui-table-page" id="pager"></div>
+            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+        </form>
+        <table id="tbl_confirm" lay-filter="filter_tb_confirm"></table>
+        <div class="layui-table-page" id="pager"></div>
 
-            <!--行内工具栏-->
-            <script type="text/html" id="bar_confirm">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="affirm"><i class="layui-icon "></i>到账确认</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon "></i>明细</a>
-            </script>
-        </div>
+        <!--行内工具栏-->
+        <script type="text/html" id="bar_confirm">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="affirm"><i class="layui-icon "></i>到账确认</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon "></i>明细</a>
+        </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/jquery.min.js"></script>
         <script src="../js/jquery.params.js"></script>
+        <script src="../js/queryParam.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
+            var param_query = new QueryParam();
+            param_query.setPagination(1,10);
+
             $(function () {
                 loadLayuiModule();
             });
@@ -76,7 +67,9 @@
                 initTable();
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    search(keyword);
+                    param_query.addKeyword(keyword);
+                    getConfirms();
+                    return false;
                 });
             }
 
@@ -84,7 +77,6 @@
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_confirm',
-                    toolbar: '#top_bar_confirm', //开启头部工具栏，并为其绑定左侧模板
                     title: '列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                     cols: columns_confirm,
@@ -100,15 +92,6 @@
                             break;
                         case "detail":
                             showDetailDlg(data);
-                            break;
-                    }
-                });
-
-                //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_confirm)', function(obj){
-                    switch(obj.event){
-                        case 'search':
-                            search();
                             break;
                     }
                 });
@@ -136,12 +119,6 @@
                         }
                     });
                 });
-            }
-
-            //模糊查找
-            function search(keyword) {
-                param_query.conditions.extra = keyword;
-                getConfirms();
             }
 
             //打开确认对话框

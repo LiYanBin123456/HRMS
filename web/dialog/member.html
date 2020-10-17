@@ -17,36 +17,24 @@
           <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
           <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
-        <style>
-            .searchbox{
-                margin-left:100px;
-                display:inline;
-                width:300px;
-            }
-        </style>
     </head>
 
-    <body class="layui-layout-body">
-        <div style="padding: 5px;">
-            <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_member">
-                <form class="layui-form searchbox">
-                    <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
-                    </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-                </form>
+    <body class="layui-layout-body" style="padding: 10px;">
+        <form class="layui-form">
+            <div class="layui-input-inline">
+                <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
             </div>
-            <table id="tbl_member" lay-filter="filter_tb_member">
-            </table>
-            <div class="layui-table-page" id="pager"></div>
+            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+        </form>
+        <table id="tbl_member" lay-filter="filter_tb_member">
+        </table>
+        <div class="layui-table-page" id="pager"></div>
 
-            <!--行内工具栏-->
-        </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/jquery.min.js"></script>
         <script src="../js/jquery.params.js"></script>
+        <script src="../js/queryParam.js"></script>
         <script>
             var table;//数据表格对象
             var member;//存储选中的员工
@@ -54,7 +42,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
+            var param_query = JSON.parse($.query.get("param"));
 
             //向调用页面返回选中的员工
             var callbackData = function () {
@@ -80,7 +68,9 @@
                 initTable();
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    search(keyword);
+                    param_query.addKeyword(keyword);
+                    getMember();
+                    return false;
                 });
             }
 
@@ -89,7 +79,6 @@
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_member',
-                    toolbar: '#top_bar_member', //开启头部工具栏，并为其绑定左侧模板
                     title: '列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                     cols: columns_member,
@@ -106,14 +95,7 @@
              * 约束条件有该合作单位cid，员工类型type，用工性质category，在职状态status
              */
             function getMember() {
-               var category =  $.query.get("category");
-               var cid =  $.query.get("cid");
-               if (category==0){//查询除出该单位，类型在职，用工性质派遣或者外包，状态在职的员工列表
-                   param_query.conditions.keys=[{k:"cid",o:"=",v:cid},{k:"type",o:"=",v:1},{k:"category",o:"!=",v:2},{k:"status",o:"=",v:0}]
-               }else {//查询除出该单位，类型在职，用工性质是小时工，状态在职的员工列表
-                   param_query.conditions.keys=[{k:"cid",o:"=",v:cid},{k:"type",o:"=",v:1},{k:"category",o:"=",v:2},{k:"status",o:"=",v:0}]
-               }
-                iEmployee.getList(param_query,function (result) {
+                iEmployee.getList(param_query,1,function (result) {
                     table.reload('tbl_member', {
                         data:result.rows
                     });

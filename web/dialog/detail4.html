@@ -22,17 +22,18 @@
 <script src="../js/interface.js"></script>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
+<script src="../js/queryParam.js"></script>
 <script>
     var table;//数据表格对象
     var laypage;//分页对象
     var form;//分页对象
     var layer;//弹出窗口
     var element;
-    var param = {
-        conditions: {keys:[],extra:""},
-        order: {need:true,field:"time",direction:false},
-        pagination: {need:false}
-    };
+
+    var param_query = new QueryParam();
+    param_query.setPagination(1,10);
+    param_query.setOrder("id",true);
+
     $(function () {
         loadLayuiModule();
     });
@@ -65,7 +66,7 @@
     }
     function getDetails() {
         var cid = $.query.get("id");
-        iFinance.getTransactions(param,cid,function (result) {
+        iFinance.getTransactions(param_query,cid,function (result) {
             table.reload('tbl_detail4', {
                 data:result.rows
             });

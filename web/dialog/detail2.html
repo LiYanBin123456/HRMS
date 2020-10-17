@@ -52,6 +52,7 @@
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/jquery.params.js"></script>
+        <script src="../js/queryParam.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -59,7 +60,10 @@
             var layer;//弹出窗口
             var element;
             var upload;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
+
+            var param_query = new QueryParam();
+            param_query.setPagination(1,10);
+            param_query.setOrder("id",true);
 
             var sid = $.query.get("id");//结算单id
             var cid = $.query.get("cid");//合作单位id
@@ -162,9 +166,9 @@
                 };
 
                 });
-                getDetail2s();
+                getDetails();
           }
-            function getDetail2s() {
+            function getDetails() {
                 iSettlement.getDetails(param_query,sid,1,function (result) {
                     console.log(result)
                     table.reload('tbl_detail', {
@@ -182,7 +186,7 @@
                             if(!first){
                                 param_query.pagination.page = obj.curr;
                                 param_query.pagination.size = obj.limit;
-                                getDetail2s();
+                                getDetails();
                             }
                         }
                     });
@@ -203,7 +207,7 @@
                         iSettlement.importDetails(sid,JSON.stringify(detail2s),1,function () {
                             layer.close(index);
                             layer.msg("导入成功");
-                            getDetail2s();
+                            getDetails();
                         })
                     },btn2: function(index, layero){
                         layer.close(index);
@@ -212,7 +216,12 @@
             }
             //打开添加对话框
             function showInsertDlg() {
-                var content = "member.html?category=1&cid="+cid;
+                var param = new QueryParam();
+                param.addCondition("cid","=",cid);
+                param.addCondition("type","=",1);
+                param.addCondition("status","=",0);
+                param.addCondition("category","=",2);
+                var content = "member.html?param="+encodeURIComponent(JSON.stringify(param));
                 layer.open({
                     title:"添加明细",
                     type: 2,
@@ -230,7 +239,7 @@
                         iSettlement.importDetails(sid,details,1,function () {
                             layer.msg("添加成功")
                         });
-                        getDetail2s();
+                        getDetails();
                     },btn2: function(index, layero){
                         layer.close(index);
                     }
@@ -243,7 +252,7 @@
                 layer.confirm('确定删除'+detail.name+"的结算单明细吗", {icon: 3, title:'删除'}, function(index){
                     iSettlement.deleteDetail(detail.id,1,function () {
                         layer.close(index);
-                        getDetail2s();
+                        getDetails();
                         layer.msg('删除成功');
                     });
                 });
@@ -282,7 +291,7 @@
                     iSettlement.saveDetail(sid,cid,1,function () {
                         layer.close(index);
                         layer.msg("修改成功");
-                        getDetail2s();
+                        getDetails();
                     })
                 });
             };
@@ -297,7 +306,7 @@
                     iSettlement.updateDetails(details,1,function () {
                         layer.close(index);
                         layer.msg("修改成功");
-                        getDetail2s();
+                        getDetails();
                     })
                 });
             };
