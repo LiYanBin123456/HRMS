@@ -16,11 +16,13 @@ import javax.lang.model.element.VariableElement;
 import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class EmployeeService {
+    static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     //获取列表
     public static DaoQueryListResult getList(Connection conn, QueryParameter param){
         return EmployeeDao.getList(conn,param);
@@ -58,7 +60,7 @@ public class EmployeeService {
     }
 
     //批量插入
-    public static DaoUpdateResult insertBatch(Connection conn, List<ViewEmployee> viewEmployees, long did) {
+    public static DaoUpdateResult insertBatch(Connection conn, List<JSONObject> viewEmployees, long did) {
         /**
          * 流程
          * 1、先批量插入员工信息
@@ -72,14 +74,14 @@ public class EmployeeService {
         DaoUpdateResult result = new DaoUpdateResult();
         List<Employee> employees =new ArrayList<>();
         List<EmployeeExtra> extras =new ArrayList<>();
-        for(ViewEmployee v : viewEmployees) {
+        for(JSONObject v : viewEmployees) {
             long cid = 0;
-            if (v.getCname() != null && !v.getCname().trim().isEmpty()) {//根据客户名称和派遣方id查找合作单位id
+            if (v.getString("cname") != null && !v.getString("cname").trim().isEmpty()) {//根据客户名称和派遣方id查找合作单位id
                 QueryConditions conditions = new QueryConditions();
-                conditions.add("name", "=", v.getCname());
+                conditions.add("name", "=",v.getString("cname"));
                 conditions.add("did", "=", did);
                 if (!CooperationDao.exist(conn, conditions).exist) {
-                    result.msg = v.getName()+"的外派单位“" + v.getCname() + "”不存在，请核对";
+                    result.msg = v.getString("name")+"的外派单位“" + v.getString("cname") + "”不存在，请核对";
                     return result;
                 }
                 Cooperation cooperation = (Cooperation) CooperationDao.get(conn, conditions).data;
@@ -87,14 +89,13 @@ public class EmployeeService {
             }
             //无外派单位
            //封装员工信息
-            Employee employee = new Employee(0, did, cid, v.getCardId(), v.getName(), v.getPhone(), v.getDegree(), v.getType(), v.getEntry()
-                    , v.getStatus(), v.getDepartment(), v.getPost(), v.getCategory(), v.getPrice());
+            Employee employee = new Employee(0, did, cid, v.getString("cardId"), v.getString("name"), v.getString("phone"), v.getByte("degree"), v.getByte("type"),  v.getSqlDate("entry")
+                    , v.getByte("status"), v.getString("department"), v.getString("post"), v.getByte("category"),  v.getFloat("price"));
             employees.add(employee);
 
-            /*//封装员工补充信息
-            EmployeeExtra extra = new EmployeeExtra(0, v.getRid(), v.getSchool(), v.getMajor(), v.getHousehold(), v.getAddress(), v.getDate1()
-                    , v.getDate2(), v.getReason());
-            extras.add(extra);*/
+            //封装员工补充信息
+            EmployeeExtra extra = new EmployeeExtra(0, v.getString("rid"), v.getString("school"), v.getString("major"), v.getByte("household"), v.getString("address"));
+            extras.add(extra);
         }
 
         result = EmployeeDao.insertBatch(conn,employees);//批量插入员工数据

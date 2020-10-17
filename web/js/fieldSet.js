@@ -189,22 +189,22 @@ var columns_employee_spare = [[
 //员工所有信息字段集合
 var columns_employees = [[
     {fixed: 'left', type: 'checkbox'},
-    {field:'name', title: '姓名',width:80},
-    {field:'cardId', title: '身份证号',width:170},
+    {field:'name', title: '姓名',width:80,edit: 'text'},
+    {field:'cardId', title: '身份证号',width:170,edit: 'text'},
     {field:'degree', title: '学历',width:80,templet:function (d) { return array_value2text(degrees_employee,d.degree) }},
-    {field:'phone', title: '联系电话',width:120},
+    {field:'phone', title: '联系电话',width:120,edit: 'text'},
     {field:'type', title: '员工类型',width:120,templet:function (d) { return array_value2text(type_employee,d.type) }},
     {field:'entry', title: '入职时间',width:120,templet:function (d) {return format_date(d.entry)}},
     {field:'status', title: '在职状态',width:120,templet:function (d) { return array_value2text(status_employee,d.status) }},
     {field:'category', title: '用工性质',width:120,templet:function (d) { return array_value2text(category_employee,d.category) }},
     {field:'household', title: '户口性质',width:120,templet:function (d) { return array_value2text(household_employee,d.household) }},
-    {field:'address', title: '户籍地址',width:120},
-    {field:'department', title: '部门',width:120},
-    {field:'post', title: '岗位',width:120},
-    {field:'school', title: '毕业院校',width:120},
-    {field:'major', title: '毕业专业',width:120},
-    {field:'cname', title: '外派单位',width:120},
-    {field:'price', title: '时间报酬',width:120}
+    {field:'address', title: '户籍地址',width:120,edit: 'text'},
+    {field:'department', title: '部门',width:120,edit: 'text'},
+    {field:'post', title: '岗位',width:120,edit: 'text'},
+    {field:'school', title: '毕业院校',width:120,edit: 'text'},
+    {field:'major', title: '毕业专业',width:120,edit: 'text'},
+    {field:'cname', title: '外派单位',width:120,edit: 'text'},
+    {field:'price', title: '时间报酬',width:120,edit: 'text'}
   ]];
 
 //普通结算单字段集合
