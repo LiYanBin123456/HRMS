@@ -279,7 +279,8 @@
                         for (var i in member){
                             details[i] = {"eid":member[i].id,"month":month};
                         }
-                        iSettlement.importDetails(sid,details,0,function () {
+                        console.log(details);
+                        iSettlement.importDetails(sid,JSON.stringify(details),0,function () {
                             getDetails();
                             layer.msg("添加成功")
                         });

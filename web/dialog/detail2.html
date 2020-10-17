@@ -235,7 +235,7 @@
                             details[i] = {"eid":member[i].id,"month":month};
                             console.log(details)
                         }
-                        iSettlement.importDetails(sid,details,1,function () {
+                        iSettlement.importDetails(sid,JSON.stringify(details),1,function () {
                             layer.msg("添加成功")
                         });
                         getDetails();

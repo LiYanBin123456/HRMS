@@ -2,12 +2,9 @@ package service.settlement;
 
 import bean.admin.Account;
 import bean.contract.Serve;
-import bean.employee.Employee;
 import bean.employee.ViewEmployee;
 import bean.log.Log;
-import bean.settlement.Detail1;
 import bean.settlement.Detail2;
-import bean.settlement.Settlement1;
 import bean.settlement.Settlement2;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -15,9 +12,7 @@ import dao.LogDao;
 import dao.admin.AccountDao;
 import dao.contract.ServeDao;
 import dao.employee.EmployeeDao;
-import dao.settlement.Detail1Dao;
 import dao.settlement.Detail2Dao;
-import dao.settlement.Settlement1Dao;
 import dao.settlement.Settlement2Dao;
 import database.*;
 import utills.Calculate;
@@ -296,6 +291,6 @@ public class Settlement2Service {
         param.addCondition("sid","=",sid);
         List<Detail2> detail2List = (List<Detail2>) Detail2Dao.getList(conn,param).rows;
 
-        return Settlement2Dao.update(conn,Calculate.calculateSettlement2(settlement2,detail2List));
+        return Settlement2Dao.update(conn, Calculate.calculateSettlement2(settlement2,detail2List));
     }
 }

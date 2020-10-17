@@ -15,15 +15,14 @@ import dao.settlement.Detail1Dao;
 import dao.settlement.Detail2Dao;
 import dao.settlement.Detail3Dao;
 import database.*;
-import jxl.Sheet;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import jxl.write.*;
 import jxl.write.Label;
 import jxl.write.biff.RowsExceededException;
 import org.apache.commons.io.IOUtils;
-import utills.XlsUtil;
 import utills.Calculate;
+import utills.XlsUtil;
 
 
 import javax.servlet.ServletException;

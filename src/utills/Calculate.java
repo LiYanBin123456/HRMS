@@ -17,6 +17,7 @@ import database.ConnUtil;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
+import java.util.HashMap;
 import java.util.List;
 
 public class Calculate {
@@ -267,30 +268,33 @@ public class Calculate {
 
         //计算应发工资
         float payable =base;//初始是基本工资
-        List<Items> itemList = mapSalary.getItemList();
+        if(mapSalary!=null){//如果有自定义工资
+            List<Items> itemList = mapSalary.getItemList();
 
-        for (int i = 0; i <itemList.size(); i++) {
-            int index = i + 1;
-            String name = "getF" + index;
-            float value2 = 0;
-            Method method;
-            try {//通过反射获取对应的值
-                method = detail1.getClass().getSuperclass().getMethod(name);
-                value2 = Float.parseFloat(method.invoke(detail1).toString());
-            } catch (NoSuchMethodException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            } catch (InvocationTargetException e) {
-                e.printStackTrace();
-            }
-            if(itemList.get(i).getType()==0){//减项
-                payable-=value2;
-            }else {//加项
-                payable+=value2;
+            for (int i = 0; i <itemList.size(); i++) {
+                int index = i + 1;
+                String name = "getF" + index;
+                float value2 = 0;
+                Method method;
+                try {//通过反射获取对应的值
+                    method = detail1.getClass().getSuperclass().getMethod(name);
+                    value2 = Float.parseFloat(method.invoke(detail1).toString());
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }
+                if(itemList.get(i).getType()==0){//减项
+                    payable-=value2;
+                }else {//加项
+                    payable+=value2;
+                }
             }
         }
         detail1.setPayable(payable);
+
 
         //计算个税
         double tax=0;//个税 = 应税额*税率（A） – 速算扣除（B） – 累计已预缴税额（C）
@@ -469,7 +473,7 @@ public class Calculate {
            social+=(viewDetail1.getPension2()+viewDetail1.getUnemployment2()+viewDetail1.getInjury());
            //单位医保总额+=（单位医保+单位大病+单位生育）
            medicare+=(viewDetail1.getMedicare2()+viewDetail1.getDisease2()+viewDetail1.getBirth());
-            //单位公积金总额+=（单位医保+单位大病+单位生育）
+            //单位公积金总额+=单位公积金
            fund+=viewDetail1.getFund2();
         }
 
