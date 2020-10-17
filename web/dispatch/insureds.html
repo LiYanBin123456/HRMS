@@ -123,6 +123,7 @@
                     var keyword = data.field.keyword;
                     param_query.addKeyword(keyword);
                     getInsureds();
+                    return false; //阻止表单跳转
                 });
 
                 form.on('radio(category)', function(data){
