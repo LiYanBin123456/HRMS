@@ -27,6 +27,7 @@
 <ul id="logs" class="layui-timeline"></ul>
 <script src="../js/interface.js"></script>
 <script src="../js/jquery.params.js"></script>
+<script src="../js/queryParam.js"></script>
 <script>
     function format_date(timestamp) {
         var d = new Date(timestamp);
@@ -38,7 +39,10 @@
     $(function () {
         getLogs();
     });
-    var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"time",direction:true},pagination: {need:true,page:1,size:10}};
+
+    var param_query = new QueryParam();
+    param_query.setOrder("time",true);
+    param_query.setPagination(1,10);
     function getLogs() {
         var category = $.query.get("category");
         var id = $.query.get("id");

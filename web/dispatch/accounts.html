@@ -44,13 +44,16 @@
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/queryParam.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"username",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query = new QueryParam();
+            param_query.setOrder("username",false);
+            param_query.setPagination(1,10);
             $(function () {
                 loadLayuiModule();
             });
@@ -109,11 +112,6 @@
             }
 
             function getAccounts() {
-                /*var result = {total:100,rows:[{username:"stuff001",nickname:"赵斌",password:"123456"},{username:"stuff002",nickname:"李晓刚",password:"123456"}]};
-                table.reload('tbl_account', {
-                    data:result.rows
-                });*/
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
                 iAccount.getList(param_query,function (result) {
                     table.reload('tbl_account', {
                         data:result.rows
@@ -127,8 +125,7 @@
                         ,jump: function(obj,first){
                             //首次不执行
                             if(!first){
-                                param_query.pagination.page = obj.curr;
-                                param_query.pagination.size = obj.limit;
+                                param_query.setPagination(obj.cur,obj.limit);
                                 getAccounts();
                             }
                         }

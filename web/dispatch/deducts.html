@@ -59,10 +59,8 @@
             var layer;//弹出窗口
             var element;
             var upload;
-
             var param_query = new QueryParam();
             param_query.setPagination(1,10);
-
             $(function () {
                 loadLayuiModule();
             });
@@ -112,20 +110,6 @@
             }
 
             function initTable() {
-                //初始化分页
-                laypage.render({
-                    elem: 'pager'
-                    ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
-                            getDeducts();
-                        }
-                    }
-                });
 
                 //初始化数据表格
                 table.render({
@@ -174,8 +158,7 @@
                         ,jump: function(obj,first){
                             //首次不执行
                             if(!first){
-                                param_query.pagination.page = obj.curr;
-                                param_query.pagination.size = obj.limit;
+                                param_query.set(obj.curr,obj.limit);
                                 getDeducts();
                             }
                         }

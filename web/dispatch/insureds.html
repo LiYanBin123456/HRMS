@@ -42,10 +42,10 @@
                 <div class="layui-input-inline">
                     <select lay-filter="filter_status" >
                         <option value="">按状态过滤</option>
-                        <option value="0">在保</option>
-                        <option value="1">新增</option>
-                        <option value="2">停保</option>
-                        <option value="3">拟停</option>
+                        <option value="0">新增在保</option>
+                        <option value="1">在保</option>
+                        <option value="2">拟停停保</option>
+                        <option value="3">停保</option>
                     </select>
                 </div>
                 <div class="layui-input-inline">
@@ -134,8 +134,8 @@
                     getInsureds();
                 });
 
-                form.on('select(filter_client)', function(data){
-                    param_query.addCondition("eid","=",data.value);
+                form.on('select(filter_cooperation)', function(data){
+                    param_query.addCondition("cid","=",data.value);
                     getInsureds();
                 });
             }
@@ -221,8 +221,7 @@
                         ,jump: function(obj,first){
                             //首次不执行
                             if(!first){
-                                param_query.pagination.page = obj.curr;
-                                param_query.pagination.size = obj.limit;
+                                param_query.set(obj.curr,obj.limit);
                                 getInsureds();
                             }
                         }

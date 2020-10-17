@@ -56,7 +56,6 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-
             var param_query = new QueryParam();
             param_query.setOrder("start",false);
             param_query.setPagination(1,10);
@@ -90,27 +89,9 @@
 
             function initPage() {
                 initTable();
-                form.on('submit(search)', function (data) {
-                    var keyword = data.field.keyword;
-                    search(keyword);
-                });
             }
 
             function initTable() {
-                //初始化分页
-                laypage.render({
-                    elem: 'pager'
-                    ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
-                            getSocials();
-                        }
-                    }
-                });
 
                 //初始化数据表格
                 table.render({
@@ -164,8 +145,7 @@
                     ,jump: function(obj,first){
                         //首次不执行
                         if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
+                            param_query.set(obj.curr,obj.limit);
                             getSocials();
                         }
                     }
@@ -173,11 +153,7 @@
                 });
             }
 
-            //模糊查找
-            function search(keyword) {
-                param_query.conditions.extra = keyword;
-                getSocials();
-            }
+
 
             //打开详情对话框
             function showDetailDlg(data) {

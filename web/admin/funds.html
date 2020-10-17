@@ -91,27 +91,13 @@
                 initTable();
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    search(keyword);
+                    param_query.addKeyword(keyword);
+                    getFunds();
+                    return false; //阻止表单跳转
                 });
             }
 
             function initTable() {
-                //初始化分页
-                laypage.render({
-                    elem: 'pager'
-                    ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
-                            getFunds();
-                        }
-                    }
-                });
-
-
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_fund',
@@ -164,8 +150,7 @@
                     ,jump: function(obj,first){
                         //首次不执行
                         if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
+                            param_query.set(obj.curr,obj.limit);
                             getFunds();
                         }
                     }
@@ -173,11 +158,6 @@
                 });
             }
 
-            //模糊查找
-            function search(keyword) {
-                param_query.conditions.extra = keyword;
-                getFunds();
-            }
 
             //打开详情对话框
             function showDetailDlg(data) {
@@ -201,7 +181,7 @@
                 });
             }
 
-            //删除公告
+            //删除规则
             function del(data) {
                  var start = format_date(data.start);
                  var city = getCityArray2(data.city);

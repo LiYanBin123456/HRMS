@@ -49,13 +49,16 @@
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/queryParam.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query = new QueryParam();
+            param_query.setOrder("date",false);
+            param_query.setPagination(1,10);
             $(function () {
                 loadLayuiModule();
             });
@@ -75,7 +78,7 @@
                 initTable();
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    param_query.conditions.extra = keyword;
+                    param_query.addKeyword(keyword);
                     getNotices();
                     return false; //阻止表单跳转
                 });
@@ -136,8 +139,7 @@
                         ,jump: function(obj,first){
                             //首次不执行
                             if(!first){
-                                param_query.pagination.page = obj.curr;
-                                param_query.pagination.size = obj.limit;
+                                param_query.set(obj.curr,obj.limit);
                                 getNotices();
                             }
                         }
