@@ -64,6 +64,7 @@
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
+<script src="../js/queryParam.js"></script>
 <script>
     var settlement = {};
     loadLayuiModule();
@@ -71,8 +72,8 @@
     var laydate ;
     var table;
     var laypage;
-
-    var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
+    var param_query = new QueryParam();
+    param_query.setPagination(1,10);
 
     function loadLayuiModule() {
         layui.use(['form','laypage','table','laydate'], function () {
@@ -121,7 +122,8 @@
     }
     //获取派遣方与合作客户的合同
     function getContracts(cid) {
-        param_query.conditions.keys=[{k:"bid",o:"=",v:cid},{k:"stype",o:"=",v:3}];
+        param_query.addCondition('bid','=',cid);
+        param_query.addCondition('stype','=',3);
         iContract.getList(param_query,"B",function (result) {//获取派遣方与合作客户的合同
             table.reload('tbl_contract', {
                 data:result.rows
@@ -135,8 +137,7 @@
                 ,jump: function(obj,first){
                     //首次不执行
                     if(!first){
-                        param_query.pagination.page = obj.curr;
-                        param_query.pagination.size = obj.limit;
+                        param_query.set(obj.curr,obj.limit);
                         getContracts();
                     }
                 }
