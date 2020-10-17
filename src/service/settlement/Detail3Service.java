@@ -1,8 +1,10 @@
 package service.settlement;
 
+import bean.contract.Serve;
 import bean.employee.Employee;
 import bean.insurance.Product;
 import bean.settlement.*;
+import dao.contract.ServeDao;
 import dao.employee.EmployeeDao;
 import dao.product.ProductDao;
 import dao.settlement.Detail2Dao;
@@ -35,7 +37,12 @@ public class Detail3Service {
 
         Settlement3 settlement3 = (Settlement3) Settlement3Dao.get(conn,sid).data;
         long pid = settlement3.getPid();//商业保险id
-        float price = settlement3.getPrice();//保险产品价格
+        String ccid = settlement3.getCcid();//合同id
+        Serve serve = (Serve) ServeDao.get(conn,ccid).data;
+        float price = 0;//保险产品价格
+        if(serve!=null){
+            price =serve.getValue();
+        }
 
         for(ViewDetail3 v3 :ViewDetail3s){
             if(v3.getEid()!=0){//员工id存在
@@ -50,10 +57,9 @@ public class Detail3Service {
                     result.msg = "用户"+v3.getCname()+"不存在，或者身份证id不正确，请核对";
                     return  result;
                 }
-
                 Employee employee = (Employee) EmployeeDao.get(conn,conditions).data; //根据员工身份证获取员工
                 //封装detail3
-                Detail3 detail3 = new Detail3(0,sid,employee.getId(),pid,v3.getPlace(),price);
+                Detail3 detail3 = new Detail3(0,sid,employee.getId(),pid,v3.getPlace(),v3.getPrice()==0?price:v3.getPrice());
                 detail3s.add(detail3);
             }
         }

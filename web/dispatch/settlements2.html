@@ -307,7 +307,7 @@
             //保存结算单
             function save(settlement) {
                 layer.confirm('保存后结算单将被设置为[保存]状态，同时会自动计算社保、医保和个税等，确认保存吗？', {icon: 3, title:'保存结算单'}, function(index){
-                    iSettlement.saveSettlement(settlement.id,settlement.cid,1,function () {
+                    iSettlement.saveSettlement(settlement.id,1,function () {
                         layer.close(index);
                         layer.msg("保存成功");
                         getSettlements();

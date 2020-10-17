@@ -135,11 +135,10 @@ public class SettlementServlet extends HttpServlet {
     private String saveSettlement(Connection conn, HttpServletRequest request) {
         int category = Integer.parseInt(request.getParameter("category"));
         long sid = Long.parseLong(request.getParameter("sid"));
-        long cid = Long.parseLong(request.getParameter("cid"));
         DaoUpdateResult result = null;
         switch (category){
             case 0://普通结算单
-                result =Settlement1Service.saveSettlement(conn,sid,cid);
+                result =Settlement1Service.saveSettlement(conn,sid);
                 break;
             case 1://小时工结算单
                 result =Settlement2Service.saveSettlement(conn,sid);

@@ -284,7 +284,7 @@ public class Settlement1Service {
 
 
     //保存结算单；实质是计算结算单并且修改
-    public static DaoUpdateResult saveSettlement(Connection conn, long sid,long cid) {
+    public static DaoUpdateResult saveSettlement(Connection conn, long sid) {
 
         //结算单
         Settlement1 settlement1 = (Settlement1) Settlement1Dao.get(conn,sid).data;

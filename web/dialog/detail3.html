@@ -221,8 +221,7 @@
                         layer.close(index);
                         var  details = new Array(member.length)
                         for (var i in member){
-                            details[i] = {"eid":member[i].id,"month":month,"pid":pid};
-                            console.log(details)
+                            details[i] = {"eid":member[i].id,"pid":pid};
                         }
                         iSettlement.importDetails(sid,JSON.stringify(details),2,function () {
                             layer.msg("添加成功")

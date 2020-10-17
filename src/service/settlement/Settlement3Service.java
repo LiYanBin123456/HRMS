@@ -268,8 +268,11 @@ public class Settlement3Service {
         QueryParameter param = new QueryParameter();
         param.addCondition("sid","=",sid);
         List<Detail3> detail3List = (List<Detail3>) Detail3Dao.getList(conn,param).rows;
-        int num = detail3List.size();//数量
-        float price = 0;//保费
-        return null;
+        float price = 0;
+        for(Detail3 detail3:detail3List){
+          price+=detail3.getPrice();
+        }
+        settlement3.setPrice(price);
+        return Settlement3Dao.updatePrice(conn,settlement3);
     }
 }

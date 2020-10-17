@@ -91,4 +91,9 @@ public class Settlement3Dao {
     }
 
 
+    public static DaoUpdateResult updatePrice(Connection conn, Settlement3 settlement3) {
+        String sql = "update settlement3 set price = ? where id = ?";
+        Object []params = {settlement3.getPrice(),settlement3.getId()};
+        return DbUtil.update(conn,sql,params);
+    }
 }
