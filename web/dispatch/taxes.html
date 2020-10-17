@@ -84,7 +84,7 @@
                 });
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    param_query.addKeyword(keyword)
+                    param_query.addKeyword(keyword);
                     getTaxes();
                     return false;
                 });
@@ -132,7 +132,7 @@
                         ,jump: function(obj,first){
                             //首次不执行
                             if(!first){
-                                param_query.set(obj.curr,obj.limit);
+                                param_query.setPagination(obj.cur,obj.limit);
                                 getTaxes();
                             }
                         }

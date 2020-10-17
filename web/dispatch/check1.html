@@ -138,7 +138,7 @@
                         ,jump: function(obj,first){
                             //首次不执行
                             if(!first){
-                                param_query.set(obj.curr,obj.limit);
+                                param_query.setPagination(obj.cur,obj.limit);
                                 getSettlements();
                             }
                         }

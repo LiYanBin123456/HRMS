@@ -42,9 +42,9 @@
                 <div class="layui-input-inline">
                     <select lay-filter="filter_status" >
                         <option value="">按状态过滤</option>
-                        <option value="0">新增在保</option>
+                        <option value="0">新增</option>
                         <option value="1">在保</option>
-                        <option value="2">拟停停保</option>
+                        <option value="2">拟停</option>
                         <option value="3">停保</option>
                     </select>
                 </div>
@@ -221,7 +221,7 @@
                         ,jump: function(obj,first){
                             //首次不执行
                             if(!first){
-                                param_query.set(obj.curr,obj.limit);
+                                param_query.setPagination(obj.cur,obj.limit);
                                 getInsureds();
                             }
                         }
