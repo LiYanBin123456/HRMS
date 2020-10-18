@@ -44,7 +44,7 @@
             var param_query = new QueryParam();
             param_query.setPagination(1,10);
 
-            var employees =  $.query.get("employees");
+            var employees =  JSON.parse($.query.get("employees"));
             $(function () {
                 loadLayuiModule();
             });
@@ -65,7 +65,6 @@
 
             function initTable() {
                 var cols =columns_employees;
-                console.log("employees:"+employees);
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_detail',
@@ -78,7 +77,7 @@
                 //单元格编辑
                 table.on('edit(filter_tb_detail)', updateEmployee);
                 table.reload('tbl_detail', {
-                    data:JSON.parse(employees)
+                    data:employees
                 });
                 laypage.render({
                     elem: 'pager'
@@ -97,7 +96,9 @@
           function updateEmployee(obj) {
               var value = obj.value; //得到修改后的值
               var field = obj.field; //得到字段
-              var e = obj.data //得到所在行所有键值
+              var e = obj.data;//得到所在行所有键值
+              console.log(obj);
+              console.log(obj.data);
               for (var i in employees){
                   if (employees[i].cardId == e.cardId){
                       employees[i][field] = value;

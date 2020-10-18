@@ -130,8 +130,8 @@ public class Calculate {
         }
 
         //获取公积金相关
-        float FundBase = setting.getFundBase();//自定义的公积金基数
-        float FundPer  = setting.getFundPer();//自定义公积金比例
+        float FundBase = setting.getFundBase();//获取自定义的公积金基数
+        float FundPer  = setting.getFundPer()/100;//获取自定义公积金比例
         fund1=FundBase*FundPer;//个人公积金
         fund2=FundBase*FundPer;//单位公积金
         detail= new Detail1(pension1,medicare1,unemployment1,disease1,fund1,pension2,medicare2,unemployment2,injury,disease2,birth,fund2);
@@ -235,7 +235,6 @@ public class Calculate {
                 break;
             case 3://自定义基数
                 float ValS=setting.getValS();//自定义的基数
-
                 object2 = calculateSocial(setting,ValS,social);
                 pension1 = Float.parseFloat(object2.getString("pension1"));
                 unemployment1 = Float.parseFloat(object2.getString("unemployment1"));
@@ -247,7 +246,7 @@ public class Calculate {
 
         //计算公积金相关
         float FundBase = setting.getFundBase();//自定义的公积金基数
-        float FundPer  = setting.getFundPer();//自定义公积金比例
+        float FundPer  = setting.getFundPer()/100;//自定义公积金比例
 
         fund1=FundBase*FundPer;//个人公积金
         fund2=FundBase*FundPer;//单位公积金
@@ -345,33 +344,33 @@ public class Calculate {
         byte medicare = setting.getMedicare();//要计算的医保类别
         switch (medicare){
             case 7://生育 大病 医疗
-                medicare1 = base*ruleMedicare.getPer2();//个人医疗
-                medicare2 =base*ruleMedicare.getPer1();//单位医疗
-                birth = base*ruleMedicare.getPer3();//单位生育
+                medicare1 = base*(ruleMedicare.getPer2()/100);//个人医疗
+                medicare2 =base*(ruleMedicare.getPer1()/100);//单位医疗
+                birth = base*(ruleMedicare.getPer3()/100);//单位生育
                 disease1 = ruleMedicare.getFin2();//个人大病
                 disease2 = ruleMedicare.getFin1();//单位大病
                 break;
             case 6://生育 大病
-                birth = base*ruleMedicare.getPer3();//单位生育
+                birth = base*(ruleMedicare.getPer3()/100);//单位生育
                 disease1 = ruleMedicare.getFin2();//个人大病
                 disease2 = ruleMedicare.getFin1();//单位大病
                 break;
             case 4://生育
-                birth = base*ruleMedicare.getPer3();//单位生育
+                birth = base*(ruleMedicare.getPer3()/100);//单位生育
                 break;
             case 3://大病 医疗
                 disease1 = ruleMedicare.getFin2();//个人大病
                 disease2 = ruleMedicare.getFin1();//单位大病
-                medicare1 = base*ruleMedicare.getPer2();//个人医疗
-                medicare2 =base*ruleMedicare.getPer1();//单位医疗
+                medicare1 = base*(ruleMedicare.getPer2()/100);//个人医疗
+                medicare2 =base*(ruleMedicare.getPer1()/100);//单位医疗
                 break;
             case 2://大病
                 disease1 = ruleMedicare.getFin2();//个人大病
                 disease2 = ruleMedicare.getFin1();//单位大病
                 break;
             case 1://医疗
-                medicare1 = base*ruleMedicare.getPer2();//个人医疗
-                medicare2 =base*ruleMedicare.getPer1();//单位医疗
+                medicare1 = base*(ruleMedicare.getPer2()/100);//个人医疗
+                medicare2 =base*(ruleMedicare.getPer1()/100);//单位医疗
                 break;
             case 0://都不选
                 break;
@@ -408,33 +407,33 @@ public class Calculate {
         byte social = setting.getSocial();//要计算的医保类别
         switch (social){
             case 7://工伤  失业 养老
-                injury=base*ruleSocial.getPer3();//单位工伤
-                pension1=base*ruleSocial.getPer2();//个人养老
-                unemployment1=base*ruleSocial.getPer5();//个人失业
-                pension2=base*ruleSocial.getPer1();//单位养老
-                unemployment2=base*ruleSocial.getPer4();//单位失业
+                injury=base*(ruleSocial.getPer3()/100);//单位工伤
+                pension1=base*(ruleSocial.getPer2()/100);//个人养老
+                unemployment1=base*(ruleSocial.getPer5()/100);//个人失业
+                pension2=base*(ruleSocial.getPer1()/100);//单位养老
+                unemployment2=base*(ruleSocial.getPer4()/100);//单位失业
                 break;
             case 6://工伤 失业
-                injury=base*ruleSocial.getPer3();//单位工伤
-                unemployment1=base*ruleSocial.getPer5();//个人失业
-                unemployment2=base*ruleSocial.getPer4();//单位失业
+                injury=base*(ruleSocial.getPer3()/100);//单位工伤
+                unemployment1=base*(ruleSocial.getPer5()/100);//个人失业
+                unemployment2=base*(ruleSocial.getPer4()/100);//单位失业
                 break;
             case 4://工伤
-                injury=base*ruleSocial.getPer3();//单位工伤
+                injury=base*(ruleSocial.getPer3()/100);//单位工伤
                 break;
             case 3:// 失业 养老
-                unemployment1=base*ruleSocial.getPer5();//个人失业
-                unemployment2=base*ruleSocial.getPer4();//单位失业
-                pension1=base*ruleSocial.getPer2();//个人养老
-                pension2=base*ruleSocial.getPer1();//单位养老
+                unemployment1=base*(ruleSocial.getPer5()/100);//个人失业
+                unemployment2=base*(ruleSocial.getPer4()/100);//单位失业
+                pension1=base*(ruleSocial.getPer2()/100);//个人养老
+                pension2=base*(ruleSocial.getPer1()/100);//单位养老
                 break;
             case 2:// 失业
-                unemployment1=base*ruleSocial.getPer5();//个人失业
-                unemployment2=base*ruleSocial.getPer4();//单位失业
+                unemployment1=base*(ruleSocial.getPer5()/100);//个人失业
+                unemployment2=base*(ruleSocial.getPer4()/100);//单位失业
                 break;
             case 1:// 养老
-                pension1=base*ruleSocial.getPer2();//个人养老
-                pension2=base*ruleSocial.getPer1();//单位养老
+                pension1=base*(ruleSocial.getPer2()/100);//个人养老
+                pension2=base*(ruleSocial.getPer1()/100);//单位养老
                 break;
             case 0://都不选
                 break;
@@ -480,7 +479,7 @@ public class Calculate {
         int type = vc.getStype();//合同服务项目中的类型
         int category = vc.getCategory();//合同服务项目中的结算方式
         int invoice = vc.getInvoice();//合同基础信息中的发票类型
-        float per = vc.getPer();//税费比例（选择增值税专用发票（全额）需要用到）
+        float per = vc.getPer()/100;//税费比例（选择增值税专用发票（全额）需要用到）
         float value = vc.getValue();//结算值，根据结算方式的不同，代表的意义不同
 
         float num = detail1s.size();//总人数
@@ -642,7 +641,7 @@ public class Calculate {
          int hours=0;//总工时
          float traffic=0;//交通费
          float extra=0;//附加
-         float summary=0;//总额
+         float summary;//总额
 
         for (Detail2 detail2:detail2s){
             hours+=detail2.getHours();

@@ -248,7 +248,7 @@
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
                       var emploeess = window["layui-layer-iframe" + index].callbackData();
-                      iEmployee.insertBatch(emploeess,function () {
+                      iEmployee.insertBatch(JSON.stringify(emploeess),function () {
                             layer.close(index);
                             layer.msg("导入成功");
                         },function (res) {

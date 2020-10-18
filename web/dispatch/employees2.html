@@ -281,7 +281,7 @@
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
                       var emploeess = window["layui-layer-iframe" + index].callbackData();
-                      iEmployee.insertBatch(emploeess,function () {
+                      iEmployee.insertBatch(JSON.stringify(emploeess),function () {
                             layer.close(index);
                             layer.msg("导入成功");
                         },function (res) {
@@ -355,19 +355,12 @@
             }
 
             function download() {
-                iFile.existModel(2,function (result) {
-                    if(!result.exist){
-                        layer.msg("附件不存在或已删除");
-                        return;
-                    }
-
                     var url = "/hrms/verify/file?op=downloadModel&category=2";
                     var form = $('<form method="POST"></form>');
                     form.attr('action', url);
                     form.appendTo($('body'));
                     form.submit();
                     form.remove();
-                })
             }
 
         </script>

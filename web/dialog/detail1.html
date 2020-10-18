@@ -331,23 +331,21 @@
                 ]];
                 //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
                 iClient.getLastSalaryDefine(cid,function (result) {
-                    mapSalary = result.data;
-                    var items = mapSalary.items;
-                    if(items) {
+                    if(result.data){
+                        mapSalary = result.data;
+                        var items = mapSalary.items;
                         var salary_items_defined = items.split(";");
                         for (var i in salary_items_defined) {
-                            var item = salary_items_defined[i];
-                            var v = item.split(',');
-                            columns_detail1_input[0].push({field:'f'+Number(Number(i)+1), title: v[0],width:80,edit: 'text'}) ;
+                                var item = salary_items_defined[i];
+                                var v = item.split(',');
+                                columns_detail1_input[0].push({field:'f'+Number(Number(i)+1), title: v[0],width:80,edit: 'text'}) ;
                         }
                         //因为split分开的数组中最后一组数据是空的，所以添加完之后需要删除最后一条数组
                         columns_detail1_input[0].pop();
                     }
                     //数组添加结束后，加上最后一条操作数据
                     columns_detail1_input[0].push({fixed: 'right', title: '操作', toolbar: '#bar_detail'});
-                    for (var i in  columns_detail1_input){
-                        console.log(columns_detail1_input[0][i]);
-                    }
+
                 });
                 return columns_detail1_input;
             }
@@ -374,25 +372,22 @@
                 ]];
                 //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
                 iClient.getLastSalaryDefine(cid,function (result) {
-                    mapSalary = result.data;
-                    var items = mapSalary.items;
-                    if(items) {
+                    if (result.data){
+                        mapSalary = result.data;
+                        var items = mapSalary.items;
                         var salary_items_defined = items.split(";");
                         for (var i in salary_items_defined) {
-                            var item = salary_items_defined[i];
-                            var v = item.split(',');
-                            columns_detail1_full[0].push({field:'f'+Number(Number(i)+1), title: v[0],width:80,edit: 'text'}) ;
+                                var item = salary_items_defined[i];
+                                var v = item.split(',');
+                                columns_detail1_full[0].push({field:'f'+Number(Number(i)+1), title: v[0],width:80,edit: 'text'}) ;
                         }
                         //因为split分开的数组中最后一组数据是空的，所以添加完之后需要删除最后一条空数组数组
                         columns_detail1_full[0].pop();
-                    }
+                        }
                     //添加完自定义项后将应发和实发放在后面
                     columns_detail1_full[0].push({field:'payable', title: '应发',width:80}, {field:'paid', title: '实发',width:80});
-                    for (var i in  columns_detail1_full){
-                        console.log(columns_detail1_full[0][i]);
-                    }
                 });
-                return columns_detail1_full;
+                 return columns_detail1_full;
             }
 
             //导出
