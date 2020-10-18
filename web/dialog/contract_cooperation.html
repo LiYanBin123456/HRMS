@@ -178,7 +178,7 @@
 <script src="../js/fieldSet.js"></script>
 <script src="../lib/layui/layui.js"></script>
 <script>
-    var contract;
+    var contracts;
     var serve;
     var form;//表单对象
     var editer;
@@ -396,19 +396,20 @@
             });
         } else {
             iContract.insert(contract, function (result) {
-                contract.id = result.extra;
                 layer.alert("添加成功", {icon: 6});
+                contract.id = result.extra;
             });
+             contracts = contract;
         }
     }
 
     function saveService() {
-        if(!contract || !contract.id ){
+        if(!contracts || !contracts.id ){
             layer.msg("请先保存合同基本信息");
             return;
         }
         var data = form.val('form_service');
-        data.cid = contract.id;
+        data.cid = contracts.id;
         if (serve) {
             iContract.updateService(data,function (result) {
                 layer.msg("修改成功");

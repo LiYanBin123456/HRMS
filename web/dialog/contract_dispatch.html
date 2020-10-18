@@ -156,8 +156,8 @@
                 form.render('select', 'form_contract');
             });
         }
-        iFile.exist(id,function (result) {
-            if(result.exist){
+        iFile.exist(id,1,function (result) {
+            if(result.exist==false){
                 $('#demo1').attr('src', "../images/PDF.png");
                 return;
             }
