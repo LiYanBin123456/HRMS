@@ -91,7 +91,7 @@
                         , done: function (res) {
                             if (res.success){
                                 var employees = res.data;
-                                showImportDlg(employees1);
+                                showImportDlg(employees);
                             }else {
                                 layer.msg("xls文件不符合要求，请下载模板再重新填写");
                             }
@@ -180,8 +180,7 @@
                     ,jump: function(obj,first){
                         //首次不执行
                         if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
+                            param_query.setPagination(obj.curr,obj.limit);
                             getEmployees();
                         }
                     }
@@ -288,20 +287,14 @@
             }
 
             function download() {
-                iFile.existModel(2,function (result) {
-                    if(!result.exist){
-                        layer.msg("附件不存在或已删除");
-                        return;
-                    }
-
                     var url = "/hrms/verify/file?op=downloadModel&category=2";
                     var form = $('<form method="POST"></form>');
                     form.attr('action', url);
                     form.appendTo($('body'));
                     form.submit();
                     form.remove();
-                })
-            }
+                }
+
 
         </script>
     </body>

@@ -112,8 +112,7 @@
                         ,jump: function(obj,first){
                             //首次不执行
                             if(!first){
-                                param_query.pagination.page = obj.curr;
-                                param_query.pagination.size = obj.limit;
+                                param_query.setPagination(obj.cur,obj.limit);
                                 getConfirms();
                             }
                         }

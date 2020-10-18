@@ -47,10 +47,8 @@
             var layer;//弹出窗口
             var element;
             var laydate;
-
             var param_query = new QueryParam();
             param_query.setPagination(1,10);
-
             $(function () {
                 loadLayuiModule();
             });
@@ -86,7 +84,7 @@
                 });
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    param_query.addKeyword(keyword)
+                    param_query.addKeyword(keyword);
                     getTaxes();
                     return false;
                 });
@@ -94,20 +92,6 @@
             }
 
             function initTable() {
-                //初始化分页
-                laypage.render({
-                    elem: 'pager'
-                    ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
-                            getTaxes();
-                        }
-                    }
-                });
 
                 //初始化数据表格
                 table.render({
@@ -148,8 +132,7 @@
                         ,jump: function(obj,first){
                             //首次不执行
                             if(!first){
-                                param_query.pagination.page = obj.curr;
-                                param_query.pagination.size = obj.limit;
+                                param_query.setPagination(obj.cur,obj.limit);
                                 getTaxes();
                             }
                         }

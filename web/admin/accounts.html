@@ -44,13 +44,16 @@
         <script src="../js/fieldSet.js"></script>
         <script src="../js/jquery.min.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/queryParam.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"username",direction:false},pagination: {need:true,page:1,size:10}};
+            var param_query = new QueryParam();
+            param_query.setOrder("username",false);
+            param_query.setPagination(1,10);
             $(function () {
                 loadLayuiModule();
             });
@@ -127,8 +130,7 @@
                         ,jump: function(obj,first){
                             //首次不执行
                             if(!first){
-                                param_query.pagination.page = obj.curr;
-                                param_query.pagination.size = obj.limit;
+                                param_query.setPagination(obj.cur,obj.limit);
                                 getAccounts();
                             }
                         }

@@ -1,25 +1,11 @@
 package dao.settlement;
 
-import bean.client.MapSalary;
-import bean.employee.Deduct;
-import bean.employee.Employee;
-import bean.employee.EnsureSetting;
-import bean.rule.RuleMedicare;
-import bean.rule.RuleSocial;
 import bean.settlement.Detail1;
 import bean.settlement.ViewDetail1;
-import dao.client.MapSalaryDao;
-import dao.employee.DeductDao;
-import dao.employee.EmployeeDao;
-import dao.employee.SettingDao;
-import dao.rule.RuleMedicareDao;
-import dao.rule.RuleSocialDao;
 import database.*;
-import utills.Calculate;
 
 
 import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Detail1Dao {

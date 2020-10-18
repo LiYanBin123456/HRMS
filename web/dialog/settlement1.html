@@ -56,6 +56,7 @@
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
+<script src="../js/queryParam.js"></script>
 <script>
     var settlement = {mode:0};
     var form;
@@ -63,7 +64,8 @@
     var table;
     var laypage;
     var element;
-    var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
+    var param_query = new QueryParam();
+    param_query.setPagination(1,10);
     //type ：0 普通结算单  1 人事代理结算单   2 小时工结算单
     var type =  $.query.get("type");
 
@@ -114,7 +116,8 @@
 
     //获取派遣方与合作客户的合同
     function getContracts(cid) {
-        param_query.conditions.keys=[{k:"bid",o:"=",v:cid},{k:"stype",o:"=",v:type}];
+        param_query.addCondition('bid','=',cid);
+        param_query.addCondition('stype','=',type);
         iContract.getList(param_query,"B",function (result) {//获取派遣方与合作客户的合同
             table.reload('tbl_contract', {
                 data:result.rows
@@ -128,8 +131,7 @@
                 ,jump: function(obj,first){
                     //首次不执行
                     if(!first){
-                        param_query.pagination.page = obj.curr;
-                        param_query.pagination.size = obj.limit;
+                        param_query.setPagination(obj.cur,obj.limit);
                         getContracts();
                     }
                 }

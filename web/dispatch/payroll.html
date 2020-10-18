@@ -65,6 +65,7 @@
     <script src="../js/interface.js"></script>
     <script src="../js/jquery.min.js"></script>
     <script src="../js/jquery.params.js"></script>
+    <script src="../js/queryParam.js"></script>
     <script>
         var category = 0;//记录是显示普通结算单还是小时工结算单
         var table;//数据表格对象
@@ -73,7 +74,9 @@
         var layer;//弹出窗口
         var element;
         var laydate;
-        var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"month",direction:true},pagination: {need:true,page:1,size:10}};
+        var param_query = new QueryParam();
+        param_query.setOrder("month",true);
+        param_query.setPagination(1,10);
         $(function () {
             loadLayuiModule();
         });
@@ -98,7 +101,9 @@
             });
             form.on('submit(search)', function (data) {
                 var keyword = data.field.keyword;
-                search(keyword);
+                param_query.addKeyword(keyword);
+                getSettlements();
+                return false; //阻止表单跳转
             });
             form.on('radio(category)', function(data){
                 switchCategory(Number(data.value));
@@ -115,20 +120,6 @@
         }
 
         function initTable() {
-            //初始化分页
-            laypage.render({
-                elem: 'pager'
-                ,count: 10 //数据总数
-                ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                ,jump: function(obj,first){
-                    //首次不执行
-                    if(!first){
-                        param_query.pagination.page = obj.curr;
-                        param_query.pagination.size = obj.limit;
-                        getSettlements();
-                    }
-                }
-            });
 
             var cols;
             switch(Number(category)){
@@ -189,8 +180,7 @@
                         ,jump: function(obj,first){
                             //首次不执行
                             if(!first){
-                                param_query.pagination.page = obj.curr;
-                                param_query.pagination.size = obj.limit;
+                                param_query.setPagination(obj.cur,obj.limit);
                                 getSettlements();
                             }
                         }
@@ -198,11 +188,6 @@
             });
         }
 
-        //模糊查找
-        function search(keyword) {
-            param_query.conditions.extra = keyword;
-            getSettlements();
-        }
 
         //打开银行选择对话框
         function showBankDlg(settlement) {

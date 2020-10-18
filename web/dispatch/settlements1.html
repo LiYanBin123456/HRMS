@@ -134,19 +134,6 @@
             }
 
             function initTable() {
-                //初始化分页
-                laypage.render({
-                    elem: 'pager'
-                    ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.setPagination(obj.curr,obj.limit);
-                            getSettlements();
-                        }
-                    }
-                });
 
                 //初始化数据表格
                 table.render({
@@ -320,7 +307,7 @@
                 var msg = "保存后结算单将被设置为[保存]状态，同时会自动计算社保、医保和个税等，确认保存吗？";
                 var title = "保存结算单-"+settlement.name+format_date(settlement.month);
                 layer.confirm(msg, {icon: 3, title:title}, function(index){
-                    iSettlement.saveSettlement(settlement.id,settlement.cid,0,function () {
+                    iSettlement.saveSettlement(settlement.id,0,function () {
                         layer.close(index);
                         layer.msg("保存成功");
                         getSettlements();

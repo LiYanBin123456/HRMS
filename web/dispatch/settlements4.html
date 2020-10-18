@@ -70,6 +70,7 @@
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/queryParam.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -77,7 +78,9 @@
             var layer;//弹出窗口
             var element;
             var laydate;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
+            var param_query = new QueryParam();
+            param_query.setOrder("id",true);
+            param_query.setPagination(1,10);
             var type = 1;//区分结算单类型  0 普通结算单  1 人事代理结算单 小时工结算单
             var month=null;
             var status = null;
@@ -104,43 +107,35 @@
                     elem: '#filter_month'
                     ,type: 'month'
                     ,change: function(value, date, endDate){
-                        month = value;
+                        var month = value+"-01";
+                        param_query.addCondition("month","=",month);
                         getSettlements();
                     },
                     done: function(value, date, endDate){
                         if (!value){
-                            month = "";
+                            param_query.removeCondition("month");
                             getSettlements();
                         }
                     }
                 });
                 form.on('select(select)', function (data) {//获取状态
-                    status = data.value;
+                    var status = data.value;
+                    if(status == -1){
+                        param_query.removeCondition("status");
+                    }else {
+                        param_query.addCondition("status", "=", data.value);
+                    }
                     getSettlements();
                 });
                 form.on('submit(search)', function (data) {//模糊搜索
                     var keyword = data.field.keyword;
-                    param_query.conditions.extra = keyword;
+                    param_query.addKeyword(keyword);
                     getSettlements();
                     return false; //阻止表单跳转
                 });
             }
 
             function initTable() {
-                //初始化分页
-                laypage.render({
-                    elem: 'pager'
-                    ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
-                            getSettlements();
-                        }
-                    }
-                });
 
                 //初始化数据表格
                 table.render({
@@ -198,17 +193,6 @@
             }
 
             function getSettlements() {
-                param_query.conditions.keys=[];//初始化数组
-                //添加获取人事代理结算单的条件
-                param_query.conditions.keys.push({k:"type",o:"=",v:type});
-
-                if (status !="null" && status != "" && status != null){
-                    param_query.conditions.keys.push({k:"status",o:"=",v:status})
-                }
-                if (month!=null&&month!=""){
-                    param_query.conditions.keys.push({k:"month",o:"like",v:"%"+month+"%"})
-                }
-
                 iSettlement.getList(param_query,0,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows
@@ -222,8 +206,7 @@
                         ,jump: function(obj,first){
                             //首次不执行
                             if(!first){
-                                param_query.pagination.page = obj.curr;
-                                param_query.pagination.size = obj.limit;
+                                param_query.setPagination(obj.cur,obj.limit);
                                 getSettlements();
                             }
                         }

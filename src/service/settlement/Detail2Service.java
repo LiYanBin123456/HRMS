@@ -31,20 +31,29 @@ public class Detail2Service {
         List<Detail2> detail2s =new ArrayList<>();
 
         for(ViewDetail2 v2 :ViewDetail2s){
-            QueryConditions conditions = new QueryConditions();
-            conditions.add("cardId","=",v2.getCardId());
-            conditions.add("did","=",did);
-            if(!EmployeeDao.exist(conn,conditions).exist){
-                 result.msg = "用户"+v2.getName()+"不存在，或者身份证id不正确，请核对";
-                 return  result;
+            if(v2.getEid()!=0){//员工id存在
+                QueryConditions conditions = new QueryConditions();
+                conditions.add("id","=",v2.getEid());
+                Employee employee = (Employee) EmployeeDao.get(conn,conditions).data; //根据员工身份证获取员工id
+                Detail2 detail2 = new Detail2(0,sid,employee.getId(),v2.getHours(),employee.getPrice(),v2.getFood()
+                        ,v2.getTraffic(),v2.getAccommodation(),v2.getUtilities(),v2.getInsurance(),v2.getTax(),v2.getOther1()
+                        ,v2.getOther2(),v2.getPayable(),v2.getPaid());
+                detail2s.add(detail2);//封装detail2
+            }else {//员工id不存在
+                QueryConditions conditions = new QueryConditions();
+                conditions.add("cardId","=",v2.getCardId());
+                conditions.add("did","=",did);
+                if(!EmployeeDao.exist(conn,conditions).exist){
+                    result.msg = "用户"+v2.getName()+"不存在，或者身份证id不正确，请核对";
+                    return  result;
+                }
+                Employee employee = (Employee) EmployeeDao.get(conn,conditions).data; //根据员工身份证获取员工id
+                Detail2 detail2 = new Detail2(0,sid,employee.getId(),v2.getHours(),employee.getPrice(),v2.getFood()
+                        ,v2.getTraffic(),v2.getAccommodation(),v2.getUtilities(),v2.getInsurance(),v2.getTax(),v2.getOther1()
+                        ,v2.getOther2(),v2.getPayable(),v2.getPaid());
+                detail2s.add(detail2);//封装detail2
             }
 
-            Employee employee = (Employee) EmployeeDao.get(conn,conditions).data; //根据员工身份证获取员工id
-            Detail2 detail2 = new Detail2(0,sid,employee.getId(),v2.getHours(),employee.getPrice(),v2.getFood()
-            ,v2.getTraffic(),v2.getAccommodation(),v2.getUtilities(),v2.getInsurance(),v2.getTax(),v2.getOther1()
-            ,v2.getOther2(),v2.getPayable(),v2.getPaid());
-            detail2s.add(detail2);//封装detail2
-            System.out.println(detail2);
         }
         result =Detail2Dao.importDetails(conn,detail2s);
         return  result;
@@ -55,8 +64,16 @@ public class Detail2Service {
         param.addCondition("sid","=",sid);
         List<Detail2> detail2List = (List<Detail2>) Detail2Dao.getList(conn,param).rows;
         List<Detail2> detail2s = new ArrayList<>();
+        DaoUpdateResult result = new DaoUpdateResult();
         for(Detail2 detail2:detail2List){
+            QueryConditions conditions = new QueryConditions();
+            conditions.add("id","=", detail2.getEid());
+            Employee employee = (Employee) EmployeeDao.get(conn,conditions).data;
             Deduct deduct = (Deduct) DeductDao.get(conn,detail2.getEid()).data;
+            if(deduct!=null){
+                result.msg="请完善该员工"+employee.getName()+"的个税专项扣除";
+                return result;
+            }
             detail2s.add(Calculate.calculatteDetail2(detail2,deduct));
         }
 

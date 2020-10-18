@@ -72,6 +72,8 @@
         <script src="../js/interface.js"></script>
         <script src="../js/jquery.min.js"></script>
         <script src="../js/jquery.params.js"></script>
+        <script src="../js/queryParam.js"></script>
+
         <script>
             var category = 0;//记录是显示合作客户，潜在客户还是流失客户
             var table;//数据表格对象
@@ -79,7 +81,9 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"id",direction:true},pagination: {need:true,page:1,size:10}};
+            var param_query = new QueryParam();
+            param_query.setOrder("id",true);
+            param_query.setPagination(1,10);
             $(function () {
                 loadLayuiModule();
             });
@@ -98,7 +102,7 @@
             function initPage() {
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    param_query.conditions.extra = keyword;
+                    param_query.addKeyword(keyword);
                     getDispatchs();
                     return false; //阻止表单跳转
                 });
@@ -179,7 +183,7 @@
             }
 
             function getDispatchs() {
-                param_query.conditions.keys=[{k:'type',o:'=',v:category}];
+                param_query.addCondition('type','=',category);
                 iClient.getList(param_query,0,function (result) {
                     table.reload('tbl_dispatch', {
                         data:result.rows
@@ -193,8 +197,7 @@
                         ,jump: function(obj,first){
                             //首次不执行
                             if(!first){
-                                param_query.pagination.page = obj.curr;
-                                param_query.pagination.size = obj.limit;
+                                param_query.setPagination(obj.cur,obj.limit);
                                 getDispatchs();
                             }
                         }

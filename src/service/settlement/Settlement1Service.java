@@ -1,10 +1,7 @@
 package service.settlement;
 
 import bean.admin.Account;
-import bean.contract.Contract;
-import bean.contract.Serve;
 import bean.contract.ViewContractCooperation;
-import bean.employee.Employee;
 import bean.employee.ViewEmployee;
 import bean.log.Log;
 import bean.settlement.*;
@@ -13,12 +10,9 @@ import com.alibaba.fastjson.JSONObject;
 import dao.LogDao;
 import dao.admin.AccountDao;
 import dao.contract.ContractDao;
-import dao.contract.ServeDao;
 import dao.employee.EmployeeDao;
 import dao.settlement.Detail1Dao;
-import dao.settlement.Detail3Dao;
 import dao.settlement.Settlement1Dao;
-import dao.settlement.Settlement3Dao;
 import database.*;
 import utills.Calculate;
 
@@ -290,7 +284,7 @@ public class Settlement1Service {
 
 
     //保存结算单；实质是计算结算单并且修改
-    public static DaoUpdateResult saveSettlement(Connection conn, long sid,long cid) {
+    public static DaoUpdateResult saveSettlement(Connection conn, long sid) {
 
         //结算单
         Settlement1 settlement1 = (Settlement1) Settlement1Dao.get(conn,sid).data;

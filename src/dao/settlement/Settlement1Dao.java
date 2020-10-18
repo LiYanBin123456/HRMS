@@ -1,15 +1,9 @@
 package dao.settlement;
 
-import bean.contract.Contract;
-import bean.contract.Serve;
 import bean.settlement.*;
-import dao.contract.ContractDao;
-import dao.contract.ServeDao;
 import database.*;
-import utills.Calculate;
 
 import java.sql.Connection;
-import java.util.List;
 
 public class Settlement1Dao {
     public static DaoQueryListResult getList(Connection conn, QueryParameter param) {

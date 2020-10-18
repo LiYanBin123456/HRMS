@@ -993,13 +993,12 @@ var InterfaceSettlement = function () {
     /**
      * 保存并且计算结算单
      * @param sid 结算单id
-     * @param cid 合作单位id
      * @param category 0_普通结算单 1_小时工结算单 2_商业保险结算单
      * @param success
      * @param fail
      */
-    this.saveSettlement = function (sid,cid,category,success,fail) {
-        var para = {op: "saveSettlement",sid:sid,cid:cid,category:category};
+    this.saveSettlement = function (sid,category,success,fail) {
+        var para = {op: "saveSettlement",sid:sid,category:category};
         access(url,para,1,success,fail);
     };
 };

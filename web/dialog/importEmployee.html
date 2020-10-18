@@ -34,13 +34,15 @@
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/jquery.params.js"></script>
+        <script src="../js/queryParam.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:false},pagination: {need:true,page:1,size:10}};
+            var param_query = new QueryParam();
+            param_query.setPagination(1,10);
 
             var employees =  $.query.get("employees");
             $(function () {
@@ -86,8 +88,7 @@
                     ,jump: function(obj,first){
                         //首次不执行
                         if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
+                            param_query.setPagination(obj.cur,obj.limit);
                         }
                     }
                 });
@@ -104,7 +105,6 @@
               }
               layer.msg(field + ' 字段更改为：'+ value);
           }
-            console.log(employees);
             //向调用页面返回选中的员工
             var callbackData = function () {
                 return employees;

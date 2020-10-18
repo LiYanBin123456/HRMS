@@ -184,8 +184,7 @@
                         ,jump: function(obj,first){
                             //首次不执行
                             if(!first){
-                                param_query.pagination.page = obj.curr;
-                                param_query.pagination.size = obj.limit;
+                                param_query.setPagination(obj.curr,obj.limit);
                                 getDetails();
                             }
                         }
@@ -236,7 +235,7 @@
                             details[i] = {"eid":member[i].id,"month":month};
                             console.log(details)
                         }
-                        iSettlement.importDetails(sid,details,1,function () {
+                        iSettlement.importDetails(sid,JSON.stringify(details),1,function () {
                             layer.msg("添加成功")
                         });
                         getDetails();
