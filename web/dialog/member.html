@@ -42,7 +42,11 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query = JSON.parse($.query.get("param"));
+            var param = JSON.parse($.query.get("param"));
+            var param_query = new QueryParam();
+            param_query.conditions = param.conditions;
+            param_query.pagination = param.pagination;
+            param_query.order = param.order;
 
             //向调用页面返回选中的员工
             var callbackData = function () {

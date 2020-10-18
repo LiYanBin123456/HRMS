@@ -119,8 +119,8 @@ public class EmployeeServlet extends HttpServlet {
 
     //插入员工信息
     private String insert(Connection conn, HttpServletRequest request) {
-        long did = (long) request.getSession().getAttribute("rid");
         Employee employee = JSONObject.parseObject(request.getParameter("employee"), Employee.class);
+        long did = (long) request.getSession().getAttribute("rid");
         employee.setDid(did);
         DaoUpdateResult res = EmployeeService.insert(conn, employee);
 
@@ -129,7 +129,7 @@ public class EmployeeServlet extends HttpServlet {
 
     //插入员工补充信息
     private String insertExtra(Connection conn, HttpServletRequest request) {
-        EmployeeExtra employeeExtra =JSONObject.parseObject(request.getParameter("extract"), EmployeeExtra.class);
+        EmployeeExtra employeeExtra =JSONObject.parseObject(request.getParameter("extra"), EmployeeExtra.class);
         DaoUpdateResult res = ExtraService.insert(conn,employeeExtra);
         return JSONObject.toJSONString(res);
     }
@@ -172,7 +172,7 @@ public class EmployeeServlet extends HttpServlet {
 
     //修改员工补充信息
     private String updateExtra(Connection conn, HttpServletRequest request) {
-        EmployeeExtra extra = JSONObject.parseObject(request.getParameter("EmployeeExtra"), EmployeeExtra.class);
+        EmployeeExtra extra = JSONObject.parseObject(request.getParameter("extra"), EmployeeExtra.class);
         DaoUpdateResult res = ExtraService.update(conn,extra);
         return JSONObject.toJSONString(res);
     }
