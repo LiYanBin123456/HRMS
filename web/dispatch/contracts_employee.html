@@ -165,7 +165,7 @@
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
                         var contracts = window["layui-layer-iframe" + index].callbackData();
-                        iContract.insertContracts(contracts,function () {
+                        iContract.insertContracts(JSON.stringify(contracts),function () {
                             layer.close(index);
                             layer.msg("导入成功");
                             getContracts();

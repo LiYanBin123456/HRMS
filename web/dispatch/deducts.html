@@ -176,7 +176,7 @@
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
                         var deducts = window["layui-layer-iframe" + index].callbackData();
-                        iEmployee.importDeducts(deducts,function () {
+                        iEmployee.importDeducts(JSON.stringify(deducts),function () {
                             layer.close(index);
                             layer.msg("导入成功");
                             getDeducts();

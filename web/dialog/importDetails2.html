@@ -44,7 +44,7 @@
             var param_query = new QueryParam();
             param_query.setOrder("id",true);
             param_query.setPagination(1,10);
-            var details2 =  $.query.get("details2");//导入的明细2
+            var details2 =  JSON.parse($.query.get("details2"));//导入的明细2
             $(function () {
                 loadLayuiModule();
             });
@@ -79,14 +79,9 @@
                     id: 'tbl_detail'
                 });
                 //单元格编辑
-                table.on('edit(filter_tb_detail)', function(obj){
-                    var value = obj.value //得到修改后的值
-                    ,data = obj.data //得到所在行所有键值
-                    ,field = obj.field; //得到字段
-                    layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
-                  });
+                table.on('edit(filter_tb_detail)', update);
                 table.reload('tbl_detail', {
-                    data:JSON.parse(details2)
+                    data:details2
                 });
                 laypage.render({
                     elem: 'pager'
@@ -101,6 +96,17 @@
                     }
                 });
           }
+            function update(obj) {
+                var value = obj.value; //得到修改后的值
+                var field = obj.field; //得到字段
+                var e = obj.data;//得到所在行所有键值
+                for (var i in employees){
+                    if (details2[i].cardId == e.cardId || details2[i].name == e.name){
+                        details2[i][field] = value;
+                    }
+                }
+                layer.msg(field + ' 字段更改为：'+ value);
+            }
         </script>
     </body>
 </html>
