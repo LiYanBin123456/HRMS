@@ -97,10 +97,8 @@
               var value = obj.value; //得到修改后的值
               var field = obj.field; //得到字段
               var e = obj.data;//得到所在行所有键值
-              console.log(obj);
-              console.log(obj.data);
               for (var i in employees){
-                  if (employees[i].cardId == e.cardId){
+                  if (employees[i].cardId == e.cardId || employees[i].name == e.name){
                       employees[i][field] = value;
                   }
               }
