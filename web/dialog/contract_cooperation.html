@@ -7,7 +7,7 @@
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
-          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
     <link rel="stylesheet" href="../css/font.css">
     <link rel="stylesheet" href="../css/xadmin.css">
     <script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
@@ -55,13 +55,18 @@
                     <label class="layui-form-label">
                         <span class="x-red">*</span>发票类型</label>
                     <div class="layui-input-inline">
-                        <select name="invoice" lay-verify="required">
+                        <select name="invoice" lay-filter="invoices" lay-verify="required">
                             <option value=""></option>
                             <option value="0">增值税专用发票（全额）</option>
                             <option value="1">增值税专用发票（差额）</option>
                             <option value="2">增值税普通发票</option>
                         </select>
                     </div>
+                </div>
+                <div class="layui-form-item layui-hide" name ="r1">
+                    <label class="layui-form-label">税费比例</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="per" required="" placeholder="%" autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item">
                     <label class="layui-form-label">
@@ -178,7 +183,7 @@
 <script src="../js/fieldSet.js"></script>
 <script src="../lib/layui/layui.js"></script>
 <script>
-    var contract;
+    var contracts;
     var serve;
     var form;//表单对象
     var editer;
@@ -266,6 +271,15 @@
 
         form.on('select(category)', function(data){
             showCategory(Number(data.value));
+        });
+
+        form.on('select(invoices)', function(data){
+            var  invoices = data.value;
+            if(invoices == 0){
+                $("[name=r1]").removeClass("layui-hide");
+            }else{
+                $("[name=r1]").addClass("layui-hide");
+            }
         });
     }
 
@@ -396,19 +410,20 @@
             });
         } else {
             iContract.insert(contract, function (result) {
-                contract.id = result.extra;
                 layer.alert("添加成功", {icon: 6});
+                contract.id = result.extra;
             });
+             contracts = contract;
         }
     }
 
     function saveService() {
-        if(!contract || !contract.id ){
+        if(!contracts || !contracts.id ){
             layer.msg("请先保存合同基本信息");
             return;
         }
         var data = form.val('form_service');
-        data.cid = contract.id;
+        data.cid = contracts.id;
         if (serve) {
             iContract.updateService(data,function (result) {
                 layer.msg("修改成功");

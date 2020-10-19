@@ -534,3 +534,6 @@ table th, table td {
     color: #393D49;
 }
 
+.dialog-content{
+    padding: 10px;
+}
