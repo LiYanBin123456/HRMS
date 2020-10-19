@@ -644,6 +644,7 @@ public class Settlement1Service {
                     detail.setUnemployment2(unemployment2);
                     detail.setBirth(birth);
                     detail.setInjury(injury);
+                    detail.setStatus((byte) 2);
 
                     detail1List.add(detail);
                 }
