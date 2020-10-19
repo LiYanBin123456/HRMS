@@ -33,11 +33,11 @@
                 <button class="layui-btn layui-btn-sm" lay-event="append"><i class="layui-icon "></i> 社保补缴</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
-                        <div class="layui-inline"><input type="text"   name="time" required="" placeholder="起始月份" autocomplete="off" class="layui-input"></div>
-                        <div class="layui-inline"><input type="text"   name="time" required="" placeholder="结束月份" autocomplete="off" class="layui-input"></div>
+                        <div class="layui-inline"><input type="text"  id="start"  name="start"  placeholder="起始月份" autocomplete="off" class="layui-input"></div>
+                        <div class="layui-inline"><input type="text"  id="end"  name="end"  placeholder="结束月份" autocomplete="off" class="layui-input"></div>
                     </div>
                 </form>
-                <button class="layui-btn layui-btn-sm" lay-event="append"><i class="layui-icon "></i> 读取基数</button>
+                <button class="layui-btn layui-btn-sm" lay-event="read"><i class="layui-icon "></i> 读取基数</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
                         <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
@@ -52,13 +52,20 @@
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/jquery.params.js"></script>
         <script src="../js/queryParam.js"></script>
+        <script src="../js/util.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
             var layer;//弹出窗口
             var element;
+            var laydate;
+            var start;
+            var end;
+            var cid = $.query.get("cid");//合作单位id
+            var sid = $.query.get("sid");//合作单位id
             var param_query = new QueryParam();
             param_query.setOrder("date",false);
             param_query.setPagination(1,10);
@@ -67,12 +74,28 @@
             });
 
             function loadLayuiModule() {
-                layui.use(['table','form','element','layer','laypage'], function() {
+                layui.use(['table','form','element','layer','laypage','laydate'], function() {
                     table = layui.table;
                     layer = layui.layer;
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
+                    laydate= layui.laydate;
+                    //执行一个laydate实例
+                    laydate.render({
+                        elem: '#start' //指定元素
+                        ,type: 'month',
+                        change: function(value, date, endDate){
+                            start = value+"-01";
+                        }
+                    });
+                    laydate.render({
+                        elem: '#end' //指定元素
+                        ,type: 'month'
+                        ,change: function(value, date, endDate){
+                            end = value+"-01";
+                        }
+                    });
                     initPage();
                 });
             }
@@ -82,6 +105,9 @@
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
                     search(keyword);
+                });
+                table.on('checkbox(filter_tb_employee)', function(obj){
+                    member = table.checkStatus('tbl_employee').data;
                 });
             }
 
@@ -118,23 +144,47 @@
                         case 'append':
                             replenish();
                             break;
+                        case 'read':
+                            read();
+                            break;
                 };
                 });
                 getStaffs();
           }
 
             function getStaffs() {
-                iEmployee.getList(param_query,function (result) {
+                param_query.addCondition("cid","=",cid);
+                param_query.addCondition("type","=",1);
+                param_query.addCondition("status","=",0);
+                param_query.addCondition("category","!=",2);
+                iEmployee.getList(param_query,1,function (result) {
                     table.reload('tbl_employee', {
                         data:result.rows
                     });
                 });
             }
 
-            //模糊查找
-
+            //读取基数
+            function read() {
+                var eids = getKeyArray(member,"id");
+                console.log(eids);
+                iSettlement.readBase(eids,sid,function (result) {
+                    console.log(result.data);
+                    table.reload('tbl_employee', {
+                        data:result.data
+                    });
+                })
+            }
             //社保补缴
             function replenish() {
+                var  employees = new Array(member.length)
+                for (var i in member){
+                    employees[i] = {"eid":member[i].id,"baseM":member[i].baseM,"baseS":member[i].baseS};
+                }
+                console.log(employees);
+                iSettlement.backup(start, end,sid,JSON.stringify(employees),function () {
+                    layer.msg = "补缴成功";
+                })
 
             }
         </script>

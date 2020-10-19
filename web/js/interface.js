@@ -874,26 +874,42 @@ var InterfaceSettlement = function () {
         var para = {op: "exportDetails",id:id, category:category};
         access(url,para,1,success,fail);
     };
+
     /**
-     * 社保补缴
-     * @param id 员工id
-     * @param month 补缴的月份
+     * 读基数
+     * @param eids
+     * @param sid
      * @param success
      * @param fail
      */
-    this.backup = function (id,month,success,fail) {
-        var para = {op: "backup",id:id, month:month};
+    this.readBase = function (eids,sid,success,fail) {
+        var para = {op: "readBase",eids:eids,sid:sid};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 补缴
+     * @param start 起始月份
+     * @param end 结束月份
+     * @param sid 结算单id
+     * @param employees 封装好的员工集合
+     * @param success
+     * @param fail
+     */
+    this.backup = function (start,end,sid,employees,success,fail) {
+        var para = {op: "backup",start:start,end:end,sid:sid,employees:employees};
         access(url,para,1,success,fail);
     };
     /**
      * 社保补差
-     * @param id 员工id
-     * @param month 补差的月份
+     * @param start 起始月份
+     * @param end 结束月份
+     * @param sid 结算单id
+     * @param eids 员工id集合
      * @param success
      * @param fail
      */
-    this.makeup = function (id,month,success,fail) {
-        var para = {op: "makeup",id:id, month:month};
+    this.makeup = function (start,end,sid,eids,success,fail) {
+        var para = {op: "makeup",start:start,end:end,sid:sid, eids:eids};
         access(url,para,1,success,fail);
     };
     /**

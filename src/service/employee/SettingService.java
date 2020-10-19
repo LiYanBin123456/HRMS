@@ -31,6 +31,4 @@ public class SettingService {
         return result;
     }
 
-
-
 }

@@ -23,7 +23,6 @@
                 display:inline;
                 width:300px;
             }
-
             .jishu{
                 margin-left:50px;
                 display:inline;
@@ -38,8 +37,8 @@
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 社保补差</button>
                 <form class="layui-form searchbox">
                     <div class="layui-input-inline">
-                        <div class="layui-inline"><input type="text"   name="time" required="" placeholder="起始月份" autocomplete="off" class="layui-input"></div>
-                        <div class="layui-inline"><input type="text"   name="time" required="" placeholder="结束月份" autocomplete="off" class="layui-input"></div>
+                        <div class="layui-inline"><input type="text"  id="start" name="time" required="" placeholder="起始月份" autocomplete="off" class="layui-input"></div>
+                        <div class="layui-inline"><input type="text"  id="end" name="time" required="" placeholder="结束月份" autocomplete="off" class="layui-input"></div>
                     </div>
                 </form>
             </div>
@@ -49,24 +48,52 @@
         </div>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/jquery.params.js"></script>
+        <script src="../js/queryParam.js"></script>
+        <script src="../js/util.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var param_query ={conditions: {keys:[],extra:""},order: {need:true,field:"date",direction:false},pagination: {need:true,page:1,size:10}};
+            var laydate;
+            var start;
+            var end;
+            var cid = $.query.get("cid");//合作单位id
+            var sid = $.query.get("sid");//合作单位id
+            var param_query = new QueryParam();
+            param_query.setOrder("date",false);
+            param_query.setPagination(1,10);
+
             $(function () {
                 loadLayuiModule();
             });
 
             function loadLayuiModule() {
-                layui.use(['table','form','element','layer','laypage'], function() {
+                layui.use(['table','form','element','layer','laypage','laydate'], function() {
                     table = layui.table;
                     layer = layui.layer;
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
+                    laydate = layui.laydate;
+
+                    //执行一个laydate实例
+                    laydate.render({
+                        elem: '#start' //指定元素
+                        ,type: 'month',
+                        change: function(value, date, endDate){
+                            start = value+"-01";
+                        }
+                    });
+                    laydate.render({
+                        elem: '#end' //指定元素
+                        ,type: 'month'
+                        ,change: function(value, date, endDate){
+                            end = value+"-01";
+                        }
+                    });
                     initPage();
                 });
             }
@@ -77,6 +104,10 @@
                     var keyword = data.field.keyword;
                     search(keyword);
                 });
+                table.on('checkbox(filter_tb_balance)', function(obj){
+                    member = table.checkStatus('tbl_staff').data;
+                });
+
             }
 
             function initTable() {
@@ -88,13 +119,11 @@
                     ,jump: function(obj,first){
                         //首次不执行
                         if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
-                            getStaffs();
+                            param_query.setPagination(obj.cur,obj.limit);
+                            getStuff();
                         }
                     }
                 });
-
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_staff',
@@ -118,23 +147,26 @@
           }
 
             function getStuff() {
-                var result = {total:100,rows:[{ID:"360402199008230081",name:"赵阳",shebao:"2500",yibao:"2500"},{ID:"360402199008230081",name:"李斌",shebao:"3000",yibao:"3000"}]};
-                table.reload('tbl_staff', {
-                    data:result.rows
-                });
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
-                    table.reload('tbl_notice', {
+                param_query.addCondition("cid","=",cid);
+                param_query.addCondition("type","=",1);
+                param_query.addCondition("status","=",0);
+                param_query.addCondition("category","!=",2);
+                iEmployee.getList(param_query,1,function (result) {
+                    console.log(result.rows);
+                    table.reload('tbl_staff', {
                         data:result.rows
                     });
-                });*/
+                });
             }
 
             //模糊查找
 
             //补差
             function balance() {
-
+                var eids = getKeyArray(member,"id");
+                iSettlement.makeup(start,end,sid,eids,function (result) {
+                    layer.msg = "补差成功";
+                })
             }
         </script>
     </body>
