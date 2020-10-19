@@ -122,9 +122,7 @@ public class EmployeeServlet extends HttpServlet {
         Employee employee = JSONObject.parseObject(request.getParameter("employee"), Employee.class);
         long did = (long) request.getSession().getAttribute("rid");
         employee.setDid(did);
-        DaoUpdateResult res = EmployeeService.insert(conn, employee);
-
-        return JSONObject.toJSONString(res);
+        return EmployeeService.insert(conn, employee);
     }
 
     //插入员工补充信息

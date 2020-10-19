@@ -41,8 +41,14 @@ public class EmployeeService {
     }
 
     //增加
-    public static DaoUpdateResult insert(Connection conn, Employee employee) {
-        return EmployeeDao.insert(conn,employee);
+    public static String insert(Connection conn, Employee employee) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("cardId","=",employee.getCardId());
+        if(EmployeeDao.exist(conn,conditions).exist){
+            return DaoResult.fail("该员工已经存在");
+        }
+        DaoUpdateResult res = EmployeeDao.insert(conn,employee);
+        return JSONObject.toJSONString(res);
     }
 
     //删除
