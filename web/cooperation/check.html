@@ -27,25 +27,23 @@
     </head>
 
     <body class="layui-layout-body">
-        <div style="padding: 5px;">
-            <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_audit">
-                <form class="layui-form ">
-                    <div class="layui-input-inline">
-                             <div class="layui-inline"><input type="radio" name="se" value="待审核" title="待审核" checked></div>
-                             <div class="layui-inline searchbox"><input type="radio" name="se" value="全部" title="全部" ></div>
-                    </div>
-                </form>
-            </div>
-            <table id="tbl_audit" lay-filter="filter_tb_audit"></table>
-            <div class="layui-table-page" id="pager"></div>
- 
-            <!--行内工具栏-->
-            <script type="text/html" id="bar_audit2">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>明细</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log"><i class="layui-icon layui-icon-edit"></i>审核</a>
-            </script>
+        <!--顶部工具栏-->
+        <div class="layui-hide" id="top_bar_audit">
+            <form class="layui-form ">
+                <div class="layui-input-inline">
+                         <div class="layui-inline"><input type="radio" name="se" value="待审核" title="待审核" checked></div>
+                         <div class="layui-inline searchbox"><input type="radio" name="se" value="全部" title="全部" ></div>
+                </div>
+            </form>
         </div>
+        <table id="tbl_audit" lay-filter="filter_tb_audit"></table>
+        <div class="layui-table-page" id="pager"></div>
+
+        <!--行内工具栏-->
+        <script type="text/html" id="bar_audit2">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>明细</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log"><i class="layui-icon layui-icon-edit"></i>审核</a>
+        </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script>

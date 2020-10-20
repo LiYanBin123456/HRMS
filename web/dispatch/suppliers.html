@@ -30,38 +30,36 @@
         </style>
     </head>
         <body class="layui-layout-body">
-              <div style="padding: 5px;">
-                  <form class="layui-form " style="display: inline">
-                      <div class="layui-input-inline">
-                          <div class="layui-input-inline ">
-                              <div class="layui-inline"><input type="radio" name="category" value="0" title="合作中" lay-filter="category" checked></div>
-                              <div class="layui-inline"><input type="radio" name="category" value="1" title="流失" lay-filter="category" ></div>
-                          </div>
-                      </div>
-                  </form>
-            <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_supplier">
-                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
-                <form class="layui-form searchbox">
-                    <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入要查找的供应商">
-                    </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm distance " lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-                </form>
-            </div>
-            <table id="tbl_supplier" lay-filter="filter_tb_supplier"></table>
-            <div class="layui-table-page" id="pager1"></div>
-
-            <!--行内工具栏-->
-            <script type="text/html" id="bar_supplier">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
-            </script>
-             <script type="text/html" id="bar_loss">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="update"><i class="layui-icon layui-icon-edit"></i> 合作</a>
-             </script>
+          <form class="layui-form " style="display: inline">
+              <div class="layui-input-inline">
+                  <div class="layui-input-inline ">
+                      <div class="layui-inline"><input type="radio" name="category" value="0" title="合作中" lay-filter="category" checked></div>
+                      <div class="layui-inline"><input type="radio" name="category" value="1" title="流失" lay-filter="category" ></div>
+                  </div>
+              </div>
+          </form>
+        <!--顶部工具栏-->
+        <div class="layui-hide" id="top_bar_supplier">
+            <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
+            <form class="layui-form searchbox">
+                <div class="layui-input-inline">
+                    <input name="keyword" class="layui-input" placeholder="请输入要查找的供应商">
+                </div>
+                <button class="layui-btn layui-btn-normal layui-btn-sm distance " lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+            </form>
         </div>
+        <table id="tbl_supplier" lay-filter="filter_tb_supplier"></table>
+        <div class="layui-table-page" id="pager1"></div>
+
+        <!--行内工具栏-->
+        <script type="text/html" id="bar_supplier">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+        </script>
+         <script type="text/html" id="bar_loss">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="update"><i class="layui-icon layui-icon-edit"></i> 合作</a>
+         </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/jquery.min.js"></script>

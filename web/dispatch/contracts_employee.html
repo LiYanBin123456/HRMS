@@ -27,28 +27,26 @@
     </head>
 
     <body class="layui-layout-body">
-        <div style="padding: 5px;">
-            <!--顶部工具栏-->
-            <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
-            <div class="layui-hide" id="top_bar_contract">
-                <button class="layui-btn layui-btn-sm" lay-event="import" ><i class="layui-icon "></i> 批量导入</button>
-                <button class="layui-btn layui-btn-sm" lay-event="" onclick="download()" ><i class="layui-icon "></i> 下载模板</button>
-                <form class="layui-form searchbox">
-                    <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
-                    </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-                </form>
-            </div>
-            <table id="tbl_contract" lay-filter="filter_tb_contract"></table>
-            <div class="layui-table-page" id="pager"></div>
-
-            <!--行内工具栏-->
-            <script type="text/html" id="bar_contract">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
-            </script>
+        <!--顶部工具栏-->
+        <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
+        <div class="layui-hide" id="top_bar_contract">
+            <button class="layui-btn layui-btn-sm" lay-event="import" ><i class="layui-icon "></i> 批量导入</button>
+            <button class="layui-btn layui-btn-sm" lay-event="" onclick="download()" ><i class="layui-icon "></i> 下载模板</button>
+            <form class="layui-form searchbox">
+                <div class="layui-input-inline">
+                    <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
+                </div>
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+            </form>
         </div>
+        <table id="tbl_contract" lay-filter="filter_tb_contract"></table>
+        <div class="layui-table-page" id="pager"></div>
+
+        <!--行内工具栏-->
+        <script type="text/html" id="bar_contract">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+        </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/jquery.min.js"></script>
