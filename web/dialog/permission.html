@@ -71,10 +71,17 @@
     }
 
     function savePermission() {
-        var checkData = tree.getChecked('tree_permission');
+        var items = tree.getChecked('tree_permission');
         var permit = 0;
-        for(var i in checkData){
-            permit += checkData[i].id;
+        for(var i in items){
+            var subItems = items[i].children
+            if(subItems){
+                for(var j in subItems){
+                    permit += subItems[j].id;
+                }
+            }else {
+                permit += items[i].id;
+            }
         }
         iAccount.permit(id,permit,function (result) {
             layer.msg("权限分配成功！");// 获得frame索引

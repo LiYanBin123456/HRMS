@@ -17,6 +17,14 @@
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <style>
+        .preview_contact{
+            display: block;
+            width: 600px;
+            height: 300px;
+        }
+    </style>
 </head>
 <body>
 <div class="layui-tab layui-tab-brief" lay-filter="tab_contracts">
@@ -203,7 +211,7 @@
             element = layui.element;
             laydate = layui.laydate;
             upload.render({
-                elem: '#test1' //绑定元素
+                elem: '#btn_upload' //绑定元素
                 , url: '/hrms//verify/file' //上传接口
                 , accept: 'file'
                 , exts: 'pdf'
@@ -215,9 +223,12 @@
                     this.data={op:"upload",category:2,id:contract.id}
                 }
                 , done: function (res) {
-                    layer.msg(res.msg);
-                    console.log(res);
-                    //上传完毕回调
+                    //直接修改src无法刷新，只能重新操作dom
+                    var src = "../accessory/contract2/"+contract.id+".pdf";
+                    $('#preview_contact').parent().empty();
+                    $('#container_contract').append("<embed id='preview_contact' class='preview_contact' src='"+src+"'></embed>");
+
+                    layer.msg("上传成功");
                 }
                 , error: function () {
                     //请求异常回调
@@ -403,7 +414,7 @@
     }
 
     function saveContract() {
-        var contract = form.val('form_contract');
+        contract = form.val('form_contract');
         if(contract.id) {
             iContract.update(contract,function (result) {
                 layer.msg("修改成功");
@@ -412,18 +423,18 @@
             iContract.insert(contract, function (result) {
                 layer.alert("添加成功", {icon: 6});
                 contract.id = result.extra;
+                form.val('form_contract',contract);
             });
-             contracts = contract;
         }
     }
 
     function saveService() {
-        if(!contracts || !contracts.id ){
+        if(!contract || !contract.id ){
             layer.msg("请先保存合同基本信息");
             return;
         }
         var data = form.val('form_service');
-        data.cid = contracts.id;
+        data.cid = contract.id;
         if (serve) {
             iContract.updateService(data,function (result) {
                 layer.msg("修改成功");

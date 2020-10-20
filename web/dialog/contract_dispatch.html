@@ -17,6 +17,13 @@
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+        .preview_contact{
+            display: block;
+            width: 600px;
+            height: 300px;
+        }
+    </style>
 </head>
 <body>
 <div class="layui-tab layui-tab-brief" lay-filter="tab_contract">
@@ -51,8 +58,7 @@
                                class="layui-input"></div>
                 </div>
                 <div class="layui-form-item layui-form-text">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>备注</label>
+                    <label class="layui-form-label">备注</label>
                     <div class="layui-input-block">
                         <textarea name="comments" placeholder="请输入内容" class="layui-textarea"></textarea>
                     </div>
@@ -65,15 +71,11 @@
         </div>
         <div class="layui-tab-item">
             <form  class="layui-form">
-                <div class="layui-upload">
-                  <div class="layui-upload-list">
-                    <img class="layui-upload-img" id="demo1" width="150px">
-                      <p id="demoText"></p>
-                  </div>
-                  <button type="button" class="layui-btn" id="test1">
-                    <i class="layui-icon">&#xe67c;</i>上传电子合同(PDF)
-                  </button>
-                  <button class="layui-btn" onclick="download()"><i class="layui-icon layui-icon-edit"></i>下载电子合同</button>
+                <div id="container_contract" class="layui-form-item layui-form-text">
+                    <embed id="preview_contact" class="preview_contact"></embed>
+                </div>
+                <div class="layui-form-item" style="text-align: center">
+                    <button type="button" class="layui-btn" id="btn_upload"><i class="layui-icon">&#xe67c;</i>上传pdf</button>
                 </div>
             </form>
         </div>
@@ -103,21 +105,21 @@
             upload = layui.upload;
             laydate = layui.laydate;
             upload.render({
-                elem: '#test1' //绑定元素
+                elem: '#btn_upload' //绑定元素
                 , url: '/hrms//verify/file' //上传接口
                 , accept: 'file'
                 , exts: 'pdf'
                 , acceptMime: '.pdf'
                 ,before: function(obj,file,id){
-                    obj.preview(function(index, file, result){
-                        $('#demo1').attr('src', "../images/PDF.png"); //图片链接（base64）
-                    });
-                    this.data={op:"upload",category:2,id:contract.id}
+                    this.data={op:"upload",category:1,id:contract.id}
                 }
                 , done: function (res) {
-                    layer.msg(res.msg);
-                    console.log(res);
-                    //上传完毕回调
+                    //直接修改src无法刷新，只能重新操作dom
+                    var src = "../accessory/contract1/"+contract.id+".pdf";
+                    $('#preview_contact').parent().empty();
+                    $('#container_contract').append("<embed id='preview_contact' class='preview_contact' src='"+src+"'></embed>");
+
+                    layer.msg("上传成功");
                 }
                 , error: function () {
                     //请求异常回调
@@ -144,24 +146,21 @@
     }
 
     function initData() {
-        var id = $.query.get("id");
-        if(id){
-            iContract.get(id,function (result) {
-                contract = result.data;
-                contract.start = format_date(contract.start);
-                contract.end = format_date(contract.end);
-                form.val('form_contract', contract);
-                layedit.setContent(editer, contract.content, false);
-                $("[name=client]").attr("disabled", 'disabled');
-                form.render('select', 'form_contract');
-            });
-        }
-        iFile.exist(id,1,function (result) {
-            if(result.exist==false){
-                $('#demo1').attr('src', "../images/PDF.png");
-                return;
+        contract = JSON.parse($.query.get("contract"));
+        contract.start = format_date(contract.start);
+        contract.end = format_date(contract.end);
+        form.val('form_contract', contract);
+        layedit.setContent(editer, contract.content, false);
+        $("[name=client]").attr("disabled", 'disabled');
+        form.render('select', 'form_contract');
+        iFile.exist(contract.id,1,function (result) {
+            if(result.exist){
+                var src = "../accessory/contract1/"+contract.id+".pdf";
+                $('#preview_contact').attr('src', src); //图片预览
+            }else {
+                $("#preview_contact").text("合同附件不存在，请上传");
             }
-        })
+        });
     }
 
     function initdispatch() {
@@ -201,20 +200,20 @@
     }
 
     function saveContract() {
-        var data = form.val('form_contract');
-        if (contract) {
-            iContract.update(data,function (result) {
+        contract = form.val('form_contract');
+        if (contract.id) {
+            iContract.update(contract,function (result) {
                 layer.msg("修改成功");
             });
         } else {
-            iContract.insert(data, function (result) {
+            iContract.insert(contract, function (result) {
                 contract.id = result.extra;
+                form.val('form_contract',contract);
                 element.tabChange('tab_contract', 'element_upload');
                 layer.alert("合同保存成功，请上传复印件", {icon: 20});
 
             });
         }
-        contract = data;
     }
 </script>
 

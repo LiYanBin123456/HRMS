@@ -19,14 +19,7 @@
         <![endif]-->
     </head>
     <body>
-        <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-           <ul class="layui-tab-title">
-            <li class="layui-this">基本信息</li>
-            <li>权限分配</li>
-           </ul>
-           <div class="layui-tab-content">
-            <div class="layui-tab-item layui-show">
-                <form lay-filter="form_account" class="layui-form">
+        <form lay-filter="form_account" class="layui-form">
                     <input type='hidden' name='id'/>
                     <div class="layui-form-item">
                         <label  class="layui-form-label">
@@ -54,21 +47,6 @@
                         <button type="button" lay-submit lay-filter="resetPassword" class="layui-btn">重置密码</button>
                     </div>
                 </form>               
-            </div>
-            <div class="layui-tab-item">
-                <form lay-filter="form_permission" class="layui-form">
-                    <input type='hidden' name='id'/>
-                    <div class="layui-form-item">
-                        <div class="layui-input-inline" id="permissions">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <button type="button" lay-submit lay-filter="savePermission" class="layui-btn layui-btn-fluid">保存</button>
-                    </div>
-                </form>
-            </div>
-           </div>
-        </div>
 </body>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
@@ -89,7 +67,6 @@
             table = layui.table;
 
             form.on("submit(saveInfo)", saveInfo);
-            form.on("submit(savePermission)", savePermission);
 
             initData();
         });
@@ -101,27 +78,7 @@
         if (param) {
             var account = JSON.parse(param);
             form.val('form_account', account);
-
-            //初始化权限信息
-            form.val('form_permission', account);
-            for(var i in permissions_dispatch){
-                var p = permissions_dispatch[i];
-                var o = $("<input type='checkbox' name='permit' lay-skin='primary'>").val(p.value).attr('title',p.text);
-                if((account.permission&p.value) != 0){
-                    $(o).attr("checked",true);
-                }
-                $("#permissions").append(o);
-            }
-            form.render('checkbox');
-
             op = "update";
-        }else{
-            for(var i in permissions_dispatch){
-                var p = permissions_dispatch[i];
-                var o = $("<input type='checkbox' name='permit' lay-skin='primary'>").val(p.value).attr('title',p.text);
-                $("#permissions").append(o);
-            }
-            form.render('checkbox');
         }
     }
 
@@ -150,17 +107,6 @@
             //修改成功后刷新父界面
             window.parent.location.reload();
         }
-    }
-
-    function savePermission(data) {
-        var id = data.field.id;
-        var permit = 0;
-        $("input:checkbox[name='permit']:checked").each(function(i){
-            permit += Number($(this).val());
-        });
-        iAccount.permit(id,permit,function (result) {
-            layer.msg("权限分配成功！");
-        });
     }
 </script>
 

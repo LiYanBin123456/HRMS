@@ -24,14 +24,14 @@ function loadMenuAgent() {
  * 平台管理员菜单项
  */
 var menuItems_dispatch = [
-    {title:"客户管理",icon:"&#xe70b",children:
+    {id:7,title:"客户管理",icon:"&#xe70b",children:
         [
             {id:1<<0,   title:"合作单位",href:"cooperations.html",icon:"&#xe6a7"},
             {id:1<<1,   title:"供应商",href:"suppliers.html",icon:"&#xe6a7"},
             {id:1<<2,   title:"合同管理",href:"contracts_cooperation.html",icon:"&#xe6a7"}
         ]
     },
-    {title:"员工管理",icon:"&#xe6a7",children:
+    {id:120,title:"员工管理",icon:"&#xe6a7",children:
         [
             {id:1<<3,   title:"内部员工",href:"employees1.html",icon:"&#xe6a7"},
             {id:1<<4,   title:"外派员工",href:"'employees2.html",icon:"&#xe6a7"},
@@ -39,7 +39,7 @@ var menuItems_dispatch = [
             {id:1<<6,   title:"合同管理",href:"contracts_employee.html",icon:"&#xe6a7"}
         ]
     },
-    {title:"结算单管理",icon:"&#xe6a7",children:
+    {id:32640,title:"结算单管理",icon:"&#xe6a7",children:
         [
             {id:1<<7,   title:"普通结算单",href:"settlements1.html",icon:"&#xe6a7"},
             {id:1<<8,   title:"人事代理结算单",href:"settlements4.html",icon:"&#xe6a7"},
@@ -51,7 +51,7 @@ var menuItems_dispatch = [
             {id:1<<14,   title:"商业保险结算单审核",href:"check3.html",icon:"&#xe6a7"}
         ]
     },
-    {title:"财务管理",icon:"&#xe6a7",children:
+    {id:491520,title:"财务管理",icon:"&#xe6a7",children:
         [
             {id:1<<15,   title:"工资发放",href:"payroll.html",icon:"&#xe6a7"},
             {id:1<<16,   title:"到账确认",href:"'confirm.html",icon:"&#xe6a7"},
