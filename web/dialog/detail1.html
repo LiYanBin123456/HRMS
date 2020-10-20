@@ -272,7 +272,7 @@
 
             //打开添加对话框
             function showAppendDlg() {
-                var content = "replenish.html";
+                var content = "replenish.html?cid="+cid+"&sid="+sid;
                 layer.open({
                     title:"社保补缴",
                     type: 2,
@@ -283,7 +283,7 @@
 
             //打开补录对话框
             function showBalanceDlg() {
-                var content = "balance.html";
+                var content = "balance.html?sid="+sid+"&cid="+cid;
                 layer.open({
                     title:"社保补差",
                     type: 2,

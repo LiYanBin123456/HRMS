@@ -370,13 +370,13 @@ var columns_detail4  = [[
     {field:'comments', title: '事项',width:200}
 ]];
 
-//工资明细添加字段集合
+//补缴字段
 var columns_staff_with_base  = [[
     {type:'checkbox'},
-    {field:'ID', title: '身份证号',width:200},
+    {field:'cardId', title: '身份证号',width:200},
     {field:'name', title: '姓名',width:100},
-    {field:'Medicare', title: '医保基数',width:200,edit: 'number'},
-    {field:'social', title: '社保基数',width:200,edit: 'number'}
+    {field:'baseM', title: '医保基数',width:200,edit: 'number'},
+    {field:'baseS', title: '社保基数',width:200,edit: 'number'}
 ]];
 
 //工资结算到账确认字段集合

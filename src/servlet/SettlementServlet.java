@@ -4,12 +4,12 @@ package servlet;
 import bean.settlement.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONPObject;
 import dao.settlement.*;
 import database.ConnUtil;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.QueryParameter;
+import service.employee.SettingService;
 import service.settlement.*;
 
 import javax.servlet.ServletException;
@@ -22,7 +22,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.List;
 
 @WebServlet(name = "SettlementServlet",urlPatterns = "/verify/settlement")
@@ -72,6 +71,9 @@ public class SettlementServlet extends HttpServlet {
             case "makeup"://补差
                 result = makeup(conn, request);
                 break;
+            case "readBase"://读取基数
+                result = readBase(conn, request);
+                break;
             case "commit"://提交
                 result = commit(conn, request);
                 break;
@@ -111,6 +113,7 @@ public class SettlementServlet extends HttpServlet {
         out.close();
 
     }
+
 
     //保存并且计算结算单明细
     private String saveDetail(Connection conn, HttpServletRequest request) {
@@ -325,25 +328,35 @@ public class SettlementServlet extends HttpServlet {
         return null;
     }
 
-    //补差
+    //读取社保医保基数
+    private String readBase(Connection conn, HttpServletRequest request) {
+        long sid = Long.parseLong(request.getParameter("sid"));//结算单id
+        String[] eids = request.getParameterValues("eids[]");
+        String result = Settlement1Service.readBase(eids,sid,conn);
+        return result;
+    }
+
+    //补缴
     private String backup(Connection conn, HttpServletRequest request) {
         String start = request.getParameter("start");//起始月份
         String end = request.getParameter("end");//结束月份
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
-        String[] eids = request.getParameterValues("eids[]");//员工id集合
+        List<JSONObject> employees = JSONArray.parseArray(request.getParameter("employees"),JSONObject.class);
 
-        return null;
+        DaoUpdateResult result = Settlement1Service.backup(start,end,sid,employees,conn);
+
+        return JSONObject.toJSONString(result);
     }
 
-    //补缴
+    //补差
     private String makeup(Connection conn, HttpServletRequest request) {
         String start = request.getParameter("start");//起始月份
         String end = request.getParameter("end");//结束月份
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
-        String[] eids = request.getParameterValues("eids[]");//员工id集合
+        String[] eids = request.getParameterValues("eids[]");//员工id数组
 
-        Detail1Service.makeup(conn,eids,start,end,sid);
-        return null;
+        DaoUpdateResult result = Settlement1Service.makeup(conn,eids,start,end,sid);
+        return JSONObject.toJSONString(result);
 
     }
 
