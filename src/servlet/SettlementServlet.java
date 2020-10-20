@@ -332,7 +332,9 @@ public class SettlementServlet extends HttpServlet {
     private String readBase(Connection conn, HttpServletRequest request) {
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
         String[] eids = request.getParameterValues("eids[]");
-        String result = Settlement1Service.readBase(eids,sid,conn);
+        String start = request.getParameter("start");
+        String end = request.getParameter("end");
+        String result = Settlement1Service.readBase(start,end,eids,sid,conn);
         return result;
     }
 

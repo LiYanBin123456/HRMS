@@ -4,7 +4,10 @@ import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
 import database.*;
 
+import java.net.ConnectException;
 import java.sql.Connection;
+import java.sql.Date;
+import java.util.List;
 
 public class RuleMedicareDao {
 
@@ -82,5 +85,32 @@ public class RuleMedicareDao {
         conditions.add("city", "=", city);
         String order = " ORDER BY start DESC limit 1";
         return DbUtil.getLast(conn, "rule_medicare", conditions,RuleMedicare.class,order);
+    }
+
+    //根据地市和月份获取医保规则
+    public static DaoQueryResult get(Connection conn, String city, Date month){
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("city","=",city);
+        parameter.addCondition("start","<=",month);
+        parameter.order.set(true,"start",false);
+        parameter.pagination.set(true,1,1);
+        DaoQueryListResult res1 = DbUtil.getList(conn,"rule_medicare",parameter,RuleMedicare.class);
+
+        DaoQueryResult res2 = new DaoQueryResult();
+        if(!res1.success){
+            res2.success = false;
+            res2.msg = "数据库操作错误";
+            return res2;
+        }
+        List<RuleMedicare> rules = (List<RuleMedicare>) res1.rows;
+        if(rules.size() == 0){
+            res2.success = false;
+            res2.msg = "规则不存在";
+            return res2;
+        }
+        res2.success = true;
+        res2.data = rules.get(0);
+        return res2;
+
     }
 }
