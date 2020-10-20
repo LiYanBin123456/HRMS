@@ -1,6 +1,5 @@
 package dao;
 
-import bean.admin.Account;
 import bean.log.Log;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;
