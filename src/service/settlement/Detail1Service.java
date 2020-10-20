@@ -6,10 +6,7 @@ import bean.employee.Employee;
 import bean.employee.EnsureSetting;
 import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
-import bean.settlement.Detail1;
-import bean.settlement.Detail2;
-import bean.settlement.ViewDetail1;
-import bean.settlement.ViewDetail2;
+import bean.settlement.*;
 import dao.client.MapSalaryDao;
 import dao.employee.DeductDao;
 import dao.employee.EmployeeDao;
@@ -18,6 +15,7 @@ import dao.rule.RuleMedicareDao;
 import dao.rule.RuleSocialDao;
 import dao.settlement.Detail1Dao;
 import dao.settlement.Detail2Dao;
+import dao.settlement.Settlement1Dao;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.QueryConditions;
@@ -25,6 +23,7 @@ import database.QueryParameter;
 import utills.Calculate;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.DeflaterInputStream;
@@ -76,6 +75,9 @@ public class Detail1Service {
     public static DaoUpdateResult saveDetail(Connection conn,long sid, long cid) {
 
         DaoUpdateResult result = new DaoUpdateResult();
+        //获取结算单
+        Settlement1 settlement = (Settlement1) Settlement1Dao.get(conn,sid).data;
+        Date month = settlement.getMonth();
         QueryParameter param = new QueryParameter();
         param.conditions.add("sid","=",sid);
         DaoQueryListResult result1 = Detail1Dao.getList(conn,param);//查询数据库中属于该结算单的所有明细
@@ -94,8 +96,10 @@ public class Detail1Service {
             }
 
             String city = setting.getCity();//员工所处地市
-            RuleMedicare medicare= (RuleMedicare) RuleMedicareDao.getLast(conn,city).data;//获取该地市的最新医保
-            RuleSocial social = (RuleSocial) RuleSocialDao.getLast(conn,city).data;//获取该地市的最新社保
+            //获取该地市的医保规则
+            RuleMedicare medicare= (RuleMedicare)RuleMedicareDao.get(conn,city,month).data;
+            //获取该地市的社保规则
+            RuleSocial social = (RuleSocial)RuleSocialDao.get(conn,city,month).data;
             if(medicare==null||social==null){
                 result.msg = "请确认系统中该员工"+employee.getName()+"的社保所在地是否存在";
                 return result;

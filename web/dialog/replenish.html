@@ -28,22 +28,21 @@
 
     <body class="layui-layout-body">
         <div class="dialog-content">
+            <form class="layui-form">
+                <div class="layui-input-inline">
+                    <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
+                </div>
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                &emsp;&emsp;&emsp;&emsp;
+                <div class="layui-inline"><input type="text"  id="starts"  name="start"  placeholder="起始月份" autocomplete="off" class="layui-input"></div>
+                    <div class="layui-inline"><input type="text"  id="ends"  name="end"  placeholder="结束月份" autocomplete="off" class="layui-input"></div>
+                    <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="read"><i class="layui-icon "></i> 读取基数</button>
+                </div>
+            </form>
             <!--顶部工具栏-->
             <div class="layui-hide" id="top_bar_employee">
                 <button class="layui-btn layui-btn-sm" lay-event="append"><i class="layui-icon "></i> 社保补缴</button>
-                <form class="layui-form searchbox">
-                    <div class="layui-input-inline">
-                        <div class="layui-inline"><input type="text"  id="start"  name="start"  placeholder="起始月份" autocomplete="off" class="layui-input"></div>
-                        <div class="layui-inline"><input type="text"  id="end"  name="end"  placeholder="结束月份" autocomplete="off" class="layui-input"></div>
-                    </div>
-                </form>
-                <button class="layui-btn layui-btn-sm" lay-event="read"><i class="layui-icon "></i> 读取基数</button>
-                <form class="layui-form searchbox">
-                    <div class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
-                    </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-                </form>
+
             </div>
             <table id="tbl_employee" lay-filter="filter_tb_employee"></table>
             <div class="layui-table-page" id="pager"></div>
@@ -69,6 +68,8 @@
             var param_query = new QueryParam();
             param_query.setOrder("date",false);
             param_query.setPagination(1,10);
+            var employees;
+
             $(function () {
                 loadLayuiModule();
             });
@@ -83,14 +84,14 @@
                     laydate= layui.laydate;
                     //执行一个laydate实例
                     laydate.render({
-                        elem: '#start' //指定元素
+                        elem: '#starts' //指定元素
                         ,type: 'month',
                         change: function(value, date, endDate){
                             start = value+"-01";
                         }
                     });
                     laydate.render({
-                        elem: '#end' //指定元素
+                        elem: '#ends' //指定元素
                         ,type: 'month'
                         ,change: function(value, date, endDate){
                             end = value+"-01";
@@ -104,10 +105,16 @@
                 initTable();
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    search(keyword);
+                    param_query.addKeyword(keyword);
+                    getStaffs();
+                    return false;
                 });
                 table.on('checkbox(filter_tb_employee)', function(obj){
                     member = table.checkStatus('tbl_employee').data;
+                });
+                form.on('submit(read)', function (data) {
+                    read();
+                    return false;
                 });
             }
 
@@ -135,17 +142,11 @@
                     cols: columns_staff_with_base,
                     id: 'tbl_employee'
                 });
-
-                //行内工具栏事件响应
-
                 //顶部工具栏事件处理
                 table.on('toolbar(filter_tb_employee)', function(obj){
                     switch(obj.event){
                         case 'append':
                             replenish();
-                            break;
-                        case 'read':
-                            read();
                             break;
                 };
                 });
@@ -158,8 +159,9 @@
                 param_query.addCondition("status","=",0);
                 param_query.addCondition("category","!=",2);
                 iEmployee.getList(param_query,1,function (result) {
+                    employees = result.rows;
                     table.reload('tbl_employee', {
-                        data:result.rows
+                        data:employees
                     });
                 });
             }
@@ -167,11 +169,21 @@
             //读取基数
             function read() {
                 var eids = getKeyArray(member,"id");
-                console.log(eids);
-                iSettlement.readBase(eids,sid,function (result) {
-                    console.log(result.data);
+                iSettlement.readBase(start,end,eids,sid,function (result) {
+                    var bases = result.data;
+                    for (var i in bases){
+                        var b = bases[i];
+                        for (var j in employees){
+                            var e = employees[j];
+                            if (e.cardId == b.cardId){
+                                e.baseM = b.baseM;
+                                e.baseS= b.baseS;
+                                break;
+                            }
+                        }
+                    }
                     table.reload('tbl_employee', {
-                        data:result.data
+                        data:employees
                     });
                 })
             }

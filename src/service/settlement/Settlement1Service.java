@@ -314,41 +314,57 @@ public class Settlement1Service {
     }
 
     //读取基数
-    public static String readBase(String[] eids, long sid, Connection conn) {
+    public static String readBase(String start, String end, String[] eids, long sid, Connection conn) {
         float baseM=0;//医保基数
         float baseS=0;//社保基数
         List<JSONObject> data = new ArrayList<>();
-        String result = null;
-
+        String result ;
+        JSONObject json = new JSONObject();
         for(int i = 0;i<eids.length;i++){
-            JSONObject object = new JSONObject();
-            //读取社保设置基数
-            EnsureSetting setting = (EnsureSetting) SettingDao.get(conn, Long.parseLong(eids[i])).data;
-
+            //获取员工信息
             QueryConditions conditions = new QueryConditions();
             conditions.add("id","=",Long.parseLong(eids[i]));
             Employee employee = (Employee) EmployeeDao.get(conn,conditions).data;
 
+            JSONObject object = new JSONObject();
+            //读取员工社保设置基数
+            EnsureSetting setting = (EnsureSetting) SettingDao.get(conn, Long.parseLong(eids[i])).data;
             if(setting==null){//员工社保设置异常
-                JSONObject json = new JSONObject();
                 json.put("success",false);
                 json.put("msg","请完善员工"+employee.getName()+"的社保设置");
                 result = json.toJSONString();
                 return result;
             }
-
             byte settingM = setting.getSettingM();//医保设置
             byte settingS = setting.getSettingS();//社保设置
             switch (settingM){
                 case 0://最低基数
-                    RuleMedicare medicare = (RuleMedicare) RuleMedicareDao.getLast(conn,setting.getCity()).data;
-                    if(medicare!=null){
-                       baseM=medicare.getBase();
-                    }else {
-                        baseM = 0;
+                    DaoQueryResult result1 = RuleMedicareDao.get(conn,setting.getCity(), Date.valueOf(start));
+                    DaoQueryResult result2 = RuleMedicareDao.get(conn,setting.getCity(), Date.valueOf(end));
+                    if(result2.success){//结束月份存在规则
+                        RuleMedicare medicare1 = (RuleMedicare) result1.data;
+                        RuleMedicare medicare2 = (RuleMedicare) result2.data;
+                        if(!result1.success){//起始月份不存在规则
+                           baseM =medicare2.getBase();
+                        }else {//存在两个规则，则判断规则是否是同一个
+                            if(medicare1.getId()!=medicare2.getId()) {//两个规则不相同
+                                json.put("success", false);
+                                json.put("msg", "请重新确认月份区间");
+                                result = json.toJSONString();
+                                return result;
+                            }
+                            baseM = medicare1.getBase();
+                        }
+                    }else {//两个都不在规则
+                        json.put("success",false);
+                        //这里应该是今年的医保规则不存在
+                        String year = end.split("-")[0];
+                        json.put("msg","员工"+employee.getName()+year+"年，所处地市的医保规则不存在,请核对");
+                        result = json.toJSONString();
+                        return result;
                     }
                     break;
-                case 1://实际工资？当前月的实际工资
+                case 1://实际工资,当前月的实际工资
                     QueryConditions conditions1 = new QueryConditions();
                     conditions1.add("sid","=",sid);
                     conditions1.add("eid","=",Long.parseLong(eids[i]));
@@ -365,18 +381,35 @@ public class Settlement1Service {
                 case 3://自定义基数
                     baseM = setting.getValM();
                     break;
-
             }
             switch (settingS){
-                case 0://最低基数?这里获取什么时候的社保规则呢？
-                    RuleSocial social = (RuleSocial) RuleSocialDao.getLast(conn,setting.getCity()).data;
-                    if(social!=null){
-                        baseS=social.getBase();
-                    }else {//社保规则不存在
-                        baseS = 0;
+                case 0://最低基数
+                    DaoQueryResult result1 = RuleSocialDao.get(conn,setting.getCity(), Date.valueOf(start));
+                    DaoQueryResult result2 = RuleSocialDao.get(conn,setting.getCity(), Date.valueOf(end));
+                    if(result2.success){//结束月份存在规则
+                        RuleSocial social1 = (RuleSocial) result1.data;
+                        RuleSocial social2 = (RuleSocial) result2.data;
+                        if(!result1.success){//起始月份不存在规则
+                            baseS =social2.getBase();
+                        }else {//存在两个规则，则判断规则是否是同一个
+                            if(social1.getId()!=social2.getId()) {//两个规则不相同
+                                json.put("success", false);
+                                json.put("msg", "请重新确认月份区间");
+                                result = json.toJSONString();
+                                return result;
+                            }
+                            baseS = social1.getBase();
+                        }
+                    }else {//两个都不在规则
+                        json.put("success",false);
+                        //这里应该是今年的医保规则不存在
+                        String year = end.split("-")[0];
+                        json.put("msg","员工"+employee.getName()+year+"年，所处地市的社保规则不存在,请核对");
+                        result = json.toJSONString();
+                        return result;
                     }
                     break;
-                case 1://实际工资？当前月的实际工资
+                case 1://实际工资，当前月的实际工资
                     QueryConditions conditions2 = new QueryConditions();
                     conditions2.add("sid","=",sid);
                     conditions2.add("eid","=",Long.parseLong(eids[i]));
@@ -401,7 +434,6 @@ public class Settlement1Service {
             object.put("baseS",baseS);
             data.add(object);
         }
-        JSONObject json = new JSONObject();
         json.put("success",true);
         json.put("data",data);
         result = json.toJSONString();
@@ -427,9 +459,9 @@ public class Settlement1Service {
                return result;
             }
             //医保规则
-            RuleMedicare medicare = (RuleMedicare) RuleMedicareDao.getLast(conn,setting.getCity()).data;
+            RuleMedicare medicare = (RuleMedicare)RuleMedicareDao.get(conn,setting.getCity(),Date.valueOf(end)).data;
             //社保规则
-            RuleSocial social = (RuleSocial) RuleSocialDao.getLast(conn,setting.getCity()).data;
+            RuleSocial social = (RuleSocial)RuleSocialDao.get(conn,setting.getCity(),Date.valueOf(end)).data;
             if(medicare==null||social==null){//医保规则空或者社保为空
                 result.msg="员工"+employee.getName()+"社保或医保所在地的规则为空，请核对";
                 return result;
