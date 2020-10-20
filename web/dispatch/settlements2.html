@@ -27,47 +27,45 @@
     </head>
 
     <body class="layui-layout-body">
-        <div style="padding: 5px;">
-            <form class="layui-form searchbox">
-                <div class="layui-input-inline">
-                    <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
-                </div>
-                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-                <div class="layui-input-inline">
-                    <input type="text" class="layui-input" autocomplete="off" id="filter_month" placeholder="按月份过滤">
-                </div>
-                <div class="layui-input-inline">
-                    <select name="status"  lay-filter="select" >
-                        <option value="">按状态过滤</option>
-                        <option value="0">编辑</option>
-                        <option value="1">提交</option>
-                        <option value="2">一审</option>
-                        <option value="3">二审</option>
-                        <option value="4">三审</option>
-                        <option value="5">扣款</option>
-                        <option value="6">发放</option>
-                    </select>
-                </div>
-            </form>
-            <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_settlement">
-                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
+        <form class="layui-form searchbox">
+            <div class="layui-input-inline">
+                <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
             </div>
-            <table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>
-            <div class="layui-table-page" id="pager"></div>
-
-            <!--行内工具栏-->
-            <script type="text/html" id="bar_settlement">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">明细</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log">日志</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="save">保存</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="saveAs">另存为</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="commit">提交</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reset">重置</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="charge">扣款</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
-            </script>
+            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" autocomplete="off" id="filter_month" placeholder="按月份过滤">
+            </div>
+            <div class="layui-input-inline">
+                <select name="status"  lay-filter="select" >
+                    <option value="">按状态过滤</option>
+                    <option value="0">编辑</option>
+                    <option value="1">提交</option>
+                    <option value="2">一审</option>
+                    <option value="3">二审</option>
+                    <option value="4">三审</option>
+                    <option value="5">扣款</option>
+                    <option value="6">发放</option>
+                </select>
+            </div>
+        </form>
+        <!--顶部工具栏-->
+        <div class="layui-hide" id="top_bar_settlement">
+            <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
         </div>
+        <table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>
+        <div class="layui-table-page" id="pager"></div>
+
+        <!--行内工具栏-->
+        <script type="text/html" id="bar_settlement">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">明细</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log">日志</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="save">保存</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="saveAs">另存为</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="commit">提交</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reset">重置</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="charge">扣款</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+        </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/queryParam.js"></script>

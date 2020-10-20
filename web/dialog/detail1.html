@@ -12,22 +12,10 @@
         <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
         <script src="../lib/layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
-        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
-        <!--[if lt IE 9]>
-          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-        <style>
-            .searchbox{
-                margin-left:400px;
-                display:inline;
-                width:300px;
-            }
-        </style>
     </head>
 
     <body class="layui-layout-body">
-        <div style="padding: 5px;">
+        <div class="dialog-content">
             <!--顶部工具栏-->
             <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
             <div class="layui-hide" id="top_bar_detail">

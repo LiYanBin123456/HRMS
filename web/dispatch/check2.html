@@ -27,23 +27,21 @@
     </head>
 
     <body class="layui-layout-body">
-        <div style="padding: 5px;">
-            <!--顶部工具栏-->
-                <form class="layui-form " style="display: inline">
-                    <div class="layui-input-inline">
-                             <input type="radio" name="category" value="0" title="待审核" lay-filter="category" checked >
-                             <input type="radio" name="category" value="1" title="全部" lay-filter="category" >
-                    </div>
-                </form>
-            <table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>
-            <div class="layui-table-page" id="pager"></div>
- 
-            <!--行内工具栏-->
-            <script type="text/html" id="bar_settlement">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>明细</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="check"><i class="layui-icon layui-icon-edit"></i>审核</a>
-            </script>
-        </div>
+        <!--顶部工具栏-->
+        <form class="layui-form " style="display: inline">
+            <div class="layui-input-inline">
+                     <input type="radio" name="category" value="0" title="待审核" lay-filter="category" checked >
+                     <input type="radio" name="category" value="1" title="全部" lay-filter="category" >
+            </div>
+        </form>
+        <table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>
+        <div class="layui-table-page" id="pager"></div>
+
+        <!--行内工具栏-->
+        <script type="text/html" id="bar_settlement">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>明细</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="check"><i class="layui-icon layui-icon-edit"></i>审核</a>
+        </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/queryParam.js"></script>

@@ -21,28 +21,26 @@
     </head>
 
     <body class="layui-layout-body">
-        <div style="padding: 5px;">
-            <form class="layui-form">
-                <div class="layui-input-inline">
-                    <div class="layui-input-block">
-                        <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city-picker" readonly="readonly" data-toggle="city-picker" placeholder="按城市过滤">
-                    </div>
+        <form class="layui-form">
+            <div class="layui-input-inline">
+                <div class="layui-input-block">
+                    <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city-picker" readonly="readonly" data-toggle="city-picker" placeholder="按城市过滤">
                 </div>
-            </form>
-            <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_medicare">
-                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
-
             </div>
-            <table id="tbl_medicare" lay-filter="filter_tb_medicare"></table>
-            <div class="layui-table-page" id="pager"></div>
+        </form>
+        <!--顶部工具栏-->
+        <div class="layui-hide" id="top_bar_medicare">
+            <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
 
-            <!--行内工具栏-->
-            <script type="text/html" id="bar_medicare">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
-            </script>
         </div>
+        <table id="tbl_medicare" lay-filter="filter_tb_medicare"></table>
+        <div class="layui-table-page" id="pager"></div>
+
+        <!--行内工具栏-->
+        <script type="text/html" id="bar_medicare">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+        </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/city.js"></script>

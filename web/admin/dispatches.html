@@ -30,44 +30,42 @@
     </head>
 
     <body class="layui-layout-body">
-        <div style="padding: 5px;">
-            <from class="layui-form" style="display: inline" >
-                <div class="layui-input-inline ">
-                    <div class="layui-inline"><input type="radio" name="category" value="0" title="合作中" lay-filter="category" checked></div>
-                    <div class="layui-inline"><input type="radio" name="category" value="1" title="潜在" lay-filter="category" ></div>
-                    <div class="layui-inline"><input type="radio" name="category" value="2" title="流失" lay-filter="category" ></div>
+        <from class="layui-form" style="display: inline" >
+            <div class="layui-input-inline ">
+                <div class="layui-inline"><input type="radio" name="category" value="0" title="合作中" lay-filter="category" checked></div>
+                <div class="layui-inline"><input type="radio" name="category" value="1" title="潜在" lay-filter="category" ></div>
+                <div class="layui-inline"><input type="radio" name="category" value="2" title="流失" lay-filter="category" ></div>
+            </div>
+        </from>
+        <!--顶部工具栏-->
+        <div class="layui-hide" id="top_bar_dispatch">
+            <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
+            <form class="layui-form searchbox">
+                <div style="width: 230px" class="layui-input-inline">
+                    <input name="keyword" class="layui-input" placeholder="请输入要查找的客户名称或者联系人">
                 </div>
-            </from>
-            <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_dispatch">
-                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
-                <form class="layui-form searchbox">
-                    <div style="width: 230px" class="layui-input-inline">
-                        <input name="keyword" class="layui-input" placeholder="请输入要查找的客户名称或者联系人">
-                    </div>
-                    <button class="layui-btn layui-btn-normal layui-btn-sm distance " lay-submit lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-                </form>
-            </div>
-            <div id="container">
-            <table id="tbl_dispatch" lay-filter="filter_tb_dispatch"></table>
-            </div>
-            <div class="layui-table-page" id="pager"></div>
-
-            <!--行内工具栏-->
-            <script type="text/html" id="bar_dispatch">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="updateType1"><i class="layui-icon layui-icon-delete"></i> 删除</a>
-            </script>
-            <script type="text/html" id="bar_potential">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="updateType2"><i class="layui-icon layui-icon-delete"></i> 删除</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="updateType3"><i class="layui-icon layui-icon-edit"></i>合作</a>
-            </script>
-            <script type="text/html" id="bar_loss">
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="updateType3"><i class="layui-icon layui-icon-edit"></i>合作</a>
-            </script>
+                <button class="layui-btn layui-btn-normal layui-btn-sm distance " lay-submit lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+            </form>
         </div>
+        <div id="container">
+        <table id="tbl_dispatch" lay-filter="filter_tb_dispatch"></table>
+        </div>
+        <div class="layui-table-page" id="pager"></div>
+
+        <!--行内工具栏-->
+        <script type="text/html" id="bar_dispatch">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="updateType1"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+        </script>
+        <script type="text/html" id="bar_potential">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="updateType2"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="updateType3"><i class="layui-icon layui-icon-edit"></i>合作</a>
+        </script>
+        <script type="text/html" id="bar_loss">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="updateType3"><i class="layui-icon layui-icon-edit"></i>合作</a>
+        </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/jquery.min.js"></script>
