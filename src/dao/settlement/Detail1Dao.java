@@ -27,6 +27,10 @@ public class Detail1Dao {
         }
         return DbUtil.batch(conn,sql,params);
     }
+    //获取明细
+    public static DaoQueryResult get(Connection conn, QueryConditions conditions){
+        return DbUtil.get(conn,"view_detail1",conditions, ViewDetail1.class);
+    }
 
     public static DaoUpdateResult importDetails(Connection conn, List<Detail1> details){
         String sql = "insert detail1 (sid,eid,base,pension1,medicare1,unemployment1,disease1,fund1,pension2,medicare2,unemployment2,injury,disease2,birth,fund2,tax,payable,paid,f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f19,f20,status) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";

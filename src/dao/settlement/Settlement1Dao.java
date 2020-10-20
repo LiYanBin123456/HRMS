@@ -1,6 +1,8 @@
 package dao.settlement;
 
+import bean.employee.EnsureSetting;
 import bean.settlement.*;
+import dao.employee.SettingDao;
 import database.*;
 
 import java.sql.Connection;
@@ -110,4 +112,6 @@ public class Settlement1Dao {
         Object []params = {s.getDid(),s.getCid(),s.getMonth(),s.getSalary(),s.getSocial(),s.getMedicare(),s.getFund(),s.getManage(),s.getTax(),s.getSummary(),s.getStatus(),s.getSource(),s.getId()};
         return DbUtil.update(conn,sql,params);
     }
+
+
 }
