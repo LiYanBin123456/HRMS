@@ -156,10 +156,11 @@
           }
 
             function getEmployees() {
+                //查询除出该单位，类型外派员工，用工性质派遣或者外包，状态在职的员工列表
                 param_query.addCondition("cid","=",cid);
                 param_query.addCondition("type","=",1);
                 param_query.addCondition("status","=",0);
-                param_query.addCondition("category","!=",2);
+                param_query.addCondition("category","!=",3);
                 iEmployee.getList(param_query,1,function (result) {
                     table.reload('tbl_staff', {
                         data:result.rows

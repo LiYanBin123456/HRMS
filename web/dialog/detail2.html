@@ -215,11 +215,12 @@
             }
             //打开添加对话框
             function showInsertDlg() {
+                //查询除出该单位，类型外派员工，用工性质小时工，状态在职的员工列表
                 var param = new QueryParam();
                 param.addCondition("cid","=",cid);
                 param.addCondition("type","=",1);
                 param.addCondition("status","=",0);
-                param.addCondition("category","=",2);
+                param.addCondition("category","=",3);
                 var content = "member.html?param="+encodeURIComponent(JSON.stringify(param));
                 layer.open({
                     title:"添加明细",

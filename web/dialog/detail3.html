@@ -208,7 +208,7 @@
                 param.addCondition("cid","=",cid);
                 param.addCondition("type","=",1);
                 param.addCondition("status","=",0);
-                param.addCondition("category","!=",2);
+                param.addCondition("category","!=",3);
                 var content = "member.html?param="+encodeURIComponent(JSON.stringify(param));
                 layer.open({
                     title:"添加明细",
