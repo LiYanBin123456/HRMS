@@ -240,13 +240,13 @@
             }
 
             function download() {
-                iFile.existModel(3,function (result) {
+                iFile.exist(8,0,function (result) {
                     if(!result.exist){
                         layer.msg("附件不存在或已删除");
                         return;
                     }
 
-                    var url = "/hrms/verify/file?op=downloadModel&category=3";
+                    var url = "/hrms/verify/file?op=download&category=8";
                     var form = $('<form method="POST"></form>');
                     form.attr('action', url);
                     form.appendTo($('body'));

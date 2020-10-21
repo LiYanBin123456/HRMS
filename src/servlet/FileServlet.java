@@ -66,18 +66,18 @@ public class FileServlet extends HttpServlet {
             case "readDeduct"://读取个税表中的数据
                 result = readDeduct(request);
                 break;
-            case "exist"://判断合同附件是否存在
+            case "exist"://判断文件是否存在
                 result = exist(request);
-                break;
+                break;/*
             case "existModel"://判断合同附件是否存在
                 result = existModel(request);
-                break;
-            case "downloadContract"://下载合同复印件
-                downloadContract(request,response);
-                return;
+                break;*/
+            case "download"://下载文件
+                download(request,response);
+                return;/*
             case "downloadModel"://下载模板
                 downloadModel(request,response);
-                return;
+                return;*/
             case "downloadDetail1"://下载商业保险结算单明细
                 downloadDetail1(conn,request,response);
                 return;
@@ -202,16 +202,16 @@ public class FileServlet extends HttpServlet {
         String fileName=null;
         switch (category){
             case 0://小时工模板
-                fileName = "detail2"+".xls";
+                fileName = "detail2.xls";
                 break;
             case 1://商业保险结算单明细模板
-                fileName = "detail3"+".xls";
+                fileName = "detail3.xls";
                 break;
             case 2://员工模板
-                fileName = "employee"+".xls";
+                fileName = "employee.xls";
                 break;
             case 3://员工合同模板
-                fileName = "EmployeeContract"+".xls";
+                fileName = "EmployeeContract.xls";
                 break;
         }
         String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
@@ -342,50 +342,69 @@ public class FileServlet extends HttpServlet {
 
     //判断合同文件是否存在
     private String exist(HttpServletRequest request) throws IOException {
-        String id = request.getParameter("id");
         byte category = Byte.parseByte(request.getParameter("category"));
-        String folder = "";
-        String suffix = "";
-        switch (category){
-            case 0:
-                folder = request.getServletContext().getRealPath("/accessory/headImg");
-                suffix = "jpg";
-                break;
-            case 1:
-                folder = request.getServletContext().getRealPath("/accessory/contract1");
-                suffix = "pdf";
-                break;
-            case 2:
-                folder = request.getServletContext().getRealPath("/accessory/contract2");
-                suffix = "pdf";
-                break;
-            case 3:
-                folder = request.getServletContext().getRealPath("/accessory/contract3");
-                suffix = "pdf";
-                break;
-            case 4:
-                folder = request.getServletContext().getRealPath("/accessory/leave");
-                suffix = "jpg";
-                break;
-        }
-        String fileName = String.format("%s/%s.%s",folder,id,suffix);
-        File file = new File(fileName);
+        String id = request.getParameter("id");
 
+        File file = getFile(category,id,request.getServletContext().getRealPath("/"));
         JSONObject json = new JSONObject();
         json.put("success",true);
         json.put("exist",file.exists()?true:false);
         return json.toJSONString();
     }
 
+    private File getFile(byte category, String id, String root){
+        String folder = "";
+        String filename = "";
+        switch (category){
+            case 0:
+                folder = "accessory/headImg";
+                filename = id+".jpg";
+                break;
+            case 1:
+                folder = "accessory/contract1";
+                filename = id+".pdf";
+                break;
+            case 2:
+                folder = "accessory/contract2";
+                filename = id+".pdf";
+                break;
+            case 3:
+                folder = "accessory/contract3";
+                filename = id+".pdf";
+                break;
+            case 4:
+                folder = "accessory/leave";
+                filename = id+".jpg";
+                break;
+            case 5://小时工模板
+                folder = "excelFile";
+                filename = "detail2.xls";
+                break;
+            case 6://商业保险结算单明细模板
+                folder = "excelFile";
+                filename = "detail3.xls";
+                break;
+            case 7://员工模板
+                folder = "excelFile";
+                filename = "employee.xls";
+                break;
+            case 8://员工合同模板
+                folder = "/excelFile";
+                filename = "EmployeeContract.xls";
+        }
+        String fileName = String.format("%s/%s/%s",root,folder,filename);
+        return new File(fileName);
+    }
+
     //下载合同文件
-    private void downloadContract(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        byte category = Byte.parseByte(request.getParameter("category"));
         String id = request.getParameter("id");
-        String fileName = id+".pdf";
-        String fullFileName = getServletContext().getRealPath("/contractFile/" + fileName);
-        File file = new File(fullFileName);
+
+        File file = getFile(category,id,request.getServletContext().getRealPath("/"));
 
         response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment;filename="+fileName);
+        response.setHeader("Content-Disposition", "attachment;filename="+file.getName());
 
         ServletOutputStream os = response.getOutputStream();
         FileInputStream fis = new FileInputStream(file);

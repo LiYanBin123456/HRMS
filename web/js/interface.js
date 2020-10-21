@@ -1216,23 +1216,43 @@ var InterfaceFile = function () {
     };
     /**
      * 判断附件是否存在，返回结果为{success:true/false,exist:true/false}
-     * @param category 0-员工头像；1-平台与派遣单位的合同；2-派遣单位与合作单位的合同；3-派遣单位与员工的合同；4-员工离职证明
+     * @param category
+     * 0-员工头像；
+     * 1-平台与派遣单位的合同；
+     * 2-派遣单位与合作单位的合同；
+     * 3-派遣单位与员工的合同；
+     * 4-员工离职证明
+     * 5-小时工结算单明细模板
+     * 6-商业保险结算单明细模板
+     * 7-员工信息模板
+     * 8-员工合同信息模板
+     * @param id 头像、合同、离职证明对应的员工或合同id
      * @param success
      * @param fail
      */
-    this.exist = function (id,category,success,fail) {
+    this.exist = function (category,id,success,fail) {
         var para = {op: "exist",id:id,category:category};
         access(url,para,1,success,fail);
     };
 
     /**
-     * 下载合同复印件
-     * @param id 合同id
+     * 下载文件
+     * * @param category
+     * 0-员工头像；
+     * 1-平台与派遣单位的合同；
+     * 2-派遣单位与合作单位的合同；
+     * 3-派遣单位与员工的合同；
+     * 4-员工离职证明
+     * 5-小时工结算单明细模板
+     * 6-商业保险结算单明细模板
+     * 7-员工信息模板
+     * 8-员工合同信息模板
+     * @param id 头像、合同、离职证明对应的员工或合同id
      * @param success
      * @param fail
      */
-    this.downloadContract = function (id,success,fail) {
-        var para = {op: "downloadContract",id:id};
+    this.download = function (category,id,success,fail) {
+        var para = {op: "download",id:id,category:category};
         access(url,para,1,success,fail);
     };
 };

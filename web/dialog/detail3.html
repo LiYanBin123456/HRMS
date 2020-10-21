@@ -257,7 +257,7 @@
 
             //下载
             function download() {
-                iFile.existModel(1,function (result) {
+                iFile.exist(6,0,function (result) {
                     if(!result.exist){
                         layer.msg("附件不存在或已删除");
                         return;

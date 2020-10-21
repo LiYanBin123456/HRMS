@@ -268,7 +268,7 @@
 
             //下载模板
             function download() {
-                iFile.existModel(0,function (result) {
+                iFile.exist(5,0,function (result) {
                     if(!result.exist){
                         layer.msg("附件不存在或已删除");
                         return;

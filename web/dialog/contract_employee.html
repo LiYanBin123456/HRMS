@@ -148,7 +148,7 @@
         contract.end = format_date(contract.end);
         form.val('form_contract', contract);
         layedit.setContent(editer, contract.content, false);
-        iFile.exist(contract.id,3,function (result) {
+        iFile.exist(3,contract.id,function (result) {
             if(result.exist){
                 var src = "../accessory/contract3/"+contract.id+".pdf";
                 $('#preview_contact').attr('src', src); //图片预览

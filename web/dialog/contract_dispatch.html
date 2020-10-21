@@ -153,7 +153,7 @@
         layedit.setContent(editer, contract.content, false);
         $("[name=client]").attr("disabled", 'disabled');
         form.render('select', 'form_contract');
-        iFile.exist(contract.id,1,function (result) {
+        iFile.exist(1,contract.id,function (result) {
             if(result.exist){
                 var src = "../accessory/contract1/"+contract.id+".pdf";
                 $('#preview_contact').attr('src', src); //图片预览
@@ -183,7 +183,7 @@
     }
 
     function download(){
-        iFile.existContract(contract.id,function (result) {
+        iFile.exist(1,contract.id,function (result) {
             if(!result.exist){
                 layer.msg("附件不存在或已删除");
                 return;
