@@ -34,16 +34,20 @@
                 </div>
                 <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
                 &emsp;&emsp;&emsp;&emsp;
-                <div class="layui-inline"><input type="text"  id="starts"  name="start"  placeholder="起始月份" autocomplete="off" class="layui-input"></div>
-                    <div class="layui-inline"><input type="text"  id="ends"  name="end"  placeholder="结束月份" autocomplete="off" class="layui-input"></div>
+                <div class="layui-inline">
+                    <input type="text"  id="starts"  name="start"  placeholder="起始月份" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-inline">
+                    <input type="text"  id="ends"  name="end"  placeholder="结束月份" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-inline">
                     <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="read"><i class="layui-icon "></i> 读取基数</button>
                 </div>
+                &emsp;&emsp;&emsp;&emsp;
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="append"><i class="layui-icon "></i> 社保补缴</button>
+                </div>
             </form>
-            <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_employee">
-                <button class="layui-btn layui-btn-sm" lay-event="append"><i class="layui-icon "></i> 社保补缴</button>
-
-            </div>
             <table id="tbl_employee" lay-filter="filter_tb_employee"></table>
             <div class="layui-table-page" id="pager"></div>
 
@@ -55,6 +59,7 @@
         <script src="../js/queryParam.js"></script>
         <script src="../js/util.js"></script>
         <script>
+            var member;
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
@@ -109,12 +114,16 @@
                     getStaffs();
                     return false;
                 });
-                table.on('checkbox(filter_tb_employee)', function(obj){
-                    member = table.checkStatus('tbl_employee').data;
-                });
                 form.on('submit(read)', function (data) {
                     read();
                     return false;
+                });
+                form.on('submit(append)', function (data) {
+                    replenish();
+                    return false;
+                });
+                table.on('checkbox(filter_tb_employee)', function(obj){
+                    member = table.checkStatus('tbl_employee').data;
                 });
             }
 
@@ -136,19 +145,25 @@
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_employee',
-                    toolbar: '#top_bar_employee', //开启头部工具栏，并为其绑定左侧模板
-                    title: '列表',
-                    cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                     cols: columns_staff_with_base,
-                    id: 'tbl_employee'
-                });
-                //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_employee)', function(obj){
-                    switch(obj.event){
-                        case 'append':
-                            replenish();
-                            break;
-                };
+                    id: 'tbl_employee',
+                    done: function (res, curr, count) {
+                        if(!member || member.length==0){
+                            return;
+                        }
+                        var rows = res.data;
+                        for (var i in rows) {
+                            for(var j in member){
+                                if(rows[i].id == member[j].id){
+                                    rows[i].LAY_CHECKED = "true";
+                                    var index= rows[0]['LAY_TABLE_INDEX'];
+                                    $('tr[data-index=' + index + '] input[type="checkbox"]').prop('checked', true);
+                                    $('tr[data-index=' + index + '] input[type="checkbox"]').next().addClass('layui-form-checked');
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 });
                 getStaffs();
           }
@@ -168,6 +183,10 @@
 
             //读取基数
             function read() {
+                if(!member || member.length==0){
+                    layer.msg("请选择员工");
+                    return;
+                }
                 var eids = getKeyArray(member,"id");
                 iSettlement.readBase(start,end,eids,sid,function (result) {
                     var bases = result.data;
@@ -189,6 +208,10 @@
             }
             //社保补缴
             function replenish() {
+                if(!member || member.length==0){
+                    layer.msg("请选择员工");
+                    return;
+                }
                 var  employees = new Array(member.length)
                 for (var i in member){
                     employees[i] = {"eid":member[i].id,"baseM":member[i].baseM,"baseS":member[i].baseS};

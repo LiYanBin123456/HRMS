@@ -442,8 +442,6 @@
         }else{
             iClient.insert(cooperation,1,function (result){
                 cooperation.id = result.extra;
-                finance = {};
-                mapSalary = {};
                 salary_items_defined = [];
                 layer.alert("基础信息保存成功，请完善财务信息", {icon: 20});
             });

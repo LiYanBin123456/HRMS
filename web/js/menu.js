@@ -34,7 +34,7 @@ var menuItems_dispatch = [
     {id:120,title:"员工管理",icon:"&#xe6a7",children:
         [
             {id:1<<3,   title:"内部员工",href:"employees1.html",icon:"&#xe6a7"},
-            {id:1<<4,   title:"外派员工",href:"'employees2.html",icon:"&#xe6a7"},
+            {id:1<<4,   title:"外派员工",href:"employees2.html",icon:"&#xe6a7"},
             {id:1<<5,   title:"人才库",href:"employees3.html",icon:"&#xe6a7"},
             {id:1<<6,   title:"合同管理",href:"contracts_employee.html",icon:"&#xe6a7"}
         ]

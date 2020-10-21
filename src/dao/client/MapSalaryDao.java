@@ -4,6 +4,7 @@ import bean.client.MapSalary;
 import database.*;
 
 import java.sql.Connection;
+import java.sql.Date;
 
 public class MapSalaryDao {
     //根据月份获取自定义工资,也是查出这个月的最新自定义工资
@@ -21,6 +22,14 @@ public class MapSalaryDao {
         conditions.add("cid", "=", id);
         return DbUtil.exist(conn, "map_salary", conditions);
     }
+
+    //判断是否存在
+    public static DaoExistResult exist(long id, Date date, Connection conn){
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("cid", "=", id);
+        conditions.add("date", "=", date);
+        return DbUtil.exist(conn, "map_salary", conditions);
+    }
     //获取最新自定义工资
     public static DaoQueryResult getLast(long id, Connection conn){
         QueryConditions conditions = new QueryConditions();
@@ -34,5 +43,12 @@ public class MapSalaryDao {
         String sql = "insert into map_salary (cid,items,date) values (?,?,now())";
         Object []params = {m.getCid(),m.getItems()};
         return DbUtil.insert(conn,sql,params);
+    }
+
+    //修改自定义工资
+    public static DaoUpdateResult update(MapSalary m, Connection conn){
+        String sql = "update map_salary set items=? where cid=? and date=?";
+        Object []params = {m.getItems(),m.getCid(),m.getDate()};
+        return DbUtil.update(conn,sql,params);
     }
 }

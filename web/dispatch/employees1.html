@@ -287,13 +287,13 @@
             }
 
             function download() {
-                    var url = "/hrms/verify/file?op=downloadModel&category=2";
-                    var form = $('<form method="POST"></form>');
-                    form.attr('action', url);
-                    form.appendTo($('body'));
-                    form.submit();
-                    form.remove();
-                }
+                var url = "/hrms/verify/file?op=download&category=7";
+                var form = $('<form method="POST"></form>');
+                form.attr('action', url);
+                form.appendTo($('body'));
+                form.submit();
+                form.remove();
+            }
 
 
         </script>

@@ -32,16 +32,23 @@
 
     <body class="layui-layout-body">
         <div class="dialog-content">
-            <!--顶部工具栏-->
-            <div class="layui-hide" id="top_bar_balance">
-                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 社保补差</button>
-                <form class="layui-form searchbox">
-                    <div class="layui-input-inline">
-                        <div class="layui-inline"><input type="text"  id="start" name="time" required="" placeholder="起始月份" autocomplete="off" class="layui-input"></div>
-                        <div class="layui-inline"><input type="text"  id="end" name="time" required="" placeholder="结束月份" autocomplete="off" class="layui-input"></div>
-                    </div>
-                </form>
-            </div>
+            <form class="layui-form">
+                <div class="layui-input-inline">
+                    <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
+                </div>
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                &emsp;&emsp;&emsp;&emsp;
+                <div class="layui-inline">
+                    <input type="text"  id="start"  name="start"  placeholder="起始月份" autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-inline">
+                    <input type="text"  id="end"  name="end"  placeholder="结束月份" autocomplete="off" class="layui-input">
+                </div>
+                &emsp;&emsp;&emsp;&emsp;
+                <div class="layui-inline">
+                    <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="append"><i class="layui-icon "></i> 社保补差</button>
+                </div>
+            </form>
             <table id="tbl_staff" lay-filter="filter_tb_balance"></table>
             <div class="layui-table-page" id="pager"></div>
         </div>
@@ -51,6 +58,7 @@
         <script src="../js/queryParam.js"></script>
         <script src="../js/util.js"></script>
         <script>
+            var member;
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
@@ -101,7 +109,13 @@
                 initTable();
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
-                    search(keyword);
+                    param_query.addKeyword(keyword);
+                    getEmployees();
+                    return false;
+                });
+                form.on('submit(append)', function (data) {
+                    balance();
+                    return false;
                 });
                 table.on('checkbox(filter_tb_balance)', function(obj){
                     member = table.checkStatus('tbl_staff').data;
@@ -119,17 +133,13 @@
                         //首次不执行
                         if(!first){
                             param_query.setPagination(obj.cur,obj.limit);
-                            getStuff();
+                            getEmployees();
                         }
                     }
                 });
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_staff',
-                    toolbar: '#top_bar_balance', //开启头部工具栏，并为其绑定左侧模板
-                    defaultToolbar:['filter', 'exports', 'print'],//自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
-                    title: '列表',
-                    cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                     cols: columns_member,
                     id: 'tbl_staff'
                 });
@@ -142,29 +152,30 @@
                             break;
                     };
                 });
-                getStuff();
+                getEmployees();
           }
 
-            function getStuff() {
+            function getEmployees() {
                 param_query.addCondition("cid","=",cid);
                 param_query.addCondition("type","=",1);
                 param_query.addCondition("status","=",0);
                 param_query.addCondition("category","!=",2);
                 iEmployee.getList(param_query,1,function (result) {
-                    console.log(result.rows);
                     table.reload('tbl_staff', {
                         data:result.rows
                     });
                 });
             }
 
-            //模糊查找
-
             //补差
             function balance() {
+                if(!member || member.length==0){
+                    layer.msg("请选择员工");
+                    return;
+                }
                 var eids = getKeyArray(member,"id");
                 iSettlement.makeup(start,end,sid,eids,function (result) {
-                    layer.msg = "补差成功";
+                    layer.msg("补差成功");
                 })
             }
         </script>

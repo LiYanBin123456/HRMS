@@ -22,6 +22,7 @@ import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.Date;
+import java.util.Calendar;
 import java.util.List;
 
 @WebServlet(urlPatterns = "/verify/client")
@@ -121,14 +122,16 @@ public class ClientServlet extends HttpServlet {
         byte category = Byte.parseByte(request.getParameter("category"));
         HttpSession session = request.getSession();
         long rid = (long) session.getAttribute("rid");
+        long id = (long) session.getAttribute("id");
         switch (category) {
             case 0://派遣单位客户
                 Dispatch dispatch = JSON.parseObject(request.getParameter("client"), Dispatch.class);
+                dispatch.setAid(id);
                 res = DispatchService.insert(conn, dispatch);
                 break;
             case 1://合作单位客户
                Cooperation cooperation= JSON.parseObject(request.getParameter("client"), Cooperation.class);
-               cooperation.setAid(0);//当前用户为其管理员
+               cooperation.setAid(id);//当前用户为其管理员
                cooperation.setDid(rid);
                res = CooperationService.insert(cooperation,conn);
                break;
@@ -325,6 +328,8 @@ public class ClientServlet extends HttpServlet {
     //增加客户自定义工资信息
     private String insertSalaryDefine(Connection conn, HttpServletRequest request) {
         MapSalary mapSalary =JSONObject.parseObject(request.getParameter("mapSalary"),MapSalary.class);
+        Date date = new Date(Calendar.getInstance().getTimeInMillis());
+        mapSalary.setDate(date);
         DaoUpdateResult res= MapSalaryService.insert(mapSalary,conn);
         return  JSONObject.toJSONString(res);
     }
