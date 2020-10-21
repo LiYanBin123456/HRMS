@@ -188,6 +188,14 @@
                     layer.msg("请选择员工");
                     return;
                 }
+                if (!start|| start == null||start=="null"||start==""){
+                    layer.msg("请选择起始月份");
+                    return;
+                }
+                if (!end|| end == null||end=="null"||end==""){
+                    layer.msg("请选择结束月份");
+                    return;
+                }
                 var eids = getKeyArray(member,"id");
                 iSettlement.readBase(start,end,eids,sid,function (result) {
                     var bases = result.data;
@@ -209,8 +217,17 @@
             }
             //社保补缴
             function replenish() {
+                console.log(start);
                 if(!member || member.length==0){
                     layer.msg("请选择员工");
+                    return;
+                }
+                if (!start|| start == null||start=="null"||start==""){
+                    layer.msg("请选择起始月份");
+                    return;
+                }
+                if (!end|| end == null||end=="null"||end==""){
+                    layer.msg("请选择结束月份");
                     return;
                 }
                 var  employees = new Array(member.length)
@@ -219,8 +236,8 @@
                 }
                 console.log(employees);
                 iSettlement.backup(start, end,sid,JSON.stringify(employees),function () {
-                    layer.msg = "补缴成功";
-                })
+                    layer.msg("补缴成功");
+                });
 
             }
         </script>
