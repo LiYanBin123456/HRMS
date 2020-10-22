@@ -268,7 +268,53 @@ public class InsuranceService {
     }
 
     //导出续保医保单
-    public static void exportMedicare1(Connection conn, HttpServletResponse response) {
+    public static void exportMedicare1(Connection conn, HttpServletResponse response) throws IOException {
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.setHeader("Content-Disposition", "attachment; filename=exportMedicare1.xls");
+
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("type", "=", 1);
+        parameter.addCondition("status","=",1);
+
+        DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
+        String rows = JSONObject.toJSONString(result.rows);
+        List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);
+
+        //获取本月最后一天
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
+        WritableSheet sheet1 = book.createSheet("续保医保单", 0);
+        try {
+            sheet1.addCell(new Label(1, 0, "个人编号"));
+            sheet1.addCell(new Label(0, 0, "姓名"));
+            sheet1.addCell(new Label(2, 0, "证件号码"));
+            sheet1.addCell(new Label(3, 0, "参保基数"));
+            sheet1.addCell(new Label(4, 0, "参保险种"));
+            sheet1.addCell(new Label(4, 0, "参保时间"));
+            int index = 1;
+            for(ViewInsurance Insurance:insurances){
+                sheet1.addCell(new Label(1, index, Insurance.getCode()));
+                sheet1.addCell(new Label(0, index, Insurance.getName()));
+                sheet1.addCell(new Label(2, index, Insurance.getCardId()));
+                sheet1.addCell(new jxl.write.Number(3, index, Insurance.getMoney()));
+                sheet1.addCell(new Label(4, index, "医疗、大病、生育"));
+                sheet1.addCell(new Label(5, index, sdf.format(Insurance.getStart())));
+                index++;
+            }
+            //设置列宽
+            sheet1.setColumnView(0,8);
+            sheet1.setColumnView(1,11);
+            sheet1.setColumnView(2,19);
+            sheet1.setColumnView(3,8);
+            sheet1.setColumnView(4,8);
+            sheet1.setColumnView(5,40);
+            book.write();
+            book.close();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        ConnUtil.closeConnection(conn);
     }
 
     //导出停保医保单
