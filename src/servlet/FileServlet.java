@@ -32,6 +32,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
+import javax.sound.midi.Soundbank;
 import java.awt.*;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
@@ -111,13 +112,13 @@ public class FileServlet extends HttpServlet {
     //导出个税申报名单表
     private void exportTaxEmployee(Connection conn, HttpServletRequest request, HttpServletResponse response)  {
         response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=tax_employee.xls");
+        response.setHeader("Content-Disposition", "attachment; filename=tax1.xls");
 
         //读取模板
-        String fileName = "tax_employee.xls";
+        String fileName = "tax1.xls";
         String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
         File file = new File(fullFileName);
-        Workbook book;
+        Workbook book = null;
 
         //查询出员工，条件限制先留着以后交流修改
         QueryParameter parameter = new QueryParameter();
@@ -125,6 +126,7 @@ public class FileServlet extends HttpServlet {
         try {
             //获取模板
             book = Workbook.getWorkbook(file);
+
             // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
             //WritableWorkbook如果直接createWorkbook模版文件会覆盖原有的文件
             WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
@@ -133,8 +135,10 @@ public class FileServlet extends HttpServlet {
             int index = 1;
 
             for(Employee e:employeeList){
+                System.out.println(e.getCardId());
+                System.out.println(e.getName());
                 sheet.addCell(new Label(0, index, ""));//工号
-                sheet.addCell(new Label(1, index,e.getName()));//姓名
+                sheet.addCell(new Label(1, index, ""));//姓名
                 sheet.addCell(new Label(2, index, "居民身份证"));//证件类型
                 sheet.addCell(new Label(3, index,e.getCardId()));//证件号码
                 sheet.addCell(new Label(4, index,"中国"));//国籍
@@ -142,7 +146,7 @@ public class FileServlet extends HttpServlet {
                 sheet.addCell(new Label(6, index,IDCardUtil.getBirthday(e.getCardId())));//出生日期
                 sheet.addCell(new Label(7, index, "雇员"));//任职受雇从业类型
                 sheet.addCell(new Label(8, index,e.getPhone()));//手机号码
-                sheet.addCell(new Label(9, index, sdf.format(e.getEntry())));//任职受雇从业日期
+                sheet.addCell(new Label(9, index, ""));//任职受雇从业日期
                 index++;
             }
             workbook.write();
@@ -158,15 +162,16 @@ public class FileServlet extends HttpServlet {
             e.printStackTrace();
         }
         ConnUtil.closeConnection(conn);
+
     }
 
     //导出个税申报表
     private void exportTax(Connection conn, HttpServletRequest request, HttpServletResponse response)  {
         response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=tax.xls");
+        response.setHeader("Content-Disposition", "attachment; filename=tax2.xls");
 
         //读取模板
-        String fileName = "tax.xls";
+        String fileName = "tax2.xls";
         String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
         File file = new File(fullFileName);
         Workbook book = null;

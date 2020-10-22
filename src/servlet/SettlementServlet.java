@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -90,7 +91,7 @@ public class SettlementServlet extends HttpServlet {
                 result = confirm(conn, request);
                 break;
             case "exportBank"://导出银行卡
-                result = exportBank(conn, request);
+                result = exportBank(conn, request,response);
                 break;
             case "getLogs"://查询日志
                 result = getLogs(conn, request);
@@ -127,8 +128,6 @@ public class SettlementServlet extends HttpServlet {
                 break;
             case 1://小时工结算单明细
                 result = Detail2Service.saveDetail(conn,sid);
-                break;
-            case 2://结算单明细
                 break;
         }
         return JSONObject.toJSONString(result);
@@ -461,7 +460,27 @@ public class SettlementServlet extends HttpServlet {
     }
 
     //导出银行
-    private String exportBank(Connection conn, HttpServletRequest request) {
+    private String exportBank(Connection conn, HttpServletRequest request,HttpServletResponse response) {
+        byte category = Byte.parseByte(request.getParameter("category"));
+        long sid = Long.parseLong(request.getParameter("id"));
+        switch (category){
+            case 0://农行
+                String fileName = "bank.xls";
+                String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
+                File file = new File(fullFileName);
+                Settlement1Service.exportBank1(conn,sid,response,file);
+                break;
+            case 1://招行
+                Settlement1Service.exportBank2(conn,sid,response);
+                break;
+            case 2://浦发
+                Settlement1Service.exportBank3(conn,sid,response);
+                break;
+            case 3://交通
+                Settlement1Service.exportBank4(conn,sid,response);
+                break;
+
+        }
      return null;
     }
 

@@ -78,10 +78,12 @@ public class Detail1Service {
         //获取结算单
         Settlement1 settlement = (Settlement1) Settlement1Dao.get(conn,sid).data;
         Date month = settlement.getMonth();
+
+        //所有明细
         QueryParameter param = new QueryParameter();
         param.conditions.add("sid","=",sid);
         DaoQueryListResult result1 = Detail1Dao.getList(conn,param);//查询数据库中属于该结算单的所有明细
-        List<Detail1> detail1s = (List<Detail1>) result1.rows;//所有明细
+        List<Detail1> detail1s = (List<Detail1>) result1.rows;
 
         List<Detail1> detail1List  = new ArrayList<>();//新建一个集合用于存放计算好后的明细
         for(Detail1 d:detail1s){
@@ -104,13 +106,18 @@ public class Detail1Service {
                 result.msg = "请确认系统中该员工"+employee.getName()+"的社保所在地是否存在";
                 return result;
             }
-            MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(cid,conn).data;//获取最新自定义的工资
-            Deduct deduct = (Deduct) DeductDao.get(conn,d.getEid()).data;//获取员工个税专项扣除
+
+            //获取最新自定义的工资
+            MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(cid,conn).data;
+
+            //获取员工个税专项扣除
+            Deduct deduct = (Deduct) DeductDao.get(conn,d.getEid()).data;
             if(deduct==null){
                 result.msg = "请完善"+employee.getName()+"的个税专项扣除";
                 return result;
             }
-            Detail1 detail1 = Calculate.calculateDetail1(d,medicare,social,setting,mapSalary,deduct);//计算结算单明细
+            //计算结算单明细
+            Detail1 detail1 = Calculate.calculateDetail1(d,medicare,social,setting,mapSalary,deduct);
             detail1List.add(detail1);
         }
         return  Detail1Dao.update(conn,detail1List);

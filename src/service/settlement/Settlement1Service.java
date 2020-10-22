@@ -4,7 +4,9 @@ import bean.admin.Account;
 import bean.contract.ViewContractCooperation;
 import bean.employee.Employee;
 import bean.employee.EnsureSetting;
+import bean.employee.PayCard;
 import bean.employee.ViewEmployee;
+import bean.insurance.ViewInsurance;
 import bean.log.Log;
 import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
@@ -15,14 +17,26 @@ import dao.LogDao;
 import dao.admin.AccountDao;
 import dao.contract.ContractDao;
 import dao.employee.EmployeeDao;
+import dao.employee.PayCardDao;
 import dao.employee.SettingDao;
+import dao.insurance.InsuranceDao;
 import dao.rule.RuleMedicareDao;
 import dao.rule.RuleSocialDao;
 import dao.settlement.Detail1Dao;
 import dao.settlement.Settlement1Dao;
 import database.*;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
 import utills.Calculate;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.text.ParseException;
@@ -687,5 +701,61 @@ public class Settlement1Service {
         //批量导入
         result = Detail1Dao.importDetails(conn,detail1List);
         return result;
+    }
+
+    //导出农行
+    public static void exportBank1(Connection conn, long sid, HttpServletResponse response, File file) {
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.setHeader("Content-Disposition", "attachment; filename=bank1.xls");
+
+        Workbook book = null;
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("sid", "=", sid);
+
+        DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
+        String rows = JSONObject.toJSONString(result.rows);
+        List<ViewDetail1> viewDetail1s = JSONArray.parseArray(rows, ViewDetail1.class);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            //获取模板
+            book = Workbook.getWorkbook(file);
+            // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
+            WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
+            WritableSheet sheet = workbook.getSheet(0);//获取第一个sheet
+
+            int index = 2;
+            for(ViewDetail1 v:viewDetail1s){
+                //金额上限（发放额）、收方账号、收方户名、收方行名称、收方行行号、附言
+                PayCard card = (PayCard) PayCardDao.get(conn,v.getEid()).data;
+                sheet.addCell(new jxl.write.Number(1, index, v.getPaid()));//金额上限,实发
+                sheet.addCell(new Label(7, index, card.getCardNo()));//收方账号
+                sheet.addCell(new Label(8, index, v.getName()));//收方户名
+                sheet.addCell(new Label(10, index,card.getBank1()));//收方行名称
+                sheet.addCell(new Label(11, index, card.getBankNo()));//收方行行号
+                sheet.addCell(new Label(13, index, ""));//附言
+                index++;
+            }
+            workbook.write();
+            workbook.close();
+            book.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BiffException e) {
+            e.printStackTrace();
+        } catch (RowsExceededException e) {
+            e.printStackTrace();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        ConnUtil.closeConnection(conn);
+    }
+    //导出招行
+    public static void exportBank2(Connection conn, long sid, HttpServletResponse response) {
+    }
+    //导出浦发
+    public static void exportBank3(Connection conn, long sid, HttpServletResponse response) {
+    }
+    //导出交通
+    public static void exportBank4(Connection conn, long sid, HttpServletResponse response) {
     }
 }

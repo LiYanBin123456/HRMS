@@ -123,7 +123,7 @@ public class Calculate {
      * @param detail //结算单明细
      * @param medicare //所在地市的医保规则
      * @param social //所在地市的社保规则
-     * @param setting //所在地市的公积金规则
+     * @param setting //员工社保设置
      * @param mapSalary //合作单位的自定义工资
      * @param deduct   //所属员工的个税专项扣除
      * @return detail1 //计算好的结算单
@@ -143,6 +143,7 @@ public class Calculate {
         float disease2;//单位大病
         float birth;//单位生育
         float fund2;//单位公积金
+
         float base = detail.getBase();//实际工资
 
         //计算医保相关
@@ -349,7 +350,7 @@ public class Calculate {
         switch (type){
             case 0://劳务外包派遣
                 if(category==0){//按人数收取的结算方式
-                    manage = num*value;//管理费=人数*单价
+                    manage = num*value;//管理费总额=人数*管理费
                     if(invoice==0){//增值税专用发票（全额）
                       tax=(salary+social+medicare+fund+manage)*per;//税费 = （应发总额+单位五险一金+管理费）*税率（基准6.72，但可以浮动）
                     }else if(invoice==1){//增值税专用发票（差额）
