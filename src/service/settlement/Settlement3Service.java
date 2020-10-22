@@ -69,7 +69,7 @@ public class Settlement3Service {
             conditions.add("did", "=", did);
             conditions.add("cid", "=", cid);
             conditions.add("type", "=", 1);
-            conditions.add("category", "!=", 2);
+            conditions.add("category", "!=", 3);
             conditions.add("status", "=", 0);
             parameter.conditions = conditions;
             List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);

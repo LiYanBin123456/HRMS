@@ -59,7 +59,7 @@
         <!--顶部工具栏-->
         <div class="layui-hide" id="top_bar2">
             <button class="layui-btn layui-btn-sm" lay-event="add"><i class="layui-icon "></i> 添加</button>
-            <button class="layui-btn layui-btn-sm" lay-event="export"><i class="layui-icon "></i> 导出变更</button>
+            <button class="layui-btn layui-btn-sm" lay-event="export" onclick="exportFund()"><i class="layui-icon "></i> 导出变更</button>
             <button type="button" class="layui-btn layui-btn-sm" lay-event=""  id="test1" ><i class="layui-icon "></i> 校对</button>
 
         </div>
@@ -343,6 +343,16 @@
             //导出停保医保单
             function exportMedicare2(){
                 var url = "/hrms/verify/insurance?op=export&category=1&status=1";
+                var form = $('<form method="POST"></form>');
+                form.attr('action', url);
+                form.appendTo($('body'));
+                form.submit();
+                form.remove();
+            }
+
+            //导出公积金参保单
+            function exportFund(){
+                var url = "/hrms/verify/insurance?op=export&category=2&status=1";
                 var form = $('<form method="POST"></form>');
                 form.attr('action', url);
                 form.appendTo($('body'));

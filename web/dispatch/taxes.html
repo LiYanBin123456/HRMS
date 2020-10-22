@@ -140,13 +140,19 @@
                 });
             }
 
-            //打开添加对话框
+            //导出个税申报名单
             function export1() {
-                layer.msg("导出个税申报名单");
+                var url = "/hrms/verify/file?op=exportTaxEmployee";
+                var form = $('<form method="POST"></form>');
+                form.attr('action', url);
+                form.appendTo($('body'));
+                form.submit();
+                form.remove();
             }
 
+            //导出个税申报表
             function export2() {
-                var url = "/hrms/verify/file?op=exportTax"
+                var url = "/hrms/verify/file?op=exportTax";
                 var form = $('<form method="POST"></form>');
                 form.attr('action', url);
                 form.appendTo($('body'));

@@ -69,6 +69,22 @@ public class Employee {
         this.price = price;
     }
 
+    public static byte getWORKING() {
+        return WORKING;
+    }
+
+    public static byte getOUTGOING() {
+        return OUTGOING;
+    }
+
+    public static byte getRETIRE() {
+        return RETIRE;
+    }
+
+    public static byte getOTHER() {
+        return OTHER;
+    }
+
     public long getId() {
         return id;
     }

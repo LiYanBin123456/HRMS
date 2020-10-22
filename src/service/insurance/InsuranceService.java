@@ -1,26 +1,33 @@
 package service.insurance;
 
+import bean.employee.EnsureSetting;
 import bean.insurance.Insurance;
 import bean.insurance.ViewInsurance;
+import bean.settlement.ViewTax;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import dao.employee.SettingDao;
 import dao.insurance.InsuranceDao;
 import database.ConnUtil;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.QueryParameter;
 import jxl.Workbook;
+import jxl.read.biff.BiffException;
 import jxl.write.Label;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
 
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 public class InsuranceService {
@@ -276,7 +283,14 @@ public class InsuranceService {
         DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);
+
+        //获取本月最后一天
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cale = Calendar.getInstance();
+        cale.add(Calendar.MONTH, 1);
+        cale.set(Calendar.DAY_OF_MONTH, 0);
+        String lastDay = sdf.format(cale.getTime());//本月最后一天
+
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("停保医保单", 0);
         try {
@@ -290,7 +304,7 @@ public class InsuranceService {
                 sheet1.addCell(new Label(1, index, Insurance.getCode()));
                 sheet1.addCell(new Label(0, index, Insurance.getName()));
                 sheet1.addCell(new Label(2, index, Insurance.getCardId()));
-                sheet1.addCell(new Label(3, index, "未实现"));
+                sheet1.addCell(new Label(3, index, lastDay));
                 sheet1.addCell(new Label(4, index, chageReason(Insurance.getReason())));
                 index++;
             }
@@ -303,6 +317,59 @@ public class InsuranceService {
             sheet1.setColumnView(5,40);
             book.write();
             book.close();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        ConnUtil.closeConnection(conn);
+    }
+
+    public static void exportFund(Connection conn, HttpServletResponse response, File file) {
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.setHeader("Content-Disposition", "attachment; filename=exportFund.xls");
+
+        Workbook book = null;
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("type", "=", 2);
+
+        DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
+        String rows = JSONObject.toJSONString(result.rows);
+        List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            //获取模板
+            book = Workbook.getWorkbook(file);
+            // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
+            WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
+            WritableSheet sheet = workbook.getSheet(0);//获取第一个sheet
+
+            int index = 6;
+            float per=0;
+            for(ViewInsurance v:insurances){
+                EnsureSetting setting = (EnsureSetting) SettingDao.get(conn,v.getEid()).data;
+                if(setting!=null){
+                    per = setting.getFundPer()/100;
+                }
+                sheet.addCell(new jxl.write.Number(0, index, index-5));//序号
+                sheet.addCell(new Label(1, index, v.getName()));//职工姓名
+                sheet.addCell(new Label(2, index, v.getCardId()));//证件号
+                sheet.addCell(new Label(3, index, sdf.format(v.getStart())));//起缴时间
+                sheet.addCell(new jxl.write.Number(4, index, v.getMoney()));//工资基数
+                sheet.addCell(new jxl.write.Number(5, index, per));//单位比例
+                sheet.addCell(new jxl.write.Number(6, index, per));//个人比例
+                sheet.addCell(new jxl.write.Number(7, index, v.getMoney()*per));//个人缴存标准
+                sheet.addCell(new jxl.write.Number(8, index, (v.getMoney()*per)*2));//缴存合计
+                sheet.addCell(new Label(10, index, v.getPhone()));//手机号码
+                index++;
+            }
+            workbook.write();
+            workbook.close();
+            book.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BiffException e) {
+            e.printStackTrace();
+        } catch (RowsExceededException e) {
+            e.printStackTrace();
         } catch (WriteException e) {
             e.printStackTrace();
         }

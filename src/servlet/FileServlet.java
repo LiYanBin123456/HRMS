@@ -3,6 +3,7 @@ package servlet;
 import bean.client.Items;
 import bean.client.MapSalary;
 
+import bean.employee.Employee;
 import bean.employee.ViewEmployee;
 import bean.settlement.*;
 import com.alibaba.fastjson.JSONArray;
@@ -23,6 +24,7 @@ import jxl.write.biff.RowsExceededException;
 import org.apache.commons.io.IOUtils;
 import utills.Calculate;
 import utills.XlsUtil;
+import utills.IDCardUtil;
 
 
 import javax.servlet.ServletException;
@@ -93,6 +95,9 @@ public class FileServlet extends HttpServlet {
             case "exportTax"://导出个税申报表
                 exportTax(conn,request,response);
                 return;
+            case "exportTaxEmployee"://导出个税申报表
+                exportTaxEmployee(conn,request,response);
+                return;
             default:
                 result = "{\"success\":false,\"msg\":\"参数错误\"}";
         }
@@ -101,6 +106,58 @@ public class FileServlet extends HttpServlet {
         out.print(result);
         out.flush();
         out.close();
+    }
+
+    //导出个税申报名单表
+    private void exportTaxEmployee(Connection conn, HttpServletRequest request, HttpServletResponse response)  {
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.setHeader("Content-Disposition", "attachment; filename=tax_employee.xls");
+
+        //读取模板
+        String fileName = "tax_employee.xls";
+        String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
+        File file = new File(fullFileName);
+        Workbook book;
+
+        //查询出员工，条件限制先留着以后交流修改
+        QueryParameter parameter = new QueryParameter();
+        List<Employee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),Employee.class);
+        try {
+            //获取模板
+            book = Workbook.getWorkbook(file);
+            // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
+            //WritableWorkbook如果直接createWorkbook模版文件会覆盖原有的文件
+            WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
+            WritableSheet sheet = workbook.getSheet(0);//获取第一个sheet
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            int index = 1;
+
+            for(Employee e:employeeList){
+                sheet.addCell(new Label(0, index, ""));//工号
+                sheet.addCell(new Label(1, index,e.getName()));//姓名
+                sheet.addCell(new Label(2, index, "居民身份证"));//证件类型
+                sheet.addCell(new Label(3, index,e.getCardId()));//证件号码
+                sheet.addCell(new Label(4, index,"中国"));//国籍
+                sheet.addCell(new Label(5, index,IDCardUtil.getSex(e.getCardId())));//性别
+                sheet.addCell(new Label(6, index,IDCardUtil.getBirthday(e.getCardId())));//出生日期
+                sheet.addCell(new Label(7, index, "雇员"));//任职受雇从业类型
+                sheet.addCell(new Label(8, index,e.getPhone()));//手机号码
+                sheet.addCell(new Label(9, index, sdf.format(e.getEntry())));//任职受雇从业日期
+                index++;
+            }
+            workbook.write();
+            workbook.close();
+            book.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BiffException e) {
+            e.printStackTrace();
+        } catch (RowsExceededException e) {
+            e.printStackTrace();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        ConnUtil.closeConnection(conn);
     }
 
     //导出个税申报表

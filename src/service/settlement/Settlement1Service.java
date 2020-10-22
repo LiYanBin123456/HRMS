@@ -67,7 +67,7 @@ public class Settlement1Service {
             parameter.addCondition("cid","=",cid);
             parameter.addCondition("did","=",did);
             parameter.addCondition("type","=",1);
-            parameter.addCondition("category","!=",2);
+            parameter.addCondition("category","!=",3);
             parameter.addCondition("status","=",0);
             List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
             List<Detail1> detail1List = new ArrayList<Detail1>();

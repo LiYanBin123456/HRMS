@@ -20,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -97,6 +98,10 @@ public class InsuranceServlet extends HttpServlet {
                 }
                 break;
             case 2://导出公积金
+                String fileName = "exportFund.xls";
+                String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
+                File file = new File(fullFileName);
+                InsuranceService.exportFund(conn,response,file);
                 break;
         }
     }
