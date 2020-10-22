@@ -256,7 +256,7 @@ var columns_contract =[[
     {field:'name', title: '合同名称',width:200},
     {field:'invoice', title: '发票类型',width:120,templet:function (d) { return array_value2text(invoice_contract,d.invoice) }},
     {field:'stype', title: '服务项目',width:120,templet:function (d) { return array_value2text(stype_contract,d.stype) }},
-    {field:'comment', title: '备注'}
+    {field:'comments', title: '备注'}
 ]];
 
 //面向合作普通结算单字段集合
