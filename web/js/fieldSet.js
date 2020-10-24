@@ -431,25 +431,37 @@ var columns_tax  = [[
 ]];
 
 
-//医/社保参保字段集合
+//社保参保字段集合
 var columns_insured1  = [[
     {field:'cardId', title: '身份证号',width:170},
-    {field:'code', title: '个人代码',width:80},
     {field:'name', title: '姓名',width:80},
-    {field:'start', title: '参保时间',width:80,templet:function (d) {return format_date(d.start)}},
-    {field:'money', title: '月缴费工资',width:100},
-    {field:'entry', title: '工作时间',width:100,templet:function (d) {return format_date(d.entry)}},
-    {field:'status', title: '参保状态',width:80,templet:function (d) { return array_value2text(status_insurance,d.status) }},
+    {field:'base3', title: '基数',width:80},
+    {field:'date3', title: '养老参保时间',width:120,templet:function (d) {return format_date(d.date3)}},
+    {field:'status3', title: '养老参保状态',width:100,templet:function (d) { return array_value2text(status_insurance,d.status3)}},
+    {field:'date4', title: '失业参保时间',width:120,templet:function (d) {return format_date(d.date4)}},
+    {field:'status4', title: '失业参保状态',width:100,templet:function (d) { return array_value2text(status_insurance,d.status4)}},
+    {field:'date5', title: '工伤参保时间',width:120,templet:function (d) {return format_date(d.date5)}},
+    {field:'status5', title: '工伤参保状态',width:100,templet:function (d) { return array_value2text(status_insurance,d.status5)}},
+    {fixed: 'right', title: '操作', toolbar: '#bar_insured'}
+]];
+
+//医保参保字段集合
+var columns_insured2  = [[
+    {field:'cardId', title: '身份证号',width:170},
+    {field:'name', title: '姓名',width:80},
+    {field:'base1', title: '基数',width:100},
+    {field:'date1', title: '参保时间',width:120,templet:function (d) {return format_date(d.date1)}},
+    {field:'status1', title: '参保状态',width:100,templet:function (d) { return array_value2text(status_insurance,d.status1) }},
     {fixed: 'right', title: '操作', toolbar: '#bar_insured'}
 ]];
 
 //公积金参保字段集合
-var columns_insured2  = [[
+var columns_insured3  = [[
     {field:'cardId', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
-    {field:'start', title: '起缴时间',width:80,templet:function (d) {return format_date(d.start)}},
-    {field:'money', title: '工资基数',width:100},
-    {field:'status', title: '参保状态',width:80,templet:function (d) { return array_value2text(status_insurance,d.status) }},
+    {field:'base2', title: '基数',width:100},
+    {field:'date2', title: '参保时间',width:120,templet:function (d) {return format_date(d.date1)}},
+    {field:'status2', title: '参保状态',width:100,templet:function (d) { return array_value2text(status_insurance,d.status1) }},
     {fixed: 'right', title: '操作', toolbar: '#bar_insured'}
 ]];
 
@@ -584,10 +596,12 @@ var status_settlement = [
     {value:6,text:"发放"}
 ];
 var status_insurance = [
-    {value:0,text:"新增"},
-    {value:1,text:"在保"},
-    {value:2,text:"拟停"},
-    {value:3,text:"停保"}
+    {value:0,text:"未参保"},
+    {value:1,text:"新增"},
+    {value:2,text:"在保"},
+    {value:3,text:"拟停"},
+    {value:4,text:"停保"}
+
 ];
 var period_product = [
     {value:0,text:"上班时间"},

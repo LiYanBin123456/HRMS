@@ -123,8 +123,7 @@ public class IDCardUtil {
                 //身份证上的日期
                 day=IDCard.substring(12).substring(0,2);
             }
-
-            birthday=year+"年"+month+"月"+day+"日";
+            birthday=year+"-"+month+"-"+day;
         return birthday;
     }
 

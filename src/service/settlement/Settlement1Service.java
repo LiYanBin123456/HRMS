@@ -462,6 +462,7 @@ public class Settlement1Service {
             long eid = object.getLong("eid");
             float baseM = object.getFloat("baseM");
             float baseS = object.getFloat("baseS");
+
             //该员工的信息
             QueryConditions conditions = new QueryConditions();
             conditions.add("id","=",eid);
@@ -480,21 +481,17 @@ public class Settlement1Service {
                 result.msg="员工"+employee.getName()+"社保或医保所在地的规则为空，请核对";
                 return result;
             }
-            //根据员工设置计算医保
-            JSONObject object1 = calculateMedicare(setting,baseM,medicare);
-            float medicare1 = Float.parseFloat(object1.getString("medicare1"));//个人医疗
-            float medicare2 = Float.parseFloat(object1.getString("medicare2"));//单位医疗
-            float birth = Float.parseFloat(object1.getString("birth"));//单位生育
-            float  disease1 = Float.parseFloat(object1.getString("disease1"));//个人大病
-            float disease2 = Float.parseFloat(object1.getString("disease2"));//单位大病
 
+            //新建明细
+            Detail1 detail1 = new Detail1();
+            detail1.setSid(sid);
+            detail1.setEid(eid);
+            detail1.setStatus((byte) 1);//补缴
+
+            //根据员工设置计算医保
+            detail1 = calculateMedicare(detail1,setting,baseM,medicare);
             //根据员工设置计算社保
-            JSONObject object2 = calculateSocial(setting,baseS,social);
-            float pension1 = Float.parseFloat(object2.getString("pension1"));//个人养老
-            float unemployment1 = Float.parseFloat(object2.getString("unemployment1"));//个人失业
-            float pension2 = Float.parseFloat(object2.getString("pension2"));//单位养老
-            float unemployment2 = Float.parseFloat(object2.getString("unemployment2"));//单位失业
-            float injury = Float.parseFloat(object2.getString("injury"));//单位工伤
+            detail1 = calculateSocial(detail1,setting,baseS,social);
 
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
             try {
@@ -507,21 +504,7 @@ public class Settlement1Service {
                 int month1 = c1.get(Calendar.MONTH);
                 int month2 = c2.get(Calendar.MONTH);
                 int monthInterval = month2 - month1 ;
-                for (int i = 0;i<monthInterval;i++){
-                    Detail1 detail1 = new Detail1();
-                    detail1.setSid(sid);
-                    detail1.setEid(eid);
-                    detail1.setMedicare1(medicare1);
-                    detail1.setMedicare2(medicare2);
-                    detail1.setPension1(pension1);
-                    detail1.setPension2(pension2);
-                    detail1.setUnemployment1(unemployment1);
-                    detail1.setUnemployment2(unemployment2);
-                    detail1.setBirth(birth);
-                    detail1.setDisease1(disease1);
-                    detail1.setDisease2(disease2);
-                    detail1.setInjury(injury);
-                    detail1.setStatus((byte) 1);//补缴
+                for (int i = 0;i<monthInterval;i++){//有多少个月 生成多少个明细
                     detail1List.add(detail1);//添加至集合
                 }
             } catch (ParseException e) {
@@ -536,18 +519,6 @@ public class Settlement1Service {
     //社保补差
     public static DaoUpdateResult makeup(Connection conn, String[] eids, String start, String end, long sid) {
         DaoUpdateResult result = new DaoUpdateResult();
-
-        //初始化数据
-        float pension1=0;//个人养老
-        float medicare1=0;//个人医疗
-        float unemployment1=0;//个人失业
-        float disease1=0;//个人大病
-        float pension2=0;//单位养老
-        float medicare2=0;//单位医疗
-        float unemployment2=0;//单位失业
-        float injury=0;//单位工伤
-        float disease2=0;//单位大病
-        float birth=0;//单位生育
         List<Detail1> detail1List = new ArrayList<>();
         for(String eid:eids){
             //该员工的信息
@@ -568,6 +539,7 @@ public class Settlement1Service {
                 result.msg="员工"+employee.getName()+"社保或医保所在地的规则为空，请核对";
                 return result;
             }
+
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
             try {
                 Calendar c1 = Calendar.getInstance();
@@ -585,114 +557,62 @@ public class Settlement1Service {
                     QueryConditions conditions1 = new QueryConditions();
                     conditions1.add("eid","=",eid);
                     conditions1.add("month","=",month);
-                    Detail1 detail1 = (Detail1) Detail1Dao.get(conn,conditions).data;
+                    ViewDetail1 detail1 = (ViewDetail1) Detail1Dao.get(conn,conditions).data;
                     if(detail1==null){
                         result.msg = "该员工"+employee.getName()+","+month+"的结算单明细不存在,请核对";
-                       return result;
+                        return result;
                     }
+
+                    //重新生成一个明细用于计算医保和社保
+                    Detail1 detail2 = new Detail1();
                     //计算医保相关
                     int SettingM = setting.getSettingM();//员工医保设置
-                    JSONObject object;
+                    float baseM = 0;
                     switch (SettingM){
                         case 0://最低标准
-                            object = calculateMedicare(setting,medicare.getBase(),medicare);
-                            medicare1 = Float.parseFloat(object.getString("medicare1"));//个人医疗
-                            medicare2 = Float.parseFloat(object.getString("medicare2"));//单位医疗
-                            birth = Float.parseFloat(object.getString("birth"));//单位生育
-                            disease1 = Float.parseFloat(object.getString("disease1"));//个人大病
-                            disease2 = Float.parseFloat(object.getString("disease2"));//单位大病
-                            break;
-                        case 1://实际工资
-                            object = calculateMedicare(setting,detail1.getBase(),medicare);
-                            medicare1 = Float.parseFloat(object.getString("medicare1"));//个人医疗
-                            medicare2 = Float.parseFloat(object.getString("medicare2"));//单位医疗
-                            birth = Float.parseFloat(object.getString("birth"));//单位生育
-                            disease1 = Float.parseFloat(object.getString("disease1"));//个人大病
-                            disease2 = Float.parseFloat(object.getString("disease2"));//单位大病
-
-                            break;
-                        case 2://不交纳，为0
-                            medicare1 =0;//个人医疗
-                            medicare2 = 0;//单位医疗
-                            birth = 0;//单位生育
-                            disease1 = 0;//个人大病
-                            disease2 =0;//单位大病
-                            break;
-                        case 3://自定义基数
-                            float ValM = setting.getValM();//自定义的基数
-                            object = calculateMedicare(setting,ValM,medicare);
-                            medicare1 = Float.parseFloat(object.getString("medicare1"));//个人医疗
-                            medicare2 = Float.parseFloat(object.getString("medicare2"));//单位医疗
-                            birth = Float.parseFloat(object.getString("birth"));//单位生育
-                            disease1 = Float.parseFloat(object.getString("disease1"));//个人大病
-                            disease2 = Float.parseFloat(object.getString("disease2"));//单位大病
-                            break;
+                            baseM = medicare.getBase();
+                             break;
+                        case 1://不缴纳
+                            baseM = 0;
+                             break;
+                        case 2://自定义基数
+                            baseM = setting.getValM();
+                           break;
                     }
+                    detail2 = calculateMedicare(detail2,setting,baseM,medicare);
+
                     //计算社保相关
                     int SettingS = setting.getSettingS();//员工社保设置
-                    JSONObject object2;
+                    float baseS = 0;
                     switch (SettingS){
                         case 0://最低标准
-                            object2 = calculateSocial(setting,social.getBase(),social);
-                            pension1 = Float.parseFloat(object2.getString("pension1"));
-                            unemployment1 = Float.parseFloat(object2.getString("unemployment1"));
-                            pension2 = Float.parseFloat(object2.getString("pension2"));
-                            unemployment2 = Float.parseFloat(object2.getString("unemployment2"));
-                            injury = Float.parseFloat(object2.getString("injury"));
+                            baseS =social.getBase();
                             break;
-                        case 1://实际工资
-                            object2 = calculateSocial(setting,detail1.getBase(),social);
-                            pension1 = Float.parseFloat(object2.getString("pension1"));
-                            unemployment1 = Float.parseFloat(object2.getString("unemployment1"));
-                            pension2 = Float.parseFloat(object2.getString("pension2"));
-                            unemployment2 = Float.parseFloat(object2.getString("unemployment2"));
-                            injury = Float.parseFloat(object2.getString("injury"));
+                        case 1://不缴纳
+                            baseS =social.getBase();
                             break;
-                        case 2://不缴纳，为0
-                            pension1=0;//个人养老
-                            unemployment1=0;//个人失业
-                            pension2=0;//单位养老
-                            unemployment2=0;//单位失业
-                            injury=0;//单位工伤
-                            break;
-                        case 3://自定义基数
-                            float ValS=setting.getValS();//自定义的基数
-                            object2 = calculateSocial(setting,ValS,social);
-                            pension1 = Float.parseFloat(object2.getString("pension1"));
-                            unemployment1 = Float.parseFloat(object2.getString("unemployment1"));
-                            pension2 = Float.parseFloat(object2.getString("pension2"));
-                            unemployment2 = Float.parseFloat(object2.getString("unemployment2"));
-                            injury = Float.parseFloat(object2.getString("injury"));
+                        case 2://自定义工资
+                            baseS=setting.getValS();
                             break;
                     }
-                    //计算补差的社保医保
-                    medicare1 = medicare1 -detail1.getMedicare1();
-                    medicare2 = medicare2 -detail1.getMedicare2();
-                    birth = birth-detail1.getBirth();
-                    disease1 = disease1 - detail1.getDisease1();
-                    disease2 = disease2 - detail1.getDisease2();
+                    detail2 = calculateSocial(detail2,setting,baseS,social);
 
-                    pension1 = pension1 - detail1.getPension1();
-                    pension2 = pension2 - detail1.getPension2();
-                    unemployment1 = unemployment1 - detail1.getUnemployment1();
-                    unemployment2 = unemployment2 - detail1.getUnemployment2();
-                    injury = injury - detail1.getInjury();
+                    //计算补差的社保医保,并重新赋值
+                    detail2.setMedicare2(detail2.getMedicare1()-detail1.getMedicare1());
+                    detail2.setMedicare2(detail2.getMedicare2() -detail1.getMedicare2());
+                    detail2.setBirth(detail2.getBirth()-detail1.getBirth());
+                    detail2.setDisease1(detail2.getDisease1() - detail1.getDisease1());
+                    detail2.setDisease2(detail2.getDisease2() - detail1.getDisease2());
+                    detail2.setPension1(detail2.getPension1() - detail1.getPension1());
+                    detail2.setPension2(detail2.getPension2() - detail1.getPension2());
+                    detail2.setUnemployment1(detail2.getUnemployment1() - detail1.getUnemployment1());
+                    detail2.setUnemployment2(detail2.getUnemployment2() - detail1.getUnemployment2());
+                    detail2.setInjury(detail2.getInjury() - detail1.getInjury());
+                    detail2.setEid(Long.parseLong(eid));
+                    detail2.setSid(sid);
+                    detail2.setStatus((byte) 2);
 
-                    //封装结算单明细
-                    Detail1 detail = new Detail1();
-                    detail.setEid(Long.parseLong(eid));
-                    detail.setSid(sid);
-                    detail.setMedicare1(medicare1);
-                    detail.setMedicare2(medicare2);
-                    detail.setPension1(pension1);
-                    detail.setPension2(pension2);
-                    detail.setUnemployment1(unemployment1);
-                    detail.setUnemployment2(unemployment2);
-                    detail.setBirth(birth);
-                    detail.setInjury(injury);
-                    detail.setStatus((byte) 2);
-
-                    detail1List.add(detail);
+                    detail1List.add(detail2);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
@@ -721,18 +641,25 @@ public class Settlement1Service {
             book = Workbook.getWorkbook(file);
             // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
             WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
-            WritableSheet sheet = workbook.getSheet(0);//获取第一个sheet
+            WritableSheet sheet1 = workbook.getSheet(0);//获取第一个sheet
+            WritableSheet sheet2 = workbook.getSheet(1);//获取第二个sheet
 
             int index = 2;
             for(ViewDetail1 v:viewDetail1s){
                 //金额上限（发放额）、收方账号、收方户名、收方行名称、收方行行号、附言
                 PayCard card = (PayCard) PayCardDao.get(conn,v.getEid()).data;
-                sheet.addCell(new jxl.write.Number(1, index, v.getPaid()));//金额上限,实发
-                sheet.addCell(new Label(7, index, card.getCardNo()));//收方账号
-                sheet.addCell(new Label(8, index, v.getName()));//收方户名
-                sheet.addCell(new Label(10, index,card.getBank1()));//收方行名称
-                sheet.addCell(new Label(11, index, card.getBankNo()));//收方行行号
-                sheet.addCell(new Label(13, index, ""));//附言
+                sheet1.addCell(new jxl.write.Number(1, index, v.getPaid()));//金额上限,实发
+                sheet1.addCell(new Label(7, index, card.getCardNo()));//收方账号
+                sheet1.addCell(new Label(8, index, v.getName()));//收方户名
+                sheet1.addCell(new Label(10, index,card.getBank1()));//收方行名称
+                sheet1.addCell(new Label(11, index, card.getBankNo()));//收方行行号
+                sheet1.addCell(new Label(13, index, ""));//附言
+
+                sheet2.addCell(new jxl.write.Number(0, index, v.getPaid()));//金额上限,实发
+                sheet2.addCell(new Label(1, index, card.getCardNo()));//收方账号
+                sheet2.addCell(new Label(2, index, v.getName()));//收方户名
+                sheet2.addCell(new Label(3, index, ""));//附言
+
                 index++;
             }
             workbook.write();

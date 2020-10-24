@@ -17,7 +17,6 @@ import database.ConnUtil;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
-import java.util.HashMap;
 import java.util.List;
 
 public class Calculate {
@@ -29,27 +28,13 @@ public class Calculate {
      */
     public static  Detail1 calculateInsurance(Long eid){
         Connection conn = ConnUtil.getConnection();
-        //初始化数据
-         float pension1=0;//个人养老
-         float medicare1=0;//个人医疗
-         float unemployment1=0;//个人失业
-         float disease1=0;//个人大病
-         float fund1=0;//个人公积金
-         float pension2=0;//单位养老
-         float medicare2=0;//单位医疗
-         float unemployment2=0;//单位失业
-         float injury=0;//单位工伤
-         float disease2=0;//单位大病
-         float birth=0;//单位生育
-         float fund2=0;//单位公积金
         //初始化明细
-        Detail1 detail;
-        detail= new Detail1(pension1,medicare1,unemployment1,disease1,fund1,pension2,medicare2,unemployment2,injury,disease2,birth,fund2);
+        Detail1 detail= new Detail1();
+        detail.setEid(eid);
         boolean existSetting=SettingDao.exist(conn,eid).exist;//员工设置是否存在
         if(!existSetting){//不存在则养老等字段为0，直接返回
             return  detail;
         }
-
         EnsureSetting setting = (EnsureSetting) SettingDao.get(conn,eid).data;//员工设置
         String city = setting.getCity();//员工地市
         RuleMedicare medicare= (RuleMedicare) RuleMedicareDao.getLast(conn,city).data;//获取该地市的最新医保
@@ -57,11 +42,14 @@ public class Calculate {
 
         //先获取医保相关
         int SettingM = setting.getSettingM();//员工医保设置
-        JSONObject object;
         float baseM = 0;
         switch (SettingM){
             case 0://最低标准
-                baseM = medicare.getBase();
+                if(medicare!=null){
+                    baseM = medicare.getBase();
+                }else {
+                    baseM = 0;
+                }
                 break;
             case 1://实际工资，因为模板中暂时没有实际工资，为0
                 baseM=0;
@@ -74,20 +62,18 @@ public class Calculate {
                 baseM = ValM;
                 break;
         }
-        object = calculateMedicare(setting,baseM,medicare);
-        medicare1 = Float.parseFloat(object.getString("medicare1"));//个人医疗
-        medicare2 = Float.parseFloat(object.getString("medicare2"));//单位医疗
-        birth = Float.parseFloat(object.getString("birth"));//单位生育
-        disease1 = Float.parseFloat(object.getString("disease1"));//个人大病
-        disease2 = Float.parseFloat(object.getString("disease2"));//单位大病
+        detail = calculateMedicare(detail,setting,baseM,medicare);
 
         //获取社保相关
         int SettingS = setting.getSettingS();//员工社保设置
-        JSONObject object2;
         float baseS = 0;
         switch (SettingS){
             case 0://最低标准
-                baseS =social.getBase();
+                if(social!=null){
+                    baseS =social.getBase();
+                }else {
+                    baseS=0;
+                }
                 break;
             case 1://实际工资
                 baseS = 0;
@@ -100,20 +86,14 @@ public class Calculate {
                 baseS = ValS;
                 break;
         }
-        object2 = calculateSocial(setting,baseS,social);
-        pension1 = Float.parseFloat(object2.getString("pension1"));
-        unemployment1 = Float.parseFloat(object2.getString("unemployment1"));
-        pension2 = Float.parseFloat(object2.getString("pension2"));
-        unemployment2 = Float.parseFloat(object2.getString("unemployment2"));
-        injury = Float.parseFloat(object2.getString("injury"));
+        calculateSocial(detail,setting,baseS,social);
 
         //获取公积金相关
         float FundBase = setting.getFundBase();//获取自定义的公积金基数
         float FundPer  = setting.getFundPer()/100;//获取自定义公积金比例
 
-        fund1=FundBase*FundPer;//个人公积金
-        fund2=FundBase*FundPer;//单位公积金
-        detail= new Detail1(pension1,medicare1,unemployment1,disease1,fund1,pension2,medicare2,unemployment2,injury,disease2,birth,fund2);
+        detail.setFund1(FundBase*FundPer);//个人公积金
+        detail.setFund2(FundBase*FundPer);//个人公积金
         return  detail;
     }
 
@@ -129,98 +109,46 @@ public class Calculate {
      * @return detail1 //计算好的结算单
      */
     public static Detail1 calculateDetail1(Detail1 detail, RuleMedicare medicare, RuleSocial social, EnsureSetting setting, MapSalary mapSalary, Deduct deduct){
-        //初始化数据
-        float pension1;//个人养老
-        float medicare1;//个人医疗
-        float unemployment1;//个人失业
-        float disease1;//个人大病
-        float fund1;//个人公积金
-
-        float pension2;//单位养老
-        float medicare2;//单位医疗
-        float unemployment2;//单位失业
-        float injury;//单位工伤
-        float disease2;//单位大病
-        float birth;//单位生育
-        float fund2;//单位公积金
-
-        float base = detail.getBase();//实际工资
-
         //计算医保相关
         int SettingM = setting.getSettingM();//员工医保设置
-        JSONObject object;
         float baseM = 0;
         switch (SettingM){
             case 0://最低标准
                 baseM = medicare.getBase();
                  break;
-            case 1://实际工资
-                baseM = base;
-                break;
-            case 2://不交纳，为0
+            case 1://不缴纳
                 baseM = 0;
                 break;
-            case 3://自定义基数
-                float ValM = setting.getValM();//自定义的基数
-                baseM = ValM;
+            case 2://自定义基数
+                baseM = setting.getValM();
                 break;
         }
-        object = calculateMedicare(setting,baseM,medicare);
-        medicare1 = Float.parseFloat(object.getString("medicare1"));//个人医疗
-        medicare2 = Float.parseFloat(object.getString("medicare2"));//单位医疗
-        birth = Float.parseFloat(object.getString("birth"));//单位生育
-        disease1 = Float.parseFloat(object.getString("disease1"));//个人大病
-        disease2 = Float.parseFloat(object.getString("disease2"));//单位大病
-
+        detail = calculateMedicare(detail,setting,baseM,medicare);
 
         //计算社保相关
         int SettingS = setting.getSettingS();//员工社保设置
-        JSONObject object2;
         float baseS = 0;
         switch (SettingS){
             case 0://最低标准
                 baseS = social.getBase();
                 break;
-            case 1://实际工资
-                baseS = base;
-                break;
-            case 2://不缴纳，为0
+            case 1://不缴纳
                 baseS=0;
                 break;
-            case 3://自定义基数
+            case 2://自定义工资
                 baseS=setting.getValS();//自定义的基数
                 break;
         }
-        object2 = calculateSocial(setting,baseS,social);
-        pension1 = Float.parseFloat(object2.getString("pension1"));
-        unemployment1 = Float.parseFloat(object2.getString("unemployment1"));
-        pension2 = Float.parseFloat(object2.getString("pension2"));
-        unemployment2 = Float.parseFloat(object2.getString("unemployment2"));
-        injury = Float.parseFloat(object2.getString("injury"));
+        detail = calculateSocial(detail,setting,baseS,social);
 
         //计算公积金相关
         float FundBase = setting.getFundBase();//自定义的公积金基数
         float FundPer  = setting.getFundPer()/100;//自定义公积金比例
-
-        fund1=FundBase*FundPer;//个人公积金
-        fund2=FundBase*FundPer;//单位公积金
-
-        detail.setPension1(pension1);
-        detail.setMedicare1(medicare1);
-        detail.setUnemployment1(unemployment1);
-        detail.setDisease1(disease1);
-        detail.setFund1(fund1);
-        detail.setPension2(pension2);
-        detail.setMedicare2(medicare2);
-        detail.setUnemployment2(unemployment2);
-        detail.setDisease2(disease2);
-        detail.setInjury(injury);
-        detail.setBirth(birth);
-        detail.setFund2(fund2);
-
+        detail.setFund1(FundBase*FundPer);//个人公积金
+        detail.setFund2(FundBase*FundPer);//单位公积金
 
         //计算应发工资
-        float payable =base;//初始是基本工资
+        float payable =detail.getBase();//初始是基本工资
         if(mapSalary!=null){//如果有自定义工资
            payable = calculatePayable(detail,mapSalary);
         }
@@ -231,7 +159,7 @@ public class Calculate {
         detail.setTax((float) tax);
 
         //计算实发=应发-个人五险一金-个税
-        float paid = payable-pension1-medicare1-unemployment1-disease1-fund1-(float) tax;
+        float paid = payable-detail.getPension1()-detail.getMedicare1()-detail.getUnemployment1()-detail.getDisease1()-detail.getFund1()-(float) tax;
         detail.setPaid(paid);
 
         return  detail;
@@ -244,7 +172,7 @@ public class Calculate {
      * @param ruleMedicare  所属地方的医保
      * @return
      */
-    public static JSONObject calculateMedicare(EnsureSetting setting, float base, RuleMedicare ruleMedicare){
+    public static Detail1 calculateMedicare(Detail1 detail, EnsureSetting setting, float base, RuleMedicare ruleMedicare){
 
         float medicare1=0;//个人医疗
         float disease1=0;//个人大病
@@ -264,16 +192,13 @@ public class Calculate {
         if((medicare&((byte)4)) != 0){
             birth = base*(ruleMedicare.getPer3()/100);//单位生育
         }
+        detail.setMedicare1(medicare1);
+        detail.setMedicare2(medicare2);
+        detail.setDisease1(disease1);
+        detail.setDisease2(disease2);
+        detail.setBirth(birth);
 
-
-        JSONObject o = new JSONObject();
-        o.put("medicare1",medicare1);
-        o.put("disease1",disease1);
-        o.put("medicare2",medicare2);
-        o.put("disease2",disease2);
-        o.put("birth",birth);
-
-        return o;
+        return detail;
 
     }
 
@@ -313,6 +238,35 @@ public class Calculate {
             return o;
     }
 
+    public static Detail1 calculateSocial(Detail1 detail, EnsureSetting setting, float base, RuleSocial ruleSocial){
+
+        float pension1=0;//个人养老
+        float unemployment1=0;//个人失业
+        float pension2=0;//单位养老
+        float unemployment2=0;//单位失业
+        float injury=0;//单位工伤
+
+        byte social = setting.getSocial();//要计算的社保类别
+        if((social&((byte)1)) != 0){
+            pension1=base*(ruleSocial.getPer2()/100);//个人养老
+            pension2=base*(ruleSocial.getPer1()/100);//单位养老
+        }
+        if((social&((byte)2)) != 0){
+            unemployment1=base*(ruleSocial.getPer5()/100);//个人失业
+            unemployment2=base*(ruleSocial.getPer4()/100);//单位失业
+        }
+        if((social&((byte)4)) != 0) {
+            injury = base * (ruleSocial.getPer3() / 100);//单位工伤
+        }
+
+        detail.setPension1(pension1);
+        detail.setPension2(pension2);
+        detail.setUnemployment1(unemployment1);
+        detail.setUnemployment2(unemployment2);
+        detail.setInjury(injury);
+        return detail;
+    }
+
     /**
      *计算普通结算单
      * @param settlement1 结算单
@@ -325,7 +279,7 @@ public class Calculate {
         float social=0;//单位社保
         float medicare=0;//单位医保
         float fund = 0;//单位公积金
-        float summary=0;//实发总额
+        float summary;//实发总额
         float manage =0;//管理费
         float tax = 0;//税费
 
@@ -353,16 +307,12 @@ public class Calculate {
                     manage = num*value;//管理费总额=人数*管理费
                     if(invoice==0){//增值税专用发票（全额）
                       tax=(salary+social+medicare+fund+manage)*per;//税费 = （应发总额+单位五险一金+管理费）*税率（基准6.72，但可以浮动）
-                    }else if(invoice==1){//增值税专用发票（差额）
-                      tax=0;
-                    }else {//普通发票
-                      tax=(salary+social+medicare+fund+manage)*per;//税费 = （应发总额+单位五险一金+管理费）*税率（基准6.72，但可以浮动）
                     }
                 }else if(category==1){//按比例收取的结算方式
                     //此时服务项目中value为比例所以需要转成小数
                     manage = (salary+social+medicare+fund)*(value/100);//管理费 = （应发总额+单位五险一金）*比例（从服务项目中的比例）
                     tax = 0;
-                }else {//按外包整体核算方式（暂时不考虑）
+                }else {//按外包整体核算方式
 
                 }
                 break;
@@ -459,6 +409,10 @@ public class Calculate {
         }
 
         tax = taxDue*rate-d-deduct.getPrepaid();
+
+        if(tax < 0 ){
+            tax = 0;
+        }
         return tax;
     }
 

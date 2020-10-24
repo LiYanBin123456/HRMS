@@ -230,9 +230,9 @@
                         <div class="layui-field-box">
                             <div class="layui-inline">
                                 <input type="radio" lay-filter="settingM" name="settingM" value="0" title="最低标准" checked>
-                                <input type="radio" lay-filter="settingM" name="settingM" value="1" title="实际工资">
-                                <input type="radio" lay-filter="settingM" name="settingM" value="2" title="不缴纳">
-                                <input type="radio" lay-filter="settingM" name="settingM" value="3" title="自定义基数">
+                                <input type="radio" lay-filter="settingM" name="settingM" value="1" title="不缴纳">
+                                <input type="radio" lay-filter="settingM" name="settingM" value="2" title="自定义基数">
+
                             </div>
                             <div class="layui-inline layui-hide" name="m1">
                                 <input type="text" name="valM" required="" placeholder="自定义基数" autocomplete="off" class="layui-input " onchange="verifyMedicalBase(this.value)">
@@ -251,9 +251,8 @@
                         <div class="layui-field-box">
                             <div class="layui-inline">
                                 <input type="radio" lay-filter="settingS" name="settingS" value="0" title="最低标准" checked>
-                                <input type="radio" lay-filter="settingS" name="settingS" value="1" title="实际工资">
-                                <input type="radio" lay-filter="settingS" name="settingS" value="2" title="不缴纳">
-                                <input type="radio" lay-filter="settingS" name="settingS" value="3" title="自定义基数">
+                                <input type="radio" lay-filter="settingS" name="settingS" value="1" title="不缴纳">
+                                <input type="radio" lay-filter="settingS" name="settingS" value="2" title="自定义基数">
                             </div>
                             <div class="layui-inline layui-hide" name="s1">
                                 <input type="text" name="valS" required="" placeholder="自定义基数" autocomplete="off" class="layui-input" onchange="verifySocialBase(this.value)" >
@@ -321,7 +320,7 @@
                         <span class="x-red">*</span>累计已预缴税额
                     </label>
                     <div class="layui-input-inline">
-                        <input type="text" name="free" required="" autocomplete="off" class="layui-input">
+                        <input type="text" name="prepaid" required="" autocomplete="off" class="layui-input">
                     </div>
                 </div>
                 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
@@ -501,7 +500,7 @@
     function initPage() {
         form.on('radio(settingM)', function(data){
             var settingM = data.value;
-            if(settingM == 3){
+            if(settingM == 2){
                 $("[name=m1]").removeClass("layui-hide");
             }else{
                 $("[name=m1]").addClass("layui-hide");
@@ -509,7 +508,7 @@
         });
         form.on('radio(settingS)', function(data){
             var settingS = data.value;
-            if(settingS == 3){
+            if(settingS == 2){
                 $("[name=s1]").removeClass("layui-hide");
             }else{
                 $("[name=s1]").addClass("layui-hide");

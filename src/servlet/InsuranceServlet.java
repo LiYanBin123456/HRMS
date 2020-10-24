@@ -109,10 +109,8 @@ public class InsuranceServlet extends HttpServlet {
     //获取
     private String get(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
-        byte category = Byte.parseByte(request.getParameter("category"));
         QueryConditions conditions = new QueryConditions();
         conditions.add("eid","=",id);
-        conditions.add("type","=",category);
         DaoQueryResult result = InsuranceDao.get(conn,conditions);
         return JSONObject.toJSONString(result);
     }
@@ -120,16 +118,14 @@ public class InsuranceServlet extends HttpServlet {
     //获取列表
     private String getList(Connection conn, HttpServletRequest request) {
         QueryParameter parameter =JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
-        byte category = Byte.parseByte(request.getParameter("category"));
-       DaoQueryListResult result = InsuranceDao.getList(conn,parameter,category);
+        DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
         return JSONObject.toJSONString(result);
     }
 
     //删除
     private String delete(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong(request.getParameter("id"));
-        byte category = Byte.parseByte(request.getParameter("category"));
-        DaoUpdateResult result = InsuranceDao.delete(conn,id,category);
+        DaoUpdateResult result = InsuranceDao.delete(conn,id);
         return JSONObject.toJSONString(result);
     }
 

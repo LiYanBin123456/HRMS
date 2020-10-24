@@ -111,7 +111,6 @@
                     upload = layui.upload;
                     form = layui.form;
                     initPage();
-                    initCooperation();
                 });
             }
 
@@ -157,15 +156,14 @@
                         top_bar = '#top_bar0';
                         break;
                     case 1:
-                        cols = columns_insured1;
+                        cols = columns_insured2;
                         top_bar = '#top_bar1';
                         break;
                     case 2:
-                        cols = columns_insured2;
+                        cols = columns_insured3;
                         top_bar = '#top_bar2';
                         break;
                 };
-
 
                 //初始化数据表格
                 table.render({
@@ -207,7 +205,7 @@
             }
 
             function getInsureds() {
-                iInsurance.getList(param_query,type,function (result) {
+                iInsurance.getList(param_query,function (result) {
                     table.reload('tbl_insured', {
                         data:result.rows
                     });
@@ -228,21 +226,21 @@
                 });
             }
 
-            function initCooperation() {
-                iClient.getList({},1,function(result){
-                    var cooperations = result.rows;
-                    var select_cooperation = $("#select_cooperation");
-                    select_cooperation.append("<option value='-2' disabled hidden>选择合作客户</option>");
-                    for(var i in cooperations){
-                        var cooperation = cooperations[i];
-                        if (cooperation.type == 0) {
-                            var option = $("<option>").val(cooperation.id).text(cooperation.name);
-                        }
-                        select_cooperation.append(option);
-                    }
-                    form.render('select', 'form_insureds');
-                })
-            }
+//            function initCooperation() {
+//                iClient.getList({},1,function(result){
+//                    var cooperations = result.rows;
+//                    var select_cooperation = $("#select_cooperation");
+//                    select_cooperation.append("<option value='-2' disabled hidden>选择合作客户</option>");
+//                    for(var i in cooperations){
+//                        var cooperation = cooperations[i];
+//                        if (cooperation.type == 0) {
+//                            var option = $("<option>").val(cooperation.id).text(cooperation.name);
+//                        }
+//                        select_cooperation.append(option);
+//                    }
+//                    form.render('select', 'form_insureds');
+//                })
+//            }
 
 
             //打开编辑对话框
@@ -299,7 +297,7 @@
             //删除
             function del(insured) {
                 layer.confirm('确定删除'+insured.name+'的参保单', {icon: 3, title:'删除参保单'}, function(index){
-                    iInsurance.delete(insured.eid,type,function () {
+                    iInsurance.delete(insured.eid,function () {
                         layer.close(index);
                         getInsureds();
                         layer.msg('删除成功');

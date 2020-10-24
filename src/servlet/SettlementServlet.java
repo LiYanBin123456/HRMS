@@ -343,9 +343,7 @@ public class SettlementServlet extends HttpServlet {
         String end = request.getParameter("end");//结束月份
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
         List<JSONObject> employees = JSONArray.parseArray(request.getParameter("employees"),JSONObject.class);
-
         DaoUpdateResult result = Settlement1Service.backup(start,end,sid,employees,conn);
-
         return JSONObject.toJSONString(result);
     }
 

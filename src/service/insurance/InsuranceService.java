@@ -73,8 +73,8 @@ public class InsuranceService {
                 sheet1.addCell(new Label(0, index, Insurance.getName()));
                 sheet1.addCell(new Label(1, index, Insurance.getCode()));
                 sheet1.addCell(new Label(2, index, Insurance.getCardId()));
-                sheet1.addCell(new Label(3, index, sdf.format(Insurance.getStart())));
-                sheet1.addCell(new jxl.write.Number(4, index, Insurance.getMoney()));
+                sheet1.addCell(new Label(3, index, sdf.format(Insurance.getDate3())));
+                sheet1.addCell(new jxl.write.Number(4, index, Insurance.getBase3()));
                 sheet1.addCell(new Label(5, index, "正常参保登记"));
                 sheet1.addCell(new Label(6, index, "合同制"));
                 sheet1.addCell(new Label(7, index, msg));
@@ -111,7 +111,13 @@ public class InsuranceService {
         DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);
+        //获取本月最后一天
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar cale = Calendar.getInstance();
+        cale.add(Calendar.MONTH, 1);
+        cale.set(Calendar.DAY_OF_MONTH, 0);
+        String lastDay = sdf.format(cale.getTime());//本月最后一天
+
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("停保社保单", 0);
         try {
@@ -125,7 +131,7 @@ public class InsuranceService {
                 sheet1.addCell(new Label(1, index, Insurance.getCode()));
                 sheet1.addCell(new Label(0, index, Insurance.getName()));
                 sheet1.addCell(new Label(2, index, Insurance.getCardId()));
-                sheet1.addCell(new Label(3, index, "未实现"));
+                sheet1.addCell(new Label(3, index, lastDay));
                 sheet1.addCell(new Label(4, index, chageReason(Insurance.getReason())));
                 index++;
             }
@@ -273,8 +279,7 @@ public class InsuranceService {
         response.setHeader("Content-Disposition", "attachment; filename=exportMedicare1.xls");
 
         QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("type", "=", 1);
-        parameter.addCondition("status","=",1);
+        parameter.addCondition("status1","=",2);
 
         DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
@@ -297,9 +302,9 @@ public class InsuranceService {
                 sheet1.addCell(new Label(1, index, Insurance.getCode()));
                 sheet1.addCell(new Label(0, index, Insurance.getName()));
                 sheet1.addCell(new Label(2, index, Insurance.getCardId()));
-                sheet1.addCell(new jxl.write.Number(3, index, Insurance.getMoney()));
+                sheet1.addCell(new jxl.write.Number(3, index, Insurance.getBase1()));
                 sheet1.addCell(new Label(4, index, "医疗、大病、生育"));
-                sheet1.addCell(new Label(5, index, sdf.format(Insurance.getStart())));
+                sheet1.addCell(new Label(5, index, sdf.format(Insurance.getDate1())));
                 index++;
             }
             //设置列宽
@@ -323,8 +328,7 @@ public class InsuranceService {
         response.setHeader("Content-Disposition", "attachment; filename=exportMedicare2.xls");
 
         QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("type", "=", 1);
-        parameter.addCondition("status","=",3);
+        parameter.addCondition("status1","=",4);
 
         DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
@@ -374,8 +378,8 @@ public class InsuranceService {
         response.setHeader("Content-Disposition", "attachment; filename=exportFund.xls");
 
         Workbook book = null;
+        //公积金的变更是什么状态
         QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("type", "=", 2);
 
         DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
@@ -398,12 +402,12 @@ public class InsuranceService {
                 sheet.addCell(new jxl.write.Number(0, index, index-5));//序号
                 sheet.addCell(new Label(1, index, v.getName()));//职工姓名
                 sheet.addCell(new Label(2, index, v.getCardId()));//证件号
-                sheet.addCell(new Label(3, index, sdf.format(v.getStart())));//起缴时间
-                sheet.addCell(new jxl.write.Number(4, index, v.getMoney()));//工资基数
+                sheet.addCell(new Label(3, index, sdf.format(v.getDate2())));//起缴时间
+                sheet.addCell(new jxl.write.Number(4, index, v.getBase2()));//工资基数
                 sheet.addCell(new jxl.write.Number(5, index, per));//单位比例
                 sheet.addCell(new jxl.write.Number(6, index, per));//个人比例
-                sheet.addCell(new jxl.write.Number(7, index, v.getMoney()*per));//个人缴存标准
-                sheet.addCell(new jxl.write.Number(8, index, (v.getMoney()*per)*2));//缴存合计
+                sheet.addCell(new jxl.write.Number(7, index, v.getBase2()*per));//个人缴存标准
+                sheet.addCell(new jxl.write.Number(8, index, (v.getBase2()*per)*2));//缴存合计
                 sheet.addCell(new Label(10, index, v.getPhone()));//手机号码
                 index++;
             }
@@ -421,4 +425,5 @@ public class InsuranceService {
         }
         ConnUtil.closeConnection(conn);
     }
+
 }

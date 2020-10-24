@@ -135,18 +135,15 @@ public class FileServlet extends HttpServlet {
             int index = 1;
 
             for(Employee e:employeeList){
-                System.out.println(e.getCardId());
-                System.out.println(e.getName());
                 sheet.addCell(new Label(0, index, ""));//工号
-                sheet.addCell(new Label(1, index, ""));//姓名
+                sheet.addCell(new Label(1, index, e.getName()));//姓名
                 sheet.addCell(new Label(2, index, "居民身份证"));//证件类型
                 sheet.addCell(new Label(3, index,e.getCardId()));//证件号码
                 sheet.addCell(new Label(4, index,"中国"));//国籍
                 sheet.addCell(new Label(5, index,IDCardUtil.getSex(e.getCardId())));//性别
                 sheet.addCell(new Label(6, index,IDCardUtil.getBirthday(e.getCardId())));//出生日期
-                sheet.addCell(new Label(7, index, "雇员"));//任职受雇从业类型
-                sheet.addCell(new Label(8, index,e.getPhone()));//手机号码
-                sheet.addCell(new Label(9, index, ""));//任职受雇从业日期
+                sheet.addCell(new Label(8, index, "雇员"));//任职受雇从业类型
+                sheet.addCell(new Label(9, index,e.getPhone()));//手机号码
                 index++;
             }
             workbook.write();

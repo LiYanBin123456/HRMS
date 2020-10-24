@@ -670,7 +670,7 @@ var InterfaceEmployee = function () {
      * @param fail
      */
     this.importDeducts = function (deducts,success,fail) {
-        var para = {op: "importDeducts",deducts:JSON.stringify(deducts)};
+        var para = {op: "importDeducts",deducts:deducts};
         access(url,para,1,success,fail);
     };
     /**
@@ -1027,12 +1027,11 @@ var InterfaceInsurance = function () {
     /**
      * 获取参保列表
      * @param param 查询参数
-     * @param category 0-社保 1-医保 2-公积金
      * @param success
      * @param fail
      */
-    this.getList = function(param,category,success,fail){
-        var para = {op: "getList", param:JSON.stringify(param),category:category};
+    this.getList = function(param,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param)};
         access(url,para,1,success,fail);
     };
     /**
@@ -1064,7 +1063,7 @@ var InterfaceInsurance = function () {
      * @param fail
      */
     this.delete = function (id,category,success,fail) {
-        var para = {op:"delete",id:id,category:category};
+        var para = {op:"delete",id:id};
         access(url,para,1,success,fail);
     };
     /**
@@ -1084,8 +1083,8 @@ var InterfaceInsurance = function () {
      * @param success
      * @param fail
      */
-    this.get = function(id,category,success,fail){
-        var para = {op: "get", id:id,category:category};
+    this.get = function(id,success,fail){
+        var para = {op: "get", id:id};
         access(url,para,1,success,fail);
     };
     /**

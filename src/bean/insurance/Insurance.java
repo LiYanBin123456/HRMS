@@ -5,34 +5,40 @@ import java.sql.Date;
 //参保单
 public class Insurance {
     private long eid;//员工id
-    /**类型
-     0_社保参保单
-     1_医保参保单
-     2_公积金参保单
-     */
-    private byte type;
     private String code;//个人代码
-    private Date start;//参保时间
-    private float money;//月缴费工资
-    /**参保状态
-     0_新增
-     1_在保
-     2_拟停
-     3_停保
-     */
-    private byte status;
+    private Date date1;//医保参保时间
+    private Date date2;//公积金参保时间
+    private Date date3;//养老保险参保时间
+    private Date date4;//失业保险参保时间
+    private Date date5;//工伤保险参保时间
+    private byte status1;//医保状态 0 新增 1在保 2拟停 3停保
+    private byte status2;//公积金状态 0 新增 1在保 2拟停 3停保
+    private byte status3;//养老保险状态 0 新增 1在保 2拟停 3停保
+    private byte status4;//失业保险状态 0 新增 1在保 2拟停 3停保
+    private byte status5;//工伤保险状态 0 新增 1在保 2拟停 3停保
+    private float base1;//医保基数
+    private float base2;//公积金基数
+    private float base3;//社保基数
 
     public Insurance() {
     }
 
-    public Insurance(long eid, byte type, String code, Date start, float money, byte status) {
+    public Insurance(long eid, String code, Date date1, Date date2, Date date3, Date date4, Date date5, byte status1, byte status2, byte status3, byte status4, byte status5, float base1, float base2, float base3) {
         this.eid = eid;
-        this.type = type;
         this.code = code;
-        this.start = start;
-        this.money = money;
-        this.status = status;
-
+        this.date1 = date1;
+        this.date2 = date2;
+        this.date3 = date3;
+        this.date4 = date4;
+        this.date5 = date5;
+        this.status1 = status1;
+        this.status2 = status2;
+        this.status3 = status3;
+        this.status4 = status4;
+        this.status5 = status5;
+        this.base1 = base1;
+        this.base2 = base2;
+        this.base3 = base3;
     }
 
     public long getEid() {
@@ -43,14 +49,6 @@ public class Insurance {
         this.eid = eid;
     }
 
-    public byte getType() {
-        return type;
-    }
-
-    public void setType(byte type) {
-        this.type = type;
-    }
-
     public String getCode() {
         return code;
     }
@@ -59,40 +57,125 @@ public class Insurance {
         this.code = code;
     }
 
-    public Date getStart() {
-        return start;
+    public Date getDate1() {
+        return date1;
     }
 
-    public void setStart(Date start) {
-        this.start = start;
+    public void setDate1(Date date1) {
+        this.date1 = date1;
     }
 
-    public float getMoney() {
-        return money;
+    public Date getDate2() {
+        return date2;
     }
 
-    public void setMoney(float money) {
-        this.money = money;
+    public void setDate2(Date date2) {
+        this.date2 = date2;
     }
 
-    public byte getStatus() {
-        return status;
+    public Date getDate3() {
+        return date3;
     }
 
-    public void setStatus(byte status) {
-        this.status = status;
+    public void setDate3(Date date3) {
+        this.date3 = date3;
     }
 
+    public Date getDate4() {
+        return date4;
+    }
+
+    public void setDate4(Date date4) {
+        this.date4 = date4;
+    }
+
+    public Date getDate5() {
+        return date5;
+    }
+
+    public void setDate5(Date date5) {
+        this.date5 = date5;
+    }
+
+    public byte getStatus1() {
+        return status1;
+    }
+
+    public void setStatus1(byte status1) {
+        this.status1 = status1;
+    }
+
+    public byte getStatus2() {
+        return status2;
+    }
+
+    public void setStatus2(byte status2) {
+        this.status2 = status2;
+    }
+
+    public byte getStatus3() {
+        return status3;
+    }
+
+    public void setStatus3(byte status3) {
+        this.status3 = status3;
+    }
+
+    public byte getStatus4() {
+        return status4;
+    }
+
+    public void setStatus4(byte status4) {
+        this.status4 = status4;
+    }
+
+    public byte getStatus5() {
+        return status5;
+    }
+
+    public void setStatus5(byte status5) {
+        this.status5 = status5;
+    }
+
+    public float getBase1() {
+        return base1;
+    }
+
+    public void setBase1(float base1) {
+        this.base1 = base1;
+    }
+
+    public float getBase2() {
+        return base2;
+    }
+
+    public void setBase2(float base2) {
+        this.base2 = base2;
+    }
+
+    public float getBase3() {
+        return base3;
+    }
+
+    public void setBase3(float base3) {
+        this.base3 = base3;
+    }
 
     @Override
     public String toString() {
         return "Insurance{" +
                 "eid=" + eid +
-                ", type=" + type +
                 ", code='" + code + '\'' +
-                ", start=" + start +
-                ", money=" + money +
-                ", status=" + status +
+                ", date1=" + date1 +
+                ", date2=" + date2 +
+                ", date3=" + date3 +
+                ", date4=" + date4 +
+                ", date5=" + date5 +
+                ", status1=" + status1 +
+                ", status2=" + status2 +
+                ", status3=" + status3 +
+                ", status4=" + status4 +
+                ", status5=" + status5 +
                 '}';
     }
 }
