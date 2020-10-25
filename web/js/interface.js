@@ -973,13 +973,12 @@ var InterfaceSettlement = function () {
     /**
      * 导出工资发放表
      * @param id 结算单id
-     * @param bank 银行
-     * @param category 0-结算单 1-小时工结算单
+     * @param category 0-招商银行 1-农业银行 2-浦发银行  3-交通银行
      * @param success
      * @param fail
      */
-    this.exportBank = function (id,bank,category,success,fail) {
-        var para = {op: "exportBank",id:id,bank:bank, category:category};
+    this.exportBank = function (id,category,success,fail) {
+        var para = {op: "exportBank",id:id,category:category};
         access(url,para,1,success,fail);
     };
     /**

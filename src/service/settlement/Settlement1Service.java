@@ -23,6 +23,7 @@ import dao.insurance.InsuranceDao;
 import dao.rule.RuleMedicareDao;
 import dao.rule.RuleSocialDao;
 import dao.settlement.Detail1Dao;
+import dao.settlement.Detail3Dao;
 import dao.settlement.Settlement1Dao;
 import database.*;
 import jxl.Workbook;
@@ -623,7 +624,7 @@ public class Settlement1Service {
         return result;
     }
 
-    //导出农行
+    //导出招行
     public static void exportBank1(Connection conn, long sid, HttpServletResponse response, File file) {
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.setHeader("Content-Disposition", "attachment; filename=bank1.xls");
@@ -635,7 +636,7 @@ public class Settlement1Service {
         DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewDetail1> viewDetail1s = JSONArray.parseArray(rows, ViewDetail1.class);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM");
         try {
             //获取模板
             book = Workbook.getWorkbook(file);
@@ -644,21 +645,23 @@ public class Settlement1Service {
             WritableSheet sheet1 = workbook.getSheet(0);//获取第一个sheet
             WritableSheet sheet2 = workbook.getSheet(1);//获取第二个sheet
 
-            int index = 2;
+            int index = 1;
             for(ViewDetail1 v:viewDetail1s){
                 //金额上限（发放额）、收方账号、收方户名、收方行名称、收方行行号、附言
                 PayCard card = (PayCard) PayCardDao.get(conn,v.getEid()).data;
+                if(card!=null){
                 sheet1.addCell(new jxl.write.Number(1, index, v.getPaid()));//金额上限,实发
                 sheet1.addCell(new Label(7, index, card.getCardNo()));//收方账号
-                sheet1.addCell(new Label(8, index, v.getName()));//收方户名
                 sheet1.addCell(new Label(10, index,card.getBank1()));//收方行名称
                 sheet1.addCell(new Label(11, index, card.getBankNo()));//收方行行号
-                sheet1.addCell(new Label(13, index, ""));//附言
+                sheet1.addCell(new Label(13, index, "融金2月工资"));//附言
 
                 sheet2.addCell(new jxl.write.Number(0, index, v.getPaid()));//金额上限,实发
                 sheet2.addCell(new Label(1, index, card.getCardNo()));//收方账号
+                sheet2.addCell(new Label(3, index, "大正月"+sdf.format(v.getMonth())+"工资"));//附言
+                }
+                sheet1.addCell(new Label(8, index, v.getName()));//收方户名
                 sheet2.addCell(new Label(2, index, v.getName()));//收方户名
-                sheet2.addCell(new Label(3, index, ""));//附言
 
                 index++;
             }
@@ -676,13 +679,163 @@ public class Settlement1Service {
         }
         ConnUtil.closeConnection(conn);
     }
-    //导出招行
-    public static void exportBank2(Connection conn, long sid, HttpServletResponse response) {
+    //导出农行
+    public static void exportBank2(Connection conn, long sid, HttpServletResponse response, File file) {
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.setHeader("Content-Disposition", "attachment; filename=bank2.xls");
+
+        Workbook book = null;
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("sid", "=", sid);
+
+        DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
+        String rows = JSONObject.toJSONString(result.rows);
+        List<ViewDetail1> viewDetail1s = JSONArray.parseArray(rows, ViewDetail1.class);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM");
+        try {
+            //获取模板
+            book = Workbook.getWorkbook(file);
+            // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
+            WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
+            WritableSheet sheet1 = workbook.getSheet(0);//获取第一个sheet
+            WritableSheet sheet2 = workbook.getSheet(1);//获取第二个sheet
+
+            int index = 1;
+            for(ViewDetail1 v:viewDetail1s){
+                //序号	卡号	姓名	开户银行（行别）	大额行号	开户行支行名称	实发	项目
+                PayCard card = (PayCard) PayCardDao.get(conn,v.getEid()).data;
+                if(card!=null) {
+                    sheet1.addCell(new jxl.write.Number(0, index, index ));
+                    sheet1.addCell(new Label(1, index, card.getCardNo()));
+                    sheet1.addCell(new Label(3, index, card.getBank1()));
+                    sheet1.addCell(new Label(4, index, card.getBankNo()));
+                    sheet1.addCell(new Label(5, index, card.getBank2()));
+                    sheet1.addCell(new jxl.write.Number(6, index, v.getPaid()));
+                    sheet1.addCell(new Label(7, index, sdf.format(v.getMonth()) + "工资"));
+
+                    //序号	卡号	姓名	金额	备注
+                    sheet2.addCell(new jxl.write.Number(0, index, index ));
+                    sheet2.addCell(new Label(1, index, card.getCardNo()));
+                    sheet2.addCell(new jxl.write.Number(3, index, v.getPaid()));
+                    sheet2.addCell(new Label(4, index, sdf.format(v.getMonth()) + "工资"));
+                }
+                sheet1.addCell(new Label(2, index, v.getName()));
+                sheet2.addCell(new Label(2, index, v.getName()));
+                index++;
+            }
+            workbook.write();
+            workbook.close();
+            book.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BiffException e) {
+            e.printStackTrace();
+        } catch (RowsExceededException e) {
+            e.printStackTrace();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        ConnUtil.closeConnection(conn);
     }
+
     //导出浦发
-    public static void exportBank3(Connection conn, long sid, HttpServletResponse response) {
+    public static void exportBank3(Connection conn, long sid, HttpServletResponse response) throws IOException {
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.setHeader("Content-Disposition", "attachment; filename=bank3.xls");
+
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("sid","=",sid);
+        DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
+        String rows = JSONObject.toJSONString(result.rows);
+
+        List<ViewDetail1> details = JSONArray.parseArray(rows, ViewDetail1.class);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String month = (sdf.format(details.get(0).getMonth()).split("-"))[1];
+        WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
+        WritableSheet sheet1 = book.createSheet("浦发银行", 0);
+        try {
+            //卡号（或账号）	金额	客户姓名	第三方编号	摘要
+            sheet1.addCell(new Label(0, 0, "卡号（或账号）"));
+            sheet1.addCell(new Label(1, 0, "金额"));
+            sheet1.addCell(new Label(2, 0, "客户姓名"));
+            sheet1.addCell(new Label(3, 0, "第三方编号"));
+            sheet1.addCell(new Label(4, 0, "摘要"));
+
+            int index = 1;
+            for(ViewDetail1 detail1:details){
+                PayCard card = (PayCard) PayCardDao.get(conn,detail1.getEid()).data;
+                if(card!=null){
+                    sheet1.addCell(new Label(0, index, card.getCardNo()));
+                    sheet1.addCell(new jxl.write.Number(1, index, detail1.getPaid()));
+                    sheet1.addCell(new Label(3, index, ""));
+                    sheet1.addCell(new Label(4, index, month+"月工资"));
+                }
+                sheet1.addCell(new Label(2, index, detail1.getName()));
+                index++;
+            }
+            //设置列宽
+            sheet1.setColumnView(0,10);
+            sheet1.setColumnView(1,10);
+            sheet1.setColumnView(2,10);
+            sheet1.setColumnView(3,10);
+            sheet1.setColumnView(4,10);
+            sheet1.setColumnView(5,10);
+            book.write();
+            book.close();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        ConnUtil.closeConnection(conn);
     }
+
     //导出交通
-    public static void exportBank4(Connection conn, long sid, HttpServletResponse response) {
+    public static void exportBank4(Connection conn, long sid, HttpServletResponse response) throws IOException {
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.setHeader("Content-Disposition", "attachment; filename=bank4.xls");
+
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("sid","=",sid);
+        DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
+        String rows = JSONObject.toJSONString(result.rows);
+        List<ViewDetail1> details = JSONArray.parseArray(rows, ViewDetail1.class);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM");
+        String month = sdf.format(details.get(0).getMonth());
+
+        WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
+        WritableSheet sheet1 = book.createSheet("浦发银行", 0);
+        try {
+            //序号	卡号	姓名	实发	项目
+            sheet1.addCell(new Label(0, 0, "序号"));
+            sheet1.addCell(new Label(1, 0, "卡号"));
+            sheet1.addCell(new Label(2, 0, "姓名"));
+            sheet1.addCell(new Label(3, 0, "实发"));
+            sheet1.addCell(new Label(4, 0, "项目"));
+
+            int index = 1;
+            for(ViewDetail1 detail1:details){
+                PayCard card = (PayCard) PayCardDao.get(conn,detail1.getEid()).data;
+                if(card!=null){
+                    sheet1.addCell(new jxl.write.Number(0, index, index));
+                    sheet1.addCell(new Label(1, index, card.getCardNo()));
+                    sheet1.addCell(new jxl.write.Number(3, index, detail1.getPaid()));
+                    sheet1.addCell(new Label(4, index, month+"月工资"));
+                }
+                sheet1.addCell(new Label(2, index, detail1.getName()));
+                index++;
+            }
+            //设置列宽
+            sheet1.setColumnView(0,10);
+            sheet1.setColumnView(1,10);
+            sheet1.setColumnView(2,10);
+            sheet1.setColumnView(3,10);
+            sheet1.setColumnView(4,10);
+            sheet1.setColumnView(5,10);
+            book.write();
+            book.close();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+        ConnUtil.closeConnection(conn);
     }
 }

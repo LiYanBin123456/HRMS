@@ -209,7 +209,12 @@
         }
 
         function exportBank(settlement,bank) {
-            layer.msg("导出["+settlement.client+settlement.month+"]"+bank+"工资发放表");
+            var url = "/hrms/verify/settlement?op=exportBank&category="+bank+"&id="+settlement.id;
+            var form = $('<form method="POST"></form>');
+            form.attr('action', url);
+            form.appendTo($('body'));
+            form.submit();
+            form.remove();
         }
 
         //打开工资确认发放对话框

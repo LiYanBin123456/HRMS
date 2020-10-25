@@ -42,8 +42,7 @@ public class InsuranceService {
         response.setHeader("Content-Disposition", "attachment; filename=exportSocial1.xls");
 
         QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("type", "=", 0);
-        parameter.addCondition("status","=",0);
+        parameter.addCondition("status3","=",1);
 
         DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
@@ -105,8 +104,7 @@ public class InsuranceService {
         response.setHeader("Content-Disposition", "attachment; filename=exportSocial2.xls");
 
         QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("type", "=", 0);
-        parameter.addCondition("status","=",3);
+        parameter.addCondition("status3","=",4);
 
         DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
@@ -380,7 +378,7 @@ public class InsuranceService {
         Workbook book = null;
         //公积金的变更是什么状态
         QueryParameter parameter = new QueryParameter();
-
+        parameter.addCondition("status2","=",4);
         DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);

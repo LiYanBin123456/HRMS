@@ -15,10 +15,10 @@
 <body>
 <form lay-filter="" class="layui-form" style="padding: 5px;">
     <select name="banks" lay-filter="filter_bank">
-        <option value="农业银行" selected>农业银行</option>
-        <option value="招商银行">招商银行</option>
-        <option value="浦发银行">浦发银行</option>
-        <option value="交通银行">交通银行</option>
+        <option value=0 selected>招商银行</option>
+        <option value=1>农业银行</option>
+        <option value=2>浦发银行</option>
+        <option value=3>交通银行</option>
     </select>
 </form>
 </body>
@@ -26,7 +26,7 @@
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
 <script>
-    var bank;//选定的银行
+    var bank=0;//选定的银行
     var form;//表单对象
 
     loadLayuiModule();
