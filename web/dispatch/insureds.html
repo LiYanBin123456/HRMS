@@ -57,17 +57,17 @@
             <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
         </form>
         <!--顶部工具栏-->
+        <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
         <div class="layui-hide" id="top_bar2">
             <button class="layui-btn layui-btn-sm" lay-event="add"><i class="layui-icon "></i> 添加</button>
             <button class="layui-btn layui-btn-sm" lay-event="export" onclick="exportFund()"><i class="layui-icon "></i> 导出变更</button>
-            <button type="button" class="layui-btn layui-btn-sm" lay-event=""  id="test1" ><i class="layui-icon "></i> 校对</button>
-
+            <button type="button" class="layui-btn layui-btn-sm" lay-event="check"  id="check" ><i class="layui-icon "></i> 校对</button>
         </div>
         <div class="layui-hide" id="top_bar1">
             <button class="layui-btn layui-btn-sm" lay-event="add"><i class="layui-icon "></i> 添加</button>
             <button class="layui-btn layui-btn-sm" lay-event="export0" onclick="exportMedicare1()"><i class="layui-icon "></i> 导出续保</button>
             <button class="layui-btn layui-btn-sm" lay-event="export1" onclick="exportMedicare2()"><i class="layui-icon "></i> 导出停保</button>
-            <button type="button" class="layui-btn layui-btn-sm" lay-event=""   ><i class="layui-icon "></i> 校对</button>
+            <button type="button" class="layui-btn layui-btn-sm" lay-event="" ><i class="layui-icon "></i> 校对</button>
         </div>
 
         <div class="layui-hide" id="top_bar0">
@@ -110,6 +110,27 @@
                     laypage = layui.laypage;
                     upload = layui.upload;
                     form = layui.form;
+                    upload.render({
+                        elem: '#import' //绑定元素
+                        , url: '/hrms/verify/insurance' //上传接口
+                        , accept: 'file'
+                        , exts: 'xls'
+                        , acceptMime: '.xls'
+                        ,before: function(file){
+                            this.data={op:"readCheckExcel",file:JSON.stringify(file)}
+                        }
+                        , done: function (res) {
+                            if (res.success){
+                                layer.msg("成功");
+                            }else {
+                                layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                            }
+                        }
+                        , error: function () {
+                            //请求异常回调
+                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                        }
+                    });
                     initPage();
                 });
             }
@@ -196,6 +217,9 @@
                             exportInsurance();
                         case 'search':
                             search();
+                            break;
+                        case 'check':
+                            $("#import").click();
                             break;
                     };
                 });

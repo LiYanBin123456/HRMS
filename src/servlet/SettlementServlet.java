@@ -41,7 +41,6 @@ public class SettlementServlet extends HttpServlet {
 
 
         switch (op) {
-
             case "getList"://获取所有客户清单
                 result = getList(conn, request);
                 break;

@@ -3,15 +3,11 @@ package service.insurance;
 import bean.employee.EnsureSetting;
 import bean.insurance.Insurance;
 import bean.insurance.ViewInsurance;
-import bean.settlement.ViewTax;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.employee.SettingDao;
 import dao.insurance.InsuranceDao;
-import database.ConnUtil;
-import database.DaoQueryListResult;
-import database.DaoUpdateResult;
-import database.QueryParameter;
+import database.*;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import jxl.write.Label;
@@ -424,4 +420,86 @@ public class InsuranceService {
         ConnUtil.closeConnection(conn);
     }
 
+    //校对医保
+//    public static void check2(Connection conn, List<ViewInsurance> insuranceList) {
+//        /**
+//         * 核对流程
+//         * 1.获取员工身份证号
+//         * 2.根据身份证号查询出该员工的参保信息
+//         * 3.根据员工信息和导入的参保信息来校对医保参保单信息
+//         */
+//        DaoUpdateResult result = new DaoUpdateResult();
+//        boolean flag1=true;//判断数据库中的员工存不存在，默认存在
+//        boolean flag2=true;//判断医保基数存不存在
+//        for (ViewInsurance i:insuranceList){
+//             i.getCardId();//员工身份证
+//            QueryConditions conditions = new QueryConditions();
+//            conditions.add("cardId","=",i.getCardId());
+//            ViewInsurance insurance = (ViewInsurance) InsuranceDao.get(conn,conditions).data;
+//            if(insurance==null){//数据库中不存在该员工的参保信息
+//                flag1=false;
+//            }
+//            if(i.getBase1()==0){//医保基数存在
+//                flag2=false;
+//            }
+//            if(flag1&flag2){//数据库中员工存在,医保基数存在
+//                //将医保状态设置为在保
+//               insurance.setStatus1((byte) 2);
+//               result.msg += "将"+insurance.getName()+"的医保状态设置为在保;";
+//            }
+//            if(flag1&!flag2){//数据库中员工存在，基数不存在
+//               //将医保状态设置为停保
+//                insurance.setStatus1((byte) 4);
+//                result.msg += "将"+insurance.getName()+"的医保状态设置为停保;";
+//            }
+//            if(!flag1&flag2){//数据中员工不存在，基数存在
+//               //将医保状态设置为什么？
+//            }
+//            if(!flag1&!flag2){//数据中员工不存在，基数也不存在
+//                //将医保状态设置为什么？
+//            }
+//            //修改该员工的参保信息
+//           InsuranceDao.update(conn,insurance);
+//        }
+//    }
+
+    public static DaoUpdateResult check(Connection conn, List<JSONObject> data){
+       /**
+        * 核对流程
+        * 1.获取员工身份证号
+        * 2.根据身份证号查询出该员工的参保信息
+        * 3.根据员工信息和导入的参保信息来校对医保参保单信息
+        */
+        DaoUpdateResult result = new DaoUpdateResult();
+        boolean flag1 = true;//判断数据库中的员工存不存在，默认存在
+        boolean flag2 = true;//判断医保基数存不存在
+
+        for(int i = 0;i<data.size();i++){
+            QueryConditions conditions = new QueryConditions();
+            conditions.add("cardId","=",data.get(i).getString("cardId"));
+            ViewInsurance insurance = (ViewInsurance) InsuranceDao.get(conn,conditions).data;
+            if(insurance==null){//数据库中不存在该员工的参保信息
+                flag1=false;
+            }
+            if( data.get(i).getFloat("base1")==0){//医保基数不存在
+                flag2=false;
+            }
+            if(flag1&flag2){//数据库中员工存在,校对数据中基数存在
+                //将医保状态设置为在保
+                insurance.setStatus1((byte) 2);
+                result.msg += "将"+insurance.getName()+"的医保状态设置为在保;";
+            }
+            if(flag1&!flag2){//数据库中员工存在，校对数据中基数不存在
+                //将医保状态设置为停保
+                insurance.setStatus1((byte) 4);
+                result.msg += "将"+insurance.getName()+"的医保状态设置为停保;";
+            }
+            if(!flag1&flag2){//数据库中员工不存在，校对数据中基数存在
+
+            }
+            //修改该员工的参保信息
+            InsuranceDao.update(conn,insurance);
+        }
+        return result;
+    }
 }
