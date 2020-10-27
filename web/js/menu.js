@@ -39,29 +39,47 @@ var menuItems_dispatch = [
             {id:1<<6,   title:"合同管理",href:"contracts_employee.html",icon:"&#xe6a7"}
         ]
     },
-    {id:32640,title:"结算单管理",icon:"&#xe6a7",children:
+    {id:384,title:"劳务派遣",icon:"&#xe6a7",children:
         [
-            {id:1<<7,   title:"普通结算单",href:"settlements1.html",icon:"&#xe6a7"},
-            {id:1<<8,   title:"人事代理结算单",href:"settlements4.html",icon:"&#xe6a7"},
-            {id:1<<9,   title:"小时工结算单",href:"'settlements2.html",icon:"&#xe6a7"},
-            {id:1<<10,   title:"商业保险结算单",href:"settlements3.html",icon:"&#xe6a7"},
-            {id:1<<11,   title:"普通结算单审核",href:"check1.html",icon:"&#xe6a7"},
-            {id:1<<12,   title:"人事代理结算单审核",href:"check4.html",icon:"&#xe6a7"},
-            {id:1<<13,   title:"小时工结算单审核",href:"'check2.html",icon:"&#xe6a7"},
-            {id:1<<14,   title:"商业保险结算单审核",href:"check3.html",icon:"&#xe6a7"}
+            {id:1<<7,   title:"结算",href:"settlements1.html",icon:"&#xe6a7"},
+            {id:1<<8,   title:"审核",href:"check1.html",icon:"&#xe6a7"},
         ]
     },
-    {id:491520,title:"财务管理",icon:"&#xe6a7",children:
+    {id:1536,title:"劳务外包",icon:"&#xe6a7",children:
         [
-            {id:1<<15,   title:"工资发放",href:"payroll.html",icon:"&#xe6a7"},
-            {id:1<<16,   title:"到账确认",href:"'confirm.html",icon:"&#xe6a7"},
-            {id:1<<17,   title:"个税专项扣除",href:"deducts.html",icon:"&#xe6a7"},
-            {id:1<<18,   title:"个税申报",href:"taxes.html",icon:"&#xe6a7"}
+            {id:1<<9,   title:"结算",href:"settlements1.html",icon:"&#xe6a7"},
+            {id:1<<10,   title:"审核",href:"check1.html",icon:"&#xe6a7"},
         ]
     },
-    {title:"五险一金",id:1<<19,href:"insureds.html",icon:"&#xe6a7"},
-    {title:"保险产品",id:1<<20,href:"products.html",icon:"&#xe6a7"},
-    {title:"账户管理",id:1<<21,href:"accounts.html",icon:"&#xe6a7"}
+    {id:6144,title:"代发工资",icon:"&#xe6a7",children:
+        [
+            {id:1<<11,   title:"结算",href:"settlements4.html",icon:"&#xe6a7"},
+            {id:1<<12,   title:"审核",href:"check4.html",icon:"&#xe6a7"},
+        ]
+    },
+    {id:24576,title:"代缴社保",icon:"&#xe6a7",children:
+        [
+            {id:1<<13,   title:"结算",href:"settlements4.html",icon:"&#xe6a7"},
+            {id:1<<14,   title:"审核",href:"check4.html",icon:"&#xe6a7"},
+        ]
+    },
+    {id:98304,title:"小时工",icon:"&#xe6a7",children:
+        [
+            {id:1<<15,   title:"结算",href:"settlements2.html",icon:"&#xe6a7"},
+            {id:1<<16,   title:"审核",href:"check2.html",icon:"&#xe6a7"},
+        ]
+    },
+    {id:1966080,title:"财务管理",icon:"&#xe6a7",children:
+        [
+            {id:1<<17,   title:"工资发放",href:"payroll.html",icon:"&#xe6a7"},
+            {id:1<<18,   title:"到账确认",href:"confirm.html",icon:"&#xe6a7"},
+            {id:1<<19,   title:"个税专项扣除",href:"deducts.html",icon:"&#xe6a7"},
+            {id:1<<20,   title:"个税申报",href:"taxes.html",icon:"&#xe6a7"}
+        ]
+    },
+    {title:"五险一金",id:1<<21,href:"insureds.html",icon:"&#xe6a7"},
+    {title:"保险产品",id:1<<22,href:"products.html",icon:"&#xe6a7"},
+    {title:"账户管理",id:1<<23,href:"accounts.html",icon:"&#xe6a7"}
 ];
 
 function getMenuHtml(items, permission) {
