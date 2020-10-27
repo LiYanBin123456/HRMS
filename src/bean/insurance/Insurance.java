@@ -4,6 +4,11 @@ import java.sql.Date;
 
 //参保单
 public class Insurance {
+    public static byte STATUS_APPENDING = 0;//新增
+    public static byte STATUS_NORMAL = 1;//在保
+    public static byte STATUS_STOPING = 2;//拟停
+    public static byte STATUS_STOPED = 3;//停保
+
     private long eid;//员工id
     private String code;//个人代码
     private Date date1;//医保参保时间
@@ -40,6 +45,8 @@ public class Insurance {
         this.base2 = base2;
         this.base3 = base3;
     }
+
+
 
     public long getEid() {
         return eid;
@@ -159,6 +166,38 @@ public class Insurance {
 
     public void setBase3(float base3) {
         this.base3 = base3;
+    }
+
+    public static byte getStatusAppending() {
+        return STATUS_APPENDING;
+    }
+
+    public static void setStatusAppending(byte statusAppending) {
+        STATUS_APPENDING = statusAppending;
+    }
+
+    public static byte getStatusNormal() {
+        return STATUS_NORMAL;
+    }
+
+    public static void setStatusNormal(byte statusNormal) {
+        STATUS_NORMAL = statusNormal;
+    }
+
+    public static byte getStatusStoping() {
+        return STATUS_STOPING;
+    }
+
+    public static void setStatusStoping(byte statusStoping) {
+        STATUS_STOPING = statusStoping;
+    }
+
+    public static byte getStatusStoped() {
+        return STATUS_STOPED;
+    }
+
+    public static void setStatusStoped(byte statusStoped) {
+        STATUS_STOPED = statusStoped;
     }
 
     @Override

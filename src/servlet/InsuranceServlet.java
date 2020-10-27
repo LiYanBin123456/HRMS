@@ -17,6 +17,7 @@ import service.insurance.InsuranceService;
 import utills.XlsUtil;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,7 @@ import java.util.List;
 
 
 @WebServlet(name = "InsuranceServlet",urlPatterns = "/verify/insurance")
+@MultipartConfig
 public class InsuranceServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
@@ -58,15 +60,12 @@ public class InsuranceServlet extends HttpServlet {
             case "get"://获取参保单
                 result = get(conn,request);
                 break;
-//            case "check"://校对参保单
-//                result = check(conn,request);
-//                break;
+            case "check"://校对参保单
+                result = check(conn,request);
+                break;
             case "export"://导出参保单
                 export(conn,request,response);
                 return;
-            case "readCheckExcel"://读取校对的excel文件
-                readCheckExcel(conn,request);
-                break;
         }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
@@ -75,36 +74,33 @@ public class InsuranceServlet extends HttpServlet {
         out.close();
     }
 
-    //读取校对单，先完成医保校对
-    private String readCheckExcel(Connection conn, HttpServletRequest request) throws IOException, ServletException {
+    //校对参保单
+    private String check(Connection conn, HttpServletRequest request) throws IOException, ServletException {
         DaoUpdateResult result=null;
+        byte category = Byte.parseByte(request.getParameter("category"));//判断是社保，医保，公积金
+        byte type = Byte.parseByte(request.getParameter("status"));//判断社保的类型
         Part part = request.getPart("file");
+        InputStream is=null;
+        List<JSONObject> data;
         try {//获取part中的文件，读取数据
-            InputStream is = part.getInputStream();
-            List<JSONObject> data = XlsUtil.readCheck(is,"8276");
-            result = InsuranceService.check(conn,data);
+             is = part.getInputStream();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        return JSONObject.toJSONString(result);
+        switch (category){
+            case 0://校对社保
+                data = XlsUtil.readSocial(is,0,type);//读第一个sheet
+                result = InsuranceService.checkSocial(conn,data,type);
+                break;
+            case 1://校对医保
+                data = XlsUtil.readMedicare(is,0);
+                result = InsuranceService.checkMedicare(conn,data);
+                break;
+            case 2://校对公积金
+                break;
+        }
+        return  JSONObject.toJSONString(result);
     }
-
-    //核对
-//    private String check(Connection conn, HttpServletRequest request) {
-//        byte category = Byte.parseByte(request.getParameter("category"));
-//        switch (category){
-//            case 0://校对社保
-//
-//                break;
-//            case 1://校对医保
-//                List<ViewInsurance> insuranceList = JSONArray.parseArray(request.getParameter("insurances"),ViewInsurance.class);
-//                //InsuranceService.check2(conn,insuranceList);
-//                break;
-//            case 2://校对公积金
-//                break;
-//        }
-//        return  null;
-//    }
 
     //导出
     private void export(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {

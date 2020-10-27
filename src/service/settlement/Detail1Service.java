@@ -22,10 +22,13 @@ import database.QueryConditions;
 import database.QueryParameter;
 import utills.Calculate;
 
+import javax.print.attribute.standard.Chromaticity;
 import java.sql.Connection;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.DeflaterInputStream;
 
 public class Detail1Service {
@@ -98,6 +101,13 @@ public class Detail1Service {
             }
 
             String city = setting.getCity();//员工所处地市
+
+            HashMap<String,RuleMedicare> mapMedicare = new HashMap<>();
+            RuleMedicare medicare1=mapMedicare.get(city);
+            if(medicare1==null){
+                RuleMedicare medicare2= (RuleMedicare)RuleMedicareDao.get(conn,city,month).data;
+                mapMedicare.put(city,medicare2);
+            }
             //获取该地市的医保规则
             RuleMedicare medicare= (RuleMedicare)RuleMedicareDao.get(conn,city,month).data;
             //获取该地市的社保规则

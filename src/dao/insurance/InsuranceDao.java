@@ -81,6 +81,19 @@ public class InsuranceDao {
         }
         return DbUtil.insertBatch(conn, sql, params);
     }
+
+    //批量修改
+    public static DaoUpdateResult updateBatch(Connection conn, List<ViewInsurance> in) {
+        String sql = "update insurance set code=?,date1=?,date2=?,date3=?,date4=?,date5=?,status1=?,status2=?,status3=?,status4=?,status5=?,base1=?,base2=?,base3=? where eid=?";
+        Object[][] params = new Object[in.size()][];
+        for (int i = 0; i < in.size(); i++) {
+            params[i] = new Object[]{ in.get(i).getCode(), in.get(i).getDate1(), in.get(i).getDate2(), in.get(i).getDate3(), in.get(i).getDate4(),in.get(i).getDate5(),
+                    in.get(i).getStatus1(),in.get(i).getStatus2(),in.get(i).getStatus3(),in.get(i).getStatus4(),in.get(i).getStatus5(),in.get(i).getBase1(),in.get(i).getBase2(),in.get(i).getBase3()
+                    ,in.get(i).getEid()
+            };
+        }
+        return DbUtil.batch(conn, sql, params);
+    }
     //自动生成员工参保单
     public static Insurance autoCreateInsurance(EnsureSetting setting, Date date, RuleMedicare ruleMedicare, RuleSocial ruleSocial, Connection conn){
         Insurance insurance = new Insurance();//参保单
