@@ -46,6 +46,9 @@
             <form lay-filter="form_cooperation" class="layui-form">
                 <input type='hidden' name='id'/>
                 <input type='hidden' name='type'/>
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>基本信息</legend>
+                </fieldset>
                 <div class="layui-form-item">
                 <div class="layui-inline">
                     <label class="layui-form-label">
@@ -124,6 +127,17 @@
                     <label class="layui-form-label">客户简介</label>
                     <div class="layui-input-block">
                         <textarea name="intro" placeholder="请输入内容" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>工伤比例设置</legend>
+                </fieldset>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="x-red">*</span>工伤比例</label>
+                        <div class="layui-input-inline">
+                            <input type="number" name="per" required="" autocomplete="off" class="layui-input">
+                        </div>
                     </div>
                 </div>
                 <div class="layui-form-item" style="text-align: center" >
@@ -281,6 +295,7 @@
 
     function initPage() {
         showCooperation();
+        showSalaryItemFixed();
         form.on('submit(submit_cooperation)', function(data){
             saveCooperation(data.field);
             element.tabChange('tab_info', 'finance');
@@ -300,6 +315,16 @@
 
     }
 
+    //显示工资固定项
+    function showSalaryItemFixed() {
+        for (var i in salary_items_fixed) {
+            var item = salary_items_fixed[i];
+            var node = $("#template [name=salary_item_fixed]").clone();
+            node.text(item);
+            $("#btn_append").before(node);
+        }
+    }
+
     function getFinance() {
         if(cooperation.id) {
             iClient.getFinance(cooperation.id, 1, function (result) {
@@ -312,20 +337,12 @@
     }
 
     function initSalayDefine() {
-        //如果已经有基本信息就忽略
+        //如果已经有自定义工资项就忽略
         if (salary_items_defined && salary_items_defined.length > 0) {
             return;
         }
-        //显示固定项
-        for (var i in salary_items_fixed) {
-            var item = salary_items_fixed[i];
-            var node = $("#template [name=salary_item_fixed]").clone();
-            node.text(item);
-            $("#btn_append").before(node);
-        }
 
-        //显示自定义项
-        //此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
+        //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
         iClient.getLastSalaryDefine(cooperation.id,function (result) {
             mapSalary = result.data;
             if(mapSalary && mapSalary.items) {

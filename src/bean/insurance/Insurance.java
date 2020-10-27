@@ -4,6 +4,11 @@ import java.sql.Date;
 
 //参保单
 public class Insurance {
+    public static byte STATUS_APPENDING = 0;//新增
+    public static byte STATUS_NORMAL = 1;//在保
+    public static byte STATUS_STOPING = 2;//拟停
+    public static byte STATUS_STOPED = 3;//停保
+
     private long eid;//员工id
     private String code;//个人代码
     private Date date1;//医保参保时间

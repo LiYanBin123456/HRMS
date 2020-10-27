@@ -14,6 +14,16 @@
 </head>
 <body>
     <div class="dialog-content">
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>角色</legend>
+        </fieldset>
+        <form lay-filter="form_role" class="layui-form">
+            <input type="radio" lay-filter="role" name="role" value="0" title="客服" checked>
+            <input type="radio" lay-filter="role" name="role" value="1073741824" title="管理员">
+        </form>
+        <fieldset class="layui-elem-field layui-field-title">
+            <legend>权限分配</legend>
+        </fieldset>
         <div id="permission"></div>
         <button type="button" class="layui-btn" onclick="savePermission()">保存</button>
     </div>
@@ -25,6 +35,7 @@
 <script src="../js/menu.js"></script>
 <script>
     var id;//账号id
+    var form;
     var tree;
 
     $(function () {
@@ -32,7 +43,8 @@
     });
 
     function loadLayuiModule() {
-        layui.use(['tree'], function () {
+        layui.use(['form','tree'], function () {
+            form = layui.form;
             tree = layui.tree;
             var inst1 = tree.render({
                 elem: '#permission',  //绑定元素
@@ -49,6 +61,11 @@
     function initData() {
         id = $.query.get("id");
         var permission = Number($.query.get("permission"));
+        if((permission & 1073741824) == 0){
+            form.val('form_role',{role:0});
+        }else{
+            form.val('form_role',{role:1073741824});
+        }
 
         var checkeds = [];
         for(var i in menuItems_dispatch){
@@ -83,6 +100,9 @@
                 permit += items[i].id;
             }
         }
+        var data = form.val('form_role');
+        permit += Number(data.role);
+
         iAccount.permit(id,permit,function (result) {
             layer.msg("权限分配成功！");// 获得frame索引
             var index = parent.layer.getFrameIndex(window.name);

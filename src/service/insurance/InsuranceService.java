@@ -23,7 +23,9 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 public class InsuranceService {
@@ -464,6 +466,7 @@ public class InsuranceService {
 //    }
 
     public static DaoUpdateResult check(Connection conn, List<JSONObject> data){
+
        /**
         * 核对流程
         * 1.获取员工身份证号
