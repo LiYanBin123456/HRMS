@@ -78,12 +78,15 @@ public class Settlement1Service {
             long sid = (Long) result.extra;
             long cid = settlement.getCid();
             long did = settlement.getDid();
-            //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派员工，用工性质不是小时工，在职
+            //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派员工，用工性质根据结算单类型而变，在职
             QueryParameter parameter = new QueryParameter();
             parameter.addCondition("cid","=",cid);
             parameter.addCondition("did","=",did);
             parameter.addCondition("type","=",1);
-            parameter.addCondition("category","!=",3);
+            if(settlement.getType()==0||settlement.getType()==1){//如果结算单类型为派遣或者外包
+                //查询出类型为派遣（1）或者外包（2）的员工
+                parameter.addCondition("category","=",settlement.getType()+1);
+            }
             parameter.addCondition("status","=",0);
             List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
             List<Detail1> detail1List = new ArrayList<Detail1>();

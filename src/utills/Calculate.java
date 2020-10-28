@@ -202,42 +202,6 @@ public class Calculate {
 
     }
 
-    /**
-     * 计算社保
-     * @param setting 员工设置
-     * @param base 基数
-     * @param ruleSocial  所属地方的社保
-     * @return
-     */
-    public static JSONObject calculateSocial(EnsureSetting setting, float base,RuleSocial ruleSocial){
-
-        float pension1=0;//个人养老
-        float unemployment1=0;//个人失业
-        float pension2=0;//单位养老
-        float unemployment2=0;//单位失业
-        float injury=0;//单位工伤
-
-        byte social = setting.getSocial();//要计算的社保类别
-        if((social&((byte)1)) != 0){
-            pension1=base*(ruleSocial.getPer2()/100);//个人养老
-            pension2=base*(ruleSocial.getPer1()/100);//单位养老
-        }
-        if((social&((byte)2)) != 0){
-            unemployment1=base*(ruleSocial.getPer5()/100);//个人失业
-            unemployment2=base*(ruleSocial.getPer4()/100);//单位失业
-        }
-        if((social&((byte)4)) != 0) {
-            injury = base * (ruleSocial.getPer3() / 100);//单位工伤
-        }
-            JSONObject o = new JSONObject();
-            o.put("pension1", pension1);
-            o.put("unemployment1", unemployment1);
-            o.put("pension2", pension2);
-            o.put("unemployment2", unemployment2);
-            o.put("injury", injury);
-            return o;
-    }
-
     public static Detail1 calculateSocial(Detail1 detail, EnsureSetting setting, float base, RuleSocial ruleSocial){
 
         float pension1=0;//个人养老

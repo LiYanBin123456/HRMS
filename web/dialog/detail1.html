@@ -61,6 +61,7 @@
             var sid = $.query.get("id");//结算单id
             var cid = $.query.get("cid");//合作单位id
             var month = $.query.get("month");//结算单月份
+            var type = $.query.get("type");//结算单类型 0 派遣 1外包 2代缴工资 3代缴社保
             var upload;
             $(function () {
                 loadLayuiModule();
@@ -239,12 +240,15 @@
 
             //打开添加明细对话框
             function showInsertDlg() {
-                //查询除出该单位，类型外派员工，用工性质派遣或者外包，状态在职的员工列表
+                //查询除出该单位，类型外派员工，状态在职的员工列表，用工性质派遣或者外包
                 var param = new QueryParam();
+                if (type ==0||type == 1){//如果结算单是代缴工资或者代缴社保
+                    param.addCondition("category","=",type+1);//查询出派遣（1）或者外包（2）员工
+                }
                 param.addCondition("cid","=",cid);
                 param.addCondition("type","=",1);
                 param.addCondition("status","=",0);
-                param.addCondition("category","!=",3);
+
                 var content = "member.html?param="+encodeURIComponent(JSON.stringify(param));
                 layer.open({
                     title:"添加明细",

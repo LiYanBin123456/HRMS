@@ -123,6 +123,7 @@
                 }else{
                     param_query.removeCondition("status")
                 }
+                param_query.addCondition("type","=",1);//添加获取类型为外包的结算单条件
                 iSettlement.getList(param_query,0,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows
