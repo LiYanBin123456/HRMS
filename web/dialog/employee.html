@@ -263,7 +263,7 @@
                             <input type="checkbox" lay-skin="primary" name="bSocial" value="2" title="失业保险" checked>
                             <input type="checkbox" lay-skin="primary" name="bSocial" value="4" title="工伤保险" checked>
                             <div class="layui-inline" name="i1">
-                                <input type="text" name="injuryPer" required="" placeholder="工伤比例" autocomplete="off" class="layui-input">
+                                <input type="text" name="injuryPer" id="injuryPer" required="" placeholder="工伤比例" readonly  autocomplete="off" class="layui-input">
                             </div>
                         </div>
                     </fieldset>
@@ -629,11 +629,18 @@
             $('input[name=bSocial]').each(function() {
                 var checked = (setting.social&Number(this.value)) != 0;
                 $(this).attr("checked",checked);
+                getInjuryPer();
             });
             form.val('form_ensure',setting);
         }
     }
 
+    function getInjuryPer() {
+        iClient.get(employee.cid,1,function (result) {
+            var client = result.data;
+            $("#injuryPer").val(client.per);
+        });
+    }
     function getDeduct() {
         if(employee.id){
             iEmployee.getDeduct(employee.id,function (result) {

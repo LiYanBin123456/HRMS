@@ -220,7 +220,7 @@ public class Calculate {
             unemployment2=base*(ruleSocial.getPer4()/100);//单位失业
         }
         if((social&((byte)4)) != 0) {
-            injury = base * (ruleSocial.getPer3() / 100);//单位工伤
+            injury = base * (setting.getInjuryPer()/100);//单位工伤
         }
 
         detail.setPension1(pension1);
