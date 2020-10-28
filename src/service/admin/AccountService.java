@@ -16,11 +16,7 @@ public class AccountService {
         }
         JSONObject json = new JSONObject();
         if(account.getPassword().equals(password)){
-            session.setAttribute("id", account.getId());
-            session.setAttribute("nickname", account.getNickname());
-            session.setAttribute("role", account.getRole());
-            session.setAttribute("rid", account.getRid());
-            session.setAttribute("permission", account.getPermission());
+            session.setAttribute("account", account);
             json.put("success",true);
             json.put("role",account.getRole());
         }else {
@@ -50,10 +46,9 @@ public class AccountService {
         if(res1.exist){
             return DaoResult.fail("该账号已经存在");
         }
-        byte role = (byte) session.getAttribute("role");
-        long rid  = (long) session.getAttribute("rid");
-        account.setRole(role);
-        account.setRid(rid);
+        Account user = (Account) session.getAttribute("account");
+        account.setRole(user.getRole());
+        account.setRid(user.getRid());
         DaoUpdateResult res2 = AccountDao.insert(conn,account);
         return JSONObject.toJSONString(res2);
     }

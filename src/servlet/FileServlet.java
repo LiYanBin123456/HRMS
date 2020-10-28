@@ -1,5 +1,6 @@
 package servlet;
 
+import bean.admin.Account;
 import bean.client.Items;
 import bean.client.MapSalary;
 
@@ -486,7 +487,7 @@ public class FileServlet extends HttpServlet {
         response.setHeader("Content-Disposition", "attachment; filename=detailModel.xls");
 
         HttpSession session = request.getSession();
-        long did = (long) session.getAttribute("rid");//当前操作的管理员所属公司id
+        Account user = (Account) session.getAttribute("account");
         long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
 
         boolean flag=MapSalaryDao.exist(cid,conn).exist;//判断客户是否有自定义工资项
@@ -499,7 +500,7 @@ public class FileServlet extends HttpServlet {
         //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派或者派遣员工，用工性质不是小时工，在职
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("cid","=",cid);
-        parameter.addCondition("did","=",did);
+        parameter.addCondition("did","=",user.getRid());
         parameter.addCondition("type","=",1);
         parameter.addCondition("category","!=",2);
         parameter.addCondition("status","=",0);

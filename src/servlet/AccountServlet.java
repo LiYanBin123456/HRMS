@@ -82,10 +82,9 @@ public class AccountServlet extends HttpServlet {
     private String getList(Connection conn, HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         HttpSession session = request.getSession();
-        byte role = (byte) session.getAttribute("role");
-        long rid = (long) session.getAttribute("rid");
-        parameter.addCondition("role","=",role);
-        parameter.addCondition("rid","=",rid);
+        Account user = (Account) session.getAttribute("account");
+        parameter.addCondition("role","=",user.getRole());
+        parameter.addCondition("rid","=",user.getRid());
         DaoQueryListResult res = AccountService.getList(conn,parameter);
         System.out.println(JSONObject.toJSONString(res));
         return JSONObject.toJSONString(res);
@@ -108,8 +107,8 @@ public class AccountServlet extends HttpServlet {
     private String get(Connection conn, HttpServletRequest request) {
         HttpSession session = request.getSession();
 
-        long id = (long) session.getAttribute("id");
-        return AccountService.get(conn,id);
+        Account user = (Account) session.getAttribute("account");
+        return AccountService.get(conn,user.getId());
     }
 
     //修改账号

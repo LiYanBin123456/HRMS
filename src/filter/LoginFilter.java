@@ -1,5 +1,6 @@
 package filter;
 
+import bean.admin.Account;
 import com.alibaba.fastjson.JSONObject;
 
 import javax.servlet.*;
@@ -29,8 +30,8 @@ public class LoginFilter implements Filter {
                 return;
             }
         }
-        Byte role = (Byte) request.getSession().getAttribute("role");
-        if (role == null) {
+        Account user = (Account) request.getSession().getAttribute("account");
+        if (user == null) {
             PrintWriter out = response.getWriter();
             JSONObject json = new JSONObject();
             json.put("success",false);

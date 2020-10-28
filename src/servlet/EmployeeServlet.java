@@ -1,5 +1,6 @@
 package servlet;
 
+import bean.admin.Account;
 import bean.employee.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
@@ -120,8 +121,8 @@ public class EmployeeServlet extends HttpServlet {
     //插入员工信息
     private String insert(Connection conn, HttpServletRequest request) {
         Employee employee = JSONObject.parseObject(request.getParameter("employee"), Employee.class);
-        long did = (long) request.getSession().getAttribute("rid");
-        employee.setDid(did);
+        Account user = (Account) request.getSession().getAttribute("account");
+        employee.setDid(user.getRid());
         return EmployeeService.insert(conn, employee);
     }
 
@@ -232,21 +233,23 @@ public class EmployeeServlet extends HttpServlet {
         byte type = Byte.parseByte(request.getParameter("type"));
         parameter.addCondition("type","=",type);
         HttpSession session = request.getSession();
-        byte role = (byte) session.getAttribute("role");
-        long rid = (long) session.getAttribute("rid");
-        long aid = (long) session.getAttribute("id");
+        Account user = (Account) session.getAttribute("account");
         switch (type){
             case 0://内部员工
             case 2://人才库
-                if(role==1) {
-                    parameter.addCondition("did", "=", rid);//获取派遣单位的内部员工或者人才库
+                if(user.getRole()==1) {
+                    parameter.addCondition("did", "=", user.getRid());//获取派遣单位的内部员工或者人才库
                 }
                 break;
             case 1://派遣员工
-                if(role==1){//派遣方管理员
-                    parameter.addCondition("did","=",rid);
-                }else if(role == 2) {//合作方管理员
-                    parameter.addCondition("cid","=",rid);
+                if(user.getRole()==1){//派遣方管理员
+                    if(user.isAdmin()) {
+                        parameter.addCondition("did", "=", user.getRid());
+                    }else{
+                        parameter.addCondition("aid", "=", user.getId());
+                    }
+                }else if(user.getRole() == 2) {//合作方管理员
+                    parameter.addCondition("cid","=",user.getRid());
                 }
                 break;
             default:
@@ -290,12 +293,11 @@ public class EmployeeServlet extends HttpServlet {
 
     //批量插入
     private String insertBatch(Connection conn, HttpServletRequest request) {
-        DaoUpdateResult res;
         HttpSession session = request.getSession();
-        long did = (long) session.getAttribute("rid");//当前操作的管理员所属公司id
+        Account user = (Account) session.getAttribute("account");
         List<JSONObject> viewEmployees = JSONArray.parseArray(request.getParameter("employees"),JSONObject.class);
 
-        res = EmployeeService.insertBatch(conn,viewEmployees,did);
+        DaoUpdateResult res = EmployeeService.insertBatch(conn,viewEmployees,user.getRid());
         return  JSONObject.toJSONString(res);
     }
 

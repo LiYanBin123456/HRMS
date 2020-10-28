@@ -1,5 +1,6 @@
 package servlet;
 
+import bean.admin.Account;
 import bean.insurance.Product;
 import com.alibaba.fastjson.JSONObject;
 import database.*;
@@ -57,8 +58,8 @@ public class ProductServlet extends HttpServlet {
     private String insert(Connection conn, HttpServletRequest request) {
         Product product = JSONObject.parseObject(request.getParameter("product"),Product.class);
         HttpSession session = request.getSession();
-        long did = (long) session.getAttribute("rid");//当前操作的管理员所属公司id
-        product.setDid(did);
+        Account user = (Account) session.getAttribute("account");
+        product.setDid(user.getRid());
         DaoUpdateResult res = ProductService.insert(conn,product);
         return JSONObject.toJSONString(res);
     }
@@ -88,8 +89,8 @@ public class ProductServlet extends HttpServlet {
     private String getList(Connection conn, HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         HttpSession session = request.getSession();
-        long rid = (long) session.getAttribute("rid");
-        parameter.addCondition("did","=",rid);
+        Account user = (Account) session.getAttribute("account");
+        parameter.addCondition("did","=",user.getRid());
         DaoQueryListResult res = ProductService.getList(conn,parameter);
         return JSONObject.toJSONString(res);
     }

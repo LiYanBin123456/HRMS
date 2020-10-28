@@ -1,5 +1,6 @@
 package servlet;
 
+import bean.admin.Account;
 import bean.contract.Contract;
 import bean.contract.Serve;
 import bean.contract.ViewContractEmployee;
@@ -87,8 +88,8 @@ public class ContractServlet extends HttpServlet {
     private String insertContracts(Connection conn, HttpServletRequest request) {
         List<ViewContractEmployee> contractList = JSONArray.parseArray(request.getParameter("contracts"),ViewContractEmployee.class);//
         HttpSession session = request.getSession();
-        long rid = (long) session.getAttribute("rid");
-        DaoUpdateResult result = ContractDao.insertContracts(contractList,conn,rid);
+        Account user = (Account) session.getAttribute("account");
+        DaoUpdateResult result = ContractDao.insertContracts(contractList,conn,user.getRid());
         return JSONObject.toJSONString(result);
     }
 
@@ -100,8 +101,8 @@ public class ContractServlet extends HttpServlet {
         parameter.addCondition("did","=",id);
         parameter.addCondition("stype","=",type);
         HttpSession session = request.getSession();
-        long rid = (long) session.getAttribute("rid");
-        DaoQueryListResult res = ContractService.getList(conn,parameter,"B",rid);
+        Account user = (Account) session.getAttribute("account");
+        DaoQueryListResult res = ContractService.getList(conn,parameter,"B",user.getRid());
         return JSONObject.toJSONString(res);
     }
 
@@ -127,8 +128,8 @@ public class ContractServlet extends HttpServlet {
         contract.setId(id);
 
         HttpSession session = request.getSession();
-        long rid = (long) session.getAttribute("rid");
-        contract.setAid(rid);
+        Account user = (Account) session.getAttribute("account");
+        contract.setAid(user.getRid());
         res = ContractService.insert(conn,contract);
         res.extra = id;
 
@@ -149,8 +150,8 @@ public class ContractServlet extends HttpServlet {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         String type=request.getParameter("type");
         HttpSession session = request.getSession();
-        long rid = (long) session.getAttribute("rid");
-        DaoQueryListResult res = ContractService.getList(conn,parameter,type,rid);
+        Account user = (Account) session.getAttribute("account");
+        DaoQueryListResult res = ContractService.getList(conn,parameter,type,user.getRid());
         return JSONObject.toJSONString(res);
     }
 

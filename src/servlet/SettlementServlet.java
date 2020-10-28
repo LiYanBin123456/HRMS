@@ -1,6 +1,7 @@
 package servlet;
 
 
+import bean.admin.Account;
 import bean.settlement.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -157,30 +158,29 @@ public class SettlementServlet extends HttpServlet {
         QueryParameter param = JSONObject.parseObject(request.getParameter("param"),QueryParameter.class);
         DaoQueryListResult result = null;
         HttpSession session = request.getSession();
-        byte role = (byte) session.getAttribute("role");
-        long rid = (long) session.getAttribute("rid");
+        Account user = (Account) session.getAttribute("account");
         switch (category){
             case 0://普通结算单
-                if(role==1){
-                    param.addCondition("did","=",rid);
-                }else if(role==2){
-                    param.addCondition("cid","=",rid);
+                if(user.getRole()==1){
+                    param.addCondition("did","=",user.getRid());
+                }else if(user.getRole()==2){
+                    param.addCondition("cid","=",user.getRid());
                 }
                 result = Settlement1Service.getList(conn,param);
                 break;
             case 1://小时工结算单
-                if(role==1){
-                    param.addCondition("did","=",rid);
-                }else if(role==2){
-                    param.addCondition("cid","=",rid);
+                if(user.getRole()==1){
+                    param.addCondition("did","=",user.getRid());
+                }else if(user.getRole()==2){
+                    param.addCondition("cid","=",user.getRid());
                 }
                 result = Settlement2Service.getList(conn,param);
                 break;
             case 2://商业保险结算单
-                if(role==1){
-                    param.addCondition("did","=",rid);
-                }else if(role==2){
-                    param.addCondition("cid","=",rid);
+                if(user.getRole()==1){
+                    param.addCondition("did","=",user.getRid());
+                }else if(user.getRole()==2){
+                    param.addCondition("cid","=",user.getRid());
                 }
               result = Settlement3Service.getList(conn,param);
                 break;
@@ -195,7 +195,7 @@ public class SettlementServlet extends HttpServlet {
         DaoUpdateResult result = null;
         HttpSession session = request.getSession();
         //获取管理员所属的公司id
-        long rid = (long) session.getAttribute("rid");
+        long rid = ((Account) session.getAttribute("account")).getRid();
         switch (category){
             case 0://普通结算单
                 Settlement1 settlement1 = JSONObject.parseObject(request.getParameter("settlement"), Settlement1.class);
@@ -303,7 +303,7 @@ public class SettlementServlet extends HttpServlet {
         long id = Long.parseLong(request.getParameter("id"));//结算单id
         DaoUpdateResult result = null;
         HttpSession session = request.getSession();
-        long did = (long) session.getAttribute("rid");//当前操作的管理员所属公司id
+        long did = ((Account) session.getAttribute("account")).getRid();//当前操作的管理员所属公司id
         switch (category){
             case 0://普通结算单明细
                 List<ViewDetail1> detail1s = JSONArray.parseArray(request.getParameter("details"),ViewDetail1.class);
@@ -360,7 +360,8 @@ public class SettlementServlet extends HttpServlet {
 
     //提交
     private String commit(Connection conn, HttpServletRequest request) {
-        Long aid = (Long) request.getSession().getAttribute("id");
+        Account user = (Account) request.getSession().getAttribute("account");
+        long aid = user.getId();
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
         DaoUpdateResult result = null;
@@ -382,7 +383,8 @@ public class SettlementServlet extends HttpServlet {
     private String check(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
-        Long aid = (Long) request.getSession().getAttribute("id");
+        Account user = (Account) request.getSession().getAttribute("account");
+        long aid = user.getId();
         byte status = Byte.parseByte(request.getParameter("status"));
         DaoUpdateResult result = null;
         switch (category){
@@ -403,7 +405,8 @@ public class SettlementServlet extends HttpServlet {
     private String reset(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
-        Long aid = (Long) request.getSession().getAttribute("id");
+        Account user = (Account) request.getSession().getAttribute("account");
+        long aid = user.getId();
         DaoUpdateResult result = null;
         switch (category){
             case 0://普通结算单明细
@@ -423,7 +426,8 @@ public class SettlementServlet extends HttpServlet {
     private String deduct(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
-        Long aid = (Long) request.getSession().getAttribute("id");
+        Account user = (Account) request.getSession().getAttribute("account");
+        long aid = user.getId();
         DaoUpdateResult result = null;
         switch (category){
             case 0://普通结算单明细
@@ -443,7 +447,8 @@ public class SettlementServlet extends HttpServlet {
     private String confirm(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
-        Long aid = (Long) request.getSession().getAttribute("id");
+        Account user = (Account) request.getSession().getAttribute("account");
+        long aid = user.getId();
         DaoUpdateResult result = null;
         switch (category){
             case 0://普通结算单明细

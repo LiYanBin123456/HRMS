@@ -109,6 +109,9 @@ function getMenuHtml(items, permission) {
             }
         }
     }
+    if(permission&(1<<30)!=0){
+        html1 += "<li><a onclick=\"xadmin.add_tab('账户管理','accounts.html')\"><i class=\"iconfont\">&#xe6a7</i><cite>'账户管理'</cite></a></li>";
+    }
     return html1;
 }
 

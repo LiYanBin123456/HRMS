@@ -32,8 +32,8 @@ public class CooperationDao {
 
 
     public static DaoUpdateResult insert(Connection conn, Cooperation c) {
-        String sql = "insert into cooperation (aid,did,rid,name,nickname,address,contact,phone,wx,qq,mail,intro,type,category,per) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        Object []params = {c.getAid(),c.getDid(),c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getMail(),c.getIntro(),c.getType(),c.getCategory(),c.getPer()};
+        String sql = "insert into cooperation (did,rid,name,nickname,address,contact,phone,wx,qq,mail,intro,type,category,per) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {c.getDid(),c.getRid(),c.getName(),c.getNickname(),c.getAddress(), c.getContact(), c.getPhone(),c.getWx(),c.getQq(),c.getMail(),c.getIntro(),c.getType(),c.getCategory(),c.getPer()};
         return DbUtil.insert(conn,sql,params);
     }
 

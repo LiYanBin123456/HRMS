@@ -1,6 +1,7 @@
 package servlet;
 
 
+import bean.admin.Account;
 import bean.client.*;
 import com.alibaba.fastjson.*;
 import dao.client.CooperationDao;
@@ -121,23 +122,20 @@ public class ClientServlet extends HttpServlet {
         DaoUpdateResult res = null;
         byte category = Byte.parseByte(request.getParameter("category"));
         HttpSession session = request.getSession();
-        long rid = (long) session.getAttribute("rid");
-        long id = (long) session.getAttribute("id");
+        Account user = (Account) session.getAttribute("account");
         switch (category) {
             case 0://派遣单位客户
                 Dispatch dispatch = JSON.parseObject(request.getParameter("client"), Dispatch.class);
-                dispatch.setAid(id);
                 res = DispatchService.insert(conn, dispatch);
                 break;
             case 1://合作单位客户
                Cooperation cooperation= JSON.parseObject(request.getParameter("client"), Cooperation.class);
-               cooperation.setAid(id);//当前用户为其管理员
-               cooperation.setDid(rid);
+               cooperation.setDid(user.getRid());
                res = CooperationService.insert(cooperation,conn);
                break;
             case 2://供应商客户
                 Supplier supplier= JSON.parseObject(request.getParameter("client"), Supplier.class);
-                supplier.setDid(rid);
+                supplier.setDid(user.getRid());
                 res = SupplierService.insert(supplier,conn);
                 break;
         }
@@ -194,21 +192,23 @@ public class ClientServlet extends HttpServlet {
         DaoQueryListResult res ;
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         HttpSession session = request.getSession();
-        long rid = (long) session.getAttribute("rid");
-        long aid = (long) session.getAttribute("id");
+        Account user = (Account) session.getAttribute("account");
         byte category= Byte.parseByte(request.getParameter("category"));
-        if(category==0){
-            //派遣方客户
-            parameter.addCondition("aid","=",aid);
+        if(category==0){//派遣单位客户
+            if(!user.isAdmin()) {
+                parameter.addCondition("aid", "=", user.getId());
+            }
             res = DispatchService.getList(conn,parameter);
-        }else if(category==1){
-            //合作单位客户
-            parameter.addCondition("did","=",rid);
-            parameter.addCondition("aid","=",aid);
+        }else if(category==1){//合作单位客户
+            if(user.isAdmin()) {
+                parameter.addCondition("did", "=", user.getRid());
+            }else {
+                parameter.addCondition("aid", "=", user.getId());
+            }
             res = CooperationService.getList(conn,parameter);
         }else {
             //供应商客户
-            parameter.addCondition("did","=",rid);
+            parameter.addCondition("did","=",user.getRid());
             res = SupplierService.getList(conn,parameter);
         }
 
