@@ -41,25 +41,25 @@ var menuItems_dispatch = [
     },
     {id:384,title:"劳务派遣",icon:"&#xe6a7",children:
         [
-            {id:1<<7,   title:"结算",href:"settlements1.html",icon:"&#xe6a7"},
-            {id:1<<8,   title:"审核",href:"check1.html",icon:"&#xe6a7"},
+            {id:1<<7,   title:"结算",href:"settlements11.html",icon:"&#xe6a7"},
+            {id:1<<8,   title:"审核",href:"check11.html",icon:"&#xe6a7"},
         ]
     },
     {id:1536,title:"劳务外包",icon:"&#xe6a7",children:
         [
-            {id:1<<9,   title:"结算",href:"settlements1.html",icon:"&#xe6a7"},
-            {id:1<<10,   title:"审核",href:"check1.html",icon:"&#xe6a7"},
+            {id:1<<9,   title:"结算",href:"settlements12.html",icon:"&#xe6a7"},
+            {id:1<<10,   title:"审核",href:"check11.html",icon:"&#xe6a7"},
         ]
     },
     {id:6144,title:"代发工资",icon:"&#xe6a7",children:
         [
-            {id:1<<11,   title:"结算",href:"settlements4.html",icon:"&#xe6a7"},
+            {id:1<<11,   title:"结算",href:"settlements13.html",icon:"&#xe6a7"},
             {id:1<<12,   title:"审核",href:"check4.html",icon:"&#xe6a7"},
         ]
     },
     {title:"代缴社保",id:24576,icon:"&#xe6a7",children:
         [
-            {id:1<<13,   title:"结算",href:"settlements4.html",icon:"&#xe6a7"},
+            {id:1<<13,   title:"结算",href:"settlements14.html",icon:"&#xe6a7"},
             {id:1<<14,   title:"审核",href:"check4.html",icon:"&#xe6a7"},
         ]
     },
