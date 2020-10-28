@@ -57,29 +57,35 @@ var menuItems_dispatch = [
             {id:1<<12,   title:"审核",href:"check4.html",icon:"&#xe6a7"},
         ]
     },
-    {id:24576,title:"代缴社保",icon:"&#xe6a7",children:
+    {title:"代缴社保",id:24576,icon:"&#xe6a7",children:
         [
             {id:1<<13,   title:"结算",href:"settlements4.html",icon:"&#xe6a7"},
             {id:1<<14,   title:"审核",href:"check4.html",icon:"&#xe6a7"},
         ]
     },
-    {id:98304,title:"小时工",icon:"&#xe6a7",children:
+    {title:"小时工",id:98304,icon:"&#xe6a7",children:
         [
             {id:1<<15,   title:"结算",href:"settlements2.html",icon:"&#xe6a7"},
             {id:1<<16,   title:"审核",href:"check2.html",icon:"&#xe6a7"},
         ]
     },
-    {id:1966080,title:"财务管理",icon:"&#xe6a7",children:
+    {title:"商业保险",id:917504,icon:"&#xe6a7",children:
         [
-            {id:1<<17,   title:"工资发放",href:"payroll.html",icon:"&#xe6a7"},
-            {id:1<<18,   title:"到账确认",href:"confirm.html",icon:"&#xe6a7"},
-            {id:1<<19,   title:"个税专项扣除",href:"deducts.html",icon:"&#xe6a7"},
-            {id:1<<20,   title:"个税申报",href:"taxes.html",icon:"&#xe6a7"}
+            {id:1<<17,   title:"保险产品",href:"products.html",icon:"&#xe6a7"},
+            {id:1<<18,   title:"结算",href:"settlements3.html",icon:"&#xe6a7"},
+            {id:1<<19,   title:"审核",href:"check3.html",icon:"&#xe6a7"},
         ]
     },
-    {title:"五险一金",id:1<<21,href:"insureds.html",icon:"&#xe6a7"},
-    {title:"保险产品",id:1<<22,href:"products.html",icon:"&#xe6a7"},
-    {title:"账户管理",id:1<<23,href:"accounts.html",icon:"&#xe6a7"}
+    {title:"财务管理",id:15728640,icon:"&#xe6a7",children:
+        [
+            {id:1<<20,   title:"工资发放",href:"payroll.html",icon:"&#xe6a7"},
+            {id:1<<21,   title:"到账确认",href:"confirm.html",icon:"&#xe6a7"},
+            {id:1<<22,   title:"个税专项扣除",href:"deducts.html",icon:"&#xe6a7"},
+            {id:1<<23,   title:"个税申报",href:"taxes.html",icon:"&#xe6a7"}
+        ]
+    },
+    {title:"五险一金",id:1<<24,href:"insureds.html",icon:"&#xe6a7"},
+    {title:"账户管理",id:1<<25,href:"accounts.html",icon:"&#xe6a7"}
 ];
 
 function getMenuHtml(items, permission) {
