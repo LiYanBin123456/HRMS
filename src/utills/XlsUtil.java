@@ -274,12 +274,12 @@ public class XlsUtil {
     }
 
     /**
-     * 读取医保校对单
+     * 读社保校对单
      * @param is 文件输入流
      * @param sheet  第几个sheet
      * @return
      */
-    public static List<JSONObject> readSocial(InputStream is, int sheet,byte type) {
+    public static List<JSONObject> readSocial(InputStream is, int sheet) {
         Workbook workbook ;
         try {
             workbook = Workbook.getWorkbook(is);
@@ -313,6 +313,58 @@ public class XlsUtil {
                 o.put("code", v);//员工编号
 
                 v = sheet.getCell(2,line).getContents();
+                o.put("cardId", v);//员工身份证号码
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                break out;
+            }
+            data.add(o);
+        }
+        return data;
+    }
+
+
+    /**
+     * 读公积金校对单
+     * @param is 文件输入流
+     * @param sheet  第几个sheet
+     * @return
+     */
+    public static List<JSONObject> readFund(InputStream is, int sheet) {
+        Workbook workbook ;
+        try {
+            workbook = Workbook.getWorkbook(is);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        //读取数据
+        Sheet sheet_data = workbook.getSheet(sheet);
+        if(null == sheet_data){
+            return null;
+        }
+        return readFund(sheet_data);
+    }
+
+    /**
+     * 读取公积金数据
+     * @param sheet
+     * @return
+     */
+    private static List<JSONObject> readFund(Sheet sheet) {
+        List<JSONObject> data = new ArrayList<>();
+        out:for(int line=1; ; line++) {
+            JSONObject o = new JSONObject();
+            String v=null;
+            try {
+                v = sheet.getCell(1,line).getContents();
+                if(v==null||v==""||v.trim().isEmpty()){//判断数据是否为空，为空则跳出循环，这里导致所填数据字段不能为空
+                    break out;
+                }
+                o.put("code", v);//员工编号
+
+                v = sheet.getCell(3,line).getContents();
                 o.put("cardId", v);//员工身份证号码
 
             } catch (Exception e) {

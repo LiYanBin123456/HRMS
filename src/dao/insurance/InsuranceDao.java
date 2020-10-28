@@ -46,8 +46,8 @@ public class InsuranceDao {
 
     //修改
     public static DaoUpdateResult update(Connection conn, Insurance i) {
-        String sql = "update insurance set code=?,date1=?,date2=?,date3=?,date4=?,date5=?,status1=?,status2=?,status3=?,status4=?,status5=?,base1=?,base2=?,base3=? where eid=?";
-        Object[] params = {i.getCode(),i.getDate1(),i.getDate2(),i.getDate3(),i.getDate4(),i.getDate5(),i.getStatus1(),i.getStatus2(),
+        String sql = "update insurance set code1=?,code2=?,code3=?,date1=?,date2=?,date3=?,date4=?,date5=?,status1=?,status2=?,status3=?,status4=?,status5=?,base1=?,base2=?,base3=? where eid=?";
+        Object[] params = {i.getCode1(),i.getCode2(),i.getCode3(),i.getDate1(),i.getDate2(),i.getDate3(),i.getDate4(),i.getDate5(),i.getStatus1(),i.getStatus2(),
           i.getStatus3(),i.getStatus4(),i.getStatus5(),i.getBase1(),i.getBase2(),i.getBase3(),i.getEid()
         };
         //调用DbUtil封装的update方法
@@ -63,8 +63,8 @@ public class InsuranceDao {
 
     //插入
     public static DaoUpdateResult insert(Connection conn, Insurance in) {
-        String sql = "insert insurance (eid,code,date1,date2,date3,date4,date5,status1,status2,status3,status4,status5,base1,base2,base3) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        Object[] params ={in.getEid(), in.getCode(), in.getDate1(), in.getDate2(), in.getDate3(), in.getDate4(),in.getDate5(),
+        String sql = "insert insurance (eid,code1,code2,code3,date1,date2,date3,date4,date5,status1,status2,status3,status4,status5,base1,base2,base3) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        Object[] params ={in.getEid(), in.getCode1(),in.getCode2(),in.getCode3(), in.getDate1(), in.getDate2(), in.getDate3(), in.getDate4(),in.getDate5(),
                 in.getStatus1(),in.getStatus2(),in.getStatus3(),in.getStatus4(),in.getStatus5(),
                 in.getBase1(),in.getBase2(),in.getBase3()};
         return DbUtil.insert(conn, sql, params);
@@ -72,10 +72,10 @@ public class InsuranceDao {
 
     //批量插入
     public static DaoUpdateResult insertBatch(Connection conn, List<Insurance> in) {
-        String sql = "insert insurance (eid,code,date1,date2,date3,date4,date5,status1,status2,status3,status4,status5,base1,base2,base3) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert insurance (eid,code1,code2,code3,date1,date2,date3,date4,date5,status1,status2,status3,status4,status5,base1,base2,base3) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         Object[][] params = new Object[in.size()][];
         for (int i = 0; i < in.size(); i++) {
-            params[i] = new Object[]{in.get(i).getEid(), in.get(i).getCode(), in.get(i).getDate1(), in.get(i).getDate2(), in.get(i).getDate3(), in.get(i).getDate4(),in.get(i).getDate5(),
+            params[i] = new Object[]{in.get(i).getEid(), in.get(i).getCode1(),in.get(i).getCode2(),in.get(i).getCode3(), in.get(i).getDate1(), in.get(i).getDate2(), in.get(i).getDate3(), in.get(i).getDate4(),in.get(i).getDate5(),
                     in.get(i).getStatus1(),in.get(i).getStatus2(),in.get(i).getStatus3(),in.get(i).getStatus4(),in.get(i).getStatus5(),in.get(i).getBase1(),in.get(i).getBase2(),in.get(i).getBase3()
             };
         }
@@ -84,10 +84,10 @@ public class InsuranceDao {
 
     //批量修改
     public static DaoUpdateResult updateBatch(Connection conn, List<ViewInsurance> in) {
-        String sql = "update insurance set code=?,date1=?,date2=?,date3=?,date4=?,date5=?,status1=?,status2=?,status3=?,status4=?,status5=?,base1=?,base2=?,base3=? where eid=?";
+        String sql = "update insurance set code1=?,code2=?,code3=?,date1=?,date2=?,date3=?,date4=?,date5=?,status1=?,status2=?,status3=?,status4=?,status5=?,base1=?,base2=?,base3=? where eid=?";
         Object[][] params = new Object[in.size()][];
         for (int i = 0; i < in.size(); i++) {
-            params[i] = new Object[]{ in.get(i).getCode(), in.get(i).getDate1(), in.get(i).getDate2(), in.get(i).getDate3(), in.get(i).getDate4(),in.get(i).getDate5(),
+            params[i] = new Object[]{ in.get(i).getCode1(),in.get(i).getCode2(),in.get(i).getCode3(), in.get(i).getDate1(), in.get(i).getDate2(), in.get(i).getDate3(), in.get(i).getDate4(),in.get(i).getDate5(),
                     in.get(i).getStatus1(),in.get(i).getStatus2(),in.get(i).getStatus3(),in.get(i).getStatus4(),in.get(i).getStatus5(),in.get(i).getBase1(),in.get(i).getBase2(),in.get(i).getBase3()
                     ,in.get(i).getEid()
             };
