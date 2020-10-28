@@ -262,6 +262,9 @@
                             <input type="checkbox" lay-skin="primary" name="bSocial" value="1" title="养老保险" checked>
                             <input type="checkbox" lay-skin="primary" name="bSocial" value="2" title="失业保险" checked>
                             <input type="checkbox" lay-skin="primary" name="bSocial" value="4" title="工伤保险" checked>
+                            <div class="layui-inline" name="i1">
+                                <input type="text" name="injuryPer" required="" placeholder="工伤比例" autocomplete="off" class="layui-input">
+                            </div>
                         </div>
                     </fieldset>
                 </div>
@@ -507,6 +510,14 @@
             }
         });
         form.on('radio(settingS)', function(data){
+            var settingS = data.value;
+            if(settingS == 2){
+                $("[name=s1]").removeClass("layui-hide");
+            }else{
+                $("[name=s1]").addClass("layui-hide");
+            }
+        });
+        form.on('checkbox(settingS)', function(data){
             var settingS = data.value;
             if(settingS == 2){
                 $("[name=s1]").removeClass("layui-hide");
