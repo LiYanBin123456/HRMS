@@ -79,7 +79,7 @@
             var param_query = new QueryParam();
             param_query.setOrder("id",true);
             param_query.setPagination(1,10);
-            var type = 1;//区分结算单类型  0 普通结算单  1 人事代理结算单 小时工结算单
+            var type = 1;//区分结算单类型   0 派遣外包结算单  1 人事代理结算单（代发工资、代缴社保）  2 小时工
             var month=null;
             var status = null;
 
@@ -191,6 +191,7 @@
             }
 
             function getSettlements() {
+                param_query.addCondition("type","=",2);//查询代缴工资结算单
                 iSettlement.getList(param_query,0,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows
@@ -214,7 +215,7 @@
 
             //打开明细对话框
             function showDetailDlg(settlement) {
-                var content = "../dialog/detail1.html?id="+settlement.id+"&month="+settlement.month+"&cid="+settlement.cid;
+                var content = "../dialog/detail1.html?id="+settlement.id+"&month="+settlement.month+"&cid="+settlement.cid+"&type="+settlement.type;
                 layer.open({
                     title:"明细",
                     type: 2,
@@ -248,6 +249,7 @@
                         var settlement = window["layui-layer-iframe" + index].callbackData();
                         layer.close(index);
                         if (settlement.month != null&&settlement.month!=""&&settlement.ccid!=null&&settlement.ccid!=""){
+                            settlement.type = 2;//代缴工资结算单
                             insertSettlement(settlement);
                         }else {
                             layer.msg("插入失败,请选择月份或者合同");

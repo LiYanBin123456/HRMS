@@ -116,8 +116,8 @@
 
     //获取派遣方与合作客户的合同
     function getContracts(cid) {
-        param_query.addCondition('bid','=',cid);
-        param_query.addCondition('stype','=',type);
+        param_query.addCondition('bid','=',cid);//该合作客户
+        param_query.addCondition('stype','=',type);//合同的服务项目类型
         iContract.getList(param_query,"B",function (result) {//获取派遣方与合作客户的合同
             table.reload('tbl_contract', {
                 data:result.rows
