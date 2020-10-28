@@ -422,87 +422,134 @@ public class InsuranceService {
         ConnUtil.closeConnection(conn);
     }
 
-    //校对医保
-//    public static void check2(Connection conn, List<ViewInsurance> insuranceList) {
-//        /**
-//         * 核对流程
-//         * 1.获取员工身份证号
-//         * 2.根据身份证号查询出该员工的参保信息
-//         * 3.根据员工信息和导入的参保信息来校对医保参保单信息
-//         */
-//        DaoUpdateResult result = new DaoUpdateResult();
-//        boolean flag1=true;//判断数据库中的员工存不存在，默认存在
-//        boolean flag2=true;//判断医保基数存不存在
-//        for (ViewInsurance i:insuranceList){
-//             i.getCardId();//员工身份证
-//            QueryConditions conditions = new QueryConditions();
-//            conditions.add("cardId","=",i.getCardId());
-//            ViewInsurance insurance = (ViewInsurance) InsuranceDao.get(conn,conditions).data;
-//            if(insurance==null){//数据库中不存在该员工的参保信息
-//                flag1=false;
-//            }
-//            if(i.getBase1()==0){//医保基数存在
-//                flag2=false;
-//            }
-//            if(flag1&flag2){//数据库中员工存在,医保基数存在
-//                //将医保状态设置为在保
-//               insurance.setStatus1((byte) 2);
-//               result.msg += "将"+insurance.getName()+"的医保状态设置为在保;";
-//            }
-//            if(flag1&!flag2){//数据库中员工存在，基数不存在
-//               //将医保状态设置为停保
-//                insurance.setStatus1((byte) 4);
-//                result.msg += "将"+insurance.getName()+"的医保状态设置为停保;";
-//            }
-//            if(!flag1&flag2){//数据中员工不存在，基数存在
-//               //将医保状态设置为什么？
-//            }
-//            if(!flag1&!flag2){//数据中员工不存在，基数也不存在
-//                //将医保状态设置为什么？
-//            }
-//            //修改该员工的参保信息
-//           InsuranceDao.update(conn,insurance);
-//        }
-//    }
-
-    public static DaoUpdateResult check(Connection conn, List<JSONObject> data){
-
-       /**
-        * 核对流程
-        * 1.获取员工身份证号
-        * 2.根据身份证号查询出该员工的参保信息
-        * 3.根据员工信息和导入的参保信息来校对医保参保单信息
-        */
-        DaoUpdateResult result = new DaoUpdateResult();
-        boolean flag1 = true;//判断数据库中的员工存不存在，默认存在
-        boolean flag2 = true;//判断医保基数存不存在
-
-        for(int i = 0;i<data.size();i++){
-            QueryConditions conditions = new QueryConditions();
-            conditions.add("cardId","=",data.get(i).getString("cardId"));
-            ViewInsurance insurance = (ViewInsurance) InsuranceDao.get(conn,conditions).data;
-            if(insurance==null){//数据库中不存在该员工的参保信息
-                flag1=false;
-            }
-            if( data.get(i).getFloat("base1")==0){//医保基数不存在
-                flag2=false;
-            }
-            if(flag1&flag2){//数据库中员工存在,校对数据中基数存在
-                //将医保状态设置为在保
-                insurance.setStatus1((byte) 2);
-                result.msg += "将"+insurance.getName()+"的医保状态设置为在保;";
-            }
-            if(flag1&!flag2){//数据库中员工存在，校对数据中基数不存在
-                //将医保状态设置为停保
-                insurance.setStatus1((byte) 4);
-                result.msg += "将"+insurance.getName()+"的医保状态设置为停保;";
-            }
-            if(!flag1&flag2){//数据库中员工不存在，校对数据中基数存在
-
-            }
-            //修改该员工的参保信息
-            InsuranceDao.update(conn,insurance);
+    /**
+     * 校对医保参保单
+     * @param conn
+     * @param data 校对的数据
+     * @return
+     */
+    public static DaoUpdateResult checkMedicare(Connection conn, List<JSONObject> data){
+      /*
+        * 校对流程
+        * （1）获取导入的名册data1（参数传递）
+        * （2）获取系统当前的名册data2
+        * （3）判断data2中“新增”状态的是否也存在于data1中，若存在则将其状态置为“在保”
+        * （4）判断data2中“拟停”状态的是否也存在于data1中，若不存在则将其状态置为“停保”
+        * */
+        HashMap<String, String> data1 = new HashMap<>();
+        for(JSONObject o:data){//k:身份证号，v:个人代码
+            data1.put(o.getString("cardId"),o.getString("code"));
         }
+
+        QueryParameter param = new QueryParameter();
+        List<ViewInsurance> data2 = (List<ViewInsurance>) InsuranceDao.getList(conn,param).rows;
+
+        List<ViewInsurance> data3 = new ArrayList<>();//需要修改的数据
+        for(ViewInsurance insurance:data2){
+            if(insurance.getStatus1() == Insurance.STATUS_APPENDING){//新增
+                String code = data1.get(insurance.getCardId());
+                if(code != null){
+                    insurance.setCode(code);
+                    insurance.setStatus1(Insurance.STATUS_NORMAL);//设置为在保
+                    data3.add(insurance);
+                }
+            }else if(insurance.getStatus1() == Insurance.STATUS_STOPING){//拟停
+                String code = data1.get(insurance.getCardId());
+                if(code == null){//如果code不存在，也就是说明校对数据中不存在该员工
+                    insurance.setStatus1(Insurance.STATUS_STOPED);//设置为停保
+                    data3.add(insurance);
+                }
+            }
+        }
+        //批量修改
+        DaoUpdateResult result = InsuranceDao.updateBatch(conn,data3);
+        return result;
+    }
+
+
+    /**
+     * 校对社保参保单
+     * @param conn
+     * @param data 校对的数据
+     * @param type 社保类型 0 养老 1 失业 2 工伤
+     * @return
+     */
+    public static DaoUpdateResult checkSocial(Connection conn, List<JSONObject> data,byte type) {
+        /*
+        * 校对流程
+        * （1）获取导入的名册data1（参数传递）
+        * （2）获取系统当前的名册data2
+        * （3）判断是校对养老，失业还是工伤
+        * （4）判断data2中“新增”状态的是否也存在于data1中，若存在则将其状态置为“在保”
+        * （5）判断data2中“拟停”状态的是否也存在于data1中，若不存在则将其状态置为“停保”
+        * */
+        HashMap<String, String> data1 = new HashMap<>();
+        for(JSONObject o:data){//k:身份证号，v:个人代码
+            data1.put(o.getString("cardId"),o.getString("code"));
+        }
+
+        QueryParameter param = new QueryParameter();
+        List<ViewInsurance> data2 = (List<ViewInsurance>) InsuranceDao.getList(conn,param).rows;
+
+        List<ViewInsurance> data3 = new ArrayList<>();//需要修改的数据
+        byte status;
+        for(ViewInsurance insurance:data2){
+            switch (type){
+                case 0://校对养老参保单
+                    status = insurance.getStatus3();
+                    if(status == Insurance.STATUS_APPENDING){//新增
+                        String code = data1.get(insurance.getCardId());
+                        if(code != null){
+                            insurance.setCode(code);
+                            insurance.setStatus3(Insurance.STATUS_NORMAL);//设置为在保
+                            data3.add(insurance);
+                        }
+                    }else if(status == Insurance.STATUS_STOPING){//拟停
+                        String code = data1.get(insurance.getCardId());
+                        if(code == null){//如果code不存在，也就是说明校对数据中不存在该员工
+                            insurance.setStatus3(Insurance.STATUS_STOPED);//设置为停保
+                            data3.add(insurance);
+                        }
+                    }
+                    break;
+                case 1://校对失业参保单
+                    status = insurance.getStatus4();
+                    if(status == Insurance.STATUS_APPENDING){//新增
+                        String code = data1.get(insurance.getCardId());
+                        if(code != null){
+                            insurance.setCode(code);
+                            insurance.setStatus4(Insurance.STATUS_NORMAL);//设置为在保
+                            data3.add(insurance);
+                        }
+                    }else if(status == Insurance.STATUS_STOPING){//拟停
+                        String code = data1.get(insurance.getCardId());
+                        if(code == null){//如果code不存在，也就是说明校对数据中不存在该员工
+                            insurance.setStatus4(Insurance.STATUS_STOPED);//设置为停保
+                            data3.add(insurance);
+                        }
+                    }
+                    break;
+                case 2://校对工伤参保单
+                    status = insurance.getStatus5();
+                    if(status == Insurance.STATUS_APPENDING){//新增
+                        String code = data1.get(insurance.getCardId());
+                        if(code != null){
+                            insurance.setCode(code);
+                            insurance.setStatus5(Insurance.STATUS_NORMAL);//设置为在保
+                            data3.add(insurance);
+                        }
+                    }else if(status == Insurance.STATUS_STOPING){//拟停
+                        String code = data1.get(insurance.getCardId());
+                        if(code == null){//如果code不存在，也就是说明校对数据中不存在该员工
+                            insurance.setStatus5(Insurance.STATUS_STOPED);//设置为停保
+                            data3.add(insurance);
+                        }
+                    }
+                    break;
+            }
+        }
+        //批量修改
+        DaoUpdateResult result = InsuranceDao.updateBatch(conn,data3);
         return result;
     }
 }

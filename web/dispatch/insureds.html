@@ -61,20 +61,21 @@
         <div class="layui-hide" id="top_bar2">
             <button class="layui-btn layui-btn-sm" lay-event="add"><i class="layui-icon "></i> 添加</button>
             <button class="layui-btn layui-btn-sm" lay-event="export" onclick="exportFund()"><i class="layui-icon "></i> 导出变更</button>
-            <button type="button" class="layui-btn layui-btn-sm" lay-event="check"  id="check" ><i class="layui-icon "></i> 校对</button>
+            <button type="button" class="layui-btn layui-btn-sm" lay-event="check"><i class="layui-icon "></i> 校对</button>
         </div>
         <div class="layui-hide" id="top_bar1">
             <button class="layui-btn layui-btn-sm" lay-event="add"><i class="layui-icon "></i> 添加</button>
             <button class="layui-btn layui-btn-sm" lay-event="export0" onclick="exportMedicare1()"><i class="layui-icon "></i> 导出续保</button>
             <button class="layui-btn layui-btn-sm" lay-event="export1" onclick="exportMedicare2()"><i class="layui-icon "></i> 导出停保</button>
-            <button type="button" class="layui-btn layui-btn-sm" lay-event="" ><i class="layui-icon "></i> 校对</button>
+            <button type="button" class="layui-btn layui-btn-sm" lay-event="check"><i class="layui-icon "></i> 校对</button>
         </div>
 
+        <button class="layui-btn layui-btn-sm" style="display: none" id="checkSocial"><i class="layui-icon "></i> 导入</button>
         <div class="layui-hide" id="top_bar0">
             <button class="layui-btn layui-btn-sm" lay-event="add"><i class="layui-icon "></i> 添加</button>
             <button class="layui-btn layui-btn-sm" lay-event="export0" onclick="exportSocial1()"><i class="layui-icon "></i> 导出新增</button>
             <button class="layui-btn layui-btn-sm" lay-event="export1" onclick="exportSocial2()"><i class="layui-icon "></i> 导出停保</button>
-            <button type="button" class="layui-btn layui-btn-sm" lay-event=""  ><i class="layui-icon "></i> 校对</button>
+            <button type="button" class="layui-btn layui-btn-sm" lay-event="checkSocial"><i class="layui-icon "></i> 校对</button>
         </div>
 
         <table id="tbl_insured" lay-filter="filter_tb_insured"></table>
@@ -89,6 +90,8 @@
         <script src="../js/queryParam.js"></script>
         <script>
             var type = 0;//记录是显示社保参保、医保参保还是公积金
+            var status=0;//记录选择的是养老、失业、工伤
+
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
@@ -117,18 +120,40 @@
                         , exts: 'xls'
                         , acceptMime: '.xls'
                         ,before: function(file){
-                            this.data={op:"readCheckExcel",file:JSON.stringify(file)}
+                            this.data={op:"check",file:JSON.stringify(file),category:type,status:0}
                         }
                         , done: function (res) {
                             if (res.success){
-                                layer.msg("成功");
+                                layer.msg("校对成功");
                             }else {
-                                layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                                layer.msg("xls文件不符合要求");
                             }
                         }
                         , error: function () {
                             //请求异常回调
-                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                            layer.msg("xls文件不符合要求");
+                        }
+                    });
+
+                    upload.render({
+                        elem: '#checkSocial' //绑定元素
+                        , url: '/hrms/verify/insurance' //上传接口
+                        , accept: 'file'
+                        , exts: 'xls'
+                        , acceptMime: '.xls'
+                        ,before: function(file){
+                            this.data={op:"check",file:JSON.stringify(file),category:type,status:status}
+                        }
+                        , done: function (res) {
+                            if (res.success){
+                                layer.msg("校对成功");
+                            }else {
+                                layer.msg("xls文件不符合要求");
+                            }
+                        }
+                        , error: function () {
+                            //请求异常回调
+                            layer.msg("xls文件不符合要求");
                         }
                     });
                     initPage();
@@ -168,7 +193,6 @@
             }
 
             function initTable() {
-                console.log(type);
                 var cols;
                 var top_bar;
                 switch(type){
@@ -221,6 +245,9 @@
                         case 'check':
                             $("#import").click();
                             break;
+                        case 'checkSocial':
+                           checkSocial();
+                            break;
                     };
                 });
 
@@ -228,6 +255,22 @@
                 getInsureds();
             }
 
+            function checkSocial() {
+                layer.open({
+                    title:"选择需要校对的社保项",
+                    type: 2,
+                    area: ['30%', '50%'],
+                    content: "../dialog/selectSocial.html",
+                    btn: ['校对', '关闭']
+                    ,yes: function(index, layero){
+                        status = window["layui-layer-iframe" + index].callbackData();
+                        layer.close(index);
+                        $("#checkSocial").click();
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
+                });
+            }
             function getInsureds() {
                 iInsurance.getList(param_query,function (result) {
                     table.reload('tbl_insured', {

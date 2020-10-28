@@ -44,6 +44,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import static utills.Calculate.calculateMedicare;
@@ -459,6 +460,7 @@ public class Settlement1Service {
     public static DaoUpdateResult backup(String start, String end, long sid,List<JSONObject> employees, Connection conn) {
         DaoUpdateResult result = new DaoUpdateResult();
         List<Detail1> detail1List = new ArrayList<>();
+        HashMap<String,RuleMedicare> mapMedicare;
         for(JSONObject object:employees){
             long eid = object.getLong("eid");
             float baseM = object.getFloat("baseM");

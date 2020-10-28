@@ -22,10 +22,13 @@ import database.QueryConditions;
 import database.QueryParameter;
 import utills.Calculate;
 
+import javax.print.attribute.standard.Chromaticity;
 import java.sql.Connection;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.DeflaterInputStream;
 
 public class Detail1Service {
@@ -85,6 +88,12 @@ public class Detail1Service {
         DaoQueryListResult result1 = Detail1Dao.getList(conn,param);//查询数据库中属于该结算单的所有明细
         List<Detail1> detail1s = (List<Detail1>) result1.rows;
 
+        HashMap<String,RuleMedicare> mapMedicare = new HashMap<>();//用于暂时存放医保规则
+        RuleMedicare medicare = null;
+
+        HashMap<String,RuleSocial> mapSocial = new HashMap<>();//用于暂时存放社保规则
+        RuleSocial social = null;
+
         List<Detail1> detail1List  = new ArrayList<>();//新建一个集合用于存放计算好后的明细
         for(Detail1 d:detail1s){
             QueryConditions conditions = new QueryConditions();
@@ -98,10 +107,21 @@ public class Detail1Service {
             }
 
             String city = setting.getCity();//员工所处地市
+
             //获取该地市的医保规则
-            RuleMedicare medicare= (RuleMedicare)RuleMedicareDao.get(conn,city,month).data;
+            medicare=mapMedicare.get(city);
+            if(medicare==null){
+                medicare= (RuleMedicare)RuleMedicareDao.get(conn,city,month).data;
+                mapMedicare.put(city,medicare);
+            }
             //获取该地市的社保规则
-            RuleSocial social = (RuleSocial)RuleSocialDao.get(conn,city,month).data;
+            social=mapSocial.get(city);
+            if(social==null){
+                social= (RuleSocial) RuleSocialDao.get(conn,city,month).data;
+                mapSocial.put(city,social);
+            }
+
+            //任然获取不到该地区的医保社保规则
             if(medicare==null||social==null){
                 result.msg = "请确认系统中该员工"+employee.getName()+"的社保所在地是否存在";
                 return result;
@@ -116,6 +136,7 @@ public class Detail1Service {
                 result.msg = "请完善"+employee.getName()+"的个税专项扣除";
                 return result;
             }
+
             //计算结算单明细
             Detail1 detail1 = Calculate.calculateDetail1(d,medicare,social,setting,mapSalary,deduct);
             detail1List.add(detail1);

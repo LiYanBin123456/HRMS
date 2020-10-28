@@ -96,7 +96,7 @@ public class XlsUtil {
             String v=null;
             try {
                 v = sheet.getCell(1,line).getContents();
-                if(v==null||v==""||v.trim().isEmpty()){//判断数据是否为空，为空则跳出循环，这里导致所填数据字段不能为空
+                if(v==null||v==""||v.trim().isEmpty()){//判断数据是否为空，为空则跳出循环
                     break out;
                 }
                 o.put("name", v);//封装员工姓名
@@ -223,52 +223,101 @@ public class XlsUtil {
 
 
     /**
-     * 读取综合所得申报税款计算表中数据
+     * 读取医保校对单
      * @param is 文件输入流
-     * @param sheetName_data xls文件中提供数据的表格名称
+     * @param sheet  第几个sheet
      * @return
      */
-    public static List<JSONObject> readCheck(InputStream is, String sheetName_data) {
+    public static List<JSONObject> readMedicare(InputStream is, int sheet) {
         Workbook workbook ;
         try {
             workbook = Workbook.getWorkbook(is);
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
             return null;
         }
         //读取数据
-        Sheet sheet_data = workbook.getSheet(sheetName_data);
+        Sheet sheet_data = workbook.getSheet(sheet);
         if(null == sheet_data){
             return null;
         }
-
-        return readCheck(sheet_data);
+        return readMedicare(sheet_data);
     }
 
     /**
-     * 解析数据
+     * 读取医保校对单
      * @param sheet
      * @return
      */
-    private static List<JSONObject> readCheck(Sheet sheet) {
+    private static List<JSONObject> readMedicare(Sheet sheet) {
         List<JSONObject> data = new ArrayList<>();
         out:for(int line=1; ; line++) {
             JSONObject o = new JSONObject();
             String v=null;
             try {
-                v = sheet.getCell(3,line).getContents();
+                v = sheet.getCell(2,line).getContents();
                 if(v==null||v==""||v.trim().isEmpty()){//判断数据是否为空，为空则跳出循环，这里导致所填数据字段不能为空
                     break out;
                 }
-                o.put("name", v);//封装员工姓名
+                o.put("code", v);//员工编号
 
                 v = sheet.getCell(4,line).getContents();
-                o.put("cardId", v);//封装员工身份证号码
+                o.put("cardId", v);//员工身份证号码
 
-                v = sheet.getCell(12,line).getContents();
-                o.put("base1", v);//医保基数
             } catch (Exception e) {
                 e.printStackTrace();
+                break out;
+            }
+            data.add(o);
+        }
+        return data;
+    }
+
+    /**
+     * 读取医保校对单
+     * @param is 文件输入流
+     * @param sheet  第几个sheet
+     * @return
+     */
+    public static List<JSONObject> readSocial(InputStream is, int sheet,byte type) {
+        Workbook workbook ;
+        try {
+            workbook = Workbook.getWorkbook(is);
+        }catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        //读取数据
+        Sheet sheet_data = workbook.getSheet(sheet);
+        if(null == sheet_data){
+            return null;
+        }
+        return readSocial(sheet_data);
+    }
+
+    /**
+     * 读取社保
+     * @param sheet
+     * @return
+     */
+    private static List<JSONObject> readSocial(Sheet sheet) {
+        List<JSONObject> data = new ArrayList<>();
+        out:for(int line=1; ; line++) {
+            JSONObject o = new JSONObject();
+            String v=null;
+            try {
+                v = sheet.getCell(0,line).getContents();
+                if(v==null||v==""||v.trim().isEmpty()){//判断数据是否为空，为空则跳出循环，这里导致所填数据字段不能为空
+                    break out;
+                }
+                o.put("code", v);//员工编号
+
+                v = sheet.getCell(2,line).getContents();
+                o.put("cardId", v);//员工身份证号码
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                break out;
             }
             data.add(o);
         }
