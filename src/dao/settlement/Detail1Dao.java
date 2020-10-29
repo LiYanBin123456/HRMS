@@ -15,15 +15,15 @@ public class Detail1Dao {
     }
 
     public static DaoUpdateResult update(Connection conn, List<Detail1> details){
-        String sql = "update detail1 set base=?,pension1=?,medicare1=?,unemployment1=?,disease1=?,fund1=?,pension2=?,medicare2=?,unemployment2=?,injury=?,disease2=?,birth=?,fund2=?,tax=?,payable=?,paid=?,f1=?,f2=?,f3=?,f4=?,f5=?,f6=?,f7=?,f8=?,f9=?,f10=?,f11=?,f12=?,f13=?,f14=?,f15=?,f16=?,f17=?,f18=?,f19=?,f20=? where id = ?";
+        String sql = "update detail1 set base=?,pension1=?,medicare1=?,unemployment1=?,disease1=?,fund1=?,pension2=?,medicare2=?,unemployment2=?,injury=?,disease2=?,birth=?,fund2=?,tax=?,free=?,extra1=?,extra2=?,payable=?,paid=?,f1=?,f2=?,f3=?,f4=?,f5=?,f6=?,f7=?,f8=?,f9=?,f10=?,f11=?,f12=?,f13=?,f14=?,f15=?,f16=?,f17=?,f18=?,f19=?,f20=?,comments1=?,comments2=? where id = ?";
         Object [][]params = new Object[details.size()][];
         for (int i = 0; i < details.size(); i++) {
             params[i] = new Object[]{details.get(i).getBase(),details.get(i).getPension1(),details.get(i).getMedicare1(),
                     details.get(i).getUnemployment1(),details.get(i).getDisease1(),details.get(i).getFund1(),details.get(i).getPension2(),details.get(i).getMedicare2(),details.get(i).getUnemployment2(),
-                    details.get(i).getInjury(),details.get(i).getDisease2(),details.get(i).getBirth(),details.get(i).getFund2(),details.get(i).getTax(),details.get(i).getPayable(),details.get(i).getPaid(),
+                    details.get(i).getInjury(),details.get(i).getDisease2(),details.get(i).getBirth(),details.get(i).getFund2(),details.get(i).getTax(),details.get(i).getFree(),details.get(i).getExtra1(),details.get(i).getExtra2(),details.get(i).getPayable(),details.get(i).getPaid(),
                     details.get(i).getF1(),details.get(i).getF2(),details.get(i).getF3(),details.get(i).getF4(),details.get(i).getF5(),details.get(i).getF6(),details.get(i).getF7(),details.get(i).getF8(),
                     details.get(i).getF9(),details.get(i).getF10(),details.get(i).getF11(),details.get(i).getF12(),details.get(i).getF13(),details.get(i).getF14(),details.get(i).getF15(),details.get(i).getF16(),
-                    details.get(i).getF17(),details.get(i).getF18(),details.get(i).getF19(),details.get(i).getF20(),details.get(i).getId()};
+                    details.get(i).getF17(),details.get(i).getF18(),details.get(i).getF19(),details.get(i).getF20(),details.get(i).getComments1(),details.get(i).getComments2(),details.get(i).getId()};
         }
         return DbUtil.batch(conn,sql,params);
     }
@@ -33,23 +33,17 @@ public class Detail1Dao {
     }
 
     public static DaoUpdateResult importDetails(Connection conn, List<Detail1> details){
-        String sql = "insert detail1 (sid,eid,base,pension1,medicare1,unemployment1,disease1,fund1,pension2,medicare2,unemployment2,injury,disease2,birth,fund2,tax,payable,paid,f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f19,f20,status) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "insert detail1 (sid,eid,base,pension1,medicare1,unemployment1,disease1,fund1,pension2,medicare2,unemployment2,injury,disease2,birth,fund2,tax,free,extra1,extra2,payable,paid,f1,f2,f3,f4,f5,f6,f7,f8,f9,f10,f11,f12,f13,f14,f15,f16,f17,f18,f19,f20,status,comments1,comments2) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
         Object [][]params = new Object[details.size()][];
         for (int i = 0; i < details.size(); i++) {
             params[i] = new Object[]{details.get(i).getSid(),details.get(i).getEid(),details.get(i).getBase(),details.get(i).getPension1(),details.get(i).getMedicare1(),
                     details.get(i).getUnemployment1(),details.get(i).getDisease1(),details.get(i).getFund1(),details.get(i).getPension2(),details.get(i).getMedicare2(),details.get(i).getUnemployment2(),
-                    details.get(i).getInjury(),details.get(i).getDisease2(),details.get(i).getBirth(),details.get(i).getFund2(),details.get(i).getTax(),details.get(i).getPayable(),details.get(i).getPaid(),
+                    details.get(i).getInjury(),details.get(i).getDisease2(),details.get(i).getBirth(),details.get(i).getFund2(),details.get(i).getTax(),details.get(i).getFree(),details.get(i).getExtra1(),details.get(i).getExtra2(),details.get(i).getPayable(),details.get(i).getPaid(),
                     details.get(i).getF1(),details.get(i).getF2(),details.get(i).getF3(),details.get(i).getF4(),details.get(i).getF5(),details.get(i).getF6(),details.get(i).getF7(),details.get(i).getF8(),
                     details.get(i).getF9(),details.get(i).getF10(),details.get(i).getF11(),details.get(i).getF12(),details.get(i).getF13(),details.get(i).getF14(),details.get(i).getF15(),details.get(i).getF16(),
-                    details.get(i).getF17(),details.get(i).getF18(),details.get(i).getF19(),details.get(i).getF20(),details.get(i).getStatus()};
+                    details.get(i).getF17(),details.get(i).getF18(),details.get(i).getF19(),details.get(i).getF20(),details.get(i).getStatus(),details.get(i).getComments1(),details.get(i).getComments2()};
         }
         return DbUtil.insertBatch(conn,sql,params);
-    }
-    public static String backup(Connection conn,Long id,String month){
-        return null;
-    }
-    public static String makeup(Connection conn,Long id,String month){
-        return null;
     }
 
     public static DaoUpdateResult delete(Connection conn, long id) {

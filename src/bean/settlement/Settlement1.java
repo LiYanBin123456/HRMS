@@ -12,7 +12,10 @@ public class Settlement1 extends Settlemet{
     private float fund;//单位公积金总额
     private float manage;//管理费
     private float tax;//税费
+    private float extra;//单位补收核减
+    private float free;//国家扣除项
     private float summary;//总额
+    private String comments;//备注
 
     public Settlement1() {
     }
@@ -38,6 +41,37 @@ public class Settlement1 extends Settlemet{
         this.manage = manage;
         this.tax = tax;
         this.summary = summary;
+    }
+
+    public Settlement1(long id, long did, long cid, String ccid, Date month, byte status, byte source, byte type, float salary, float social, float medicare, float fund, float manage, float tax, float extra, float free, float summary, String comments) {
+        super(id, did, cid, ccid, month, status, source);
+        this.type = type;
+        this.salary = salary;
+        this.social = social;
+        this.medicare = medicare;
+        this.fund = fund;
+        this.manage = manage;
+        this.tax = tax;
+        this.extra = extra;
+        this.free = free;
+        this.summary = summary;
+        this.comments = comments;
+    }
+
+    public float getFree() {
+        return free;
+    }
+
+    public void setFree(float free) {
+        this.free = free;
+    }
+
+    public String getComments() {
+        return comments;
+    }
+
+    public void setComments(String comments) {
+        this.comments = comments;
     }
 
     public byte getType() {
@@ -102,6 +136,14 @@ public class Settlement1 extends Settlemet{
 
     public void setSummary(float summary) {
         this.summary = summary;
+    }
+
+    public float getExtra() {
+        return extra;
+    }
+
+    public void setExtra(float extra) {
+        this.extra = extra;
     }
 
     @Override

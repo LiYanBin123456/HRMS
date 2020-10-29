@@ -270,10 +270,6 @@ public class Settlement1Service {
         return LogDao.getList(conn,id,parameter);
     }
 
-    public static String exportBank(Connection conn, long id,String bank) {
-        return null;
-    }
-
     public static DaoUpdateResult saveAs(Connection conn, long id, Date month) {
         /**流程
          * 1、查询出结算单，修改结算月份
@@ -312,7 +308,6 @@ public class Settlement1Service {
             return result1;
         }
     }
-
 
     //保存结算单；实质是计算结算单并且修改
     public static DaoUpdateResult saveSettlement(Connection conn, long sid) {

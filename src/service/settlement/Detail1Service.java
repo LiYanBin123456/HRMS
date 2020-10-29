@@ -39,6 +39,7 @@ public class Detail1Service {
     public static DaoUpdateResult update(Connection conn, List<Detail1> details ){
         return  Detail1Dao.update(conn,details);
     }
+
     public static DaoUpdateResult importDetails(Connection conn, long sid, List<ViewDetail1> viewDetail1s, long did){
         DaoUpdateResult result = new DaoUpdateResult();
         List<Detail1> detail1s =new ArrayList<>();
@@ -68,11 +69,6 @@ public class Detail1Service {
         result = Detail1Dao.importDetails(conn,detail1s);
         return  result;
     }
-
-    public static String makeup(Connection conn,Long id,String month){
-        return null;
-    }
-
 
     //计算结算单明细并修改
     public static DaoUpdateResult saveDetail(Connection conn,long sid, long cid) {
@@ -144,18 +140,4 @@ public class Detail1Service {
         return  Detail1Dao.update(conn,detail1List);
     }
 
-    //社保补差
-    public static void backup(Connection conn, String[] eids, String start, String end, long sid) {
-    for(int i = 0 ; i <eids.length; i++){
-        long eid = Long.parseLong(eids[i]);//员工id
-        EnsureSetting setting = (EnsureSetting) SettingDao.get(conn,eid).data;
-
-    }
-
-    }
-
-    //社保补缴
-    public static void makeup(Connection conn, String[] eids, String start, String end, long sid) {
-
-    }
 }

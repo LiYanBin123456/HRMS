@@ -3,8 +3,10 @@ package servlet;
 
 import bean.admin.Account;
 import bean.settlement.*;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.JSONPObject;
 import dao.settlement.*;
 import database.ConnUtil;
 import database.DaoQueryListResult;
@@ -105,6 +107,9 @@ public class SettlementServlet extends HttpServlet {
             case "saveDetail"://保存结算单明细
                 result = saveDetail(conn, request);
                 break;
+            case "updateExtra"://修改结算单额外信息
+                result = update(conn, request);
+                break;
         }
         ConnUtil.closeConnection(conn);
 
@@ -113,6 +118,13 @@ public class SettlementServlet extends HttpServlet {
         out.flush();
         out.close();
 
+    }
+
+    //修改普通结算单额外信息
+    private String update(Connection conn, HttpServletRequest request) {
+        Settlement1 settlement1 = JSON.parseObject(request.getParameter("settlement"),Settlement1.class);
+        DaoUpdateResult result = Settlement1Dao.updateExtra(conn,settlement1);
+        return JSONObject.toJSONString(result);
     }
 
 

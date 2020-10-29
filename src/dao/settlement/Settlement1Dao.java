@@ -18,8 +18,8 @@ public class Settlement1Dao {
     }
 
     public static DaoUpdateResult insert(Connection conn, Settlement1 s) {
-        String sql = "insert into settlement1 (did,cid,ccid,type,month,salary,social,medicare,fund,manage,tax,summary,status,source) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-        Object []params = {s.getDid(),s.getCid(),s.getCcid(),s.getType(),s.getMonth(),s.getSalary(),s.getSocial(),s.getMedicare(),s.getFund(),s.getManage(),s.getTax(),s.getSummary(),s.getStatus(),s.getSource()};
+        String sql = "insert into settlement1 (did,cid,ccid,type,month,salary,social,medicare,fund,manage,tax,extra,summary,status,source,comments) values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {s.getDid(),s.getCid(),s.getCcid(),s.getType(),s.getMonth(),s.getSalary(),s.getSocial(),s.getMedicare(),s.getFund(),s.getManage(),s.getTax(),s.getExtra(),s.getSummary(),s.getStatus(),s.getSource(),s.getComments()};
         return DbUtil.insert(conn,sql,params);
     }
 
@@ -90,14 +90,6 @@ public class Settlement1Dao {
         return DbUtil.update(conn,sql,params);
     }
 
-    public static String exportBank(Connection conn, long id,String bank) {
-        return null;
-    }
-
-    public static String saveAs(Connection conn, long id,String month) {
-        return null;
-    }
-
     //获取结算单详情
     public static DaoQueryResult get(Connection conn,long id){
         QueryConditions conditions = new QueryConditions();
@@ -105,11 +97,17 @@ public class Settlement1Dao {
         return DbUtil.get(conn,"settlement1",conditions,Settlement1.class);
     }
 
+    public static DaoUpdateResult updateExtra(Connection conn, Settlement1 s) {
+        String sql = "update settlement1 set extra=?,comments=? where id = ?";
+        Object []params = {s.getExtra(),s.getComments(),s.getId()};
+        return DbUtil.update(conn,sql,params);
+
+    }
 
     //修改结算单
     public static DaoUpdateResult update(Connection conn, Settlement1 s) {
-        String sql = "update settlement1 set did=?,cid=?,month=?,salary=?,social=?,medicare=?,fund=? ,manage=?,tax=?,summary=?,status=?,source=? where id = ?";
-        Object []params = {s.getDid(),s.getCid(),s.getMonth(),s.getSalary(),s.getSocial(),s.getMedicare(),s.getFund(),s.getManage(),s.getTax(),s.getSummary(),s.getStatus(),s.getSource(),s.getId()};
+        String sql = "update settlement1 set did=?,cid=?,month=?,salary=?,social=?,medicare=?,fund=? ,manage=?,tax=?,extra=?,summary=?,status=?,source=?,comments=? where id = ?";
+        Object []params = {s.getDid(),s.getCid(),s.getMonth(),s.getSalary(),s.getSocial(),s.getMedicare(),s.getFund(),s.getManage(),s.getTax(),s.getExtra(),s.getSummary(),s.getStatus(),s.getSource(),s.getComments(),s.getId()};
         return DbUtil.update(conn,sql,params);
     }
 
