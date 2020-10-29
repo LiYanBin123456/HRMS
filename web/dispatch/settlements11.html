@@ -131,7 +131,7 @@
                 });
                 table.on('edit(filter_tb_settlement)', function(obj){
                     var settlement = obj.data;
-                    updateSettletment(settlement);
+                    updateSettlement(settlement);
                 });
             }
 
@@ -270,7 +270,7 @@
                 });
             }
 
-            function updateSettletment(settlement) {
+            function updateSettlement(settlement) {
                 iSettlement.update(settlement,function (result) {
                     getSettlements();
                     layer.msg("结算单修改成功");

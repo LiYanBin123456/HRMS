@@ -793,6 +793,12 @@ var InterfaceSettlement = function () {
         var para = {op: "insert",settlement:JSON.stringify(settlement), category:category,type:type};
         access(url,para,1,success,fail);
     };
+
+    this.update = function (settlement,success,fail) {
+        var para = {op: "update",settlement:JSON.stringify(settlement)};
+        access(url,para,1,success,fail);
+    };
+
     /**
      * 删除结算单
      * @param id 结算单id

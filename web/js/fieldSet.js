@@ -217,8 +217,10 @@ var columns_settlement1  = [[
     {field:'fund', title: '单位公积金',width:80},
     {field:'manage', title: '管理费',width:70},
     {field:'tax', title: '税费',width:70},
+    {field:'extra', title: '附加',width:70,edit: 'text'},
     {field:'summary', title: '总额',width:80},
     {field:'status', title: '状态',width:70,templet:function (d) { return array_value2text(status_settlement,d.status) }},
+    {field:'comments', title: '备注',width:200,edit: 'text'},
     {title:'操作', toolbar: '#bar_settlement',width:500,fixed:"right"}
 ]];
 
