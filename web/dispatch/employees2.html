@@ -34,7 +34,10 @@
             <button class="layui-btn layui-btn-sm" lay-event="dispatch"><i class="layui-icon "></i> 批量派遣</button>
             <form class="layui-form searchbox" lay-filter="form_top_bar">
                 <div class="layui-input-inline">
-                    <select id="select_cooperation" lay-filter="filter_cooperation"></select>
+                    <select id="select_cooperation" lay-filter="filter_cooperation" placeholder="按合作客户筛选"></select>
+                </div>
+                <div class="layui-input-inline">
+                    <select id="select_cooperation" lay-filter="filter_status" placeholder="按状态筛选"></select>
                 </div>
                 <div class="layui-input-inline">
                     <input name="keyword" class="layui-input"  type="text" placeholder="请输入要查找的员工">
@@ -123,6 +126,12 @@
                     }else{
                         param_query.addCondition("cid","=",cid);
                     }
+                    getEmployees();
+                });
+
+                form.on('select(filter_status)', function(data){
+                     var status = data.value;
+                    param_query.addCondition("status","=",status);
                     getEmployees();
                 });
 

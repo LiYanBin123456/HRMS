@@ -129,6 +129,10 @@
                     getSettlements();
                     return false; //阻止表单跳转
                 });
+                table.on('edit(filter_tb_settlement)', function(obj){
+                    var settlement = obj.data;
+                    updateSettletment(settlement);
+                });
             }
 
             function initTable() {
@@ -263,6 +267,13 @@
                 iSettlement.insert(settlement,0,settlement.mode,function () {
                     getSettlements();
                     layer.msg("创建结算单，cid:"+settlement.cid+",month:"+format_date(settlement.month));
+                });
+            }
+
+            function updateSettletment(settlement) {
+                iSettlement.update(settlement,function (result) {
+                    getSettlements();
+                    layer.msg("结算单修改成功");
                 });
             }
 

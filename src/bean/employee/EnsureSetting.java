@@ -167,6 +167,14 @@ public class EnsureSetting {
         this.product = product;
     }
 
+    public float getInjuryPer() {
+        return injuryPer;
+    }
+
+    public void setInjuryPer(float injuryPer) {
+        this.injuryPer = injuryPer;
+    }
+
     @Override
     public String toString() {
         return "EnsureSetting{" +
