@@ -97,7 +97,7 @@ public class FileServlet extends HttpServlet {
             case "exportTax"://导出个税申报表
                 exportTax(conn,request,response);
                 return;
-            case "exportTaxEmployee"://导出个税申报表
+            case "exportTaxEmployee"://导出个税申报名单
                 exportTaxEmployee(conn,request,response);
                 return;
             default:

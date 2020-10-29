@@ -89,7 +89,7 @@ public class InsuranceServlet extends HttpServlet {
         }
         switch (category){
             case 0://校对社保
-                data = XlsUtil.readSocial(is,0,type);//读第一个sheet
+                data = XlsUtil.readSocial(is,0);//读第一个sheet
                 result = InsuranceService.checkSocial(conn,data,type);
                 break;
             case 1://校对医保
@@ -97,6 +97,8 @@ public class InsuranceServlet extends HttpServlet {
                 result = InsuranceService.checkMedicare(conn,data);
                 break;
             case 2://校对公积金
+                data = XlsUtil.readFund(is,0);
+                result = InsuranceService.checkFund(conn,data);
                 break;
         }
         return  JSONObject.toJSONString(result);

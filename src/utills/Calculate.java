@@ -150,7 +150,7 @@ public class Calculate {
         //计算应发工资
         float payable =detail.getBase();//初始是基本工资
         if(mapSalary!=null){//如果有自定义工资
-           payable = calculatePayable(detail,mapSalary);
+           payable = calculatePayable(payable,detail,mapSalary);
         }
         detail.setPayable(payable);
 
@@ -220,7 +220,7 @@ public class Calculate {
             unemployment2=base*(ruleSocial.getPer4()/100);//单位失业
         }
         if((social&((byte)4)) != 0) {
-            injury = base * (ruleSocial.getPer3() / 100);//单位工伤
+            injury = base * (setting.getInjuryPer()/100);//单位工伤
         }
 
         detail.setPension1(pension1);
@@ -304,11 +304,10 @@ public class Calculate {
      * @param mapSalary 自定义工资
      * @return
      */
-    private static float calculatePayable(Detail1 v, MapSalary mapSalary){
+    private static float calculatePayable(float payable,Detail1 v, MapSalary mapSalary){
         /**
          * 思路：
          */
-        float payable = 0;
         List<Items> itemList = mapSalary.getItemList();
         for (int i = 0; i <itemList.size(); i++) {
             int index = i + 1;

@@ -4,23 +4,28 @@ import java.sql.Date;
 
 //参保单
 public class Insurance {
-    public static byte STATUS_APPENDING = 0;//新增
-    public static byte STATUS_NORMAL = 1;//在保
-    public static byte STATUS_STOPING = 2;//拟停
-    public static byte STATUS_STOPED = 3;//停保
+
+    public static byte STATUS_NULL = 0;//未参保
+    public static byte STATUS_APPENDING = 1;//新增
+    public static byte STATUS_NORMAL = 2;//在保
+    public static byte STATUS_STOPING = 3;//拟停
+    public static byte STATUS_STOPED = 4;//停保
+    public static byte STATUS_ERROR = 5;//异常
 
     private long eid;//员工id
-    private String code;//个人代码
+    private String code1;//个人医保代码
+    private String code2;//个人公积金代码
+    private String code3;//个人社保代码
     private Date date1;//医保参保时间
     private Date date2;//公积金参保时间
     private Date date3;//养老保险参保时间
     private Date date4;//失业保险参保时间
     private Date date5;//工伤保险参保时间
-    private byte status1;//医保状态 0 新增 1在保 2拟停 3停保
-    private byte status2;//公积金状态 0 新增 1在保 2拟停 3停保
-    private byte status3;//养老保险状态 0 新增 1在保 2拟停 3停保
-    private byte status4;//失业保险状态 0 新增 1在保 2拟停 3停保
-    private byte status5;//工伤保险状态 0 新增 1在保 2拟停 3停保
+    private byte status1;//医保状态 0 未参保 1 新增 2 在保 3拟停 4 停保 5异常
+    private byte status2;//公积金状态 0 未参保 1 新增 2 在保 3拟停 4 停保 5异常
+    private byte status3;//养老保险状态 0 未参保 1 新增 2 在保 3拟停 4 停保 5异常
+    private byte status4;//失业保险状态 0 未参保 1 新增 2 在保 3拟停 4 停保 5异常
+    private byte status5;//工伤保险状态 0 未参保 1 新增 2 在保 3拟停 4 停保 5异常
     private float base1;//医保基数
     private float base2;//公积金基数
     private float base3;//社保基数
@@ -28,9 +33,11 @@ public class Insurance {
     public Insurance() {
     }
 
-    public Insurance(long eid, String code, Date date1, Date date2, Date date3, Date date4, Date date5, byte status1, byte status2, byte status3, byte status4, byte status5, float base1, float base2, float base3) {
+    public Insurance(long eid, String code1, String code2, String code3, Date date1, Date date2, Date date3, Date date4, Date date5, byte status1, byte status2, byte status3, byte status4, byte status5, float base1, float base2, float base3) {
         this.eid = eid;
-        this.code = code;
+        this.code1 = code1;
+        this.code2 = code2;
+        this.code3 = code3;
         this.date1 = date1;
         this.date2 = date2;
         this.date3 = date3;
@@ -46,7 +53,29 @@ public class Insurance {
         this.base3 = base3;
     }
 
+    public String getCode1() {
+        return code1;
+    }
 
+    public void setCode1(String code1) {
+        this.code1 = code1;
+    }
+
+    public String getCode2() {
+        return code2;
+    }
+
+    public void setCode2(String code2) {
+        this.code2 = code2;
+    }
+
+    public String getCode3() {
+        return code3;
+    }
+
+    public void setCode3(String code3) {
+        this.code3 = code3;
+    }
 
     public long getEid() {
         return eid;
@@ -56,13 +85,6 @@ public class Insurance {
         this.eid = eid;
     }
 
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
 
     public Date getDate1() {
         return date1;
@@ -168,6 +190,22 @@ public class Insurance {
         this.base3 = base3;
     }
 
+    public static byte getStatusNull() {
+        return STATUS_NULL;
+    }
+
+    public static void setStatusNull(byte statusNull) {
+        STATUS_NULL = statusNull;
+    }
+
+    public static byte getStatusError() {
+        return STATUS_ERROR;
+    }
+
+    public static void setStatusError(byte statusError) {
+        STATUS_ERROR = statusError;
+    }
+
     public static byte getStatusAppending() {
         return STATUS_APPENDING;
     }
@@ -204,7 +242,6 @@ public class Insurance {
     public String toString() {
         return "Insurance{" +
                 "eid=" + eid +
-                ", code='" + code + '\'' +
                 ", date1=" + date1 +
                 ", date2=" + date2 +
                 ", date3=" + date3 +

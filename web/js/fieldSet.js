@@ -433,8 +433,10 @@ var columns_tax  = [[
 
 //社保参保字段集合
 var columns_insured1  = [[
-    {field:'cardId', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
+    {field:'cardId', title: '身份证号',width:170},
+    {field:'code3', title: '社保编号',width:100},
+    {field:'cname', title: '合作单位名称',width:120},
     {field:'base3', title: '基数',width:80},
     {field:'date3', title: '养老参保时间',width:120,templet:function (d) {return format_date(d.date3)}},
     {field:'status3', title: '养老参保状态',width:100,templet:function (d) { return array_value2text(status_insurance,d.status3)}},
@@ -447,8 +449,10 @@ var columns_insured1  = [[
 
 //医保参保字段集合
 var columns_insured2  = [[
-    {field:'cardId', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
+    {field:'cardId', title: '身份证号',width:170},
+    {field:'code1', title: '医保编号',width:100},
+    {field:'cname', title: '合作单位名称',width:120},
     {field:'base1', title: '基数',width:100},
     {field:'date1', title: '参保时间',width:120,templet:function (d) {return format_date(d.date1)}},
     {field:'status1', title: '参保状态',width:100,templet:function (d) { return array_value2text(status_insurance,d.status1) }},
@@ -457,8 +461,10 @@ var columns_insured2  = [[
 
 //公积金参保字段集合
 var columns_insured3  = [[
-    {field:'cardId', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
+    {field:'cardId', title: '身份证号',width:170},
+    {field:'code2', title: '社保编号',width:100},
+    {field:'cname', title: '合作单位名称',width:120},
     {field:'base2', title: '基数',width:100},
     {field:'date2', title: '参保时间',width:120,templet:function (d) {return format_date(d.date1)}},
     {field:'status2', title: '参保状态',width:100,templet:function (d) { return array_value2text(status_insurance,d.status1) }},
@@ -600,7 +606,8 @@ var status_insurance = [
     {value:1,text:"新增"},
     {value:2,text:"在保"},
     {value:3,text:"拟停"},
-    {value:4,text:"停保"}
+    {value:4,text:"停保"},
+    {value:5,text:"异常"}
 
 ];
 var period_product = [

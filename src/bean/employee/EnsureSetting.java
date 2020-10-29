@@ -64,6 +64,21 @@ public class EnsureSetting {
         this.product = product;
     }
 
+    public EnsureSetting(long eid, String city, byte settingM, float valM, byte medicare, byte settingS, float valS, byte social, float injuryPer, float fundPer, float fundBase, float product) {
+        this.eid = eid;
+        this.city = city;
+        this.settingM = settingM;
+        this.valM = valM;
+        this.medicare = medicare;
+        this.settingS = settingS;
+        this.valS = valS;
+        this.social = social;
+        this.injuryPer = injuryPer;
+        this.fundPer = fundPer;
+        this.fundBase = fundBase;
+        this.product = product;
+    }
+
     public byte getMedicare() {
         return medicare;
     }
@@ -126,14 +141,6 @@ public class EnsureSetting {
 
     public void setValS(float valS) {
         this.valS = valS;
-    }
-
-    public float getInjuryPer() {
-        return injuryPer;
-    }
-
-    public void setInjuryPer(float injuryPer) {
-        this.injuryPer = injuryPer;
     }
 
     public float getFundPer() {

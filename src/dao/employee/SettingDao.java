@@ -17,8 +17,8 @@ public class SettingDao {
 
     //修改
     public static DaoUpdateResult update(Connection conn, EnsureSetting s) {
-        String sql = "update ensureSetting set city=?,settingM=?,valM=?,medicare=?,settingS=?,vaLS=?,social=?,injuryPer,fundPer=?,fundBase=?,product=? where eid=? ";
-        Object []params = {s.getCity(),s.getSettingM(),s.getValM(),s.getMedicare(),s.getSettingS(),s.getValS(),s.getSocial(),s.getInjuryPer(),s.getFundPer(),s.getFundBase(),s.getProduct(),s.getEid()};
+        String sql = "update ensureSetting set city=?,settingM=?,valM=?,medicare=?,settingS=?,vaLS=?,social=?,fundPer=?,fundBase=?,product=? where eid=? ";
+        Object []params = {s.getCity(),s.getSettingM(),s.getValM(),s.getMedicare(),s.getSettingS(),s.getValS(),s.getSocial(),s.getFundPer(),s.getFundBase(),s.getProduct(),s.getEid()};
         return  DbUtil.update(conn,sql,params);
     }
 
