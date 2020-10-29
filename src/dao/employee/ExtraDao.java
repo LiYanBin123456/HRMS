@@ -49,20 +49,14 @@ public class ExtraDao {
     //离职或者退休
     public static DaoUpdateResult leave(Connection conn, long id, byte category, byte reason, Date date) {
         DaoUpdateResult res ;
-        //修改员工状态
-        String sql = "update employee set type = ? where id = ?";
-        Object []params = {category,id};
-        res =  DbUtil.update(conn,sql,params);
-        if(res.success){//先修改员工信息，修改完毕之后再修改员工补充信息中的离职或者退休
-            if(category==0){//离职
-                String sql1 = "update employee_extra set date1 = ?, reason=? where eid = ?";
-                Object []params1 = {date,reason,id};
-                res =  DbUtil.update(conn,sql1,params1);
-            }else {//退休
-                String sql1 = "update employee_extra set date2 = ? where eid = ?";
-                Object []params1 = {date,id};
-                res =  DbUtil.update(conn,sql1,params1);
-            }
+        if(category==0){//离职
+            String sql1 = "update employee_extra set date1 = ?, reason=? where eid = ?";
+            Object []params1 = {date,reason,id};
+            res =  DbUtil.update(conn,sql1,params1);
+        }else {//退休
+            String sql1 = "update employee_extra set date2 = ? where eid = ?";
+            Object []params1 = {date,id};
+            res =  DbUtil.update(conn,sql1,params1);
         }
 
         return res;

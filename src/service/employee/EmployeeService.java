@@ -4,16 +4,13 @@ package service.employee;
 import bean.client.Cooperation;
 import bean.employee.Employee;
 import bean.employee.EmployeeExtra;
-import bean.employee.ViewEmployee;
-import bean.settlement.Detail3;
 import com.alibaba.fastjson.JSONObject;
 import dao.client.CooperationDao;
 import dao.employee.EmployeeDao;
 import dao.employee.ExtraDao;
+import dao.employee.SettingDao;
 import database.*;
 
-import javax.lang.model.element.VariableElement;
-import javax.servlet.http.HttpSession;
 import java.sql.Connection;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -123,8 +120,24 @@ public class EmployeeService {
     }
 
     //批量派遣
-    public static DaoUpdateResult dispatch(Connection conn, String[] eids,long cid) {
-        return  EmployeeDao.dispatch(conn,eids,cid);
+    public static String dispatch(Connection conn, String[] eids,long cid) {
+        QueryConditions condition = new QueryConditions();
+        condition.add("id","=",cid);
+        DaoQueryResult res1 = CooperationDao.get(conn,condition);
+        Cooperation c = (Cooperation) res1.data;
+
+        ConnUtil.closeAutoCommit(conn);
+        DaoUpdateResult res2 = SettingDao.updateInjuryPer(conn,eids,c.getPer1());
+        DaoUpdateResult res3 = EmployeeDao.dispatch(conn,eids,cid);
+
+
+        if(res2.success && res3.success){
+            ConnUtil.commit(conn);
+            return DaoResult.success();
+        }else{
+            ConnUtil.rollback(conn);
+            return DaoResult.fail("数据库出错误");
+        }
     }
 
     //雇用

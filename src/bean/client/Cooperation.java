@@ -25,7 +25,8 @@ public class Cooperation extends Client{
      *
      */
     private byte category;
-    private float per;//工伤比例
+    private float per1;//工伤结算比例
+    private float per2;//工伤缴纳比例
 
     public Cooperation() {
     }
@@ -61,12 +62,20 @@ public class Cooperation extends Client{
         this.category = category;
     }
 
-    public float getPer() {
-        return per;
+    public float getPer1() {
+        return per1;
     }
 
-    public void setPer(float per) {
-        this.per = per;
+    public void setPer1(float per) {
+        this.per1 = per;
+    }
+
+    public float getPer2() {
+        return per2;
+    }
+
+    public void setPer2(float per) {
+        this.per2 = per;
     }
 
     @Override

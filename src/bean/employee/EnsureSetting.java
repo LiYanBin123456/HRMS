@@ -1,8 +1,6 @@
 package bean.employee;
 
-import java.awt.geom.FlatteningPathIterator;
-
-//员工个税专项扣除
+//员工社保设置
 public class EnsureSetting {
     private long eid;//员工id
     private String city;//社保所在地市
@@ -42,9 +40,10 @@ public class EnsureSetting {
      社保采用位运算
      第一位 养老保险
      第二位 失业保险
-     第三位 工商保险
+     第三位 工伤保险
      */
     private byte social;
+    private float injuryPer;//工伤比例，只有购买工伤保险才有
     private float fundPer;//公积金比例
     private float fundBase;//公积金基数
     private float product;//保险产品 0 无   1 购买
@@ -127,6 +126,14 @@ public class EnsureSetting {
 
     public void setValS(float valS) {
         this.valS = valS;
+    }
+
+    public float getInjuryPer() {
+        return injuryPer;
+    }
+
+    public void setInjuryPer(float injuryPer) {
+        this.injuryPer = injuryPer;
     }
 
     public float getFundPer() {

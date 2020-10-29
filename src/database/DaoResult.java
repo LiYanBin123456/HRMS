@@ -8,6 +8,15 @@ public class DaoResult {
     public Object extra;//附加信息
 
     /**
+     * @return
+     */
+    public static String success(){
+        JSONObject json = new JSONObject();
+        json.put("success", true);
+        return json.toJSONString();
+    }
+
+    /**
      * 生成错误返回结果的json字符串
      * @param msg 错误信息
      * @return

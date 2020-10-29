@@ -84,8 +84,7 @@ var menuItems_dispatch = [
             {id:1<<23,   title:"个税申报",href:"taxes.html",icon:"&#xe6a7"}
         ]
     },
-    {title:"五险一金",id:1<<24,href:"insureds.html",icon:"&#xe6a7"},
-    {title:"账户管理",id:1<<25,href:"accounts.html",icon:"&#xe6a7"}
+    {title:"五险一金",id:1<<24,href:"insureds.html",icon:"&#xe6a7"}
 ];
 
 function getMenuHtml(items, permission) {
@@ -109,8 +108,8 @@ function getMenuHtml(items, permission) {
             }
         }
     }
-    if(permission&(1<<30)!=0){
-        html1 += "<li><a onclick=\"xadmin.add_tab('账户管理','accounts.html')\"><i class=\"iconfont\">&#xe6a7</i><cite>'账户管理'</cite></a></li>";
+    if((permission&(1<<30))!=0){
+        html1 += "<li><a onclick=\"xadmin.add_tab('账户管理','accounts.html')\"><i class=\"iconfont\">&#xe6a7</i><cite>账户管理</cite></a></li>";
     }
     return html1;
 }

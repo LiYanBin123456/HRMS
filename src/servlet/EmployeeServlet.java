@@ -312,8 +312,7 @@ public class EmployeeServlet extends HttpServlet {
     private String dispatch(Connection conn, HttpServletRequest request) {
         long cid = Long.parseLong(request.getParameter("cid"));
         String[] eids = request.getParameterValues("eids[]");
-        DaoUpdateResult res = EmployeeService.dispatch(conn,eids,cid );
-        return  JSONObject.toJSONString(res);
+        return EmployeeService.dispatch(conn,eids,cid );
     }
 
     //雇用

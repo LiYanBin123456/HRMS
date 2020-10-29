@@ -88,10 +88,10 @@
                         <label class="layui-form-label"><span class="x-red">*</span>用工性质</label>
                         <div class="layui-input-inline">
                             <select name="category" lay-verify="required" lay-filter="filter_category">
-                                <option value=""></option>
-                                <option value="0">派遣</option>
-                                <option value="1">外包</option>
-                                <option value="2">小时工</option>
+                                <option value="0">无</option>
+                                <option value="1">派遣</option>
+                                <option value="2">外包</option>
+                                <option value="3">小时工</option>
                             </select>
                         </div>
                     </div>
@@ -261,7 +261,7 @@
                         <div class="layui-field-box">
                             <input type="checkbox" lay-skin="primary" name="bSocial" value="1" title="养老保险" checked>
                             <input type="checkbox" lay-skin="primary" name="bSocial" value="2" title="失业保险" checked>
-                            <input type="checkbox" lay-skin="primary" name="bSocial" value="4" title="工伤保险" checked>
+                            <input type="checkbox" lay-skin="primary" name="bSocial" value="4" title="工伤保险" lay-filter="injury" checked>
                             <div class="layui-inline" name="i1">
                                 <input type="text" name="injuryPer" required="" placeholder="工伤比例" autocomplete="off" class="layui-input">
                             </div>
@@ -517,19 +517,18 @@
                 $("[name=s1]").addClass("layui-hide");
             }
         });
-        form.on('checkbox(settingS)', function(data){
-            var settingS = data.value;
-            if(settingS == 2){
-                $("[name=s1]").removeClass("layui-hide");
+        form.on('checkbox(injury)', function(data){
+            if(data.elem.checked){
+                $("[name=i1]").removeClass("layui-hide");
             }else{
-                $("[name=s1]").addClass("layui-hide");
+                $("[name=i1]").addClass("layui-hide");
             }
         });
 
         //监听用工性质选项变化
         form.on('select(filter_category)', function(data){
             var category = data.value;
-            if(category == 2){
+            if(category == 3){
                 $("[name=t2]").removeClass("layui-hide");
             }else{
                 $("[name=t2]").addClass("layui-hide");
@@ -629,6 +628,11 @@
             $('input[name=bSocial]').each(function() {
                 var checked = (setting.social&Number(this.value)) != 0;
                 $(this).attr("checked",checked);
+                if(this.value == 4){
+                    if(!checked){
+                        $("[name=i1]").addClass("layui-hide");
+                    }
+                }
             });
             form.val('form_ensure',setting);
         }
