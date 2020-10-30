@@ -19,6 +19,9 @@ public class Detail1 extends Detail {
     private float birth;//单位生育
     private float fund2;//单位公积金
     private float tax;//个税
+    private float free;//国家减免项
+    private float extra1;//补收核减（个人）
+    private float extra2;//补收核减（单位）
     private float payable;//应发
     private float paid;//实发
     private float f1;//自定字段
@@ -47,6 +50,8 @@ public class Detail1 extends Detail {
      2补差
      */
     private byte status;
+    private String comments1;//个人备注
+    private String comments2;//单位备注
 
     public Detail1() {
     }
@@ -105,6 +110,84 @@ public class Detail1 extends Detail {
         this.f19 = f19;
         this.f20 = f20;
         this.status = status;
+    }
+
+    public Detail1(long id, long sid, long eid, float base, float pension1, float medicare1, float unemployment1, float disease1, float fund1, float pension2, float medicare2, float unemployment2, float injury, float disease2, float birth, float fund2, float tax, float free, float extra1, float extra2, float payable, float paid, float f1, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9, float f10, float f11, float f12, float f13, float f14, float f15, float f16, float f17, float f18, float f19, float f20, byte status, String comments1, String comments2) {
+        super(id, sid, eid);
+        this.base = base;
+        this.pension1 = pension1;
+        this.medicare1 = medicare1;
+        this.unemployment1 = unemployment1;
+        this.disease1 = disease1;
+        this.fund1 = fund1;
+        this.pension2 = pension2;
+        this.medicare2 = medicare2;
+        this.unemployment2 = unemployment2;
+        this.injury = injury;
+        this.disease2 = disease2;
+        this.birth = birth;
+        this.fund2 = fund2;
+        this.tax = tax;
+        this.free = free;
+        this.extra1 = extra1;
+        this.extra2 = extra2;
+        this.payable = payable;
+        this.paid = paid;
+        this.f1 = f1;
+        this.f2 = f2;
+        this.f3 = f3;
+        this.f4 = f4;
+        this.f5 = f5;
+        this.f6 = f6;
+        this.f7 = f7;
+        this.f8 = f8;
+        this.f9 = f9;
+        this.f10 = f10;
+        this.f11 = f11;
+        this.f12 = f12;
+        this.f13 = f13;
+        this.f14 = f14;
+        this.f15 = f15;
+        this.f16 = f16;
+        this.f17 = f17;
+        this.f18 = f18;
+        this.f19 = f19;
+        this.f20 = f20;
+        this.status = status;
+        this.comments1 = comments1;
+        this.comments2 = comments2;
+    }
+
+    public float getExtra1() {
+        return extra1;
+    }
+
+    public void setExtra1(float extra1) {
+        this.extra1 = extra1;
+    }
+
+    public float getExtra2() {
+        return extra2;
+    }
+
+    public void setExtra2(float extra2) {
+        this.extra2 = extra2;
+    }
+
+    public String getComments1() {
+        return comments1;
+    }
+
+    public void setComments1(String comments1) {
+        this.comments1 = comments1;
+    }
+
+    public String getComments2() {
+        return comments2;
+    }
+
+    public void setComments2(String comments2) {
+        this.comments2 = comments2;
     }
 
     public float getBase() {
@@ -225,6 +308,14 @@ public class Detail1 extends Detail {
 
     public void setPayable(float payable) {
         this.payable = payable;
+    }
+
+    public float getFree() {
+        return free;
+    }
+
+    public void setFree(float free) {
+        this.free = free;
     }
 
     public float getPaid() {

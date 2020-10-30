@@ -13,6 +13,7 @@ import dao.employee.SettingDao;
 import dao.rule.RuleMedicareDao;
 import dao.rule.RuleSocialDao;
 import database.ConnUtil;
+import org.omg.CORBA.FREE_MEM;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -158,8 +159,12 @@ public class Calculate {
         double tax =calculateTax(detail,deduct);
         detail.setTax((float) tax);
 
-        //计算实发=应发-个人五险一金-个税
-        float paid = payable-detail.getPension1()-detail.getMedicare1()-detail.getUnemployment1()-detail.getDisease1()-detail.getFund1()-(float) tax;
+        //计算国家减免项=单位养老+单位失业+单位工伤-工伤补充
+        float free = detail.getPension2()+detail.getUnemployment2()+detail.getInjury()-social.getExtra();
+        detail.setFree(free);
+
+        //计算实发=应发-个人五险一金-个税+补收核减
+        float paid = payable-detail.getPension1()-detail.getMedicare1()-detail.getUnemployment1()-detail.getDisease1()-detail.getFund1()-(float) tax+detail.getExtra1();
         detail.setPaid(paid);
 
         return  detail;
@@ -220,7 +225,7 @@ public class Calculate {
             unemployment2=base*(ruleSocial.getPer4()/100);//单位失业
         }
         if((social&((byte)4)) != 0) {
-            injury = base * (setting.getInjuryPer()/100);//单位工伤
+            injury = base * (setting.getInjuryPer()/100)+ruleSocial.getExtra();//单位工伤
         }
 
         detail.setPension1(pension1);
@@ -245,6 +250,8 @@ public class Calculate {
         float fund = 0;//单位公积金
         float summary;//实发总额
         float manage =0;//管理费
+        float extra = 0;//额外
+        float free = 0;//国家减免项
         float tax = 0;//税费
 
         for(ViewDetail1 viewDetail1:detail1s){
@@ -256,6 +263,10 @@ public class Calculate {
            medicare+=(viewDetail1.getMedicare2()+viewDetail1.getDisease2()+viewDetail1.getBirth());
             //单位公积金总额+=单位公积金
            fund+=viewDetail1.getFund2();
+            //补收核减
+           extra+=viewDetail1.getExtra2();
+           //国家减免
+           free+=viewDetail1.getFree();
         }
 
         int type = vc.getStype();//合同服务项目中的类型
@@ -286,7 +297,7 @@ public class Calculate {
                 break;
         }
 
-        summary=salary+social+medicare+fund+manage+tax;//总额
+        summary=salary+social+medicare+fund+manage+tax+extra-free;//总额
         settlement1.setSalary(salary);
         settlement1.setSocial(social);
         settlement1.setMedicare(medicare);
@@ -294,6 +305,8 @@ public class Calculate {
         settlement1.setManage(manage);
         settlement1.setTax(tax);
         settlement1.setSummary(summary);
+        settlement1.setExtra(extra);
+        settlement1.setFree(free);
         return settlement1;
     }
 
@@ -342,8 +355,8 @@ public class Calculate {
     private static double calculateTax(Detail1 v, Deduct deduct){
         double tax;//个税 = 应税额*税率（A） – 速算扣除（B） – 累计已预缴税额（C）
         float taxDue;//应税额 = 累计收入额（D）+ 本期收入 – 个税累计专项扣除（E）– 累计减除费用（F）
-        float income1;//本期收入 = 本月应发（G）– 本月个人五险一金（H）
-        income1 = v.getPayable() - v.getPension1()-v.getMedicare1()-v.getUnemployment1()-v.getDisease1()-v.getFund1();
+        float income1;//本期收入 = 本月应发（G）– 本月个人五险一金（H）+ 补收核减（个人）
+        income1 = v.getPayable() - v.getPension1()-v.getMedicare1()-v.getUnemployment1()-v.getDisease1()-v.getFund1()+v.getExtra1();
         taxDue=deduct.getIncome()+income1-deduct.getDeduct()-deduct.getFree();
 
         float rate = 0;//税率
