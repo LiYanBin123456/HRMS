@@ -45,6 +45,8 @@ public class Employee {
      1_外派、
      2_派遣、
      3_小时工、
+     4_代缴工资
+     5_代缴社保
      */
     private byte category;
     private float price;//小时工时间报酬

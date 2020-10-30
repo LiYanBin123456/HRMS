@@ -639,7 +639,9 @@ var category_employee = [
     {value:0,text:"内部员工"},
     {value:1,text:"派遣"},
     {value:2,text:"外包"},
-    {value:3,text:"小时工"}
+    {value:3,text:"小时工"},
+    {value:4,text:"代缴工资"},
+    {value:5,text:"代缴社保"}
 ];
 
 var household_employee = [

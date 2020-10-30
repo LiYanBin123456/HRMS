@@ -8,12 +8,10 @@ import bean.employee.EnsureSetting;
 import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
 import bean.settlement.*;
-import com.alibaba.fastjson.JSONObject;
 import dao.employee.SettingDao;
 import dao.rule.RuleMedicareDao;
 import dao.rule.RuleSocialDao;
 import database.ConnUtil;
-import org.omg.CORBA.FREE_MEM;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -163,7 +161,7 @@ public class Calculate {
         float free = detail.getPension2()+detail.getUnemployment2()+detail.getInjury()-social.getExtra();
         detail.setFree(free);
 
-        //计算实发=应发-个人五险一金-个税+补收核减
+        //计算实发=应发-个人五险一金-个税+补收核减（个人）
         float paid = payable-detail.getPension1()-detail.getMedicare1()-detail.getUnemployment1()-detail.getDisease1()-detail.getFund1()-(float) tax+detail.getExtra1();
         detail.setPaid(paid);
 

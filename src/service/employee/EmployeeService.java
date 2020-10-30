@@ -4,11 +4,13 @@ package service.employee;
 import bean.client.Cooperation;
 import bean.employee.Employee;
 import bean.employee.EmployeeExtra;
+import bean.insurance.Insurance;
 import com.alibaba.fastjson.JSONObject;
 import dao.client.CooperationDao;
 import dao.employee.EmployeeDao;
 import dao.employee.ExtraDao;
 import dao.employee.SettingDao;
+import dao.insurance.InsuranceDao;
 import database.*;
 
 import java.sql.Connection;
@@ -156,6 +158,19 @@ public class EmployeeService {
             json.put("success",false);
             json.put("msg","操作失败");
             return json.toJSONString();
+        }
+        //离职或者退休后将医社保状态设置为拟停
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("eid","=",id);
+        Insurance insurance = (Insurance) InsuranceDao.get(conn,conditions).data;
+        if(insurance!=null){//如果存在,将医社保参保状态全部设置为拟停
+            insurance.setStatus1(Insurance.STATUS_STOPING);
+            insurance.setStatus2(Insurance.STATUS_STOPING);
+            insurance.setStatus3(Insurance.STATUS_STOPING);
+            insurance.setStatus4(Insurance.STATUS_STOPING);
+            insurance.setStatus5(Insurance.STATUS_STOPING);
+            //修改参保单
+            InsuranceDao.update(conn,insurance);
         }
         ConnUtil.commit(conn);
         return JSONObject.toJSONString(res1);
