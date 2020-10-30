@@ -129,14 +129,9 @@
                     getSettlements();
                     return false; //阻止表单跳转
                 });
-                table.on('edit(filter_tb_settlement)', function(obj){
-                    var settlement = obj.data;
-                    updateSettlement(settlement);
-                });
             }
 
             function initTable() {
-
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_settlement',
@@ -144,6 +139,12 @@
                     title: '列表',
                     cols: columns_settlement1,
                     id: 'tbl_settlement'
+                });
+
+                //表格编辑
+                table.on('edit(filter_tb_settlement)', function(obj){
+                    var settlement = obj.data;
+                    updateSettlement(settlement);
                 });
 
                 //行内工具栏事件响应

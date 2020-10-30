@@ -2,6 +2,10 @@ package bean.admin;
 
 //账号表
 public class Account {
+    public static byte ROLE_PLATFORM = 0;//平台用户
+    public static byte ROLE_DISPATCH = 1;//派遣单位用户
+    public static byte ROLE_COOPERATION = 2;//合作单位用户
+    public static byte ROLE_EMPLOYEE = 3;//员工用户
     private long id;//编号
     private String nickname;//昵称
     private String username;//账号

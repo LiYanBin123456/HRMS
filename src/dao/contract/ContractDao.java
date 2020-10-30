@@ -1,5 +1,6 @@
 package dao.contract;
 
+import bean.admin.Account;
 import bean.contract.*;
 import bean.employee.Employee;
 import dao.employee.EmployeeDao;
@@ -14,24 +15,25 @@ import java.util.List;
 
 public class ContractDao {
     //根据查询条件获取合同列表，用视图查找
-    public static DaoQueryListResult getList(Connection conn, QueryParameter parameter, String type, long rid) {
-        DaoQueryListResult res = null;
+    public static DaoQueryListResult getList(Connection conn, QueryParameter parameter, String type, Account user) {
+        if(user.isAdmin()) {
+            parameter.addCondition("aid", "=", user.getRid());
+        }else {
+            parameter.addCondition("admin", "=", user.getId());
+        }
         if(parameter.conditions.extra!=null && !parameter.conditions.extra.isEmpty()) {
             parameter.addCondition("concat(name,comments)","like",parameter.conditions.extra);
         }
+
+        DaoQueryListResult res = null;
         switch(type){
-            case "A":
-                //获取平台和所有派遣方的合同
+            case "A"://获取平台和所有派遣方的合同
                 res= DbUtil.getList(conn,"view_contract_dispatch",parameter, ViewContractDispatch.class);
                 break;
-            case "B":
-                //获取该派遣方与之合作单位的合同
-                parameter.addCondition("aid","=",rid);
+            case "B"://获取该派遣方与之合作单位的合同
                 res= DbUtil.getList(conn,"view_contract_cooperation",parameter, ViewContractCooperation.class);
                 break;
-            case "C":
-                //获取该派遣方与之员工的合同
-                parameter.addCondition("aid","=",rid);
+            case "C"://获取该派遣方与之员工的合同
                 res= DbUtil.getList(conn,"view_contract_employee",parameter, ViewContractEmployee.class);
                 break;
         }

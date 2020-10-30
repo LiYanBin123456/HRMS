@@ -144,6 +144,12 @@
                     id: 'tbl_settlement'
                 });
 
+                //表格编辑
+                table.on('edit(filter_tb_settlement)', function(obj){
+                    var settlement = obj.data;
+                    updateSettlement(settlement);
+                });
+
                 //行内工具栏事件响应
                 table.on('tool(filter_tb_settlement)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
                     var settlement = obj.data; //获得当前行数据
@@ -265,6 +271,13 @@
                 iSettlement.insert(settlement,0,settlement.mode,function () {
                     getSettlements();
                     layer.msg("创建结算单，cid:"+settlement.cid+",month:"+format_date(settlement.month));
+                });
+            }
+
+            function updateSettlement(settlement) {
+                iSettlement.update(settlement,function (result) {
+                    getSettlements();
+                    layer.msg("结算单修改成功");
                 });
             }
 

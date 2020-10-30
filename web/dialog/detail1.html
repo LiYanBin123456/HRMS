@@ -163,6 +163,7 @@
                 });
                 getDetails();
           }
+
             //修改结算单明细
             function  updateDetail() {
                 var details = layui.table.cache.tbl_detail;
@@ -295,6 +296,7 @@
                     content: content
                 });
             }
+
             //删除结算单明细
             function del(detail) {
                 layer.confirm('确定删除'+detail.name+"的结算单明细吗", {icon: 3, title:'删除'}, function(index){
@@ -320,14 +322,18 @@
                         var items = mapSalary.items;
                         var salary_items_defined = items.split(";");
                         for (var i in salary_items_defined) {
-                                var item = salary_items_defined[i];
-                                var v = item.split(',');
-                                columns_detail1_input[0].push({field:'f'+Number(Number(i)+1), title: v[0],width:80,edit: 'text'}) ;
+                            var item = salary_items_defined[i];
+                            var v = item.split(',');
+                            columns_detail1_input[0].push({field:'f'+Number(Number(i)+1), title: v[0],width:80,edit: 'text'}) ;
                         }
-                        //因为split分开的数组中最后一组数据是空的，所以添加完之后需要删除最后一条数组
-                        columns_detail1_input[0].pop();
                     }
                     //数组添加结束后，加上最后一条操作数据
+                    columns_detail1_input[0].push({field:'free', title: '国家减免',width:80,edit: 'text'});
+                    columns_detail1_input[0].push({field:'extra1', title: '补收核减（个人）',width:100,edit: 'text'});
+                    columns_detail1_input[0].push({field:'extra2', title: '补收核减（单位）',width:100,edit: 'text'});
+                    columns_detail1_input[0].push({field:'status', title: '类型',width:80});
+                    columns_detail1_input[0].push({field:'comments1', title: '备注1',width:100,edit: 'text'});
+                    columns_detail1_input[0].push({field:'comments2', title: '备注2',width:100,edit: 'text'});
                     columns_detail1_input[0].push({fixed: 'right', title: '操作', toolbar: '#bar_detail'});
 
                 });
@@ -361,15 +367,20 @@
                         var items = mapSalary.items;
                         var salary_items_defined = items.split(";");
                         for (var i in salary_items_defined) {
-                                var item = salary_items_defined[i];
-                                var v = item.split(',');
-                                columns_detail1_full[0].push({field:'f'+Number(Number(i)+1), title: v[0],width:80,edit: 'text'}) ;
+                            var item = salary_items_defined[i];
+                            var v = item.split(',');
+                            columns_detail1_full[0].push({field:'f'+Number(Number(i)+1), title: v[0],width:80,edit: 'text'}) ;
                         }
-                        //因为split分开的数组中最后一组数据是空的，所以添加完之后需要删除最后一条空数组数组
-                        columns_detail1_full[0].pop();
-                        }
+                    }
                     //添加完自定义项后将应发和实发放在后面
+                    columns_detail1_full[0].push({field:'free', title: '国家减免',width:80,edit: 'text'});
+                    columns_detail1_input[0].push({field:'extra1', title: '补收核减（个人）',width:100,edit: 'text'});
+                    columns_detail1_input[0].push({field:'extra2', title: '补收核减（单位）',width:100,edit: 'text'});
                     columns_detail1_full[0].push({field:'payable', title: '应发',width:80}, {field:'paid', title: '实发',width:80});
+                    columns_detail1_input[0].push({field:'comments1', title: '备注1',width:100,edit: 'text'});
+                    columns_detail1_input[0].push({field:'comments2', title: '备注2',width:100,edit: 'text'});
+                    columns_detail1_input[0].push({fixed: 'right', title: '操作', toolbar: '#bar_detail'});
+
                 });
                  return columns_detail1_full;
             }

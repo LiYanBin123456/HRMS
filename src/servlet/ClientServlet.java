@@ -298,6 +298,12 @@ public class ClientServlet extends HttpServlet {
     //获取合作单位和余额
     private String getFinances(Connection conn, HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
+        Account user = (Account) request.getSession().getAttribute("account");
+        if(user.isAdmin()) {
+            parameter.addCondition("did", "=", user.getRid());
+        }else {
+            parameter.addCondition("aid", "=", user.getId());
+        }
         DaoQueryListResult result =FinanceService.getList(conn,parameter);
         return JSONObject.toJSONString(result);
     }

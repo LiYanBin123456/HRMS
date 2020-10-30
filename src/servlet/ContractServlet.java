@@ -102,7 +102,7 @@ public class ContractServlet extends HttpServlet {
         parameter.addCondition("stype","=",type);
         HttpSession session = request.getSession();
         Account user = (Account) session.getAttribute("account");
-        DaoQueryListResult res = ContractService.getList(conn,parameter,"B",user.getRid());
+        DaoQueryListResult res = ContractService.getList(conn,parameter,"B",user);
         return JSONObject.toJSONString(res);
     }
 
@@ -151,7 +151,7 @@ public class ContractServlet extends HttpServlet {
         String type=request.getParameter("type");
         HttpSession session = request.getSession();
         Account user = (Account) session.getAttribute("account");
-        DaoQueryListResult res = ContractService.getList(conn,parameter,type,user.getRid());
+        DaoQueryListResult res = ContractService.getList(conn,parameter,type,user);
         return JSONObject.toJSONString(res);
     }
 

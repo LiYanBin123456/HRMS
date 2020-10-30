@@ -1,5 +1,6 @@
 package service.contract;
 
+import bean.admin.Account;
 import bean.contract.Contract;
 import dao.client.DispatchDao;
 import dao.contract.ContractDao;
@@ -8,8 +9,10 @@ import database.*;
 import java.sql.Connection;
 
 public class ContractService {
-    public static DaoQueryListResult getList(Connection conn, QueryParameter parameter, String type, long rid) {
-     return ContractDao.getList(conn,parameter,type,rid);
+    public static DaoQueryListResult getList(Connection conn, QueryParameter parameter, String type, Account user) {
+
+
+        return ContractDao.getList(conn,parameter,type,user);
     }
 
     public static DaoQueryResult getLast(Connection conn, long id,String type) {

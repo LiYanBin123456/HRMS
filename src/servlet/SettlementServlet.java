@@ -156,32 +156,27 @@ public class SettlementServlet extends HttpServlet {
     private String getList(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         QueryParameter param = JSONObject.parseObject(request.getParameter("param"),QueryParameter.class);
-        DaoQueryListResult result = null;
         HttpSession session = request.getSession();
         Account user = (Account) session.getAttribute("account");
+        if(user.getRole()==Account.ROLE_DISPATCH){
+            if(user.isAdmin()) {
+                param.addCondition("did", "=", user.getRid());
+            }else {
+                param.addCondition("aid", "=", user.getId());
+            }
+        }else if(user.getRole()==Account.ROLE_COOPERATION){
+            param.addCondition("cid","=",user.getRid());
+        }
+
+        DaoQueryListResult result = null;
         switch (category){
             case 0://普通结算单
-                if(user.getRole()==1){
-                    param.addCondition("did","=",user.getRid());
-                }else if(user.getRole()==2){
-                    param.addCondition("cid","=",user.getRid());
-                }
                 result = Settlement1Service.getList(conn,param);
                 break;
             case 1://小时工结算单
-                if(user.getRole()==1){
-                    param.addCondition("did","=",user.getRid());
-                }else if(user.getRole()==2){
-                    param.addCondition("cid","=",user.getRid());
-                }
                 result = Settlement2Service.getList(conn,param);
                 break;
             case 2://商业保险结算单
-                if(user.getRole()==1){
-                    param.addCondition("did","=",user.getRid());
-                }else if(user.getRole()==2){
-                    param.addCondition("cid","=",user.getRid());
-                }
               result = Settlement3Service.getList(conn,param);
                 break;
         }
