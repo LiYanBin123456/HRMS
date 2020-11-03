@@ -84,8 +84,11 @@ public class Settlement1Service {
             parameter.addCondition("did","=",did);
             parameter.addCondition("type","=",1);
             if(settlement.getType()==0||settlement.getType()==1){//如果结算单类型为派遣或者外包
-                //查询出类型为派遣（1）或者外包（2）的员工
+                //查询出类别为派遣（1）或者外包（2）的员工
                 parameter.addCondition("category","=",settlement.getType()+1);
+            }else if (settlement.getType()==2||settlement.getType()==3){////如果结算单类型为代发工资或者代缴社保
+                //查询出类别为代发工资（4）或者代缴社保（5）的员工
+                parameter.addCondition("category","=",settlement.getType()+2);
             }
             parameter.addCondition("status","=",0);
             List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);

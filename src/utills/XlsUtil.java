@@ -158,7 +158,6 @@ public class XlsUtil {
                 if(v==null){//判断数据是否为空，为空则跳出循环，这里导致所填数据字段不能为空
                     break out;
                 }
-
                 String field = map.get("field");
                 String type = map.get("type");
                 String isNull = map.get("isNull");

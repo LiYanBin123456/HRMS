@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <title>小时工结算单明细</title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
@@ -22,7 +22,6 @@
     <body class="layui-layout-body">
         <div class="dialog-content">
             <!--顶部工具栏-->
-            <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
             <button class="layui-btn" id="download" onclick="download()" style="display: none"><i class="layui-icon layui-icon-edit"></i>下载复印件</button>
             <div class="layui-hide" id="top_bar_detail">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
@@ -59,7 +58,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var upload;
+
 
             var param_query = new QueryParam();
             param_query.setPagination(1,10);
@@ -67,7 +66,6 @@
 
             var sid = $.query.get("id");//结算单id
             var cid = $.query.get("cid");//合作单位id
-            var month = $.query.get("month");//结算单月份
             $(function () {
                 loadLayuiModule();
             });
@@ -79,29 +77,6 @@
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
-                    upload = layui.upload;
-                    upload.render({
-                        elem: '#import' //绑定元素
-                        , url: '/hrms/verify/file' //上传接口
-                        , accept: 'file'
-                        , exts: 'xls'
-                        , acceptMime: '.xls'
-                        ,before: function(file){
-                            this.data={op:"readXls",file:JSON.stringify(file)}
-                        }
-                        , done: function (res) {
-                            if (res.success){
-                                var details2 = res.data;
-                                showImportDlg(details2);
-                            }else {
-                                layer.msg("xls文件不符合要求，请下载模板再重新填写");
-                            }
-                        }
-                        , error: function () {
-                            //请求异常回调
-                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
-                        }
-                    });
                     initPage();
                 });
             }
@@ -158,7 +133,7 @@
                             showInsertDlg();
                             break;
                         case 'import':
-                             $("#import").click();
+                            showImportDlg();
                             break;
                         case 'download':
                             $("#download").click();
@@ -193,8 +168,8 @@
             }
 
             //核对导入的数据
-            function showImportDlg(details2) {
-                var content = "importDetails2.html?details2="+encodeURIComponent(JSON.stringify(details2));
+            function showImportDlg() {
+                var content = "importDetails2.html";
                 layer.open({
                     title:"核对明细",
                     type: 2,
@@ -203,7 +178,7 @@
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
                         var detail2s = window["layui-layer-iframe" + index].callbackData();
-                        iSettlement.importDetails(sid,JSON.stringify(detail2s),1,function () {
+                        iSettlement.importDetails(sid,detail2s,1,function () {
                             layer.close(index);
                             layer.msg("导入成功");
                             getDetails();
@@ -233,7 +208,7 @@
                         layer.close(index);
                         var  details = new Array(member.length)
                         for (var i in member){
-                            details[i] = {"eid":member[i].id,"month":month};
+                            details[i] = {"eid":member[i].id};
                             console.log(details)
                         }
                         iSettlement.importDetails(sid,JSON.stringify(details),1,function () {

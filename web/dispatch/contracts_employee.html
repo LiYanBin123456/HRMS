@@ -28,7 +28,6 @@
 
     <body class="layui-layout-body">
         <!--顶部工具栏-->
-        <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
         <div class="layui-hide" id="top_bar_contract">
             <button class="layui-btn layui-btn-sm" lay-event="import" ><i class="layui-icon "></i> 批量导入</button>
             <button class="layui-btn layui-btn-sm" lay-event="" onclick="download()" ><i class="layui-icon "></i> 下载模板</button>
@@ -58,7 +57,6 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var upload;
             var param_query = new QueryParam();
             param_query.setOrder("start",false);
             param_query.setPagination(1,10);
@@ -73,29 +71,6 @@
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
-                    upload = layui.upload;
-                    upload.render({
-                        elem: '#import' //绑定元素
-                        , url: '/hrms/verify/file' //上传接口
-                        , accept: 'file'
-                        , exts: 'xls'
-                        , acceptMime: '.xls'
-                        ,before: function(file){
-                            this.data={op:"readXls",file:JSON.stringify(file)}
-                        }
-                        , done: function (res) {
-                            if (res.success){
-                                var contracts = res.data;
-                                showImportDlg(contracts);
-                            }else {
-                                layer.msg("xls文件不符合要求，请下载模板再重新填写");
-                            }
-                        }
-                        , error: function () {
-                            //请求异常回调
-                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
-                        }
-                    });
                     initPage();
                 });
             }
@@ -146,15 +121,15 @@
                             search();
                             break;
                         case 'import':
-                            $("#import").click();
+                           showImportDlg();
                             break;
                     };
                 });
                 getContracts();
             }
             //核对导入的数据
-            function showImportDlg(contracts) {
-                var content = "../dialog/importEmployeeContract.html?contracts="+encodeURIComponent(JSON.stringify(contracts));
+            function showImportDlg() {
+                var content = "../dialog/importEmployeeContract.html";
                 layer.open({
                     title:"核对明细",
                     type: 2,
@@ -163,7 +138,7 @@
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
                         var contracts = window["layui-layer-iframe" + index].callbackData();
-                        iContract.insertContracts(JSON.stringify(contracts),function () {
+                        iContract.insertContracts(contracts,function () {
                             layer.close(index);
                             layer.msg("导入成功");
                             getContracts();

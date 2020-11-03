@@ -79,8 +79,7 @@
             var param_query = new QueryParam();
             param_query.setPagination(1,10);
 
-            var type = 0;//区分结算单类型   0 派遣外包结算单  1 人事代理结算单（代发工资、代缴社保）  2 小时工
-
+            var type = 1;//区分结算单类型  0 派遣  1 外包  2 代发工资  3 代缴社保
             $(function () {
                 loadLayuiModule();
             });
@@ -194,7 +193,7 @@
             }
 
             function getSettlements() {
-                param_query.addCondition("type","=",1);//查询外包结算单
+                param_query.addCondition("type","=",type);//查询外包结算单
                 iSettlement.getList(param_query,0,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows
@@ -253,7 +252,7 @@
                         layer.close(index);
                         console.log(settlement);
                         if (settlement.month != null&&settlement.month!=""&&settlement.ccid!=null&&settlement.ccid!=""){
-                            settlement.type = 1;//劳务外包结算单
+                            settlement.type = type;//劳务外包结算单
                             insertSettlement(settlement);
                         }else {
                             layer.msg("插入失败,请选择月份或者合同");

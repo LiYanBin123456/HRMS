@@ -81,8 +81,7 @@
             param_query.setPagination(1,10);
 
             var type = 2;//区分结算单类型  0 普通结算单  1 人事代理结算单 小时工结算单
-            var month=null;
-            var status = null;
+
             $(function () {
                 loadLayuiModule();
             });
@@ -238,7 +237,7 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/settlement1.html?type="+type;
+                var content = "../dialog/settlement2.html";
                 layer.open({
                     title:"添加",
                     type: 2,

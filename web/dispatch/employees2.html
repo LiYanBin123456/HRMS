@@ -37,7 +37,7 @@
                     <select id="select_cooperation" lay-filter="filter_cooperation" placeholder="按合作客户筛选"></select>
                 </div>
                 <div class="layui-input-inline">
-                    <select id="select_cooperation" lay-filter="filter_status" placeholder="按状态筛选"></select>
+                    <select id="" lay-filter="filter_status" placeholder="按状态筛选"></select>
                 </div>
                 <div class="layui-input-inline">
                     <input name="keyword" class="layui-input"  type="text" placeholder="请输入要查找的员工">
@@ -83,29 +83,6 @@
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
-                    upload = layui.upload;
-                    upload.render({
-                        elem: '#import' //绑定元素
-                        , url: '/hrms/verify/file' //上传接口
-                        , accept: 'file'
-                        , exts: 'xls'
-                        , acceptMime: '.xls'
-                        ,before: function(file){
-                            this.data={op:"readXls",file:JSON.stringify(file)}
-                        }
-                        , done: function (res) {
-                            if (res.success){
-                                var employees = res.data;
-                                showImportDlg(employees);
-                            }else {
-                                layer.msg("xls文件不符合要求，请下载模板再重新填写");
-                            }
-                        }
-                        , error: function () {
-                            //请求异常回调
-                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
-                        }
-                    });
                     initPage();
                 });
             }
@@ -179,7 +156,7 @@
                             showInsertDlg();
                             break;
                         case 'import':
-                            $("#import").click();
+                            showImportDlg();
                             break;
                         case "dispatch":
                             batchDispatch();
@@ -280,8 +257,8 @@
                 });
             }
             //核对导入的数据
-            function showImportDlg(employees) {
-                var content = "../dialog/importEmployee.html?employees="+encodeURIComponent(JSON.stringify(employees));
+            function showImportDlg() {
+                var content = "../dialog/importEmployee.html";
                 layer.open({
                     title:"核对明细",
                     type: 2,
@@ -289,8 +266,8 @@
                     content: content,
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
-                      var emploeess = window["layui-layer-iframe" + index].callbackData();
-                      iEmployee.insertBatch(JSON.stringify(emploeess),function () {
+                      var emploees = window["layui-layer-iframe" + index].callbackData();
+                      iEmployee.insertBatch(emploees,function () {
                             layer.close(index);
                             layer.msg("导入成功");
                         },function (res) {

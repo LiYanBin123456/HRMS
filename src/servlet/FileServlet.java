@@ -82,10 +82,10 @@ public class FileServlet extends HttpServlet {
             case "downloadModel"://下载模板
                 downloadModel(request,response);
                 return;*/
-            case "downloadDetail1"://下载商业保险结算单明细
+            case "downloadDetail1"://下载结算单明细模板
                 downloadDetail1(conn,request,response);
                 return;
-            case "exportDetail1"://导出商业保险结算单明细
+            case "exportDetail1"://导出结算单明细
                     exportDetail1(conn,request,response);
                 return;
             case "exportDetail2"://下载小时工结算单明细
@@ -363,43 +363,6 @@ public class FileServlet extends HttpServlet {
         return json.toJSONString();
     }
 
-    //上传合同文件
-    /*private String upload(HttpServletRequest request) throws IOException, ServletException {
-        DaoUpdateResult result = new DaoUpdateResult();
-        String id = request.getParameter("id");
-            //将文件上传到服务器并且以合同id命名
-            String file;
-            Part part = request.getPart("file");
-            if(part!=null){//获取文件的名称
-                String header = part.getHeader("content-disposition");
-                String headerName = header.substring(header.indexOf("filename")+10, header.length()-1); //截取字符串获取文件名称
-                String suffixName=headerName.substring(headerName.indexOf(".")+1); //获取文件名后缀
-                String s="pdf";
-                if(suffixName.equals(s)){
-                    InputStream put = part.getInputStream();  //获取文件流
-                    String url = request.getServletContext().getRealPath("/contractFile"); //获取文件夹的真实路径
-                    File uploadDir = new File(url);
-                    if (!uploadDir.exists()) { // 如果该文件夹不存在则创建
-                        uploadDir.mkdirs();
-                    }
-
-                    file = id+"."+suffixName;
-                    FileOutputStream fos = new FileOutputStream(new File(url, file));   //建立对拷流
-                    IOUtils.copy(put, fos);
-                    put.close();
-                    fos.close();
-                    part.delete();
-                    result.msg = "合同插入成功";
-                    result.success = true;
-                }
-                else {
-                    result.msg ="格式不正确";
-                    result.success = false;
-                }
-            }
-            return JSONObject.toJSONString(result);
-    }*/
-
     //判断合同文件是否存在
     private String exist(HttpServletRequest request) throws IOException {
         byte category = Byte.parseByte(request.getParameter("category"));
@@ -481,7 +444,7 @@ public class FileServlet extends HttpServlet {
         bis.close();
     }
 
-    //下载普通结算单明细
+    //下载普通结算单明细模板
     private void downloadDetail1(Connection conn, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.setHeader("Content-Disposition", "attachment; filename=detailModel.xls");
@@ -502,7 +465,7 @@ public class FileServlet extends HttpServlet {
         parameter.addCondition("cid","=",cid);
         parameter.addCondition("did","=",user.getRid());
         parameter.addCondition("type","=",1);
-        parameter.addCondition("category","!=",2);
+        parameter.addCondition("category","!=",3);
         parameter.addCondition("status","=",0);
         List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
 
@@ -910,8 +873,7 @@ public class FileServlet extends HttpServlet {
         ConnUtil.closeConnection(conn);
     }
 
-
-
+    //读取个税专项扣除
     private String readDeduct(HttpServletRequest request)throws IOException, ServletException {
         String result = null;
         Part part = request.getPart("file");
