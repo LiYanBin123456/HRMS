@@ -134,7 +134,7 @@ public class Detail1Service {
             }
 
             //计算结算单明细
-            Detail1 detail1 = Calculate.calculateDetail1(d,medicare,social,setting,mapSalary,deduct);
+            Detail1 detail1 = Calculate.calculateDetail1(settlement,d,medicare,social,setting,mapSalary,deduct);
             detail1List.add(detail1);
         }
         return  Detail1Dao.update(conn,detail1List);
