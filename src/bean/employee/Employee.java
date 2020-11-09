@@ -5,7 +5,7 @@ import java.sql.Date;
 //员工表
 public class Employee {
     public static final byte WORKING = 0;
-    public static final byte OUTGOING = 1;
+    public static final byte LEAVED = 1;
     public static final byte RETIRE = 2;
     public static final byte OTHER = 3;
    private long id;
@@ -76,7 +76,7 @@ public class Employee {
     }
 
     public static byte getOUTGOING() {
-        return OUTGOING;
+        return LEAVED;
     }
 
     public static byte getRETIRE() {

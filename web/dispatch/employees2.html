@@ -9,17 +9,10 @@
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
         <link rel="stylesheet" href="../css/font.css">
         <link rel="stylesheet" href="../css/xadmin.css">
-        <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-        <script src="../lib/layui/layui.js" charset="utf-8"></script>
+        <script src="../layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
-        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
-        <!--[if lt IE 9]>
-          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
         <style>
             .searchbox{
-                margin-left:100px;
                 display:inline;
                 width:300px;
             }
@@ -28,7 +21,7 @@
 
     <body class="layui-layout-body">
         <div class="layui-hide" id="top_bar">
-            <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加外派员工</button>
+            <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
             <button class="layui-btn layui-btn-sm" lay-event="import" id="import"><i class="layui-icon "></i> 批量导入</button>
             <button class="layui-btn layui-btn-sm" lay-event="" onclick="download()"><i class="layui-icon "></i> 下载模板</button>
             <button class="layui-btn layui-btn-sm" lay-event="dispatch"><i class="layui-icon "></i> 批量派遣</button>
@@ -36,8 +29,15 @@
                 <div class="layui-input-inline">
                     <select id="select_cooperation" lay-filter="filter_cooperation" placeholder="按合作客户筛选"></select>
                 </div>
-                <div class="layui-input-inline">
-                    <select id="" lay-filter="filter_status" placeholder="按状态筛选"></select>
+                <div class="layui-input-inline" style="width:120px">
+                    <select id="" lay-filter="filter_status">
+                        <option selected disabled hidden>按状态筛选</option>
+                        <option value="-1">不限</option>
+                        <option value="0">在职</option>
+                        <option value="1">离职</option>
+                        <option value="2">退休</option>
+                        <option value="3">其它</option>
+                    </select>
                 </div>
                 <div class="layui-input-inline">
                     <input name="keyword" class="layui-input"  type="text" placeholder="请输入要查找的员工">
@@ -88,11 +88,10 @@
             }
 
             function initPage() {
-
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
                     param_query.addKeyword(keyword);
-                    getEmployees();
+                    getEmployees(true);
                     return false; //阻止表单跳转
                 });
 
@@ -103,18 +102,22 @@
                     }else{
                         param_query.addCondition("cid","=",cid);
                     }
-                    getEmployees();
+                    getEmployees(true);
                 });
 
                 form.on('select(filter_status)', function(data){
-                     var status = data.value;
-                    param_query.addCondition("status","=",status);
-                    getEmployees();
+                    var status = data.value;
+                    if(status == -1){
+                        param_query.removeCondition("status");
+                    }else {
+                        param_query.addCondition("status", "=", status);
+                    }
+                    getEmployees(true);
                 });
 
                 initTable();
                 initCooperationList();
-                getEmployees();
+                getEmployees(false);
             }
 
             function initTable() {
@@ -185,25 +188,26 @@
                 });
             }
 
-            function getEmployees() {
+            function getEmployees(reserve) {
                 iEmployee.getList(param_query,1,function (result) {
                     table.reload('tbl_employee', {
-                        data:result.rows
+                        data: result.rows,
+                        reserve:reserve
                     });
-                //初始化分页
-                laypage.render({
-                    elem: 'pager'
-                    ,curr: param_query.pagination.page
-                    ,count: result.total //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.setPagination(obj.curr,obj.limit);
-                            getEmployees();
+                    //初始化分页
+                    laypage.render({
+                        elem: 'pager'
+                        ,curr: param_query.pagination.page
+                        ,count: result.total //数据总数
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                        ,jump: function(obj,first){
+                            //首次不执行
+                            if(!first){
+                                param_query.setPagination(obj.curr,obj.limit);
+                                getEmployees(true);
+                            }
                         }
-                    }
-                });
+                    });
                 });
             }
 
@@ -211,13 +215,13 @@
             function showDetailDlg(employee) {
                 var content = "../dialog/employee.html?id="+employee.id+"&type="+employee.type;
                 layer.open({
-                    title:"内部员工详情",
+                    title:"外派员工详情",
                     type: 2,
                     area: ['80%', '90%'],
                     content: content,
                     cancel:function (index) {
                         layer.close(index);
-                        getEmployees();
+                        getEmployees(true);
                     }
                 });
             }
@@ -289,7 +293,7 @@
                     content: content,
                     cancel:function (index) {
                         layer.close(index);
-                        getEmployees();
+                        getEmployees(true);
                     }
                 });
             }
@@ -299,7 +303,7 @@
                 layer.confirm("确定将"+employee.name+"移入人才库", {icon: 3, title:'删除员工'}, function(index){
                     iEmployee.delete(employee.id,0,function () {
                         layer.close(index);
-                        getEmployees();
+                        getEmployees(true);
                         layer.msg('删除成功');
                     });
                 });

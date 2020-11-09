@@ -10,9 +10,9 @@
         <link rel="stylesheet" href="../css/font.css">
         <link rel="stylesheet" href="../css/xadmin.css">
         <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-        <script src="../lib/layui/layui.js" charset="utf-8"></script>
+        <script src="../layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
-        <link href="../city-picker/city-picker.css" rel="stylesheet" />
+        <link href="../layui/extend/city-picker/city-picker.css" rel="stylesheet" />
         <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
         <!--[if lt IE 9]>
           <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
@@ -47,7 +47,7 @@
         <script src="../js/jquery.min.js"></script>
         <script src="../js/jquery.params.js"></script>
         <script src="../js/queryParam.js"></script>
-        <script src="../city-picker/city-picker.data.js"></script>
+        <script src="../layui/extend/city-picker/city-picker.data.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -65,7 +65,7 @@
             function loadLayuiModule() {
                 layui.extend({
                     index: 'lib/index' //主入口模块
-                    , citypicker: '../city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
+                    , citypicker: '../layui/extend/city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
                 }).use(['table','form','element','layer','laypage','citypicker'], function() {
                     table = layui.table;
                     layer = layui.layer;

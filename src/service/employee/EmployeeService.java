@@ -150,7 +150,7 @@ public class EmployeeService {
     //离职或者退休
     public static String leave(Connection conn, long id, byte category, byte reason, Date date) {
         ConnUtil.closeAutoCommit(conn);
-        DaoUpdateResult res1 = EmployeeDao.updateStatus(conn,id,category==0? Employee.OUTGOING:Employee.RETIRE);
+        DaoUpdateResult res1 = EmployeeDao.updateStatus(conn,id,category==0? Employee.LEAVED :Employee.RETIRE);
         DaoUpdateResult res2 = ExtraDao.leave(conn,id,category,reason,date);
         if(!res1.success || !res2.success){
             ConnUtil.rollback(conn);

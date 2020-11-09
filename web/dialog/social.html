@@ -9,9 +9,9 @@
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
         <link rel="stylesheet" href="../css/font.css">
         <link rel="stylesheet" href="../css/xadmin.css">
-        <script type="text/javascript" src="../lib/layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
-        <link href="../city-picker/city-picker.css" rel="stylesheet" />
+        <link href="../layui/extend/city-picker/city-picker.css" rel="stylesheet" />
         <style type="text/css">
 
 .frm-layout{
@@ -133,7 +133,7 @@
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
-<script src="../city-picker/city-picker.data.js"></script>
+<script src="../layui/extend/city-picker/city-picker.data.js"></script>
 <script src="../js/city.js"></script>
 <script src="../js/fieldSet.js"></script>
 <script>
@@ -146,7 +146,7 @@
     function loadLayuiModule() {
         layui.extend({
             index: 'lib/index' //主入口模块
-            , citypicker: '../city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
+            , citypicker: '../layui/extend/city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
         }).use(['form','jquery','citypicker','laydate'], function () {
             form = layui.form;
             laydate = layui.laydate;
