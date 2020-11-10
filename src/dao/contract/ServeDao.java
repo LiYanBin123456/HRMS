@@ -12,15 +12,16 @@ public class ServeDao {
     //添加合同服务项目
     public static DaoUpdateResult insert(Connection conn, Serve s){
         String pid = s.getPid()==0?null:String.valueOf(s.getPid());
-        String sql = "insert into serve (cid,type,category,payment,settlement,receipt,pid,value) values (?,?,?,?,?,?,?,?)";
-        Object []params = {s.getCid(),s.getType(),s.getCategory(),s.getPayment(),s.getSettlement(),s.getReceipt(),pid,s.getValue()};
+        String sql = "insert into serve (cid,type,category,payment,settlement,receipt,pid,value,payoff) values (?,?,?,?,?,?,?,?,?)";
+        Object []params = {s.getCid(),s.getType(),s.getCategory(),s.getPayment(),s.getSettlement(),s.getReceipt(),pid,s.getValue(),s.getPayoff()};
         return DbUtil.insert(conn,sql,params);
     }
+
     //修改合同服务项目
     public static DaoUpdateResult update(Connection conn,Serve s){
         String pid = s.getPid()==0?null:String.valueOf(s.getPid());
-        String sql = "update serve set type=?,category=?,payment=?,settlement=?,receipt=?,pid=?,value=? where cid=?";
-        Object []params = {s.getType(),s.getCategory(),s.getPayment(),s.getSettlement(),s.getReceipt(),pid,s.getValue(),s.getCid()};
+        String sql = "update serve set type=?,category=?,payment=?,settlement=?,receipt=?,pid=?,value=?,payoff=? where cid=?";
+        Object []params = {s.getType(),s.getCategory(),s.getPayment(),s.getSettlement(),s.getReceipt(),pid,s.getValue(),s.getPayoff(),s.getCid()};
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
     }

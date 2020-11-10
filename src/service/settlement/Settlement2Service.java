@@ -274,23 +274,12 @@ public class Settlement2Service {
         return LogDao.getList(conn,id,parameter);
     }
 
-    public static String exportBank(Connection conn, long id,String bank) {
-        return null;
-    }
-
-
-
-    public static String copy(Connection conn, long id,String month) {
-        return null;
-    }
-
-
     public static DaoUpdateResult saveSettlement(Connection conn, long sid) {
         Settlement2 settlement2 = (Settlement2) Settlement2Dao.get(conn,sid).data;
         QueryParameter param = new QueryParameter();
         param.addCondition("sid","=",sid);
         List<Detail2> detail2List = (List<Detail2>) Detail2Dao.getList(conn,param).rows;
-
-        return Settlement2Dao.update(conn, Calculate.calculateSettlement2(settlement2,detail2List));
+        Serve serve = (Serve) ServeDao.get(conn,settlement2.getCcid()).data;
+        return Settlement2Dao.update(conn, Calculate.calculateSettlement2(settlement2,detail2List,serve));
     }
 }

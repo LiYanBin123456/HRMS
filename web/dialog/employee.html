@@ -265,7 +265,7 @@
                             <input type="checkbox" lay-skin="primary" name="bSocial" value="2" title="失业保险" checked>
                             <input type="checkbox" lay-skin="primary" name="bSocial" value="4" title="工伤保险" lay-filter="injury" checked>
                             <div class="layui-inline" name="i1">
-                                <input type="text" name="injuryPer" required="" placeholder="工伤比例" autocomplete="off" class="layui-input">
+                                <input type="text" id="injuryPer" name="injuryPer" required="" placeholder="工伤比例" autocomplete="off" readonly class="layui-input">
                             </div>
                         </div>
                     </fieldset>
@@ -794,7 +794,15 @@
         });
     }
 
-
+    //获取所属公司的工伤比例
+    function getFundPer() {
+        iClient.get(employee.cid,1,function(result){
+          var coop = result.data;
+          var fundPer = coop.per1;
+          console.log(fundPer);
+          $("#injuryPer").val(fundPer);
+        });
+    }
 </script>
 
 </html>

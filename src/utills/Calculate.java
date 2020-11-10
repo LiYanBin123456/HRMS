@@ -2,6 +2,7 @@ package utills;
 
 import bean.client.Items;
 import bean.client.MapSalary;
+import bean.contract.Serve;
 import bean.contract.ViewContractCooperation;
 import bean.employee.Deduct;
 import bean.employee.EnsureSetting;
@@ -450,14 +451,13 @@ public class Calculate {
 
         float payable;//应付金额
         float paid;//实付金额
-
-        payable = d.getHours()*d.getPrice();//应付=工时*单价
-
+       //应付=工时*单价-水电-餐费-住宿费-保险+其他1+其他2
+        payable = d.getHours()*d.getPrice()-d.getInsurance()-d.getUtilities()-d.getAccommodation()-d.getFood()+d.getOther1()+d.getOther2();
         double tax=0;//个税 = 应税额*税率（A） – 速算扣除（B） – 累计已预缴税额（C）
         float income1;//本期收入 = 本月应发（G）
         float taxDue;//应税额 = 累计收入额（D）+ 本期收入 – 个税累计专项扣除（E）– 累计减除费用（F）
 
-        income1 = payable;
+        income1 =payable ;
         taxDue=deduct.getIncome()+income1-deduct.getDeduct()-deduct.getFree();
 
         if(taxDue>0&&taxDue<=36000){//根据个税比例报表计算个税
@@ -476,7 +476,7 @@ public class Calculate {
             tax = taxDue*0.45-181920-deduct.getPrepaid();
         }
 
-        paid = payable-d.getInsurance()-d.getTraffic()-d.getUtilities()-d.getAccommodation()-d.getFood()-d.getOther1()-d.getOther2()-(float) tax;
+        paid = payable-(float) tax;
 
         d.setPayable(payable);
         d.setTax((float) tax);
@@ -489,21 +489,29 @@ public class Calculate {
      * 计算小时工结算单
      * @param settlement2   小时工结算单
      * @param detail2s  小时工结算明细列表
+     * @param serve  合同服务项目
      * @return  计算好的结算单
      */
-    public static Settlement2 calculateSettlement2(Settlement2 settlement2,List<Detail2> detail2s){
+    public static Settlement2 calculateSettlement2(Settlement2 settlement2, List<Detail2> detail2s, Serve serve){
          int hours=0;//总工时
          float traffic=0;//交通费
          float extra=0;//附加
          float summary;//总额
-
-        for (Detail2 detail2:detail2s){
+         byte payoff = serve.getPayoff();//0 派遣方发工资   1合作方发工资
+         for (Detail2 detail2:detail2s){
             hours+=detail2.getHours();
             traffic+=detail2.getTraffic();
             extra+=(detail2.getOther1()+detail2.getOther2());
+         }
+        if(payoff==0){//派遣方发工资
+            //总额= 总工时*单位的单价+交通费+额外收入
+            summary=hours*settlement2.getPrice()+traffic+extra;
+        }else {//合作方发工资
+            //总额= 总工时*单位与员工的单价差+交通费+额外收入
+            summary=hours*settlement2.getPrice();
+            extra=0;
+            traffic=0;
         }
-
-        summary=hours*settlement2.getPrice();
         settlement2.setHours(hours);
         settlement2.setSummary(summary);
         settlement2.setExtra(extra);

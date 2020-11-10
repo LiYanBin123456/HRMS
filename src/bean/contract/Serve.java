@@ -20,10 +20,11 @@ public class Serve {
 
     private long pid;//保险产品id
     private float value;//结算值 根据结算方式的不同而不同，因为按比例是百分比，因此设置为float类型
+    private byte payoff;//工资发放对象  0 派遣单位发放  1 合作单位发放
     public Serve() {
     }
 
-    public Serve(String cid, byte type, byte category, byte payment, byte settlement, byte receipt, long pid, float value) {
+    public Serve(String cid, byte type, byte category, byte payment, byte settlement, byte receipt, long pid, float value, byte payoff) {
         this.cid = cid;
         this.type = type;
         this.category = category;
@@ -32,9 +33,8 @@ public class Serve {
         this.receipt = receipt;
         this.pid = pid;
         this.value = value;
-
+        this.payoff = payoff;
     }
-
 
     public String getCid() {
         return cid;
@@ -100,6 +100,13 @@ public class Serve {
         this.value = value;
     }
 
+    public byte getPayoff() {
+        return payoff;
+    }
+
+    public void setPayoff(byte payoff) {
+        this.payoff = payoff;
+    }
 
     @Override
     public String toString() {

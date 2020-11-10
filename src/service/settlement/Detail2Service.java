@@ -70,7 +70,7 @@ public class Detail2Service {
             conditions.add("id","=", detail.getEid());
             Employee employee = (Employee) EmployeeDao.get(conn,conditions).data;
             Deduct deduct = (Deduct) DeductDao.get(conn,detail.getEid()).data;
-            if(deduct!=null){
+            if(deduct==null){
                 result.msg="请完善该员工"+employee.getName()+"的个税专项扣除";
                 return result;
             }
