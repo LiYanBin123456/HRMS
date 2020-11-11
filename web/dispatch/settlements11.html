@@ -239,6 +239,15 @@
                 });
             }
 
+            function showStatus(status) {
+                var content = "../dialog/status_settlement.html?status="+status;
+                layer.open({
+                    type: 2,
+                    area: ['100px', '400px'],
+                    content: content
+                });
+            }
+
             //打开添加对话框
             function showInsertDlg() {
                 var content = "../dialog/settlement1.html?type="+type;
