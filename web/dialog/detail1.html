@@ -61,7 +61,6 @@
             var sid = $.query.get("id");//结算单id
             var cid = $.query.get("cid");//合作单位id
             var type = $.query.get("type");//结算单类型 0 派遣 1外包 2代缴工资 3代缴社保
-            var upload;
             $(function () {
                 loadLayuiModule();
             });
@@ -73,29 +72,6 @@
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
-//                    upload = layui.upload;
-//                    upload.render({
-//                        elem: '#import' //绑定元素
-//                        , url: '/hrms/verify/file' //上传接口
-//                        , accept: 'file'
-//                        , exts: 'xls'
-//                        , acceptMime: '.xls'
-//                        ,before: function(file){
-//                            this.data={op:"readXls",file:JSON.stringify(file)}
-//                        }
-//                        , done: function (res) {
-//                            if (res.success){
-//                                var detail1s = res.data;
-//                                showImportDlg(detail1s);
-//                            }else {
-//                                layer.msg("xls文件不符合要求，请下载模板再重新填写");
-//                            }
-//                        }
-//                        , error: function () {
-//                            //请求异常回调
-//                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
-//                        }
-//                    });
                     initPage();
                 });
             }

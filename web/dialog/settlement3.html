@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>小时工结算单</title>
+    <title>商业保险结算单</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -32,20 +32,13 @@
     </div>
     <div class="layui-form-item">
         <label class="layui-form-label">
-            <span class="x-red">*</span>选择保险产品
+            <span class="x-red">*</span>保险产品
         </label>
-        <div class="layui-input-inline">
-            <select name="pid" id="select_product" lay-filter="filter_product" lay-verify="required"></select>
+        <div class="layui-input-inline" >
+            <input type="text" name="pname" class="layui-input" readonly>
         </div>
     </div>
     <form class="layui-form" style="display: inline">
-        <label class="layui-form-label">
-            <span class="x-red">*</span>是否自动生成明细
-        </label>
-        <div class="layui-input-inline">
-            <input type="radio" name="mode" title="否" value="0" lay-filter="mode" checked="checked">
-            <input type="radio" name="mode" title="是" value="1" lay-filter="mode" >
-        </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>选择合同
@@ -117,6 +110,7 @@
             var contact = obj.data;
             $("[name=ccid]").val(contact.id);
             settlement.ccid = contact.id;
+            getPname(contact.pid);
         });
         getContracts(cid);
     }
@@ -128,7 +122,6 @@
             table.reload('tbl_contract', {
                 data:result.rows
             });
-
             laypage.render({
                 elem: 'pager'
                 ,curr: param_query.pagination.page
@@ -145,10 +138,10 @@
         });
     }
 
-
     //查询所属的所有合作方
     function initCoop() {
-        iClient.getList({},1,function(result){
+        param_query.addCondition("type","=",0);
+        iClient.getList(param_query,1,function(result){
             var cooperations = result.rows;
             var select_cooperation = $("#select_cooperation");
             select_cooperation.append("<option value='-2' selected disabled hidden>选择合作客户</option>");
@@ -160,18 +153,11 @@
             form.render('select', 'form_settlement');
         });
     }
-    //查询所属的所有保险产品
-    function initProduct() {
-        iProduct.getList({},function(result){
-            var products = result.rows;
-            var select_product = $("#select_product");
-            select_product.append("<option value='-2' selected disabled hidden>选择保险产品</option>");
-            for(var i in products){
-                var product = products[i];
-                var option = $("<option>").val(product.id).text(product.name);
-                select_product.append(option);
-            }
-            form.render('select', 'form_settlement');
+
+    function getPname(pid) {
+        iProduct.get(pid,function (result) {
+            var product = result.data;
+            $("[name=pname]").val(product.name);
         });
     }
     //向调用页面返回编辑的结算单

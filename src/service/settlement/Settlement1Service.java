@@ -566,7 +566,6 @@ public class Settlement1Service {
                         result.msg = "该员工"+employee.getName()+","+month+"的结算单明细不存在,请核对";
                         return result;
                     }
-
                     //重新生成一个明细用于计算医保和社保
                     Detail1 detail2 = new Detail1();
                     //计算医保相关
@@ -632,7 +631,7 @@ public class Settlement1Service {
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.setHeader("Content-Disposition", "attachment; filename=bank1.xls");
 
-        Workbook book = null;
+        Workbook book ;
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid", "=", sid);
 
@@ -661,7 +660,7 @@ public class Settlement1Service {
 
                 sheet2.addCell(new jxl.write.Number(0, index, v.getPaid()));//金额上限,实发
                 sheet2.addCell(new Label(1, index, card.getCardNo()));//收方账号
-                sheet2.addCell(new Label(3, index, "大正月"+sdf.format(v.getMonth())+"工资"));//附言
+                sheet2.addCell(new Label(3, index, "大正月"+v.getMonth()==null?"":sdf.format(v.getMonth())+"工资"));//附言
                 }
                 sheet1.addCell(new Label(8, index, v.getName()));//收方户名
                 sheet2.addCell(new Label(2, index, v.getName()));//收方户名
@@ -714,13 +713,13 @@ public class Settlement1Service {
                     sheet1.addCell(new Label(4, index, card.getBankNo()));
                     sheet1.addCell(new Label(5, index, card.getBank2()));
                     sheet1.addCell(new jxl.write.Number(6, index, v.getPaid()));
-                    sheet1.addCell(new Label(7, index, sdf.format(v.getMonth()) + "工资"));
+                    sheet1.addCell(new Label(7, index, v.getMonth()==null?"":sdf.format(v.getMonth()) + "工资"));
 
                     //序号	卡号	姓名	金额	备注
                     sheet2.addCell(new jxl.write.Number(0, index, index ));
                     sheet2.addCell(new Label(1, index, card.getCardNo()));
                     sheet2.addCell(new jxl.write.Number(3, index, v.getPaid()));
-                    sheet2.addCell(new Label(4, index, sdf.format(v.getMonth()) + "工资"));
+                    sheet2.addCell(new Label(4, index, v.getMonth()==null?"":sdf.format(v.getMonth()) + "工资"));
                 }
                 sheet1.addCell(new Label(2, index, v.getName()));
                 sheet2.addCell(new Label(2, index, v.getName()));
@@ -753,7 +752,7 @@ public class Settlement1Service {
 
         List<ViewDetail1> details = JSONArray.parseArray(rows, ViewDetail1.class);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String month = (sdf.format(details.get(0).getMonth()).split("-"))[1];
+        String month = details.get(0).getMonth()==null?"":(sdf.format(details.get(0).getMonth()).split("-"))[1];
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("浦发银行", 0);
         try {
@@ -803,7 +802,7 @@ public class Settlement1Service {
         List<ViewDetail1> details = JSONArray.parseArray(rows, ViewDetail1.class);
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM");
-        String month = sdf.format(details.get(0).getMonth());
+        String month = details.get(0).getMonth()==null?"":sdf.format(details.get(0).getMonth());
 
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("浦发银行", 0);

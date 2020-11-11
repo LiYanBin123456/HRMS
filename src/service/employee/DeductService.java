@@ -21,6 +21,8 @@ public class DeductService {
 
     //修改
     public static DaoUpdateResult update(Connection conn, Deduct deduct) {
+        float deducts = deduct.getDeduct1()+deduct.getDeduct2()+deduct.getDeduct3()+deduct.getDeduct4()+deduct.getDeduct5()+deduct.getDeduct6();
+        deduct.setDeduct(deducts);
         return DeductDao.update(conn,deduct);
     }
 
