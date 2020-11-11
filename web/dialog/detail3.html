@@ -250,7 +250,7 @@
             //保存
             function  save() {
                 var details = layui.table.cache.tbl_detail;
-                var msg = "保存后结算单将被设置为[保存]状态，同时会自动计算社保、医保和个税等，确认保存吗？";
+                var msg = "保存后结算单将自动计算保费？";
                 var title = "保存结算单明细";
                 layer.confirm(msg, {icon: 3, title:title}, function(index){
                     iSettlement.updateDetails(details,2,function () {

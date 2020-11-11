@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>添加普通结算单或小时工结算单</title>
+    <title>添加普通结算单</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -140,7 +140,8 @@
 
     //查询所属的所有合作方
     function initCoop() {
-        iClient.getList({},1,function(result){
+        param_query.addCondition("type","=",0);
+        iClient.getList(param_query,1,function(result){
             var cooperations = result.rows;
             var select_cooperation = $("#select_cooperation");
             select_cooperation.append("<option value='-2' selected disabled hidden>选择合作客户</option>");

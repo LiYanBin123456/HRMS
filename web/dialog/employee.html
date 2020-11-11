@@ -794,15 +794,6 @@
         });
     }
 
-    //获取所属公司的工伤比例
-    function getFundPer() {
-        iClient.get(employee.cid,1,function(result){
-          var coop = result.data;
-          var fundPer = coop.per1;
-          console.log(fundPer);
-          $("#injuryPer").val(fundPer);
-        });
-    }
 </script>
 
 </html>

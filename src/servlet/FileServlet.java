@@ -852,9 +852,9 @@ public class FileServlet extends HttpServlet {
             for(ViewDetail3 detail3:detail3s){
                 sheet1.addCell(new Label(0, index, detail3.getCname()));
                 sheet1.addCell(new Label(1, index, detail3.getCardId()));
-                sheet1.addCell(new Label(1, index, detail3.getPname()));
-                sheet1.addCell(new Label(1, index, detail3.getPlace()));
-                sheet1.addCell(new Label(1, index, detail3.getPost()));
+                sheet1.addCell(new Label(2, index, detail3.getPname()));
+                sheet1.addCell(new Label(3, index, detail3.getPlace()));
+                sheet1.addCell(new Label(4, index, detail3.getPost()));
                 sheet1.addCell(new jxl.write.Number(5, index, detail3.getPrice()));
                 index++;
             }
