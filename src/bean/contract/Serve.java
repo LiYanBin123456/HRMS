@@ -1,7 +1,5 @@
 package bean.contract;
 
-import java.sql.Date;
-
 //合同服务项目
 public class Serve {
 
@@ -20,11 +18,11 @@ public class Serve {
 
     private long pid;//保险产品id
     private float value;//结算值 根据结算方式的不同而不同，因为按比例是百分比，因此设置为float类型
-    private byte payoff;//工资发放对象  0 派遣单位发放  1 合作单位发放
+    private byte payer;//工资发放对象  0 派遣单位发放  1 合作单位发放
     public Serve() {
     }
 
-    public Serve(String cid, byte type, byte category, byte payment, byte settlement, byte receipt, long pid, float value, byte payoff) {
+    public Serve(String cid, byte type, byte category, byte payment, byte settlement, byte receipt, long pid, float value, byte payer) {
         this.cid = cid;
         this.type = type;
         this.category = category;
@@ -33,7 +31,7 @@ public class Serve {
         this.receipt = receipt;
         this.pid = pid;
         this.value = value;
-        this.payoff = payoff;
+        this.payer = payer;
     }
 
     public String getCid() {
@@ -100,12 +98,12 @@ public class Serve {
         this.value = value;
     }
 
-    public byte getPayoff() {
-        return payoff;
+    public byte getPayer() {
+        return payer;
     }
 
-    public void setPayoff(byte payoff) {
-        this.payoff = payoff;
+    public void setPayer(byte payer) {
+        this.payer = payer;
     }
 
     @Override

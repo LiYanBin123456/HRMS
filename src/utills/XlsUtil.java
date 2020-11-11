@@ -64,10 +64,10 @@ public class XlsUtil {
     /**
      * 读取综合所得申报税款计算表中数据
      * @param is 文件输入流
-     * @param sheetName_data xls文件中提供数据的表格名称
+     * @param sheet xls文件中提供数据的表格
      * @return
      */
-    public static List<JSONObject> readDeduct(InputStream is, String sheetName_data) {
+    public static List<JSONObject> readDeduct(InputStream is, int sheet) {
         Workbook workbook ;
         try {
             workbook = Workbook.getWorkbook(is);
@@ -76,7 +76,7 @@ public class XlsUtil {
             return null;
         }
         //读取数据
-        Sheet sheet_data = workbook.getSheet(sheetName_data);
+        Sheet sheet_data = workbook.getSheet(sheet);
         if(null == sheet_data){
             return null;
         }

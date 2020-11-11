@@ -497,7 +497,7 @@ public class Calculate {
          float traffic=0;//交通费
          float extra=0;//附加
          float summary;//总额
-         byte payoff = serve.getPayoff();//0 派遣方发工资   1合作方发工资
+         byte payoff = serve.getPayer();//0 派遣方发工资   1合作方发工资
          for (Detail2 detail2:detail2s){
             hours+=detail2.getHours();
             traffic+=detail2.getTraffic();

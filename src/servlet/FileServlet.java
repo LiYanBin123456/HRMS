@@ -879,7 +879,7 @@ public class FileServlet extends HttpServlet {
         Part part = request.getPart("file");
         try {//获取part中的文件，读取数据
             InputStream is = part.getInputStream();
-            List<JSONObject> data = XlsUtil.readDeduct(is,"综合所得申报税款计算");
+            List<JSONObject> data = XlsUtil.readDeduct(is,0);
             if(null == data){
                 result = "{\"success\":false,\"msg\":\"xls文件不符合要求，请下载模板再重新填写\"}";
             }else{
