@@ -169,17 +169,14 @@ public class ClientServlet extends HttpServlet {
         switch (category) {
             case 0://派遣方客户
                 Dispatch dispatch = JSON.parseObject(request.getParameter("client"), Dispatch.class);
-                System.out.println("前台传来的数据："+dispatch);
                 res = DispatchService.update(conn, dispatch);
                 break;
             case 1://合作单位客户
                 Cooperation cooperation= JSON.parseObject(request.getParameter("client"), Cooperation.class);
-                System.out.println("前台传来的数据："+cooperation);
                 res = CooperationService.update(conn,cooperation);
                 break;
             case 2://派遣单位客户
                 Supplier supplier= JSON.parseObject(request.getParameter("client"), Supplier.class);
-                System.out.println("前台传来的数据："+supplier);
                 res = SupplierService.update(conn,supplier);
                 break;
         }
@@ -282,7 +279,6 @@ public class ClientServlet extends HttpServlet {
     //修改客户服务信息
     private String updateFinance(Connection conn, HttpServletRequest request) {
         Finance finance =JSONObject.parseObject(request.getParameter("finance"),Finance.class);
-        System.out.println("前台传来的数据："+finance);
         DaoUpdateResult res = FinanceService.update(conn,finance);
         return JSONObject.toJSONString(res);
     }
@@ -311,7 +307,6 @@ public class ClientServlet extends HttpServlet {
     //增加客户服务信息
     private String insertFinance(Connection conn, HttpServletRequest request) {
         Finance finance =JSONObject.parseObject(request.getParameter("finance"),Finance.class);
-        System.out.println("前台传来的数据："+finance);
         DaoUpdateResult res = FinanceService.insert(conn,finance);
         return JSONObject.toJSONString(res);
     }
@@ -349,8 +344,6 @@ public class ClientServlet extends HttpServlet {
             if (file.exists()) {
                 file.delete();
                 msg = "合同文件删除成功!!";
-                System.out.println(filename+"文件删除成功!!");
-
             }else {
                 msg = "文件不存在或者已删除";
             }

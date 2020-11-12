@@ -265,7 +265,7 @@
                             <input type="checkbox" lay-skin="primary" name="bSocial" value="2" title="失业保险" checked>
                             <input type="checkbox" lay-skin="primary" name="bSocial" value="4" title="工伤保险" lay-filter="injury" checked>
                             <div class="layui-inline" name="i1">
-                                <input type="text" id="injuryPer" name="injuryPer" required="" placeholder="工伤比例" autocomplete="off" readonly class="layui-input">
+                                <input type="text" id="per" name="per" required="" placeholder="工伤比例" autocomplete="off" readonly class="layui-input">
                             </div>
                         </div>
                     </fieldset>
@@ -538,6 +538,7 @@
             }
         });
         getEmployee();
+
     }
 
     function getEmployee() {
@@ -553,7 +554,6 @@
             employee.type = type;
             showEmployee(employee);
         }
-
         function showEmployee(employee) {
             employee.entry = format_date(employee.entry);
             if(employee.type == 1){
@@ -611,6 +611,7 @@
                     layer.alert("尚未设置社保信息，请设置并保存", {icon: 20});
                 }
             });
+            getPer(employee);
         }
 
         function showEnsureSetting(setting) {
@@ -782,6 +783,14 @@
         });
     }
 
+    //获取工伤比例
+    function getPer(employee) {
+        iClient.get(employee.cid,1,function (result) {
+            var coop = result.data;
+            var per = coop.per1;
+            $("#per").val(per);
+        })
+    }
     function onSaveSuccess() {
         layer.msg("保存成功");
     }

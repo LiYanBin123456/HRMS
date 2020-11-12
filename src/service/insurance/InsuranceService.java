@@ -62,23 +62,23 @@ public class InsuranceService {
             sheet1.addCell(new Label(10, 0, "户口性质"));
             sheet1.addCell(new Label(11, 0, "户籍地址"));
             int index = 1;
-            for(ViewInsurance Insurance:insurances){
+            for(ViewInsurance v:insurances){
                 //转化户口性质
-                String houseHold =  houseHold(Insurance.getHousehold());
+                String houseHold =  houseHold(v.getHousehold());
                 //比较时间
-                String msg = compareDate(Insurance.getEntry());
-                sheet1.addCell(new Label(0, index, Insurance.getName()));
-                sheet1.addCell(new Label(1, index, Insurance.getCode3()));
-                sheet1.addCell(new Label(2, index, Insurance.getCardId()));
-                sheet1.addCell(new Label(3, index, sdf.format(Insurance.getDate3())));
-                sheet1.addCell(new jxl.write.Number(4, index, Insurance.getBase3()));
+                String msg = compareDate(v.getEntry());
+                sheet1.addCell(new Label(0, index, v.getName()));
+                sheet1.addCell(new Label(1, index, v.getCode3()));
+                sheet1.addCell(new Label(2, index, v.getCardId()));
+                sheet1.addCell(new Label(3, index, v.getDate3()==null?"":sdf.format(v.getDate3())));
+                sheet1.addCell(new jxl.write.Number(4, index, v.getBase3()));
                 sheet1.addCell(new Label(5, index, "正常参保登记"));
                 sheet1.addCell(new Label(6, index, "合同制"));
                 sheet1.addCell(new Label(7, index, msg));
-                sheet1.addCell(new Label(8, index, Insurance.getEntry()==null?"":sdf.format(Insurance.getEntry())));
-                sheet1.addCell(new Label(9, index, Insurance.getPhone()));
+                sheet1.addCell(new Label(8, index, v.getEntry()==null?"":sdf.format(v.getEntry())));
+                sheet1.addCell(new Label(9, index, v.getPhone()));
                 sheet1.addCell(new Label(10, index, houseHold));
-                sheet1.addCell(new Label(11, index, Insurance.getAddress()));
+                sheet1.addCell(new Label(11, index, v.getAddress()));
                 index++;
             }
             //设置列宽
@@ -117,18 +117,18 @@ public class InsuranceService {
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("停保社保单", 0);
         try {
-            sheet1.addCell(new Label(1, 0, "个人代码"));
-            sheet1.addCell(new Label(0, 0, "姓名"));
+            sheet1.addCell(new Label(0, 0, "个人代码"));
+            sheet1.addCell(new Label(1, 0, "姓名"));
             sheet1.addCell(new Label(2, 0, "证件号码"));
             sheet1.addCell(new Label(3, 0, "变更日期"));
             sheet1.addCell(new Label(4, 0, "变更原因"));
             int index = 1;
-            for(ViewInsurance Insurance:insurances){
-                sheet1.addCell(new Label(1, index, Insurance.getCode3()));
-                sheet1.addCell(new Label(0, index, Insurance.getName()));
-                sheet1.addCell(new Label(2, index, Insurance.getCardId()));
+            for(ViewInsurance insurance:insurances){
+                sheet1.addCell(new Label(1, index, insurance.getCode3()));
+                sheet1.addCell(new Label(0, index, insurance.getName()));
+                sheet1.addCell(new Label(2, index, insurance.getCardId()));
                 sheet1.addCell(new Label(3, index, lastDay));
-                sheet1.addCell(new Label(4, index, chageReason(Insurance.getReason())));
+                sheet1.addCell(new Label(4, index, insurance==null?"":chageReason(insurance.getReason())));
                 index++;
             }
             //设置列宽
@@ -184,13 +184,12 @@ public class InsuranceService {
     public static String compareDate(Date date){
         String msg = null;
         if(date == null){
-          return msg = "否";
+            msg = "否";
         }else {
             //获取当前时间
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM");//设置日期格式
             String now = df.format(new Date(System.currentTimeMillis()));
             String time =df.format(date);
-
             try {
                 java.util.Date date1 = df.parse(now);
                 java.util.Date date2 = df.parse(time);
@@ -202,9 +201,8 @@ public class InsuranceService {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            return msg;
         }
-
+       return msg;
     }
 
     //转换离职原因
@@ -294,13 +292,13 @@ public class InsuranceService {
             sheet1.addCell(new Label(4, 0, "参保险种"));
             sheet1.addCell(new Label(4, 0, "参保时间"));
             int index = 1;
-            for(ViewInsurance Insurance:insurances){
-                sheet1.addCell(new Label(1, index, Insurance.getCode1()));
-                sheet1.addCell(new Label(0, index, Insurance.getName()));
-                sheet1.addCell(new Label(2, index, Insurance.getCardId()));
-                sheet1.addCell(new jxl.write.Number(3, index, Insurance.getBase1()));
+            for(ViewInsurance insurance:insurances){
+                sheet1.addCell(new Label(1, index, insurance.getCode1()));
+                sheet1.addCell(new Label(0, index, insurance.getName()));
+                sheet1.addCell(new Label(2, index, insurance.getCardId()));
+                sheet1.addCell(new jxl.write.Number(3, index, insurance.getBase1()));
                 sheet1.addCell(new Label(4, index, "医疗、大病、生育"));
-                sheet1.addCell(new Label(5, index, sdf.format(Insurance.getDate1())));
+                sheet1.addCell(new Label(5, index, insurance.getDate1()==null?"":sdf.format(insurance.getDate1())));
                 index++;
             }
             //设置列宽
@@ -398,7 +396,7 @@ public class InsuranceService {
                 sheet.addCell(new jxl.write.Number(0, index, index-5));//序号
                 sheet.addCell(new Label(1, index, v.getName()));//职工姓名
                 sheet.addCell(new Label(2, index, v.getCardId()));//证件号
-                sheet.addCell(new Label(3, index, sdf.format(v.getDate2())));//起缴时间
+                sheet.addCell(new Label(3, index, v.getDate2()==null?"":sdf.format(v.getDate2())));//起缴时间
                 sheet.addCell(new jxl.write.Number(4, index, v.getBase2()));//工资基数
                 sheet.addCell(new jxl.write.Number(5, index, per));//单位比例
                 sheet.addCell(new jxl.write.Number(6, index, per));//个人比例

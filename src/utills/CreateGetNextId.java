@@ -2,10 +2,6 @@ package utills;
 import java.util.Calendar;
 
 public class CreateGetNextId {
-    public static void main(String[] args) {
-        //System.out.println( CreateGetNextId.NextId(111118, "A"));
-        System.out.println(CreateGetNextId.NextId("A2019000521","A"));
-    }
     /**list集合为表中全部信息,str为ID最开始的字符(如学生就为SD)，
      *strid为截取的自动增长的数值部分(最后的4位) 故ID就为SD201801010001样式
      */
@@ -38,7 +34,6 @@ public class CreateGetNextId {
 
         String nextid=type+now.get(Calendar.YEAR)+sid;
 
-        System.out.println(nextid);
         return nextid;
 
     }
@@ -68,7 +63,7 @@ public class CreateGetNextId {
         }
         Calendar now = Calendar.getInstance();
         String nextid=type+now.get(Calendar.YEAR)+sid;
-        System.out.println(nextid);
+
         return nextid;
 
     }

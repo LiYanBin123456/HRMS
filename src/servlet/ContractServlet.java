@@ -110,8 +110,7 @@ public class ContractServlet extends HttpServlet {
     private String insert(Connection conn, HttpServletRequest request)throws IOException, ServletException {
         DaoUpdateResult res ;
         Contract contract = JSON.parseObject(request.getParameter("contract"), Contract.class);
-        System.out.println("前台传来的数据："+contract);
-        //自定义自增id
+         //自定义自增id
         QueryConditions conditions = new QueryConditions();
         String type = contract.getType();
         conditions.add("type", "=", type);
@@ -139,7 +138,6 @@ public class ContractServlet extends HttpServlet {
     //获取最新合同
     private String getLast(Connection conn, HttpServletRequest request) {
         long bid = Long.parseLong(request.getParameter("id"));
-        System.out.println("客户id="+bid);
         String type = request.getParameter("type");
         DaoQueryResult res = ContractService.getLast(conn,bid,type);
         return JSONObject.toJSONString(res);
@@ -172,7 +170,6 @@ public class ContractServlet extends HttpServlet {
     //修改合同
     private String update(Connection conn, HttpServletRequest request) {
         Contract contract = JSON.parseObject(request.getParameter("contract"), Contract.class);
-        System.out.println("前台传来的数据："+contract);
         DaoUpdateResult res = ContractService.update(conn,contract);
         return JSONObject.toJSONString(res);
     }
@@ -188,7 +185,6 @@ public class ContractServlet extends HttpServlet {
     //修改合同服务项目
     private String updateService(Connection conn, HttpServletRequest request) {
         Serve serve  = JSON.parseObject(request.getParameter("serve"), Serve.class);
-        System.out.println("前台传来的数据："+serve);
         DaoUpdateResult res = ServeService.update(conn,serve);
         return JSONObject.toJSONString(res);
     }
@@ -203,7 +199,6 @@ public class ContractServlet extends HttpServlet {
     //添加合同服务项目
     private String insertService(Connection conn, HttpServletRequest request) {
         Serve serve  = JSON.parseObject(request.getParameter("serve"), Serve.class);
-        System.out.println("前台传来的数据："+serve);
         DaoUpdateResult res = ServeService.insert(conn,serve);
         return JSONObject.toJSONString(res);
     }

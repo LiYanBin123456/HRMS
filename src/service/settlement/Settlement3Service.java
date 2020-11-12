@@ -155,7 +155,6 @@ public class Settlement3Service {
                 log.setOperator(operator);
                 log.setTime(time);
                 log.setContent(content);
-                System.out.println(log);
                 //插入log信息
                 LogDao.insert(conn,log);
             }
@@ -191,7 +190,6 @@ public class Settlement3Service {
                 log.setOperator(operator);
                 log.setTime(time);
                 log.setContent(content);
-                System.out.println(log);
                 //插入log信息
                 LogDao.insert(conn,log);
             }
@@ -220,7 +218,6 @@ public class Settlement3Service {
                 log.setOperator(operator);
                 log.setTime(time);
                 log.setContent(content);
-                System.out.println(log);
                 //插入log信息
                 LogDao.insert(conn,log);
             }
@@ -249,7 +246,6 @@ public class Settlement3Service {
                 log.setOperator(operator);
                 log.setTime(time);
                 log.setContent(content);
-                System.out.println(log);
                 //插入log信息
                 LogDao.insert(conn,log);
             }
