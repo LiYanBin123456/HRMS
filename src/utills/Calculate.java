@@ -163,7 +163,7 @@ public class Calculate {
         detail.setTax((float) tax);
 
         //计算国家减免项=单位养老+单位失业+单位工伤-工伤补充
-        float free = detail.getPension2()+detail.getUnemployment2()+detail.getInjury()-detail.getInjury()==0?0:social.getExtra();
+        float free = detail.getPension2()+detail.getUnemployment2()+detail.getInjury()-(detail.getInjury()==0?0:social.getExtra());
         detail.setFree(free);
 
          float paid = 0;

@@ -134,18 +134,6 @@
                         </select>
                     </div>
                 </div>
-                <!--<div class="layui-form-item" name="c1">
-                    <label class="layui-form-label">结算值</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="v1" required="" placeholder="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item layui-hide" name="c2">
-                    <label class="layui-form-label">代理费</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="v2" required="" placeholder="元/人/月" autocomplete="off" class="layui-input">
-                    </div>
-                </div>-->
                 <div class="layui-form-item layui-hide" name="c3">
                     <label class="layui-form-label">工资发放</label>
                     <div class="layui-input-inline">
@@ -190,7 +178,7 @@
 <script src="../js/fieldSet.js"></script>
 <script src="../layui/layui.js"></script>
 <script>
-    var contracts;
+
     var serve;
     var form;//表单对象
     var editer;
@@ -331,17 +319,17 @@
     //根据劳务外包派遣的结算方式显示相应的内容
     function showCategory(category) {
         switch(category){
-            case 1:
-                $("#title").text("管理费");
+            case 0:
+                $("#title").text("单价");
                 $("#unit").text("元/人/月");
+                break;
+            case 1:
+                $("#title").text("比例");
+                $("#unit").text("%");
                 break;
             case 2:
                 $("#title").text("比例");
                 $("#unit").text("%");
-                break;
-            case 3:
-                $("#title").text("单价");
-                $("#unit").text("元/人/月");
                 break;
 
         };

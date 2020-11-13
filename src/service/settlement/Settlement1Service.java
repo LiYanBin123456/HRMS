@@ -141,7 +141,6 @@ public class Settlement1Service {
                 log.setOperator(operator);
                 log.setTime(time);
                 log.setContent(content);
-                System.out.println(log);
                 //插入log信息
                 LogDao.insert(conn,log);
             }
@@ -176,7 +175,6 @@ public class Settlement1Service {
                 log.setOperator(operator);
                 log.setTime(time);
                 log.setContent(content);
-                System.out.println(log);
                 //插入log信息
                 LogDao.insert(conn,log);
             }
@@ -204,7 +202,6 @@ public class Settlement1Service {
                 log.setOperator(operator);
                 log.setTime(time);
                 log.setContent(content);
-                System.out.println(log);
                 //插入log信息
                 LogDao.insert(conn,log);
             }
@@ -232,7 +229,6 @@ public class Settlement1Service {
                 log.setOperator(operator);
                 log.setTime(time);
                 log.setContent(content);
-                System.out.println(log);
                 //插入log信息
                 LogDao.insert(conn,log);
             }
@@ -260,7 +256,6 @@ public class Settlement1Service {
                 log.setOperator(operator);
                 log.setTime(time);
                 log.setContent(content);
-                System.out.println(log);
                 //插入log信息
                 LogDao.insert(conn,log);
             }
@@ -664,7 +659,6 @@ public class Settlement1Service {
                 }
                 sheet1.addCell(new Label(8, index, v.getName()));//收方户名
                 sheet2.addCell(new Label(2, index, v.getName()));//收方户名
-
                 index++;
             }
             workbook.write();

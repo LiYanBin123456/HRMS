@@ -23,7 +23,6 @@ public class XlsUtil {
             InputStreamReader reader = new InputStreamReader(in, "UTF-8");
             List<JSONObject> data = read(in,"学员信息表","元数据");
             String str = JSONObject.toJSONString(data);
-            System.out.println(str);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {

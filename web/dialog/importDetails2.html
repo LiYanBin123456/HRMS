@@ -74,7 +74,6 @@
                         , done: function (res) {
                             if (res.success){
                                 details = JSON.stringify(res.data);
-                                console.log(details);
                                 initPage();
                             }else {
                                 layer.msg("xls文件不符合要求，请下载模板再重新填写");

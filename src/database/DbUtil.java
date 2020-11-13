@@ -105,13 +105,11 @@ public class DbUtil {
      */
     public static DaoQueryListResult getList(Connection conn, String table, QueryParameter param, Class c){
         String sql1 = String.format("select * from %s where ",table);
-
         String sql2 = String.format("select count(*) from %s where ",table);
 
         String condition = param.conditions.toString();
         sql1 += condition;
         sql2 += condition;
-        System.out.println(param.conditions.extra);
         //是否需要排序
         if(param.order.need){
             sql1 += (" order by "+param.order.field);
@@ -138,7 +136,6 @@ public class DbUtil {
             result.msg = "数据库操作错误";
             e.printStackTrace();
         }
-
         return result;
     }
 
@@ -153,7 +150,6 @@ public class DbUtil {
         String sql = String.format("select count(*) from %s where 1=1 and ",table);
         String condition = conditions.toString();
         sql +=condition;
-        System.out.println(sql);
         QueryRunner qr = new QueryRunner();
         DaoQueryListResult result = new DaoQueryListResult();
         try {
@@ -164,7 +160,6 @@ public class DbUtil {
             result.msg = "数据库操作错误";
             e.printStackTrace();
         }
-
         return result;
     }
 
@@ -176,11 +171,9 @@ public class DbUtil {
      */
     public static List getColumns(Connection conn, String sql, String table,QueryParameter param){
         String sql1 = String.format("select %s from %s where ",sql,table);
-
         String condition = param.conditions.toString();
-        System.out.println(condition);
         sql1 += condition;
-        System.out.println(sql1);
+
 
         QueryRunner qr = new QueryRunner();
         List Columns = null;
@@ -205,7 +198,6 @@ public class DbUtil {
      */
     public static DaoQueryListResult getList(Connection conn, String sql,String table, QueryParameter param, Class c){
         String sql1 = String.format("select %s from %s where ",sql,table);;
-
         String sql2 = String.format("select count(*) from %s where ",table);
 
         String condition = param.conditions.toString();
@@ -233,8 +225,6 @@ public class DbUtil {
             if(param.pagination.need) {
                 result.total = qr.query(conn, sql2, new ScalarHandler<Long>(), values);
             }
-            System.out.println("getList===sql=="+sql1);
-            System.out.println("getList===sql=="+sql2);
         }catch (SQLException e){
             result.success = false;
             result.msg = "数据库操作错误";
@@ -282,15 +272,14 @@ public class DbUtil {
         String condition = conditions.toString();
         sql += condition;
         sql += " limit 1 ";
-        System.out.println(sql);
+
         DaoQueryResult result = new DaoQueryResult();
         QueryRunner qr = new QueryRunner();
         try {
             List<Object> values = conditions.extraValues();
-            System.out.println("get==sql=="+sql);
             result.data = qr.query(conn, sql, new BeanHandler<>(c),values.toArray());
             result.success = true;
-            System.out.println(result.data);
+
         }catch (SQLException e){
             result.success = false;
             result.msg = "数据库操作错误";
@@ -313,7 +302,7 @@ public class DbUtil {
         String condition = conditions.toString();
         sql += condition;
         sql += order;
-        System.out.println("getLast==="+sql);
+
         DaoQueryResult result = new DaoQueryResult();
         QueryRunner qr = new QueryRunner();
         try {
@@ -344,7 +333,6 @@ public class DbUtil {
         QueryRunner qr = new QueryRunner();
         try {
             List<Object> values = conditions.extraValues();
-            System.out.println("get==sql=="+sql);
             id= qr.query(conn, sql, new ScalarHandler<>(),values.toArray());
         }catch (SQLException e){
             e.printStackTrace();

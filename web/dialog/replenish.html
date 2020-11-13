@@ -235,7 +235,6 @@
                 for (var i in member){
                     employees[i] = {"eid":member[i].id,"baseM":member[i].baseM,"baseS":member[i].baseS};
                 }
-                console.log(employees);
                 iSettlement.backup(start, end,sid,JSON.stringify(employees),function () {
                     layer.msg("补缴成功");
                 });

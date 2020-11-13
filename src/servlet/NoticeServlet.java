@@ -60,10 +60,7 @@ public class NoticeServlet extends HttpServlet {
     private String insert(Connection conn,HttpServletRequest request) {
         //获取前台传过来的求职者的信息封装成对象Client
         Notice notice = JSON.parseObject(request.getParameter("notice"), Notice.class);
-        System.out.println(notice);
-
         DaoUpdateResult res = NoticeService.insert(conn, notice);
-
         return JSONObject.toJSONString(res);
     }
     //删除公告
@@ -77,7 +74,6 @@ public class NoticeServlet extends HttpServlet {
     //修改公告
     private String update(Connection conn,HttpServletRequest request) {
         Notice notice = JSON.parseObject(request.getParameter("notice"), Notice.class);
-        System.out.println("前台传来的数据："+notice);
         DaoUpdateResult res = NoticeService.update(conn, notice);
 
         return JSONObject.toJSONString(res);
@@ -94,7 +90,6 @@ public class NoticeServlet extends HttpServlet {
     //获取公告
     private String get(Connection conn,HttpServletRequest request){
         long id = Long.parseLong(request.getParameter("id"));
-        System.out.println("客户id="+id);
         DaoQueryResult res = NoticeService.get(conn,id);
         return  JSONObject.toJSONString(res);
     }

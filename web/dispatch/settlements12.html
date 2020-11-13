@@ -250,7 +250,6 @@
                     ,yes: function(index, layero){
                         var settlement = window["layui-layer-iframe" + index].callbackData();
                         layer.close(index);
-                        console.log(settlement);
                         if (settlement.month != null&&settlement.month!=""&&settlement.ccid!=null&&settlement.ccid!=""){
                             settlement.type = type;//劳务外包结算单
                             insertSettlement(settlement);

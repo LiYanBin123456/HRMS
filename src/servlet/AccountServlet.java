@@ -86,7 +86,6 @@ public class AccountServlet extends HttpServlet {
         parameter.addCondition("role","=",user.getRole());
         parameter.addCondition("rid","=",user.getRid());
         DaoQueryListResult res = AccountService.getList(conn,parameter);
-        System.out.println(JSONObject.toJSONString(res));
         return JSONObject.toJSONString(res);
     }
 

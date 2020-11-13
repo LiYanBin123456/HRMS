@@ -891,7 +891,6 @@ public class FileServlet extends HttpServlet {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        System.out.println(result);
         return result;
     }
 
