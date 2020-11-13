@@ -162,7 +162,7 @@ var columns_employee_internal = [[
     {field:'degree', title: '学历',width:80,templet:function (d) { return array_value2text(degrees_employee,d.degree) }},
     {field:'phone', title: '联系电话',width:120},
     {field:'department', title: '所属部门'},
-    {title: '操作', toolbar: '<div><a class="layui-btn layui-btn-xs" lay-event="op"><i class="layui-icon">&#xe65f;</i></a></div>',width:80,fixed:"right"}
+    {title: '操作', toolbar: '#bar_employee',width:240,fixed:"right"}
 ]];
 
 //外派员工管理字段集合

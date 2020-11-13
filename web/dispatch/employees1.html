@@ -43,11 +43,9 @@
 
         <!--行内工具栏-->
         <script type="text/html" id="bar_employee">
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="addContract"><i class="layui-icon layui-icon-edit"></i>添加合同</a>
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dimission"><i class="layui-icon layui-icon-edit"></i> 离职</a>
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="retire"><i class="layui-icon layui-icon-edit"></i> 退休</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 移入人才库</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">详情</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="addContract">添加合同</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="more">…</a>
         </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
@@ -66,8 +64,6 @@
             param_query.setPagination(1,10);
             //弹出菜单项
             var menu_data=[
-                {'data':'detail','title':'详情'},
-                {'data':'addContract','title':'添加合同'},
                 {'data':'leave','title':'离职'},
                 {'data':'retire','title':'退休'},
                 {'data':'del','title':'移入人才库'}
@@ -115,25 +111,30 @@
                 //行内工具栏事件响应
                 table.on('tool(filter_tb_employee)', function(obj){ //注：tool 是工具条事件名，filter_tb_employee是table原始容器的属性lay-filter="对应的值"
                     var employee = obj.data; //获得当前行数据
-                    popMenu.open(menu_data,false,function(d){
-                        switch (d.data){
-                            case "detail":
-                                showDetailDlg(employee);
-                                break;
-                            case "addContract":
-                                addContract(employee);
-                                break;
-                            case "leave":
-                                showLeaveDlg(employee);
-                                break;
-                            case "retire":
-                                showRetireDlg(employee);
-                                break;
-                            case "del":
-                                del(employee);
-                                break;
-                        }
-                    });
+                    switch (obj.event){
+                        case "detail":
+                            showDetailDlg(employee);
+                            break;
+                        case "addContract":
+                            addContract(employee);
+                            break;
+                        case "more":
+                            popMenu.open(menu_data,false,function(d){
+                                switch (d.data){
+                                    case "leave":
+                                        showLeaveDlg(employee);
+                                        break;
+                                    case "retire":
+                                        showRetireDlg(employee);
+                                        break;
+                                    case "del":
+                                        del(employee);
+                                        break;
+                                }
+                            });
+                            break;
+                    }
+
                 });
 
                 //顶部工具栏事件处理

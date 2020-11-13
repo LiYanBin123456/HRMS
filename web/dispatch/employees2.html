@@ -9,6 +9,7 @@
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
         <link rel="stylesheet" href="../css/font.css">
         <link rel="stylesheet" href="../css/xadmin.css">
+        <link rel="stylesheet" href="../layui/extend/pop-menu/pop-menu.css">
         <script src="../layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
         <style>
@@ -51,11 +52,9 @@
 
         <!--行内工具栏-->
         <script type="text/html" id="bar_employee">
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="addContract"><i class="layui-icon layui-icon-edit"></i>添加合同</a>
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="dimission"><i class="layui-icon layui-icon-edit"></i> 离职</a>
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="retire"><i class="layui-icon layui-icon-edit"></i> 退休</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 移入人才库</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">详情</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="addContract">添加合同</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="more"> …</a>
         </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
@@ -70,19 +69,30 @@
             var layer;//弹出窗口
             var element;
             var upload;
+            var popMenu;
             var param_query = new QueryParam();
             param_query.setPagination(1,10);
+            //弹出菜单项
+            var menu_data=[
+                {'data':'leave','title':'离职'},
+                {'data':'retire','title':'退休'},
+                {'data':'del','title':'移入人才库'}
+            ];
             $(function () {
                 loadLayuiModule();
             });
 
             function loadLayuiModule() {
-                layui.use(['table','form','upload','element','layer','laypage'], function() {
+                layui.extend({
+                    index: 'lib/index' //主入口模块
+                    , popMenu: '../layui/extend/pop-menu/pop-menu'
+                }).use(['table','form','upload','element','layer','laypage','popMenu'], function() {
                     table = layui.table;
                     layer = layui.layer;
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
+                    popMenu = layui.popMenu;
                     initPage();
                 });
             }
@@ -140,14 +150,20 @@
                         case "addContract":
                             addContract(employee);
                             break;
-                        case "dimission":
-                            showDimissionDlg(employee);
-                            break;
-                        case "retire":
-                            showRetireDlg(employee);
-                            break;
-                        case "del":
-                            del(employee);
+                        case "more":
+                            popMenu.open(menu_data,false,function(d){
+                                switch (d.data){
+                                    case "leave":
+                                        showLeaveDlg(employee);
+                                        break;
+                                    case "retire":
+                                        showRetireDlg(employee);
+                                        break;
+                                    case "del":
+                                        del(employee);
+                                        break;
+                                }
+                            });
                             break;
                     }
                 });
