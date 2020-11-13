@@ -9,6 +9,7 @@
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
         <link rel="stylesheet" href="../css/font.css">
         <link rel="stylesheet" href="../css/xadmin.css">
+        <link rel="stylesheet" href="../layui/extend/pop-menu/pop-menu.css">
         <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
         <script src="../layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
@@ -58,13 +59,8 @@
         <!--行内工具栏-->
         <script type="text/html" id="bar_settlement">
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">明细</a>
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log">日志</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="save">保存</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="saveAs">另存为</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="commit">提交</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reset">重置</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="charge">扣款</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="save">保存</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="more"> …</a>
         </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
@@ -76,9 +72,19 @@
             var layer;//弹出窗口
             var element;
             var laydate;
+            var popMenu;
             var param_query = new QueryParam();
             param_query.setOrder("id",true);
             param_query.setPagination(1,10);
+            //弹出菜单项
+            var menu_data=[
+                {'data':'log','title':'日志'},
+                {'data':'saveAs','title':'另存为'},
+                {'data':'commit','title':'提交'},
+                {'data':'reset','title':'重置'},
+                {'data':'charge','title':'扣款'},
+                {'data':'delete','title':'删除'}
+            ];
 
             var type = 2;//区分结算单类型  0 普通结算单  1 人事代理结算单 小时工结算单
 
@@ -87,12 +93,16 @@
             });
 
             function loadLayuiModule() {
-                layui.use(['table','form','element','layer','laypage','laydate'], function() {
+                layui.extend({
+                    index: 'lib/index' //主入口模块
+                    , popMenu: '../layui/extend/pop-menu/pop-menu'
+                }).use(['table','form','element','layer','laypage','laydate','popMenu'], function() {
                     table = layui.table;
                     layer = layui.layer;
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
+                    popMenu = layui.popMenu;
                     laydate = layui.laydate;
                     initPage();
                 });
@@ -152,26 +162,32 @@
                         case "detail":
                             showDetailDlg(settlement);
                             break;
-                        case "log":
-                            showLogs(settlement);
-                            break;
-                        case 'saveAs':
-                            showCopyDlg(settlement);
-                            break;
                         case 'save':
                             save(settlement);
                             break;
-                        case 'commit':
-                            commit(settlement);
-                            break;
-                        case 'reset':
-                            reset(settlement);
-                            break;
-                        case 'charge':
-                            charge(settlement);
-                            break;
-                        case 'delete':
-                            del(settlement);
+                        case "more":
+                            popMenu.open(menu_data,false,function(d){
+                                switch (d.data){
+                                    case "log":
+                                        showLogs(settlement);
+                                        break;
+                                    case 'saveAs':
+                                        showCopyDlg(settlement);
+                                        break;
+                                    case 'commit':
+                                        commit(settlement);
+                                        break;
+                                    case 'reset':
+                                        reset(settlement);
+                                        break;
+                                    case 'charge':
+                                        charge(settlement);
+                                        break;
+                                    case 'delete':
+                                        del(settlement);
+                                        break;
+                                }
+                            });
                             break;
                     }
                 });
