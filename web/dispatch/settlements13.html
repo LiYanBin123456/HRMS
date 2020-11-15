@@ -28,30 +28,30 @@
     </head>
 
     <body class="layui-layout-body">
-        <form class="layui-form searchbox">
-            <div class="layui-input-inline">
-                <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
-            </div>
-            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-            <div class="layui-input-inline">
-                <input type="text" class="layui-input" autocomplete="off" id="filter_month" lay-filter="filter_month" placeholder="按月份过滤">
-            </div>
-            <div class="layui-input-inline">
-                <select name="status" lay-filter="select" >
-                    <option value="">按状态过滤</option>
-                    <option value="0">编辑</option>
-                    <option value="1">提交</option>
-                    <option value="2">一审</option>
-                    <option value="3">二审</option>
-                    <option value="4">三审</option>
-                    <option value="5">扣款</option>
-                    <option value="6">发放</option>
-                </select>
-            </div>
-        </form>
         <!--顶部工具栏-->
         <div class="layui-hide" id="top_bar_settlement">
             <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
+            <form class="layui-form searchbox">
+                <div class="layui-input-inline">
+                    <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
+                </div>
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" autocomplete="off" id="filter_month" lay-filter="filter_month" placeholder="按月份过滤">
+                </div>
+                <div class="layui-input-inline">
+                    <select name="status" lay-filter="select" >
+                        <option value="">按状态过滤</option>
+                        <option value="0">编辑</option>
+                        <option value="1">提交</option>
+                        <option value="2">一审</option>
+                        <option value="3">二审</option>
+                        <option value="4">三审</option>
+                        <option value="5">扣款</option>
+                        <option value="6">发放</option>
+                    </select>
+                </div>
+            </form>
         </div>
         <table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>
         <div class="layui-table-page" id="pager"></div>
@@ -65,6 +65,7 @@
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/queryParam.js"></script>
+        <script src="../js/util.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -108,19 +109,18 @@
             }
 
             function initPage() {
-                initTable();
                 laydate.render({
                     elem: '#filter_month'
                     ,type: 'month'
                     ,change: function(value, date, endDate){
                         var month = value+"-01";
                         param_query.addCondition("month","=",month);
-                        getSettlements();
+                        getSettlements(true);
                     },
                     done: function(value, date, endDate){
                         if (!value){
                             param_query.removeCondition("month");
-                            getSettlements();
+                            getSettlements(true);
                         }
                     }
                 });
@@ -131,14 +131,17 @@
                     }else {
                         param_query.addCondition("status", "=", data.value);
                     }
-                    getSettlements();
+                    getSettlements(true);
                 });
                 form.on('submit(search)', function (data) {//模糊搜索
                     var keyword = data.field.keyword;
                     param_query.addKeyword(keyword);
-                    getSettlements();
+                    getSettlements(true);
                     return false; //阻止表单跳转
                 });
+
+                initTable();
+                getSettlements(false);
             }
 
             function initTable() {
@@ -210,11 +213,12 @@
                 getSettlements();
             }
 
-            function getSettlements() {
+            function getSettlements(reserve) {
                 param_query.addCondition("type","=",type);//查询代缴工资结算单
                 iSettlement.getList(param_query,0,function (result) {
                     table.reload('tbl_settlement', {
-                        data:result.rows
+                        data:result.rows,
+                        reserve:reserve
                     });
                     //初始化分页
                     laypage.render({
