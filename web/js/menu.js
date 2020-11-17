@@ -151,7 +151,7 @@ function getMenuHtml(items, permission) {
             }
         }
     }
-    if(bit_test(permission,"1073741824,1073741824")){
+    if(bit_test(permission,"524288,0")){
         html1 += "<li><a onclick=\"xadmin.add_tab('账户管理','accounts.html')\"><i class=\"iconfont\">&#xe6a7</i><cite>账户管理</cite></a></li>";
     }
     return html1;
@@ -166,6 +166,13 @@ function bit_test(str1,str2) {
     var n21 = Number(s2[0]);
     var n22 = Number(s2[1]);
     return ((n11&n21)!=0)||((n12&n22)!=0);
+}
+
+function calc(str) {
+    var s = str.split(",");
+    var n1 = Number(s[0]);
+    var n2 = Number(s[1]);
+    return n1*4294967296+n2;
 }
 
 //字符串格式化,用法：String.format("x={0},y={1}",x,y);

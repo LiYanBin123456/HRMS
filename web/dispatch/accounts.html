@@ -150,7 +150,7 @@
 
             //打开编辑对话框
             function showPermissionlDlg(account) {
-                var content = "../dialog/permission.html?category=1&id="+account.id+"&permission="+account.permission;
+                var content = "../dialog/permission.html?account="+encodeURIComponent(JSON.stringify(account));
                 layer.open({
                     title:account.nickname+"权限编辑",
                     type: 2,

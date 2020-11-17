@@ -18,8 +18,8 @@
             <legend>角色</legend>
         </fieldset>
         <form lay-filter="form_role" class="layui-form">
-            <input type="radio" lay-filter="role" name="role" value="0" title="客服" checked>
-            <input type="radio" lay-filter="role" name="role" value="1073741824" title="管理员">
+            <input type="radio" lay-filter="role" name="role" value="0,0" title="客服" checked>
+            <input type="radio" lay-filter="role" name="role" value="524288,0" title="管理员">
         </form>
         <fieldset class="layui-elem-field layui-field-title">
             <legend>权限分配</legend>
@@ -34,7 +34,7 @@
 <script src="../js/fieldSet.js"></script>
 <script src="../js/menu.js"></script>
 <script>
-    var id;//账号id
+    var account;//账号id
     var form;
     var tree;
 
@@ -59,12 +59,12 @@
 
 
     function initData() {
-        id = $.query.get("id");
-        var permission = Number($.query.get("permission"));
-        if(bit_test(permission & 1073741824) == 0){
-            form.val('form_role',{role:0});
+        account = JSON.parse($.query.get("account"));
+        var permission = account.permissionString;
+        if(bit_test(permission,"524288,0")){
+            form.val('form_role',{role:"524288,0"});
         }else{
-            form.val('form_role',{role:1073741824});
+            form.val('form_role',{role:"0,0"});
         }
 
         var checkeds = [];
@@ -74,12 +74,12 @@
             if(children){
                 for(var j in children) {
                     var child = children[j];
-                    if(child.id & permission){
+                    if(bit_test(child.id ,permission)){
                         checkeds.push(child.id);
                     }
                 }
             }else{
-                if(item.id & permission){
+                if(bit_test(child.id ,permission)){
                     checkeds.push(item.id);
                 }
             }
@@ -94,16 +94,16 @@
             var subItems = items[i].children
             if(subItems){
                 for(var j in subItems){
-                    permit += subItems[j].id;
+                    permit += calc(subItems[j].id);
                 }
             }else {
-                permit += items[i].id;
+                permit += calc(items[i].id);
             }
         }
         var data = form.val('form_role');
-        permit += Number(data.role);
+        permit += calc(data.role);
 
-        iAccount.permit(id,permit,function (result) {
+        iAccount.permit(account.id,permit,function (result) {
             layer.msg("权限分配成功！");// 获得frame索引
             var index = parent.layer.getFrameIndex(window.name);
             //关闭当前frame

@@ -107,7 +107,7 @@
         iAccount.get(function (result) {
             var account = result.data;
             $("#loginName").html(account.nickname);
-            var html = loadMenuDispatch(account.permission);
+            var html = loadMenuDispatch(account.permissionString);
             $("#nav").html(html);
         });
     }

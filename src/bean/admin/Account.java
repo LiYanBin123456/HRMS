@@ -79,7 +79,7 @@ public class Account {
         return permission;
     }
     public String getPermissionString(){
-        return String.format("%d,%d",permission>>32,permission&0xffffffff);
+        return String.format("%d,%d",permission>>32,permission&0xffffffffL);
     }
 
     public void setPermission(long permission) {
@@ -87,7 +87,7 @@ public class Account {
     }
 
     public boolean isAdmin(){
-        return (permission & (1L<<50)) != 0;
+        return (permission & (1L<<51)) != 0;
     }
     @Override
     public String toString() {
