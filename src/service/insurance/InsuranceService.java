@@ -93,7 +93,6 @@ public class InsuranceService {
         } catch (WriteException e) {
             e.printStackTrace();
         }
-        ConnUtil.closeConnection(conn);
     }
 
     //导出停保社保单
@@ -143,7 +142,6 @@ public class InsuranceService {
         } catch (WriteException e) {
             e.printStackTrace();
         }
-        ConnUtil.closeConnection(conn);
     }
 
 
@@ -313,7 +311,6 @@ public class InsuranceService {
         } catch (WriteException e) {
             e.printStackTrace();
         }
-        ConnUtil.closeConnection(conn);
     }
 
     //导出停保医保单
@@ -364,7 +361,6 @@ public class InsuranceService {
         } catch (WriteException e) {
             e.printStackTrace();
         }
-        ConnUtil.closeConnection(conn);
     }
 
     public static void exportFund(Connection conn, HttpServletResponse response, File file) {
@@ -417,7 +413,6 @@ public class InsuranceService {
         } catch (WriteException e) {
             e.printStackTrace();
         }
-        ConnUtil.closeConnection(conn);
     }
 
     /**

@@ -4,20 +4,17 @@ import java.sql.Date;
 
 //结算单基类
 public class Settlemet {
+    public static final byte STATUS_EDITING = 0;//编辑
+    public static final byte STATUS_COMMITED = 1;//提交
+    public static final byte STATUS_CHECKED1 = 2;//初审
+    public static final byte STATUS_CHECKED2 = 3;//终审
+    public static final byte STATUS_PAYED1 = 4;//扣款
+    public static final byte STATUS_PAYED2 = 5;//发放
     private long id;//
     private long did;//派遣方id
     private long cid;//合作客户id
     private String ccid;//合同id
     private Date month;//月份
-    /**状态
-     0_编辑
-     1_提交
-     2_一审
-     3_二审
-     4_终审
-     5_扣款
-     6_发放
-     */
     private byte status;
     /**来源
      0_派遣单位录入

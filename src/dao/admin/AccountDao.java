@@ -49,7 +49,7 @@ public class AccountDao {
         return  DbUtil.delete(conn,"account",conditions);
     }
 
-    public static DaoUpdateResult permit(Connection conn, long id,int permission) {
+    public static DaoUpdateResult permit(Connection conn, long id,long permission) {
         String sql = "update account set permission=? where id=?";
         Object []params = {permission,id};
         //调用DbUtil封装的update方法

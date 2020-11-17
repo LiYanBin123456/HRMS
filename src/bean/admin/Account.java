@@ -12,12 +12,12 @@ public class Account {
     private String password;//密码
     private byte role;//账号角色 0_平台管理员 1_派遣单位 2_合作单位 3_员工
     private long rid;//所属公司id 平台默认为0 用role和rid可以确定账户属于那个派遣单位或者合作单位
-    private  int permission;//权限使用位运算
+    private  long permission;//权限使用位运算
 
     public Account() {
     }
 
-    public Account(long id, String nickname, String username, String password, byte role, long rid, int permission) {
+    public Account(long id, String nickname, String username, String password, byte role, long rid, long permission) {
         this.id = id;
         this.nickname = nickname;
         this.username = username;
@@ -75,16 +75,19 @@ public class Account {
         this.rid = rid;
     }
 
-    public int getPermission() {
+    public long getPermission() {
         return permission;
     }
+    public String getPermissionString(){
+        return String.format("%d,%d",permission>>32,permission&0xffffffffL);
+    }
 
-    public void setPermission(int permission) {
+    public void setPermission(long permission) {
         this.permission = permission;
     }
 
     public boolean isAdmin(){
-        return (permission & (1<<30)) != 0;
+        return (permission & (1L<<51)) != 0;
     }
     @Override
     public String toString() {

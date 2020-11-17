@@ -45,10 +45,11 @@
         </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
-        <script src="../js/jquery.params.js"></script>
         <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.params.js"></script>
         <script src="../js/queryParam.js"></script>
         <script>
+            var type = $.query.get("type");
             var category = 0; //显示待审核和全部
             var table;//数据表格对象
             var laypage;//分页对象
@@ -158,12 +159,24 @@
 
             //删除结算单明细
             function check(settlement) {
-                layer.confirm('审核'+settlement.name+"的结算单明细，审核成功后结算单状态变成终审", {icon: 3, title:'删除'}, function(index){
-                    iSettlement.check(settlement.id,0,4,function () {
+                var content = "../dialog/check.html";
+                layer.open({
+                    title:"审核["+settlement.name+"]",
+                    type: 2,
+                    area: ['300px', '300px'],
+                    content: content,
+                    btn: ['提交', '取消']
+                    ,yes: function(index, layero){
+                        var result = window["layui-layer-iframe" + index].callbackData();
                         layer.close(index);
-                        getSettlements(0);
-                        layer.msg('审核成功');
-                    });
+                        iSettlement.check(0,settlement.id,type,result.pass,result.reason,function () {
+                            layer.close(index);
+                            getSettlements();
+                            layer.msg('审核成功');
+                        });
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
                 });
             }
         </script>

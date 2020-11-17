@@ -84,28 +84,28 @@ var columns_accounts  = [[
 
 //合作单位合作客户管理字段集合
 var columns_cooperation_partner = [[
-    {field:'name', title: '客户名称'},
-    {field:'category', title: '客户性质',width:200,templet:function (d) { return array_value2text(categorys_cooperation,d.category) }},
-    {field:'contact', title: '联系人',width:200},
-    {field:'phone', title: '联系电话',width:200},
+    {field:'name', title: '客户名称',width:200},
+    {field:'category', title: '客户性质',width:100,templet:function (d) { return array_value2text(categorys_cooperation,d.category) }},
+    {field:'contact', title: '联系人',width:100},
+    {field:'phone', title: '联系电话',width:120},
     {fixed: 'right', title: '操作', toolbar: '#bar_cooperation',width:300}
 ]];
 
 //合作单位潜在客户管理字段集合
 var columns_cooperation_potential = [[
-    {field:'name', title: '客户名称'},
-    {field:'category', title: '客户性质',width:200,templet:function (d) { return array_value2text(categorys_cooperation,d.category) }},
-    {field:'contact', title: '联系人',width:200},
-    {field:'phone', title: '联系电话',width:200},
+    {field:'name', title: '客户名称',width:200},
+    {field:'category', title: '客户性质',width:100,templet:function (d) { return array_value2text(categorys_cooperation,d.category) }},
+    {field:'contact', title: '联系人',width:100},
+    {field:'phone', title: '联系电话',width:120},
     {fixed: 'right', title: '操作', toolbar: '#bar_potential',width:300}
 ]];
 
 //合作单位流失客户管理字段集合
 var columns_cooperation_loss = [[
-    {field:'name', title: '客户名称'},
-    {field:'category', title: '客户性质',width:200,templet:function (d) { return array_value2text(categorys_cooperation,d.category) }},
-    {field:'contact', title: '联系人',width:200},
-    {field:'phone', title: '联系电话',width:200},
+    {field:'name', title: '客户名称',width:200},
+    {field:'category', title: '客户性质',width:100,templet:function (d) { return array_value2text(categorys_cooperation,d.category) }},
+    {field:'contact', title: '联系人',width:100},
+    {field:'phone', title: '联系电话',width:120},
     {fixed: 'right', title: '操作', toolbar: '#bar_loss',width:300}
 ]];
 
@@ -676,11 +676,16 @@ var reason_employee = [
 var status_settlement = [
     {value:0,text:"编辑"},
     {value:1,text:"提交"},
-    {value:2,text:"一审"},
-    {value:3,text:"二审"},
-    {value:4,text:"终审"},
-    {value:5,text:"扣款"},
-    {value:6,text:"发放"}
+    {value:2,text:"初审"},
+    {value:3,text:"终审"},
+    {value:4,text:"扣款"},
+    {value:5,text:"发放"}
+];
+
+var type_settlement = [
+    {value:0,text:"正常"},
+    {value:1,text:"补缴"},
+    {value:2,text:"补差"}
 ];
 var status_insurance = [
     {value:0,text:"未参保"},
@@ -689,7 +694,6 @@ var status_insurance = [
     {value:3,text:"拟停"},
     {value:4,text:"停保"},
     {value:5,text:"异常"}
-
 ];
 var period_product = [
     {value:0,text:"上班时间"},
