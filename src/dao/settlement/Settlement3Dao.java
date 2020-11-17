@@ -60,9 +60,15 @@ public class Settlement3Dao {
      * @param status  几审
      * @return
      */
-    public static DaoUpdateResult check(Connection conn, long id,byte status) {
-        String sql = String.format("update settlement3 set status=%s where id = ?",status);
-        Object []params = {id};
+    public static DaoUpdateResult check(Connection conn, long id,byte type,boolean result) {
+        byte status;
+        if(type==0){
+            status = result?Settlement1.STATUS_CHECKED1:Settlement1.STATUS_EDITING;
+        }else{
+            status = result?Settlement1.STATUS_CHECKED2:Settlement1.STATUS_COMMITED;
+        }
+        String sql = "update settlement3 set status=? where id = ?";
+        Object []params = {status,id};
         return DbUtil.update(conn,sql,params);
     }
 

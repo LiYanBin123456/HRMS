@@ -158,12 +158,24 @@
 
             //删除结算单明细
             function check(settlement) {
-                layer.confirm('审核'+settlement.name+"的结算单明细，审核成功后结算单状态变成终审", {icon: 3, title:'删除'}, function(index){
-                    iSettlement.check(settlement.id,0,4,function () {
+                var content = "../dialog/check.html";
+                layer.open({
+                    title:"审核["+settlement.name+"]",
+                    type: 2,
+                    area: ['300px', '300px'],
+                    content: content,
+                    btn: ['提交', '取消']
+                    ,yes: function(index, layero){
+                        var result = window["layui-layer-iframe" + index].callbackData();
                         layer.close(index);
-                        getSettlements(0);
-                        layer.msg('审核成功');
-                    });
+                        iSettlement.check(settlement.id,0,4,function () {
+                            layer.close(index);
+                            getSettlements();
+                            layer.msg('审核成功');
+                        });
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
                 });
             }
         </script>

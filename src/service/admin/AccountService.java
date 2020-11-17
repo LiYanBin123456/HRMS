@@ -57,7 +57,7 @@ public class AccountService {
         return AccountDao.delete(conn,id);
     }
 
-    public static DaoUpdateResult permit(Connection conn, long id,int permission) {
+    public static DaoUpdateResult permit(Connection conn, long id,long permission) {
         return AccountDao.permit(conn,id,permission);
     }
 }

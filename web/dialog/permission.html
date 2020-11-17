@@ -61,7 +61,7 @@
     function initData() {
         id = $.query.get("id");
         var permission = Number($.query.get("permission"));
-        if((permission & 1073741824) == 0){
+        if(bit_test(permission & 1073741824) == 0){
             form.val('form_role',{role:0});
         }else{
             form.val('form_role',{role:1073741824});

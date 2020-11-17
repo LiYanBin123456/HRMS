@@ -147,38 +147,27 @@ public class Settlement2Service {
     }
 
     //审核
-    public static DaoUpdateResult check(Connection conn, long id, long aid, byte status) {
+    public static DaoUpdateResult check(Connection conn, long id, byte type,boolean result,String reason,Account user) {
         /**流程
          *1、修改结算单状态为提交
          * 2、根据aid查询出管理员
          * 2、插入日志
          */
-        DaoUpdateResult result = Settlement2Dao.check(conn,id,status);
-        if(result.success){//修改成功，插入日志
-            DaoQueryResult result1 = AccountDao.get(conn, aid);
-            if(result1.success){
-                Account account = (Account) result1.data;
+        DaoUpdateResult res = Settlement2Dao.check(conn,id,type,result);
+        if(res.success){//修改成功，插入日志
                 //封装log信息
-                String operator = account.getNickname()+"("+account.getId()+")";
-                String content = null;
-                if(status == 2){//判断是几审
-                    content = "一审";
-                }else if(status == 3){
-                    content = "二审";
-                }else {
-                    content = "终审";
-                }
-                Log log = new Log();
-                log.setSid(id);
-                log.setType((byte) 1);
-                log.setOperator(operator);
-                log.setTime(time);
-                log.setContent(content);
-                //插入log信息
-                LogDao.insert(conn,log);
-            }
+            String operator = user.getNickname()+"("+user.getId()+")";
+            String content = (type==0?"初审":"终审")+(result?"通过":("不通过:"+reason));
+            Log log = new Log();
+            log.setSid(id);
+            log.setType((byte) 1);
+            log.setOperator(operator);
+            log.setTime(time);
+            log.setContent(content);
+            //插入log信息
+            LogDao.insert(conn,log);
         }
-        return result;
+        return res;
     }
 
     //重置

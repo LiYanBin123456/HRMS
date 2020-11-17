@@ -390,22 +390,24 @@ public class SettlementServlet extends HttpServlet {
     private String check(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
+        byte type = Byte.parseByte(request.getParameter("status"));
+        boolean result = Boolean.parseBoolean(request.getParameter("result"));
+        String reason = request.getParameter("reason");
         Account user = (Account) request.getSession().getAttribute("account");
         long aid = user.getId();
-        byte status = Byte.parseByte(request.getParameter("status"));
-        DaoUpdateResult result = null;
+        DaoUpdateResult res = null;
         switch (category){
             case 0://普通结算单明细
-                result = Settlement1Service.check(conn,id,aid,status);
+                res = Settlement1Service.check(conn,id,type,result,reason,user);
                 break;
             case 1://小时工结算单明细
-                result = Settlement2Service.check(conn,id,aid,status);
+                res = Settlement2Service.check(conn,id,type,result,reason,user);
                 break;
             case 2://商业保险结算单明细
-                result = Settlement3Service.check(conn,id,aid,status);
+                res = Settlement3Service.check(conn,id,type,result,reason,user);
                 break;
         }
-        return JSONObject.toJSONString(result);
+        return JSONObject.toJSONString(res);
     }
 
     //重置

@@ -52,12 +52,18 @@ public class Settlement2Dao {
      * 审核，修改结算单状态为几审
      * @param conn
      * @param id 要审核的结算单id
-     * @param status  几审
+     * @param type  初审/终审
      * @return
      */
-    public static DaoUpdateResult check(Connection conn, long id,byte status) {
-        String sql = String.format("update settlement2 set status=%s where id = ?",status);
-        Object []params = {id};
+    public static DaoUpdateResult check(Connection conn, long id,byte type,boolean result) {
+        byte status;
+        if(type==0){
+            status = result?Settlement1.STATUS_CHECKED1:Settlement1.STATUS_EDITING;
+        }else{
+            status = result?Settlement1.STATUS_CHECKED2:Settlement1.STATUS_COMMITED;
+        }
+        String sql = "update settlement2 set status=? where id = ?";
+        Object []params = {status,id};
         return DbUtil.update(conn,sql,params);
     }
 

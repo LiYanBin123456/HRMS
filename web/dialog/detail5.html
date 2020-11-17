@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+        <link rel="stylesheet" href="../css/font.css">
+        <link rel="stylesheet" href="../css/xadmin.css">
+        <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+        <script src="../layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../js/xadmin.js"></script>
+        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+        <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <style>
+            .searchbox{
+                margin-left:570px;
+                display:inline;
+                width:300px;
+            }
+        </style>
+    </head>
+
+    <body class="layui-layout-body">
+        <div class="dialog-content">
+            <!--顶部工具栏-->
+            <button class="layui-btn" id="download" onclick="download()" style="display: none"><i class="layui-icon layui-icon-edit"></i>下载复印件</button>
+            <div class="layui-hide" id="top_bar_detail">
+                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 新增</button>
+                <button class="layui-btn layui-btn-sm" lay-event="import"><i class="layui-icon "></i> 批量新增</button>
+                <button class="layui-btn layui-btn-sm" lay-event="download"><i class="layui-icon "></i> 下载模板</button>
+                <button class="layui-btn layui-btn-sm" lay-event="save" onclick="save()"><i class="layui-icon "></i> 保存</button>
+            </div>
+            <table id="tbl_detail" lay-filter="filter_tb_detail"></table>
+            <div class="layui-table-page" id="pager"></div>
+
+            <!--行内工具栏-->
+            <script type="text/html" id="bar_detail">
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 替换</a>
+            </script>
+        </div>
+        <script src="../js/fieldSet.js"></script>
+        <script src="../js/interface.js"></script>
+        <script src="../js/jquery.params.js"></script>
+        <script src="../js/queryParam.js"></script>
+        <script>
+            var table;//数据表格对象
+            var laypage;//分页对象
+            var form;//分页对象
+            var layer;//弹出窗口
+            var element;
+
+
+            var param_query = new QueryParam();
+            param_query.setPagination(1,10);
+            param_query.setOrder("id",true);
+
+            var sid = $.query.get("id");//结算单id
+            var cid = $.query.get("cid");//合作单位id
+            var pid = $.query.get("pid");//产品保险id
+
+            $(function () {
+                loadLayuiModule();
+            });
+
+            function loadLayuiModule() {
+                layui.use(['table','form','element','layer','upload','laypage'], function() {
+                    table = layui.table;
+                    layer = layui.layer;
+                    element = layui.element;
+                    laypage = layui.laypage;
+                    form = layui.form;
+                    initPage();
+                });
+            }
+
+            function initPage() {
+                initTable();
+            }
+
+            function initTable() {
+
+                //初始化数据表格
+                table.render({
+                    elem: '#tbl_detail',
+                    toolbar: '#top_bar_detail', //开启头部工具栏，并为其绑定左侧模板
+                    title: '列表',
+                    cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                    cols: columns_detail3,
+                    id: 'tbl_detail'
+                });
+
+                //行内工具栏事件响应
+                table.on('tool(filter_tb_detail)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                    var detail = obj.data; //获得当前行数据
+                    switch (obj.event){
+                        case "del":
+                            del(detail);
+                            break;
+                    }
+                });
+
+                //单元格编辑
+                table.on('edit(filter_tb_detail)', function(obj){
+                    var value = obj.value //得到修改后的值
+                    ,data = obj.data //得到所在行所有键值
+                    ,field = obj.field; //得到字段
+                    layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+                  });
+
+                //顶部工具栏事件处理
+                table.on('toolbar(filter_tb_detail)', function(obj){
+                    switch(obj.event){
+                        case 'insert':
+                            showInsertDlg();
+                            break;
+                        case 'import':
+                           showImportDlg();
+                            break;
+                        case 'download':
+                            $("#download").click();
+                            break;
+                };
+                });
+                getDetails();
+          }
+
+            function getDetails() {
+                iSettlement.getDetails(param_query,sid,2,function (result) {
+                    table.reload('tbl_detail', {
+                        data:result.rows
+                    });
+                    //初始化分页
+                    laypage.render({
+                        elem: 'pager'
+                        ,curr:param_query.pagination.page
+                        ,count: result.total //数据总数
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                        ,jump: function(obj,first){
+                            //首次不执行
+                            if(!first){
+                                param_query.setPagination(obj.curr,obj.limit);
+                                getDetails();
+                            }
+                        }
+                    });
+                });
+            }
+
+            //模糊查找
+
+
+            //核对导入的数据
+            function showImportDlg() {
+                var content = "importDetails3.html";
+                layer.open({
+                    title:"核对明细",
+                    type: 2,
+                    area: ['80%', '80%'],
+                    content: content,
+                    btn: ['添加', '关闭']
+                    ,yes: function(index, layero){
+                        var detail3s = window["layui-layer-iframe" + index].callbackData();
+                        iSettlement.importDetails(sid,detail3s,2,function () {
+                            layer.close(index);
+                            layer.msg("导入成功");
+                            getDetails();
+                        })
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
+                });
+            }
+            //打开添加对话框
+            function showInsertDlg() {
+                var param = new QueryParam();
+                param.addCondition("cid","=",cid);
+                param.addCondition("type","=",1);
+                param.addCondition("status","=",0);
+                param.addCondition("category","!=",3);
+                var content = "member.html?param="+encodeURIComponent(JSON.stringify(param));
+                layer.open({
+                    title:"添加明细",
+                    type: 2,
+                    area: ['80%', '80%'],
+                    content: content,
+                    btn: ['添加', '关闭']
+                    ,yes: function(index, layero){
+                        var member = window["layui-layer-iframe" + index].callbackData();
+                        layer.close(index);
+                        var  details = new Array(member.length)
+                        for (var i in member){
+                            details[i] = {"eid":member[i].id,"pid":pid};
+                        }
+                        iSettlement.importDetails(sid,JSON.stringify(details),2,function () {
+                            layer.msg("添加成功")
+                        });
+                        getDetails();
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
+                });
+            }
+
+
+            //删除公告
+            function del(detail) {
+                layer.confirm('确定删除'+detail.cname+"的结算单明细吗", {icon: 3, title:'删除'}, function(index){
+                    iSettlement.deleteDetail(detail.id,2,function () {
+                        layer.close(index);
+                        getDetails();
+                        layer.msg('删除成功');
+                    });
+                });
+            }
+
+            //导出
+            function exports(){
+                var url = "/hrms/verify/file?op=exportDetail3&id="+sid;
+                var form = $('<form method="POST"></form>');
+                form.attr('action', url);
+                form.appendTo($('body'));
+                form.submit();
+                form.remove();
+            }
+
+            //下载
+            function download() {
+                iFile.exist(6,0,function (result) {
+                    if(!result.exist){
+                        layer.msg("附件不存在或已删除");
+                        return;
+                    }
+
+                    var url = "/hrms/verify/file?op=downloadModel&category=1";
+                    var form = $('<form method="POST"></form>');
+                    form.attr('action', url);
+                    form.appendTo($('body'));
+                    form.submit();
+                    form.remove();
+                })
+            }
+
+            //保存
+            function  save() {
+                var details = layui.table.cache.tbl_detail;
+                var msg = "保存后结算单将自动计算保费？";
+                var title = "保存结算单明细";
+                layer.confirm(msg, {icon: 3, title:title}, function(index){
+                    iSettlement.updateDetails(details,2,function () {
+                        layer.close(index);
+                        layer.msg("修改成功");
+                        getDetails();
+                    })
+                });
+            };
+        </script>
+    </body>
+</html>

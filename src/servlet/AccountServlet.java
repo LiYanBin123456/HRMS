@@ -119,7 +119,7 @@ public class AccountServlet extends HttpServlet {
 
     //设置权限
     private String permit(Connection conn, HttpServletRequest request) {
-        int permission = Integer.parseInt(request.getParameter("permission"));
+        long permission = Long.parseLong(request.getParameter("permission"));
         long id = Long.parseLong(request.getParameter("id"));
         DaoUpdateResult res =AccountService.permit(conn,id,permission);
         return JSONObject.toJSONString(res);

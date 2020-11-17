@@ -18,10 +18,6 @@
     <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
     <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
-    <script>
-        // 是否开启刷新记忆tab功能
-        // var is_remember = false;
-    </script>
 </head>
 <body class="index">
 <!-- 顶部开始 -->
@@ -33,7 +29,6 @@
     </div>
     <ul class="layui-nav left fast-add" lay-filter="">
         <li class="layui-nav-item">
-            <a href="javascript:;">+新增</a>
             <dl class="layui-nav-child">
                 <!-- 二级菜单 -->
                 <dd>
@@ -67,65 +62,6 @@
 <div class="left-nav">
     <div id="side-nav">
         <ul id="nav">
-
-                    <li>
-                        <a onclick="xadmin.add_tab('员工管理','employees.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>员工管理</cite></a>
-                    </li>
-            <li>
-                <a href="javascript:;">
-                    <i class="iconfont">&#xe70b;</i>
-                    <cite>结算管理</cite>
-                    <i class="iconfont nav_right">&#xe697;</i></a>
-                <ul class="sub-menu">
-                    <li>
-                        <a onclick="xadmin.add_tab('普通结算单','settlements1.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>普通结算单</cite></a>
-                    </li>
-                    <li>
-                        <a onclick="xadmin.add_tab('小时工结算单','settlements2.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>小时工结算单</cite></a>
-                    </li>
-                    <li>
-                        <a onclick="xadmin.add_tab('商业保险结算单','settlements3.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>商业保险结算单</cite></a>
-                    </li>
-                    <li>
-                        <a onclick="xadmin.add_tab('结算单审核','check.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>普通结算单审核</cite></a>
-                    </li>
-                    <li>
-                        <a onclick="xadmin.add_tab('结算单审核','check.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>小时工结算单审核</cite></a>
-                    </li>
-                    <li>
-                        <a onclick="xadmin.add_tab('结算单审核','check.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>商业保险结算单审核</cite></a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a onclick="xadmin.add_tab('账户管理','accounts.html')">
-                    <i class="iconfont">&#xe6a7;</i>
-                    <cite>账户管理</cite></a>
-            </li>
-            <li>
-                <a onclick="xadmin.add_tab('账户管理','accounts.html')">
-                    <i class="iconfont">&#xe6a7;</i>
-                    <cite>考勤管理</cite></a>
-            </li>
-            <li>
-                <a onclick="xadmin.add_tab('账户管理','accounts.html')">
-                    <i class="iconfont">&#xe6a7;</i>
-                    <cite>部门管理</cite></a>
-            </li>
         </ul>
     </div>
 </div>
@@ -159,9 +95,9 @@
 <style id="theme_style"></style>
 <!-- 右侧主体结束 -->
 <!-- 中部结束 -->
-
 <script src="../js/jquery.min.js"></script>
 <script src="../js/interface.js"></script>
+<script src="../js/menu.js"></script>
 <script>
     $(function () {
         getLoginInfo();
@@ -169,7 +105,10 @@
 
     function getLoginInfo() {
         iAccount.get(function (result) {
-            $("#loginName").html(result.data.nickname);
+            var account = result.data;
+            $("#loginName").html(account.nickname);
+            var html = loadMenuCooperation(account.permission);
+            $("#nav").html(html);
         });
     }
 
