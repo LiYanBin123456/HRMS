@@ -17,12 +17,11 @@
 <body class="layui-layout-body" style="padding: 10px;">
 <form class="layui-form">
     <div class="layui-form-item">
-        <input type="checkbox" name="result" lay-skin="switch" lay-text="通过|不通过" checked>
+        <input type="checkbox" lay-skin="switch" lay-text="通过|不通过" lay-filter="switch_pass" checked>
     </div>
     <div class="layui-form-item">
-        <textarea name="reason" placeholder="不通过理由" class="layui-textarea"></textarea>
+        <textarea name="reason" placeholder="不通过理由" class="layui-textarea layui-hide" onkeyup="changeReason(this)"></textarea>
     </div>
-    <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
 </form>
 
 <script src="../js/fieldSet.js"></script>
@@ -31,13 +30,13 @@
 <script src="../js/jquery.params.js"></script>
 <script src="../js/queryParam.js"></script>
 <script>
-    var member;//存储选中的员工
+    var result = {pass:true};//审核结果
     var form;//分页对象
     var element;
 
     //向调用页面返回选中的员工
     var callbackData = function () {
-        return member;
+        return result;
     };
 
     $(function () {
@@ -45,68 +44,28 @@
     });
 
     function loadLayuiModule() {
-        layui.use(['table','form','element','layer','laypage'], function() {
-            table = layui.table;
+        layui.use(['form','element','layer'], function() {
             layer = layui.layer;
             element = layui.element;
-            laypage = layui.laypage;
             form = layui.form;
             initPage();
         });
     }
 
     function initPage() {
-        initTable();
-        form.on('submit(search)', function (data) {
-            var keyword = data.field.keyword;
-            param_query.addKeyword(keyword);
-            getMember();
-            return false;
+        form.on('switch(switch_pass)', function(data){
+            result.pass = data.elem.checked;
+            if(result.pass){
+                $("[name=reason]").addClass("layui-hide");
+            }else{
+                $("[name=reason]").removeClass("layui-hide");
+            }
         });
     }
-
-
-    function initTable() {
-        //初始化数据表格
-        table.render({
-            elem: '#tbl_member',
-            title: '列表',
-            cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-            cols: columns_member,
-            id: 'tbl_member'
-        });
-        table.on('checkbox(filter_tb_member)', function(obj){
-            member = table.checkStatus('tbl_member').data;
-        });
-        getMember();
+    
+    function changeReason(o) {
+        result.reason = o.value;
     }
-
-    /**
-     * 查询出派遣到该单位的员工
-     * 约束条件有该合作单位cid，员工类型type，用工性质category，在职状态status
-     */
-    function getMember() {
-        iEmployee.getList(param_query,1,function (result) {
-            table.reload('tbl_member', {
-                data:result.rows
-            });
-            laypage.render({
-                elem: 'pager'
-                ,curr: param_query.pagination.page
-                ,count: result.total //数据总数
-                ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                ,jump: function(obj,first){
-                    //首次不执行
-                    if(!first){
-                        param_query.setPagination(obj.curr,obj.limit);
-                        getMember();
-                    }
-                }
-            });
-        });
-    }
-
-
 
 </script>
 </body>

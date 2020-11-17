@@ -41,14 +41,17 @@
         <!--行内工具栏-->
         <script type="text/html" id="bar_settlement">
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>明细</a>
+            {{#  if((type==0 && d.status==1)||(type==1 && d.status==2)){ }}
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="check"><i class="layui-icon layui-icon-edit"></i>审核</a>
+            {{#  } }}
         </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
-        <script src="../js/jquery.params.js"></script>
         <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.params.js"></script>
         <script src="../js/queryParam.js"></script>
         <script>
+            var type = $.query.get("type");
             var category = 0; //显示待审核和全部
             var table;//数据表格对象
             var laypage;//分页对象
@@ -168,7 +171,7 @@
                     ,yes: function(index, layero){
                         var result = window["layui-layer-iframe" + index].callbackData();
                         layer.close(index);
-                        iSettlement.check(settlement.id,0,4,function () {
+                        iSettlement.check(0,settlement.id,type,result.pass,result.reason,function () {
                             layer.close(index);
                             getSettlements();
                             layer.msg('审核成功');

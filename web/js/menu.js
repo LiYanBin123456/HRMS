@@ -157,7 +157,6 @@ function getMenuHtml(items, permission) {
     return html1;
 }
 
-
 function bit_test(str1,str2) {
     var s1 = str1.split(",");
     var s2 = str2.split(",");

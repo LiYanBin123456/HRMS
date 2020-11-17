@@ -935,12 +935,14 @@ var InterfaceSettlement = function () {
      * 审核结算单
      * @param id 结算单id
      * @param category 0-普通结算单 1-小时工结算单 2-商业保险结算单
-     * @param status 2-一审 3-二审 4-终审
+     * @param type 0-初审 1-终审
+     * @param pass true-通过 false-不通过
+     * @param reason 不通过的原因
      * @param success
      * @param fail
      */
-    this.check = function (id,category,status,success,fail) {
-        var para = {op: "check",id:id, category:category,status:status};
+    this.check = function (category,id,type,pass,reason,success,fail) {
+        var para = {op: "check",id:id, category:category,type:type,pass:pass,reason:reason};
         access(url,para,1,success,fail);
     };
     /**

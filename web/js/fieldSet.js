@@ -676,11 +676,10 @@ var reason_employee = [
 var status_settlement = [
     {value:0,text:"编辑"},
     {value:1,text:"提交"},
-    {value:2,text:"一审"},
-    {value:3,text:"二审"},
-    {value:4,text:"终审"},
-    {value:5,text:"扣款"},
-    {value:6,text:"发放"}
+    {value:2,text:"初审"},
+    {value:3,text:"终审"},
+    {value:4,text:"扣款"},
+    {value:5,text:"发放"}
 ];
 var status_insurance = [
     {value:0,text:"未参保"},
