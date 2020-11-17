@@ -94,13 +94,14 @@ public class Calculate {
 
         detail.setFund1(FundBase*FundPer);//个人公积金
         detail.setFund2(FundBase*FundPer);//个人公积金
+        ConnUtil.closeConnection(conn);
         return  detail;
     }
 
 
     /**
      * 计算普通结算单明细
-     * @param detail //结算单明细
+     * @param d //结算单明细
      * @param medicare //所在地市的医保规则
      * @param social //所在地市的社保规则
      * @param setting //员工社保设置
@@ -108,7 +109,7 @@ public class Calculate {
      * @param deduct   //所属员工的个税专项扣除
      * @return detail1 //计算好的结算单
      */
-    public static Detail1 calculateDetail1(Settlement1 settlement1,Detail1 detail, RuleMedicare medicare, RuleSocial social, EnsureSetting setting, MapSalary mapSalary, Deduct deduct){
+    public static Detail1 calculateDetail1(Settlement1 settlement1,Detail1 d, RuleMedicare medicare, RuleSocial social, EnsureSetting setting, MapSalary mapSalary, Deduct deduct,ViewContractCooperation vc){
         //获取医保基数
         int SettingM = setting.getSettingM();//员工医保设置
         float baseM = 0;
@@ -144,51 +145,83 @@ public class Calculate {
         //结算单类型不是代缴工资就需要计算单五险一金
         if(settlement1.getType()!=2){
             //计算医保
-            detail = calculateMedicare(detail,setting,baseM,medicare);
+            d = calculateMedicare(d,setting,baseM,medicare);
             //计算社保
-            detail = calculateSocial(detail,setting,baseS,social);
+            d = calculateSocial(d,setting,baseS,social);
             //设置公积金
-            detail.setFund1(FundBase*FundPer);//个人公积金
-            detail.setFund2(FundBase*FundPer);//单位公积金
+            d.setFund1(FundBase*FundPer);//个人公积金
+            d.setFund2(FundBase*FundPer);//单位公积金
         }
         //计算应发工资
-        float payable =detail.getBase();//初始是基本工资
+        float payable =d.getBase();//初始是基本工资
         if(mapSalary!=null){//如果有自定义工资
-           payable = calculatePayable(payable,detail,mapSalary);
+           payable = calculatePayable(payable,d,mapSalary);
         }
-        detail.setPayable(payable);
+        //应发=应发-个人五险一金+个人核收补缴
+        payable= payable-d.getPension1()-d.getMedicare1()-d.getUnemployment1()-d.getDisease1()-d.getFund1()+d.getExtra1();
+        d.setPayable(payable);
 
         //计算个税
-        double tax =calculateTax(detail,deduct);
-        detail.setTax((float) tax);
+        double tax =calculateTax(d,deduct);
+        d.setTax((float) tax);
 
         //计算国家减免项=单位养老+单位失业+单位工伤-工伤补充
-        float free = detail.getPension2()+detail.getUnemployment2()+detail.getInjury()-(detail.getInjury()==0?0:social.getExtra());
-        detail.setFree(free);
+        float free = d.getPension2()+d.getUnemployment2()+d.getInjury()-(d.getInjury()==0?0:social.getExtra());
+        d.setFree(free);
 
-         float paid = 0;
-
+        float paid = 0;
          //根据结算单类型，计算实发工资
         switch (settlement1.getType()){
             case 0://派遣结算单
-                //计算实发=应发-个人五险一金-个税+补收核减（个人）
-                paid = payable-detail.getPension1()-detail.getMedicare1()-detail.getUnemployment1()-detail.getDisease1()-detail.getFund1()-(float) tax+detail.getExtra1();
+                //计算实发=应发-个税
+                paid = payable-(float) tax;
                 break;
             case 1://外包结算单
-                //计算实发=应发-个人五险一金-个税+补收核减（个人）
-                paid = payable-detail.getPension1()-detail.getMedicare1()-detail.getUnemployment1()-detail.getDisease1()-detail.getFund1()-(float) tax+detail.getExtra1();
+                //计算实发=应发-个税
+                paid = payable-(float) tax;
                 break;
             case 2://代发工资
-               //计算实发=应发-个税+补收核减（个人） 不需要计算五险一金
-                paid = payable-(float) tax+detail.getExtra1();
+                //计算实发=应发-个税 不需要计算五险一金 这里还有问题
+                paid = payable-(float) tax;
                 break;
             case 3://代缴社保,只需要五险一金，其他为零
                 paid=0;
-                detail.setPayable(0);
+                d.setPayable(0);
                 break;
         }
-        detail.setPaid(paid);
-        return  detail;
+        int type = vc.getStype();//合同服务项目中的类型
+        int category = vc.getCategory();//合同服务项目中的结算方式
+        int invoice = vc.getInvoice();//合同基础信息中的发票类型
+        float per = vc.getPer()/100;//税费比例（选择增值税专用发票（全额）需要用到）
+        float value = vc.getValue();//结算值，根据结算方式的不同，代表的意义不同
+        float manage = 0;
+        float tax2 = 0;
+        switch (type){
+            case 0://劳务派遣
+                if(category==0){//按人数收取的结算方式
+                    manage=value;//管理费=管理费
+                    if(invoice==0){//增值税专用发票（全额）
+                        //税费=（应发+单位五险一金+管理费）
+                        tax2 = (payable+d.getPension2()+d.getUnemployment2()+d.getMedicare2()+d.getDisease2()+d.getInjury()+d.getBirth()+d.getFund2()+manage-d.getFree())*per;
+                    }
+                }else if(category==1){//按比例收取的结算方式
+                    //此时服务项目中value为比例所以需要转成小数
+                    //管理费 = （应发总额+单位五险一金-国家减免）*比例（从服务项目中的比例）
+                    manage = (payable+d.getPension2()+d.getUnemployment2()+d.getMedicare2()+d.getDisease2()+d.getInjury()-d.getFree())*(value/100);
+                    tax2=0;
+                }else {//按外包整体核算方式
+
+                }
+                break;
+            case 1://人事代理
+                tax2=0;
+                manage = value;//管理费=人数*单价
+                break;
+        }
+        d.setTax2(tax2);
+        d.setManage(manage);
+        d.setPaid(paid);
+        return  d;
     }
 
     /**
@@ -278,7 +311,6 @@ public class Calculate {
         for(ViewDetail1 v:detail1s){
             //应发总额+=明细中的应发总额
            salary+=v.getPayable();
-
            if(settlement1.getType()==3){//代缴社保结算单
                //单位社保总额+=（单位失业+单位养老+单位工商）+个人社保
                social+=(v.getPension2()+v.getUnemployment2()+v.getInjury()+v.getPension1()+v.getUnemployment1());
@@ -294,7 +326,6 @@ public class Calculate {
                //单位公积金总额+=单位公积金
                fund+=v.getFund2();
            }
-
             //补收核减
            extra+=v.getExtra2();
            //国家减免
@@ -404,8 +435,8 @@ public class Calculate {
     private static double calculateTax(Detail1 v, Deduct deduct){
         double tax;//个税 = 应税额*税率（A） – 速算扣除（B） – 累计已预缴税额（C）
         float taxDue;//应税额 = 累计收入额（D）+ 本期收入 – 个税累计专项扣除（E）– 累计减除费用（F）
-        float income1;//本期收入 = 本月应发（G）– 本月个人五险一金（H）+ 补收核减（个人）
-        income1 = v.getPayable() - v.getPension1()-v.getMedicare1()-v.getUnemployment1()-v.getDisease1()-v.getFund1()+v.getExtra1();
+        float income1;//本期收入 = 本月应发（G）
+        income1 = v.getPayable();
         taxDue=deduct.getIncome()+income1-deduct.getDeduct()-deduct.getFree();
 
         float rate = 0;//税率
@@ -448,7 +479,6 @@ public class Calculate {
      * @return 计算好的结算单明细
      */
     public static Detail2 calculatteDetail2(Detail2 d,Deduct deduct){
-
         float payable;//应付金额
         float paid;//实付金额
        //应付=工时*单价-水电-餐费-住宿费-保险+其他1+其他2
