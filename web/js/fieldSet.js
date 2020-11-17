@@ -147,12 +147,12 @@ var columns_contract_cooperation = [[
 
 //员工合同字段集合
 var columns_contract_employee  = [[
-    {field:'cardId', title: '身份证号码',width:170},
+    {field:'cardId', title: '身份证号码'},
     {field:'name', title: '姓名',width:100},
     {field:'start', title: '生效时间',width:100,templet:function (d) {return format_date(d.start)}},
     {field:'end', title: '到期时间',width:100,templet:function (d) {return format_date(d.end)}},
     {field:'times', title: '签订次数',width:80},
-    { title: '操作', toolbar: '#bar_contract'}
+    { title: '操作', toolbar: '#bar_contract',width:200}
 ]];
 
 //内部员工管理字段集合
@@ -162,7 +162,7 @@ var columns_employee_internal = [[
     {field:'degree', title: '学历',width:80,templet:function (d) { return array_value2text(degrees_employee,d.degree) }},
     {field:'phone', title: '联系电话',width:120},
     {field:'department', title: '所属部门'},
-    {title: '操作', toolbar: '#bar_employee',width:240,fixed:"right"}
+    {title: '操作', toolbar: '#bar_employee',width:220,fixed:"right"}
 ]];
 
 //外派员工管理字段集合
@@ -173,7 +173,7 @@ var columns_employee_expatriate = [[
     {field:'degree', title: '学历',width:100,templet:function (d) { return array_value2text(degrees_employee,d.degree) }},
     {field:'phone', title: '联系电话',width:120},
     {field:'cname', title: '派遣单位'},
-    { title: '操作', toolbar: '#bar_employee',width:400,fixed:"right"}
+    { title: '操作', toolbar: '#bar_employee',width:220,fixed:"right"}
 ]];
 
 
@@ -222,7 +222,7 @@ var columns_settlement1  = [[
     {field:'extra', title: '附加',width:70,edit: 'text'},
     {field:'summary', title: '总额',width:80},
     {field:'comments', title: '备注',width:200,edit: 'text'},
-    {title:'操作', toolbar: '#bar_settlement',width:500,fixed:"right"}
+    {title:'操作', toolbar: '#bar_settlement',width:220,fixed:"right"}
 ]];
 
 var columns_settlement1_check  = [[
@@ -278,7 +278,7 @@ var columns_settlement10  = [[
 
 //小时工结算单字段集合
 var columns_settlement2  = [[
-    {field:'name', title: '用工企业',width:180,fixed:"left"},
+    {field:'name', title: '用工企业',fixed:"left"},
     {field:'month', title: '月份',width:90,templet:function (d) {return format_month(d.month)}},
     {field:'hours', title: '总工时',width:70},
     {field:'price', title: '单价',width:60,edit: 'text'},
@@ -286,7 +286,7 @@ var columns_settlement2  = [[
     {field:'extra', title: '附加',width:70},
     {field:'summary', title: '总额',width:80},
     {field:'status', title: '状态',width:70,templet:function (d) { return array_value2text(status_settlement,d.status) }},
-    {title: '操作', toolbar: '#bar_settlement',width:500,fixed:"right"}
+    {title: '操作', toolbar: '#bar_settlement',width:220,fixed:"right"}
 ]];
 
 //面向合作小时工结算单字段集合
@@ -308,7 +308,7 @@ var columns_settlement3  = [[
     {field:'pname', title: '保险产品',width:180},
     {field:'price', title: '保费',width:100,edit: 'text'},
     {field:'status', title: '状态',width:100,templet:function (d) { return array_value2text(status_settlement,d.status) }},
-    {title: '操作', toolbar: '#bar_settlement',width:480,fixed:"right"}
+    {title: '操作', toolbar: '#bar_settlement',width:220,fixed:"right"}
 ]];
 
 //面向合作商业保险结算单字段集合

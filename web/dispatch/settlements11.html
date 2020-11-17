@@ -9,6 +9,7 @@
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
         <link rel="stylesheet" href="../css/font.css">
         <link rel="stylesheet" href="../css/xadmin.css">
+        <link rel="stylesheet" href="../layui/extend/pop-menu/pop-menu.css">
         <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
         <script src="../layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
@@ -27,30 +28,30 @@
     </head>
 
     <body class="layui-layout-body">
-        <form class="layui-form searchbox">
-            <div class="layui-input-inline">
-                <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
-            </div>
-            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-            <div class="layui-input-inline">
-                <input type="text" class="layui-input" autocomplete="off" id="filter_month" lay-filter="filter_month" placeholder="按月份过滤">
-            </div>
-            <div class="layui-input-inline">
-                <select name="status" lay-filter="select" >
-                    <option value="-1">按状态过滤</option>
-                    <option value="0">编辑</option>
-                    <option value="1">提交</option>
-                    <option value="2">一审</option>
-                    <option value="3">二审</option>
-                    <option value="4">三审</option>
-                    <option value="5">扣款</option>
-                    <option value="6">发放</option>
-                </select>
-            </div>
-        </form>
         <!--顶部工具栏-->
         <div class="layui-hide" id="top_bar_settlement">
             <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
+            <form class="layui-form searchbox">
+                <div class="layui-input-inline">
+                    <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
+                </div>
+                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                <div class="layui-input-inline">
+                    <input type="text" class="layui-input" autocomplete="off" id="filter_month" lay-filter="filter_month" placeholder="按月份过滤">
+                </div>
+                <div class="layui-input-inline">
+                    <select name="status" lay-filter="select" >
+                        <option value="-1">按状态过滤</option>
+                        <option value="0">编辑</option>
+                        <option value="1">提交</option>
+                        <option value="2">一审</option>
+                        <option value="3">二审</option>
+                        <option value="4">三审</option>
+                        <option value="5">扣款</option>
+                        <option value="6">发放</option>
+                    </select>
+                </div>
+            </form>
         </div>
         <table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>
         <div class="layui-table-page" id="pager"></div>
@@ -58,17 +59,13 @@
         <!--行内工具栏-->
         <script type="text/html" id="bar_settlement">
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">明细</a>
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log">日志</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="save">保存</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="saveAs">另存为</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="commit">提交</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="reset">重置</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="charge">扣款</a>
-            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="save">保存</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="more"> …</a>
         </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/queryParam.js"></script>
+        <script src="../js/util.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -76,8 +73,18 @@
             var layer;//弹出窗口
             var element;
             var laydate;
+            var popMenu;
             var param_query = new QueryParam();
             param_query.setPagination(1,10);
+            //弹出菜单项
+            var menu_data=[
+                {'data':'log','title':'日志'},
+                {'data':'saveAs','title':'另存为'},
+                {'data':'commit','title':'提交'},
+                {'data':'reset','title':'重置'},
+                {'data':'charge','title':'扣款'},
+                {'data':'delete','title':'删除'}
+            ];
 
             var type = 0;//区分结算单类型  0 派遣  1 外包  2 代发工资  3 代缴社保
 
@@ -86,31 +93,34 @@
             });
 
             function loadLayuiModule() {
-                layui.use(['table','form','element','layer','laypage','laydate'], function() {
+                layui.extend({
+                    index: 'lib/index' //主入口模块
+                    , popMenu: '../layui/extend/pop-menu/pop-menu'
+                }).use(['table','form','element','layer','laypage','laydate','popMenu'], function() {
                     table = layui.table;
                     layer = layui.layer;
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
+                    popMenu = layui.popMenu;
                     laydate = layui.laydate;
                     initPage();
                 });
             }
 
             function initPage() {
-                initTable();
                 laydate.render({
                     elem: '#filter_month'
                     ,type: 'month'
                     ,change: function(value, date, endDate){
                         var month = value+"-01";
                         param_query.addCondition("month","=",month);
-                        getSettlements();
+                        getSettlements(true);
                     },
                     done: function(value, date, endDate){
                         if (!value){
                             param_query.removeCondition("month");
-                            getSettlements();
+                            getSettlements(true);
                         }
                     }
                 });
@@ -121,14 +131,17 @@
                     }else {
                         param_query.addCondition("status", "=", data.value);
                     }
-                    getSettlements();
+                    getSettlements(true);
                 });
                 form.on('submit(search)', function (data) {//模糊搜索
                     var keyword = data.field.keyword;
                     param_query.addKeyword(keyword);
-                    getSettlements();
+                    getSettlements(true);
                     return false; //阻止表单跳转
                 });
+
+                initTable();
+                getSettlements(false);
             }
 
             function initTable() {
@@ -154,29 +167,35 @@
                         case "detail":
                             showDetailDlg(settlement);
                             break;
-                        case "log":
-                            showLogs(settlement);
-                            break;
-                        case "del":
-                            del(settlement);
-                            break;
-                        case 'saveAs':
-                            showCopyDlg(settlement);
-                            break;
                         case 'save':
                             save(settlement);
                             break;
-                        case 'commit':
-                            commit(settlement);
-                            break;
-                        case 'reset':
-                            reset(settlement);
-                            break;
-                        case 'charge':
-                            charge(settlement);
-                            break;
-                        case 'delete':
-                            del(settlement);
+                        case "more":
+                            popMenu.open(menu_data,false,function(d){
+                                switch (d.data){
+                                    case "log":
+                                        showLogs(settlement);
+                                        break;
+                                    case "del":
+                                        del(settlement);
+                                        break;
+                                    case 'saveAs':
+                                        showCopyDlg(settlement);
+                                        break;
+                                    case 'commit':
+                                        commit(settlement);
+                                        break;
+                                    case 'reset':
+                                        reset(settlement);
+                                        break;
+                                    case 'charge':
+                                        charge(settlement);
+                                        break;
+                                    case 'delete':
+                                        del(settlement);
+                                        break;
+                                }
+                            });
                             break;
                     }
                 });
@@ -193,11 +212,12 @@
                 getSettlements();
             }
 
-            function getSettlements() {
+            function getSettlements(reserve) {
                 param_query.addCondition("type","=",type);//查询派遣结算单
                 iSettlement.getList(param_query,0,function (result) {
                     table.reload('tbl_settlement', {
-                        data:result.rows
+                        data:result.rows,
+                        reserve:reserve
                     });
                     //初始化分页
                     laypage.render({
