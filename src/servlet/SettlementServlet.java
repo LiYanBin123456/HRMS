@@ -94,6 +94,7 @@ public class SettlementServlet extends HttpServlet {
                 break;
             case "exportBank"://导出银行卡
                 exportBank(conn, request,response);
+                ConnUtil.closeConnection(conn);
                 return;
             case "getLogs"://查询日志
                 result = getLogs(conn, request);

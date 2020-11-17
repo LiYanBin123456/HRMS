@@ -65,6 +65,7 @@ public class InsuranceServlet extends HttpServlet {
                 break;
             case "export"://导出参保单
                 export(conn,request,response);
+                ConnUtil.closeConnection(conn);
                 return;
         }
         ConnUtil.closeConnection(conn);

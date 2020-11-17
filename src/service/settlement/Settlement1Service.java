@@ -662,7 +662,6 @@ public class Settlement1Service {
         } catch (WriteException e) {
             e.printStackTrace();
         }
-        ConnUtil.closeConnection(conn);
     }
     //导出农行
     public static void exportBank2(Connection conn, long sid, HttpServletResponse response, File file) {
@@ -720,7 +719,6 @@ public class Settlement1Service {
         } catch (WriteException e) {
             e.printStackTrace();
         }
-        ConnUtil.closeConnection(conn);
     }
 
     //导出浦发
@@ -770,7 +768,6 @@ public class Settlement1Service {
         } catch (WriteException e) {
             e.printStackTrace();
         }
-        ConnUtil.closeConnection(conn);
     }
 
     //导出交通
@@ -821,6 +818,5 @@ public class Settlement1Service {
         } catch (WriteException e) {
             e.printStackTrace();
         }
-        ConnUtil.closeConnection(conn);
     }
 }

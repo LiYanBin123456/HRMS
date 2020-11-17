@@ -1,6 +1,7 @@
 package service.settlement;
 
 import bean.client.MapSalary;
+import bean.contract.ViewContractCooperation;
 import bean.employee.Deduct;
 import bean.employee.Employee;
 import bean.employee.EnsureSetting;
@@ -8,6 +9,7 @@ import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
 import bean.settlement.*;
 import dao.client.MapSalaryDao;
+import dao.contract.ContractDao;
 import dao.employee.DeductDao;
 import dao.employee.EmployeeDao;
 import dao.employee.SettingDao;
@@ -132,9 +134,13 @@ public class Detail1Service {
                 result.msg = "请完善"+employee.getName()+"的个税专项扣除";
                 return result;
             }
+            //获取合同视图
+            //获取合作客户的合同视图
+            ViewContractCooperation vc = (ViewContractCooperation) ContractDao.getViewContractCoop(conn,settlement.getCcid()).data;
+
 
             //计算结算单明细
-            Detail1 detail1 = Calculate.calculateDetail1(settlement,d,medicare,social,setting,mapSalary,deduct);
+            Detail1 detail1 = Calculate.calculateDetail1(settlement,d,medicare,social,setting,mapSalary,deduct,vc);
             detail1List.add(detail1);
         }
         return  Detail1Dao.update(conn,detail1List);
