@@ -40,11 +40,10 @@
                         <option value="">按状态过滤</option>
                         <option value="0">编辑</option>
                         <option value="1">提交</option>
-                        <option value="2">一审</option>
-                        <option value="3">二审</option>
-                        <option value="4">三审</option>
-                        <option value="5">扣款</option>
-                        <option value="6">发放</option>
+                        <option value="2">初审</option>
+                        <option value="3">终审</option>
+                        <option value="4">扣款</option>
+                        <option value="5">发放</option>
                     </select>
                 </div>
                 <div class="layui-input-inline">
@@ -87,8 +86,6 @@
                 {'data':'delete','title':'删除'}
             ];
 
-            var type = 2;//区分结算单类型  0 普通结算单  1 人事代理结算单 小时工结算单
-
             $(function () {
                 loadLayuiModule();
             });
@@ -110,7 +107,6 @@
             }
 
             function initPage() {
-
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
                     param_query.addKeyword(keyword);

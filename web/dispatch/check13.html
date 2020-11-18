@@ -50,13 +50,13 @@
         <script src="../js/queryParam.js"></script>
         <script>
             var type = $.query.get("type");
-            var category = 0; //显示待审核和全部
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
             var layer;//弹出窗口
             var element;
             var param_query = new QueryParam();
+            param_query.addCondition("type","=",2);//添加获取类型为代缴工资的结算单条件
             param_query.setOrder("id",true);
             param_query.setPagination(1,10);
             $(function () {
@@ -87,7 +87,11 @@
                 $("#container").empty();
                 $("#container").append('<table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>');
 
-                category = value;
+                if(value == 0){
+                    param_query.addCondition("status","=",type==0?2:3);
+                }else{
+                    param_query.removeCondition("status")
+                }
                 initTable()
             }
 
@@ -119,12 +123,6 @@
             }
 
             function getSettlements() {
-                if(category == 0){
-                    param_query.addCondition("status","=",3);
-                }else{
-                    param_query.removeCondition("status")
-                }
-                param_query.addCondition("type","=",2);//添加获取类型为代缴工资的结算单条件
                 iSettlement.getList(param_query,0,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows
