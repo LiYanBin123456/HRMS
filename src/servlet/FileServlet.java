@@ -367,12 +367,8 @@ public class FileServlet extends HttpServlet {
         Account user = (Account) session.getAttribute("account");
         long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
 
-        boolean flag=MapSalaryDao.exist(cid,conn).exist;//判断客户是否有自定义工资项
-        List<Items> itemList = new ArrayList<>();
-        if(flag){//如果有
-            MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(cid, conn).data;
-            itemList = mapSalary.getItemList();
-        }
+
+        MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(cid, conn).data;
 
         //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派或者派遣员工，用工性质不是小时工，在职
         QueryParameter parameter = new QueryParameter();
@@ -413,8 +409,9 @@ public class FileServlet extends HttpServlet {
             sheet1.addCell(new Label(13, 0, "单位生育",wcf));
             sheet1.addCell(new Label(14, 0, "单位公积金",wcf));
             sheet1.addCell(new Label(15, 0, "个税",wcf));
-            if(flag){
+            if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){
                 int  c = 0;
+                List<Items> itemList = mapSalary.getItemList();
                 for(int i = 0;i<itemList.size();i++){
                     c = i+16;
                     sheet1.addCell(new Label(c, 0, itemList.get(i).getField(),wcf));
@@ -445,8 +442,9 @@ public class FileServlet extends HttpServlet {
                 sheet1.addCell(new jxl.write.Number(13, index, detail.getBirth()));
                 sheet1.addCell(new jxl.write.Number(14, index, detail.getFund2()));
                 sheet1.addCell(new jxl.write.Number(15, index, 0));
-                if(flag) {//判断客户是否存在自定义字段
+                if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0) {//判断客户是否存在自定义字段
                      int c2 = 0;
+                    List<Items> itemList = mapSalary.getItemList();
                     for (int i = 0; i < itemList.size(); i++) {
                         c2 = i + 16;
                         sheet1.addCell(new jxl.write.Number(c2 , index, 0));
@@ -478,8 +476,9 @@ public class FileServlet extends HttpServlet {
             sheet2.addCell(new Label(0, 14, "birth"));
             sheet2.addCell(new Label(0, 15, "fund2"));
             sheet2.addCell(new Label(0, 16, "tax"));
-            if(flag){
+            if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){
                 int  c = 0;
+                List<Items> itemList = mapSalary.getItemList();
                 for(int i = 0;i<itemList.size();i++){
                     c = i+17;
                     String name = "f"+(i+1);
@@ -509,8 +508,9 @@ public class FileServlet extends HttpServlet {
             sheet2.addCell(new Label(1, 14, "float"));
             sheet2.addCell(new Label(1, 15, "float"));
             sheet2.addCell(new Label(1, 16, "float"));
-            if(flag){
+            if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){
                 int  c = 0;
+                List<Items> itemList = mapSalary.getItemList();
                 for(int i = 0;i<itemList.size();i++){
                     c = i+17;
                     sheet2.addCell(new Label(1, c, "float"));
@@ -540,8 +540,9 @@ public class FileServlet extends HttpServlet {
             sheet2.addCell(new Label(2, 14, "TRUE"));
             sheet2.addCell(new Label(2, 15, "TRUE"));
             sheet2.addCell(new Label(2, 16, "TRUE"));
-            if(flag){
+            if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){
                 int  c = 0;
+                List<Items> itemList = mapSalary.getItemList();
                 for(int i = 0;i<itemList.size();i++){
                     c = i+17;
                     sheet2.addCell(new Label(2, c, "TRUE"));
@@ -565,7 +566,7 @@ public class FileServlet extends HttpServlet {
         response.setHeader("Content-Disposition", "attachment; filename=details1.xls");
 
         long cid = Long.parseLong(request.getParameter("cid"));//获取合作客户的id
-        boolean flag=MapSalaryDao.exist(cid,conn).exist;//判断客户是否有自定义工资项
+        MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(cid, conn).data;//自定义工资
 
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
         QueryParameter parameter = new QueryParameter();
@@ -597,16 +598,13 @@ public class FileServlet extends HttpServlet {
             sheet2.addCell(new Label(0, 1, "员工姓名"));
             sheet2.addCell(new Label(1, 1, "身份证号码"));
             sheet2.addCell(new Label(2, 1, "基本工资"));
-            if(flag){
-                MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(cid,conn).data;
-                String map = mapSalary.getItems();
-                String[] maps = map.split(";");//例如maps[{加班工资,1},{考勤扣款,0}];
+            if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){
+                List<Items> itemList = mapSalary.getItemList();//获取自定义工资项集合
                 int  c = 0;
-                for(int i = 0;i<maps.length;i++){
+                for(int i = 0;i<itemList.size();i++){
                     c = i+3;
-                    String[] value = maps[i].split(",");//例如[加班工资，1]
-                    sheet1.addCell(new Label(c, 1, value[0]));
-                    sheet2.addCell(new Label(c, 1, value[0]));
+                    sheet1.addCell(new Label(c, 1, itemList.get(i).getField()));
+                    sheet2.addCell(new Label(c, 1, itemList.get(i).getField()));
                 }
                 sheet1.addCell(new Label(c+1, 1, "单位养老"));
                 sheet1.addCell(new Label(c+2, 1, "单位医疗"));
@@ -643,8 +641,7 @@ public class FileServlet extends HttpServlet {
                 sheet1.addCell(new Label(12, 1, "核收补减"));
                 sheet1.addCell(new Label(13, 1, "税费"));
                 sheet1.addCell(new Label(14, 1, "汇款总额"));
-                sheet1.addCell(new Label(15, 1, "税费"));
-                sheet1.addCell(new Label(16, 1, "备注"));
+                sheet1.addCell(new Label(15, 1, "备注"));
 
                 sheet2.addCell(new Label(3, 1, "个人养老"));
                 sheet2.addCell(new Label(4, 1, "个人医疗"));
@@ -673,9 +670,8 @@ public class FileServlet extends HttpServlet {
                 sheet2.addCell(new Label(1, index, v.getCardId()));
                 sheet2.addCell(new jxl.write.Number(2, index, v.getBase()));
 
-                if(flag) {//判断客户是否存在自定义字段
+                if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0) {//判断客户是否存在自定义字段
                     float salary = 0;//自定义工资总和
-                    MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(cid, conn).data;
                     List<Items> itemList = mapSalary.getItemList();
                     int c2 = 0;
                     for (int i = 0; i < itemList.size(); i++) {
@@ -694,10 +690,10 @@ public class FileServlet extends HttpServlet {
                         } catch (InvocationTargetException e) {
                             e.printStackTrace();
                         }
-                        if(itemList.get(i).getType()==0){//减项
-                            salary-=Float.parseFloat(value);
-                        }else {//加项
+                        if(itemList.get(i).getType()==0){//加项
                             salary+=Float.parseFloat(value);
+                        }else {//减项
+                            salary-=Float.parseFloat(value);
                         }
 
                         sheet1.addCell(new Label(c2, index, value));
