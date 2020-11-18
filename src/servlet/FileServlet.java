@@ -4,18 +4,22 @@ import bean.admin.Account;
 import bean.client.Items;
 import bean.client.MapSalary;
 
+import bean.contract.Contract;
+import bean.contract.ViewContractCooperation;
 import bean.employee.Employee;
 import bean.employee.ViewEmployee;
 import bean.settlement.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.client.MapSalaryDao;
+import dao.contract.ContractDao;
 import dao.employee.EmployeeDao;
 
 import dao.finance.FinanceDao;
 import dao.settlement.Detail1Dao;
 import dao.settlement.Detail2Dao;
 import dao.settlement.Detail3Dao;
+import dao.settlement.Settlement1Dao;
 import database.*;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
@@ -42,6 +46,8 @@ import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
+
+import static utills.Calculate.calculateManageAndTax2;
 
 @WebServlet(name = "FileServlet",urlPatterns = "/verify/file")
 @MultipartConfig
@@ -659,21 +665,33 @@ public class FileServlet extends HttpServlet {
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid","=",sid);
+        //获取结算单视图
+        ViewSettlement1 vs = (ViewSettlement1) Settlement1Dao.get(conn,sid).data;
+        //获取合作客户视图
+        ViewContractCooperation vc = (ViewContractCooperation) ContractDao.getViewContractCoop(conn,vs.getCcid()).data;
+        //获取结算单明细
         DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
         List< ViewDetail1> detail1s = JSONArray.parseArray(rows, ViewDetail1.class);
+
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("公司汇款明细", 0);
         WritableSheet sheet2 = book.createSheet("个人工资表", 1);
 
-        try {
-            sheet1.addCell(new Label(0, 0, "员工姓名"));
-            sheet1.addCell(new Label(1, 0, "身份证号码"));
-            sheet1.addCell(new Label(2, 0, "基本工资"));
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
 
-            sheet2.addCell(new Label(0, 0, "员工姓名"));
-            sheet2.addCell(new Label(1, 0, "身份证号码"));
-            sheet2.addCell(new Label(2, 0, "基本工资"));
+        try {
+            sheet1.addCell(new Label(0, 0, " "+"九江市杰博人力资源有限公司派遣员工"+vs.getMonth()==null?"":sdf.format(vs.getMonth())+"工资收款明细("+vs.getName()+")"));
+
+            sheet1.addCell(new Label(0, 1, "员工姓名"));
+            sheet1.addCell(new Label(1, 1, "身份证号码"));
+            sheet1.addCell(new Label(2, 1, "基本工资"));
+
+            sheet2.addCell(new Label(0, 0, " "+vs.getName()+vs.getMonth()==null?"":sdf.format(vs.getMonth())+"实发明细"));
+
+            sheet2.addCell(new Label(0, 1, "员工姓名"));
+            sheet2.addCell(new Label(1, 1, "身份证号码"));
+            sheet2.addCell(new Label(2, 1, "基本工资"));
             if(flag){
                 MapSalary mapSalary =  (MapSalary)MapSalaryDao.getLast(cid,conn).data;
                 String map = mapSalary.getItems();
@@ -682,54 +700,65 @@ public class FileServlet extends HttpServlet {
                 for(int i = 0;i<maps.length;i++){
                     c = i+3;
                     String[] value = maps[i].split(",");//例如[加班工资，1]
-                    sheet1.addCell(new Label(c, 0, value[0]));
-                    sheet2.addCell(new Label(c, 0, value[0]));
+                    sheet1.addCell(new Label(c, 1, value[0]));
+                    sheet2.addCell(new Label(c, 1, value[0]));
                 }
-                sheet1.addCell(new Label(c+1, 0, "单位养老"));
-                sheet1.addCell(new Label(c+2, 0, "单位医疗"));
-                sheet1.addCell(new Label(c+3, 0, "单位大病"));
-                sheet1.addCell(new Label(c+4, 0, "单位生育"));
-                sheet1.addCell(new Label(c+5, 0, "单位失业"));
-                sheet1.addCell(new Label(c+6, 0, "单位工伤"));
-                sheet1.addCell(new Label(c+7, 0, "单位公积金"));
-                sheet1.addCell(new Label(c+8, 0, "单位社保合计"));
-                sheet1.addCell(new Label(c+9, 0, "管理费"));
-                sheet1.addCell(new Label(c+10, 0, "核收补减"));
-                sheet1.addCell(new Label(c+12, 0, "回款总额"));
-                sheet1.addCell(new Label(c+13, 0, "备注"));
+                sheet1.addCell(new Label(c+1, 1, "单位养老"));
+                sheet1.addCell(new Label(c+2, 1, "单位医疗"));
+                sheet1.addCell(new Label(c+3, 1, "单位大病"));
+                sheet1.addCell(new Label(c+4, 1, "单位生育"));
+                sheet1.addCell(new Label(c+5, 1, "单位失业"));
+                sheet1.addCell(new Label(c+6, 1, "单位工伤"));
+                sheet1.addCell(new Label(c+7, 1, "单位公积金"));
+                sheet1.addCell(new Label(c+8, 1, "单位社保合计"));
+                sheet1.addCell(new Label(c+9, 1, "管理费"));
+                sheet1.addCell(new Label(c+10,1, "核收补减"));
+                sheet1.addCell(new Label(c+11,1, "税费"));
+                sheet1.addCell(new Label(c+12,1, "汇款总额"));
+                sheet1.addCell(new Label(c+13,1, "备注"));
 
-                sheet2.addCell(new Label(c+1, 0, "个人养老"));
-                sheet2.addCell(new Label(c+2, 0, "个人医疗"));
-                sheet2.addCell(new Label(c+3, 0, "个人失业"));
-                sheet2.addCell(new Label(c+4, 0, "个人大病"));
-                sheet2.addCell(new Label(c+5, 0, "个人公积金"));
-                sheet2.addCell(new Label(c+6, 0, "应发工资"));
-                sheet2.addCell(new Label(c+7, 0, "个税"));
-                sheet2.addCell(new Label(c+8, 0, "实发工资"));
+                sheet2.addCell(new Label(c+1, 1, "个人养老"));
+                sheet2.addCell(new Label(c+2, 1, "个人医疗"));
+                sheet2.addCell(new Label(c+3, 1, "个人失业"));
+                sheet2.addCell(new Label(c+4, 1, "个人大病"));
+                sheet2.addCell(new Label(c+5, 1, "个人公积金"));
+                sheet2.addCell(new Label(c+6, 1, "应发工资"));
+                sheet2.addCell(new Label(c+7, 1, "个税"));
+                sheet2.addCell(new Label(c+8, 1, "实发工资"));
             }else {
-                sheet1.addCell(new Label(3, 0, "单位养老"));
-                sheet1.addCell(new Label(4, 0, "单位医疗"));
-                sheet1.addCell(new Label(5, 0, "单位大病"));
-                sheet1.addCell(new Label(6, 0, "单位生育"));
-                sheet1.addCell(new Label(7, 0, "单位失业"));
-                sheet1.addCell(new Label(8, 0, "单位工伤"));
-                sheet1.addCell(new Label(9, 0, "单位公积金"));
-                sheet1.addCell(new Label(10, 0, "单位社保合计"));
-                sheet1.addCell(new Label(11, 0, "管理费"));
-                sheet1.addCell(new Label(12, 0, "核收补减"));
-                sheet1.addCell(new Label(13, 0, "回款总额"));
-                sheet1.addCell(new Label(14, 0, "备注"));
+                sheet1.addCell(new Label(3, 1, "单位养老"));
+                sheet1.addCell(new Label(4, 1, "单位医疗"));
+                sheet1.addCell(new Label(5, 1, "单位大病"));
+                sheet1.addCell(new Label(6, 1, "单位生育"));
+                sheet1.addCell(new Label(7, 1, "单位失业"));
+                sheet1.addCell(new Label(8, 1, "单位工伤"));
+                sheet1.addCell(new Label(9, 1, "单位公积金"));
+                sheet1.addCell(new Label(10, 1, "单位社保合计"));
+                sheet1.addCell(new Label(11, 1, "管理费"));
+                sheet1.addCell(new Label(12, 1, "核收补减"));
+                sheet1.addCell(new Label(13, 1, "税费"));
+                sheet1.addCell(new Label(14, 1, "汇款总额"));
+                sheet1.addCell(new Label(15, 1, "税费"));
+                sheet1.addCell(new Label(16, 1, "备注"));
 
-                sheet2.addCell(new Label(3, 0, "个人养老"));
-                sheet2.addCell(new Label(4, 0, "个人医疗"));
-                sheet2.addCell(new Label(5, 0, "个人失业"));
-                sheet2.addCell(new Label(6, 0, "个人大病"));
-                sheet2.addCell(new Label(7, 0, "个人公积金"));
-                sheet2.addCell(new Label(8, 0, "应发工资"));
-                sheet2.addCell(new Label(9, 0, "个税"));
-                sheet2.addCell(new Label(10, 0, "实发工资"));
+                sheet2.addCell(new Label(3, 1, "个人养老"));
+                sheet2.addCell(new Label(4, 1, "个人医疗"));
+                sheet2.addCell(new Label(5, 1, "个人失业"));
+                sheet2.addCell(new Label(6, 1, "个人大病"));
+                sheet2.addCell(new Label(7, 1, "个人公积金"));
+                sheet2.addCell(new Label(8, 1, "应发工资"));
+                sheet2.addCell(new Label(9, 1, "个税"));
+                sheet2.addCell(new Label(10, 1, "实发工资"));
             }
-            int index = 1;
+            int index = 2;
+            int type = vc.getStype();//合同服务项目中的类型
+            int category = vc.getCategory();//合同服务项目中的结算方式
+            int invoice = vc.getInvoice();//合同基础信息中的发票类型
+            float per = vc.getPer()/100;//税费比例（选择增值税专用发票（全额）需要用到）
+            float val = vc.getValue();//结算值，根据结算方式的不同，代表的意义不同
+            float manage = 0;
+            float tax2 = 0;
+
             for( ViewDetail1 v:detail1s){
                 sheet1.addCell(new Label(0, index, v.getName()));
                 sheet1.addCell(new Label(1, index, v.getCardId()));
@@ -738,12 +767,13 @@ public class FileServlet extends HttpServlet {
                 sheet2.addCell(new Label(0, index, v.getName()));
                 sheet2.addCell(new Label(1, index, v.getCardId()));
                 sheet2.addCell(new jxl.write.Number(2, index, v.getBase()));
+
                 if(flag) {//判断客户是否存在自定义字段
+                    float salary = 0;//自定义工资总和
                     MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(cid, conn).data;
-                    String map = mapSalary.getItems();
-                    String[] maps = map.split(";");//maps[{加班工资,1},{考勤扣款,0}];
+                    List<Items> itemList = mapSalary.getItemList();
                     int c2 = 0;
-                    for (int i = 0; i < maps.length; i++) {
+                    for (int i = 0; i < itemList.size(); i++) {
                         c2 = i + 3;
                         int in = i + 1;
                         String name = "getF" + in;
@@ -759,6 +789,12 @@ public class FileServlet extends HttpServlet {
                         } catch (InvocationTargetException e) {
                             e.printStackTrace();
                         }
+                        if(itemList.get(i).getType()==0){//减项
+                            salary-=Float.parseFloat(value);
+                        }else {//加项
+                            salary+=Float.parseFloat(value);
+                        }
+
                         sheet1.addCell(new Label(c2, index, value));
                         sheet2.addCell(new Label(c2, index, value));
                     }
@@ -769,9 +805,23 @@ public class FileServlet extends HttpServlet {
                     sheet1.addCell(new jxl.write.Number(c2+5, index, v.getUnemployment2()));
                     sheet1.addCell(new jxl.write.Number(c2+6, index, v.getInjury()));
                     sheet1.addCell(new jxl.write.Number(c2+7, index, v.getFund2()));
+                    //社保合计
                     float sum = v.getPension2()+v.getMedicare2()+v.getDisease2()+v.getBirth()+v.getUnemployment2()
                             +v.getInjury()+v.getFund2();
-                    sheet1.addCell(new jxl.write.Number(c2+7, index, sum));
+                    sheet1.addCell(new jxl.write.Number(c2+8, index, sum));
+                    //计算管理费和税费
+                    HashMap<String,Float> map2 = Calculate.calculateManageAndTax2(type,category,invoice,per,val,manage,tax2,v);
+                    //管理费
+                    sheet1.addCell(new jxl.write.Number(c2+9, index, map2.get("manage")));
+                    //核收补减
+                    sheet1.addCell(new jxl.write.Number(c2+10, index, v.getExtra2()));
+                    //税费
+                    sheet1.addCell(new jxl.write.Number(c2+11, index, map2.get("tax2")));
+                    //汇款总额 = 基本工资+自定义项目+单位社保总额+管理费+税费+（单位）核收补减
+                    float summary = v.getBase()+salary+sum-v.getFree()+manage+tax2+v.getExtra2();
+                    sheet1.addCell(new jxl.write.Number(c2+12, index, summary));
+                    sheet1.addCell(new Label(c2+13, index, v.getComments2()));
+
 
                     sheet2.addCell(new jxl.write.Number(c2+1, index, v.getPension1()));
                     sheet2.addCell(new jxl.write.Number(c2+2, index, v.getMedicare1()));
@@ -782,6 +832,33 @@ public class FileServlet extends HttpServlet {
                     sheet2.addCell(new jxl.write.Number(c2+7, index, v.getTax()));
                     sheet2.addCell(new jxl.write.Number(c2+8, index, v.getPaid()));
                 }else {
+                    sheet1.addCell(new jxl.write.Number(3, index, v.getPension2()));
+                    sheet1.addCell(new jxl.write.Number(4, index, v.getMedicare2()));
+                    sheet1.addCell(new jxl.write.Number(5, index, v.getDisease2()));
+                    sheet1.addCell(new jxl.write.Number(6, index, v.getBirth()));
+                    sheet1.addCell(new jxl.write.Number(7, index, v.getUnemployment2()));
+                    sheet1.addCell(new jxl.write.Number(8, index, v.getInjury()));
+                    sheet1.addCell(new jxl.write.Number(9, index, v.getFund2()));
+                    //社保合计
+                    float sum = v.getPension2()+v.getMedicare2()+v.getDisease2()+v.getBirth()+v.getUnemployment2()
+                            +v.getInjury()+v.getFund2();
+                    sheet1.addCell(new jxl.write.Number(10, index, sum));
+
+                    //计算管理费和税费
+                    HashMap<String,Float> map2 =calculateManageAndTax2(type,category,invoice,per,val,manage,tax2,v);
+                    //管理费
+                    sheet1.addCell(new jxl.write.Number(11, index,  map2.get("manage")));
+                    //核收补减
+                    sheet1.addCell(new jxl.write.Number(12, index, v.getExtra2()));
+                    //税费
+                    sheet1.addCell(new jxl.write.Number(13, index, map2.get("tax2")));
+                    //汇款总额 = 基本工资+单位社保总额+管理费+税费+（单位）核收补减
+                    float summary = v.getBase()+sum-v.getFree()+manage+tax2+v.getExtra2();
+                    sheet1.addCell(new jxl.write.Number(14, index, summary));
+                    //备注
+                    sheet1.addCell(new Label(15, index,v.getComments2()));
+
+
                     sheet2.addCell(new jxl.write.Number(3, index, v.getPension1()));
                     sheet2.addCell(new jxl.write.Number(4, index, v.getMedicare1()));
                     sheet2.addCell(new jxl.write.Number(5, index, v.getUnemployment1()));

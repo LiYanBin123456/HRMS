@@ -17,6 +17,7 @@ import database.ConnUtil;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.Connection;
+import java.util.HashMap;
 import java.util.List;
 
 public class Calculate {
@@ -189,37 +190,6 @@ public class Calculate {
                 d.setPayable(0);
                 break;
         }
-        int type = vc.getStype();//合同服务项目中的类型
-        int category = vc.getCategory();//合同服务项目中的结算方式
-        int invoice = vc.getInvoice();//合同基础信息中的发票类型
-        float per = vc.getPer()/100;//税费比例（选择增值税专用发票（全额）需要用到）
-        float value = vc.getValue();//结算值，根据结算方式的不同，代表的意义不同
-        float manage = 0;
-        float tax2 = 0;
-        switch (type){
-            case 0://劳务派遣
-                if(category==0){//按人数收取的结算方式
-                    manage=value;//管理费=管理费
-                    if(invoice==0){//增值税专用发票（全额）
-                        //税费=（应发+单位五险一金+管理费）
-                        tax2 = (payable+d.getPension2()+d.getUnemployment2()+d.getMedicare2()+d.getDisease2()+d.getInjury()+d.getBirth()+d.getFund2()+manage-d.getFree())*per;
-                    }
-                }else if(category==1){//按比例收取的结算方式
-                    //此时服务项目中value为比例所以需要转成小数
-                    //管理费 = （应发总额+单位五险一金-国家减免）*比例（从服务项目中的比例）
-                    manage = (payable+d.getPension2()+d.getUnemployment2()+d.getMedicare2()+d.getDisease2()+d.getInjury()-d.getFree())*(value/100);
-                    tax2=0;
-                }else {//按外包整体核算方式
-
-                }
-                break;
-            case 1://人事代理
-                tax2=0;
-                manage = value;//管理费=人数*单价
-                break;
-        }
-        d.setTax2(tax2);
-        d.setManage(manage);
         d.setPaid(paid);
         return  d;
     }
@@ -548,6 +518,47 @@ public class Calculate {
         settlement2.setTraffic(traffic);
 
         return settlement2;
+    }
+
+    /**
+     * 计算管理费和税费（只适用于导出结算单）
+     * @param type 合同服务项目中的类型
+     * @param category 合同服务项目中的结算方式
+     * @param invoice 合同基础信息中的发票类型
+     * @param per 税费比例（选择增值税专用发票（全额）需要用到）
+     * @param val 结算值，根据结算方式的不同，代表的意义不同
+     * @param manage 管理费
+     * @param tax2 税费
+     * @param v 明细
+     */
+    public  static HashMap<String, Float> calculateManageAndTax2(int type, int category, int invoice, float per, float val, float manage, float tax2, ViewDetail1 v){
+        HashMap<String,Float> map = new HashMap<String, Float>();
+        //计算管理费
+        switch (type){
+            case 0://劳务派遣
+                if(category==0){//按人数收取的结算方式
+                    manage=val;//管理费=管理费
+                    if(invoice==0){//增值税专用发票（全额）
+                        //税费=（应发+单位五险一金+管理费-国家减免）
+                        tax2 = (v.getPayable()+v.getPension2()+v.getUnemployment2()+v.getMedicare2()+v.getDisease2()+v.getInjury()+v.getBirth()+v.getFund2()+manage-v.getFree())*per;
+                    }
+                }else if(category==1){//按比例收取的结算方式
+                    //此时服务项目中value为比例所以需要转成小数
+                    //管理费 = （应发总额+单位五险一金-国家减免）*比例（从服务项目中的比例）
+                    manage = (v.getPayable()+v.getPension2()+v.getUnemployment2()+v.getMedicare2()+v.getDisease2()+v.getInjury()-v.getFree())*(val/100);
+                    tax2=0;
+                }else {//按外包整体核算方式
+
+                }
+                break;
+            case 1://人事代理
+                tax2=0;
+                manage = val;//管理费=人数*单价
+                break;
+        }
+        map.put("manage",manage);
+        map.put("tax2",tax2);
+        return map;
     }
 
 }

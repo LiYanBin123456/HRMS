@@ -101,7 +101,7 @@ public class Settlement1Dao {
     public static DaoQueryResult get(Connection conn,long id){
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
-        return DbUtil.get(conn,"settlement1",conditions,Settlement1.class);
+        return DbUtil.get(conn,"view_settlement1",conditions,ViewSettlement1.class);
     }
 
     public static DaoUpdateResult updateExtra(Connection conn, Settlement1 s) {
