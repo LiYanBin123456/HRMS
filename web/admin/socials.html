@@ -18,20 +18,25 @@
           <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
           <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
+        <style>
+            .searchbox{
+                margin-left:100px;
+                display:inline;
+                width:500px;
+            }
+        </style>
 
     </head>
 
     <body class="layui-layout-body">
-        <form class="layui-form">
-            <div class="layui-input-inline">
-                <div class="layui-input-block">
-                    <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city-picker" readonly="readonly" data-toggle="city-picker" placeholder="按城市过滤">
-                </div>
-            </div>
-        </form>
         <!--顶部工具栏-->
         <div class="layui-hide" id="top_bar_social">
             <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
+            <form class="layui-form searchbox ">
+                <div class="layui-input-inline">
+                        <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city-picker" readonly="readonly" data-toggle="city-picker" placeholder="按城市过滤">
+                </div>
+            </form>
         </div>
         <table id="tbl_social" lay-filter="filter_tb_social"></table>
         <div class="layui-table-page" id="pager"></div>
@@ -48,6 +53,7 @@
         <script src="../js/queryParam.js"></script>
         <script src="../layui/extend/city-picker/city-picker.data.js"></script>
         <script src="../js/city.js"></script>
+        <script src="../js/util.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -78,10 +84,11 @@
                         level: 'city',// 级别
                         onCitySelected:function (code) {
                             param_query.addCondition("city","=",code);
-                            getSocials();
+                            getSocials(true);
                         }
                     });
                     initPage();
+                    getSocials(false);
                 });
             }
 
@@ -129,10 +136,11 @@
                 getSocials();
             }
 
-            function getSocials() {
+            function getSocials(reserve) {
                 iRule.getList(param_query,1,function (result) {
                     table.reload('tbl_social', {
-                        data:result.rows
+                        data:result.rows,
+                        reserve:reserve
                     });
                     //初始化分页
                 laypage.render({
