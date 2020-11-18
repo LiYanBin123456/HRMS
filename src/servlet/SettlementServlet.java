@@ -92,10 +92,6 @@ public class SettlementServlet extends HttpServlet {
             case "confirm"://确认到账
                 result = confirm(conn, request);
                 break;
-            case "exportBank"://导出银行卡
-                exportBank(conn, request,response);
-                ConnUtil.closeConnection(conn);
-                return;
             case "getLogs"://查询日志
                 result = getLogs(conn, request);
                 break;
@@ -469,35 +465,6 @@ public class SettlementServlet extends HttpServlet {
                 break;
         }
         return JSONObject.toJSONString(result);
-    }
-
-    //导出银行
-    private void exportBank(Connection conn, HttpServletRequest request,HttpServletResponse response) throws IOException {
-        byte category = Byte.parseByte(request.getParameter("category"));
-        long sid = Long.parseLong(request.getParameter("id"));
-        String fileName;
-        String fullFileName;
-        File file;
-        switch (category){
-            case 0://招行
-                fileName = "bank1.xls";
-                fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
-                file = new File(fullFileName);
-                Settlement1Service.exportBank1(conn,sid,response,file);
-                break;
-            case 1://农行
-                fileName = "bank2.xls";
-                fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
-                file = new File(fullFileName);
-                Settlement1Service.exportBank2(conn,sid,response,file);
-                break;
-            case 2://浦发
-                Settlement1Service.exportBank3(conn,sid,response);
-                break;
-            case 3://交通
-                Settlement1Service.exportBank4(conn,sid,response);
-                break;
-        }
     }
 
     //获取日志

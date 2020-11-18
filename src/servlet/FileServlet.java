@@ -27,6 +27,9 @@ import jxl.write.*;
 import jxl.write.Label;
 import jxl.write.biff.RowsExceededException;
 import org.apache.commons.io.IOUtils;
+import service.fileService.FileService;
+import service.insurance.InsuranceService;
+import service.settlement.Settlement1Service;
 import utills.Calculate;
 import utills.XlsUtil;
 import utills.IDCardUtil;
@@ -70,24 +73,12 @@ public class FileServlet extends HttpServlet {
             case "upload"://上传文件
                 result = upload(request);
                 break;
-            /*case "uploadImg"://上传员工头像
-                result = uploadImg(request);
-                break;*/
             case "readDeduct"://读取个税表中的数据
                 result = readDeduct(request);
                 break;
             case "exist"://判断文件是否存在
                 result = exist(request);
-                break;/*
-            case "existModel"://判断合同附件是否存在
-                result = existModel(request);
-                break;*/
-            case "download"://下载文件
-                download(request,response);
-                return;/*
-            case "downloadModel"://下载模板
-                downloadModel(request,response);
-                return;*/
+                break;
             case "downloadDetail1"://下载结算单明细模板
                 downloadDetail1(conn,request,response);
                 ConnUtil.closeConnection(conn);
@@ -112,10 +103,18 @@ public class FileServlet extends HttpServlet {
                 exportTaxEmployee(conn,request,response);
                 ConnUtil.closeConnection(conn);
                 return;
+            case "exportInsurance"://导出参保单
+                exportInsurance(conn,request,response);
+                ConnUtil.closeConnection(conn);
+                return;
+            case "exportBank"://导出银行卡
+                exportBank(conn, request,response);
+                ConnUtil.closeConnection(conn);
+                return;
             default:
                 result = "{\"success\":false,\"msg\":\"参数错误\"}";
         }
-
+        ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
         out.print(result);
         out.flush();
@@ -236,74 +235,6 @@ public class FileServlet extends HttpServlet {
         }
     }
 
-
-    //判断模板是否存在
-    private String existModel(HttpServletRequest request) throws IOException {
-        int category = Integer.parseInt(request.getParameter("category"));
-        String fileName=null;
-
-        switch (category){
-            case 0://小时工模板
-                fileName = "detail2"+".xls";
-                break;
-            case 1://商业保险结算单明细模板
-                fileName = "detail3"+".xls";
-                break;
-            case 2://员工模板
-                fileName = "employee"+".xls";
-                break;
-            case 3://员工模板
-                fileName = "EmployeeContract"+".xls";
-                break;
-        }
-        String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
-        File file = new File(fullFileName);
-
-        JSONObject json = new JSONObject();
-        json.put("success",true);
-        json.put("exist",file.exists()?true:false);
-        return json.toJSONString();
-    }
-
-    //下载模板
-    private void downloadModel(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        int category = Integer.parseInt(request.getParameter("category"));
-        String fileName=null;
-        switch (category){
-            case 0://小时工模板
-                fileName = "detail2.xls";
-                break;
-            case 1://商业保险结算单明细模板
-                fileName = "detail3.xls";
-                break;
-            case 2://员工模板
-                fileName = "employee.xls";
-                break;
-            case 3://员工合同模板
-                fileName = "EmployeeContract.xls";
-                break;
-        }
-        String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
-        File file = new File(fullFileName);
-
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment;filename="+fileName);
-
-        ServletOutputStream os = response.getOutputStream();
-        FileInputStream fis = new FileInputStream(file);
-        BufferedInputStream bis = new BufferedInputStream(fis);
-
-        int size=0;
-        byte[] buff = new byte[1024];
-        while ((size=bis.read(buff))!=-1) {
-            os.write(buff, 0, size);
-        }
-
-        os.flush();
-        os.close();
-        bis.close();
-    }
-
     //读取excel表
     private String readXls(HttpServletRequest request) throws IOException, ServletException {
         String result = null;
@@ -322,10 +253,8 @@ public class FileServlet extends HttpServlet {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-        System.out.println(result);
         return result;
     }
-
 
     //上传员工头像
     private String upload(HttpServletRequest request) throws IOException, ServletException {
@@ -384,6 +313,7 @@ public class FileServlet extends HttpServlet {
         return json.toJSONString();
     }
 
+    //下载文件
     private File getFile(byte category, String id, String root){
         String folder = "";
         String filename = "";
@@ -426,31 +356,6 @@ public class FileServlet extends HttpServlet {
         }
         String fileName = String.format("%s/%s/%s",root,folder,filename);
         return new File(fileName);
-    }
-
-    //下载合同文件
-    private void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        byte category = Byte.parseByte(request.getParameter("category"));
-        String id = request.getParameter("id");
-
-        File file = getFile(category,id,request.getServletContext().getRealPath("/"));
-
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment;filename="+file.getName());
-
-        ServletOutputStream os = response.getOutputStream();
-        FileInputStream fis = new FileInputStream(file);
-        BufferedInputStream bis = new BufferedInputStream(fis);
-
-        int size=0;
-        byte[] buff = new byte[1024];
-        while ((size=bis.read(buff))!=-1) {
-            os.write(buff, 0, size);
-        }
-
-        os.flush();
-        os.close();
-        bis.close();
     }
 
     //下载普通结算单明细模板
@@ -1017,39 +922,61 @@ public class FileServlet extends HttpServlet {
         return result;
     }
 
-    private Part getPart(HttpServletRequest request){
-        Collection<Part> parts = null;
-        try {
-            parts = request.getParts();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ServletException e) {
-            e.printStackTrace();
+    //导出参保单
+    private void exportInsurance(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        byte category = Byte.parseByte(request.getParameter("category"));
+        byte status = Byte.parseByte(request.getParameter("status"));
+        switch (category){
+            case 0://导出社保单
+                if(status == 0){//导出新增
+                    FileService.exportSocial1(conn,response);
+                }else {//导出停保
+                    FileService.exportSocial2(conn,response);
+                }
+                break;
+            case 1://导出医保单
+                if(status == 0){//导出续保
+                    FileService.exportMedicare1(conn,response);
+                }else {//导出停保
+                    FileService.exportMedicare2(conn,response);
+                }
+                break;
+            case 2://导出公积金
+                String fileName = "exportFund.xls";
+                String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
+                File file = new File(fullFileName);
+                FileService.exportFund(conn,response,file);
+                break;
         }
-        Part part = (Part) parts.toArray()[1];//第二个才是我们需要的，应该是uploadify对Servlet3支持还不够好
-        return part;
     }
 
-    /**
-     * 获取上传的文件名
-     * @param part
-     * @return
-     */
-    private String getFileName(Part part) {
-        String header = part.getHeader("content-disposition");
-        /**
-         * String[] tempArr1 = header.split(";");代码执行完之后，在不同的浏览器下，tempArr1数组里面的内容稍有区别
-         * 火狐或者google浏览器下：tempArr1={form-data,name="file",filename="snmp4j--api.zip"}
-         * IE浏览器下：tempArr1={form-data,name="file",filename="E:\snmp4j--api.zip"}
-         */
-        String[] tempArr1 = header.split(";");
-        /**
-         *火狐或者google浏览器下：tempArr2={filename,"snmp4j--api.zip"}
-         *IE浏览器下：tempArr2={filename,"E:\snmp4j--api.zip"}
-         */
-        String[] tempArr2 = tempArr1[2].split("=");
-        //获取文件名，兼容各种浏览器的写法
-        String fileName = tempArr2[1].substring(tempArr2[1].lastIndexOf("\\")+1).replaceAll("\"", "");
-        return fileName;
+    //导出银行
+    private void exportBank(Connection conn, HttpServletRequest request,HttpServletResponse response) throws IOException {
+        byte category = Byte.parseByte(request.getParameter("category"));
+        long sid = Long.parseLong(request.getParameter("id"));
+        String fileName;
+        String fullFileName;
+        File file;
+        switch (category){
+            case 0://招行
+                fileName = "bank1.xls";
+                fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
+                file = new File(fullFileName);
+                FileService.exportBank1(conn,sid,response,file);
+                break;
+            case 1://农行
+                fileName = "bank2.xls";
+                fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
+                file = new File(fullFileName);
+                FileService.exportBank2(conn,sid,response,file);
+                break;
+            case 2://浦发
+                FileService.exportBank3(conn,sid,response);
+                break;
+            case 3://交通
+                FileService.exportBank4(conn,sid,response);
+                break;
+        }
     }
+
 }

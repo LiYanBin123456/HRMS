@@ -155,7 +155,7 @@ public class Calculate {
         }
         //计算应发工资
         float payable =d.getBase();//初始是基本工资
-        if(mapSalary!=null){//如果有自定义工资
+        if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){//如果有自定义工资
            payable = calculatePayable(payable,d,mapSalary);
         }
         //应发=应发-个人五险一金+个人核收补缴
@@ -387,10 +387,10 @@ public class Calculate {
             } catch (InvocationTargetException e) {
                 e.printStackTrace();
             }
-            if(itemList.get(i).getType()==0){//减项
-                payable-=value2;
-            }else {//加项
+            if(itemList.get(i).getType()==0){//加项
                 payable+=value2;
+            }else {//减项
+                payable-=value2;
             }
         }
         return  payable;

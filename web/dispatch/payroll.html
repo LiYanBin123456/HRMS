@@ -208,7 +208,7 @@
         }
 
         function exportBank(settlement,bank) {
-            var url = "/hrms/verify/settlement?op=exportBank&category="+bank+"&id="+settlement.id;
+            var url = "/hrms/verify/file?op=exportBank&category="+bank+"&id="+settlement.id;
             var form = $('<form method="POST"></form>');
             form.attr('action', url);
             form.appendTo($('body'));
