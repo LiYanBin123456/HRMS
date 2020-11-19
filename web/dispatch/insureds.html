@@ -41,10 +41,12 @@
             <div class="layui-input-inline">
                 <select lay-filter="filter_status" >
                     <option value="">按状态过滤</option>
-                    <option value="0">新增</option>
-                    <option value="1">在保</option>
-                    <option value="2">拟停</option>
-                    <option value="3">停保</option>
+                    <option value="0">未参保</option>
+                    <option value="1">新增</option>
+                    <option value="2">在保</option>
+                    <option value="3">拟停</option>
+                    <option value="4">停保</option>
+                    <option value="5">异常</option>
                 </select>
             </div>
             <div class="layui-input-inline">
@@ -52,7 +54,7 @@
                 </select>
             </div>
             <div class="layui-input-inline searchboxs">
-                <input name="keyword" class="layui-input" placeholder="输入要查找投保人员的姓名或身份证号">
+                <input name="keyword" class="layui-input" placeholder="输入要查找投保人员的姓名">
             </div>
             <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
         </form>
@@ -174,8 +176,20 @@
                 });
 
                 form.on('select(filter_status)', function(data){
-                    param_query.addCondition("status","=",data.value);
-                    getInsureds();
+                    if (data){
+                        switch(type){
+                            case 0:
+                                param_query.addCondition("status1","=",data.value);
+                                break;
+                            case 1:
+                                param_query.addCondition("status3","=",data.value);
+                                break;
+                            case 2:
+                                param_query.addCondition("status4","=",data.value);
+                                break
+                        }
+                    }
+                     getInsureds();
                 });
 
                 form.on('select(filter_cooperation)', function(data){

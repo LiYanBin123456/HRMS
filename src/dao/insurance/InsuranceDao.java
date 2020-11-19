@@ -25,7 +25,7 @@ public class InsuranceDao {
     //获取列表
     public static DaoQueryListResult getList(Connection conn, QueryParameter param, byte category) {
         if (param.conditions.extra != null && !param.conditions.extra.isEmpty()) {
-            param.addCondition("concat(status,name,cardId)", "like", param.conditions.extra);
+            param.addCondition("concat(status1,status2,status3,status4,status5,cname,name)", "like", param.conditions.extra);
         }
         param.addCondition("type", "=", category);
         return DbUtil.getList(conn, "view_insurance", param, ViewInsurance.class);
@@ -34,7 +34,7 @@ public class InsuranceDao {
     //获取列表
     public static DaoQueryListResult getList(Connection conn, QueryParameter param) {
         if (param.conditions.extra != null && !param.conditions.extra.isEmpty()) {
-            param.addCondition("concat(status,name,cardId)", "like", param.conditions.extra);
+            param.addCondition("concat(status1,status2,status3,status4,status5,cname,name)", "like", param.conditions.extra);
         }
         return DbUtil.getList(conn, "view_insurance", param, ViewInsurance.class);
     }

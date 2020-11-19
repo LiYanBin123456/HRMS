@@ -145,10 +145,14 @@ public class Calculate {
 
         //结算单类型不是代缴工资就需要计算单五险一金
         if(settlement1.getType()!=2){
-            //计算医保
-            d = calculateMedicare(d,setting,baseM,medicare);
-            //计算社保
-            d = calculateSocial(d,setting,baseS,social);
+               //计算医保
+            if(setting.getSettingM()!=1){//是否需要缴纳医保
+                d = calculateMedicare(d,setting,baseM,medicare);
+            }
+            if(setting.getSettingS()!=1){//是否需要缴纳社保
+                //计算社保
+                d = calculateSocial(d,setting,baseS,social);
+            }
             //设置公积金
             d.setFund1(FundBase*FundPer);//个人公积金
             d.setFund2(FundBase*FundPer);//单位公积金
