@@ -73,6 +73,9 @@ public class FileServlet extends HttpServlet {
             case "upload"://上传文件
                 result = upload(request);
                 break;
+            case "download"://下载文件
+                download(request,response);
+                return;
             case "readDeduct"://读取个税表中的数据
                 result = readDeduct(request);
                 break;
@@ -356,6 +359,31 @@ public class FileServlet extends HttpServlet {
         }
         String fileName = String.format("%s/%s/%s",root,folder,filename);
         return new File(fileName);
+    }
+
+    //下载
+    private void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        byte category = Byte.parseByte(request.getParameter("category"));
+        String id = request.getParameter("id");
+
+        File file = getFile(category,id,request.getServletContext().getRealPath("/"));
+
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment;filename="+file.getName());
+
+        ServletOutputStream os = response.getOutputStream();
+        FileInputStream fis = new FileInputStream(file);
+        BufferedInputStream bis = new BufferedInputStream(fis);
+
+        int size=0;
+        byte[] buff = new byte[1024];
+        while ((size=bis.read(buff))!=-1) {
+            os.write(buff, 0, size);
+        }
+
+        os.flush();
+        os.close();
+        bis.close();
     }
 
     //下载普通结算单明细模板
@@ -975,4 +1003,39 @@ public class FileServlet extends HttpServlet {
         }
     }
 
+    private Part getPart(HttpServletRequest request){
+        Collection<Part> parts = null;
+        try {
+            parts = request.getParts();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ServletException e) {
+            e.printStackTrace();
+        }
+        Part part = (Part) parts.toArray()[1];//第二个才是我们需要的，应该是uploadify对Servlet3支持还不够好
+        return part;
+    }
+
+    /**
+     * 获取上传的文件名
+     * @param part
+     * @return
+     */
+    private String getFileName(Part part) {
+        String header = part.getHeader("content-disposition");
+        /**
+         * String[] tempArr1 = header.split(";");代码执行完之后，在不同的浏览器下，tempArr1数组里面的内容稍有区别
+         * 火狐或者google浏览器下：tempArr1={form-data,name="file",filename="snmp4j--api.zip"}
+         * IE浏览器下：tempArr1={form-data,name="file",filename="E:\snmp4j--api.zip"}
+         */
+        String[] tempArr1 = header.split(";");
+        /**
+         *火狐或者google浏览器下：tempArr2={filename,"snmp4j--api.zip"}
+         *IE浏览器下：tempArr2={filename,"E:\snmp4j--api.zip"}
+         */
+        String[] tempArr2 = tempArr1[2].split("=");
+        //获取文件名，兼容各种浏览器的写法
+        String fileName = tempArr2[1].substring(tempArr2[1].lastIndexOf("\\")+1).replaceAll("\"", "");
+        return fileName;
+    }
 }
