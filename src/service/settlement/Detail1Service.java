@@ -126,7 +126,7 @@ public class Detail1Service {
             }
 
             //获取最新自定义的工资
-            MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(cid,conn).data;
+            MapSalary mapSalary = (MapSalary) MapSalaryDao.selectByMonth(cid,conn,month).data;
 
             //获取员工个税专项扣除
             Deduct deduct = (Deduct) DeductDao.get(conn,d.getEid()).data;

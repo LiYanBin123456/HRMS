@@ -106,6 +106,18 @@ var InterfaceClient = function() {
         access(url,para,1,success,fail);
     };
     /**
+     * 根据月份获取自定义工资
+     * @param id
+     * @param month
+     * @param success
+     * @param fail
+     */
+    this.selectSalaryDefineByMoth = function (id,month,success,fail) {
+        var para = {op:"getSalaryDefineByMonth",id:id,month:month};
+        access(url,para,1,success,fail);
+    };
+
+    /**
      * 添加自定义工资
      * @param mapSalary 自定义工资
      * @param success

@@ -394,6 +394,7 @@ public class FileServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Account user = (Account) session.getAttribute("account");
         long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
+        byte type = Byte.parseByte(request.getParameter("type"));//0 派遣 1 外包  2代缴工资 3代缴社保
 
 
         MapSalary mapSalary = (MapSalary) MapSalaryDao.getLast(cid, conn).data;
@@ -403,7 +404,20 @@ public class FileServlet extends HttpServlet {
         parameter.addCondition("cid","=",cid);
         parameter.addCondition("did","=",user.getRid());
         parameter.addCondition("type","=",1);
-        parameter.addCondition("category","!=",3);
+        switch (type){
+            case 0://派遣员工
+                parameter.addCondition("category","=",1);
+                break;
+            case 1://外包员工
+                parameter.addCondition("category","=",2);
+                break;
+            case 2://代缴工资
+                parameter.addCondition("category","=",4);
+                break;
+            case 3://代发工资
+                parameter.addCondition("category","=",5);
+                break;
+        }
         parameter.addCondition("status","=",0);
         List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
 
@@ -411,44 +425,35 @@ public class FileServlet extends HttpServlet {
         WritableSheet sheet1 = book.createSheet("信息表", 0);
         WritableSheet sheet2 = book.createSheet("元数据", 1);
 
-        WritableCellFormat wcf = new WritableCellFormat();
-        Color color = Color.decode("#d6dae0"); // 自定义的颜色
-        book.setColourRGB(Colour.ORANGE, color.getRed(),
-        color.getGreen(), color.getBlue());
         try {
-            wcf.setBackground(Colour.ORANGE);
-        } catch (WriteException e) {
-            e.printStackTrace();
-        }
-        try {
-            sheet1.addCell(new Label(0, 0, "员工姓名*",wcf));
-            sheet1.addCell(new Label(1, 0, "身份证号码*",wcf));
-            sheet1.addCell(new Label(2, 0, "基本工资*",wcf));
-            sheet1.addCell(new Label(3, 0, "个人养老",wcf));
-            sheet1.addCell(new Label(4, 0, "个人医疗",wcf));
-            sheet1.addCell(new Label(5, 0, "个人失业",wcf));
-            sheet1.addCell(new Label(6, 0, "个人大病",wcf));
-            sheet1.addCell(new Label(7, 0, "个人公积金",wcf));
-            sheet1.addCell(new Label(8, 0, "单位养老",wcf));
-            sheet1.addCell(new Label(9, 0, "单位医疗",wcf));
-            sheet1.addCell(new Label(10, 0, "单位失业",wcf));
-            sheet1.addCell(new Label(11, 0, "单位工伤",wcf));
-            sheet1.addCell(new Label(12, 0, "单位大病",wcf));
-            sheet1.addCell(new Label(13, 0, "单位生育",wcf));
-            sheet1.addCell(new Label(14, 0, "单位公积金",wcf));
-            sheet1.addCell(new Label(15, 0, "个税",wcf));
+            sheet1.addCell(new Label(0, 0, "员工姓名*"));
+            sheet1.addCell(new Label(1, 0, "身份证号码*"));
+            sheet1.addCell(new Label(2, 0, "基本工资*"));
+            sheet1.addCell(new Label(3, 0, "个人养老"));
+            sheet1.addCell(new Label(4, 0, "个人医疗"));
+            sheet1.addCell(new Label(5, 0, "个人失业"));
+            sheet1.addCell(new Label(6, 0, "个人大病"));
+            sheet1.addCell(new Label(7, 0, "个人公积金"));
+            sheet1.addCell(new Label(8, 0, "单位养老"));
+            sheet1.addCell(new Label(9, 0, "单位医疗"));
+            sheet1.addCell(new Label(10, 0, "单位失业"));
+            sheet1.addCell(new Label(11, 0, "单位工伤"));
+            sheet1.addCell(new Label(12, 0, "单位大病"));
+            sheet1.addCell(new Label(13, 0, "单位生育"));
+            sheet1.addCell(new Label(14, 0, "单位公积金"));
+            sheet1.addCell(new Label(15, 0, "个税"));
             if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){
                 int  c = 0;
                 List<Items> itemList = mapSalary.getItemList();
                 for(int i = 0;i<itemList.size();i++){
                     c = i+16;
-                    sheet1.addCell(new Label(c, 0, itemList.get(i).getField(),wcf));
+                    sheet1.addCell(new Label(c, 0, itemList.get(i).getField()));
                 }
-                sheet1.addCell(new Label(c+1, 0, "应付",wcf));
-                sheet1.addCell(new Label(c+2, 0, "实付",wcf));
+                sheet1.addCell(new Label(c+1, 0, "应付"));
+                sheet1.addCell(new Label(c+2, 0, "实付"));
             }else {
-                sheet1.addCell(new Label(16, 0, "应付",wcf));
-                sheet1.addCell(new Label(17, 0, "实付",wcf));
+                sheet1.addCell(new Label(16, 0, "应付"));
+                sheet1.addCell(new Label(17, 0, "实付"));
             }
             int index = 1;
             for( ViewEmployee viewEmployee:employeeList){//根据员工生成明细，如果没有员工则不生成

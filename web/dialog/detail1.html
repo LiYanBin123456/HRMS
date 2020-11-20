@@ -61,6 +61,7 @@
             var sid = $.query.get("id");//结算单id
             var cid = $.query.get("cid");//合作单位id
             var type = $.query.get("type");//结算单类型 0 派遣 1外包 2代缴工资 3代缴社保
+            var month = format_month($.query.get("month"))+"-31";//结算单月份
             $(function () {
                 loadLayuiModule();
             });
@@ -219,7 +220,20 @@
             function showInsertDlg() {
                 //查询除出该单位，类型外派员工，状态在职的员工列表，用工性质派遣或者外包
                 var param = new QueryParam();
-                param.addCondition("category","=",type+1);//查询出派遣（1）、外包（2）员工、代缴个人（3）、代缴社保（4）
+                switch (type){
+                    case 0:
+                        param.addCondition("category","=",1);//查询出派遣（1）
+                        break;
+                    case 1:
+                        param.addCondition("category","=",2);//外包（2）
+                        break;
+                    case 2:
+                        param.addCondition("category","=",4);//代缴个人（4）
+                        break;
+                    case 3:
+                        param.addCondition("category","=",5);//代缴社保（5）
+                        break;
+                }
                 param.addCondition("cid","=",cid);
                 param.addCondition("type","=",1);
                 param.addCondition("status","=",0);
@@ -289,7 +303,7 @@
                     {field:'base', title: '基本工资',width:80,edit: 'text'}
                 ]];
                 //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
-                iClient.getLastSalaryDefine(cid,function (result) {
+                iClient.selectSalaryDefineByMoth(cid,month,function (result) {
                     if(result.data!=null&&result.data.items.length>0){
                         mapSalary = result.data;
                         var items = mapSalary.items;
@@ -320,7 +334,7 @@
                     {field:'base', title: '基本工资',width:80}
                 ]];
                 //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
-                iClient.getLastSalaryDefine(cid,function (result) {
+                iClient.selectSalaryDefineByMoth(cid,month,function (result) {
                     if (result.data!=null&&result.data.items.length>0){
                         mapSalary = result.data;
                             var items = mapSalary.items;
@@ -370,7 +384,7 @@
 
             //下载模板
             function download() {
-                    var url = "/hrms/verify/file?op=downloadDetail1&cid="+cid+"&sid="+sid;
+                    var url = "/hrms/verify/file?op=downloadDetail1&cid="+cid+"&sid="+sid+"&type="+type;
                     var form = $('<form method="POST"></form>');
                     form.attr('action', url);
                     form.appendTo($('body'));

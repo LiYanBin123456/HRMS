@@ -6,8 +6,8 @@ import bean.client.*;
 import com.alibaba.fastjson.*;
 import dao.client.CooperationDao;
 import dao.client.DispatchDao;
+import dao.client.MapSalaryDao;
 import dao.client.SupplierDao;
-import dao.contract.ContractDao;
 import database.*;
 import service.client.*;
 
@@ -20,7 +20,6 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.lang.reflect.Type;
 import java.sql.Connection;
 import java.sql.Date;
 import java.util.Calendar;
@@ -71,6 +70,9 @@ public class ClientServlet extends HttpServlet {
             case "getLastSalaryDefine"://获取客户最新自定义工资
                 result = getLastSalaryDefine(conn,request);
                 break;
+            case "getSalaryDefineByMonth"://获取客户最新自定义工资
+                result = getSalaryDefineByMonth(conn,request);
+                break;
             case "getSalaryDefine"://获取客户自定义工资
                 result = getSalaryDefine(conn,request);
                 break;
@@ -95,6 +97,14 @@ public class ClientServlet extends HttpServlet {
         out.print(result);
         out.flush();
         out.close();
+    }
+
+    //根据日期获取公司自定义工资
+    private String getSalaryDefineByMonth(Connection conn, HttpServletRequest request) {
+        String month = request.getParameter("month");
+        long cid = Long.parseLong(request.getParameter("id"));
+        DaoQueryResult result = MapSalaryDao.selectByMonth(cid,conn, Date.valueOf(month));
+        return JSONObject.toJSONString(result);
     }
 
     //修改客户状态
