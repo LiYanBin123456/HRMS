@@ -105,6 +105,7 @@
                     toolbar: '#top_bar',
                     title: '内部员工列表',
                     cols: columns_employee_internal,
+                    limit: 50,
                     id: 'tbl_employee'
                 });
 
@@ -165,6 +166,7 @@
                     elem: 'pager'
                     ,curr: param_query.pagination.page
                     ,count: result.total //数据总数
+                    ,limit: param_query.pagination.size
                     ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
                     ,jump: function(obj,first){
                         //首次不执行

@@ -150,6 +150,7 @@
                     title: '合作客户列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                     cols: cols,
+                    limit: 50,
                     id: 'tbl_cooperation'
                 });
 
@@ -200,6 +201,7 @@
                         elem: 'pager'
                         ,curr:param_query.pagination.page
                         ,count: result.total //数据总数
+                        ,limit: param_query.pagination.size
                         ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
                         ,jump: function(obj,first){
                             //首次不执行

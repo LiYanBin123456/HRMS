@@ -132,6 +132,7 @@
                 laypage.render({
                     elem: 'pager'
                     ,count: 10 //数据总数
+                    ,limit: param_query.pagination.size
                     ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
                     ,jump: function(obj,first){
                         //首次不执行
@@ -146,6 +147,7 @@
                 table.render({
                     elem: '#tbl_employee',
                     cols: columns_staff_with_base,
+                    limit: 50,
                     id: 'tbl_employee',
                     done: function (res, curr, count) {
                         if(!member || member.length==0){

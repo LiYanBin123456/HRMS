@@ -71,6 +71,7 @@
                 table.render({
                     elem: '#tbl_contract',
                     cols: columns_contract_cooperation,
+                    limit: 50,
                     id: 'tbl_contract'
                 });
 
@@ -110,6 +111,7 @@
                         elem: 'pager',
                         curr:param_query.pagination.page,
                         count: result.total, //数据总数
+                        limit: param_query.pagination.size,
                         layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip'],
                         jump: function(obj,first){
                             //首次不执行

@@ -229,6 +229,7 @@
                     elem: '#tbl_insured',
                     toolbar: top_bar,
                     cols: cols,
+                    limit: 50,
                     id: 'tbl_insured'
                 });
 
@@ -295,6 +296,7 @@
                         elem: 'pager'
                         ,curr:param_query.pagination.page
                         ,count: result.total //数据总数
+                        ,limit: param_query.pagination.size
                         ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
                         ,jump: function(obj,first){
                             //首次不执行

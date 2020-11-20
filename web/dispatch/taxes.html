@@ -108,6 +108,7 @@
                     toolbar: '#top_bar_tax', //开启头部工具栏，并为其绑定左侧模板
                     title: '列表',
                     cols: columns_tax,
+                    limit: 50,
                     id: 'tbl_tax'
                 });
 
@@ -137,6 +138,7 @@
                         elem: 'pager'
                         ,curr:param_query.pagination.page
                         ,count: result.total //数据总数
+                        ,limit: param_query.pagination.size
                         ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
                         ,jump: function(obj,first){
                             //首次不执行
