@@ -44,11 +44,10 @@
                         <option value="-1">按状态过滤</option>
                         <option value="0">编辑</option>
                         <option value="1">提交</option>
-                        <option value="2">一审</option>
-                        <option value="3">二审</option>
-                        <option value="4">三审</option>
-                        <option value="5">扣款</option>
-                        <option value="6">发放</option>
+                        <option value="2">初审</option>
+                        <option value="3">终审</option>
+                        <option value="4">扣款</option>
+                        <option value="5">发放</option>
                     </select>
                 </div>
             </form>
@@ -74,8 +73,13 @@
             var element;
             var laydate;
             var popMenu;
+
             var param_query = new QueryParam();
+            var type = 1;//区分结算单类型  0 派遣  1 外包  2 代发工资  3 代缴社保
+            param_query.addCondition("type","=",type);//查询外包结算单
+            param_query.setOrder("id",true);
             param_query.setPagination(1,10);
+
             //弹出菜单项
             var menu_data=[
                 {'data':'log','title':'日志'},
@@ -86,7 +90,6 @@
                 {'data':'delete','title':'删除'}
             ];
 
-            var type = 1;//区分结算单类型  0 派遣  1 外包  2 代发工资  3 代缴社保
             $(function () {
                 loadLayuiModule();
             });
@@ -209,7 +212,6 @@
             }
 
             function getSettlements(reserve) {
-                param_query.addCondition("type","=",type);//查询外包结算单
                 iSettlement.getList(param_query,0,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows,

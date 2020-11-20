@@ -288,7 +288,7 @@
                 ]];
                 //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
                 iClient.getLastSalaryDefine(cid,function (result) {
-                    if(result.data){
+                    if(result.data!=null&&result.data.items.length>0){
                         mapSalary = result.data;
                         var items = mapSalary.items;
                         var salary_items_defined = items.split(";");
@@ -319,15 +319,15 @@
                 ]];
                 //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
                 iClient.getLastSalaryDefine(cid,function (result) {
-                    if (result.data){
+                    if (result.data!=null&&result.data.items.length>0){
                         mapSalary = result.data;
-                        var items = mapSalary.items;
-                        var salary_items_defined = items.split(";");
-                        for (var i in salary_items_defined) {
-                            var item = salary_items_defined[i];
-                            var v = item.split(',');
-                            columns_detail1_full[0].push({field:'f'+Number(Number(i)+1), title: v[0],width:80,edit: 'text'}) ;
-                        }
+                            var items = mapSalary.items;
+                            var salary_items_defined = items.split(";");
+                            for (var i in salary_items_defined) {
+                                var item = salary_items_defined[i];
+                                var v = item.split(',');
+                                columns_detail1_full[0].push({field:'f'+Number(Number(i)+1), title: v[0],width:80,edit: 'text'}) ;
+                            }
                     }
                     //添加完自定义项后将应发和实发放在后面
                     columns_detail1_full[0].push({field:'pension1', title: '个人养老',width:80});

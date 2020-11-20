@@ -63,10 +63,6 @@ public class InsuranceServlet extends HttpServlet {
             case "check"://校对参保单
                 result = check(conn,request);
                 break;
-            case "export"://导出参保单
-                export(conn,request,response);
-                ConnUtil.closeConnection(conn);
-                return;
         }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
@@ -103,34 +99,6 @@ public class InsuranceServlet extends HttpServlet {
                 break;
         }
         return  JSONObject.toJSONString(result);
-    }
-
-    //导出
-    private void export(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        byte category = Byte.parseByte(request.getParameter("category"));
-        byte status = Byte.parseByte(request.getParameter("status"));
-        switch (category){
-            case 0://导出社保单
-                if(status == 0){//导出新增
-                   InsuranceService.exportSocial1(conn,response);
-                }else {//导出停保
-                   InsuranceService.exportSocial2(conn,response);
-                }
-                break;
-            case 1://导出医保单
-                if(status == 0){//导出续保
-                    InsuranceService.exportMedicare1(conn,response);
-                }else {//导出停保
-                    InsuranceService.exportMedicare2(conn,response);
-                }
-                break;
-            case 2://导出公积金
-                String fileName = "exportFund.xls";
-                String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
-                File file = new File(fullFileName);
-                InsuranceService.exportFund(conn,response,file);
-                break;
-        }
     }
 
     //获取

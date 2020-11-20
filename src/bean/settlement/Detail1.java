@@ -19,12 +19,9 @@ public class Detail1 extends Detail {
     private float birth;//单位生育
     private float fund2;//单位公积金
     private float tax;//个税
-    private float tax2;//税费
     private float free;//国家减免项
     private float extra1;//补收核减（个人）
     private float extra2;//补收核减（单位）
-    private float manage;//管理费
-    private float sum;//汇款合计
     private float payable;//应发
     private float paid;//实发
     private float f1;//自定字段
@@ -180,8 +177,6 @@ public class Detail1 extends Detail {
         this.free = free;
         this.extra1 = extra1;
         this.extra2 = extra2;
-        this.manage = manage;
-        this.sum = sum;
         this.payable = payable;
         this.paid = paid;
         this.f1 = f1;
@@ -225,12 +220,11 @@ public class Detail1 extends Detail {
         this.birth = birth;
         this.fund2 = fund2;
         this.tax = tax;
-        this.tax2 = tax2;
+
         this.free = free;
         this.extra1 = extra1;
         this.extra2 = extra2;
-        this.manage = manage;
-        this.sum = sum;
+
         this.payable = payable;
         this.paid = paid;
         this.f1 = f1;
@@ -376,30 +370,6 @@ public class Detail1 extends Detail {
 
     public void setDisease2(float disease2) {
         this.disease2 = disease2;
-    }
-
-    public float getManage() {
-        return manage;
-    }
-
-    public void setManage(float manage) {
-        this.manage = manage;
-    }
-
-    public float getSum() {
-        return sum;
-    }
-
-    public void setSum(float sum) {
-        this.sum = sum;
-    }
-
-    public float getTax2() {
-        return tax2;
-    }
-
-    public void setTax2(float tax2) {
-        this.tax2 = tax2;
     }
 
     public float getBirth() {

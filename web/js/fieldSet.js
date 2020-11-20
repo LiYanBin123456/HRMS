@@ -489,7 +489,7 @@ var columns_tax  = [[
     {field:'name', title: '姓名',width:80,fixed:"left"},
     {field:'cardId', title: '证照号码',width:160},
     {field:'month', title: '月份',width:160,templet:function (d) {return format_month(d.month)}},
-    {field:'payable', title: '本期收入',width:120},
+    {field:'payable', title: '本期收入',width:120},//基本工资加自定义工资
     {field:'', title: '本期免税收入',width:120,text:0},
     {field:'pension1', title: '基本养老保险费',width:120},
     {field:'medicare1', title: '基本医疗保险费',width:120},

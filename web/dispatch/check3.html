@@ -50,7 +50,6 @@
         <script>
             var type = $.query.get("type");
             var table;//数据表格对象
-            var category = 0; //显示待审核和全部
             var laypage;//分页对象
             var form;//分页对象
             var layer;//弹出窗口
@@ -84,12 +83,15 @@
                 $("#container").empty();
                 $("#container").append('<table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>');
 
-                category = value;
+                if(value == 0){
+                    param_query.addCondition("status","=",type==0?2:3);
+                }else{
+                    param_query.removeCondition("status")
+                }
                 initTable();
             }
 
             function initTable() {
-
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_settlement',
@@ -114,15 +116,10 @@
                     }
                 });
                 //顶部工具栏事件处理
-                getSettlements(category);
+                getSettlements();
             }
 
             function getSettlements() {
-                if(category == 0){
-                    param_query.addCondition("status","=",3);
-                }else{
-                    param_query.removeCondition("status")
-                }
                 iSettlement.getList(param_query,2,function (result) {
                     table.reload('tbl_settlement', {
                         data:result.rows
@@ -137,7 +134,7 @@
                             //首次不执行
                             if(!first){
                                 param_query.setPagination(obj.curr,obj.limit);
-                                getSettlements(category);
+                                getSettlements();
                             }
                         }
                     });
