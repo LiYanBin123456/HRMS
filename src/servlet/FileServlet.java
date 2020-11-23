@@ -745,13 +745,15 @@ public class FileServlet extends HttpServlet {
                     sheet1.addCell(new jxl.write.Number(c2+8, index, sum));
                     //计算管理费和税费
                     HashMap<String,Float> map2 = Calculate.calculateManageAndTax2(type,category,invoice,per,val,manage,tax2,v);
+                    manage =  map2.get("manage");
+                    tax2 = map2.get("tax2");
                     //管理费
-                    sheet1.addCell(new jxl.write.Number(c2+9, index, map2.get("manage")));
+                    sheet1.addCell(new jxl.write.Number(c2+9, index, manage));
                     //核收补减
                     sheet1.addCell(new jxl.write.Number(c2+10, index, v.getExtra2()));
                     //税费
-                    sheet1.addCell(new jxl.write.Number(c2+11, index, map2.get("tax2")));
-                    //汇款总额 = 基本工资+自定义项目+单位社保总额+管理费+税费+（单位）核收补减
+                    sheet1.addCell(new jxl.write.Number(c2+11, index,tax2));
+                    //汇款总额 = 基本工资+自定义工资项+单位社保总额+管理费+税费+（单位）核收补减
                     float summary = v.getBase()+salary+sum-v.getFree()+manage+tax2+v.getExtra2();
                     sheet1.addCell(new jxl.write.Number(c2+12, index, summary));
                     sheet1.addCell(new Label(c2+13, index, v.getComments2()));

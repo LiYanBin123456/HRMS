@@ -63,6 +63,7 @@ public class MapSalaryDao {
         parameter.pagination.set(true,1,1);
         DaoQueryListResult res1 = DbUtil.getList(conn,"map_salary",parameter,MapSalary.class);
         DaoQueryResult res2 = new DaoQueryResult();
+        res2.success = true;
 
         if(!res1.success){
             res2.success = false;
@@ -72,13 +73,10 @@ public class MapSalaryDao {
 
         List<MapSalary> mapSalaries = (List<MapSalary>) res1.rows;
         if(mapSalaries.size() == 0){
-            res2.success = false;
-            res2.msg = "规则不存在";
-            return res2;
+            res2.data = null;
+        }else {
+            res2.data = mapSalaries.get(0);
         }
-
-        res2.success = true;
-        res2.data = mapSalaries.get(0);
         return res2;
     }
 }
