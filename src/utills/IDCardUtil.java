@@ -4,7 +4,7 @@ package utills;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 
 /**
  * @Description：身份证号的util
@@ -168,4 +168,28 @@ public class IDCardUtil {
         }
         return true;
     }
+
+    /**
+     * 获取某个月最后一天
+     * @param date
+     * @return
+     */
+    public static String getLastday_Month(String date)  {
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        try {
+            calendar.setTime(df.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        //上个月最后一天
+        calendar.add(Calendar.MONTH, 1);    //加一个月
+        calendar.set(Calendar.DATE, 1);        //设置为该月第一天
+        calendar.add(Calendar.DATE, -1);    //再减一天即为上个月最后一天
+        String day_last = df.format(calendar.getTime());
+
+        return day_last;
+    }
+
+
 }

@@ -25,8 +25,8 @@
                 <button class="layui-btn layui-btn-sm" lay-event="" onclick="exports()" ><i class="layui-icon " ></i> 导出</button>
                 <button class="layui-btn layui-btn-sm" lay-event="import"><i class="layui-icon "></i> 导入</button>
                 <button class="layui-btn layui-btn-sm" lay-event="" onclick="download()"><i class="layui-icon "></i> 下载模板</button>
-                <button class="layui-btn layui-btn-sm" lay-event="" onclick="updateDetail()"><i class="layui-icon "></i> 修改</button>
-                <button class="layui-btn layui-btn-sm" lay-event="" onclick="saveDetail()"><i class="layui-icon "></i> 保存</button>
+                <button class="layui-btn layui-btn-sm" lay-event="" onclick="updateDetail()"><i class="layui-icon "></i> 保存</button>
+                <button class="layui-btn layui-btn-sm" lay-event="" onclick="saveDetail()"><i class="layui-icon "></i> 计算</button>
             </div>
             <form class="layui-form" style="display: inline">
                 <div class="layui-input-inline">
@@ -61,7 +61,7 @@
             var sid = $.query.get("id");//结算单id
             var cid = $.query.get("cid");//合作单位id
             var type = $.query.get("type");//结算单类型 0 派遣 1外包 2代缴工资 3代缴社保
-            var month = format_month($.query.get("month"))+"-31";//结算单月份
+            var month = format_month($.query.get("month"))+"-01";//结算单月份
             $(function () {
                 loadLayuiModule();
             });
