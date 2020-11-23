@@ -666,7 +666,7 @@
 
     
     function saveEmployee() {
-        var employee = form.val('form_employee');
+         employee = form.val('form_employee');
         if(employee.type==1 && employee.cid<1){
             layer.alert("请选择外派单位", {icon: 20});
             return;
@@ -674,7 +674,10 @@
         if(employee.id){
             iEmployee.update(employee,onSaveSuccess);
         } else {
-            iEmployee.insert(employee, onSaveSuccess);
+            iEmployee.insert(employee,function (result){
+                employee.id = result.extra;
+                layer.alert("保存成功", {icon: 20});
+            });
         }
     }
 
