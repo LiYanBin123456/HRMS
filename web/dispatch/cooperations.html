@@ -23,6 +23,11 @@
                 display:inline;
                 width:300px;
             }
+            .searchboxs{
+                margin-left:550px;
+                display:inline;
+                width:300px;
+            }
             .distance{
                 margin-left:20px;
             }
@@ -31,23 +36,19 @@
     </head>
 
     <body class="layui-layout-body">
-      <form class="layui-form " style="display: inline">
-              <div class="layui-input-inline">
-                  <div class="layui-input-inline ">
-                      <div class="layui-inline"><input type="radio" name="type" value="0" title="合作中" lay-filter="type" checked></div>
-                      <div class="layui-inline"><input type="radio" name="type" value="1" title="潜在" lay-filter="type" ></div>
-                      <div class="layui-inline"><input type="radio" name="type" value="2" title="流失" lay-filter="type" ></div>
-                  </div>
-              </div>
-          </form>
         <!--顶部工具栏-->
         <div class="layui-hide" id="top_bar_cooperation">
             <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
-            <form class="layui-form searchbox">
+            <form class="layui-form searchbox" style="display: inline" >
                 <div class="layui-input-inline">
                     <input name="keyword" class="layui-input" placeholder="请输入要查找的合作客户">
                 </div>
                 <button class="layui-btn layui-btn-normal layui-btn-sm distance " lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+                <div class="layui-input-inline searchboxs ">
+                    <div class="layui-inline"><input type="radio" name="type" value="0" title="合作中" lay-filter="type" checked></div>
+                    <div class="layui-inline"><input type="radio" name="type" value="1" title="潜在" lay-filter="type" ></div>
+                    <div class="layui-inline"><input type="radio" name="type" value="2" title="流失" lay-filter="type" ></div>
+                </div>
             </form>
         </div>
          <div id="container">
@@ -75,6 +76,7 @@
         <script src="../js/jquery.min.js"></script>
         <script src="../js/jquery.params.js"></script>
         <script src="../js/queryParam.js"></script>
+        <script src="../js/util.js"></script>
         <script>
             var type = 0;//记录是显示合作客户，潜在客户还是流失客户
             var table;//数据表格对象
@@ -103,26 +105,21 @@
             }
 
             function initPage() {
-                initTable();
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
                     param_query.addKeyword(keyword);
-                    getCooperations();
+                    getCooperations(true);
                     return false; //阻止表单跳转
                 });
 
                 form.on('radio(type)', function(data){
-                    switchType(Number(data.value));
+                    var value = data.value;
+                    type = value;
+                    param_query.addCondition("type","=",type);
+                    getCooperations(true);
                 });
-            }
-
-            function switchType(value) {
-                $("#container").empty();
-                $("#container").append('<table id="tbl_cooperation" lay-filter="filter_tb_cooperation"></table>');
-
-                type = value;
-                param_query.addCondition("type","=",type);
-                initTable()
+                initTable();
+                getCooperations(false);
             }
 
             function initTable() {
@@ -139,6 +136,7 @@
                         break;
                     case 2://流失客户
                         cols = columns_cooperation_loss;
+                        top_bar = '#top_bar_cooperation';
                         break;
                 }
 
@@ -188,13 +186,13 @@
                     };
                 });
 
-                getCooperations();
             }
 
-            function getCooperations() {
+            function getCooperations(reserve) {
                 iClient.getList(param_query,1,function (result) {
                     table.reload('tbl_cooperation', {
-                        data:result.rows
+                        data:result.rows,
+                        reserve:reserve
                     });
                     //初始化分页
                     laypage.render({
