@@ -74,8 +74,8 @@
              laydate = layui.laydate;
             laypage = layui.laypage;
             table = layui.table;
+
             initCoop();
-            initProduct();
 
             form.on('select(filter_cooperation)', function(data){
                 settlement.cid = data.value;
@@ -155,6 +155,8 @@
             form.render('select', 'form_settlement');
         });
     }
+
+
 
     function getPname(pid) {
         iProduct.get(pid,function (result) {
