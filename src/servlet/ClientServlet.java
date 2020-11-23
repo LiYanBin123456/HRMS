@@ -22,8 +22,11 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.Date;
+import java.text.ParseException;
 import java.util.Calendar;
 import java.util.List;
+
+import static utills.IDCardUtil.getLastday_Month;
 
 @WebServlet(urlPatterns = "/verify/client")
 public class ClientServlet extends HttpServlet {
@@ -103,6 +106,7 @@ public class ClientServlet extends HttpServlet {
     private String getSalaryDefineByMonth(Connection conn, HttpServletRequest request) {
         String month = request.getParameter("month");
         long cid = Long.parseLong(request.getParameter("id"));
+        month = getLastday_Month(month);
         DaoQueryResult result = MapSalaryDao.selectByMonth(cid,conn, Date.valueOf(month));
         return JSONObject.toJSONString(result);
     }
