@@ -210,7 +210,7 @@ var columns_employees = [[
 //普通结算单字段集合
 var columns_settlement1  = [[
     {field:'name', title: '用工企业',width:180,fixed:"left"},
-    {field:'month', title: '月份',width:70,fixed:"left",templet:function (d) {return format_month(d.month)}},
+    {field:'month', title: '月份',width:100,fixed:"left",templet:function (d) {return format_month(d.month)}},
     {field:'status', title: '状态',width:60,fixed:"left",templet:function (d) { return format_settlement_status(d.status)}},
     {field:'salary', title: '应发工资',width:70},
     {field:'social', title: '单位社保',width:70},
@@ -286,7 +286,7 @@ var columns_settlement2  = [[
     {field:'extra', title: '附加',width:70},
     {field:'summary', title: '总额',width:80},
     {field:'status', title: '状态',width:70,templet:function (d) { return array_value2text(status_settlement,d.status) }},
-    {title: '操作', toolbar: '#bar_settlement',width:220,fixed:"right"}
+    {title: '操作', toolbar: '#bar_settlement',width:180,fixed:"right"}
 ]];
 
 //面向合作小时工结算单字段集合
