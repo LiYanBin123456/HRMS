@@ -16,10 +16,7 @@ import dao.contract.ContractDao;
 import dao.employee.EmployeeDao;
 
 import dao.finance.FinanceDao;
-import dao.settlement.Detail1Dao;
-import dao.settlement.Detail2Dao;
-import dao.settlement.Detail3Dao;
-import dao.settlement.Settlement1Dao;
+import dao.settlement.*;
 import database.*;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
@@ -647,11 +644,12 @@ public class FileServlet extends HttpServlet {
                 sheet1.addCell(new Label(c+6, 1, "单位工伤"));
                 sheet1.addCell(new Label(c+7, 1, "单位公积金"));
                 sheet1.addCell(new Label(c+8, 1, "单位社保合计"));
-                sheet1.addCell(new Label(c+9, 1, "管理费"));
-                sheet1.addCell(new Label(c+10,1, "核收补减"));
-                sheet1.addCell(new Label(c+11,1, "税费"));
-                sheet1.addCell(new Label(c+12,1, "汇款总额"));
-                sheet1.addCell(new Label(c+13,1, "备注"));
+                sheet1.addCell(new Label(c+9, 1, "单位社保合计"));
+                sheet1.addCell(new Label(c+10, 1, "管理费"));
+                sheet1.addCell(new Label(c+11,1, "核收补减"));
+                sheet1.addCell(new Label(c+12,1, "税费"));
+                sheet1.addCell(new Label(c+13,1, "汇款总额"));
+                sheet1.addCell(new Label(c+14,1, "备注"));
 
                 sheet2.addCell(new Label(c+1, 1, "个人养老"));
                 sheet2.addCell(new Label(c+2, 1, "个人医疗"));
@@ -670,11 +668,12 @@ public class FileServlet extends HttpServlet {
                 sheet1.addCell(new Label(8, 1, "单位工伤"));
                 sheet1.addCell(new Label(9, 1, "单位公积金"));
                 sheet1.addCell(new Label(10, 1, "单位社保合计"));
-                sheet1.addCell(new Label(11, 1, "管理费"));
-                sheet1.addCell(new Label(12, 1, "核收补减"));
-                sheet1.addCell(new Label(13, 1, "税费"));
-                sheet1.addCell(new Label(14, 1, "汇款总额"));
-                sheet1.addCell(new Label(15, 1, "备注"));
+                sheet1.addCell(new Label(11, 1, "国家减免"));
+                sheet1.addCell(new Label(12, 1, "管理费"));
+                sheet1.addCell(new Label(13, 1, "核收补减"));
+                sheet1.addCell(new Label(14, 1, "税费"));
+                sheet1.addCell(new Label(15, 1, "汇款总额"));
+                sheet1.addCell(new Label(16, 1, "备注"));
 
                 sheet2.addCell(new Label(3, 1, "个人养老"));
                 sheet2.addCell(new Label(4, 1, "个人医疗"));
@@ -743,20 +742,21 @@ public class FileServlet extends HttpServlet {
                     float sum = v.getPension2()+v.getMedicare2()+v.getDisease2()+v.getBirth()+v.getUnemployment2()
                             +v.getInjury()+v.getFund2();
                     sheet1.addCell(new jxl.write.Number(c2+8, index, sum));
+                    sheet1.addCell(new jxl.write.Number(c2+9, index, v.getFree()));
                     //计算管理费和税费
                     HashMap<String,Float> map2 = Calculate.calculateManageAndTax2(type,category,invoice,per,val,manage,tax2,v);
                     manage =  map2.get("manage");
                     tax2 = map2.get("tax2");
                     //管理费
-                    sheet1.addCell(new jxl.write.Number(c2+9, index, manage));
+                    sheet1.addCell(new jxl.write.Number(c2+10, index, manage));
                     //核收补减
-                    sheet1.addCell(new jxl.write.Number(c2+10, index, v.getExtra2()));
+                    sheet1.addCell(new jxl.write.Number(c2+11, index, v.getExtra2()));
                     //税费
-                    sheet1.addCell(new jxl.write.Number(c2+11, index,tax2));
+                    sheet1.addCell(new jxl.write.Number(c2+12, index,tax2));
                     //汇款总额 = 基本工资+自定义工资项+单位社保总额+管理费+税费+（单位）核收补减
                     float summary = v.getBase()+salary+sum-v.getFree()+manage+tax2+v.getExtra2();
-                    sheet1.addCell(new jxl.write.Number(c2+12, index, summary));
-                    sheet1.addCell(new Label(c2+13, index, v.getComments2()));
+                    sheet1.addCell(new jxl.write.Number(c2+13, index, summary));
+                    sheet1.addCell(new Label(c2+14, index, v.getComments2()));
 
 
                     sheet2.addCell(new jxl.write.Number(c2+1, index, v.getPension1()));
@@ -779,20 +779,21 @@ public class FileServlet extends HttpServlet {
                     float sum = v.getPension2()+v.getMedicare2()+v.getDisease2()+v.getBirth()+v.getUnemployment2()
                             +v.getInjury()+v.getFund2();
                     sheet1.addCell(new jxl.write.Number(10, index, sum));
+                    sheet1.addCell(new jxl.write.Number(11, index, v.getFree()));
 
                     //计算管理费和税费
                     HashMap<String,Float> map2 =calculateManageAndTax2(type,category,invoice,per,val,manage,tax2,v);
                     //管理费
-                    sheet1.addCell(new jxl.write.Number(11, index,  map2.get("manage")));
+                    sheet1.addCell(new jxl.write.Number(12, index,  map2.get("manage")));
                     //核收补减
-                    sheet1.addCell(new jxl.write.Number(12, index, v.getExtra2()));
+                    sheet1.addCell(new jxl.write.Number(13, index, v.getExtra2()));
                     //税费
-                    sheet1.addCell(new jxl.write.Number(13, index, map2.get("tax2")));
+                    sheet1.addCell(new jxl.write.Number(14, index, map2.get("tax2")));
                     //汇款总额 = 基本工资+单位社保总额+管理费+税费+（单位）核收补减
                     float summary = v.getBase()+sum-v.getFree()+manage+tax2+v.getExtra2();
-                    sheet1.addCell(new jxl.write.Number(14, index, summary));
+                    sheet1.addCell(new jxl.write.Number(15, index, summary));
                     //备注
-                    sheet1.addCell(new Label(15, index,v.getComments2()));
+                    sheet1.addCell(new Label(16, index,v.getComments2()));
 
 
                     sheet2.addCell(new jxl.write.Number(3, index, v.getPension1()));
@@ -823,15 +824,20 @@ public class FileServlet extends HttpServlet {
         parameter.addCondition("sid","=",sid);
         DaoQueryListResult result = Detail2Dao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
+        //小时工结算单
+        Settlement2 settlement2 = (Settlement2) Settlement2Dao.get(conn,sid).data;
+        //公司的单价
+        float price = settlement2.getPrice();
 
         List<ViewDetail2> detail2s = JSONArray.parseArray(rows, ViewDetail2.class);
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
-        WritableSheet sheet1 = book.createSheet("小时工结算单明细", 0);
+        WritableSheet sheet1 = book.createSheet("小时工汇款表", 0);
+        WritableSheet sheet2 = book.createSheet("小时工结算单明细", 1);
         try {
             sheet1.addCell(new Label(0, 0, "员工姓名"));
             sheet1.addCell(new Label(1, 0, "身份证号码"));
             sheet1.addCell(new Label(2, 0, "工时"));
-            sheet1.addCell(new Label(3, 0, "单价"));
+            sheet1.addCell(new Label(3, 0, "公司单价"));
             sheet1.addCell(new Label(4, 0, "餐费"));
             sheet1.addCell(new Label(5, 0, "交通费"));
             sheet1.addCell(new Label(6, 0, "住宿费"));
@@ -840,43 +846,76 @@ public class FileServlet extends HttpServlet {
             sheet1.addCell(new Label(9, 0, "个税"));
             sheet1.addCell(new Label(10, 0, "其他1"));
             sheet1.addCell(new Label(11, 0, "其他2"));
-            sheet1.addCell(new Label(12, 0, "应付"));
-            sheet1.addCell(new Label(13, 0, "实付"));
+            sheet1.addCell(new Label(12, 0, "汇款总额"));
+
+
+            sheet2.addCell(new Label(0, 0, "员工姓名"));
+            sheet2.addCell(new Label(1, 0, "身份证号码"));
+            sheet2.addCell(new Label(2, 0, "工时"));
+            sheet2.addCell(new Label(3, 0, "单价"));
+            sheet2.addCell(new Label(4, 0, "餐费"));
+            sheet2.addCell(new Label(5, 0, "交通费"));
+            sheet2.addCell(new Label(6, 0, "住宿费"));
+            sheet2.addCell(new Label(7, 0, "水电费"));
+            sheet2.addCell(new Label(8, 0, "保险费"));
+            sheet2.addCell(new Label(9, 0, "个税"));
+            sheet2.addCell(new Label(10, 0, "其他1"));
+            sheet2.addCell(new Label(11, 0, "其他2"));
+            sheet2.addCell(new Label(12, 0, "应付"));
+            sheet2.addCell(new Label(13, 0, "实付"));
 
             int index = 1;
-            for(ViewDetail2 detail2:detail2s){
-                sheet1.addCell(new Label(0, index, detail2.getName()));
-                sheet1.addCell(new Label(1, index, detail2.getCardId()));
-                sheet1.addCell(new jxl.write.Number(2, index, detail2.getHours()));
-                sheet1.addCell(new jxl.write.Number(3, index, detail2.getPrice()));
-                sheet1.addCell(new jxl.write.Number(4, index, detail2.getFood()));
-                sheet1.addCell(new jxl.write.Number(5, index, detail2.getTraffic()));
-                sheet1.addCell(new jxl.write.Number(6, index, detail2.getAccommodation()));
-                sheet1.addCell(new jxl.write.Number(7, index, detail2.getUtilities()));
-                sheet1.addCell(new jxl.write.Number(8, index, detail2.getInsurance()));
-                sheet1.addCell(new jxl.write.Number(9, index, detail2.getTax()));
-                sheet1.addCell(new jxl.write.Number(10, index, detail2.getOther1()));
-                sheet1.addCell(new jxl.write.Number(11, index, detail2.getOther2()));
-                sheet1.addCell(new jxl.write.Number(12, index, detail2.getPayable()));
-                sheet1.addCell(new jxl.write.Number(13, index, detail2.getPaid()));
+            for(ViewDetail2 d:detail2s){
+                sheet1.addCell(new Label(0, index, d.getName()));
+                sheet1.addCell(new Label(1, index, d.getCardId()));
+                sheet1.addCell(new jxl.write.Number(2, index, d.getHours()));
+                sheet1.addCell(new jxl.write.Number(3, index, price));
+                sheet1.addCell(new jxl.write.Number(4, index, d.getFood()));
+                sheet1.addCell(new jxl.write.Number(5, index, d.getTraffic()));
+                sheet1.addCell(new jxl.write.Number(6, index, d.getAccommodation()));
+                sheet1.addCell(new jxl.write.Number(7, index, d.getUtilities()));
+                sheet1.addCell(new jxl.write.Number(8, index, d.getInsurance()));
+                sheet1.addCell(new jxl.write.Number(9, index, d.getTax()));
+                sheet1.addCell(new jxl.write.Number(10, index, d.getOther1()));
+                sheet1.addCell(new jxl.write.Number(11, index, d.getOther2()));
+                //汇款总额 = 工时*公司单价-水电-餐费-住宿费-保险-个税+其他1+其他2
+                float sum = d.getHours()*price-d.getFood()- d.getTraffic()-d.getAccommodation()-d.getUtilities()- d.getInsurance()
+                        -d.getTax()+d.getOther1()+d.getOther2();
+                sheet1.addCell(new jxl.write.Number(12, index, sum));
+
+
+                sheet2.addCell(new Label(0, index, d.getName()));
+                sheet2.addCell(new Label(1, index, d.getCardId()));
+                sheet2.addCell(new jxl.write.Number(2, index, d.getHours()));
+                sheet2.addCell(new jxl.write.Number(3, index, d.getPrice()));
+                sheet2.addCell(new jxl.write.Number(4, index, d.getFood()));
+                sheet2.addCell(new jxl.write.Number(5, index, d.getTraffic()));
+                sheet2.addCell(new jxl.write.Number(6, index, d.getAccommodation()));
+                sheet2.addCell(new jxl.write.Number(7, index, d.getUtilities()));
+                sheet2.addCell(new jxl.write.Number(8, index, d.getInsurance()));
+                sheet2.addCell(new jxl.write.Number(9, index, d.getTax()));
+                sheet2.addCell(new jxl.write.Number(10, index, d.getOther1()));
+                sheet2.addCell(new jxl.write.Number(11, index, d.getOther2()));
+                sheet2.addCell(new jxl.write.Number(12, index, d.getPayable()));
+                sheet2.addCell(new jxl.write.Number(13, index, d.getPaid()));
                 index++;
             }
             //设置列宽
-            sheet1.setColumnView(0,10);
-            sheet1.setColumnView(1,20);
-            sheet1.setColumnView(2,10);
-            sheet1.setColumnView(3,10);
-            sheet1.setColumnView(4,10);
-            sheet1.setColumnView(5,10);
-            sheet1.setColumnView(6,10);
-            sheet1.setColumnView(7,10);
-            sheet1.setColumnView(8,10);
-            sheet1.setColumnView(9,10);
-            sheet1.setColumnView(10,10);
-            sheet1.setColumnView(11,10);
-            sheet1.setColumnView(12,10);
-            sheet1.setColumnView(13,15);
-            sheet1.setColumnView(14,15);
+            sheet2.setColumnView(0,10);
+            sheet2.setColumnView(1,20);
+            sheet2.setColumnView(2,10);
+            sheet2.setColumnView(3,10);
+            sheet2.setColumnView(4,10);
+            sheet2.setColumnView(5,10);
+            sheet2.setColumnView(6,10);
+            sheet2.setColumnView(7,10);
+            sheet2.setColumnView(8,10);
+            sheet2.setColumnView(9,10);
+            sheet2.setColumnView(10,10);
+            sheet2.setColumnView(11,10);
+            sheet2.setColumnView(12,10);
+            sheet2.setColumnView(13,15);
+            sheet2.setColumnView(14,15);
             book.write();
             book.close();
         } catch (WriteException e) {

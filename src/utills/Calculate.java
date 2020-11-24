@@ -502,17 +502,21 @@ public class Calculate {
          float extra=0;//附加
          float summary;//总额
          byte payoff = serve.getPayer();//0 派遣方发工资   1合作方发工资
+         float difference ;//差额 = 单位的单价-小时工的单价
          for (Detail2 detail2:detail2s){
             hours+=detail2.getHours();
             traffic+=detail2.getTraffic();
             extra+=(detail2.getOther1()+detail2.getOther2());
+
          }
         if(payoff==0){//派遣方发工资
             //总额= 总工时*单位的单价+交通费+额外收入
             summary=hours*settlement2.getPrice()+traffic+extra;
         }else {//合作方发工资
+            //差额 = 单位的单价-小时工的单价
+            difference = settlement2.getPrice()-detail2s.get(0).getPrice();
             //总额= 总工时*单位与员工的单价差+交通费+额外收入
-            summary=hours*settlement2.getPrice();
+            summary=hours*difference;
             extra=0;
             traffic=0;
         }
