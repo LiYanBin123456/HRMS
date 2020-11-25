@@ -18,7 +18,7 @@ layui.define(['jquery','layer'],function(exports){
             closeBtn: 0, //不显示关闭按钮
             shade: obj.shade || ["0.0", '#000'],//遮罩
             shadeClose: obj.shadeClose || true, //开启遮罩关闭
-            maxHeight: obj.maxHeight || 240,//自定义高度
+            maxHeight: obj.maxHeight || 200,//自定义高度
             content: obj.content || build_menu_data(data),//支持自定义内容
             success: function(dom, index) {
                 $(".mouse-right-menu .enian_menu .text").click(function() {
