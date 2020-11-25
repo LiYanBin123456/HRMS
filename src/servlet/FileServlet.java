@@ -795,12 +795,14 @@ public class FileServlet extends HttpServlet {
 
                     //计算管理费和税费
                     HashMap<String,Float> map2 =calculateManageAndTax2(type,category,invoice,per,val,manage,tax2,v);
+                    manage = map2.get("manage");
+                    tax2 = map2.get("tax2");
                     //管理费
-                    sheet1.addCell(new jxl.write.Number(12, index,  map2.get("manage")));
+                    sheet1.addCell(new jxl.write.Number(12, index, manage ));
                     //核收补减
                     sheet1.addCell(new jxl.write.Number(13, index, v.getExtra2()));
                     //税费
-                    sheet1.addCell(new jxl.write.Number(14, index, map2.get("tax2")));
+                    sheet1.addCell(new jxl.write.Number(14, index,tax2));
                     //汇款总额 = 基本工资+单位社保总额+管理费+税费+（单位）核收补减
                     float summary = v.getBase()+sum-v.getFree()+manage+tax2+v.getExtra2();
                     sheet1.addCell(new jxl.write.Number(15, index, summary));
