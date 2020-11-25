@@ -4,11 +4,13 @@ package service.employee;
 import bean.client.Cooperation;
 import bean.employee.Employee;
 import bean.employee.EmployeeExtra;
+import bean.employee.PayCard;
 import bean.insurance.Insurance;
 import com.alibaba.fastjson.JSONObject;
 import dao.client.CooperationDao;
 import dao.employee.EmployeeDao;
 import dao.employee.ExtraDao;
+import dao.employee.PayCardDao;
 import dao.employee.SettingDao;
 import dao.insurance.InsuranceDao;
 import database.*;
@@ -79,6 +81,7 @@ public class EmployeeService {
         DaoUpdateResult result = new DaoUpdateResult();
         List<Employee> employees =new ArrayList<>();
         List<EmployeeExtra> extras =new ArrayList<>();
+        List<PayCard> payCards =new ArrayList<>();
         for(JSONObject v : viewEmployees) {
             long cid = 0;
             if (v.getString("cname") != null && !v.getString("cname").trim().isEmpty()) {//根据客户名称和派遣方id查找合作单位id
@@ -101,17 +104,22 @@ public class EmployeeService {
             //封装员工补充信息
             EmployeeExtra extra = new EmployeeExtra(0, v.getString("rid"), v.getString("school"), v.getString("major"), v.getByte("household"), v.getString("address"));
             extras.add(extra);
+
+            PayCard payCard = new PayCard(0,v.getString("bank1"),v.getString("bank2"),v.getString("bankNo"),v.getString("cardNo"));
+            payCards.add(payCard);
         }
 
         result = EmployeeDao.insertBatch(conn,employees);//批量插入员工数据
         int[] eids = (int[])result.extra;
         for(int i = 0;i<eids.length;i++){//员工补充信息添加对应eid
             extras.get(i).setEid(eids[i]);
+            payCards.get(i).setEid(eids[i]);
         }
 
         DaoUpdateResult result1 = ExtraDao.insertBatch(conn,extras);//批量插入员工补充数据
+        DaoUpdateResult result2 =PayCardDao.insertBatch(conn,payCards);
 
-        if(result.success&&result1.success){//事务处理
+        if(result.success&&result1.success&&result2.success){//事务处理
             ConnUtil.commit(conn);
             return  result;
         }else {

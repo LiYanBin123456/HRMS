@@ -374,7 +374,11 @@
 
             //导出
             function exports(){
-                var url = "/hrms/verify/file?op=exportDetail1&sid="+sid+"&cid="+cid;
+                if (type==3){//代缴社保
+                    var url = "/hrms/verify/file?op=exportDetail4&sid="+sid;
+                }else {
+                    var url = "/hrms/verify/file?op=exportDetail1&sid="+sid+"&cid="+cid+"&month="+month;
+                }
                 var form = $('<form method="POST"></form>');
                 form.attr('action', url);
                 form.appendTo($('body'));
