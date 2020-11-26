@@ -1,6 +1,5 @@
 package dao.settlement;
 
-import bean.rule.RuleFund;
 import bean.settlement.Settlement1;
 import bean.settlement.Settlement3;
 import bean.settlement.ViewSettlement3;
@@ -27,8 +26,8 @@ public class Settlement3Dao {
 
     //添加结算单
     public static DaoUpdateResult insert(Connection conn, Settlement3 s) {
-        String sql = "insert into settlement3 (did,cid,ccid,pid,month,price,status,source) values (?,?,?,?,?,?,?,?)";
-        Object []params = {s.getDid(),s.getCid(),s.getCcid(),s.getPid(),s.getMonth(),s.getPrice(),s.getStatus(),s.getSource()};
+        String sql = "insert into settlement3 (did,cid,ccid,pid,month,price,status,flag) values (?,?,?,?,?,?,?,?)";
+        Object []params = {s.getDid(),s.getCid(),s.getCcid(),s.getPid(),s.getMonth(),s.getPrice(),s.getStatus(),s.getFlag()};
         return DbUtil.insert(conn,sql,params);
     }
 
@@ -57,7 +56,6 @@ public class Settlement3Dao {
      * 审核，修改结算单状态为几审
      * @param conn
      * @param id 要审核的结算单id
-     * @param status  几审
      * @return
      */
     public static DaoUpdateResult check(Connection conn, long id,byte type,boolean result) {

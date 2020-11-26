@@ -10,15 +10,8 @@ public class ViewSettlement3 extends Settlement3 {
     public ViewSettlement3() {
     }
 
-    public ViewSettlement3(long id, long did, long cid, Date month, byte status, byte source, long pid, float price, String cname, String pname, String post) {
-        super(id, did, cid, month, status, source, pid, price);
-        this.cname = cname;
-        this.pname = pname;
-        this.post = post;
-    }
-
-    public ViewSettlement3(long id, long did, long cid, String ccid, Date month, byte status, byte source, long pid, float price, String cname, String pname, String post) {
-        super(id, did, cid, ccid, month, status, source, pid, price);
+    public ViewSettlement3(long id, long did, long cid, String ccid, Date month, byte status, byte flag, long pid, float price, String cname, String pname, String post) {
+        super(id, did, cid, ccid, month, status, flag, pid, price);
         this.cname = cname;
         this.pname = pname;
         this.post = post;

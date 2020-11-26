@@ -34,6 +34,14 @@ public class Settlement2 extends Settlemet{
         this.summary = summary;
     }
 
+    public Settlement2(int hours, float price, float traffic, float extra, float summary) {
+        this.hours = hours;
+        this.price = price;
+        this.traffic = traffic;
+        this.extra = extra;
+        this.summary = summary;
+    }
+
     public int getHours() {
         return hours;
     }

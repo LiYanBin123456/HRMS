@@ -19,6 +19,10 @@ public class ViewSettlement1 extends Settlement1{
         this.name = name;
     }
 
+    public ViewSettlement1(byte type, float salary, float social, float medicare, float fund, float manage, float tax, float extra, float free, float summary, String comments, String name) {
+        super(type, salary, social, medicare, fund, manage, tax, extra, free, summary, comments);
+        this.name = name;
+    }
 
     public String getName() {
         return name;

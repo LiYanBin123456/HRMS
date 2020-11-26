@@ -18,6 +18,12 @@ public class ViewSettlement2 extends Settlement2{
         this.name = name;
     }
 
+    public ViewSettlement2(int hours, float price, float traffic, float extra, float summary, String name) {
+        super(hours, price, traffic, extra, summary);
+        this.name = name;
+    }
+
+
     public String getName() {
         return name;
     }

@@ -27,8 +27,6 @@ import jxl.write.Label;
 import jxl.write.biff.RowsExceededException;
 import org.apache.commons.io.IOUtils;
 import service.fileService.FileService;
-import service.insurance.InsuranceService;
-import service.settlement.Settlement1Service;
 import utills.Calculate;
 import utills.XlsUtil;
 import utills.IDCardUtil;

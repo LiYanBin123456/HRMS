@@ -10,14 +10,8 @@ public class Settlement3 extends Settlemet {
     public Settlement3() {
     }
 
-    public Settlement3(long id, long did, long cid, Date month, byte status, byte source, long pid, float price) {
-        super(id, did, cid, month, status, source);
-        this.pid = pid;
-        this.price = price;
-    }
-
-    public Settlement3(long id, long did, long cid, String ccid, Date month, byte status, byte source, long pid, float price) {
-        super(id, did, cid, ccid, month, status, source);
+    public Settlement3(long id, long did, long cid, String ccid, Date month, byte status, byte flag, long pid, float price) {
+        super(id, did, cid, ccid, month, status, flag);
         this.pid = pid;
         this.price = price;
     }

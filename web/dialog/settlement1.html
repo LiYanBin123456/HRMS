@@ -62,7 +62,7 @@
 <script src="../js/interface.js"></script>
 <script src="../js/queryParam.js"></script>
 <script>
-    var settlement = {mode:0};
+    var settlement = {mode:1,flag:1};
     var form;
     var laydate;
     var table;
@@ -90,6 +90,9 @@
             });
             form.on('radio(mode)', function(data){
                 settlement.mode = data.value;
+            });
+            form.on('radio(calc)', function(data){
+                settlement.flag = data.value;
             });
             laydate.render({
                 elem: '#month' //指定元素
