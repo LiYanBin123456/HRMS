@@ -62,6 +62,13 @@ var menuItems_dispatch = [
             {id:"0,2097152",   title:"终审",href:"check22.html?type=1",icon:"&#xe6a7"}
         ]
     },
+    {title:"特殊结算",id:"0,3670016",icon:"&#xe6a7",children:
+        [
+            {id:"0,524288",   title:"结算",href:"settlements0.html",icon:"&#xe6a7"},
+            {id:"0,1048576",   title:"初审",href:"check0.html?type=0",icon:"&#xe6a7"},
+            {id:"0,2097152",   title:"终审",href:"check0.html?type=1",icon:"&#xe6a7"}
+        ]
+    },
     {title:"商业保险",id:"0,62914560",icon:"&#xe6a7",children:
         [
             {id:"0,4194304",   title:"保险产品",href:"products.html",icon:"&#xe6a7"},

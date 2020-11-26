@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>添加普通结算单</title>
+    <title>特殊结算单</title>
     <meta name="renderer" content="webkit">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport"
@@ -13,48 +13,24 @@
     <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
 </head>
 <body>
-
 <form lay-filter="form_settlement" class="layui-form" style="padding: 10px">
     <div class="layui-form-item">
-        <label class="layui-form-label"><span class="x-red">*</span>选择结算单位</label>
+        <label class="layui-form-label">
+            <span class="x-red">*</span>选择结算单位</label>
+        <div class="layui-input-inline" >
+            <select name="cid" id="select_cooperation" autocomplete="off" lay-filter="filter_cooperation" lay-verify="required"></select>
+        </div>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">
+            <span class="x-red">*</span>选择结算月份
+        </label>
         <div class="layui-input-inline">
-            <select name="cid" id="select_cooperation" lay-filter="filter_cooperation" lay-verify="required"></select>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label"><span class="x-red">*</span>选择结算月份</label>
-        <div class="layui-input-inline" >
-            <input type="text" class="layui-input" name="month" id="month" autocomplete="off">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">
-            <span class="x-red">*</span>是否生成明细
-        </label>
-        <div class="layui-input-inline" >
-            <input type="radio" name="mode" title="是" value="1" lay-filter="mode" checked="checked">
-            <input type="radio" name="mode" title="否" value="0" lay-filter="mode">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">
-            <span class="x-red">*</span>是否计算社保
-        </label>
-        <div class="layui-input-inline" >
-            <input type="radio" name="calc" title="是" value="1" lay-filter="calc" checked="checked">
-            <input type="radio" name="calc" title="否" value="0" lay-filter="calc">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label"><span class="x-red">*</span>选择合同</label>
-        <div class="layui-input-inline" >
-            <input type="text" name="ccid" class="layui-input" readonly>
+            <input type="text" class="layui-input" id="month" autocomplete="off">
         </div>
     </div>
 </form>
-<table id="tbl_contract" lay-filter="filter_tb_contract">
-</table>
-<div class="layui-table-page" id="pager"></div>
 </body>
 <script src="../js/fieldSet.js"></script>
 <script src="../js/jquery.min.js"></script>
@@ -63,34 +39,35 @@
 <script src="../js/queryParam.js"></script>
 <script>
     var settlement = {mode:0};
-    var form;
-    var laydate;
+    loadLayuiModule();
+    var form ;
+    var laydate ;
     var table;
     var laypage;
-    var element;
     var param_query = new QueryParam();
     param_query.setPagination(1,10);
-    //type ：0 1 派遣外包（需普通结算单合同）  2 3 代缴工资社保（人事代理合同）
-    var type =  $.query.get("type");
-
-    loadLayuiModule();
 
     function loadLayuiModule() {
-        layui.use(['form', 'laydate', 'jquery','laypage','table','element'], function () {
-            form = layui.form;
-            laydate = layui.laydate;
-            element = layui.element;
-            table = layui.table;
+        layui.use(['form','laypage','table','laydate'], function () {
+             form = layui.form;
+             laydate = layui.laydate;
             laypage = layui.laypage;
+            table = layui.table;
 
             initCoop();
+
             form.on('select(filter_cooperation)', function(data){
                 settlement.cid = data.value;
                 initTable(data.value);
             });
+
             form.on('radio(mode)', function(data){
                 settlement.mode = data.value;
             });
+            form.on('select(filter_product)', function(data){
+                settlement.pid = data.value;
+            });
+
             laydate.render({
                 elem: '#month' //指定元素
                 ,type: 'month'
@@ -99,9 +76,7 @@
                 }
             });
         });
-
     }
-
     function initTable(cid) {
         //初始化数据表格
         table.render({
@@ -115,23 +90,18 @@
             var contact = obj.data;
             $("[name=ccid]").val(contact.id);
             settlement.ccid = contact.id;
+            getPname(contact.pid);
         });
         getContracts(cid);
     }
-
     //获取派遣方与合作客户的合同
     function getContracts(cid) {
-        param_query.addCondition('bid','=',cid);//该合作客户
-        if (type==0||type==1){//外包或者派遣
-            param_query.addCondition('stype','=',0);//获取劳务外包服务类型的合同
-        }else {//代缴社保工资
-            param_query.addCondition('stype','=',1);//获取人事代理服务类型的合同
-        }
+        param_query.addCondition('bid','=',cid);
+        param_query.addCondition('stype','=',3);
         iContract.getList(param_query,"B",function (result) {//获取派遣方与合作客户的合同
             table.reload('tbl_contract', {
                 data:result.rows
             });
-
             laypage.render({
                 elem: 'pager'
                 ,curr: param_query.pagination.page
@@ -165,9 +135,16 @@
         });
     }
 
+
+
+    function getPname(pid) {
+        iProduct.get(pid,function (result) {
+            var product = result.data;
+            $("[name=pname]").val(product.name);
+        });
+    }
     //向调用页面返回编辑的结算单
     var callbackData = function () {
-        settlement.type = type;
         return settlement;
     }
 </script>
