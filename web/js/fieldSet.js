@@ -204,10 +204,10 @@ var columns_employees = [[
     {field:'school', title: '毕业院校',width:120,edit: 'text'},
     {field:'major', title: '毕业专业',width:120,edit: 'text'},
     {field:'cname', title: '外派单位',width:120,edit: 'text'},
-    {field:'bank1', title: '时间报酬',width:120,edit: 'text'},
-    {field:'bank2', title: '时间报酬',width:120,edit: 'text'},
-    {field:'bankNo', title: '时间报酬',width:120,edit: 'text'},
-    {field:'cardNo', title: '时间报酬',width:120,edit: 'text'}
+    {field:'bank1', title: '发行卡',width:120,edit: 'text'},
+    {field:'bank2', title: '开户行',width:120,edit: 'text'},
+    {field:'bankNo', title: '行号',width:120,edit: 'text'},
+    {field:'cardNo', title: '账号',width:120,edit: 'text'}
   ]];
 
 //普通结算单字段集合

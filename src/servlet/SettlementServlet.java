@@ -124,7 +124,6 @@ public class SettlementServlet extends HttpServlet {
         return JSONObject.toJSONString(result);
     }
 
-
     //保存并且计算结算单明细
     private String saveDetail(Connection conn, HttpServletRequest request) {
         int category = Integer.parseInt(request.getParameter("category"));//类别
