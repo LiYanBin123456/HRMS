@@ -2,7 +2,6 @@ package service.settlement;
 
 import bean.client.Cooperation;
 import bean.client.MapSalary;
-import bean.contract.ViewContractCooperation;
 import bean.employee.Deduct;
 import bean.employee.Employee;
 import bean.employee.EnsureSetting;
@@ -11,14 +10,13 @@ import bean.rule.RuleSocial;
 import bean.settlement.*;
 import dao.client.CooperationDao;
 import dao.client.MapSalaryDao;
-import dao.contract.ContractDao;
 import dao.employee.DeductDao;
 import dao.employee.EmployeeDao;
 import dao.employee.SettingDao;
 import dao.rule.RuleMedicareDao;
 import dao.rule.RuleSocialDao;
+import dao.settlement.Detail0Dao;
 import dao.settlement.Detail1Dao;
-import dao.settlement.Detail2Dao;
 import dao.settlement.Settlement1Dao;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;
@@ -26,37 +24,32 @@ import database.QueryConditions;
 import database.QueryParameter;
 import utills.Calculate;
 
-import javax.print.attribute.standard.Chromaticity;
 import java.sql.Connection;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.zip.DeflaterInputStream;
 
-public class Detail1Service {
+public class Detail0Service {
 
     public static DaoQueryListResult getList(Connection conn, QueryParameter param, long id){
         param.conditions.add("sid","=",id);
-        return Detail1Dao.getList(conn,param);
+        return Detail0Dao.getList(conn,param);
     }
 
-    public static DaoUpdateResult update(Connection conn, List<Detail1> details ){
-        return  Detail1Dao.update(conn,details);
+    public static DaoUpdateResult update(Connection conn, List<Detail0> details ){
+        return  Detail0Dao.update(conn,details);
     }
 
-    public static DaoUpdateResult importDetails(Connection conn, long sid, List<ViewDetail1> viewDetail1s, long did){
+    public static DaoUpdateResult importDetails(Connection conn, long sid, List<ViewDetail0> viewDetails, long did){
         DaoUpdateResult result = new DaoUpdateResult();
-        List<Detail1> detail1s =new ArrayList<>();
+        List<Detail0> details =new ArrayList<>();
 
-        for(ViewDetail1 v :viewDetail1s){
+        for(ViewDetail0 v :viewDetails){
             if(v.getEid()!=0){//员工id存在
-                Detail1 detail1 = new Detail1(0,sid,v.getEid(),v.getBase(),v.getPension1(),v.getMedicare1(),v.getUnemployment1(),v.getDisease1(),v.getFund1(),v.getPension2(),v.getMedicare2()
-                        ,v.getUnemployment2(),v.getInjury(),v.getDisease2(),v.getBirth(),v.getFund2(),v.getTax(),v.getPayable(),v.getPaid(),v.getF1(),v.getF2(),v.getF3(),v.getF4(),v.getF5(),v.getF6(),v.getF7()
-                        ,v.getF8(),v.getF9(),v.getF10(),v.getF11(),v.getF12(),v.getF13(),v.getF14(),v.getF15(),v.getF16(),v.getF17(),v.getF18(),v.getF19(),v.getF20(),v.getStatus());
-                detail1s.add(detail1);
-            }else {//员工不存在
+                Detail0 detail = new Detail0(v.getSid(),v.getEid(),v.getAmount(),v.getTax(),v.getPaid());
+                details.add(detail);
+            }else {//员工id不存在
                 QueryConditions conditions = new QueryConditions();
                 conditions.add("cardId","=",v.getCardId());
                 conditions.add("did","=",did);
@@ -65,14 +58,11 @@ public class Detail1Service {
                     return  result;
                 }
                 Employee employee = (Employee) EmployeeDao.get(conn,conditions).data; //根据员工身份证获取员工id
-                Detail1 detail1 = new Detail1(0,sid,employee.getId(),v.getBase(),v.getPension1(),v.getMedicare1(),v.getUnemployment1(),v.getDisease1(),v.getFund1(),v.getPension2(),v.getMedicare2()
-                        ,v.getUnemployment2(),v.getInjury(),v.getDisease2(),v.getBirth(),v.getFund2(),v.getTax(),v.getPayable(),v.getPaid(),v.getF1(),v.getF2(),v.getF3(),v.getF4(),v.getF5(),v.getF6(),v.getF7()
-                        ,v.getF8(),v.getF9(),v.getF10(),v.getF11(),v.getF12(),v.getF13(),v.getF14(),v.getF15(),v.getF16(),v.getF17(),v.getF18(),v.getF19(),v.getF20(),v.getStatus());
-                detail1s.add(detail1);
+                Detail0 detail = new Detail0(v.getSid(),employee.getId(),v.getAmount(),v.getTax(),v.getPaid());
+                details.add(detail);
             }
-
         }
-        result = Detail1Dao.importDetails(conn,detail1s);
+        result = Detail0Dao.importDetails(conn,details);
         return  result;
     }
 

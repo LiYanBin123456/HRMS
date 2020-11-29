@@ -36,7 +36,7 @@
             <input type="radio" name="mode" title="否" value="0" lay-filter="mode">
         </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-form-item" id="if_social">
         <label class="layui-form-label">
             <span class="x-red">*</span>是否计算社保
         </label>
@@ -91,9 +91,14 @@
             form.on('radio(mode)', function(data){
                 settlement.mode = data.value;
             });
-            form.on('radio(calc)', function(data){
-                settlement.flag = data.value;
-            });
+            if (type==3||type==4){//类型是代发工资和代缴社保,不需要自动计算社保的选项卡
+                $("#if_social").addClass("layui-hide");
+            }else {
+                form.on('radio(calc)', function(data){
+                    settlement.flag = data.value;
+                });
+            }
+
             laydate.render({
                 elem: '#month' //指定元素
                 ,type: 'month'

@@ -1040,6 +1040,210 @@ var InterfaceSettlement = function () {
     };
 };
 
+//特殊结算单管理相关接口
+var InterfaceSettlement0 = function () {
+    var url = base+"/settlement0";//servlet的url地址
+    /**
+     * 获取结算单列表
+     * @param param 查询列表
+      * @param success
+     * @param fail
+     */
+    this.getList = function(param,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 添加结算单
+     * @param settlement 结算单信息
+     * @param type 0_不生成明细 1_自动生成明细
+     * @param success
+     * @param fail
+     */
+    this.insert = function (settlement,type,success,fail) {
+        var para = {op: "insert",settlement:JSON.stringify(settlement),type:type};
+        access(url,para,1,success,fail);
+    };
+
+    this.update = function (settlement,success,fail) {
+        var para = {op: "update",settlement:JSON.stringify(settlement)};
+        access(url,para,1,success,fail);
+    };
+
+    /**
+     * 删除结算单
+     * @param id 结算单id
+     * @param success
+     * @param fail
+     */
+    this.delete = function (id,success,fail) {
+        var para = {op:"delete",id:id};
+        access(url,para,1,success,fail);
+    };
+
+    /**
+     * 删除结算单明细
+     * @param id 结算单明细id
+     * @param success
+     * @param fail
+     */
+    this.deleteDetail = function (id,success,fail) {
+        var para = {op:"deleteDetail",id:id};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 获取结算单明细列表
+     * @param param 查询参数列表
+     * @param id 结算单编号
+     * @param success
+     * @param fail
+     */
+    this.getDetails = function(param,id,success,fail){
+        var para = {op: "getDetails", param:JSON.stringify(param),id:id};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 修改结算单明细
+     * @param details 结算单明细
+     * @param success
+     * @param fail
+     */
+    this.updateDetails = function (details,success,fail) {
+        var para = {op: "updateDetails",details:JSON.stringify(details)};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 导入结算单明细
+     * @param id 结算单编号
+     * @param details 结算单明细集合
+     * @param success
+     * @param fail
+     */
+    this.importDetails = function (id,details,success,fail) {
+        var para = {op: "importDetails",id:id,details:details};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 导出结算单明细
+     * @param id 结算单编号
+     * @param category 0-普通结算单明细 1-小时工结算单明细 2-商业保险结算单明细
+     * @param success
+     * @param fail
+     */
+    this.exportDetails = function (id,category,success,fail) {
+        var para = {op: "exportDetails",id:id, category:category};
+        access(url,para,1,success,fail);
+    };
+
+
+    /**
+     * 提交结算单
+     * @param id 结算单id
+     * @param category 0-普通结算单 1-小时工结算单 2-商业保险结算单
+     * @param success
+     * @param fail
+     */
+    this.commit = function (id,category,success,fail) {
+        var para = {op: "commit",id:id, category:category};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 审核结算单
+     * @param id 结算单id
+     * @param category 0-普通结算单 1-小时工结算单 2-商业保险结算单
+     * @param type 0-初审 1-终审
+     * @param pass true-通过 false-不通过
+     * @param reason 不通过的原因
+     * @param success
+     * @param fail
+     */
+    this.check = function (category,id,type,pass,reason,success,fail) {
+        var para = {op: "check",id:id, category:category,type:type,pass:pass,reason:reason};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 重置结算单
+     * @param id 结算单id
+     * @param category 0-结算单 1-小时工结算单
+     * @param success
+     * @param fail
+     */
+    this.reset = function (id,category,success,fail) {
+        var para = {op: "reset",id:id, category:category};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 扣款
+     * @param id 结算单id
+     * @param category 0-结算单 1-小时工结算单
+     * @param success
+     * @param fail
+     */
+    this.deduct = function (id,category,success,fail) {
+        var para = {op: "deduct",id:id, category:category};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 发放工资
+     * @param id 结算单id
+     * @param category 0-结算单 1-小时工结算单
+     * @param success
+     * @param fail
+     */
+    this.confirm = function (id,category,success,fail) {
+        var para = {op: "confirm",id:id, category:category};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 导出工资发放表
+     * @param id 结算单id
+     * @param category 0-招商银行 1-农业银行 2-浦发银行  3-交通银行
+     * @param success
+     * @param fail
+     */
+    this.exportBank = function (id,category,success,fail) {
+        var para = {op: "exportBank",id:id,category:category};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 查询结算单日志
+     * @param param 查询参数
+     * @param id 结算单id
+     * @param category 0-结算单 1-小时工结算单
+     * @param success
+     * @param fail
+     */
+    this.getLogs = function (param,id,category,success,fail) {
+        var para = {op: "getLogs",param:JSON.stringify(param),id:id,category:category};
+        access(url,para,1,success,fail);
+    };
+
+    /**
+     * 保存结算单并且自动计算结算单明细
+     * @param sid 结算单id
+     * @param cid 合作单位id
+     * @param category 0_普通结算单 1_小时工结算单  2_商业保险结算单
+     * @param success
+     * @param fail
+     */
+    this.saveDetail = function (sid,cid,category,success,fail) {
+        var para = {op: "saveDetail",sid:sid,cid:cid,category:category};
+        access(url,para,1,success,fail);
+    };
+
+    /**
+     * 保存并且计算结算单
+     * @param sid 结算单id
+     * @param category 0_普通结算单 1_小时工结算单 2_商业保险结算单
+     * @param success
+     * @param fail
+     */
+    this.saveSettlement = function (sid,category,success,fail) {
+        var para = {op: "saveSettlement",sid:sid,category:category};
+        access(url,para,1,success,fail);
+    };
+};
+
 //参保单管理相关接口
 var InterfaceInsurance = function () {
     var url = base+"/insurance";//servlet的url地址
@@ -1282,6 +1486,7 @@ var iAccount =new InterfaceAccount();//账号管理
 var iNotice =new InterfaceNotice();//公告管理
 var iEmployee = new InterfaceEmployee();//员工管理
 var iSettlement = new InterfaceSettlement();//结算单管理
+var iSettlement0 = new InterfaceSettlement0();//结算单管理
 var iInsurance = new InterfaceInsurance();//参保单管理
 var iProduct = new InterfaceProduct();//保险产品管理
 var iFinance = new InterfaceFinance();//财务管理

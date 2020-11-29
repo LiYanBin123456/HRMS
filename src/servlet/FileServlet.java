@@ -4,7 +4,6 @@ import bean.admin.Account;
 import bean.client.Items;
 import bean.client.MapSalary;
 
-import bean.contract.Contract;
 import bean.contract.Serve;
 import bean.contract.ViewContractCooperation;
 import bean.employee.Employee;
@@ -12,12 +11,13 @@ import bean.employee.ViewEmployee;
 import bean.settlement.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import dao.client.FinanceDao;
 import dao.client.MapSalaryDao;
 import dao.contract.ContractDao;
 import dao.contract.ServeDao;
 import dao.employee.EmployeeDao;
 
-import dao.finance.FinanceDao;
+
 import dao.settlement.*;
 import database.*;
 import jxl.Workbook;
@@ -37,8 +37,6 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
-import javax.sound.midi.Soundbank;
-import java.awt.*;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

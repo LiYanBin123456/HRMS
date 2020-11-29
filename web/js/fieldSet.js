@@ -227,6 +227,26 @@ var columns_settlement1  = [[
     {field:'comments', title: '备注',width:200,edit: 'text'},
     {title:'操作', toolbar: '#bar_settlement',width:220,fixed:"right"}
 ]];
+//特殊普通结算单字段集合
+var columns_settlement0  = [[
+    {field:'name', title: '用工企业',width:180,fixed:"left"},
+    {field:'month', title: '月份',width:100,fixed:"left",templet:function (d) {return format_month(d.month)}},
+    {field:'status', title: '状态',width:60,fixed:"left",templet:function (d) { return format_settlement_status(d.status)}},
+    {field:'tax', title: '税费',width:80},
+    {field:'amount', title: '金额',width:100},
+    {title:'操作', toolbar: '#bar_settlement',width:220,fixed:"right"}
+]];
+
+//特殊普通结算单明细字段集合
+var  columns_detail0 = [[
+    {field:'name', title: '员工姓名',width:180,fixed:"left"},
+    {field:'cardId', title: '身份证',width:180,fixed:"left"},
+    {field:'amount', title: '金额',width:100},
+    {field:'tax', title: '税费',width:80},
+    {field:'paid', title: '实发',width:80},
+    {title:'操作', toolbar: '#bar_settlement',width:220,fixed:"right"}
+]];
+
 
 var columns_settlement1_check  = [[
     {field:'name', title: '用工企业',width:180,fixed:"left"},

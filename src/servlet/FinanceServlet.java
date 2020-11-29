@@ -3,7 +3,7 @@ package servlet;
 import bean.log.Transaction;
 import com.alibaba.fastjson.JSONObject;
 import dao.TransactionDao;
-import dao.finance.FinanceDao;
+import dao.client.FinanceDao;
 import database.ConnUtil;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;

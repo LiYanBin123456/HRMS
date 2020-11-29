@@ -21,6 +21,14 @@ public class Detail0 {
         this.paid = paid;
     }
 
+    public Detail0(long sid, long eid, float amount, float tax, float paid) {
+        this.sid = sid;
+        this.eid = eid;
+        this.amount = amount;
+        this.tax = tax;
+        this.paid = paid;
+    }
+
     public long getId() {
         return id;
     }
