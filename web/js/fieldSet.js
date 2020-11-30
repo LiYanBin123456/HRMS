@@ -761,7 +761,7 @@ var invoice_contract = [
 ];
 //合同服务项目类型
 var stype_contract = [
-    {value:0,text:"劳务派遣"},
+    {value:0,text:"劳务外包派遣"},
     {value:1,text:"人事服务代理"},
     {value:2,text:"小时工"},
     {value:3,text:"商业保险"}

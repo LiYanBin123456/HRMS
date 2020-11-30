@@ -186,9 +186,9 @@
                         layer.close(index);
                         var  details = new Array(member.length)
                         for (var i in member){
-                            details[i] = {"eid":member[i].id,"pid":pid};
+                            details[i] = {"eid":member[i].id};
                         }
-                        iSettlement.importDetails(sid,JSON.stringify(details),2,function () {
+                        iSettlement0.importDetails(sid,JSON.stringify(details),function () {
                             layer.msg("添加成功")
                         });
                         getDetails();
