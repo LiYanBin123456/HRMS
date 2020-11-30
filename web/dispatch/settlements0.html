@@ -74,7 +74,6 @@
     var laydate;
     var popMenu;
 
-    var type = 0;//区分结算单类型  0 派遣  1 外包
     var param_query = new QueryParam();
     param_query.setOrder("id",true);
     param_query.setPagination(1,10);
@@ -336,7 +335,7 @@
         var msg = "保存后结算单将被设置为[保存]状态，同时会自动计算，确认保存吗?";
         var title = "保存结算单-"+settlement.name+format_date(settlement.month);
         layer.confirm(msg, {icon: 3, title:title}, function(index){
-            iSettlement.saveSettlement(settlement.id,0,function () {
+            iSettlement0.saveSettlement(settlement.id,function () {
                 layer.close(index);
                 layer.msg("保存成功");
                 getSettlements();

@@ -2,6 +2,7 @@ package dao.settlement;
 
 import bean.settlement.Detail0;
 import bean.settlement.Detail1;
+import bean.settlement.ViewDetail0;
 import bean.settlement.ViewDetail1;
 import database.*;
 
@@ -11,7 +12,7 @@ import java.util.List;
 public class Detail0Dao {
 
     public static DaoQueryListResult getList(Connection conn, QueryParameter param){
-        return DbUtil.getList(conn,"view_detail0",param, ViewDetail1.class);
+        return DbUtil.getList(conn,"view_detail0",param, ViewDetail0.class);
     }
 
     public static DaoUpdateResult update(Connection conn, List<Detail0> ds){
@@ -24,7 +25,7 @@ public class Detail0Dao {
     }
     //获取明细
     public static DaoQueryResult get(Connection conn, QueryConditions conditions){
-        return DbUtil.get(conn,"view_detail0",conditions, ViewDetail1.class);
+        return DbUtil.get(conn,"view_detail0",conditions, ViewDetail0.class);
     }
 
     public static DaoUpdateResult importDetails(Connection conn, List<Detail0> ds){

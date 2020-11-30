@@ -23,7 +23,8 @@
                 <button class="layui-btn layui-btn-sm" lay-event="export" onclick="exports()"><i class="layui-icon "></i> 导出</button>
                 <button class="layui-btn layui-btn-sm" lay-event="import"><i class="layui-icon "></i> 导入</button>
                 <button class="layui-btn layui-btn-sm" lay-event="download"><i class="layui-icon "></i> 下载模板</button>
-                <button class="layui-btn layui-btn-sm" lay-event="save" onclick="save()"><i class="layui-icon "></i> 计算</button>
+                <button class="layui-btn layui-btn-sm" lay-event="save" onclick="save()"><i class="layui-icon "></i> 保存</button>
+                <button class="layui-btn layui-btn-sm" lay-event="caculate" onclick="caculate()"><i class="layui-icon "></i> 计算</button>
             </div>
             <table id="tbl_detail" lay-filter="filter_tb_detail"></table>
             <div class="layui-table-page" id="pager"></div>
@@ -51,7 +52,6 @@
 
             var sid = $.query.get("id");//结算单id
             var cid = $.query.get("cid");//合作单位id
-            var pid = $.query.get("pid");//产品保险id
 
             $(function () {
                 loadLayuiModule();
@@ -240,16 +240,27 @@
             //保存
             function  save() {
                 var details = layui.table.cache.tbl_detail;
-                var msg = "保存后结算单将自动计算保费？";
-                var title = "保存结算单明细";
+                var msg = "保存后结算单？";
+                var title = "保存结算单";
                 layer.confirm(msg, {icon: 3, title:title}, function(index){
-                    iSettlement.updateDetails(details,2,function () {
+                    iSettlement0.updateDetails(details,function () {
                         layer.close(index);
                         layer.msg("修改成功");
                         getDetails();
                     })
                 });
             };
+            function caculate(){
+                var msg = "计算结算单";
+                var title = "保存结算单";
+                layer.confirm(msg, {icon: 3, title:title}, function(index){
+                    iSettlement0.saveDetail(sid,function () {
+                        layer.close(index);
+                        layer.msg("修改成功");
+                        getDetails();
+                    })
+                });
+            }
         </script>
     </body>
 </html>

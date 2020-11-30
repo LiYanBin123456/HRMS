@@ -99,37 +99,18 @@ public class Settlement0Servlet extends HttpServlet {
 
     //保存并且计算结算单明细
     private String saveDetail(Connection conn, HttpServletRequest request) {
-        int category = Integer.parseInt(request.getParameter("category"));//类别
+
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
-        long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
-        DaoUpdateResult result = null;
-        switch (category){
-            case 0://普通结算单明细
-                result = Detail1Service.saveDetail(conn,sid,cid);
-                break;
-            case 1://小时工结算单明细
-                result = Detail2Service.saveDetail(conn,sid);
-                break;
-        }
+        DaoUpdateResult result;
+        result = Detail0Service.saveDetail(conn,sid);
         return JSONObject.toJSONString(result);
     }
 
     //保存并且计算结算单
     private String saveSettlement(Connection conn, HttpServletRequest request) {
-        int category = Integer.parseInt(request.getParameter("category"));
         long sid = Long.parseLong(request.getParameter("sid"));
-        DaoUpdateResult result = null;
-        switch (category){
-            case 0://普通结算单
-                result = Settlement1Service.saveSettlement(conn,sid);
-                break;
-            case 1://小时工结算单
-                result = Settlement2Service.saveSettlement(conn,sid);
-                break;
-            case 2://商业保险结算单
-                result = Settlement3Service.saveSettlement(conn,sid);
-                break;
-        }
+        DaoUpdateResult result;
+        result = Settlement0Service.saveSettlement(conn,sid);
         return JSONObject.toJSONString(result);
     }
 

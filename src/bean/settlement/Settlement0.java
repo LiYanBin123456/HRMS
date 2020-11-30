@@ -11,11 +11,12 @@ public class Settlement0 {
     private byte type;//类型 0派遣  1 外包
     private byte status;//状态
     private  float tax;
+    private float paid;//实发
 
     public Settlement0() {
     }
 
-    public Settlement0(long id, long did, long cid, Date month, float amount, byte type, byte status, float tax) {
+    public Settlement0(long id, long did, long cid, Date month, float amount, byte type, byte status, float tax, float paid) {
         this.id = id;
         this.did = did;
         this.cid = cid;
@@ -24,6 +25,7 @@ public class Settlement0 {
         this.type = type;
         this.status = status;
         this.tax = tax;
+        this.paid = paid;
     }
 
     public long getId() {
@@ -88,6 +90,14 @@ public class Settlement0 {
 
     public void setStatus(byte status) {
         this.status = status;
+    }
+
+    public float getPaid() {
+        return paid;
+    }
+
+    public void setPaid(float paid) {
+        this.paid = paid;
     }
 
     @Override

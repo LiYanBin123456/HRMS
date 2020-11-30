@@ -2,14 +2,14 @@ package bean.settlement;
 
 import java.sql.Date;
 
-public class viewSettlement0 extends Settlement0{
+public class ViewSettlement0 extends Settlement0{
     private String name;//合作客户名称
 
-    public viewSettlement0() {
+    public ViewSettlement0() {
     }
 
-    public viewSettlement0(long id, long did, long cid, Date month, float amount, byte type, byte status, float tax, String name) {
-        super(id, did, cid, month, amount, type, status, tax);
+    public ViewSettlement0(long id, long did, long cid, Date month, float amount, byte type, byte status, float tax, float paid, String name) {
+        super(id, did, cid, month, amount, type, status, tax, paid);
         this.name = name;
     }
 
@@ -23,7 +23,7 @@ public class viewSettlement0 extends Settlement0{
 
     @Override
     public String toString() {
-        return "viewSettlement0{" +
+        return "ViewSettlement0{" +
                 "name='" + name + '\'' +
                 '}';
     }

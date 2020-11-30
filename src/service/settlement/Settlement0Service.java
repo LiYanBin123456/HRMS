@@ -302,20 +302,26 @@ public class Settlement0Service {
     }
     //保存结算单；实质是计算结算单并且修改
     public static DaoUpdateResult saveSettlement(Connection conn, long sid) {
-
+        float amount=0;
+        float tax=0;
+        float paid;
         //结算单
-        Settlement1 settlement1 = (Settlement1) Settlement1Dao.get(conn,sid).data;
-        //获取合作客户的合同视图
-        ViewContractCooperation viewContractCooperation = (ViewContractCooperation) ContractDao.getViewContractCoop(conn,settlement1.getCcid()).data;
+        Settlement0 settlement0 = (Settlement0) Settlement0Dao.get(conn,sid).data;
+
         QueryParameter parm = new QueryParameter();
         parm.addCondition("sid","=",sid);
         //该结算单中的所有明细
-        List<ViewDetail1> viewDetail1s = (List<ViewDetail1>) Detail1Dao.getList(conn,parm).rows;
+        List<ViewDetail0> vs = (List<ViewDetail0>) Detail0Dao.getList(conn,parm).rows;
+        for(ViewDetail0 d:vs){
+            amount+=d.getAmount();
+            tax+=d.getTax();
+        }
+        paid=amount-tax;
+        settlement0.setAmount(amount);
+        settlement0.setTax(tax);
+        settlement0.setPaid(paid);
 
-        //计算结算单
-        Settlement1 settlement11 = Calculate.calculateSettlement1(settlement1,viewContractCooperation,viewDetail1s);
-
-        return Settlement1Dao.update(conn,settlement11);
+        return Settlement0Dao.update(conn,settlement0);
     }
     //读取基数
     public static String readBase(String start, String end, String[] eids, long sid, Connection conn) {

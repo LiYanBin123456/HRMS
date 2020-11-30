@@ -1221,25 +1221,22 @@ var InterfaceSettlement0 = function () {
     /**
      * 保存结算单并且自动计算结算单明细
      * @param sid 结算单id
-     * @param cid 合作单位id
-     * @param category 0_普通结算单 1_小时工结算单  2_商业保险结算单
      * @param success
      * @param fail
      */
-    this.saveDetail = function (sid,cid,category,success,fail) {
-        var para = {op: "saveDetail",sid:sid,cid:cid,category:category};
+    this.saveDetail = function (sid,success,fail) {
+        var para = {op: "saveDetail",sid:sid};
         access(url,para,1,success,fail);
     };
 
     /**
      * 保存并且计算结算单
      * @param sid 结算单id
-     * @param category 0_普通结算单 1_小时工结算单 2_商业保险结算单
-     * @param success
+     ** @param success
      * @param fail
      */
-    this.saveSettlement = function (sid,category,success,fail) {
-        var para = {op: "saveSettlement",sid:sid,category:category};
+    this.saveSettlement = function (sid,success,fail) {
+        var para = {op: "saveSettlement",sid:sid};
         access(url,para,1,success,fail);
     };
 };

@@ -227,25 +227,7 @@ var columns_settlement1  = [[
     {field:'comments', title: '备注',width:200,edit: 'text'},
     {title:'操作', toolbar: '#bar_settlement',width:220,fixed:"right"}
 ]];
-//特殊普通结算单字段集合
-var columns_settlement0  = [[
-    {field:'name', title: '用工企业',width:180,fixed:"left"},
-    {field:'month', title: '月份',width:100,fixed:"left",templet:function (d) {return format_month(d.month)}},
-    {field:'status', title: '状态',width:60,fixed:"left",templet:function (d) { return format_settlement_status(d.status)}},
-    {field:'tax', title: '税费',width:80},
-    {field:'amount', title: '金额',width:100},
-    {title:'操作', toolbar: '#bar_settlement',width:220,fixed:"right"}
-]];
 
-//特殊普通结算单明细字段集合
-var  columns_detail0 = [[
-    {field:'name', title: '员工姓名',width:180,fixed:"left"},
-    {field:'cardId', title: '身份证',width:180,fixed:"left"},
-    {field:'amount', title: '金额',width:100},
-    {field:'tax', title: '税费',width:80},
-    {field:'paid', title: '实发',width:80},
-    {title:'操作', toolbar: '#bar_settlement',width:220,fixed:"right"}
-]];
 
 
 var columns_settlement1_check  = [[
@@ -336,10 +318,12 @@ var columns_settlement3  = [[
 
 //特殊结算单字段集合
 var columns_settlement0  = [[
-    {field:'cname', title: '用工企业',fixed:"left"},
+    {field:'name', title: '用工企业',fixed:"left"},
     {field:'month', title: '月份',width:100,templet:function (d) {return format_month(d.month)}},
-    {field:'amount', title: '金额',width:180},
+    {field:'amount', title: '金额',width:120},
     {field:'tax', title: '税费',width:100,edit: 'text'},
+    {field:'paid', title: '实发',width:100,edit: 'text'},
+    {field:'type', title: '类型',width:100,templet:function (d) { return array_value2text(type_settlement0,d.status)}},
     {field:'status', title: '状态',width:100,templet:function (d) { return array_value2text(status_settlement,d.status) }},
     {title: '操作', toolbar: '#bar_settlement',width:220,fixed:"right"}
 ]];
@@ -476,10 +460,10 @@ var columns_detail3  = [[
 //特殊结算单明细字段集合
 var columns_detail0  = [[
     {field:'cardId', title: '身份证号',width:160},
-    {field:'cname', title: '姓名',width:80},
-    {field:'amount', title: '金额',width:80},
-    {field:'tax', title: '税额',width:100,edit: 'text'},
-    {field:'paid', title: '实发',width:100,edit: 'text'},
+    {field:'name', title: '姓名',width:80},
+    {field:'amount', title: '金额',width:80,edit: 'text'},
+    {field:'tax', title: '税额',width:100},
+    {field:'paid', title: '实发',width:100},
     {fixed: 'right', title: '操作', toolbar: '#bar_detail'}
 ]];
 
@@ -723,6 +707,11 @@ var status_settlement = [
     {value:3,text:"终审"},
     {value:4,text:"扣款"},
     {value:5,text:"发放"}
+];
+
+var type_settlement0 = [
+    {value:0,text:"派遣"},
+    {value:1,text:"外包"}
 ];
 
 var type_settlement = [

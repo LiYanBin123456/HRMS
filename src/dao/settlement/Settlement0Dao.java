@@ -3,6 +3,7 @@ package dao.settlement;
 import bean.settlement.Settlement0;
 import bean.settlement.Settlement1;
 import bean.settlement.ViewSettlement1;
+import bean.settlement.ViewSettlement0;
 import database.*;
 
 import java.sql.Connection;
@@ -13,13 +14,13 @@ public class Settlement0Dao {
             //根据地市模糊查询
             param.addCondition("name","like",param.conditions.extra);
         }
-        return DbUtil.getList(conn, "view_settlement0", param, ViewSettlement1.class);
+        return DbUtil.getList(conn, "view_settlement0", param, ViewSettlement0.class);
 
     }
 
     public static DaoUpdateResult insert(Connection conn, Settlement0 s) {
-        String sql = "insert into settlement0 (did,cid,type,month,amount,tax) values (?,?,?,?,?,?)";
-        Object []params = {s.getDid(),s.getCid(),s.getType(),s.getMonth(),s.getAmount(),s.getTax()};
+        String sql = "insert into settlement0 (did,cid,type,month,amount,tax,status,paid) values (?,?,?,?,?,?,?,?)";
+        Object []params = {s.getDid(),s.getCid(),s.getType(),s.getMonth(),s.getAmount(),s.getTax(),s.getStatus(),s.getPaid()};
         return DbUtil.insert(conn,sql,params);
     }
 
@@ -101,13 +102,13 @@ public class Settlement0Dao {
     public static DaoQueryResult get(Connection conn,long id){
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
-        return DbUtil.get(conn,"view_settlement0",conditions,ViewSettlement1.class);
+        return DbUtil.get(conn,"view_settlement0",conditions,ViewSettlement0.class);
     }
 
     //修改结算单
     public static DaoUpdateResult update(Connection conn, Settlement0 s) {
-        String sql = "update settlement1 set did=?,cid=?,type=?,month=?,amount=?,tax=? where id = ?";
-        Object []params = {s.getDid(),s.getCid(),s.getType(),s.getMonth(),s.getAmount(),s.getTax(),s.getId()};
+        String sql = "update settlement0 set did=?,cid=?,type=?,month=?,amount=?,tax=?,status=?,paid=? where id = ?";
+        Object []params = {s.getDid(),s.getCid(),s.getType(),s.getMonth(),s.getAmount(),s.getTax(),s.getStatus(),s.getPaid(),s.getId()};
         return DbUtil.update(conn,sql,params);
     }
 
