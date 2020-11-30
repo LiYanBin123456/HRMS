@@ -123,6 +123,7 @@ public class EmployeeService {
             ConnUtil.commit(conn);
             return  result;
         }else {
+            ConnUtil.rollback(conn);
             result.success = false;
             result.msg = "员工批量插入失败，请仔细核对员工信息";
             return  result;

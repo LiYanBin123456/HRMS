@@ -100,19 +100,42 @@ public class Calculate {
     }
 
 
-    /**
-     * 计算普通结算单明细
-     * @param d //结算单明细
-     * @param medicare //所在地市的医保规则
-     * @param social //所在地市的社保规则
-     * @param setting //员工社保设置
-     * @param mapSalary //合作单位的自定义工资
-     * @param deduct   //所属员工的个税专项扣除
-     * @return detail1 //计算好的结算单
-     */
-    public static Detail1 calculateDetail1(Settlement1 settlement1,Detail1 d, RuleMedicare medicare, RuleSocial social, EnsureSetting setting, MapSalary mapSalary, Deduct deduct,ViewContractCooperation vc){
+    public static Detail1 calculateDetail1(Detail1 d, MapSalary mapSalary, Deduct deduct) {
+        //计算应发工资
+        float income;//本期收入初始时基本工资
+        float payable =d.getBase();//初始是基本工资
+        float paid;
+        if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){//如果有自定义工资
+            payable = calculatePayable(payable,d,mapSalary);
+        }
+        paid=payable;
+        income=payable+d.getPayable();
+
+        //计算个税
+        double tax =calculateTax(income,deduct);
+        tax=tax-d.getTax();
+        paid = paid-(float)tax;
+
+        d.setTax((float) tax);
+        d.setPayable(payable);
+        d.setPaid(paid);
+
+        return d;
+    }
+        /**
+         * 计算普通结算单明细
+         * @param d //结算单明细
+         * @param medicare //所在地市的医保规则
+         * @param social //所在地市的社保规则
+         * @param setting //员工社保设置
+         * @param mapSalary //合作单位的自定义工资
+         * @param deduct   //所属员工的个税专项扣除
+         * @return detail1 //计算好的结算单
+         */
+    public static Detail1 calculateDetail1(Settlement1 settlement1,Detail1 d, RuleMedicare medicare, RuleSocial social, EnsureSetting setting, MapSalary mapSalary, Deduct deduct,float injueryPer){
         //获取医保基数
         int SettingM = setting.getSettingM();//员工医保设置
+        setting.setInjuryPer(injueryPer);
         float baseM = 0;
         switch (SettingM){
             case 0://最低标准
@@ -167,7 +190,7 @@ public class Calculate {
         d.setPayable(payable);
 
         //计算个税
-        double tax =calculateTax(d,deduct);
+        double tax =calculateTax(payable,deduct);
         d.setTax((float) tax);
 
         //计算国家减免项=单位养老+单位失业+单位工伤-工伤补充
@@ -403,14 +426,12 @@ public class Calculate {
 
     /**
      * 计算普通结算单的个税
-     * @param v 结算单明细
+     * @param income1 本期收入
      * @return v
      */
-    private static double calculateTax(Detail1 v, Deduct deduct){
+    public static double calculateTax(float income1, Deduct deduct){
         double tax;//个税 = 应税额*税率（A） – 速算扣除（B） – 累计已预缴税额（C）
         float taxDue;//应税额 = 累计收入额（D）+ 本期收入 – 个税累计专项扣除（E）– 累计减除费用（F）
-        float income1;//本期收入 = 本月应发（G）
-        income1 = v.getPayable();
         taxDue=deduct.getIncome()+income1-deduct.getDeduct()-deduct.getFree();
 
         float rate = 0;//税率
@@ -440,6 +461,46 @@ public class Calculate {
 
         tax = taxDue*rate-d-deduct.getPrepaid();
 
+        if(tax < 0 ){
+            tax = 0;
+        }
+        return tax;
+    }
+
+    /**
+     * 计算年终奖的个税
+     * @param income 本期收入
+     * @return v
+     */
+    public static double calculateTax(float income){
+        double tax;//个税 = 应税额*税率（A） – 速算扣除（B） – 累计已预缴税额（C）
+        float taxDue;//应税额 = 年终奖/12；
+        taxDue = income/12;
+        float rate = 0;//税率
+        float d = 0;//速算扣除
+        if(taxDue>0&&taxDue<=3000){//根据个税比例报表计算个税
+            rate = 0.03f;
+            d = 0;
+        }else if(taxDue<=12000){
+            rate = 0.1f;
+            d = 210;
+        }else if(taxDue<=25000){
+            rate = 0.2f;
+            d = 1410;
+        }else if(taxDue<=35000){
+            rate = 0.25f;
+            d = 2660;
+        }else if(taxDue<=55000){
+            rate = 0.3f;
+            d = 4410;
+        }else if(taxDue<=80000){
+            rate = 0.35f;
+            d = 7160;
+        }else if(taxDue>80000){
+            rate = 0.45f;
+            d = 15160;
+        }
+        tax = income*rate-d;
         if(tax < 0 ){
             tax = 0;
         }

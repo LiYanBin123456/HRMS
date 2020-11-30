@@ -135,7 +135,7 @@ public class Settlement3Service {
     }
 
     //提交
-    public static DaoUpdateResult commit(Connection conn, long id, long aid) {
+    public static DaoUpdateResult commit(Connection conn, long id, Account account) {
         /**流程
          *1、修改结算单状态为提交
          * 2、根据aid查询出管理员
@@ -143,9 +143,6 @@ public class Settlement3Service {
          */
         DaoUpdateResult result = Settlement3Dao.commit(conn, id);
         if(result.success){//修改成功，插入日志
-            DaoQueryResult result1 = AccountDao.get(conn, aid);
-            if(result1.success){
-                Account account = (Account) result1.data;
                 //封装log信息
                 String operator = account.getNickname()+"("+account.getId()+")";
                 String content = "提交";
@@ -157,7 +154,6 @@ public class Settlement3Service {
                 log.setContent(content);
                 //插入log信息
                 LogDao.insert(conn,log);
-            }
         }
         return result;
     }
@@ -186,7 +182,7 @@ public class Settlement3Service {
     }
 
     //重置
-    public static DaoUpdateResult reset(Connection conn, long id,long aid) {
+    public static DaoUpdateResult reset(Connection conn, long id, Account account) {
         /**流程
          *1、修改结算单状态为重置
          * 2、根据aid查询出管理员
@@ -194,9 +190,6 @@ public class Settlement3Service {
          */
         DaoUpdateResult result = Settlement3Dao.reset(conn, id);
         if(result.success){//修改成功，插入日志
-            DaoQueryResult result1 = AccountDao.get(conn, aid);
-            if(result1.success){
-                Account account = (Account) result1.data;
                 //封装log信息
                 String operator = account.getNickname()+"("+account.getId()+")";
                 String content = "重置";
@@ -208,13 +201,12 @@ public class Settlement3Service {
                 log.setContent(content);
                 //插入log信息
                 LogDao.insert(conn,log);
-            }
         }
         return result;
     }
 
     //扣款
-    public static DaoUpdateResult deduct(Connection conn, long id,long aid) {
+    public static DaoUpdateResult deduct(Connection conn, long id, Account account) {
         /**流程
          *1、修改结算单状态为扣款
          * 2、根据aid查询出管理员
@@ -222,9 +214,6 @@ public class Settlement3Service {
          */
         DaoUpdateResult result = Settlement3Dao.deduct(conn, id);
         if(result.success){//修改成功，插入日志
-            DaoQueryResult result1 = AccountDao.get(conn, aid);
-            if(result1.success){
-                Account account = (Account) result1.data;
                 //封装log信息
                 String operator = account.getNickname()+"("+account.getId()+")";
                 String content = "扣款";
@@ -236,7 +225,7 @@ public class Settlement3Service {
                 log.setContent(content);
                 //插入log信息
                 LogDao.insert(conn,log);
-            }
+
         }
         return result;
     }

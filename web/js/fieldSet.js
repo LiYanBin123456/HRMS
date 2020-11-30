@@ -204,10 +204,10 @@ var columns_employees = [[
     {field:'school', title: '毕业院校',width:120,edit: 'text'},
     {field:'major', title: '毕业专业',width:120,edit: 'text'},
     {field:'cname', title: '外派单位',width:120,edit: 'text'},
-    {field:'bank1', title: '时间报酬',width:120,edit: 'text'},
-    {field:'bank2', title: '时间报酬',width:120,edit: 'text'},
-    {field:'bankNo', title: '时间报酬',width:120,edit: 'text'},
-    {field:'cardNo', title: '时间报酬',width:120,edit: 'text'}
+    {field:'bank1', title: '发行卡',width:120,edit: 'text'},
+    {field:'bank2', title: '开户行',width:120,edit: 'text'},
+    {field:'bankNo', title: '行号',width:120,edit: 'text'},
+    {field:'cardNo', title: '账号',width:120,edit: 'text'}
   ]];
 
 //普通结算单字段集合
@@ -227,6 +227,8 @@ var columns_settlement1  = [[
     {field:'comments', title: '备注',width:200,edit: 'text'},
     {title:'操作', toolbar: '#bar_settlement',width:220,fixed:"right"}
 ]];
+
+
 
 var columns_settlement1_check  = [[
     {field:'name', title: '用工企业',width:180,fixed:"left"},
@@ -310,6 +312,18 @@ var columns_settlement3  = [[
     {field:'month', title: '月份',width:100,templet:function (d) {return format_month(d.month)}},
     {field:'pname', title: '保险产品',width:180},
     {field:'price', title: '保费',width:100,edit: 'text'},
+    {field:'status', title: '状态',width:100,templet:function (d) { return array_value2text(status_settlement,d.status) }},
+    {title: '操作', toolbar: '#bar_settlement',width:220,fixed:"right"}
+]];
+
+//特殊结算单字段集合
+var columns_settlement0  = [[
+    {field:'name', title: '用工企业',fixed:"left"},
+    {field:'month', title: '月份',width:100,templet:function (d) {return format_month(d.month)}},
+    {field:'amount', title: '金额',width:120},
+    {field:'tax', title: '税费',width:100,edit: 'text'},
+    {field:'paid', title: '实发',width:100,edit: 'text'},
+    {field:'type', title: '类型',width:100,templet:function (d) { return array_value2text(type_settlement0,d.status)}},
     {field:'status', title: '状态',width:100,templet:function (d) { return array_value2text(status_settlement,d.status) }},
     {title: '操作', toolbar: '#bar_settlement',width:220,fixed:"right"}
 ]];
@@ -440,6 +454,16 @@ var columns_detail3  = [[
     {field:'place', title: '工作地点',width:80},
     {field:'pname', title: '保险产品',width:100,edit: 'text'},
     {field:'price', title: '保费',width:80,edit: 'text'},
+    {fixed: 'right', title: '操作', toolbar: '#bar_detail'}
+]];
+
+//特殊结算单明细字段集合
+var columns_detail0  = [[
+    {field:'cardId', title: '身份证号',width:160},
+    {field:'name', title: '姓名',width:80},
+    {field:'amount', title: '金额',width:80,edit: 'text'},
+    {field:'tax', title: '税额',width:100},
+    {field:'paid', title: '实发',width:100},
     {fixed: 'right', title: '操作', toolbar: '#bar_detail'}
 ]];
 
@@ -685,6 +709,11 @@ var status_settlement = [
     {value:5,text:"发放"}
 ];
 
+var type_settlement0 = [
+    {value:0,text:"派遣"},
+    {value:1,text:"外包"}
+];
+
 var type_settlement = [
     {value:0,text:"正常"},
     {value:1,text:"补缴"},
@@ -732,7 +761,7 @@ var invoice_contract = [
 ];
 //合同服务项目类型
 var stype_contract = [
-    {value:0,text:"劳务派遣"},
+    {value:0,text:"劳务外包派遣"},
     {value:1,text:"人事服务代理"},
     {value:2,text:"小时工"},
     {value:3,text:"商业保险"}

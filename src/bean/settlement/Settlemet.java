@@ -10,7 +10,7 @@ public class Settlemet {
     public static final byte STATUS_CHECKED2 = 3;//终审
     public static final byte STATUS_PAYED1 = 4;//扣款
     public static final byte STATUS_PAYED2 = 5;//发放
-    private long id;//
+    private long id;
     private long did;//派遣方id
     private long cid;//合作客户id
     private String ccid;//合同id
@@ -20,28 +20,28 @@ public class Settlemet {
      0_派遣单位录入
      1_合作单位录入
      */
-    private byte source;
+    private byte flag;
 
     public Settlemet() {
     }
 
-    public Settlemet(long id, long did, long cid, Date month, byte status, byte source) {
+    public Settlemet(long id, long did, long cid, Date month, byte status, byte flag) {
         this.id = id;
         this.did = did;
         this.cid = cid;
         this.month = month;
         this.status = status;
-        this.source = source;
+        this.flag = flag;
     }
 
-    public Settlemet(long id, long did, long cid, String ccid, Date month, byte status, byte source) {
+    public Settlemet(long id, long did, long cid, String ccid, Date month, byte status, byte flag) {
         this.id = id;
         this.did = did;
         this.cid = cid;
         this.ccid = ccid;
         this.month = month;
         this.status = status;
-        this.source = source;
+        this.flag = flag;
     }
 
     public long getId() {
@@ -84,12 +84,12 @@ public class Settlemet {
         this.status = status;
     }
 
-    public byte getSource() {
-        return source;
+    public byte getFlag() {
+        return flag;
     }
 
-    public void setSource(byte source) {
-        this.source = source;
+    public void setFlag(byte flag) {
+        this.flag = flag;
     }
 
     public String getCcid() {
@@ -108,7 +108,7 @@ public class Settlemet {
                 ", cid=" + cid +
                 ", month=" + month +
                 ", status=" + status +
-                ", source=" + source +
+                ", flag=" + flag +
                 '}';
     }
 }

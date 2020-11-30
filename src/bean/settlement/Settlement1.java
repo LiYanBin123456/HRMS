@@ -58,6 +58,20 @@ public class Settlement1 extends Settlemet{
         this.comments = comments;
     }
 
+    public Settlement1(byte type, float salary, float social, float medicare, float fund, float manage, float tax, float extra, float free, float summary, String comments) {
+        this.type = type;
+        this.salary = salary;
+        this.social = social;
+        this.medicare = medicare;
+        this.fund = fund;
+        this.manage = manage;
+        this.tax = tax;
+        this.extra = extra;
+        this.free = free;
+        this.summary = summary;
+        this.comments = comments;
+    }
+
     public float getFree() {
         return free;
     }

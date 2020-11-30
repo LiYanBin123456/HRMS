@@ -21,11 +21,11 @@ public class Settlement2Dao {
     public static DaoQueryResult get(Connection conn,long id){
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
-        return DbUtil.get(conn,"settlement2",conditions,Settlement2.class);
+        return DbUtil.get(conn,"view_settlement2",conditions,ViewSettlement2.class);
     }
     public static DaoUpdateResult insert(Connection conn, Settlement2 s) {
-        String sql = "insert into settlement2 (did,cid,ccid,month,hours,price,traffic,extra,summary,status,source) values (?,?,?,?,?,?,?,?,?,?,?)";
-        Object []params = {s.getDid(),s.getCid(),s.getCcid(),s.getMonth(),s.getHours(),s.getPrice(),s.getTraffic(),s.getExtra(),s.getSummary(),s.getStatus(),s.getSource()};
+        String sql = "insert into settlement2 (did,cid,ccid,month,hours,price,traffic,extra,summary,status,flag) values (?,?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {s.getDid(),s.getCid(),s.getCcid(),s.getMonth(),s.getHours(),s.getPrice(),s.getTraffic(),s.getExtra(),s.getSummary(),s.getStatus(),s.getFlag()};
         return DbUtil.insert(conn,sql,params);
     }
 
@@ -113,9 +113,9 @@ public class Settlement2Dao {
 
     //修改结算单
     public static DaoUpdateResult update(Connection conn, Settlement2 settlement2) {
-        String sql = "update settlement2 set did=?,cid=?,month=?,hours=?,price=?,traffic=?,extra=?,summary=?,status=?,source=?  where id = ?";
+        String sql = "update settlement2 set did=?,cid=?,month=?,hours=?,price=?,traffic=?,extra=?,summary=?,status=?,flag=?  where id = ?";
         Object []params = {settlement2.getDid(),settlement2.getCid(),settlement2.getMonth(),settlement2.getHours(),settlement2.getPrice()
-        ,settlement2.getTraffic(),settlement2.getExtra(),settlement2.getSummary(),settlement2.getStatus(),settlement2.getSource(),settlement2.getId()};
+        ,settlement2.getTraffic(),settlement2.getExtra(),settlement2.getSummary(),settlement2.getStatus(),settlement2.getFlag(),settlement2.getId()};
         return DbUtil.update(conn,sql,params);
     }
 }

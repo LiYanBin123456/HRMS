@@ -4,9 +4,7 @@ import bean.admin.Account;
 import bean.contract.ViewContractCooperation;
 import bean.employee.Employee;
 import bean.employee.EnsureSetting;
-import bean.employee.PayCard;
 import bean.employee.ViewEmployee;
-import bean.insurance.ViewInsurance;
 import bean.log.Log;
 import bean.log.Transaction;
 import bean.rule.RuleMedicare;
@@ -15,31 +13,19 @@ import bean.settlement.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.LogDao;
-import dao.admin.AccountDao;
 import dao.client.FinanceDao;
 import dao.contract.ContractDao;
 import dao.employee.EmployeeDao;
-import dao.employee.PayCardDao;
 import dao.employee.SettingDao;
-import dao.insurance.InsuranceDao;
 import dao.rule.RuleMedicareDao;
 import dao.rule.RuleSocialDao;
+import dao.settlement.Detail0Dao;
 import dao.settlement.Detail1Dao;
-import dao.settlement.Detail3Dao;
+import dao.settlement.Settlement0Dao;
 import dao.settlement.Settlement1Dao;
 import database.*;
-import jxl.Workbook;
-import jxl.read.biff.BiffException;
-import jxl.write.Label;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
-import jxl.write.biff.RowsExceededException;
 import utills.Calculate;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.text.ParseException;
@@ -53,15 +39,16 @@ import static utills.Calculate.calculateMedicare;
 import static utills.Calculate.calculateSocial;
 
 
-public class Settlement1Service {
+public class Settlement0Service {
     static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
     static String date = df.format(new Date(System.currentTimeMillis()));
     static  Date time = Date.valueOf(date);//获取当前时间
 
     //获取普通结算单列表
     public static DaoQueryListResult getList(Connection conn, QueryParameter param) {
-        return Settlement1Dao.getList(conn,param);
+        return Settlement0Dao.getList(conn,param);
     }
+
     /**
      * 插入结算单，插入后根据返回的id，自动生成明细
      * @param conn
@@ -69,11 +56,11 @@ public class Settlement1Service {
      * @param type 0 不自动生成明细  1 自动生成明细
      * @return
      */
-    public static DaoUpdateResult insert(Connection conn, Settlement1 settlement, byte type) {
+    public static DaoUpdateResult insert(Connection conn, Settlement0 settlement, byte type) {
         //关闭自动提交
         ConnUtil.closeAutoCommit(conn);
 
-        DaoUpdateResult result = Settlement1Dao.insert(conn,settlement);
+        DaoUpdateResult result = Settlement0Dao.insert(conn,settlement);
 
         if(result.success&&type == 1){//自动生成结算单明细
             long sid = (Long) result.extra;
@@ -84,23 +71,18 @@ public class Settlement1Service {
             parameter.addCondition("cid","=",cid);
             parameter.addCondition("did","=",did);
             parameter.addCondition("type","=",1);
-            if(settlement.getType()==0||settlement.getType()==1){//如果结算单类型为派遣或者外包
-                //查询出类别为派遣（1）或者外包（2）的员工
-                parameter.addCondition("category","=",settlement.getType()+1);
-            }else if (settlement.getType()==2||settlement.getType()==3){////如果结算单类型为代发工资或者代缴社保
-                //查询出类别为代发工资（4）或者代缴社保（5）的员工
-                parameter.addCondition("category","=",settlement.getType()+2);
-            }
+            //查询出类别为派遣（1）或者外包（2）的员工
+            parameter.addCondition("category","=",settlement.getType()+1);
             parameter.addCondition("status","=",0);
             List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
-            List<Detail1> detail1List = new ArrayList<Detail1>();
+            List<Detail0> arrayList = new ArrayList<Detail0>();
             for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
-                Detail1 detail1 = new Detail1();
-                detail1.setSid(sid);
-                detail1.setEid(employeeList.get(i).getId());
-                detail1List.add(i,detail1);
+                Detail0 detail = new Detail0();
+                detail.setSid(sid);
+                detail.setEid(employeeList.get(i).getId());
+                arrayList.add(i,detail);
             }
-            DaoUpdateResult result1 = Detail1Dao.importDetails(conn,detail1List);
+            DaoUpdateResult result1 = Detail0Dao.importDetails(conn,arrayList);
             //事务处理
             if(result1.success){
                 ConnUtil.commit(conn);
@@ -117,7 +99,7 @@ public class Settlement1Service {
     }
     //删除结算单
     public static DaoUpdateResult delete(Connection conn, Long id) {
-        return Settlement1Dao.delete(conn,id);
+        return Settlement0Dao.delete(conn,id);
     }
 
     public static DaoUpdateResult commit(Connection conn, long id, Account account) {
@@ -320,19 +302,26 @@ public class Settlement1Service {
     }
     //保存结算单；实质是计算结算单并且修改
     public static DaoUpdateResult saveSettlement(Connection conn, long sid) {
+        float amount=0;
+        float tax=0;
+        float paid;
         //结算单
-        Settlement1 settlement1 = (Settlement1) Settlement1Dao.get(conn,sid).data;
-        //获取合作客户的合同视图
-        ViewContractCooperation viewContractCooperation = (ViewContractCooperation) ContractDao.getViewContractCoop(conn,settlement1.getCcid()).data;
+        Settlement0 settlement0 = (Settlement0) Settlement0Dao.get(conn,sid).data;
+
         QueryParameter parm = new QueryParameter();
         parm.addCondition("sid","=",sid);
         //该结算单中的所有明细
-        List<ViewDetail1> viewDetail1s = (List<ViewDetail1>) Detail1Dao.getList(conn,parm).rows;
+        List<ViewDetail0> vs = (List<ViewDetail0>) Detail0Dao.getList(conn,parm).rows;
+        for(ViewDetail0 d:vs){
+            amount+=d.getAmount();
+            tax+=d.getTax();
+        }
+        paid=amount-tax;
+        settlement0.setAmount(amount);
+        settlement0.setTax(tax);
+        settlement0.setPaid(paid);
 
-        //计算结算单
-        Settlement1 settlement11 = Calculate.calculateSettlement1(settlement1,viewContractCooperation,viewDetail1s);
-
-        return Settlement1Dao.update(conn,settlement11);
+        return Settlement0Dao.update(conn,settlement0);
     }
     //读取基数
     public static String readBase(String start, String end, String[] eids, long sid, Connection conn) {
