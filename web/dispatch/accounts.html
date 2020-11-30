@@ -185,7 +185,7 @@
 
             //删除账号
             function del(account) {
-                layer.confirm('确定删除账号'+account.name, {icon: 3, title:'删除'}, function(index){
+                layer.confirm('确定删除账号'+account.nickname, {icon: 3, title:'删除'}, function(index){
                     iNotice.delete(account.id,function () {
                         layer.close(index);
                         getAccounts();
