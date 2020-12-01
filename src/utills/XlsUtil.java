@@ -215,6 +215,8 @@ public class XlsUtil {
                 return value.isEmpty()?0:Float.parseFloat(value);
             case "double":
                 return value.isEmpty()?0:Double.parseDouble(value);
+            case "long":
+                return value.isEmpty()?0:Long.parseLong(value);
         }
         return null;
     }

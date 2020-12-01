@@ -78,23 +78,12 @@ public class EmployeeService {
         //关闭自动提交
         ConnUtil.closeAutoCommit(conn);
 
-        DaoUpdateResult result = new DaoUpdateResult();
+        DaoUpdateResult result;
         List<Employee> employees =new ArrayList<>();
         List<EmployeeExtra> extras =new ArrayList<>();
         List<PayCard> payCards =new ArrayList<>();
         for(JSONObject v : viewEmployees) {
-            long cid = 0;
-            if (v.getString("cname") != null && !v.getString("cname").trim().isEmpty()) {//根据客户名称和派遣方id查找合作单位id
-                QueryConditions conditions = new QueryConditions();
-                conditions.add("name", "=",v.getString("cname"));
-                conditions.add("did", "=", did);
-                if (!CooperationDao.exist(conn, conditions).exist) {
-                    result.msg = v.getString("name")+"的外派单位“" + v.getString("cname") + "”不存在，请核对";
-                    return result;
-                }
-                Cooperation cooperation = (Cooperation) CooperationDao.get(conn, conditions).data;
-                cid = cooperation.getId();//合作单位id
-            }
+            long cid = v.getLong("cid");
             //无外派单位
            //封装员工信息
             Employee employee = new Employee(0, did, cid, v.getString("cardId"), v.getString("name"), v.getString("phone"), v.getByte("degree"), v.getByte("type"),  v.getSqlDate("entry")
