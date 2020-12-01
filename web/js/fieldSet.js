@@ -311,9 +311,10 @@ var columns_settlement3  = [[
     {field:'cname', title: '用工企业',fixed:"left"},
     {field:'month', title: '月份',width:100,templet:function (d) {return format_month(d.month)}},
     {field:'pname', title: '保险产品',width:180},
+    {field:'price', title: '单价',width:80},
+    {field:'amount', title: '人数',width:80},
     {field:'price', title: '保费',width:100,edit: 'text'},
-    {field:'status', title: '状态',width:100,templet:function (d) { return array_value2text(status_settlement,d.status) }},
-    {title: '操作', toolbar: '#bar_settlement',width:220,fixed:"right"}
+    {title: '操作', toolbar: '#bar_settlement',width:300,fixed:"right"}
 ]];
 
 //特殊结算单字段集合
@@ -452,8 +453,10 @@ var columns_detail3  = [[
     {field:'cardId', title: '身份证号',width:160},
     {field:'cname', title: '姓名',width:80},
     {field:'place', title: '工作地点',width:80},
-    {field:'pname', title: '保险产品',width:100,edit: 'text'},
-    {field:'price', title: '保费',width:80,edit: 'text'},
+    {field:'post', title: '工作岗位',width:100,edit: 'text'},
+    {field:'place', title: '职业类别',width:80},
+    {field:'place', title: '生效日期',width:80},
+    {field:'status', title: '状态',width:80},
     {fixed: 'right', title: '操作', toolbar: '#bar_detail'}
 ]];
 
