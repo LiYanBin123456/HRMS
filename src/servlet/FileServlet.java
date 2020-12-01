@@ -599,11 +599,11 @@ public class FileServlet extends HttpServlet {
 
     //导出普通结算单明细
     private void exportDetail1(Connection conn, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=details1.xls");
-
+        String fileName;
         String month = request.getParameter("month");//获取结算单月份
-        month = getLastday_Month(month);
+        month = getLastday_Month(month);//将月份变成该月最后一天
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
+
         long cid = Long.parseLong(request.getParameter("cid"));//获取合作客户的id
         //获取合作客户的自定义工资项
         MapSalary mapSalary = (MapSalary)MapSalaryDao.selectByMonth(cid,conn, Date.valueOf(month)).data;
@@ -611,7 +611,6 @@ public class FileServlet extends HttpServlet {
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid","=",sid);
-
         //获取结算单视图
         ViewSettlement1 vs = (ViewSettlement1) Settlement1Dao.get(conn,sid).data;
         //获取合作客户视图
@@ -621,20 +620,44 @@ public class FileServlet extends HttpServlet {
         String rows = JSONObject.toJSONString(result.rows);
         List< ViewDetail1> detail1s = JSONArray.parseArray(rows, ViewDetail1.class);
 
+        //结算单类型
+        byte types = vs.getType();
+        String typeMsg="";
+        switch (types){
+            case 0:
+                typeMsg = "派遣";
+                break;
+            case 1:
+                typeMsg = "外包";
+                break;
+            case 2:
+                typeMsg = "代发工资";
+                break;
+            case 3:
+                typeMsg = "代缴社保";
+                break;
+        }
+        //文件名
+        fileName=vs.getName()+(vs.getMonth()==null?"":sdf.format(vs.getMonth()))+typeMsg+"结算单";
+        fileName = new String(fileName.getBytes(),"iso-8859-1");
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.addHeader("Content-Disposition", "attachment;filename=\""
+                + fileName + ".xls\"");
+
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("公司汇款明细", 0);
         WritableSheet sheet2 = book.createSheet("个人工资表", 1);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
+
 
         try {
-            sheet1.addCell(new Label(0, 0,vs.getName()+""+vs.getMonth()==null?"":sdf.format(vs.getMonth())+"工资汇款明细"));
+            sheet1.addCell(new Label(0, 0, vs.getName()+""+(vs.getMonth()==null?"":sdf.format(vs.getMonth()))+typeMsg+"工资汇款表"));
 
             sheet1.addCell(new Label(0, 1, "员工姓名"));
             sheet1.addCell(new Label(1, 1, "身份证号码"));
             sheet1.addCell(new Label(2, 1, "基本工资"));
 
-            sheet2.addCell(new Label(0, 0, vs.getName()+""+vs.getMonth()==null?"":sdf.format(vs.getMonth())+"实发明细"));
+            sheet2.addCell(new Label(0, 0, vs.getName()+""+(vs.getMonth()==null?"":sdf.format(vs.getMonth()))+typeMsg+"工资明细表"));
 
             sheet2.addCell(new Label(0, 1, "员工姓名"));
             sheet2.addCell(new Label(1, 1, "身份证号码"));
@@ -831,23 +854,27 @@ public class FileServlet extends HttpServlet {
     private void exportDetail2(Connection conn, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
         String fileName ;
         long sid = Long.parseLong(request.getParameter("id"));//结算单id
-        ViewSettlement2 viewSettlement2 = (ViewSettlement2) Settlement2Dao.get(conn,sid).data;
-        fileName=viewSettlement2.getName()+"小时工结算单";
+        //获取小时工结算单视图
+        ViewSettlement2 vs = (ViewSettlement2) Settlement2Dao.get(conn,sid).data;
+
+        //获取小时工明细
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid","=",sid);
         DaoQueryListResult result = Detail2Dao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewDetail2> detail2s = JSONArray.parseArray(rows, ViewDetail2.class);
-        //小时工结算单
-        Settlement2 settlement2 = (Settlement2) Settlement2Dao.get(conn,sid).data;
-        String cid = settlement2.getCcid();//获取合作客户的id
+
+        String cid = vs.getCcid();//获取合作客户的id
         Serve serve = (Serve) ServeDao.get(conn,cid).data;
         byte payer = serve.getPayer();//0 派遣单位发放工资  1 合作客户发放工资
         //公司的单价
-        float price = settlement2.getPrice();
+        float price = vs.getPrice();
         if(payer==1){//合作客户发放工资  单价=公司单价-员工单价
               price =price - detail2s.get(0).getPrice();
         }
+
+        //文件名
+        fileName=vs.getName()+"小时工结算单";
         fileName = new String(fileName.getBytes(),"iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.addHeader("Content-Disposition", "attachment;filename=\""
@@ -855,37 +882,43 @@ public class FileServlet extends HttpServlet {
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("小时工汇款表", 0);
         WritableSheet sheet2 = book.createSheet("小时工结算单明细", 1);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
         try {
-            sheet1.addCell(new Label(0, 0, "员工姓名"));
-            sheet1.addCell(new Label(1, 0, "身份证号码"));
-            sheet1.addCell(new Label(2, 0, "工时"));
-            sheet1.addCell(new Label(3, 0, "公司单价"));
-            sheet1.addCell(new Label(4, 0, "餐费"));
-            sheet1.addCell(new Label(5, 0, "交通费"));
-            sheet1.addCell(new Label(6, 0, "住宿费"));
-            sheet1.addCell(new Label(7, 0, "水电费"));
-            sheet1.addCell(new Label(8, 0, "保险费"));
-            sheet1.addCell(new Label(9, 0, "其他1"));
-            sheet1.addCell(new Label(10, 0, "其他2"));
-            sheet1.addCell(new Label(11, 0, "汇款总额"));
+            //表头
+            sheet1.addCell(new Label(0, 0, vs.getName()+""+(vs.getMonth()==null?"":sdf.format(vs.getMonth()))+"小时工汇款表"));
 
+            sheet1.addCell(new Label(0, 1, "员工姓名"));
+            sheet1.addCell(new Label(1, 1, "身份证号码"));
+            sheet1.addCell(new Label(2, 1, "工时"));
+            sheet1.addCell(new Label(3, 1, "公司单价"));
+            sheet1.addCell(new Label(4, 1, "餐费"));
+            sheet1.addCell(new Label(5, 1, "交通费"));
+            sheet1.addCell(new Label(6, 1, "住宿费"));
+            sheet1.addCell(new Label(7, 1, "水电费"));
+            sheet1.addCell(new Label(8, 1, "保险费"));
+            sheet1.addCell(new Label(9, 1, "其他1"));
+            sheet1.addCell(new Label(10, 1, "其他2"));
+            sheet1.addCell(new Label(11, 1, "汇款总额"));
 
-            sheet2.addCell(new Label(0, 0, "员工姓名"));
-            sheet2.addCell(new Label(1, 0, "身份证号码"));
-            sheet2.addCell(new Label(2, 0, "工时"));
-            sheet2.addCell(new Label(3, 0, "单价"));
-            sheet2.addCell(new Label(4, 0, "餐费"));
-            sheet2.addCell(new Label(5, 0, "交通费"));
-            sheet2.addCell(new Label(6, 0, "住宿费"));
-            sheet2.addCell(new Label(7, 0, "水电费"));
-            sheet2.addCell(new Label(8, 0, "保险费"));
-            sheet2.addCell(new Label(9, 0, "个税"));
-            sheet2.addCell(new Label(10, 0, "其他1"));
-            sheet2.addCell(new Label(11, 0, "其他2"));
-            sheet2.addCell(new Label(12, 0, "应付"));
-            sheet2.addCell(new Label(13, 0, "实付"));
+            //表头
+            sheet2.addCell(new Label(0, 0, vs.getName()+""+(vs.getMonth()==null?"":sdf.format(vs.getMonth()))+"小时工明细表"));
 
-            int index = 1;
+            sheet2.addCell(new Label(0, 1, "员工姓名"));
+            sheet2.addCell(new Label(1, 1, "身份证号码"));
+            sheet2.addCell(new Label(2, 1, "工时"));
+            sheet2.addCell(new Label(3, 1, "单价"));
+            sheet2.addCell(new Label(4, 1, "餐费"));
+            sheet2.addCell(new Label(5, 1, "交通费"));
+            sheet2.addCell(new Label(6, 1, "住宿费"));
+            sheet2.addCell(new Label(7, 1, "水电费"));
+            sheet2.addCell(new Label(8, 1, "保险费"));
+            sheet2.addCell(new Label(9, 1, "个税"));
+            sheet2.addCell(new Label(10, 1, "其他1"));
+            sheet2.addCell(new Label(11, 1, "其他2"));
+            sheet2.addCell(new Label(12, 1, "应付"));
+            sheet2.addCell(new Label(13, 1, "实付"));
+
+            int index = 2;
             for(ViewDetail2 d:detail2s){
                 sheet1.addCell(new Label(0, index, d.getName()));
                 sheet1.addCell(new Label(1, index, d.getCardId()));
@@ -920,22 +953,6 @@ public class FileServlet extends HttpServlet {
                 sheet2.addCell(new jxl.write.Number(13, index, d.getPaid()));
                 index++;
             }
-            //设置列宽
-            sheet2.setColumnView(0,10);
-            sheet2.setColumnView(1,20);
-            sheet2.setColumnView(2,10);
-            sheet2.setColumnView(3,10);
-            sheet2.setColumnView(4,10);
-            sheet2.setColumnView(5,10);
-            sheet2.setColumnView(6,10);
-            sheet2.setColumnView(7,10);
-            sheet2.setColumnView(8,10);
-            sheet2.setColumnView(9,10);
-            sheet2.setColumnView(10,10);
-            sheet2.setColumnView(11,10);
-            sheet2.setColumnView(12,10);
-            sheet2.setColumnView(13,15);
-            sheet2.setColumnView(14,15);
             book.write();
             book.close();
         } catch (WriteException e) {
@@ -993,8 +1010,8 @@ public class FileServlet extends HttpServlet {
 
     //导出代缴社保结算单明细
     private void exportDetail4(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=details1.xls");
+        String fileName;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
 
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
         QueryParameter parameter = new QueryParameter();
@@ -1009,36 +1026,40 @@ public class FileServlet extends HttpServlet {
         String rows = JSONObject.toJSONString(result.rows);
         List< ViewDetail1> detail1s = JSONArray.parseArray(rows, ViewDetail1.class);
 
+        //文件名
+        fileName=vs.getName()+(vs.getMonth()==null?"":sdf.format(vs.getMonth()))+"代缴社保结算单";
+        fileName = new String(fileName.getBytes(),"iso-8859-1");
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.addHeader("Content-Disposition", "attachment;filename=\""
+                + fileName + ".xls\"");
+
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("公司汇款明细", 0);
-        WritableSheet sheet2 = book.createSheet("个人工资表", 1);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
 
         try {
-            sheet1.addCell(new Label(0, 0, "九江市杰博人力资源有限公司派遣员工"+vs.getMonth()==null?"":sdf.format(vs.getMonth())+"工资收款明细("+vs.getName()+")"));
-            sheet1.addCell(new Label(1, 1, "员工姓名"));
-            sheet1.addCell(new Label(2, 1, "身份证号码"));
-            sheet1.addCell(new Label(3, 1, "单位养老"));
-            sheet1.addCell(new Label(4, 1, "单位医疗"));
-            sheet1.addCell(new Label(5, 1, "单位大病"));
-            sheet1.addCell(new Label(6, 1, "单位生育"));
-            sheet1.addCell(new Label(7, 1, "单位失业"));
-            sheet1.addCell(new Label(8, 1, "单位工伤"));
-            sheet1.addCell(new Label(9, 1, "单位公积金"));
-            sheet1.addCell(new Label(10, 1, "单位社保合计"));
-            sheet1.addCell(new Label(11, 1, "个人养老"));
-            sheet1.addCell(new Label(12, 1, "个人医疗"));
-            sheet1.addCell(new Label(13, 1, "个人失业"));
-            sheet1.addCell(new Label(14, 1, "个人大病"));
-            sheet1.addCell(new Label(15, 1, "个人公积金"));
-            sheet1.addCell(new Label(16, 1, "个人社保合计"));
-            sheet1.addCell(new Label(17, 1, "国家减免"));
-            sheet1.addCell(new Label(18, 1, "管理费"));
-            sheet1.addCell(new Label(19, 1, "核收补减"));
-            sheet1.addCell(new Label(20, 1, "税费"));
-            sheet1.addCell(new Label(21, 1, "汇款总额"));
-            sheet1.addCell(new Label(22, 1, "备注"));
+            sheet1.addCell(new Label(0, 0, vs.getName()+""+(vs.getMonth()==null?"":sdf.format(vs.getMonth()))+"代缴社保汇款表"));
+            sheet1.addCell(new Label(0, 1, "员工姓名"));
+            sheet1.addCell(new Label(1, 1, "身份证号码"));
+            sheet1.addCell(new Label(2, 1, "单位养老"));
+            sheet1.addCell(new Label(3, 1, "单位医疗"));
+            sheet1.addCell(new Label(4, 1, "单位大病"));
+            sheet1.addCell(new Label(5, 1, "单位生育"));
+            sheet1.addCell(new Label(6, 1, "单位失业"));
+            sheet1.addCell(new Label(7, 1, "单位工伤"));
+            sheet1.addCell(new Label(8, 1, "单位公积金"));
+            sheet1.addCell(new Label(9, 1, "单位社保合计"));
+            sheet1.addCell(new Label(10, 1, "个人养老"));
+            sheet1.addCell(new Label(11, 1, "个人医疗"));
+            sheet1.addCell(new Label(12, 1, "个人失业"));
+            sheet1.addCell(new Label(13, 1, "个人大病"));
+            sheet1.addCell(new Label(14, 1, "个人公积金"));
+            sheet1.addCell(new Label(15, 1, "个人社保合计"));
+            sheet1.addCell(new Label(16, 1, "国家减免"));
+            sheet1.addCell(new Label(17, 1, "管理费"));
+            sheet1.addCell(new Label(18, 1, "核收补减"));
+            sheet1.addCell(new Label(19, 1, "税费"));
+            sheet1.addCell(new Label(20, 1, "汇款总额"));
+            sheet1.addCell(new Label(21, 1, "备注"));
 
 
             int index = 2;
@@ -1051,44 +1072,44 @@ public class FileServlet extends HttpServlet {
             float tax2 = 0;
 
             for( ViewDetail1 v:detail1s){
-                sheet1.addCell(new Label(1, index, v.getName()));
-                sheet1.addCell(new Label(2, index, v.getCardId()));
-                sheet1.addCell(new jxl.write.Number(3, index, v.getPension2()));
-                sheet1.addCell(new jxl.write.Number(4, index, v.getMedicare2()));
-                sheet1.addCell(new jxl.write.Number(5, index, v.getDisease2()));
-                sheet1.addCell(new jxl.write.Number(6, index, v.getBirth()));
-                sheet1.addCell(new jxl.write.Number(7, index, v.getUnemployment2()));
-                sheet1.addCell(new jxl.write.Number(8, index, v.getInjury()));
-                sheet1.addCell(new jxl.write.Number(9, index, v.getFund2()));
+                sheet1.addCell(new Label(0, index, v.getName()));
+                sheet1.addCell(new Label(1, index, v.getCardId()));
+                sheet1.addCell(new jxl.write.Number(2, index, v.getPension2()));
+                sheet1.addCell(new jxl.write.Number(3, index, v.getMedicare2()));
+                sheet1.addCell(new jxl.write.Number(4, index, v.getDisease2()));
+                sheet1.addCell(new jxl.write.Number(5, index, v.getBirth()));
+                sheet1.addCell(new jxl.write.Number(6, index, v.getUnemployment2()));
+                sheet1.addCell(new jxl.write.Number(7, index, v.getInjury()));
+                sheet1.addCell(new jxl.write.Number(8, index, v.getFund2()));
                 float sum1 = v.getPension2()+v.getMedicare2()+v.getDisease2()+v.getBirth()+v.getUnemployment2()
                         +v.getInjury()+v.getFund2();
                 //单位社保合计
-                sheet1.addCell(new jxl.write.Number(10, index, sum1));
+                sheet1.addCell(new jxl.write.Number(9, index, sum1));
 
-                sheet1.addCell(new jxl.write.Number(11, index, v.getPension1()));
-                sheet1.addCell(new jxl.write.Number(12, index, v.getMedicare1()));
-                sheet1.addCell(new jxl.write.Number(13, index, v.getUnemployment1()));
-                sheet1.addCell(new jxl.write.Number(14, index, v.getDisease1()));
-                sheet1.addCell(new jxl.write.Number(15, index, v.getFund1()));
+                sheet1.addCell(new jxl.write.Number(10, index, v.getPension1()));
+                sheet1.addCell(new jxl.write.Number(11, index, v.getMedicare1()));
+                sheet1.addCell(new jxl.write.Number(12, index, v.getUnemployment1()));
+                sheet1.addCell(new jxl.write.Number(13, index, v.getDisease1()));
+                sheet1.addCell(new jxl.write.Number(14, index, v.getFund1()));
                 float sum2 = v.getPension1()+v.getDisease1()+v.getUnemployment1()
                         +v.getMedicare1()+v.getFund1();
-                sheet1.addCell(new jxl.write.Number(16, index, sum2));
-                sheet1.addCell(new jxl.write.Number(17, index, v.getFree()));
+                sheet1.addCell(new jxl.write.Number(15, index, sum2));
+                sheet1.addCell(new jxl.write.Number(16, index, v.getFree()));
                 //计算管理费和税费
                 HashMap<String,Float> map2 =calculateManageAndTax2(type,category,invoice,per,val,manage,tax2,v);
                 //管理费
-                sheet1.addCell(new jxl.write.Number(18, index,  map2.get("manage")));
+                sheet1.addCell(new jxl.write.Number(17, index,  map2.get("manage")));
                 //核收补减
-                sheet1.addCell(new jxl.write.Number(19, index, v.getExtra2()));
+                sheet1.addCell(new jxl.write.Number(18, index, v.getExtra2()));
                 //税费
-                sheet1.addCell(new jxl.write.Number(20, index, map2.get("tax2")));
+                sheet1.addCell(new jxl.write.Number(19, index, map2.get("tax2")));
                 //社保合计
                 float sum = sum1+sum2;
                 //汇款总额 = 社保总额+管理费+税费+（单位）核收补减
                 float summary = sum-v.getFree()+ map2.get("manage")+map2.get("tax2")+v.getExtra2();
-                sheet1.addCell(new jxl.write.Number(21, index, summary));
+                sheet1.addCell(new jxl.write.Number(20, index, summary));
                 //备注
-                sheet1.addCell(new Label(22, index,v.getComments2()));
+                sheet1.addCell(new Label(21, index,v.getComments2()));
                 index++;
             }
             book.write();
