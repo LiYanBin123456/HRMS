@@ -628,16 +628,17 @@ var columns_account2  = [[
 //----------------------------------------------------------------数据集合-----------------------
 var categorys_cooperation = [
     {value:0,text:"政府部门"},
-    {value:1,text:"事业单位"},
-    {value:2,text:"人才市场"},
-    {value:3,text:"学校"},
-    {value:4,text:"内资企业"},
-    {value:5,text:"外资企业"},
-    {value:6,text:"港澳台企业"},
-    {value:7,text:"内资工厂"},
-    {value:8,text:"外资工厂"},
-    {value:9,text:"港澳台工厂"},
-    {value:10,text:"其它"}
+    {value:1,text:"国企"},
+    {value:2,text:"事业单位"},
+    {value:3,text:"人才市场"},
+    {value:4,text:"学校"},
+    {value:5,text:"内资企业"},
+    {value:6,text:"外资企业"},
+    {value:7,text:"港澳台企业"},
+    {value:8,text:"内资工厂"},
+    {value:9,text:"外资工厂"},
+    {value:10,text:"港澳台工厂"},
+    {value:11,text:"其它"}
 ];
 var business_supplier = [
     {value:0,text:"顶岗实习"},

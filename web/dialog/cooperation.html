@@ -372,7 +372,7 @@
     //添加自定义字段
     function appendSalaryItem(type) {
         layer.prompt({
-            formType: 2, value: '', title: '请输入字段名（不超过8个字符）', area: ['100px', '30px'] //自定义文本域宽高
+            formType: 2, value: '', title: '请输入字段名（每个字段名不超过8个字符，多个字段用空格隔开）', area: ['150px', '30px'] //自定义文本域宽高
         }, function (value, index, elem) {
             var values = value.split(" ");
             for(var k in values){
