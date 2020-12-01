@@ -39,17 +39,6 @@
                 <div class="layui-input-inline">
                     <input type="text" class="layui-input" autocomplete="off" id="filter_month" placeholder="按月份过滤">
                 </div>
-                <div class="layui-input-inline">
-                    <select name="status"  lay-filter="select"   >
-                        <option value="">按状态过滤</option>
-                        <option value="0">编辑</option>
-                        <option value="1">提交</option>
-                        <option value="2">初审</option>
-                        <option value="3">终审</option>
-                        <option value="4">扣款</option>
-                        <option value="5">发放</option>
-                    </select>
-                </div>
             </form>
         </div>
         <table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>
@@ -57,9 +46,10 @@
 
         <!--行内工具栏-->
         <script type="text/html" id="bar_settlement">
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">明细</a>
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="save">保存</a>
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="more"> …</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">参保明细</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="saveAs">另存为</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="delete">删除</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log">日志</a>
         </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
@@ -80,8 +70,6 @@
             var menu_data=[
                 {'data':'log','title':'日志'},
                 {'data':'saveAs','title':'另存为'},
-                {'data':'commit','title':'提交'},
-                {'data':'reset','title':'重置'},
                 {'data':'delete','title':'删除'}
             ];
             $(function () {
@@ -160,29 +148,14 @@
                         case "detail":
                             showDetailDlg(settlement);
                             break;
-                        case 'save':
-                            save(settlement);
+                        case "log":
+                            showLogs(settlement);
                             break;
-                        case "more":
-                            popMenu.open(menu_data,false,function(d){
-                                switch (d.data){
-                                    case "log":
-                                        showLogs(settlement);
-                                        break;
-                                    case 'saveAs':
-                                        showCopyDlg(settlement);
-                                        break;
-                                    case 'commit':
-                                        commit(settlement);
-                                        break;
-                                    case 'reset':
-                                        reset(settlement);
-                                        break;
-                                    case 'delete':
-                                        del(settlement);
-                                        break;
-                                }
-                            });
+                        case 'saveAs':
+                            showCopyDlg(settlement);
+                            break;
+                        case 'delete':
+                            del(settlement);
                             break;
                     }
                 });
@@ -352,6 +325,7 @@
 
             //删除结算单
             function del(settlement) {
+                //有明细的不能删除
                 layer.confirm('确定删除'+settlement.cname+":"+format_date(settlement.month)+'的结算单', {icon: 3, title:'删除'}, function(index){
                     iSettlement.delete(settlement.id,2,function () {
                         layer.close(index);

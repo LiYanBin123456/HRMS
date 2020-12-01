@@ -31,7 +31,7 @@
             <!--顶部工具栏-->
             <button class="layui-btn" id="download" onclick="download()" style="display: none"><i class="layui-icon layui-icon-edit"></i>下载复印件</button>
             <div class="layui-hide" id="top_bar_detail">
-                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
+                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 新增</button>
                 <button class="layui-btn layui-btn-sm" lay-event="export" onclick="exports()"><i class="layui-icon "></i> 导出</button>
                 <button class="layui-btn layui-btn-sm" lay-event="import"><i class="layui-icon "></i> 导入</button>
                 <button class="layui-btn layui-btn-sm" lay-event="download"><i class="layui-icon "></i> 下载模板</button>
@@ -43,6 +43,7 @@
             <!--行内工具栏-->
             <script type="text/html" id="bar_detail">
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 替换</a>
             </script>
         </div>
         <script src="../js/fieldSet.js"></script>

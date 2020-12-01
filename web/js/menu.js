@@ -72,7 +72,7 @@ var menuItems_dispatch = [
     {title:"商业保险",id:"0,62914560",icon:"&#xe6a7",children:
         [
             {id:"0,4194304",   title:"保险产品",href:"products.html",icon:"&#xe6a7"},
-            {id:"0,8388608",   title:"结算",href:"settlements3.html",icon:"&#xe6a7"},
+            {id:"0,8388608",   title:"参保单",href:"settlements3.html",icon:"&#xe6a7"},
             {id:"0,16777216",   title:"初审",href:"check31.html?type=0",icon:"&#xe6a7"},
             {id:"0,33554432",   title:"终审",href:"check32.html?type=1",icon:"&#xe6a7"}
         ]
