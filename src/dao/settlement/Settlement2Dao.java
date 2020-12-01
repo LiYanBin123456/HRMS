@@ -21,7 +21,7 @@ public class Settlement2Dao {
     public static DaoQueryResult get(Connection conn,long id){
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
-        return DbUtil.get(conn,"settlement2",conditions,Settlement2.class);
+        return DbUtil.get(conn,"view_settlement2",conditions,ViewSettlement2.class);
     }
     public static DaoUpdateResult insert(Connection conn, Settlement2 s) {
         String sql = "insert into settlement2 (did,cid,ccid,month,hours,price,traffic,extra,summary,status,flag) values (?,?,?,?,?,?,?,?,?,?,?)";

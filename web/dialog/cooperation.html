@@ -63,16 +63,17 @@
                         <select name="category" lay-verify="required">
                             <option value=""></option>
                             <option value="0">政府部门</option>
-                            <option value="1">事业单位</option>
-                            <option value="2">人才市场</option>
-                            <option value="3">学校</option>
-                            <option value="4">内资企业</option>
-                            <option value="5">外资企业</option>
-                            <option value="6">港澳台企业</option>
-                            <option value="7">内资工厂</option>
-                            <option value="8">外资工厂</option>
-                            <option value="9">港澳台工厂</option>
-                            <option value="10">其他</option>
+                            <option value="1">国企</option>
+                            <option value="2">事业单位</option>
+                            <option value="3">人才市场</option>
+                            <option value="4">学校</option>
+                            <option value="5">内资企业</option>
+                            <option value="6">外资企业</option>
+                            <option value="7">港澳台企业</option>
+                            <option value="8">内资工厂</option>
+                            <option value="9">外资工厂</option>
+                            <option value="10">港澳台工厂</option>
+                            <option value="11">其他</option>
                         </select>
                     </div>
                 </div>
@@ -373,14 +374,18 @@
         layer.prompt({
             formType: 2, value: '', title: '请输入字段名（不超过8个字符）', area: ['100px', '30px'] //自定义文本域宽高
         }, function (value, index, elem) {
+            var values = value.split(" ");
+            for(var k in values){
+                var val = values[k];
             if (salary_items_defined.length >= 20) {
-                layer.msg('最多只能子定义20个字段');
+                layer.msg('最多只能自定义20个字段');
             } else {
-                salary_items_defined.push(value+","+type);
+                salary_items_defined.push(val+","+type);
                 var node = type==0?$("#template [name=salary_item_defined0]").clone():$("#template [name=salary_item_defined1]").clone();
-                node.text(value);
+                node.text(val);
                 node.click(removeSalaryItem);
                 $("#btn_append").before(node);
+            }
             }
             layer.close(index);
         });

@@ -88,7 +88,7 @@ public class FileServlet extends HttpServlet {
                 exportDetail1(conn,request,response);
                 ConnUtil.closeConnection(conn);
                 return;
-            case "exportDetail2"://下载小时工结算单明细
+            case "exportDetail2"://导出小时工结算单明细
                 exportDetail2(conn,request,response);
                 ConnUtil.closeConnection(conn);
                 return;
@@ -628,13 +628,13 @@ public class FileServlet extends HttpServlet {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
 
         try {
-            sheet1.addCell(new Label(0, 0, "九江市杰博人力资源有限公司派遣员工"+vs.getMonth()==null?"":sdf.format(vs.getMonth())+"工资收款明细("+vs.getName()+")"));
+            sheet1.addCell(new Label(0, 0,vs.getName()+""+vs.getMonth()==null?"":sdf.format(vs.getMonth())+"工资汇款明细"));
 
             sheet1.addCell(new Label(0, 1, "员工姓名"));
             sheet1.addCell(new Label(1, 1, "身份证号码"));
             sheet1.addCell(new Label(2, 1, "基本工资"));
 
-            sheet2.addCell(new Label(0, 0, " "+vs.getName()+vs.getMonth()==null?"":sdf.format(vs.getMonth())+"实发明细"));
+            sheet2.addCell(new Label(0, 0, vs.getName()+""+vs.getMonth()==null?"":sdf.format(vs.getMonth())+"实发明细"));
 
             sheet2.addCell(new Label(0, 1, "员工姓名"));
             sheet2.addCell(new Label(1, 1, "身份证号码"));
@@ -829,10 +829,10 @@ public class FileServlet extends HttpServlet {
 
     //导出小时工结算的明细
     private void exportDetail2(Connection conn, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-        response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=details2.xls");
-
+        String fileName ;
         long sid = Long.parseLong(request.getParameter("id"));//结算单id
+        ViewSettlement2 viewSettlement2 = (ViewSettlement2) Settlement2Dao.get(conn,sid).data;
+        fileName=viewSettlement2.getName()+"小时工结算单";
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid","=",sid);
         DaoQueryListResult result = Detail2Dao.getList(conn,parameter);
@@ -848,6 +848,10 @@ public class FileServlet extends HttpServlet {
         if(payer==1){//合作客户发放工资  单价=公司单价-员工单价
               price =price - detail2s.get(0).getPrice();
         }
+        fileName = new String(fileName.getBytes(),"iso-8859-1");
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.addHeader("Content-Disposition", "attachment;filename=\""
+                + fileName + ".xls\"");
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("小时工汇款表", 0);
         WritableSheet sheet2 = book.createSheet("小时工结算单明细", 1);

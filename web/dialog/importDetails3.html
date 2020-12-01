@@ -109,7 +109,7 @@
                 laypage.render({
                     elem: 'pager'
                     ,curr:param_query.pagination.page
-                    ,count: details.length //数据总数
+                    ,count: JSON.parse(details).length //数据总数
                     ,limit: param_query.pagination.size
                     ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
                     ,jump: function(obj,first){

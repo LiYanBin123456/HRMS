@@ -468,6 +468,46 @@ public class Calculate {
     }
 
     /**
+     * 计算年终奖的个税
+     * @param income 本期收入
+     * @return v
+     */
+    public static double calculateTax(float income){
+        double tax;//个税 = 应税额*税率（A） – 速算扣除（B） – 累计已预缴税额（C）
+        float taxDue;//应税额 = 年终奖/12；
+        taxDue = income/12;
+        float rate = 0;//税率
+        float d = 0;//速算扣除
+        if(taxDue>0&&taxDue<=3000){//根据个税比例报表计算个税
+            rate = 0.03f;
+            d = 0;
+        }else if(taxDue<=12000){
+            rate = 0.1f;
+            d = 210;
+        }else if(taxDue<=25000){
+            rate = 0.2f;
+            d = 1410;
+        }else if(taxDue<=35000){
+            rate = 0.25f;
+            d = 2660;
+        }else if(taxDue<=55000){
+            rate = 0.3f;
+            d = 4410;
+        }else if(taxDue<=80000){
+            rate = 0.35f;
+            d = 7160;
+        }else if(taxDue>80000){
+            rate = 0.45f;
+            d = 15160;
+        }
+        tax = income*rate-d;
+        if(tax < 0 ){
+            tax = 0;
+        }
+        return tax;
+    }
+
+    /**
      * 计算小时工结算单明细
      * @param d 小时工结算单明细
      * @param deduct 所属员工的各项扣除
