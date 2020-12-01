@@ -505,6 +505,13 @@
             }else{
                 $("[name=m1]").addClass("layui-hide");
             }
+            if(settingM == 1){
+                $("[name=bMedicare]").prop("checked", false);
+                form.render('checkbox');
+            }else{
+                $("[name=bMedicare]").prop("checked", true);
+                form.render('checkbox');
+            }
         });
         form.on('radio(settingS)', function(data){
             var settingS = data.value;
@@ -512,6 +519,13 @@
                 $("[name=s1]").removeClass("layui-hide");
             }else{
                 $("[name=s1]").addClass("layui-hide");
+            }
+            if(settingS == 1){
+                $("[name=bSocial]").prop("checked", false);
+                form.render('checkbox');
+            }else{
+                $("[name=bSocial]").prop("checked", true);
+                form.render('checkbox');
             }
         });
         form.on('checkbox(injury)', function(data){
