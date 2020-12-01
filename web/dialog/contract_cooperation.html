@@ -164,7 +164,7 @@
         <div class="layui-tab-item">
             <form class="layui-form" >
                 <div id="container_contract" class="layui-form-item layui-form-text">
-                    <embed id="preview_contact" class="preview_contact"></embed>
+                    <embed id="preview_contact" class="preview_contact">
                 </div>
                 <div class="layui-form-item" style="text-align: center">
                     <button type="button" class="layui-btn" id="btn_upload"><i class="layui-icon">&#xe67c;</i>上传pdf</button>
@@ -230,24 +230,13 @@
                 elem: '#contract_cooperation_end'
             });
             initPage();
-            initTab();
+            getService();
             initCooperation();
             initProduct();
         });
     }
 
-    function initTab() {
-        element.on('tab(tab_contracts)', function(data) {
-            switch (data.index) {
-                case 0:
-                    initPage();//获取合同基础信息
-                    break;
-                case 1:
-                    getService();//获取合同服务项目
-                    break;
-            }
-        });
-    }
+
 
 
     function initPage() {
