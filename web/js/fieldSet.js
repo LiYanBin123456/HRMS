@@ -761,7 +761,8 @@ var period_product = [
 var invoice_contract = [
     {value:0,text:"增值税发票(全额)"},
     {value:1,text:"增值税发票(差额)"},
-    {value:2,text:"普通发票"}
+    {value:2,text:"增值税普通发票（全额）"},
+    {value:3,text:"增值税普通发票（差额）"}
 ];
 //合同服务项目类型
 var stype_contract = [
