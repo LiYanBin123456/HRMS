@@ -29,16 +29,16 @@
 
     <body class="layui-layout-body">
         <!--顶部工具栏-->
-        <div class="layui-hide" id="top_bar_settlement">
+        <script type="text/html" id="top_bar_settlement">
             <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
             <form class="layui-form searchbox">
                 <div class="layui-input-inline">
                     <input name="keyword" class="layui-input" placeholder="请输入要查找的用工企业">
                 </div>
                 <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-                <div class="layui-input-inline">
+                <!--<div class="layui-input-inline">
                     <input type="text" class="layui-input" autocomplete="off" id="filter_month" lay-filter="filter_month" placeholder="按月份过滤">
-                </div>
+                </div>-->
                 <div class="layui-input-inline">
                     <select name="status" lay-filter="select" >
                         <option value="-1">按状态过滤</option>
@@ -51,7 +51,7 @@
                     </select>
                 </div>
             </form>
-        </div>
+        </script>
         <table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>
         <div class="layui-table-page" id="pager"></div>
 
@@ -111,21 +111,6 @@
             }
 
             function initPage() {
-                laydate.render({
-                    elem: '#filter_month'
-                    ,type: 'month'
-                    ,change: function(value, date, endDate){
-                        var month = value+"-01";
-                        param_query.addCondition("month","=",month);
-                        getSettlements(true);
-                    },
-                    done: function(value, date, endDate){
-                        if (!value){
-                            param_query.removeCondition("month");
-                            getSettlements(true);
-                        }
-                    }
-                });
                 form.on('select(select)', function (data) {//获取状态
                     var status = data.value;
                     if(status == -1){
@@ -143,6 +128,21 @@
                 });
 
                 initTable();
+                laydate.render({
+                    elem: '#filter_month'
+                    ,type: 'month'
+                    ,change: function(value, date, endDate){
+                        var month = value+"-01";
+                        param_query.addCondition("month","=",month);
+                        getSettlements(true);
+                    },
+                    done: function(value, date, endDate){
+                        if (!value){
+                            param_query.removeCondition("month");
+                            getSettlements(true);
+                        }
+                    }
+                });
                 getSettlements(false);
             }
 

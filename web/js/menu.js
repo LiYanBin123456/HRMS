@@ -19,11 +19,11 @@ var menuItems_dispatch = [
             {id:"0,4",   title:"合同管理",href:"contracts_cooperation.html",icon:"&#xe6a7"}
         ]
     },
-    {id:"0,120",title:"员工管理",icon:"&#xe6a7",children:
+    {id:"0,120",title:"员工管理",icon:"&#xe70b",children:
         [
-            {id:"0,8",   title:"内部员工",href:"employees1.html",icon:"&#xe6a7"},
+            {id:"0,8",   title:"内部员工",href:"employees1.html",icon:"&#xe70b"},
             {id:"0,16",   title:"外派员工",href:"employees2.html",icon:"&#xe6a7"},
-            {id:"0,32",   title:"人才库",href:"employees3.html",icon:"&#xe6a7"},
+            {id:"0,32",   title:"人才库",href:"employees3.html",icon:"&#xe676"},
             {id:"0,64",   title:"合同管理",href:"contracts_employee.html",icon:"&#xe6a7"}
         ]
     },
@@ -73,8 +73,7 @@ var menuItems_dispatch = [
         [
             {id:"0,4194304",   title:"保险产品",href:"products.html",icon:"&#xe6a7"},
             {id:"0,8388608",   title:"参保单",href:"settlements3.html",icon:"&#xe6a7"},
-            {id:"0,16777216",   title:"初审",href:"check31.html?type=0",icon:"&#xe6a7"},
-            {id:"0,33554432",   title:"终审",href:"check32.html?type=1",icon:"&#xe6a7"}
+            {id:"0,16777216",   title:"人员管理",href:"employees0.html?type=0",icon:"&#xe6a7"},
         ]
     },
     {title:"财务管理",id:"0,1006632960",icon:"&#xe6a7",children:
