@@ -7,6 +7,7 @@
 
 //派遣单位合作客户字段集合
 var columns_dispatch_partner = [[
+    {field:'id', title: '编号'},
     {field:'name', title: '客户名称'},
     {field:'contact', title: '联系人',width:250},
     {field:'phone', title: '联系电话',width:250},
@@ -15,6 +16,7 @@ var columns_dispatch_partner = [[
 
 //派遣单位潜在客户字段集合
 var columns_dispatch_potential = [[
+    {field:'id', title: '编号'},
     {field:'name', title: '客户名称'},
     {field:'contact', title: '联系人',width:250},
     {field:'phone', title: '联系电话',width:250},
@@ -23,6 +25,7 @@ var columns_dispatch_potential = [[
 
 //派遣单位流失客户字段集合
 var columns_dispatch_loss = [[
+    {field:'id', title: '编号'},
     {field:'name', title: '客户名称'},
     {field:'contact', title: '联系人',width:250},
     {field:'phone', title: '联系电话',width:250},
@@ -84,6 +87,7 @@ var columns_accounts  = [[
 
 //合作单位合作客户管理字段集合
 var columns_cooperation_partner = [[
+    {field:'id', title: '编号',width:100},
     {field:'name', title: '客户名称',width:200},
     {field:'category', title: '客户性质',width:100,templet:function (d) { return array_value2text(categorys_cooperation,d.category) }},
     {field:'contact', title: '联系人',width:100},
@@ -93,6 +97,7 @@ var columns_cooperation_partner = [[
 
 //合作单位潜在客户管理字段集合
 var columns_cooperation_potential = [[
+    {field:'id', title: '编号',width:100},
     {field:'name', title: '客户名称',width:200},
     {field:'category', title: '客户性质',width:100,templet:function (d) { return array_value2text(categorys_cooperation,d.category) }},
     {field:'contact', title: '联系人',width:100},
@@ -102,6 +107,7 @@ var columns_cooperation_potential = [[
 
 //合作单位流失客户管理字段集合
 var columns_cooperation_loss = [[
+    {field:'id', title: '编号',width:100},
     {field:'name', title: '客户名称',width:200},
     {field:'category', title: '客户性质',width:100,templet:function (d) { return array_value2text(categorys_cooperation,d.category) }},
     {field:'contact', title: '联系人',width:100},
@@ -111,6 +117,7 @@ var columns_cooperation_loss = [[
 
 //供应商管理字段集合
 var columns_supplier_partner = [[
+    {field:'id', title: '编号',width:100},
     {field:'name', title: '名称'},
     {field:'business', title: '业务类别',width:90,templet:function (d) { return array_value2text(business_supplier,d.business) }},
     {field:'contact', title: '联系人',width:100},
@@ -153,6 +160,16 @@ var columns_contract_employee  = [[
     {field:'end', title: '到期时间',width:100,templet:function (d) {return format_date(d.end)}},
     {field:'times', title: '签订次数',width:80},
     { title: '操作', toolbar: '#bar_contract',width:200}
+]];
+
+//商业保险参保人员字段集合
+var columns_employee0 = [[
+    {field:'cardId', title: '身份证号',width:170},
+    {field:'name', title: '姓名',width:80},
+    {field:'degree', title: '学历',width:80,templet:function (d) { return array_value2text(degrees_employee,d.degree) }},
+    {field:'phone', title: '联系电话',width:120},
+    {field:'department', title: '所属部门'},
+    {title: '操作', toolbar: '#bar_employee',width:220,fixed:"right"}
 ]];
 
 //内部员工管理字段集合
@@ -198,12 +215,12 @@ var columns_employees = [[
     {field:'status', title: '在职状态',width:120,templet:function (d) { return array_value2text(status_employee,d.status) }},
     {field:'category', title: '用工性质',width:120,templet:function (d) { return array_value2text(category_employee,d.category) }},
     {field:'household', title: '户口性质',width:120,templet:function (d) { return array_value2text(household_employee,d.household) }},
+    {field:'cid', title: '外派单位编号',width:120,edit: 'text'},
     {field:'address', title: '户籍地址',width:120,edit: 'text'},
     {field:'department', title: '部门',width:120,edit: 'text'},
     {field:'post', title: '岗位',width:120,edit: 'text'},
     {field:'school', title: '毕业院校',width:120,edit: 'text'},
     {field:'major', title: '毕业专业',width:120,edit: 'text'},
-    {field:'cname', title: '外派单位',width:120,edit: 'text'},
     {field:'bank1', title: '发行卡',width:120,edit: 'text'},
     {field:'bank2', title: '开户行',width:120,edit: 'text'},
     {field:'bankNo', title: '行号',width:120,edit: 'text'},
