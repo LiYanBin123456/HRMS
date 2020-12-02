@@ -559,12 +559,17 @@ var InterfaceEmployee = function () {
         access(url,para,1,success,fail);
     };
     /**
-     * 批量导入员工信息
-     * @param employees 员工信息集合
-     * @param extracts 员工补充信息集合
+     * 批量设置员工社保信息
+     * @param eids
+     * @param setting
      * @param success
      * @param fail
      */
+    this.settingBatch = function (eids,setting,success,fail) {
+        var para = {op: "settingBatch",eids:eids,setting:JSON.stringify(setting)};
+        access(url,para,1,success,fail);
+    };
+
     this.insertBatch = function (employees,success,fail) {
         var para = {op: "insertBatch",employees:employees};
         access(url,para,1,success,fail);

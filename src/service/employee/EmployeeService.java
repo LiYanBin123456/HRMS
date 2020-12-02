@@ -4,6 +4,7 @@ package service.employee;
 import bean.client.Cooperation;
 import bean.employee.Employee;
 import bean.employee.EmployeeExtra;
+import bean.employee.EnsureSetting;
 import bean.employee.PayCard;
 import bean.insurance.Insurance;
 import com.alibaba.fastjson.JSONObject;
@@ -172,5 +173,28 @@ public class EmployeeService {
         }
         ConnUtil.commit(conn);
         return JSONObject.toJSONString(res1);
+    }
+
+    public static String settingBatch(Connection conn, String[] eids, EnsureSetting setting) {
+        ConnUtil.closeAutoCommit(conn);
+        List<EnsureSetting> settingList=new ArrayList<>();
+        DaoUpdateResult result=new DaoUpdateResult();
+        for(int i=0;i<eids.length;i++){
+            setting.setEid(Long.parseLong(eids[i]));
+            settingList.add(setting);
+        }
+        for (EnsureSetting s:settingList){
+            if(SettingDao.exist(conn,s.getEid()).exist){
+                result=SettingDao.update(conn,s);
+            }else {
+                result=SettingDao.insert(conn,s);
+            }
+            if(result.success=false){//事务处理
+                ConnUtil.rollback(conn);
+                return JSONObject.toJSONString(result);
+            }
+        }
+        ConnUtil.commit(conn);
+        return JSONObject.toJSONString(result);
     }
 }

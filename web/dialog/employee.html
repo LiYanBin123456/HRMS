@@ -619,7 +619,6 @@
                     layer.alert("尚未设置社保信息，请设置并保存", {icon: 20});
                 }
             });
-            getPer(employee);
         }
 
         function showEnsureSetting(setting) {
@@ -794,14 +793,6 @@
         });
     }
 
-    //获取工伤比例
-    function getPer(employee) {
-        iClient.get(employee.cid,1,function (result) {
-            var coop = result.data;
-            var per = coop.per1;
-            $("#per").val(per);
-        })
-    }
     function onSaveSuccess() {
         layer.msg("保存成功");
     }

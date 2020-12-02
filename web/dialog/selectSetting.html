@@ -37,10 +37,9 @@
                     <input type="radio" lay-filter="settingM" name="settingM" value="0" title="最低标准" checked>
                     <input type="radio" lay-filter="settingM" name="settingM" value="1" title="不缴纳">
                     <input type="radio" lay-filter="settingM" name="settingM" value="2" title="自定义基数">
-
                 </div>
                 <div class="layui-inline layui-hide" name="m1">
-                    <input type="text" name="valM" required="" placeholder="自定义基数" autocomplete="off" class="layui-input " onchange="verifyMedicalBase(this.value)">
+                    <input type="text" name="valM" required="" placeholder="自定义基数" autocomplete="off" class="layui-input ">
                 </div>
             </div>
             <div class="layui-field-box">
@@ -60,7 +59,7 @@
                     <input type="radio" lay-filter="settingS" name="settingS" value="2" title="自定义基数">
                 </div>
                 <div class="layui-inline layui-hide" name="s1">
-                    <input type="text" name="valS" required="" placeholder="自定义基数" autocomplete="off" class="layui-input" onchange="verifySocialBase(this.value)" >
+                    <input type="text" name="valS" required="" placeholder="自定义基数" autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-field-box">
@@ -79,11 +78,11 @@
             <div class="layui-field-box">
                 基数
                 <div class="layui-inline" name="f1">
-                    <input type="text" name="fundBase" required="" placeholder="基数" autocomplete="off" class="layui-input" onchange="verifyFundBase(this.value)">
+                    <input type="text" name="fundBase" required="" placeholder="基数" autocomplete="off" class="layui-input" >
                 </div>
                 比例
                 <div class="layui-inline" name="f1">
-                    <input type="text" name="fundPer" required="" placeholder="%" autocomplete="off" class="layui-input" onchange="verifyFundPer(this.value)">
+                    <input type="text" name="fundPer" required="" placeholder="%" autocomplete="off" class="layui-input" >
                 </div>
             </div>
         </fieldset>
@@ -99,9 +98,6 @@
             </div>
         </fieldset>
     </div>
-    <div class="layui-form-item">
-        <button class="layui-btn" onclick="saveEnsureSetting()" type="button">保存</button>
-    </div>
 </form>
 </body>
 <script src="../js/jquery.min.js"></script>
@@ -112,15 +108,11 @@
 <script src="../js/fieldSet.js"></script>
 <script src="../js/city.js"></script>
 <script>
-    var op = "insert";
     var form;//表单对象
     var cityPicker;
     var element;
     var laydate;
-    var upload;
-    var employee = {degree:1,category:0,status:0,entry:new Date().getTime()};
-
-
+    var setting;
     loadLayuiModule();
 
     function loadLayuiModule() {
@@ -179,19 +171,26 @@
                 $("[name=i1]").addClass("layui-hide");
             }
         });
-
-        //监听用工性质选项变化
-        form.on('select(filter_category)', function(data){
-            var category = data.value;
-            if(category == 3){
-                $("[name=t2]").removeClass("layui-hide");
-            }else{
-                $("[name=t2]").addClass("layui-hide");
-            }
-        });
-        getEmployee();
-
     }
+
+    //向调用页面返回选中的数据
+    var callbackData = function () {
+        setting = form.val('form_ensure');
+        if(!setting.city){
+            layer.alert("请选择社保所在地", {icon: 20});
+        }
+        setting.medicare = 0;
+        $('input[name=bMedicare]:checked').each(function() {
+            setting.medicare += Number($(this).val());
+        });
+        setting.social = 0;
+        $('input[name=bSocial]:checked').each(function() {
+            setting.social += Number($(this).val());
+        });
+        return setting;
+    }
+
+
 </script>
 
 
