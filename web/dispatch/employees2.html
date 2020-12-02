@@ -182,6 +182,9 @@
                         case "dispatch":
                             batchDispatch();
                             break;
+                        case "setting":
+                            batchSetting();
+                            break;
                         case 'download':
                             download();
                             break;
@@ -362,6 +365,21 @@
                         })
                     });
                 }
+            }
+            
+            function  batchSetting() {
+                var employees = table.checkStatus('tbl_employee').data;
+                if(employees.length<1){
+                    layer.msg("请至少选择一个员工进行操作");
+                    return;
+                }
+                layer.open({
+                    title:"设置为",
+                    type: 2,
+                    area: ['60%', '80%'],
+                    content: "../dialog/selectSetting.html"
+                });
+                
             }
 
             function download() {
