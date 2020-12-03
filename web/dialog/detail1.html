@@ -197,7 +197,7 @@
 
             //核对导入的数据
             function showImportDlg() {
-                var content = "importDetails1.html?&cid="+cid;
+                var content = "importDetails1.html?&cid="+cid+"&month="+month;
                 layer.open({
                     title:"核对明细",
                     type: 2,
@@ -389,7 +389,7 @@
 
             //下载模板
             function download() {
-                    var url = "/hrms/verify/file?op=downloadDetail1&cid="+cid+"&sid="+sid+"&type="+type;
+                    var url = "/hrms/verify/file?op=downloadDetail1&cid="+cid+"&sid="+sid+"&type="+type+"&month="+month;
                     var form = $('<form method="POST"></form>');
                     form.attr('action', url);
                     form.appendTo($('body'));
