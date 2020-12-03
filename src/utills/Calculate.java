@@ -600,7 +600,7 @@ public class Calculate {
      * @param tax2 税费
      * @param v 明细
      */
-    public  static HashMap<String, Float> calculateManageAndTax2(int type, int category, int invoice, float per, float val, float manage, float tax2, ViewDetail1 v){
+    public  static HashMap<String, Float> calculateManageAndTax2(int type, int category, int invoice, float per, float val, float manage, float tax2, ViewDetail1 v,float salary){
         HashMap<String,Float> map = new HashMap<String, Float>();
         //计算管理费
         switch (type){
@@ -608,13 +608,13 @@ public class Calculate {
                 if(category==0){//按人数收取的结算方式
                     manage=val;//管理费=管理费
                     if(invoice==0){//增值税专用发票（全额）
-                        //税费=（应发+单位五险一金+管理费-国家减免）
-                        tax2 = (v.getPayable()+v.getPension2()+v.getUnemployment2()+v.getMedicare2()+v.getDisease2()+v.getInjury()+v.getBirth()+v.getFund2()+manage-v.getFree())*per;
+                        //税费=（基本工资+自定义工资项+单位五险一金+管理费-国家减免+单位核收补减）
+                        tax2 += (v.getBase()+salary+v.getPension2()+v.getUnemployment2()+v.getMedicare2()+v.getDisease2()+v.getInjury()+v.getBirth()+v.getFund2()+manage-v.getFree()+v.getExtra2())*per;
                     }
                 }else if(category==1){//按比例收取的结算方式
                     //此时服务项目中value为比例所以需要转成小数
-                    //管理费 = （应发总额+单位五险一金-国家减免）*比例（从服务项目中的比例）
-                    manage = (v.getPayable()+v.getPension2()+v.getUnemployment2()+v.getMedicare2()+v.getDisease2()+v.getInjury()-v.getFree())*(val/100);
+                    //管理费 = （基本工资+自定义工资项+单位五险一金-国家减免+单位核收补减）*比例（从服务项目中的比例）
+                    manage += (v.getBase()+salary+v.getPension2()+v.getUnemployment2()+v.getMedicare2()+v.getDisease2()+v.getBirth()+v.getFund2()+v.getInjury()-v.getFree()+v.getExtra2())*(val/100);
                     tax2=0;
                 }else {//按外包整体核算方式
 
