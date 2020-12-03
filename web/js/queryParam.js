@@ -44,7 +44,7 @@ QueryParam.prototype = {
     },
 
     setOrder:function(field,direction){
-        if(field && direction){
+        if(field){
             this.order.need = true;
             this.order.field = field;
             this.order.direction = direction;
