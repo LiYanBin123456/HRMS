@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>添加员工</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <link href="../layui/extend/city-picker/city-picker.css" rel="stylesheet"/>
+
+    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<form lay-filter="form_ensure" class="layui-form">
+    <input type="hidden" name="eid">
+    <div class="layui-form-item">
+        <label class="layui-form-label">社保所在地</label>
+        <div class="layui-input-block">
+            <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city" readonly="readonly" data-toggle="city-picker" placeholder="请选择">
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <fieldset class="layui-elem-field">
+            <legend>医保</legend>
+            <div class="layui-field-box">
+                <div class="layui-inline">
+                    <input type="radio" lay-filter="settingM" name="settingM" value="0" title="最低标准" checked>
+                    <input type="radio" lay-filter="settingM" name="settingM" value="1" title="不缴纳">
+                    <input type="radio" lay-filter="settingM" name="settingM" value="2" title="自定义基数">
+                </div>
+                <div class="layui-inline layui-hide" name="m1">
+                    <input type="text" name="valM" required="" placeholder="自定义基数" autocomplete="off" class="layui-input ">
+                </div>
+            </div>
+            <div class="layui-field-box">
+                <input type="checkbox" lay-skin="primary" name="bMedicare" value="1" title="医疗保险" checked>
+                <input type="checkbox" lay-skin="primary" name="bMedicare" value="2" title="大病保险" checked>
+                <input type="checkbox" lay-skin="primary" name="bMedicare" value="4" title="生育保险" checked>
+            </div>
+        </fieldset>
+    </div>
+    <div class="layui-form-item">
+        <fieldset class="layui-elem-field">
+            <legend>社保</legend>
+            <div class="layui-field-box">
+                <div class="layui-inline">
+                    <input type="radio" lay-filter="settingS" name="settingS" value="0" title="最低标准" checked>
+                    <input type="radio" lay-filter="settingS" name="settingS" value="1" title="不缴纳">
+                    <input type="radio" lay-filter="settingS" name="settingS" value="2" title="自定义基数">
+                </div>
+                <div class="layui-inline layui-hide" name="s1">
+                    <input type="text" name="valS" required="" placeholder="自定义基数" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-field-box">
+                <input type="checkbox" lay-skin="primary" name="bSocial" value="1" title="养老保险" checked>
+                <input type="checkbox" lay-skin="primary" name="bSocial" value="2" title="失业保险" checked>
+                <input type="checkbox" lay-skin="primary" name="bSocial" value="4" title="工伤保险" lay-filter="injury" checked>
+                <div class="layui-inline" name="i1">
+                    <input type="text" id="per" name="per" required="" placeholder="工伤比例" autocomplete="off" readonly class="layui-input">
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="layui-form-item">
+        <fieldset class="layui-elem-field">
+            <legend>公积金</legend>
+            <div class="layui-field-box">
+                基数
+                <div class="layui-inline" name="f1">
+                    <input type="text" name="fundBase" required="" placeholder="基数" autocomplete="off" class="layui-input" >
+                </div>
+                比例
+                <div class="layui-inline" name="f1">
+                    <input type="text" name="fundPer" required="" placeholder="%" autocomplete="off" class="layui-input" >
+                </div>
+            </div>
+        </fieldset>
+    </div>
+    <div class="layui-form-item">
+        <fieldset class="layui-elem-field">
+            <legend>保险产品</legend>
+            <div class="layui-field-box">
+                <div class="layui-inline">
+                    <input type="radio" lay-filter="settingP" name="product" value="0" title="无" checked>
+                    <input type="radio" lay-filter="settingP" name="product" value="1" title="购买">
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</form>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.params.js"></script>
+<script src="../js/interface.js"></script>
+<script src="../js/xadmin.js"></script>
+<script src="../layui/extend/city-picker/city-picker.data.js"></script>
+<script src="../js/fieldSet.js"></script>
+<script src="../js/city.js"></script>
+<script>
+    var form;//表单对象
+    var cityPicker;
+    var element;
+    var laydate;
+    var setting;
+    loadLayuiModule();
+
+    function loadLayuiModule() {
+        layui.extend({
+            index: 'lib/index' //主入口模块
+            , citypicker: '../layui/extend/city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
+        }).use(['form', 'element','citypicker','laydate', 'upload'], function () {
+            form = layui.form;
+            laydate = layui.laydate;
+            element = layui.element;
+            var picker = layui.citypicker;
+            cityPicker = new picker("#city-picker", {
+                provincename: "provinceId",
+                cityname: "city",
+                level: 'city'
+            });
+            initPage();
+        });
+    }
+
+    function initPage() {
+        form.on('radio(settingM)', function(data){
+            var settingM = data.value;
+            if(settingM == 2){
+                $("[name=m1]").removeClass("layui-hide");
+            }else{
+                $("[name=m1]").addClass("layui-hide");
+            }
+            if(settingM == 1){
+                $("[name=bMedicare]").prop("checked", false);
+                form.render('checkbox');
+            }else{
+                $("[name=bMedicare]").prop("checked", true);
+                form.render('checkbox');
+            }
+        });
+        form.on('radio(settingS)', function(data){
+            var settingS = data.value;
+            if(settingS == 2){
+                $("[name=s1]").removeClass("layui-hide");
+            }else{
+                $("[name=s1]").addClass("layui-hide");
+            }
+            if(settingS == 1){
+                $("[name=bSocial]").prop("checked", false);
+                form.render('checkbox');
+            }else{
+                $("[name=bSocial]").prop("checked", true);
+                form.render('checkbox');
+            }
+        });
+        form.on('checkbox(injury)', function(data){
+            if(data.elem.checked){
+                $("[name=i1]").removeClass("layui-hide");
+            }else{
+                $("[name=i1]").addClass("layui-hide");
+            }
+        });
+    }
+
+    //向调用页面返回选中的数据
+    var callbackData = function () {
+        setting = form.val('form_ensure');
+        if(!setting.city){
+            layer.alert("请选择社保所在地", {icon: 20});
+        }
+        setting.medicare = 0;
+        $('input[name=bMedicare]:checked').each(function() {
+            setting.medicare += Number($(this).val());
+        });
+        setting.social = 0;
+        $('input[name=bSocial]:checked').each(function() {
+            setting.social += Number($(this).val());
+        });
+        return setting;
+    }
+
+
+</script>
+
+
+</html>

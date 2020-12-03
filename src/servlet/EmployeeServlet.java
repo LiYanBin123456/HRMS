@@ -67,6 +67,9 @@ public class EmployeeServlet extends HttpServlet {
             case "insertBatch"://批量插入
                 result = insertBatch(conn,request);
                 break;
+            case "settingBatch"://批量设置员工社保信息
+                result = settingBatch(conn,request);
+                break;
             case "insertEnsureSetting"://插入社保设置信息
                 result = insertEnsureSetting(conn,request);
                 break;
@@ -116,6 +119,13 @@ public class EmployeeServlet extends HttpServlet {
         out.print(result);
         out.flush();
         out.close();
+    }
+
+    //批量设置社保信息
+    private String settingBatch(Connection conn, HttpServletRequest request) {
+        EnsureSetting setting = JSONObject.parseObject(request.getParameter("setting"), EnsureSetting.class);
+        String[] eids = request.getParameterValues("eids[]");
+        return EmployeeService.settingBatch(conn,eids,setting );
     }
 
     //插入员工信息
