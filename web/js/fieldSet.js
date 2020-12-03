@@ -163,13 +163,13 @@ var columns_contract_employee  = [[
 ]];
 
 //商业保险参保人员字段集合
-var columns_employee0 = [[
+var columns_insured0 = [[
     {field:'cardId', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
-    {field:'degree', title: '学历',width:80,templet:function (d) { return array_value2text(degrees_employee,d.degree) }},
-    {field:'phone', title: '联系电话',width:120},
-    {field:'department', title: '所属部门'},
-    {title: '操作', toolbar: '#bar_employee',width:220,fixed:"right"}
+    {field:'place', title: '工作地点',width:120},
+    {field:'post', title: '工作岗位',width:120},
+    {field:'category', title: '职业类别',width:120},
+    {title: '操作', toolbar: '#bar_insured',width:220,fixed:"right"}
 ]];
 
 //内部员工管理字段集合
@@ -471,8 +471,8 @@ var columns_detail3  = [[
     {field:'cname', title: '姓名',width:80},
     {field:'place', title: '工作地点',width:80},
     {field:'post', title: '工作岗位',width:100,edit: 'text'},
-    {field:'place', title: '职业类别',width:80},
-    {field:'place', title: '生效日期',width:80},
+    {field:'category', title: '职业类别',width:80},
+    {field:'day', title: '生效日期',width:80},
     {field:'status', title: '状态',width:80},
     {fixed: 'right', title: '操作', toolbar: '#bar_detail'}
 ]];

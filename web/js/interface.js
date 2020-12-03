@@ -1324,6 +1324,66 @@ var InterfaceInsurance = function () {
     };
 };
 
+//商业保险参保人员管理相关接口
+var InterfaceInsured = function () {
+    var url = base+"/insured";//servlet的url地址
+
+    /**
+     * 获取商业保险参保人员列表
+     * @param param 查询参数
+     * @param success
+     * @param fail
+     */
+    this.getList = function(param,success,fail){
+        var para = {op: "getList", param:JSON.stringify(param)};
+        access(url,para,1,success,fail);
+    };
+
+    /**
+     * 删除商业保险参保人员
+     * @param id 员工id
+     * @param success
+     * @param fail
+     */
+    this.delete = function (id,success,fail) {
+        var para = {op:"delete",id:id};
+        access(url,para,1,success,fail);
+    };
+
+    /**
+     * 添加商业保险参保人员
+     * @param insured 商业保险参保人员
+     * @param success
+     * @param fail
+     */
+    this.insert = function (insured,success,fail) {
+        var para = {op: "insert",insured:JSON.stringify(insured)};
+        access(url,para,1,success,fail);
+    };
+
+    /**
+     * 批量导入商业保险参保人员
+     * @param insureds 参保人员集合
+     * @param success
+     * @param fail
+     */
+    this.insertBatch = function(insureds,success,fail){
+        var para = {op: "insertBatch", insurances:JSON.stringify(insureds)};
+        access(url,para,1,success,fail);
+    };
+
+    /**
+     * 修改商业保险参保人员
+     * @param insured 商业保险参保人员
+     * @param success
+     * @param fail
+     */
+    this.update = function(insured,success,fail){
+        var para = {op: "update", insured:JSON.stringify(insured)};
+        access(url,para,1,success,fail);
+    };
+};
+
 //保险产品管理相关接口
 var InterfaceProduct = function () {
     var url = base+"/product";//servlet的url地址
@@ -1490,6 +1550,7 @@ var iEmployee = new InterfaceEmployee();//员工管理
 var iSettlement = new InterfaceSettlement();//结算单管理
 var iSettlement0 = new InterfaceSettlement0();//结算单管理
 var iInsurance = new InterfaceInsurance();//参保单管理
+var iInsured = new InterfaceInsured();//参保单管理
 var iProduct = new InterfaceProduct();//保险产品管理
 var iFinance = new InterfaceFinance();//财务管理
 var iFile = new InterfaceFile();//文件管理

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html class="x-admin-sm">
-
     <head>
         <meta charset="UTF-8">
         <title></title>
@@ -29,7 +28,6 @@
             <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加员工</button>
             <button class="layui-btn layui-btn-sm" lay-event="import" id="import"><i class="layui-icon "></i> 批量导入</button>
             <button class="layui-btn layui-btn-sm" lay-event="download" ><i class="layui-icon "></i> 下载模板</button>
-            <button class="layui-btn layui-btn-sm" lay-event="setting"><i class="layui-icon "></i> 批量设置</button>
 
             <form class="layui-form searchbox">
                 <div class="layui-input-inline">
@@ -39,14 +37,13 @@
             </form>
         </div>
 
-        <table id="tbl_employee" lay-filter="filter_tb_employee"></table>
+        <table id="tbl_insured" lay-filter="filter_tb_insured"></table>
         <div class="layui-table-page" id="pager"></div>
 
         <!--行内工具栏-->
-        <script type="text/html" id="bar_employee">
+        <script type="text/html" id="bar_insured">
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">详情</a>
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="addContract">添加合同</a>
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="more">…</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="delete">删除</a>
         </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
@@ -63,12 +60,6 @@
             var popMenu;
             var param_query = new QueryParam();
             param_query.setPagination(1,10);
-            //弹出菜单项
-            var menu_data=[
-                {'data':'leave','title':'离职'},
-                {'data':'retire','title':'退休'},
-                {'data':'del','title':'移入人才库'}
-            ];
             $(function () {
                 loadLayuiModule();
             });
@@ -92,7 +83,7 @@
                 form.on('submit(search)', function (data) {
                     var keyword = data.field.keyword;
                     param_query.addKeyword(keyword);
-                    getEmployees();
+                    getInsureds();
                     return false; //阻止表单跳转
                 });
 
@@ -102,45 +93,29 @@
             function initTable() {
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_employee',
+                    elem: '#tbl_insured',
                     toolbar: '#top_bar',
                     title: '内部员工列表',
-                    cols: columns_employee_internal,
+                    cols: columns_insured0,
                     limit: 200,
-                    id: 'tbl_employee'
+                    id: 'tbl_insured'
                 });
 
                 //行内工具栏事件响应
-                table.on('tool(filter_tb_employee)', function(obj){ //注：tool 是工具条事件名，filter_tb_employee是table原始容器的属性lay-filter="对应的值"
-                    var employee = obj.data; //获得当前行数据
+                table.on('tool(filter_tb_insured)', function(obj){ //注：tool 是工具条事件名，filter_tb_insured是table原始容器的属性lay-filter="对应的值"
+                    var insured = obj.data; //获得当前行数据
                     switch (obj.event){
                         case "detail":
-                            showDetailDlg(employee);
+                            showDetailDlg(insured);
                             break;
-                        case "addContract":
-                            addContract(employee);
-                            break;
-                        case "more":
-                            popMenu.open(menu_data,false,function(d){
-                                switch (d.data){
-                                    case "leave":
-                                        showLeaveDlg(employee);
-                                        break;
-                                    case "retire":
-                                        showRetireDlg(employee);
-                                        break;
-                                    case "del":
-                                        del(employee);
-                                        break;
-                                }
-                            });
+                        case "delete":
+                            del(insured); 
                             break;
                     }
-
                 });
 
                 //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_employee)', function(obj){
+                table.on('toolbar(filter_tb_insured)', function(obj){
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
@@ -154,36 +129,36 @@
                     }
                 });
 
-                getEmployees();
+                getInsureds();
             }
 
-            function getEmployees() {
-                iEmployee.getList(param_query,0,function (result) {
-                    table.reload('tbl_employee', {
+            function getInsureds() {
+                iInsured.getList(param_query,function (result) {
+                    table.reload('tbl_insured', {
                         data:result.rows
                     });
-                //初始化分页
-                laypage.render({
-                    elem: 'pager'
-                    ,curr: param_query.pagination.page
-                    ,count: result.total //数据总数
-                    ,limit: param_query.pagination.size
-                    ,limits: [10, 20, 50, 100, 200]
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.setPagination(obj.curr,obj.limit);
-                            getEmployees();
+                    //初始化分页
+                    laypage.render({
+                        elem: 'pager'
+                        ,curr: param_query.pagination.page
+                        ,count: result.total //数据总数
+                        ,limit: param_query.pagination.size
+                        ,limits: [10, 20, 50, 100, 200]
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                        ,jump: function(obj,first){
+                            //首次不执行
+                            if(!first){
+                                param_query.setPagination(obj.curr,obj.limit);
+                                getInsureds();
+                            }
                         }
-                    }
-                });
+                    });
                 });
             }
 
             //打开详情对话框
-            function showDetailDlg(employee) {
-                var content = "../dialog/employee.html?id="+employee.id+"&type="+employee.type;
+            function showDetailDlg(insured) {
+                var content = "../dialog/insured.html?insured="+encodeURI(JSON.stringify(insured));
                 layer.open({
                     title:"内部员工详情",
                     type: 2,
@@ -191,48 +166,14 @@
                     content: content,
                     cancel:function (index) {
                         layer.close(index);
-                        getEmployees();
+                        getInsureds();
                     }
-                });
-            }
-
-            //打开合同对话框
-            function addContract(employee) {
-                var contract = {bid:employee.id,cardId:employee.cardId,name:employee.name,type:"C"};
-                var content = "../dialog/contract_employee.html?contract="+encodeURIComponent(JSON.stringify(contract));
-                layer.open({
-                    title:'合同-'+contract.name,
-                    type: 2,
-                    area: ['60%', '90%'],
-                    content: content
-                });
-            }
-
-            //打开离职对话框
-            function showLeaveDlg(employee) {
-                var content = "../dialog/dismiss.html?id="+employee.id;
-                layer.open({
-                    title:"离职",
-                    type: 2,
-                    area: ['35%', '80%'],
-                    content: content
-                });
-            }
-
-            //打开退休对话框
-            function showRetireDlg(employee) {
-                var content = "../dialog/retire.html?id="+employee.id;
-                layer.open({
-                    title:"退休",
-                    type: 2,
-                    area: ['35%', '60%'],
-                    content: content
                 });
             }
 
             //核对导入的数据
             function showImportDlg() {
-                var content = "../dialog/importEmployee.html";
+                var content = "../dialog/importInsured.html";
                 layer.open({
                     title:"核对明细",
                     type: 2,
@@ -241,7 +182,7 @@
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
                       var emploeess = window["layui-layer-iframe" + index].callbackData();
-                      iEmployee.insertBatch(emploeess,function () {
+                      iInsured.insertBatch(emploeess,function () {
                             layer.close(index);
                             layer.msg("导入成功");
                         },function (res) {
@@ -255,7 +196,7 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/employee.html?type=0";
+                var content = "../dialog/insured.html";
                 layer.open({
                     title:"添加员工",
                     type: 2,
@@ -263,17 +204,17 @@
                     content: content,
                     cancel:function (index) {
                         layer.close(index);
-                        getEmployees();
+                        getInsureds();
                     }
                 });
             }
 
             //删除
-            function del(employee) {
-                layer.confirm("确定将"+employee.name+"移入人才库", {icon: 3, title:'删除员工'}, function(index){
-                    iEmployee.delete(employee.id,0,function () {
+            function del(insured) {
+                layer.confirm("确定删除"+insured.name, {icon: 3, title:'删除人员'}, function(index){
+                    iInsured.delete(insured.id,function () {
                         layer.close(index);
-                        getEmployees();
+                        getInsureds();
                         layer.msg('删除成功');
                     });
                 });
@@ -287,8 +228,6 @@
                 form.submit();
                 form.remove();
             }
-
-
         </script>
     </body>
 </html>

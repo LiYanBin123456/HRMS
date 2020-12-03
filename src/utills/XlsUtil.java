@@ -306,6 +306,7 @@ public class XlsUtil {
             JSONObject o = new JSONObject();
             String v=null;
             try {
+
                 v = sheet.getCell(0,line).getContents();
                 if(v==null||v==""||v.trim().isEmpty()){//判断数据是否为空，为空则跳出循环，这里导致所填数据字段不能为空
                     break out;

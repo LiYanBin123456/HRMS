@@ -62,29 +62,29 @@ var menuItems_dispatch = [
             {id:"0,2097152",   title:"终审",href:"check22.html?type=1",icon:"&#xe6a7"}
         ]
     },
-    {title:"特殊结算",id:"0,3670016",icon:"&#xe6a7",children:
+    {title:"特殊结算",id:"0,29360128",icon:"&#xe6a7",children:
         [
-            {id:"0,524288",   title:"结算",href:"settlements0.html",icon:"&#xe6a7"},
-            {id:"0,1048576",   title:"初审",href:"check0.html?type=0",icon:"&#xe6a7"},
-            {id:"0,2097152",   title:"终审",href:"check0.html?type=1",icon:"&#xe6a7"}
+            {id:"0,4194304",   title:"结算",href:"settlements0.html",icon:"&#xe6a7"},
+            {id:"0,8388608",   title:"初审",href:"check0.html?type=0",icon:"&#xe6a7"},
+            {id:"0,16777216",   title:"终审",href:"check0.html?type=1",icon:"&#xe6a7"}
         ]
     },
-    {title:"商业保险",id:"0,62914560",icon:"&#xe6a7",children:
+    {title:"商业保险",id:"0,234881024",icon:"&#xe6a7",children:
         [
-            {id:"0,4194304",   title:"保险产品",href:"products.html",icon:"&#xe6a7"},
-            {id:"0,8388608",   title:"参保单",href:"settlements3.html",icon:"&#xe6a7"},
-            {id:"0,16777216",   title:"人员管理",href:"employees0.html?type=0",icon:"&#xe6a7"},
+            {id:"0,33554432",   title:"保险产品",href:"products.html",icon:"&#xe6a7"},
+            {id:"0,67108864",   title:"参保单",href:"settlements3.html",icon:"&#xe6a7"},
+            {id:"0,134217728",   title:"人员管理",href:"insureds0.html?type=0",icon:"&#xe6a7"},
         ]
     },
-    {title:"财务管理",id:"0,1006632960",icon:"&#xe6a7",children:
+    {title:"财务管理",id:"0,4026531840",icon:"&#xe6a7",children:
         [
-            {id:"0,67108864",   title:"工资发放",href:"payroll.html",icon:"&#xe6a7"},
-            {id:"0,134217728",   title:"到账确认",href:"confirm.html",icon:"&#xe6a7"},
-            {id:"0,268435456",   title:"个税专项扣除",href:"deducts.html",icon:"&#xe6a7"},
-            {id:"0,536870912",   title:"个税申报",href:"taxes.html",icon:"&#xe6a7"}
+            {id:"0,268435456",   title:"工资发放",href:"payroll.html",icon:"&#xe6a7"},
+            {id:"0,536870912",   title:"到账确认",href:"confirm.html",icon:"&#xe6a7"},
+            {id:"0,1073741824",   title:"个税专项扣除",href:"deducts.html",icon:"&#xe6a7"},
+            {id:"0,2147483648",   title:"个税申报",href:"taxes.html",icon:"&#xe6a7"}
         ]
     },
-    {title:"五险一金",id:"0,1073741824",href:"insureds.html",icon:"&#xe6a7"}
+    {title:"五险一金",id:"0,4294967296",href:"insureds.html",icon:"&#xe6a7"}
 ];
 
 /**

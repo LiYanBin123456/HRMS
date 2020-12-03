@@ -16,6 +16,7 @@ public class AccountService {
         }
         JSONObject json = new JSONObject();
         if(account.getPassword().equals(password)){
+            session.setMaxInactiveInterval(60 * 60);
             session.setAttribute("account", account);
             json.put("success",true);
             json.put("role",account.getRole());
