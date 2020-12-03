@@ -126,8 +126,6 @@ public class FileServlet extends HttpServlet {
         out.close();
     }
 
-
-
     //导出个税申报名单表
     private void exportTaxEmployee(Connection conn, HttpServletRequest request, HttpServletResponse response)  {
         response.setContentType("APPLICATION/OCTET-STREAM");
@@ -731,8 +729,6 @@ public class FileServlet extends HttpServlet {
         WritableSheet sheet1 = book.createSheet("公司汇款明细", 0);
         WritableSheet sheet2 = book.createSheet("个人工资表", 1);
 
-
-
         try {
             sheet1.addCell(new Label(0, 0, vs.getName()+""+(vs.getMonth()==null?"":sdf.format(vs.getMonth()))+typeMsg+"工资汇款表"));
 
@@ -818,9 +814,8 @@ public class FileServlet extends HttpServlet {
                 sheet2.addCell(new Label(0, index, v.getName()));
                 sheet2.addCell(new Label(1, index, v.getCardId()));
                 sheet2.addCell(new jxl.write.Number(2, index, v.getBase()));
-
+                float salary = 0;//自定义工资总和
                 if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0) {//判断客户是否存在自定义字段
-                    float salary = 0;//自定义工资总和
                     List<Items> itemList = mapSalary.getItemList();
                     int c2 = 0;
                     for (int i = 0; i < itemList.size(); i++) {
@@ -861,7 +856,7 @@ public class FileServlet extends HttpServlet {
                     sheet1.addCell(new jxl.write.Number(c2+8, index, sum));
                     sheet1.addCell(new jxl.write.Number(c2+9, index, v.getFree()));
                     //计算管理费和税费
-                    HashMap<String,Float> map2 = Calculate.calculateManageAndTax2(type,category,invoice,per,val,manage,tax2,v);
+                    HashMap<String,Float> map2 = Calculate.calculateManageAndTax2(type,category,invoice,per,val,manage,tax2,v,salary);
                     manage =  map2.get("manage");
                     tax2 = map2.get("tax2");
                     //管理费
@@ -899,7 +894,7 @@ public class FileServlet extends HttpServlet {
                     sheet1.addCell(new jxl.write.Number(11, index, v.getFree()));
 
                     //计算管理费和税费
-                    HashMap<String,Float> map2 =calculateManageAndTax2(type,category,invoice,per,val,manage,tax2,v);
+                    HashMap<String,Float> map2 =calculateManageAndTax2(type,category,invoice,per,val,manage,tax2,v,salary);
                     manage = map2.get("manage");
                     tax2 = map2.get("tax2");
                     //管理费
@@ -1178,8 +1173,12 @@ public class FileServlet extends HttpServlet {
                         +v.getMedicare1()+v.getFund1();
                 sheet1.addCell(new jxl.write.Number(15, index, sum2));
                 sheet1.addCell(new jxl.write.Number(16, index, v.getFree()));
+
+                //因为代缴社保的管理费和税费计算需要整合个人五险一金，所以这里的数据需要加工
+                manage+=sum2;
+                tax2+=sum2;
                 //计算管理费和税费
-                HashMap<String,Float> map2 =calculateManageAndTax2(type,category,invoice,per,val,manage,tax2,v);
+                HashMap<String,Float> map2 =calculateManageAndTax2(type,category,invoice,per,val,manage,tax2,v,0);
                 //管理费
                 sheet1.addCell(new jxl.write.Number(17, index,  map2.get("manage")));
                 //核收补减
@@ -1201,6 +1200,7 @@ public class FileServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
+
     //读取个税专项扣除
     private String readDeduct(HttpServletRequest request)throws IOException, ServletException {
         String result = null;
