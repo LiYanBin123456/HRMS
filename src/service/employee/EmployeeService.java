@@ -180,8 +180,10 @@ public class EmployeeService {
         List<EnsureSetting> settingList=new ArrayList<>();
         DaoUpdateResult result=new DaoUpdateResult();
         for(int i=0;i<eids.length;i++){
-            setting.setEid(Long.parseLong(eids[i]));
-            settingList.add(setting);
+            EnsureSetting setting1=new EnsureSetting();
+            setting1 = setting;
+            setting1.setEid(Long.parseLong(eids[i]));
+            settingList.add(setting1);
         }
         for (EnsureSetting s:settingList){
             if(SettingDao.exist(conn,s.getEid()).exist){

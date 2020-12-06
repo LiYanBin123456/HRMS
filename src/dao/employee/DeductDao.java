@@ -52,12 +52,34 @@ public class DeductDao {
        return DbUtil.exist(conn,"deduct",conditions);
     }
 
+    /**
+     * 批量导入
+     * @param conn
+     * @param d
+     * @return
+     */
     public static DaoUpdateResult importDeducts(Connection conn, List<Deduct> d) {
-        String sql = "insert deduct (eid,income,free,prepaid,deduct,deduct1,deduct2,deduct3,deduct4,deduct5,deduct6) values (?,?,?,?,?,?,?)";
+        String sql = "insert deduct (eid,income,free,prepaid,deduct,deduct1,deduct2,deduct3,deduct4,deduct5,deduct6) values (?,?,?,?,?,?,?,?,?,?,?)";
         Object [][]params = new Object[d.size()][];
         for (int i = 0; i < d.size(); i++) {
             params[i] = new Object[]{d.get(i).getEid(),d.get(i).getIncome(),d.get(i).getFree(),d.get(i).getPrepaid(),d.get(i).getDeduct()
                     ,d.get(i).getDeduct1(),d.get(i).getDeduct2(),d.get(i).getDeduct3(),d.get(i).getDeduct4(),d.get(i).getDeduct5(),d.get(i).getDeduct6()};
+        }
+        return DbUtil.insertBatch(conn,sql,params);
+    }
+
+    /**
+     * 批量修改员工个税
+     * @param conn
+     * @param d
+     * @return
+     */
+    public static DaoUpdateResult updateDeducts(Connection conn, List<Deduct> d) {
+        String sql = "update deduct set income=?,free=?,prepaid=?,deduct=?,deduct1=?,deduct2=?,deduct3=?,deduct4=?,deduct5=?,deduct6=? where eid=?";
+        Object [][]params = new Object[d.size()][];
+        for (int i = 0; i < d.size(); i++) {
+            params[i] = new Object[]{d.get(i).getIncome(),d.get(i).getFree(),d.get(i).getPrepaid(),d.get(i).getDeduct()
+                    ,d.get(i).getDeduct1(),d.get(i).getDeduct2(),d.get(i).getDeduct3(),d.get(i).getDeduct4(),d.get(i).getDeduct5(),d.get(i).getDeduct6(),d.get(i).getEid()};
         }
         return DbUtil.insertBatch(conn,sql,params);
     }

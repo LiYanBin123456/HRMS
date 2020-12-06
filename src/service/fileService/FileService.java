@@ -2,6 +2,7 @@ package service.fileService;
 
 import bean.employee.EnsureSetting;
 import bean.employee.PayCard;
+import bean.employee.ViewDeduct;
 import bean.insurance.ViewInsurance;
 import bean.settlement.ViewDetail1;
 import com.alibaba.fastjson.JSONArray;
