@@ -22,8 +22,8 @@ public class ServeService {
     }
 
     //获取合作客户的所有合同服务项目
-    public static DaoQueryListResult getList(Connection conn, QueryParameter parameter, long id){
-        return ServeDao.getList(conn,parameter,id);
+    public static DaoQueryListResult getList(Connection conn, QueryParameter parameter){
+        return ServeDao.getList(conn,parameter);
     }
 
     //修改合同服务项目

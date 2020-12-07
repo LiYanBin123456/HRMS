@@ -35,22 +35,15 @@
             <span class="x-red">*</span>保险产品
         </label>
         <div class="layui-input-inline" >
-            <input type="text" name="pname" class="layui-input" readonly>
+            <select name="pid" id="select_product" autocomplete="off" lay-filter="filter_product" lay-verify="required"></select>
         </div>
     </div>
-    <form class="layui-form" style="display: inline">
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                <span class="x-red">*</span>选择合同
-            </label>
-            <div class="layui-input-inline" >
-                <input type="text" name="ccid" class="layui-input" readonly>
-            </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">单价</label>
+        <div class="layui-input-inline" >
+            <input type="text" name="price" class="layui-input" readonly>
         </div>
-    </form>
-    <table id="tbl_contract" lay-filter="filter_tb_contract">
-    </table>
-    <div class="layui-table-page" id="pager"></div>
+    </div>
 </form>
 </body>
 <script src="../js/fieldSet.js"></script>
@@ -59,34 +52,39 @@
 <script src="../js/interface.js"></script>
 <script src="../js/queryParam.js"></script>
 <script>
-    var settlement = {mode:0};
+    var settlement = {};
     loadLayuiModule();
     var form ;
     var laydate ;
-    var table;
-    var laypage;
-    var param_query = new QueryParam();
-    param_query.setPagination(1,10);
+    var products = [];
+
+    var param_query_cooperation = new QueryParam();
+    var param_query_product = new QueryParam();
 
     function loadLayuiModule() {
-        layui.use(['form','laypage','table','laydate'], function () {
+        layui.use(['form','laydate'], function () {
              form = layui.form;
              laydate = layui.laydate;
-            laypage = layui.laypage;
-            table = layui.table;
 
             initCoop();
 
             form.on('select(filter_cooperation)', function(data){
                 settlement.cid = data.value;
-                initTable(data.value);
-            });
-
-            form.on('radio(mode)', function(data){
-                settlement.mode = data.value;
+                getProducts(data.value);
             });
             form.on('select(filter_product)', function(data){
-                settlement.pid = data.value;
+                var pid = data.value;
+                if(pid == -1){
+                    return;
+                }
+                settlement.pid = pid;
+                for(var i in products){
+                    var p = products[i];
+                    if(p.pid == pid){
+                        settlement.price = p.value;
+                        $("[name=price]").val(p.value);
+                    }
+                }
             });
 
             laydate.render({
@@ -98,53 +96,28 @@
             });
         });
     }
-    function initTable(cid) {
-        //初始化数据表格
-        table.render({
-            elem: '#tbl_contract',
-            cellMinWidth: 50, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-            cols: columns_contract,
-            limit: 200,
-            id: 'tbl_contract'
-        });
-        table.on('row(filter_tb_contract)', function(obj){
-            var contact = obj.data;
-            $("[name=ccid]").val(contact.id);
-            settlement.ccid = contact.id;
-            getPname(contact.pid);
-        });
-        getContracts(cid);
-    }
-    //获取派遣方与合作客户的合同
-    function getContracts(cid) {
-        param_query.addCondition('bid','=',cid);
-        param_query.addCondition('stype','=',3);
-        iContract.getList(param_query,"B",function (result) {//获取派遣方与合作客户的合同
-            table.reload('tbl_contract', {
-                data:result.rows
-            });
-            laypage.render({
-                elem: 'pager'
-                ,curr: param_query.pagination.page
-                ,count: result.total //数据总数
-                ,limit: param_query.pagination.size
-                ,limits: [10, 20, 50, 100, 200]
-                ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                ,jump: function(obj,first){
-                    //首次不执行
-                    if(!first){
-                        param_query.setPagination(obj.curr,obj.limit);
-                        getContracts();
-                    }
-                }
-            });
+
+    //获取派遣方与合作客户的有合作关系的保险产品
+    function getProducts(cid) {
+        param_query_product.addCondition('bid','=',cid);
+        param_query_product.addCondition('stype','=',3);
+        iContract.getServiceList(param_query_product,function (result) {//获取派遣方与合作客户的合同
+            products = result.rows;
+            var select_product = $("#select_product");
+            select_product.append("<option value='-1' selected disabled hidden>选择保险产品</option>");
+            for(var i in products){
+                var service = products[i];
+                var option = $("<option>").val(service.pid).text(service.pName);
+                select_product.append(option);
+            }
+            form.render('select', 'form_settlement');
         });
     }
 
     //查询所属的所有合作方
     function initCoop() {
-        param_query.addCondition("type","=",0);
-        iClient.getList(param_query,1,function(result){
+        param_query_cooperation.addCondition("type","=",0);
+        iClient.getList(param_query_cooperation,1,function(result){
             var cooperations = result.rows;
             var select_cooperation = $("#select_cooperation");
             select_cooperation.append("<option value='-2' selected disabled hidden>选择合作客户</option>");
@@ -158,13 +131,6 @@
     }
 
 
-
-    function getPname(pid) {
-        iProduct.get(pid,function (result) {
-            var product = result.data;
-            $("[name=pname]").val(product.name);
-        });
-    }
     //向调用页面返回编辑的结算单
     var callbackData = function () {
         return settlement;

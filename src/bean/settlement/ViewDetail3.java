@@ -2,37 +2,11 @@ package bean.settlement;
 
 
 public class ViewDetail3 extends Detail3 {
-    private String cname;//员工姓名
-    private String pname;//保险产品名称
     private String cardId;//身份证号码
+    private String name;//员工姓名
+    private String place;//工作地点
     private String post;//工作岗位
-
-    public ViewDetail3() {
-    }
-
-    public ViewDetail3(long id, long sid, long eid,  Long pid, String place, float price, String cname, String pname, String cardId, String post) {
-        super(id, sid, eid, pid, place, price);
-        this.cname = cname;
-        this.pname = pname;
-        this.cardId = cardId;
-        this.post = post;
-    }
-
-    public String getCname() {
-        return cname;
-    }
-
-    public void setCname(String cname) {
-        this.cname = cname;
-    }
-
-    public String getPname() {
-        return pname;
-    }
-
-    public void setPname(String pname) {
-        this.pname = pname;
-    }
+    private byte category;//人员类别
 
     public String getCardId() {
         return cardId;
@@ -40,6 +14,22 @@ public class ViewDetail3 extends Detail3 {
 
     public void setCardId(String cardId) {
         this.cardId = cardId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPlace() {
+        return place;
+    }
+
+    public void setPlace(String place) {
+        this.place = place;
     }
 
     public String getPost() {
@@ -50,13 +40,11 @@ public class ViewDetail3 extends Detail3 {
         this.post = post;
     }
 
-    @Override
-    public String toString() {
-        return "ViewDetail3{" +
-                "cname='" + cname + '\'' +
-                ", pname='" + pname + '\'' +
-                ", cardId='" + cardId + '\'' +
-                ", post='" + post + '\'' +
-                '}';
+    public byte getCategory() {
+        return category;
+    }
+
+    public void setCategory(byte category) {
+        this.category = category;
     }
 }

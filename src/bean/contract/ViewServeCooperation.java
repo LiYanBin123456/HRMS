@@ -4,6 +4,7 @@ package bean.contract;
 public class ViewServeCooperation extends Serve {
     private long id;//合作客户id
     private String name;//合作客户名称
+    private String pName;//保险产品名称
     private byte status;//合同状态
 
     public ViewServeCooperation() {
@@ -30,6 +31,14 @@ public class ViewServeCooperation extends Serve {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getpName() {
+        return pName;
+    }
+
+    public void setpName(String pName) {
+        this.pName = pName;
     }
 
     public byte getStatus() {

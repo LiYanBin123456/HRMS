@@ -67,6 +67,9 @@ public class SettlementServlet extends HttpServlet {
             case "exportDetails"://导出明细
                 result = exportDetails(conn, request);
                 break;
+            case "replaceDetails"://替换明细
+                result = replaceDetails(conn, request);
+                break;
             case "backup"://补缴
                 result = backup(conn, request);
                 break;
@@ -316,11 +319,20 @@ public class SettlementServlet extends HttpServlet {
                 result = Detail2Service.importDetails(conn,id,ViewDetail2s,did);
                 break;
             case 2://商业保险结算单明细
-                List<ViewDetail3> viewDetail3s = JSONArray.parseArray(request.getParameter("details"),ViewDetail3.class);
-                result = Detail3Service.importDetails(conn,id,viewDetail3s,did);
+                List<Detail3> detail3s = JSONArray.parseArray(request.getParameter("details"),Detail3.class);
+                result = Detail3Service.importDetails(conn,id,detail3s);
                 break;
         }
         return JSONObject.toJSONString(result);
+    }
+
+    //替换明细
+    private String replaceDetails(Connection conn, HttpServletRequest request) {
+        List<Detail3> member1 = JSONArray.parseArray(request.getParameter("member1"),Detail3.class);
+        List<Detail3> member2 = JSONArray.parseArray(request.getParameter("member2"),Detail3.class);
+
+        DaoUpdateResult res = Detail3Service.replaceDetails(conn,member1,member2);
+        return JSONObject.toJSONString(res);
     }
 
     //导出明细
@@ -373,9 +385,9 @@ public class SettlementServlet extends HttpServlet {
             case 1://小时工结算单明细
                 result = Settlement2Service.commit(conn, id, user);
                 break;
-            case 2://商业保险结算单明细
+            /*case 2://商业保险结算单明细
                 result = Settlement3Service.commit(conn, id, user);
-                break;
+                break;*/
         }
         return JSONObject.toJSONString(result);
     }
@@ -396,9 +408,9 @@ public class SettlementServlet extends HttpServlet {
             case 1://小时工结算单明细
                 res = Settlement2Service.check(conn,id,type,pass,reason,user);
                 break;
-            case 2://商业保险结算单明细
+            /*case 2://商业保险结算单明细
                 res = Settlement3Service.check(conn,id,type,pass,reason,user);
-                break;
+                break;*/
         }
         return JSONObject.toJSONString(res);
     }
@@ -416,9 +428,9 @@ public class SettlementServlet extends HttpServlet {
             case 1://小时工结算单明细
                 result = Settlement2Service.reset(conn, id, user);
                 break;
-            case 2://商业保险结算单明细
+            /*case 2://商业保险结算单明细
                 result = Settlement3Service.reset(conn, id, user);
-                break;
+                break;*/
         }
         return JSONObject.toJSONString(result);
     }

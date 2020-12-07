@@ -1,57 +1,28 @@
 package bean.settlement;
 
 
-import java.sql.Date;
-
 //商业结算单明细
 public class Detail3 extends Detail {
+    public static final byte STATUS_INSERT = 0;//新增;
+    public static final byte STATUS_CONFIRMED = 1;//参保;
+    public static final byte STATUS_REPLACED = -1;//被替换;
+    private byte day;//生效日
+    private byte status;//状态
 
-    private Long pid;//保险产品id
-    private String place;//工作地点
-    private float price;//保费
 
-    public Detail3() {
+    public byte getDay() {
+        return day;
     }
 
-
-    public Detail3(long id, long sid, long eid, Long pid, String place, float price) {
-        super(id, sid, eid);
-        this.pid = pid;
-        this.place = place;
-        this.price = price;
+    public void setDay(byte day) {
+        this.day = day;
     }
 
-
-    public Long getPid() {
-        return pid;
+    public byte getStatus() {
+        return status;
     }
 
-    public void setPid(Long pid) {
-        this.pid = pid;
-    }
-
-    public String getPlace() {
-        return place;
-    }
-
-    public void setPlace(String place) {
-        this.place = place;
-    }
-
-    public float getPrice() {
-        return price;
-    }
-
-    public void setPrice(float price) {
-        this.price = price;
-    }
-
-    @Override
-    public String toString() {
-        return "Detail3{" +
-                "pid=" + pid +
-                ", place='" + place + '\'' +
-                ", price=" + price +
-                '}';
+    public void setStatus(byte status) {
+        this.status = status;
     }
 }

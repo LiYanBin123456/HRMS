@@ -162,16 +162,6 @@ var columns_contract_employee  = [[
     { title: '操作', toolbar: '#bar_contract',width:200}
 ]];
 
-//商业保险参保人员字段集合
-var columns_insured0 = [[
-    {field:'cardId', title: '身份证号',width:170},
-    {field:'name', title: '姓名',width:80},
-    {field:'place', title: '工作地点',width:120},
-    {field:'post', title: '工作岗位',width:120},
-    {field:'category', title: '职业类别',width:120},
-    {title: '操作', toolbar: '#bar_insured',width:220,fixed:"right"}
-]];
-
 //内部员工管理字段集合
 var columns_employee_internal = [[
     {field:'cardId', title: '身份证号',width:170},
@@ -330,7 +320,7 @@ var columns_settlement3  = [[
     {field:'pname', title: '保险产品',width:180},
     {field:'price', title: '单价',width:80},
     {field:'amount', title: '人数',width:80},
-    {field:'price', title: '保费',width:100,edit: 'text'},
+    {field:'summary', title: '保费',width:100,edit: 'text'},
     {title: '操作', toolbar: '#bar_settlement',width:300,fixed:"right"}
 ]];
 
@@ -467,14 +457,15 @@ var columns_detail2_full  = [[
 
 //商业保险工资管理明细字段集合
 var columns_detail3  = [[
-    {field:'cardId', title: '身份证号',width:160},
-    {field:'cname', title: '姓名',width:80},
-    {field:'place', title: '工作地点',width:80},
-    {field:'post', title: '工作岗位',width:100,edit: 'text'},
-    {field:'category', title: '职业类别',width:80},
-    {field:'day', title: '生效日期',width:80},
-    {field:'status', title: '状态',width:80},
-    {fixed: 'right', title: '操作', toolbar: '#bar_detail'}
+    {type:'checkbox'},
+    {field:'cardId', title: '身份证号',width:150},
+    {field:'name', title: '姓名',width:80},
+    {field:'place', title: '工作地点'},
+    {field:'post', title: '工作岗位',width:120},
+    {field:'category', title: '职业类别',width:80,templet:function (d) {return format_product_allow(d.category)}},
+    {field:'day', title: '生效日',width:80},
+    {field:'status', title: '状态',width:80,templet:function (d) {return format_status_detail3(d.status)}},
+    {fixed: 'right', title: '操作', toolbar: '#bar_detail',width:100}
 ]];
 
 //特殊结算单明细字段集合
@@ -557,6 +548,16 @@ var columns_tax  = [[
 ]];
 
 
+//商业保险参保人员字段集合
+var columns_insured0 = [[
+    {field:'cardId', title: '身份证号',width:170},
+    {field:'name', title: '姓名',width:80},
+    {field:'place', title: '工作地点',width:120},
+    {field:'post', title: '工作岗位',width:120},
+    {field:'category', title: '职业类别',width:120,templet:function (d) {return format_product_allow(d.category)}},
+    {title: '操作', toolbar: '#bar_insured',width:220,fixed:"right"}
+]];
+
 //社保参保字段集合
 var columns_insured1  = [[
     {field:'name', title: '姓名',width:80},
@@ -602,6 +603,16 @@ var columns_member  = [[
     {type:'checkbox'},
     {field:'cardId', title: '身份证号',width:200},
     {field:'name', title: '姓名',width:80},
+]];
+
+//商业保险参保人员字段集合
+var columns_member3 = [[
+    {type:'checkbox'},
+    {field:'cardId', title: '身份证号',width:170},
+    {field:'name', title: '姓名',width:80},
+    {field:'place', title: '工作地点',width:120},
+    {field:'post', title: '工作岗位',width:120},
+    {field:'category', title: '职业类别',width:120,templet:function (d) { return format_product_allow(d.category)}},
 ]];
 
 //保险产品字段集合
@@ -860,6 +871,21 @@ function format_product_allow(v) {
     }
     if(str.length>0){
         str = str.substr(0,str.length-1);
+    }
+    return str;
+}
+
+function format_status_detail3(status) {
+    switch (status){
+        case 0:
+            return "新增";
+            break;
+        case 1:
+            return "参保";
+            break;
+        case -1:
+            return "替换";
+            break;
     }
     return str;
 }

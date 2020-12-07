@@ -2,7 +2,7 @@
 <html class="x-admin-sm">
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <title>参保人员管理</title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
@@ -12,14 +12,6 @@
         <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
         <script src="../layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
-
-        <style>
-            .searchbox{
-                margin-left:100px;
-                display:inline;
-                width:300px;
-            }
-        </style>
     </head>
 
     <body class="layui-layout-body">
@@ -28,8 +20,8 @@
             <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加员工</button>
             <button class="layui-btn layui-btn-sm" lay-event="import" id="import"><i class="layui-icon "></i> 批量导入</button>
             <button class="layui-btn layui-btn-sm" lay-event="download" ><i class="layui-icon "></i> 下载模板</button>
-
-            <form class="layui-form searchbox">
+            &emsp;&emsp;
+            <form class="layui-form" style="display: inline">
                 <div class="layui-input-inline">
                     <input name="keyword" type="text" class="layui-input" placeholder="请输入要查找的员工">
                 </div>
@@ -95,7 +87,7 @@
                 table.render({
                     elem: '#tbl_insured',
                     toolbar: '#top_bar',
-                    title: '内部员工列表',
+                    title: '参保人员列表',
                     cols: columns_insured0,
                     limit: 200,
                     id: 'tbl_insured'

@@ -204,9 +204,9 @@ public class Settlement0Servlet extends HttpServlet {
             case 1://小时工结算单明细
                 result = Settlement2Service.commit(conn, id, user);
                 break;
-            case 2://商业保险结算单明细
+            /*case 2://商业保险结算单明细
                 result = Settlement3Service.commit(conn, id, user);
-                break;
+                break;*/
         }
         return JSONObject.toJSONString(result);
     }
@@ -227,9 +227,9 @@ public class Settlement0Servlet extends HttpServlet {
             case 1://小时工结算单明细
                 res = Settlement2Service.check(conn,id,type,pass,reason,user);
                 break;
-            case 2://商业保险结算单明细
+            /*case 2://商业保险结算单明细
                 res = Settlement3Service.check(conn,id,type,pass,reason,user);
-                break;
+                break;*/
         }
         return JSONObject.toJSONString(res);
     }
@@ -247,9 +247,9 @@ public class Settlement0Servlet extends HttpServlet {
             case 1://小时工结算单明细
                 result = Settlement2Service.reset(conn, id, user);
                 break;
-            case 2://商业保险结算单明细
+            /*case 2://商业保险结算单明细
                 result = Settlement3Service.reset(conn, id, user);
-                break;
+                break;*/
         }
         return JSONObject.toJSONString(result);
     }
@@ -267,9 +267,9 @@ public class Settlement0Servlet extends HttpServlet {
             case 1://小时工结算单明细
                 result = Settlement2Service.deduct(conn,id,user);
                 break;
-            case 2://商业保险结算单明细
+            /*case 2://商业保险结算单明细
                 result = Settlement3Service.deduct(conn,id,user);
-                break;
+                break;*/
         }
         return JSONObject.toJSONString(result);
     }

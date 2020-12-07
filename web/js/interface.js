@@ -363,12 +363,11 @@ var InterfaceContract = function() {
     /**
      * 获取当前合作单位的有效服务项目列表
      * @param param 查询参数
-     * @param id 该客户id
      * @param success
      * @param fail
      */
-    this.getServiceList = function (param,id,success,fail) {
-        var para = {op: "getServiceList",param:JSON.stringify(param),id:id};
+    this.getServiceList = function (param,success,fail) {
+        var para = {op: "getServiceList",param:JSON.stringify(param)};
         access(url,para,1,success,fail);
     };
 
@@ -884,6 +883,17 @@ var InterfaceSettlement = function () {
      */
     this.importDetails = function (id,details,category,success,fail) {
         var para = {op: "importDetails",id:id,details:details, category:category};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 商业保险结算单明细替换
+     * @param member1 待替换成员
+     * @param member2 替换后的成员
+     * @param success
+     * @param fail
+     */
+    this.replaceDetails = function (member1,member2,success,fail) {
+        var para = {op: "replaceDetails",member1:member1,member2:member2};
         access(url,para,1,success,fail);
     };
     /**

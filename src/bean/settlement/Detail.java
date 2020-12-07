@@ -4,7 +4,7 @@ import java.sql.Date;
 
 //结算单明细基类
 public class Detail {
-    private long id;//工资表id
+    private long id;//明细id
     private long sid;//结算单id
     private long eid;//员工id
 

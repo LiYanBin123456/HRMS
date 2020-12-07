@@ -177,8 +177,13 @@ public class ContractServlet extends HttpServlet {
     //获取当前合作单位的有效服务项目列表
     private String getServiceList(Connection conn, HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
-        long id= Long.parseLong(request.getParameter("id"));
-        DaoQueryListResult res = ServeService.getList(conn,parameter,id);
+        HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("account");
+        if(user.getRole() == Account.ROLE_COOPERATION){
+            long id = user.getId();
+            parameter.addCondition("bid","=",user.getId());
+        }
+        DaoQueryListResult res = ServeService.getList(conn,parameter);
         return JSONObject.toJSONString(res);
     }
 

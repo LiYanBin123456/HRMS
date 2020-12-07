@@ -31,11 +31,8 @@
             <!--顶部工具栏-->
             <button class="layui-btn" id="download" onclick="download()" style="display: none"><i class="layui-icon layui-icon-edit"></i>下载复印件</button>
             <div class="layui-hide" id="top_bar_detail">
-                <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 新增</button>
-                <button class="layui-btn layui-btn-sm" lay-event="export" onclick="exports()"><i class="layui-icon "></i> 导出</button>
-                <button class="layui-btn layui-btn-sm" lay-event="import"><i class="layui-icon "></i> 导入</button>
-                <button class="layui-btn layui-btn-sm" lay-event="download"><i class="layui-icon "></i> 下载模板</button>
-                <button class="layui-btn layui-btn-sm" lay-event="save" onclick="save()"><i class="layui-icon "></i> 计算</button>
+                <a class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 新增</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="replace"><i class="layui-icon layui-icon-edit"></i> 替换</a>
             </div>
             <table id="tbl_detail" lay-filter="filter_tb_detail"></table>
             <div class="layui-table-page" id="pager"></div>
@@ -43,7 +40,6 @@
             <!--行内工具栏-->
             <script type="text/html" id="bar_detail">
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 替换</a>
             </script>
         </div>
         <script src="../js/fieldSet.js"></script>
@@ -86,7 +82,6 @@
             }
 
             function initTable() {
-
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_detail',
@@ -108,27 +103,17 @@
                     }
                 });
 
-                //单元格编辑
-                table.on('edit(filter_tb_detail)', function(obj){
-                    var value = obj.value //得到修改后的值
-                    ,data = obj.data //得到所在行所有键值
-                    ,field = obj.field; //得到字段
-                    layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
-                  });
-
                 //顶部工具栏事件处理
                 table.on('toolbar(filter_tb_detail)', function(obj){
+                    var details = table.checkStatus('tbl_detail').data;
                     switch(obj.event){
                         case 'insert':
                             showInsertDlg();
                             break;
-                        case 'import':
-                           showImportDlg();
+                        case "replace":
+                            showReplaceDlg(details);
                             break;
-                        case 'download':
-                            $("#download").click();
-                            break;
-                };
+                    };
                 });
                 getDetails();
           }
@@ -157,40 +142,11 @@
                 });
             }
 
-            //模糊查找
-
-
-            //核对导入的数据
-            function showImportDlg() {
-                var content = "importDetails3.html";
-                layer.open({
-                    title:"核对明细",
-                    type: 2,
-                    area: ['80%', '80%'],
-                    content: content,
-                    btn: ['添加', '关闭']
-                    ,yes: function(index, layero){
-                        var detail3s = window["layui-layer-iframe" + index].callbackData();
-                        iSettlement.importDetails(sid,detail3s,2,function () {
-                            layer.close(index);
-                            layer.msg("导入成功");
-                            getDetails();
-                        })
-                    },btn2: function(index, layero){
-                        layer.close(index);
-                    }
-                });
-            }
             //打开添加对话框
             function showInsertDlg() {
-                var param = new QueryParam();
-                param.addCondition("cid","=",cid);
-                param.addCondition("type","=",1);
-                param.addCondition("status","=",0);
-                param.addCondition("category","!=",3);
-                var content = "member.html?param="+encodeURIComponent(JSON.stringify(param));
+                var content = "member3.html?cid="+cid;
                 layer.open({
-                    title:"添加明细",
+                    title:"添加参保人员",
                     type: 2,
                     area: ['80%', '80%'],
                     content: content,
@@ -200,12 +156,12 @@
                         layer.close(index);
                         var  details = new Array(member.length)
                         for (var i in member){
-                            details[i] = {"eid":member[i].id,"pid":pid};
+                            details[i] = {"eid":member[i].id,"sid":sid};
                         }
                         iSettlement.importDetails(sid,JSON.stringify(details),2,function () {
                             layer.msg("添加成功")
+                            getDetails();
                         });
-                        getDetails();
                     },btn2: function(index, layero){
                         layer.close(index);
                     }
@@ -213,9 +169,9 @@
             }
 
 
-            //删除公告
+            //删除
             function del(detail) {
-                layer.confirm('确定删除'+detail.cname+"的结算单明细吗", {icon: 3, title:'删除'}, function(index){
+                layer.confirm('确定删除'+detail.name+"的参保吗？", {icon: 3, title:'删除'}, function(index){
                     iSettlement.deleteDetail(detail.id,2,function () {
                         layer.close(index);
                         getDetails();
@@ -224,46 +180,54 @@
                 });
             }
 
-            //导出
-            function exports(){
-                var url = "/hrms/verify/file?op=exportDetail3&id="+sid;
-                var form = $('<form method="POST"></form>');
-                form.attr('action', url);
-                form.appendTo($('body'));
-                form.submit();
-                form.remove();
-            }
+            //替换
+            function showReplaceDlg(details){
+                if(details.length < 1){
+                    layer.msg("请选择被替换的人员");
+                    return;
+                }
+                var content = "member3.html?cid="+cid;
+                layer.open({
+                    title:"选择替换人员["+details.length+"人]",
+                    type: 2,
+                    area: ['80%', '100%'],
+                    content: content,
+                    btn: ['替换', '关闭']
+                    ,yes: function(index, layero){
+                        var member = window["layui-layer-iframe" + index].callbackData();
+                        var success = replace(details,member,index);
+                        if(success){
+                            layer.close(index);
+                        }
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
+                });
 
-            //下载
-            function download() {
-                iFile.exist(6,0,function (result) {
-                    if(!result.exist){
-                        layer.msg("附件不存在或已删除");
-                        return;
+                function replace(members1, members2,dlg) {
+                    if(members1.length != members2.length){
+                        layer.msg("替换的人数不一致");
+                        return false;
+                    }
+                    var replaced = [];
+                    for(var i in members2){
+                        for(var j in members1){
+                            if(members2[i].id == members1[j].eid){
+                                layer.msg(members1[j].name+"不能替换自己");
+                                return false;
+                            }
+                        }
+                        replaced.push({"eid":members2[i].id});
                     }
 
-                    var url = "/hrms/verify/file?op=download&category=6";
-                    var form = $('<form method="POST"></form>');
-                    form.attr('action', url);
-                    form.appendTo($('body'));
-                    form.submit();
-                    form.remove();
-                })
-            }
-
-            //保存
-            function  save() {
-                var details = layui.table.cache.tbl_detail;
-                var msg = "保存后结算单将自动计算保费？";
-                var title = "保存结算单明细";
-                layer.confirm(msg, {icon: 3, title:title}, function(index){
-                    iSettlement.updateDetails(details,2,function () {
-                        layer.close(index);
-                        layer.msg("修改成功");
+                    iSettlement.replaceDetails(JSON.stringify(members1),JSON.stringify(replaced),function () {
+                        layer.msg("替换成功")
                         getDetails();
-                    })
-                });
-            };
+                    });
+
+                    return true;
+                }
+            }
         </script>
     </body>
 </html>

@@ -26,8 +26,8 @@ public class Settlement3Dao {
 
     //添加结算单
     public static DaoUpdateResult insert(Connection conn, Settlement3 s) {
-        String sql = "insert into settlement3 (did,cid,ccid,pid,month,price,status,flag) values (?,?,?,?,?,?,?,?)";
-        Object []params = {s.getDid(),s.getCid(),s.getCcid(),s.getPid(),s.getMonth(),s.getPrice(),s.getStatus(),s.getFlag()};
+        String sql = "insert into settlement3 (did,cid,pid,month,price) values (?,?,?,?,?)";
+        Object []params = {s.getDid(),s.getCid(),s.getPid(),s.getMonth(),s.getPrice()};
         return DbUtil.insert(conn,sql,params);
     }
 
@@ -95,9 +95,9 @@ public class Settlement3Dao {
     }
 
 
-    public static DaoUpdateResult updatePrice(Connection conn, Settlement3 settlement3) {
-        String sql = "update settlement3 set price = ? where id = ?";
-        Object []params = {settlement3.getPrice(),settlement3.getId()};
+    public static DaoUpdateResult update(Connection conn, Settlement3 settlement) {
+        String sql = "update settlement3 set amount=?,summary=? where id = ?";
+        Object []params = {settlement.getAmount(),settlement.getSummary(),settlement.getId()};
         return DbUtil.update(conn,sql,params);
     }
 }

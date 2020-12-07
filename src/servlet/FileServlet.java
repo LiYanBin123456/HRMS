@@ -1056,20 +1056,18 @@ public class FileServlet extends HttpServlet {
         try {
             sheet1.addCell(new Label(0, 0, "员工姓名"));
             sheet1.addCell(new Label(1, 0, "身份证号码"));
-            sheet1.addCell(new Label(2, 0, "保险产品"));
-            sheet1.addCell(new Label(3, 0, "工作地点"));
-            sheet1.addCell(new Label(4, 0, "工作岗位"));
-            sheet1.addCell(new Label(5, 0, "保费"));
+            sheet1.addCell(new Label(2, 0, "工作地点"));
+            sheet1.addCell(new Label(3, 0, "工作岗位"));
+            sheet1.addCell(new Label(4, 0, "人员类别"));
 
 
             int index = 1;
             for(ViewDetail3 detail3:detail3s){
-                sheet1.addCell(new Label(0, index, detail3.getCname()));
+                sheet1.addCell(new Label(0, index, detail3.getName()));
                 sheet1.addCell(new Label(1, index, detail3.getCardId()));
-                sheet1.addCell(new Label(2, index, detail3.getPname()));
-                sheet1.addCell(new Label(3, index, detail3.getPlace()));
-                sheet1.addCell(new Label(4, index, detail3.getPost()));
-                sheet1.addCell(new jxl.write.Number(5, index, detail3.getPrice()));
+                sheet1.addCell(new Label(2, index, detail3.getPlace()));
+                sheet1.addCell(new Label(3, index, detail3.getPost()));
+                sheet1.addCell(new jxl.write.Number(4, index, detail3.getCategory()));
                 index++;
             }
             //设置列宽

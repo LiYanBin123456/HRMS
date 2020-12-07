@@ -5,7 +5,9 @@ import java.sql.Date;
 //商业保险结算单
 public class Settlement3 extends Settlemet {
     private long pid;//产品id
-    private float price;//保费
+    private float price;//单价
+    private int amount;//人数
+    private double summary;//保费
 
     public Settlement3() {
     }
@@ -30,6 +32,22 @@ public class Settlement3 extends Settlemet {
 
     public void setPrice(float price) {
         this.price = price;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    public double getSummary() {
+        return summary;
+    }
+
+    public void setSummary(double summary) {
+        this.summary = summary;
     }
 
     @Override
