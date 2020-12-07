@@ -1,5 +1,6 @@
 package utills;
 
+import bean.employee.ViewDeduct;
 import com.alibaba.fastjson.JSONObject;
 
 import jxl.Cell;
@@ -8,6 +9,7 @@ import jxl.Workbook;
 
 
 import java.io.*;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -378,4 +380,218 @@ public class XlsUtil {
     }
 
 
+    public static List<ViewDeduct> readDeducts(InputStream is) {
+        Workbook workbook ;
+        try {
+            workbook = Workbook.getWorkbook(is);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        List<ViewDeduct> deductList = new ArrayList<>();
+
+        //读取子女累计教育
+        Sheet data1 = workbook.getSheet(1);
+        if(null == data1){
+            return null;
+        }
+        readDeduct1(data1,deductList);
+
+        //读取继续教育
+        Sheet data2 = workbook.getSheet(2);
+        if(null == data1){
+            return null;
+        }
+        readDeduct2(data2,deductList);
+
+        //读取住房贷款利息
+        Sheet data3 = workbook.getSheet(3);
+        if(null == data1){
+            return null;
+        }
+        readDeduct3(data3,deductList);
+
+        //读取住房租金
+        Sheet data4 = workbook.getSheet(4);
+        if(null == data1){
+            return null;
+        }
+        readDeduct4(data4,deductList);
+
+        //读取住房租金
+        Sheet data5= workbook.getSheet(5);
+        if(null == data1){
+            return null;
+        }
+        readDeduct5(data5,deductList);
+
+        return deductList;
+    }
+
+    //读子女教育支出
+    private static  void readDeduct1(Sheet sheet,List<ViewDeduct> deductList) {
+       out:for(int line=1; ; line++) {
+           String v1;
+           String v2;
+           float deduct;
+           try {
+               v1 = sheet.getCell(3,line).getContents();//身份证
+               if(v1==null||v1==""||v1.trim().isEmpty()){//判断数据是否为空，为空则跳出循环
+                   break out;
+               }
+               String name = sheet.getCell(1,line).getContents();//姓名
+
+               v2 = sheet.getCell(17,line).getContents();//扣除比例
+               Number num = (NumberFormat.getInstance().parse(v2));
+               deduct=1000*(num.intValue()/100);//换算成扣除金额
+               //判断个税是否存在
+               ViewDeduct d = getDeduct(deductList,v1);
+               if(d == null){//不在
+                   d = new ViewDeduct();
+                   d.setCardId(v1);
+                   d.setDeduct1(deduct);
+                   d.setName(name);
+                   deductList.add(d);
+               }else{
+                   d.setDeduct1(d.getDeduct1()+deduct);
+               }
+           } catch (Exception e) {
+               e.printStackTrace();
+               break out;
+           }
+        }
+    }
+
+    //读继续教育教育
+    private static  void readDeduct2(Sheet sheet,List<ViewDeduct> deductList) {
+        out:for(int line=2; ; line++) {
+            String v1;
+            float deduct=400;//默认继续教育
+            try {
+                v1 = sheet.getCell(3,line).getContents();//身份证
+                if(v1==null||v1==""||v1.trim().isEmpty()){//判断数据是否为空，为空则跳出循环
+                    break out;
+                }
+                String name = sheet.getCell(1,line).getContents();//姓名
+
+                //判断是否存在
+                ViewDeduct d = getDeduct(deductList,v1);
+                if(d == null){//不在
+                    d = new ViewDeduct();
+                    d.setCardId(v1);
+                    d.setDeduct3(deduct);
+                    d.setName(name);
+                    deductList.add(d);
+                }else{
+                    d.setDeduct3(d.getDeduct3()+deduct);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                break out;
+            }
+        }
+    }
+
+    //读住房贷款利息
+    private static  void readDeduct3(Sheet sheet,List<ViewDeduct> deductList) {
+        out:for(int line=2; ; line++) {
+            String v1;
+            float deduct=1000;//默认住房贷款1000
+            try {
+                v1 = sheet.getCell(3,line).getContents();//身份证
+                if(v1==null||v1==""||v1.trim().isEmpty()){//判断数据是否为空，为空则跳出循环
+                    break out;
+                }
+                String name = sheet.getCell(1,line).getContents();//姓名
+
+                //判断个税是否存在
+                ViewDeduct d = getDeduct(deductList,v1);
+                if(d == null){//不在
+                    d = new ViewDeduct();
+                    d.setCardId(v1);
+                    d.setDeduct5(deduct);
+                    d.setName(name);
+                    deductList.add(d);
+                }else{
+                    d.setDeduct5(d.getDeduct5()+deduct);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                break out;
+            }
+        }
+    }
+
+    //住房租金
+    private static  void readDeduct4(Sheet sheet,List<ViewDeduct> deductList) {
+        out:for(int line=1; ; line++) {
+            String v1;
+            float deduct=800;//默认住房贷款1000
+            try {
+                v1 = sheet.getCell(3,line).getContents();//身份证
+                if(v1==null||v1==""||v1.trim().isEmpty()){//判断数据是否为空，为空则跳出循环
+                    break out;
+                }
+                String name = sheet.getCell(1,line).getContents();//姓名
+
+                //判断个税是否存在
+                ViewDeduct d = getDeduct(deductList,v1);
+                if(d == null){//不在
+                    d = new ViewDeduct();
+                    d.setCardId(v1);
+                    d.setDeduct6(deduct);
+                    d.setName(name);
+                    deductList.add(d);
+                }else{
+                    d.setDeduct6(d.getDeduct6()+deduct);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                break out;
+            }
+        }
+    }
+
+    //读赡养老人支出
+    private static  void readDeduct5(Sheet sheet,List<ViewDeduct> deductList) {
+        out:for(int line=2; ; line++) {
+            String v1;
+            String v2;
+            float deduct;
+            try {
+                v1 = sheet.getCell(3,line).getContents();//身份证
+                if(v1==null||v1==""||v1.trim().isEmpty()){//判断数据是否为空，为空则跳出循环
+                    break out;
+                }
+                String name = sheet.getCell(1,line).getContents();//姓名
+
+                v2 = sheet.getCell(6,line).getContents();//扣除比例
+                deduct= Float.parseFloat(v2);
+                //判断个税是否存在
+                ViewDeduct d = getDeduct(deductList,v1);
+                if(d == null){//不在
+                    d = new ViewDeduct();
+                    d.setCardId(v1);
+                    d.setDeduct2(deduct);
+                    d.setName(name);
+                    deductList.add(d);
+                }else{
+                    d.setDeduct2(d.getDeduct2()+deduct);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                break out;
+            }
+        }
+    }
+
+
+    private static ViewDeduct getDeduct(List<ViewDeduct> deductList, String cardId) {
+        for(ViewDeduct deduct:deductList){
+            if(deduct.getCardId().equals(cardId)){
+                return deduct;
+            }
+        }
+        return null;
+    }
 }

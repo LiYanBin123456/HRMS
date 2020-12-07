@@ -180,8 +180,20 @@ public class EmployeeService {
         List<EnsureSetting> settingList=new ArrayList<>();
         DaoUpdateResult result=new DaoUpdateResult();
         for(int i=0;i<eids.length;i++){
-            setting.setEid(Long.parseLong(eids[i]));
-            settingList.add(setting);
+            EnsureSetting setting1=new EnsureSetting();
+            setting1.setEid(Long.parseLong(eids[i]));
+            setting1.setCity(setting.getCity());
+            setting1.setFundBase(setting.getFundBase());
+            setting1.setFundPer(setting.getFundPer());
+            setting1.setInjuryPer(setting.getInjuryPer());
+            setting1.setMedicare(setting.getMedicare());
+            setting1.setProduct(setting.getProduct());
+            setting1.setSettingM(setting.getSettingM());
+            setting1.setSettingS(setting.getSettingS());
+            setting1.setSocial(setting.getSocial());
+            setting1.setValM(setting.getValM());
+            setting1.setValS(setting.getValS());
+            settingList.add(setting1);
         }
         for (EnsureSetting s:settingList){
             if(SettingDao.exist(conn,s.getEid()).exist){

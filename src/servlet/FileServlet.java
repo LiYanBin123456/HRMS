@@ -7,6 +7,7 @@ import bean.client.MapSalary;
 import bean.contract.Serve;
 import bean.contract.ViewContractCooperation;
 import bean.employee.Employee;
+import bean.employee.ViewDeduct;
 import bean.employee.ViewEmployee;
 import bean.settlement.*;
 import com.alibaba.fastjson.JSONArray;
@@ -26,6 +27,7 @@ import jxl.write.*;
 import jxl.write.Label;
 import jxl.write.biff.RowsExceededException;
 import org.apache.commons.io.IOUtils;
+import service.employee.DeductService;
 import service.fileService.FileService;
 import utills.Calculate;
 import utills.XlsUtil;
@@ -76,6 +78,9 @@ public class FileServlet extends HttpServlet {
                 return;
             case "readDeduct"://读取个税表中的数据
                 result = readDeduct(request);
+                break;
+            case "readDeducts"://读取个税表中的数据
+                result = readDeducts(conn,request);
                 break;
             case "exist"://判断文件是否存在
                 result = exist(request);
@@ -803,10 +808,11 @@ public class FileServlet extends HttpServlet {
             int invoice = vc.getInvoice();//合同基础信息中的发票类型
             float per = vc.getPer()/100;//税费比例（选择增值税专用发票（全额）需要用到）
             float val = vc.getValue();//结算值，根据结算方式的不同，代表的意义不同
-            float manage = 0;
-            float tax2 = 0;
 
             for( ViewDetail1 v:detail1s){
+                float manage = 0;
+                float tax2 = 0;
+
                 sheet1.addCell(new Label(0, index, v.getName()));
                 sheet1.addCell(new Label(1, index, v.getCardId()));
                 sheet1.addCell(new jxl.write.Number(2, index, v.getBase()));
@@ -1220,6 +1226,19 @@ public class FileServlet extends HttpServlet {
         return result;
     }
 
+    //读取专项扣除数据
+    private String readDeducts(Connection conn,HttpServletRequest request)throws IOException, ServletException {
+        DaoQueryListResult result = new DaoQueryListResult();
+        Part part = request.getPart("file");
+        try {//获取part中的文件，读取数据
+            InputStream is = part.getInputStream();
+            List<ViewDeduct> data = XlsUtil.readDeducts(is);
+            result=DeductService.addDeducts(conn,data);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return JSONObject.toJSONString(result);
+    }
     //导出参保单
     private void exportInsurance(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {
         byte category = Byte.parseByte(request.getParameter("category"));

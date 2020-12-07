@@ -393,8 +393,8 @@
                 layer.confirm(msg, {icon: 3, title:'批量设置'}, function(index){
                     var ids = getKeyArray(employees,"id");
                     iEmployee.settingBatch(ids,setting,function () {
-                        layer.close(index);
                         layer.msg('设置成功');
+                        layer.close(index);
                     })
                 });
             }
