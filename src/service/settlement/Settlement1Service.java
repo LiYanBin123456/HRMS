@@ -2,10 +2,7 @@ package service.settlement;
 
 import bean.admin.Account;
 import bean.contract.ViewContractCooperation;
-import bean.employee.Employee;
-import bean.employee.EnsureSetting;
-import bean.employee.PayCard;
-import bean.employee.ViewEmployee;
+import bean.employee.*;
 import bean.insurance.ViewInsurance;
 import bean.log.Log;
 import bean.log.Transaction;
@@ -18,6 +15,7 @@ import dao.LogDao;
 import dao.admin.AccountDao;
 import dao.client.FinanceDao;
 import dao.contract.ContractDao;
+import dao.employee.DeductDao;
 import dao.employee.EmployeeDao;
 import dao.employee.PayCardDao;
 import dao.employee.SettingDao;
@@ -252,19 +250,35 @@ public class Settlement1Service {
         }
         return result;
     }
-
-    public static DaoUpdateResult confirm(Connection conn, long id, Account account) {
+    //确认发放
+    public static DaoUpdateResult confirm(Connection conn, long sid, Account account) {
         /**流程
          *1、修改结算单状态为发放
-         * 2、插入日志
+         * 2、获取结算单明细并且修改员工个税专项扣除中的累计收入，累计已预缴税额，累计减免
+         * 3、插入日志
          */
-        DaoUpdateResult result = Settlement1Dao.confirm(conn, id);
+        DaoUpdateResult result = Settlement1Dao.confirm(conn, sid);
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("sid","=",sid);
+        parameter.addCondition("status","=",0);
+        List<Detail1> detailList = (List<Detail1>) Detail1Dao.getList(conn,parameter).rows;
+        List<Deduct> deductList = new ArrayList<>();
+        for (Detail1 detail1:detailList){
+            Deduct deduct = (Deduct) DeductDao.get(conn,detail1.getEid()).data;
+            //累计收入=累计收入+当月应发；
+            deduct.setIncome(deduct.getIncome()+detail1.getPayable());
+            //累计减免=累计减免+5000；
+            deduct.setFree(deduct.getFree()+5000);
+            //累计已预缴税额=累计已预缴税额+个税
+            deduct.setPrepaid(deduct.getPrepaid()+detail1.getTax());
+            deductList.add(deduct);
+        }
         if(result.success){//修改成功，插入日志
                 //封装log信息
                 String operator = account.getNickname()+"("+account.getId()+")";
                 String content = "发放";
                 Log log = new Log();
-                log.setSid(id);
+                log.setSid(sid);
                 log.setType((byte) 0);
                 log.setOperator(operator);
                 log.setTime(time);
@@ -463,8 +477,10 @@ public class Settlement1Service {
     //社保补缴
     public static DaoUpdateResult backup(String start, String end, long sid,List<JSONObject> employees, Connection conn) {
         DaoUpdateResult result = new DaoUpdateResult();
-        List<Detail1> detail1List = new ArrayList<>();
-        HashMap<String,RuleMedicare> mapMedicare;
+        DaoUpdateResult result1;
+        ConnUtil.closeAutoCommit(conn);
+        List<Detail1> detail1List = new ArrayList<>();//添加补缴明细的集合
+        List<Detail1> detail2List = new ArrayList<>();//添加正常明细的集合
         for(JSONObject object:employees){
             long eid = object.getLong("eid");
             float baseM = object.getFloat("baseM");
@@ -474,6 +490,12 @@ public class Settlement1Service {
             QueryConditions conditions = new QueryConditions();
             conditions.add("id","=",eid);
             Employee employee = (Employee) EmployeeDao.get(conn,conditions).data;
+            //获取该员工正常的结算单明细
+            QueryConditions conditions1 = new QueryConditions();
+            conditions1.add("eid","=",eid);
+            conditions1.add("sid","=",sid);
+            conditions1.add("status","=",0);
+            ViewDetail1 detail =(ViewDetail1) Detail1Dao.get(conn,conditions1).data;
 
             EnsureSetting setting = (EnsureSetting) SettingDao.get(conn,eid).data;//获取员工社保设置
             if(setting==null){//员工设置为空
@@ -491,14 +513,18 @@ public class Settlement1Service {
 
             //新建明细
             Detail1 detail1 = new Detail1();
-            detail1.setSid(sid);
-            detail1.setEid(eid);
-            detail1.setStatus((byte) 1);//补缴
+
 
             //根据员工设置计算医保
             detail1 = calculateMedicare(detail1,setting,baseM,medicare);
             //根据员工设置计算社保
             detail1 = calculateSocial(detail1,setting,baseS,social);
+            //个人社保合计
+            float sum1 = detail1.getPension1()+detail1.getDisease1()+detail1.getUnemployment1()
+                    +detail1.getMedicare1()+detail1.getFund1();
+            //单位社保合计
+            float sum2 =detail1.getPension2()+detail1.getMedicare2()+detail1.getDisease2()+detail1.getBirth()+detail1.getUnemployment2()
+                    +detail1.getInjury()+detail1.getFund2();
 
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
             try {
@@ -508,20 +534,52 @@ public class Settlement1Service {
                 java.util.Date date2 = sdf.parse(end);
                 c1.setTime(date1);
                 c2.setTime(date2);
-                int month1 = c1.get(Calendar.MONTH);
-                int month2 = c2.get(Calendar.MONTH);
-                int monthInterval = month2 - month1 ;
+                int month1 = c1.get(Calendar.MONTH)+1;
+                int month2 = c2.get(Calendar.MONTH)+1;
+                int monthInterval = (month2 - month1)+1;
+                //将个人社保合计赋值给该员工正常结算单明细的个人核收补减*月数，且是负数
+                detail.setExtra1(detail1.getExtra1()-(sum1*monthInterval));
+                detail.setComments1("个人社保补缴合计");
+                //将单位社保合计赋值给该员工正常结算单明细的单位核收补减*月数，正数
+                detail.setExtra2(detail.getExtra2()+sum2*monthInterval);
+                detail.setComments2("单位社保补缴合计");
+                detail2List.add(detail);//添加进正常明细集合
                 for (int i = 0;i<monthInterval;i++){//有多少个月 生成多少个明细
-                    detail1List.add(detail1);//添加至集合
+                    Detail1 detail2 = new Detail1();
+                    detail2.setSid(sid);
+                    detail2.setEid(eid);
+                    detail2.setComments1((month1+i)+"月补缴");
+                    detail2.setDisease1(detail1.getDisease1());
+                    detail2.setDisease2(detail1.getDisease2());
+                    detail2.setMedicare1(detail1.getMedicare1());
+                    detail2.setMedicare2(detail1.getMedicare2());
+                    detail2.setPension1(detail1.getPension1());
+                    detail2.setPension2(detail1.getPension2());
+                    detail2.setUnemployment1(detail1.getUnemployment1());
+                    detail2.setUnemployment2(detail1.getUnemployment2());
+                    detail2.setInjury(detail1.getInjury());
+                    detail2.setBirth(detail1.getBirth());
+                    detail2.setStatus((byte) 1);//补缴
+                    detail1List.add(detail2);//添加至集合
                 }
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
+
         //批量插入补缴明细
         result = Detail1Dao.importDetails(conn,detail1List);
+        //批量修改正常明细
+        result1= Detail1Dao.update(conn,detail2List);
+        if(!result.success&&!result1.success){
+            ConnUtil.rollback(conn);
+            result.msg ="数据库操作错误";
+            return result;
+        }
+        ConnUtil.commit(conn);
         return result;
     }
+
     //社保补差
     public static DaoUpdateResult makeup(Connection conn, String[] eids, String start, String end, long sid) {
         DaoUpdateResult result = new DaoUpdateResult();
