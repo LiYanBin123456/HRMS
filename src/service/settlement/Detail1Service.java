@@ -48,7 +48,7 @@ public class Detail1Service {
 
     public static DaoUpdateResult importDetails(Connection conn, long sid, List<ViewDetail1> details, long did) {
         DaoUpdateResult result = new DaoUpdateResult();
-
+        List<Detail1> ds = new ArrayList<>();
         for (ViewDetail1 v : details) {
             v.setSid(sid);
             if (v.getEid() == 0) {//通过导入方式，需要确认员工是否存在
@@ -62,8 +62,9 @@ public class Detail1Service {
                 Employee employee = (Employee) EmployeeDao.get(conn, conditions).data; //根据员工身份证获取员工id
                 v.setEid(employee.getId());
             }
+            ds.add(v);
         }
-        result = Detail1Dao.importDetails(conn, details);
+        result = Detail1Dao.importDetails(conn, ds);
         return result;
     }
 
