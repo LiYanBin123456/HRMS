@@ -7,8 +7,10 @@ import bean.client.MapSalary;
 import bean.contract.Serve;
 import bean.contract.ViewContractCooperation;
 import bean.employee.Employee;
+import bean.employee.EnsureSetting;
 import bean.employee.ViewDeduct;
 import bean.employee.ViewEmployee;
+import bean.insurance.ViewInsurance;
 import bean.settlement.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -19,6 +21,7 @@ import dao.contract.ServeDao;
 import dao.employee.EmployeeDao;
 
 
+import dao.employee.SettingDao;
 import dao.settlement.*;
 import database.*;
 import jxl.Workbook;
@@ -87,6 +90,10 @@ public class FileServlet extends HttpServlet {
                 break;
             case "downloadDetail1"://下载结算单明细模板
                 downloadDetail1(conn,request,response);
+                ConnUtil.closeConnection(conn);
+                return;
+            case "downloadDetail2"://下载小时工结算单明细模板
+                downloadDetail2(conn,request,response);
                 ConnUtil.closeConnection(conn);
                 return;
             case "exportDetail1"://导出结算单明细
@@ -678,6 +685,58 @@ public class FileServlet extends HttpServlet {
             }
             book.write();
             book.close();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //下载小时工结算明细模板
+    private void downloadDetail2(Connection conn, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("account");
+        long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
+
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("cid","=",cid);
+        parameter.addCondition("did","=",user.getRid());
+        parameter.addCondition("type","=",1);
+        parameter.addCondition("category","=",3);
+        parameter.addCondition("status","=",0);
+        List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
+
+        //文件名
+        String filename="小时工结算单明细模板";
+        filename = new String(filename.getBytes(),"iso-8859-1");
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.addHeader("Content-Disposition", "attachment;filename=\""
+                + filename + ".xls\"");
+
+        String fileName = "detail2.xls";
+        String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
+        File file = new File(fullFileName);
+        Workbook book;
+        try {
+            //获取模板
+            book = Workbook.getWorkbook(file);
+            // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
+            WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
+            WritableSheet sheet = workbook.getSheet("信息表");//获取第一个sheet
+
+            int index = 1;
+            for(Employee  e:employeeList){
+                sheet.addCell(new Label(0, index, e.getName()));//员工姓名
+                sheet.addCell(new Label(1, index, e.getCardId()));//身份证号
+                index++;
+            }
+            workbook.write();
+            workbook.close();
+            book.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BiffException e) {
+            e.printStackTrace();
+        } catch (RowsExceededException e) {
+            e.printStackTrace();
         } catch (WriteException e) {
             e.printStackTrace();
         }
