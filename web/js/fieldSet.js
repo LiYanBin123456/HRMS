@@ -749,7 +749,9 @@ var type_settlement0 = [
 var type_settlement = [
     {value:0,text:"正常"},
     {value:1,text:"补缴"},
-    {value:2,text:"补差"}
+    {value:2,text:"补差"},
+    {value:3,text:"自定义"},
+    {value:4,text:"补发"}
 ];
 var status_insurance = [
     {value:0,text:"未参保"},

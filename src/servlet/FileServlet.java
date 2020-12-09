@@ -472,6 +472,7 @@ public class FileServlet extends HttpServlet {
         try {
             sheet1.addCell(new Label(0, 0, "员工姓名*"));
             sheet1.addCell(new Label(1, 0, "身份证号码*"));
+            sheet1.setColumnView(1,20);
             sheet1.addCell(new Label(2, 0, "基本工资"));
             if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){
                 int  c = 0;
@@ -499,6 +500,8 @@ public class FileServlet extends HttpServlet {
                 sheet1.addCell(new Label(c+17, 0, "个税"));
                 sheet1.addCell(new Label(c+18, 0, "应付"));
                 sheet1.addCell(new Label(c+19, 0, "实付"));
+                sheet1.addCell(new Label(c+20, 0, "是否为自定义工资条（0否1是）*"));
+                sheet1.setColumnView(c+20,20);
             }else {
                 sheet1.addCell(new Label(3, 0, "个人核收补减"));
                 sheet1.addCell(new Label(4, 0, "备注1"));
@@ -519,11 +522,21 @@ public class FileServlet extends HttpServlet {
                 sheet1.addCell(new Label(19, 0, "个税"));
                 sheet1.addCell(new Label(20, 0, "应付"));
                 sheet1.addCell(new Label(21, 0, "实付"));
+                sheet1.addCell(new Label(22, 0, "是否为自定义工资条（0否1是）*"));
+                sheet1.setColumnView(22,20);
             }
             int index = 1;
             for( ViewEmployee viewEmployee:employeeList){//根据员工生成明细，如果没有员工则不生成
                 sheet1.addCell(new Label(0, index, viewEmployee.getName()));
                 sheet1.addCell(new Label(1, index, viewEmployee.getCardId()));
+                if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){
+                    List<Items> itemList = mapSalary.getItemList();
+                    int c = itemList.size()+2;
+                    sheet1.addCell(new Label(c+20, index,  "0"));
+
+                }else {
+                    sheet1.addCell(new Label(22, index,  "0"));
+                }
                 index++;
             }
 
@@ -558,6 +571,7 @@ public class FileServlet extends HttpServlet {
                 sheet2.addCell(new Label(0, c+17, "tax"));
                 sheet2.addCell(new Label(0, c+18,  "payable"));
                 sheet2.addCell(new Label(0, c+19,  "paid"));
+                sheet2.addCell(new Label(0, c+20,  "status"));
             }else {
                 sheet2.addCell(new Label(0, 4, "extra1"));
                 sheet2.addCell(new Label(0, 5, "comments1"));
@@ -578,6 +592,7 @@ public class FileServlet extends HttpServlet {
                 sheet2.addCell(new Label(0, 20, "tax"));
                 sheet2.addCell(new Label(0, 21,  "payable"));
                 sheet2.addCell(new Label(0, 22,  "paid"));
+                sheet2.addCell(new Label(0, 23,  "status"));
             }
             sheet2.addCell(new Label(1, 0, "类型"));
             sheet2.addCell(new Label(1, 1, "string"));
@@ -609,6 +624,7 @@ public class FileServlet extends HttpServlet {
                 sheet2.addCell(new Label(1,c+17,  "float"));
                 sheet2.addCell(new Label(1,c+18,  "float"));
                 sheet2.addCell(new Label(1,c+19,  "float"));
+                sheet2.addCell(new Label(1,c+20,  "float"));
             }else {
                 sheet2.addCell(new Label(1, 3, "float"));
                 sheet2.addCell(new Label(1, 4, "float"));
@@ -630,6 +646,7 @@ public class FileServlet extends HttpServlet {
                 sheet2.addCell(new Label(1, 20, "float"));
                 sheet2.addCell(new Label(1, 21, "float"));
                 sheet2.addCell(new Label(1, 22, "float"));
+                sheet2.addCell(new Label(1, 23, "float"));
             }
 
             sheet2.addCell(new Label(2, 0, "是否允许为空"));
@@ -662,6 +679,7 @@ public class FileServlet extends HttpServlet {
                 sheet2.addCell(new Label(2, c+17, "TRUE"));
                 sheet2.addCell(new Label(2, c+18, "TRUE"));
                 sheet2.addCell(new Label(2, c+19, "TRUE"));
+                sheet2.addCell(new Label(2, c+20, "False"));
             }else {
                 sheet2.addCell(new Label(2, 4, "TRUE"));
                 sheet2.addCell(new Label(2, 5, "TRUE"));
@@ -682,6 +700,7 @@ public class FileServlet extends HttpServlet {
                 sheet2.addCell(new Label(2, 20, "TRUE"));
                 sheet2.addCell(new Label(2, 21, "TRUE"));
                 sheet2.addCell(new Label(2, 22,  "TRUE"));
+                sheet2.addCell(new Label(2, 23,  "False"));
             }
             book.write();
             book.close();
@@ -1325,7 +1344,6 @@ public class FileServlet extends HttpServlet {
                 break;
         }
     }
-
     //导出银行
     private void exportBank(Connection conn, HttpServletRequest request,HttpServletResponse response) throws IOException {
         byte category = Byte.parseByte(request.getParameter("category"));

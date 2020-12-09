@@ -139,7 +139,8 @@
                     {field:'extra1', title: '个人核收补减',width:80},
                     {field:'comments1', title: '备注1',width:80},
                     {field:'extra2', title: '单位核收补减',width:80},
-                    {field:'comments2', title: '备注2',width:80}
+                    {field:'comments2', title: '备注2',width:80},
+                    {field:'status', title: '是否为自定义工资条（0否1是）',width:160},
                 ]];
                 //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
                 iClient.selectSalaryDefineByMoth(cid,month,function (result) {
