@@ -100,4 +100,8 @@ public class Settlement3Dao {
         Object []params = {settlement.getAmount(),settlement.getSummary(),settlement.getId()};
         return DbUtil.update(conn,sql,params);
     }
+
+    public static DaoUpdateResult statistic(Connection conn, long sid, int increment) {
+        return null;
+    }
 }

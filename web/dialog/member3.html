@@ -37,7 +37,8 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
-            var cid = $.query.get("cid")
+            var cid = $.query.get("cid");
+            var eids = JSON.parse($.query.get("eids"));
             var param_query = new QueryParam();
             param_query.addCondition("cid","=",cid);
 
@@ -90,8 +91,17 @@
 
             function getInsureds() {
                 iInsured.getList(param_query,function (result) {
+                    var insureds = result.rows;
+                    for(var i=insureds.length-1; i>=0; i--){
+                        for(var j in eids){
+                            if(insureds[i].id == eids[j].id){
+                                insureds.splice(i,1);
+                                break;
+                            }
+                        }
+                    }
                     table.reload('tbl_insured', {
-                        data:result.rows
+                        data:insureds
                     });
                     //初始化分页
                     laypage.render({

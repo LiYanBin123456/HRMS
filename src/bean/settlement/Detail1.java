@@ -44,6 +44,13 @@ public class Detail1 extends Detail {
     private float f18;
     private float f19;
     private float f20;
+
+    public static final byte STATUS_NORMAL = 0;
+    public static final byte STATUS_REPLENISH = 1;
+    public static final byte STATUS_BALANCE = 2;
+    public static final byte STATUS_CUSTOM = 3;//自定义（什么都不计算）
+    public static final byte STATUS_MAKEUP = 4;//补发工资（只计算个税）
+
     /**状态
      0正常
      1补缴

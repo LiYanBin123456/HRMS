@@ -897,6 +897,27 @@ var InterfaceSettlement = function () {
         access(url,para,1,success,fail);
     };
     /**
+     * 商业保险结算单确认新增
+     * @param ids 待确认id序列
+     * @param success
+     * @param fail
+     */
+    this.confirmDetails1 = function (ids,day,success,fail) {
+        var para = {op: "confirmDetails1",ids:ids,day:day};
+        access(url,para,1,success,fail);
+    };
+    /**
+     * 商业保险结算单确认替换
+     * @param ids1 待替换成员
+     * @param ids2 替换后的成员
+     * @param success
+     * @param fail
+     */
+    this.confirmDetails2 = function (ids1,ids2,day,success,fail) {
+        var para = {op: "confirmDetails2",ids1:ids1,ids2:ids2,day:day};
+        access(url,para,1,success,fail);
+    };
+    /**
      * 导出结算单明细
      * @param id 结算单编号
      * @param category 0-普通结算单明细 1-小时工结算单明细 2-商业保险结算单明细

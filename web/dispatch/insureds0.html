@@ -152,9 +152,9 @@
             function showDetailDlg(insured) {
                 var content = "../dialog/insured.html?insured="+encodeURI(JSON.stringify(insured));
                 layer.open({
-                    title:"内部员工详情",
+                    title:"参保人员详情",
                     type: 2,
-                    area: ['100%', '100%'],
+                    area: ['300px', '400px'],
                     content: content,
                     cancel:function (index) {
                         layer.close(index);
@@ -190,9 +190,9 @@
             function showInsertDlg() {
                 var content = "../dialog/insured.html";
                 layer.open({
-                    title:"添加员工",
+                    title:"添加参保人员",
                     type: 2,
-                    area: ['80%', '90%'],
+                    area: ['300px', '400px'],
                     content: content,
                     cancel:function (index) {
                         layer.close(index);

@@ -881,9 +881,15 @@ function format_status_detail3(status) {
             return "新增";
             break;
         case 1:
+            return "拟换上";
+            break;
+        case 2:
             return "参保";
             break;
         case -1:
+            return "拟换下";
+            break;
+        case -2:
             return "替换";
             break;
     }

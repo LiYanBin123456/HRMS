@@ -20,6 +20,8 @@
             <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
             <div class="layui-hide" id="top_bar_detail">
                 <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
+                <button class="layui-btn layui-btn-sm" lay-event="custom"><i class="layui-icon "></i> 添加补发</button>
+                <button class="layui-btn layui-btn-sm" lay-event="custom"><i class="layui-icon "></i> 添加自定义</button>
                 <button class="layui-btn layui-btn-sm" lay-event="append"><i class="layui-icon "></i> 社保补缴</button>
                 <button class="layui-btn layui-btn-sm" lay-event="balance"><i class="layui-icon "></i> 社保补差</button>
                 <button class="layui-btn layui-btn-sm" lay-event="" onclick="exports()" ><i class="layui-icon " ></i> 导出</button>
@@ -127,6 +129,9 @@
                         case 'insert':
                             showInsertDlg();
                             break;
+                        case 'custom':
+                            showCustomtDlg();
+                            break;
                         case 'append':
                             showAppendDlg();
                             break;
@@ -211,6 +216,52 @@
                             layer.msg("导入成功");
                             getDetails();
                         })
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
+                });
+            }
+
+            //打开添加明细对话框
+            function showInsertDlg() {
+                //查询除出该单位，类型外派员工，状态在职的员工列表，用工性质派遣或者外包
+                var param = new QueryParam();
+                switch (type){
+                    case 0:
+                        param.addCondition("category","=",1);//查询出派遣（1）
+                        break;
+                    case 1:
+                        param.addCondition("category","=",2);//外包（2）
+                        break;
+                    case 2:
+                        param.addCondition("category","=",4);//代缴个人（4）
+                        break;
+                    case 3:
+                        param.addCondition("category","=",5);//代缴社保（5）
+                        break;
+                }
+                param.addCondition("cid","=",cid);
+                param.addCondition("type","=",1);
+                param.addCondition("status","=",0);
+
+                var content = "member.html?param="+encodeURIComponent(JSON.stringify(param));
+                layer.open({
+                    title:"添加明细",
+                    type: 2,
+                    area: ['80%', '80%'],
+                    content: content,
+                    btn: ['添加', '关闭']
+                    ,yes: function(index, layero){
+                        var member = window["layui-layer-iframe" + index].callbackData();
+                        layer.close(index);
+                        var  details = new Array(member.length)
+                        for (var i in member){
+                            details[i] = {"eid":member[i].id};
+                        }
+                        iSettlement.importDetails(sid,JSON.stringify(details),0,function () {
+                            getDetails();
+                            layer.msg("添加成功")
+                        });
                     },btn2: function(index, layero){
                         layer.close(index);
                     }

@@ -67,7 +67,11 @@ public class InsuredServlet extends HttpServlet {
         }
         return "";*/
         Insured insured = JSONObject.parseObject(request.getParameter("insured"), Insured.class);
-        insured.setCid(2);
+        Account user = (Account) session.getAttribute("account");
+        if(user.getRole() == Account.ROLE_COOPERATION) {
+            insured.setCid(user.getId());
+        }
+        //insured.setCid(2);
         return InsuredService.insert(conn, insured);
     }
 

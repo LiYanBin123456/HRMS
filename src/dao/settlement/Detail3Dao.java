@@ -22,10 +22,10 @@ public class Detail3Dao {
     }
 
     public static DaoUpdateResult importDetails(Connection conn, List<Detail3> details){
-        String sql = "insert detail3 (sid,eid,day) values (?,?,?)";
+        String sql = "insert detail3 (sid,eid,status) values (?,?,?)";
         Object [][]params = new Object[details.size()][];
         for (int i = 0; i < details.size(); i++) {
-            params[i] = new Object[]{details.get(i).getSid(),details.get(i).getEid(),details.get(i).getDay()};
+            params[i] = new Object[]{details.get(i).getSid(),details.get(i).getEid(),details.get(i).getStatus()};
         }
         return DbUtil.insertBatch(conn,sql,params);
     }
@@ -37,5 +37,38 @@ public class Detail3Dao {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
         return DbUtil.delete(conn,"detail3",conditions);
+    }
+
+    /**
+     * 确认替换下
+     * @param conn
+     * @param ids1 被换下的
+     * @param ids2 换上的
+     * @param day 生效日
+     * @return
+     */
+    public static DaoUpdateResult confirm(Connection conn, String[] ids1, String[] ids2, byte day) {
+        String sql = "update detail3 set day=?,status=?,rid=? where id = ?";
+        Object [][]params = new Object[ids1.length][];
+        for (int i = 0; i < ids1.length; i++) {
+            params[i] = new Object[]{day,Detail3.STATUS_CONFIRMED,ids1[i],ids2[i]};
+        }
+        return DbUtil.batch(conn,sql,params);
+    }
+
+    /**
+     * 确认参保
+     * @param conn
+     * @param ids
+     * @param day
+     * @return
+     */
+    public static DaoUpdateResult confirm(Connection conn, String[] ids, byte day) {
+        String sql = "update detail3 set day=?,status=? where id = ?";
+        Object [][]params = new Object[ids.length][];
+        for (int i = 0; i < ids.length; i++) {
+            params[i] = new Object[]{day,Detail3.STATUS_CONFIRMED,ids[i]};
+        }
+        return DbUtil.batch(conn,sql,params);
     }
 }

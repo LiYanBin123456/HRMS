@@ -12,27 +12,27 @@
         <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
         <script src="../layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
-        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
-        <!--[if lt IE 9]>
-          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-        <style>
-            .searchbox{
-                margin-left:570px;
-                display:inline;
-                width:300px;
-            }
-        </style>
     </head>
 
     <body class="layui-layout-body">
         <div class="dialog-content">
             <!--顶部工具栏-->
-            <button class="layui-btn" id="download" onclick="download()" style="display: none"><i class="layui-icon layui-icon-edit"></i>下载复印件</button>
             <div class="layui-hide" id="top_bar_detail">
                 <a class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 新增</a>
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="replace"><i class="layui-icon layui-icon-edit"></i> 替换</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="confirm1"><i class="layui-icon layui-icon-edit"></i> 确认新增</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="confirm2"><i class="layui-icon layui-icon-edit"></i> 确认替换</a>
+                <div class="layui-input-inline" style="width:120px">
+                    <select id="" lay-filter="filter_status">
+                        <option selected disabled hidden>按状态筛选</option>
+                        <option value="99">不限</option>
+                        <option value="2">参保</option>
+                        <option value="-2">替换</option>
+                        <option value="0">新增</option>
+                        <option value="1">拟换上</option>
+                        <option value="-1">拟换下</option>
+                    </select>
+                </div>
             </div>
             <table id="tbl_detail" lay-filter="filter_tb_detail"></table>
             <div class="layui-table-page" id="pager"></div>
@@ -52,6 +52,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
+            var rows;
 
 
             var param_query = new QueryParam();
@@ -79,6 +80,15 @@
 
             function initPage() {
                 initTable();
+                form.on('select(filter_status)', function(data){
+                    var status = data.value;
+                    if(status == 99){
+                        param_query.removeCondition("status");
+                    }else {
+                        param_query.addCondition("status", "=", status);
+                    }
+                    getDetails(true);
+                });
             }
 
             function initTable() {
@@ -113,15 +123,23 @@
                         case "replace":
                             showReplaceDlg(details);
                             break;
+                        case "confirm1":
+                            confirm1(details);
+                            break;
+                        case "confirm2":
+                            confirm2(details);
+                            break;
                     };
                 });
-                getDetails();
+                getDetails(false);
           }
 
-            function getDetails() {
+            function getDetails(reserve) {
                 iSettlement.getDetails(param_query,sid,2,function (result) {
+                    rows = result.rows;
                     table.reload('tbl_detail', {
-                        data:result.rows
+                        data:result.rows,
+                        reserve:reserve
                     });
                     //初始化分页
                     laypage.render({
@@ -144,7 +162,11 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "member3.html?cid="+cid;
+                var eids = [];
+                for(var i in rows){
+                    eids.push({id:rows[i].eid});
+                }
+                var content = "member3.html?cid="+cid+"&eids="+encodeURIComponent(JSON.stringify(eids));
                 layer.open({
                     title:"添加参保人员",
                     type: 2,
@@ -186,7 +208,64 @@
                     layer.msg("请选择被替换的人员");
                     return;
                 }
-                var content = "member3.html?cid="+cid;
+                var eids = [];
+                for(var i in rows){
+                    eids.push({id:rows[i].eid});
+                }
+                var content = "member3.html?cid="+cid+"&eids="+encodeURIComponent(JSON.stringify(eids));
+                layer.open({
+                    title:"选择替换人员["+details.length+"人]",
+                    type: 2,
+                    area: ['80%', '100%'],
+                    content: content,
+                    btn: ['替换', '关闭']
+                    ,yes: function(index, layero){
+                        var member = window["layui-layer-iframe" + index].callbackData();
+                        var success = replace(details,member,index);
+                        if(success){
+                            layer.close(index);
+                        }
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
+                });
+
+                function replace(members1, members2,dlg) {
+                    if(members1.length != members2.length){
+                        layer.msg("替换的人数不一致");
+                        return false;
+                    }
+                    var replaced = [];
+                    for(var i in members2){
+                        for(var j in members1){
+                            if(members2[i].id == members1[j].eid){
+                                layer.msg(members1[j].name+"不能替换自己");
+                                return false;
+                            }
+                        }
+                        replaced.push({"eid":members2[i].id});
+                    }
+
+                    iSettlement.replaceDetails(JSON.stringify(members1),JSON.stringify(replaced),function () {
+                        layer.msg("替换成功")
+                        getDetails();
+                    });
+
+                    return true;
+                }
+            }
+
+            //确认新增
+            function showReplaceDlg(details){
+                if(details.length < 1){
+                    layer.msg("请选择确认新增的人员");
+                    return;
+                }
+                var eids = [];
+                for(var i in rows){
+                    eids.push({id:rows[i].eid});
+                }
+                var content = "member3.html?cid="+cid+"&eids="+encodeURIComponent(JSON.stringify(eids));
                 layer.open({
                     title:"选择替换人员["+details.length+"人]",
                     type: 2,

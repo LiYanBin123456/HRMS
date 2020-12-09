@@ -283,8 +283,8 @@ public class Settlement0Service {
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid","=",id);
         //根据复制的结算单id查询出所有的结算单明细
-        List<Detail1> detail1List = (List<Detail1>) Detail1Dao.getList(conn,parameter).rows;
-        for(Detail1 detail1 :detail1List){
+        List<ViewDetail1> detail1List = (List<ViewDetail1>) Detail1Dao.getList(conn,parameter).rows;
+        for(ViewDetail1 detail1 :detail1List){
             //重新赋结算单id
            detail1.setSid(sid);
         }
@@ -452,7 +452,7 @@ public class Settlement0Service {
     //社保补缴
     public static DaoUpdateResult backup(String start, String end, long sid,List<JSONObject> employees, Connection conn) {
         DaoUpdateResult result = new DaoUpdateResult();
-        List<Detail1> detail1List = new ArrayList<>();
+        List<ViewDetail1> detail1List = new ArrayList<>();
         HashMap<String,RuleMedicare> mapMedicare;
         for(JSONObject object:employees){
             long eid = object.getLong("eid");
@@ -479,15 +479,15 @@ public class Settlement0Service {
             }
 
             //新建明细
-            Detail1 detail1 = new Detail1();
+            ViewDetail1 detail1 = new ViewDetail1();
             detail1.setSid(sid);
             detail1.setEid(eid);
-            detail1.setStatus((byte) 1);//补缴
+            detail1.setStatus(Detail1.STATUS_REPLENISH);//补缴
 
             //根据员工设置计算医保
-            detail1 = calculateMedicare(detail1,setting,baseM,medicare);
+            detail1 = (ViewDetail1) calculateMedicare(detail1,setting,baseM,medicare);
             //根据员工设置计算社保
-            detail1 = calculateSocial(detail1,setting,baseS,social);
+            detail1 = (ViewDetail1) calculateSocial(detail1,setting,baseS,social);
 
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
             try {
@@ -514,7 +514,7 @@ public class Settlement0Service {
     //社保补差
     public static DaoUpdateResult makeup(Connection conn, String[] eids, String start, String end, long sid) {
         DaoUpdateResult result = new DaoUpdateResult();
-        List<Detail1> detail1List = new ArrayList<>();
+        List<ViewDetail1> detail1List = new ArrayList<>();
         for(String eid:eids){
             //该员工的信息
             QueryConditions conditions = new QueryConditions();
@@ -558,7 +558,7 @@ public class Settlement0Service {
                         return result;
                     }
                     //重新生成一个明细用于计算医保和社保
-                    Detail1 detail2 = new Detail1();
+                    ViewDetail1 d = new ViewDetail1();
                     //计算医保相关
                     int SettingM = setting.getSettingM();//员工医保设置
                     float baseM = 0;
@@ -573,7 +573,7 @@ public class Settlement0Service {
                             baseM = setting.getValM();
                            break;
                     }
-                    detail2 = calculateMedicare(detail2,setting,baseM,medicare);
+                    d = (ViewDetail1) calculateMedicare(d,setting,baseM,medicare);
 
                     //计算社保相关
                     int SettingS = setting.getSettingS();//员工社保设置
@@ -589,24 +589,24 @@ public class Settlement0Service {
                             baseS=setting.getValS();
                             break;
                     }
-                    detail2 = calculateSocial(detail2,setting,baseS,social);
+                    d = (ViewDetail1) calculateSocial(d,setting,baseS,social);
 
                     //计算补差的社保医保,并重新赋值
-                    detail2.setMedicare2(detail2.getMedicare1()-detail1.getMedicare1());
-                    detail2.setMedicare2(detail2.getMedicare2() -detail1.getMedicare2());
-                    detail2.setBirth(detail2.getBirth()-detail1.getBirth());
-                    detail2.setDisease1(detail2.getDisease1() - detail1.getDisease1());
-                    detail2.setDisease2(detail2.getDisease2() - detail1.getDisease2());
-                    detail2.setPension1(detail2.getPension1() - detail1.getPension1());
-                    detail2.setPension2(detail2.getPension2() - detail1.getPension2());
-                    detail2.setUnemployment1(detail2.getUnemployment1() - detail1.getUnemployment1());
-                    detail2.setUnemployment2(detail2.getUnemployment2() - detail1.getUnemployment2());
-                    detail2.setInjury(detail2.getInjury() - detail1.getInjury());
-                    detail2.setEid(Long.parseLong(eid));
-                    detail2.setSid(sid);
-                    detail2.setStatus((byte) 2);
+                    d.setMedicare2(d.getMedicare1()-detail1.getMedicare1());
+                    d.setMedicare2(d.getMedicare2() -detail1.getMedicare2());
+                    d.setBirth(d.getBirth()-detail1.getBirth());
+                    d.setDisease1(d.getDisease1() - detail1.getDisease1());
+                    d.setDisease2(d.getDisease2() - detail1.getDisease2());
+                    d.setPension1(d.getPension1() - detail1.getPension1());
+                    d.setPension2(d.getPension2() - detail1.getPension2());
+                    d.setUnemployment1(d.getUnemployment1() - detail1.getUnemployment1());
+                    d.setUnemployment2(d.getUnemployment2() - detail1.getUnemployment2());
+                    d.setInjury(d.getInjury() - detail1.getInjury());
+                    d.setEid(Long.parseLong(eid));
+                    d.setSid(sid);
+                    d.setStatus(Detail1.STATUS_BALANCE);
 
-                    detail1List.add(detail2);
+                    detail1List.add(d);
                 }
             } catch (ParseException e) {
                 e.printStackTrace();

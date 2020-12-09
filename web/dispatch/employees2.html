@@ -200,11 +200,11 @@
                     var select_cooperation = $("#select_cooperation");
                     select_cooperation.append("<option selected disabled hidden>按合作单位筛选</option>");
                     select_cooperation.append("<option value='-1'>不限</option>");
-                    for (var i in cooperations) {
+                    /*for (var i in cooperations) {
                         var cooperation = cooperations[i];
                         var option = $("<option>").val(cooperation.id).text(cooperation.name);
                         select_cooperation.append(option);
-                    }
+                    }*/
                     form.render('select', 'form_top_bar');
                 });
             }

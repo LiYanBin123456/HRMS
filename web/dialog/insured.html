@@ -17,7 +17,7 @@
 
 </head>
 <body>
-    <form lay-filter="form_insured" class="layui-form layui-row">
+    <form lay-filter="form_insured" class="layui-form" style="padding: 5px;">
         <input type="hidden" name="id">
         <div class="layui-form-item">
             <label class="layui-form-label">
@@ -61,19 +61,26 @@
                 </select>
             </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>工作单位</label>
+            <div class="layui-input-inline">
+                <select id="select_cooperation" name="cid" lay-filter="filter_cooperation"></select>
+            </div>
+        </div>
         <div class="layui-form-item" >
             <div class="layui-input-block">
                 <button type="button" class="layui-btn " onclick="saveInsured()">保存</button>
             </div>
         </div>
     </form>
-</div>
 </body>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
 <script src="../js/xadmin.js"></script>
 <script src="../js/fieldSet.js"></script>
+<script src="../js/queryParam.js"></script>
 <script>
     var op = "insert";
     var form;//表单对象
@@ -90,11 +97,28 @@
     }
 
     function initPage() {
-        var insured = JSON.parse($.query.get("insured"));
-        if(insured){
+        var param = $.query.get("insured");
+        if(param){
+            var insured = JSON.parse(insured);
             op = "update";
             form.val('form_insured', insured);
         }
+        initCooperationList();
+    }
+
+    function initCooperationList() {
+        var param = new QueryParam();
+        param.addCondition("type","=",0);
+        iClient.getList(param,1,function (result) {
+            var cooperations = result.rows;
+            var select_cooperation = $("#select_cooperation");
+            for (var i in cooperations) {
+                var cooperation = cooperations[i];
+                var option = $("<option>").val(cooperation.id).text(cooperation.name);
+                select_cooperation.append(option);
+            }
+            form.render('select', 'form_insured');
+        });
     }
 
     function saveInsured() {

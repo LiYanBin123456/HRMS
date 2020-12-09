@@ -159,12 +159,12 @@ public class Settlement3Service {
     }*/
 
     //扣款
-    public static DaoUpdateResult deduct(Connection conn, long id, Account account) {
-        /**流程
+    /*public static DaoUpdateResult deduct(Connection conn, long id, Account account) {
+        *//**流程
          *1、修改结算单状态为扣款
          * 2、根据aid查询出管理员
          * 2、插入日志
-         */
+         *//*
         DaoUpdateResult result = Settlement3Dao.deduct(conn, id);
         if(result.success){//修改成功，插入日志
                 //封装log信息
@@ -181,7 +181,7 @@ public class Settlement3Service {
 
         }
         return result;
-    }
+    }*/
 
     //获取该结算单的所有日志
     public static DaoQueryListResult getLogs(Connection conn, long id, QueryParameter parameter) {
@@ -189,7 +189,7 @@ public class Settlement3Service {
         return LogDao.getList(conn,id,parameter);
     }
 
-    public static DaoUpdateResult saveSettlement(Connection conn, long sid) {
+    /*public static DaoUpdateResult saveSettlement(Connection conn, long sid) {
         Settlement3 settlement = (Settlement3) Settlement3Dao.get(conn,sid).data;
         QueryParameter param = new QueryParameter();
         param.addCondition("sid","=",sid);
@@ -198,5 +198,5 @@ public class Settlement3Service {
         settlement.setAmount(details.size());
         settlement.setSummary(settlement.getPrice()*settlement.getAmount());
         return Settlement3Dao.update(conn,settlement);
-    }
+    }*/
 }

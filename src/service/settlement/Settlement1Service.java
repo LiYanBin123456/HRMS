@@ -62,6 +62,7 @@ public class Settlement1Service {
     public static DaoQueryListResult getList(Connection conn, QueryParameter param) {
         return Settlement1Dao.getList(conn,param);
     }
+
     /**
      * 插入结算单，插入后根据返回的id，自动生成明细
      * @param conn
@@ -91,16 +92,19 @@ public class Settlement1Service {
                 //查询出类别为代发工资（4）或者代缴社保（5）的员工
                 parameter.addCondition("category","=",settlement.getType()+2);
             }
+
             parameter.addCondition("status","=",0);
             List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
-            List<Detail1> detail1List = new ArrayList<Detail1>();
+            List<ViewDetail1> details = new ArrayList<ViewDetail1>();
+            byte status = ((settlement.getFlag()&((byte)1)) == 0)?Detail1.STATUS_MAKEUP:Detail1.STATUS_NORMAL;
             for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
-                Detail1 detail1 = new Detail1();
+                ViewDetail1 detail1 = new ViewDetail1();
                 detail1.setSid(sid);
                 detail1.setEid(employeeList.get(i).getId());
-                detail1List.add(i,detail1);
+                detail1.setStatus(status);
+                details.add(i,detail1);
             }
-            DaoUpdateResult result1 = Detail1Dao.importDetails(conn,detail1List);
+            DaoUpdateResult result1 = Detail1Dao.importDetails(conn,details);
             //事务处理
             if(result1.success){
                 ConnUtil.commit(conn);
@@ -301,13 +305,13 @@ public class Settlement1Service {
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid","=",id);
         //根据复制的结算单id查询出所有的结算单明细
-        List<Detail1> detail1List = (List<Detail1>) Detail1Dao.getList(conn,parameter).rows;
-        for(Detail1 detail1 :detail1List){
+        List<ViewDetail1> details = (List<ViewDetail1>) Detail1Dao.getList(conn,parameter).rows;
+        for(ViewDetail1 detail1 :details){
             //重新赋结算单id
            detail1.setSid(sid);
         }
         //重新插入数据库
-        DaoUpdateResult result1 = Detail1Dao.importDetails(conn,detail1List);
+        DaoUpdateResult result1 = Detail1Dao.importDetails(conn,details);
 
         if(result.success&&result1.success){//事务
             ConnUtil.commit(conn);
@@ -463,7 +467,7 @@ public class Settlement1Service {
     //社保补缴
     public static DaoUpdateResult backup(String start, String end, long sid,List<JSONObject> employees, Connection conn) {
         DaoUpdateResult result = new DaoUpdateResult();
-        List<Detail1> detail1List = new ArrayList<>();
+        List<ViewDetail1> detail1List = new ArrayList<>();
         HashMap<String,RuleMedicare> mapMedicare;
         for(JSONObject object:employees){
             long eid = object.getLong("eid");
@@ -490,15 +494,15 @@ public class Settlement1Service {
             }
 
             //新建明细
-            Detail1 detail1 = new Detail1();
+            ViewDetail1 detail1 = new ViewDetail1();
             detail1.setSid(sid);
             detail1.setEid(eid);
-            detail1.setStatus((byte) 1);//补缴
+            detail1.setStatus(Detail1.STATUS_REPLENISH);//补缴
 
             //根据员工设置计算医保
-            detail1 = calculateMedicare(detail1,setting,baseM,medicare);
+            detail1 = (ViewDetail1) calculateMedicare(detail1,setting,baseM,medicare);
             //根据员工设置计算社保
-            detail1 = calculateSocial(detail1,setting,baseS,social);
+            detail1 = (ViewDetail1) calculateSocial(detail1,setting,baseS,social);
 
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
             try {
@@ -525,7 +529,7 @@ public class Settlement1Service {
     //社保补差
     public static DaoUpdateResult makeup(Connection conn, String[] eids, String start, String end, long sid) {
         DaoUpdateResult result = new DaoUpdateResult();
-        List<Detail1> detail1List = new ArrayList<>();
+        List<ViewDetail1> detail1List = new ArrayList<>();
         for(String eid:eids){
             //该员工的信息
             QueryConditions conditions = new QueryConditions();
@@ -569,7 +573,7 @@ public class Settlement1Service {
                         return result;
                     }
                     //重新生成一个明细用于计算医保和社保
-                    Detail1 detail2 = new Detail1();
+                    ViewDetail1 detail2 = new ViewDetail1();
                     //计算医保相关
                     int SettingM = setting.getSettingM();//员工医保设置
                     float baseM = 0;
@@ -584,7 +588,7 @@ public class Settlement1Service {
                             baseM = setting.getValM();
                            break;
                     }
-                    detail2 = calculateMedicare(detail2,setting,baseM,medicare);
+                    detail2 = (ViewDetail1) calculateMedicare(detail2,setting,baseM,medicare);
 
                     //计算社保相关
                     int SettingS = setting.getSettingS();//员工社保设置
@@ -600,7 +604,7 @@ public class Settlement1Service {
                             baseS=setting.getValS();
                             break;
                     }
-                    detail2 = calculateSocial(detail2,setting,baseS,social);
+                    detail2 = (ViewDetail1) calculateSocial(detail2,setting,baseS,social);
 
                     //计算补差的社保医保,并重新赋值
                     detail2.setMedicare2(detail2.getMedicare1()-detail1.getMedicare1());
@@ -615,7 +619,7 @@ public class Settlement1Service {
                     detail2.setInjury(detail2.getInjury() - detail1.getInjury());
                     detail2.setEid(Long.parseLong(eid));
                     detail2.setSid(sid);
-                    detail2.setStatus((byte) 2);
+                    detail2.setStatus(Detail1.STATUS_BALANCE);
 
                     detail1List.add(detail2);
                 }
