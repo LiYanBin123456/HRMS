@@ -100,7 +100,7 @@ public class EmployeeService {
         }
 
         result = EmployeeDao.insertBatch(conn,employees);//批量插入员工数据
-        int[] eids = (int[])result.extra;
+        long[] eids = (long[]) result.extra;
         for(int i = 0;i<eids.length;i++){//员工补充信息添加对应eid
             extras.get(i).setEid(eids[i]);
             payCards.get(i).setEid(eids[i]);
