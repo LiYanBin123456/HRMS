@@ -255,14 +255,19 @@ public class Settlement1Service {
     //确认发放
     public static DaoUpdateResult confirm(Connection conn, long sid, Account account) {
         /**流程
-         *1、修改结算单状态为发放
+         * 1、修改结算单状态为发放
          * 2、获取结算单明细并且修改员工个税专项扣除中的累计收入，累计已预缴税额，累计减免
          * 3、插入日志
          */
+        //关闭自动提交
+        ConnUtil.closeAutoCommit(conn);
+
         DaoUpdateResult result = Settlement1Dao.confirm(conn, sid);
+        //查询出该结算单除了补缴，补差外的所有结算单明细
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid","=",sid);
-        parameter.addCondition("status","=",0);
+        parameter.addCondition("status","!=",Detail1.STATUS_REPLENISH);
+        parameter.addCondition("status","!=",Detail1.STATUS_BALANCE);
         List<Detail1> detailList = (List<Detail1>) Detail1Dao.getList(conn,parameter).rows;
         List<Deduct> deductList = new ArrayList<>();
         for (Detail1 detail1:detailList){
@@ -275,18 +280,27 @@ public class Settlement1Service {
             deduct.setPrepaid(deduct.getPrepaid()+detail1.getTax());
             deductList.add(deduct);
         }
-        if(result.success){//修改成功，插入日志
-                //封装log信息
-                String operator = account.getNickname()+"("+account.getId()+")";
-                String content = "发放";
-                Log log = new Log();
-                log.setSid(sid);
-                log.setType((byte) 0);
-                log.setOperator(operator);
-                log.setTime(time);
-                log.setContent(content);
-                //插入log信息
-                LogDao.insert(conn,log);
+        //批量修改个税信息
+        DaoUpdateResult result1 = DeductDao.updateDeducts(conn,deductList);
+
+        //封装log信息
+        String operator = account.getNickname()+"("+account.getId()+")";
+        String content = "发放";
+        Log log = new Log();
+        log.setSid(sid);
+        log.setType((byte) 0);
+        log.setOperator(operator);
+        log.setTime(time);
+        log.setContent(content);
+
+        //插入log信息
+        DaoUpdateResult result2 = LogDao.insert(conn,log);
+        if(!result.success&&!result1.success&&!result2.success){//有一个不成功就回滚
+            ConnUtil.rollback(conn);
+            result.success=false;
+            result.msg="数据库操作错误";
+        }else {//成功则提交
+            ConnUtil.commit(conn);
         }
         return result;
     }

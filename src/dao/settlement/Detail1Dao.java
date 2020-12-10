@@ -2,6 +2,7 @@ package dao.settlement;
 
 import bean.settlement.Detail1;
 import bean.settlement.ViewDetail1;
+import bean.settlement.ViewDetailTotal;
 import database.*;
 
 
@@ -51,6 +52,11 @@ public class Detail1Dao {
         QueryConditions conditions = new QueryConditions();
         conditions.add("id","=",id);
         return DbUtil.delete(conn,"detail1",conditions);
+    }
+
+
+    public static DaoQueryResult getTotal(Connection conn,QueryConditions conditions){
+         return DbUtil.get(conn,"view_detail_total",conditions, ViewDetailTotal.class);
     }
 
 }

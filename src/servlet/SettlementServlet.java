@@ -482,10 +482,10 @@ public class SettlementServlet extends HttpServlet {
         return JSONObject.toJSONString(result);
     }
 
-    //确认到账
+    //确认发放
     private String confirm(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
-        long id = Long.parseLong(request.getParameter("id"));
+        long id = Long.parseLong(request.getParameter("id"));//结算单id
         Account user = (Account) request.getSession().getAttribute("account");
         DaoUpdateResult result = null;
         switch (category){
