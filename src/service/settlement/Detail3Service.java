@@ -40,9 +40,6 @@ public class Detail3Service {
      * @return
      */
     public static DaoUpdateResult replaceDetails(Connection conn, List<Detail3> member1, List<Detail3> member2) {
-        for(Detail3 d:member1){
-            d.setStatus(Detail3.STATUS_REPLACING_DOWN);
-        }
         long sid = member1.get(0).getSid();
         Date date = new Date();
         byte day = (byte) date.getDate();
@@ -52,8 +49,16 @@ public class Detail3Service {
             d.setStatus(Detail3.STATUS_REPLACING_UP);
         }
         ConnUtil.closeAutoCommit(conn);
-        DaoUpdateResult res1 = Detail3Dao.update(conn,member1);
-        DaoUpdateResult res2 = Detail3Dao.importDetails(conn,member2);
+        DaoUpdateResult res1 = Detail3Dao.importDetails(conn,member2);
+
+        long []ids = (long[]) res1.extra;
+        for(int i=0; i<member1.size(); i++){
+            Detail3 d = member1.get(i);
+            d.setUid(ids[i]);
+            d.setStatus(Detail3.STATUS_REPLACING_DOWN);
+        }
+        DaoUpdateResult res2 = Detail3Dao.update(conn,member1);
+
         if(res1.success && res2.success){
             ConnUtil.commit(conn);
             return res1;
@@ -85,10 +90,10 @@ public class Detail3Service {
          */
         ConnUtil.closeAutoCommit(conn);
 
-        DaoUpdateResult res1 = Detail3Dao.confirm(conn,ids,day);
+        DaoUpdateResult res1 = Detail3Dao.confirm(conn,Detail3.STATUS_CONFIRMED,ids,day);
         DaoUpdateResult res2 = Settlement3Dao.statistic(conn,sid,ids.length);
 
-        if(res1.success){
+        if(res1.success && res2.success){
             ConnUtil.commit(conn);
             return res1;
         }else{
@@ -118,8 +123,8 @@ public class Detail3Service {
          */
         ConnUtil.closeAutoCommit(conn);
 
-        DaoUpdateResult res1 = Detail3Dao.confirm(conn,ids1,ids2,day);
-        DaoUpdateResult res2 = Detail3Dao.confirm(conn,ids2,day);
+        DaoUpdateResult res1 = Detail3Dao.confirm(conn,Detail3.STATUS_REPLACED,ids1,day);
+        DaoUpdateResult res2 = Detail3Dao.confirm(conn,Detail3.STATUS_CONFIRMED,ids2,day);
 
         if(res1.success && res2.success){
             ConnUtil.commit(conn);

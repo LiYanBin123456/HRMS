@@ -102,6 +102,8 @@ public class Settlement3Dao {
     }
 
     public static DaoUpdateResult statistic(Connection conn, long sid, int increment) {
-        return null;
+        String sql = "update settlement3 set amount=amount+?,summary=price*amount where id = ?";
+        Object []params = {increment,sid};
+        return DbUtil.update(conn,sql,params);
     }
 }

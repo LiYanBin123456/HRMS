@@ -12,11 +12,6 @@
         <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
         <script src="../layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
-        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
-        <!--[if lt IE 9]>
-          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
         <style>
             .searchbox{
                 margin-left:100px;
@@ -28,10 +23,8 @@
 
     <body class="layui-layout-body">
         <!--顶部工具栏-->
-        <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
-        <button class="layui-btn layui-btn-sm" style="display: none" id="importDeduct"><i class="layui-icon "></i> 导入专项扣除</button>
+        <button class="layui-hide" id="importDeduct">导入专项扣除</button>
         <div class="layui-hide" id="top_bar_deduct">
-            <button class="layui-btn layui-btn-sm" lay-event="import"><i class="layui-icon "></i> 导入</button>
             <button class="layui-btn layui-btn-sm" lay-event="importDeduct"><i class="layui-icon "></i> 导入专项扣除</button>
             <form class="layui-form searchbox">
                 <div class="layui-input-inline">
@@ -59,6 +52,7 @@
             var layer;//弹出窗口
             var element;
             var upload;
+            var cid;//导入合作单位的id
             var param_query = new QueryParam();
             param_query.setPagination(1,10);
             $(function () {
@@ -74,35 +68,13 @@
                     form = layui.form;
                     upload = layui.upload;
                     upload.render({
-                        elem: '#import' //绑定元素
-                        , url: '/hrms/verify/file' //上传接口
-                        , accept: 'file'
-                        , exts: 'xls'
-                        , acceptMime: '.xls'
-                        ,before: function(file){
-                            this.data={op:"readDeduct",file:JSON.stringify(file)}
-                        }
-                        , done: function (res) {
-                            if (res.success){
-                                var deducts = res.data;
-                                showImportDlg(deducts);
-                            }else {
-                                layer.msg("xls文件不符合要求，请下载模板再重新填写");
-                            }
-                        }
-                        , error: function () {
-                            //请求异常回调
-                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
-                        }
-                    });
-                    upload.render({
                         elem: '#importDeduct' //绑定元素
                         , url: '/hrms/verify/file' //上传接口
                         , accept: 'file'
                         , exts: 'xls'
                         , acceptMime: '.xls'
                         ,before: function(file){
-                            this.data={op:"readDeducts",file:JSON.stringify(file)}
+                            this.data={op:"readDeducts",file:JSON.stringify(file),cid:cid}
                         }
                         , done: function (res) {
                             if (res.success){
@@ -134,7 +106,6 @@
             }
 
             function initTable() {
-
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_deduct',
@@ -158,14 +129,8 @@
                 //顶部工具栏事件处理
                 table.on('toolbar(filter_tb_deduct)', function(obj){
                     switch(obj.event){
-                        case 'insert':
-                            showInsertDlg();
-                            break;
-                        case 'import':
-                            $("#import").click();
-                            break;
                         case 'importDeduct':
-                            $("#importDeduct").click();
+                            showImportDlg();
                             break;
                     }
                 });
@@ -196,7 +161,27 @@
                 });
             }
 
-            function showImportDlg(deducts) {
+            function showImportDlg() {
+                layer.open({
+                    title:"选择需导入的合作单位",
+                    type: 2,
+                    area: ['240px', '300px'],
+                    content: "../dialog/selectCooperation.html",
+                    btn: ['确定', '关闭']
+                    ,yes: function(index, layero){
+                        var cooperation = window["layui-layer-iframe" + index].callbackData();
+                        cid = cooperation.id;
+                        $("#importDeduct").click();//触发文件上传
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
+                });
+            }
+
+            function showConfirmDlg(deducts) {
+
+
+
                 var content = "../dialog/importDeducts.html?deducts="+encodeURIComponent(JSON.stringify(deducts));
                 layer.open({
                     title:"核对明细",

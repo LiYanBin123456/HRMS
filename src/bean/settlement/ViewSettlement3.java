@@ -5,17 +5,6 @@ import java.sql.Date;
 public class ViewSettlement3 extends Settlement3 {
     private String cname;//合作客户姓名
     private String pname;//保险产品名称
-    private String post;//工作岗位
-
-    public ViewSettlement3() {
-    }
-
-    public ViewSettlement3(long id, long did, long cid, String ccid, Date month, byte status, byte flag, long pid, float price, String cname, String pname, String post) {
-        super(id, did, cid, ccid, month, status, flag, pid, price);
-        this.cname = cname;
-        this.pname = pname;
-        this.post = post;
-    }
 
     public String getCname() {
         return cname;
@@ -31,22 +20,5 @@ public class ViewSettlement3 extends Settlement3 {
 
     public void setPname(String pname) {
         this.pname = pname;
-    }
-
-    public String getPost() {
-        return post;
-    }
-
-    public void setPost(String post) {
-        this.post = post;
-    }
-
-    @Override
-    public String toString() {
-        return "ViewSettlement3{" +
-                "cname='" + cname + '\'' +
-                ", pname='" + pname + '\'' +
-                ", post='" + post + '\'' +
-                '}';
     }
 }

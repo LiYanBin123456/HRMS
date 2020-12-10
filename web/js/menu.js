@@ -76,15 +76,16 @@ var menuItems_dispatch = [
             {id:"0,134217728",   title:"人员管理",href:"insureds0.html?type=0",icon:"&#xe602"},
         ]
     },
-    {title:"财务管理",id:"0,4026531840",icon:"&#xe606",children:
+    {title:"财务管理",id:"1,4026531840",icon:"&#xe606",children:
         [
             {id:"0,268435456",   title:"工资发放",href:"payroll.html",icon:"&#xe602"},
             {id:"0,536870912",   title:"到账确认",href:"confirm.html",icon:"&#xe602"},
-            {id:"0,1073741824",   title:"个税专项扣除",href:"deducts.html",icon:"&#xe602"},
-            {id:"0,2147483648",   title:"个税申报",href:"taxes.html",icon:"&#xe602"}
+            {id:"0,1073741824",   title:"个税扣除1",href:"deducts1.html",icon:"&#xe602"},
+            {id:"1,0",   title:"个税扣除2",href:"deducts2.html",icon:"&#xe602"},
+            {id:"2,0",   title:"个税申报",href:"taxes.html",icon:"&#xe602"}
         ]
     },
-    {title:"五险一金",id:"0,4294967296",href:"insureds.html",icon:"&#xe656"}
+    {title:"五险一金",id:"4,0",href:"insureds.html",icon:"&#xe656"}
 ];
 
 /**

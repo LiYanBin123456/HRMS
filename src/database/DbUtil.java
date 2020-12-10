@@ -37,10 +37,9 @@ public class DbUtil {
         QueryRunner qr = new QueryRunner();
         try {
             List<Object[]> res = qr.insertBatch(conn,sql,new ArrayListHandler(),params);
-            int[] extra = new int[res.size()];
+            long[] extra = new long[res.size()];
             for(int i=0; i<res.size(); i++){
-                long id = (long)res.get(i)[0];
-                extra[i] = (int)id;
+                extra[i] = (long)res.get(i)[0];
             }
             result.extra = extra;
             result.success = true;

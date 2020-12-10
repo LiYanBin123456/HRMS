@@ -8,9 +8,10 @@ public class Detail3 extends Detail {
     public static final byte STATUS_REPLACING_UP = 1;//拟换上;
     public static final byte STATUS_REPLACING_DOWN = -1;//拟换下;
     public static final byte STATUS_REPLACED = -2;//替换;
+
     private byte day;//生效日
     private byte status;//状态
-    private long rid;//替换之后的id
+    private long uid;//替换之后的id
 
     public byte getDay() {
         return day;
@@ -28,11 +29,11 @@ public class Detail3 extends Detail {
         this.status = status;
     }
 
-    public long getRid() {
-        return rid;
+    public long getUid() {
+        return uid;
     }
 
-    public void setRid(long rid) {
-        this.rid = rid;
+    public void setUid(long uid) {
+        this.uid = uid;
     }
 }

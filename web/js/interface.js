@@ -902,8 +902,8 @@ var InterfaceSettlement = function () {
      * @param success
      * @param fail
      */
-    this.confirmDetails1 = function (ids,day,success,fail) {
-        var para = {op: "confirmDetails1",ids:ids,day:day};
+    this.confirmDetails1 = function (sid,ids,day,success,fail) {
+        var para = {op: "confirmDetails1",sid:sid,ids:ids,day:day};
         access(url,para,1,success,fail);
     };
     /**
@@ -913,8 +913,8 @@ var InterfaceSettlement = function () {
      * @param success
      * @param fail
      */
-    this.confirmDetails2 = function (ids1,ids2,day,success,fail) {
-        var para = {op: "confirmDetails2",ids1:ids1,ids2:ids2,day:day};
+    this.confirmDetails2 = function (sid,ids1,ids2,day,success,fail) {
+        var para = {op: "confirmDetails2",sid:sid,ids1:ids1,ids2:ids2,day:day};
         access(url,para,1,success,fail);
     };
     /**
