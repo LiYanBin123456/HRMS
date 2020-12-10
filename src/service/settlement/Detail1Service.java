@@ -62,6 +62,9 @@ public class Detail1Service {
                 Employee employee = (Employee) EmployeeDao.get(conn, conditions).data; //根据员工身份证获取员工id
                 v.setEid(employee.getId());
             }
+            if(v.getStatus()!=0){//如果是自定义工资条
+               v.setStatus(Detail1.STATUS_CUSTOM);
+            }
             ds.add(v);
         }
         result = Detail1Dao.importDetails(conn, ds);
@@ -78,9 +81,11 @@ public class Detail1Service {
         Date month = settlement.getMonth();
         byte flag = settlement.getFlag();//判断是否计算社保
 
-        //获取结算单明细
+        //获取除补缴、补差和自定义工资的结算单明细
         QueryParameter param = new QueryParameter();
         param.conditions.add("sid", "=", sid);
+        param.conditions.add("status", "!=",1);
+        param.conditions.add("status", "!=",2);
         DaoQueryListResult result1 = Detail1Dao.getList(conn, param);
         List<Detail1> detail1s = (List<Detail1>) result1.rows;
 
@@ -100,7 +105,7 @@ public class Detail1Service {
             parameter.addCondition("cid", "=", settlement.getCid());
             parameter.addCondition("type", "=", settlement.getType());
             parameter.addCondition("id", "!=", settlement.getId());
-            //获取当月出此结算单之外的其它结算单
+            //获取当月除此结算单之外的其它结算单
             List<Settlement1> settlementList = (List<Settlement1>) Settlement1Dao.getList(conn, parameter).rows;
             for (Settlement1 s : settlementList) {
                 QueryParameter param2 = new QueryParameter();

@@ -479,7 +479,6 @@ public class Settlement1Service {
     //社保补缴
     public static DaoUpdateResult backup(String start, String end, long sid,List<JSONObject> employees, Connection conn) {
         DaoUpdateResult result = new DaoUpdateResult();
-        HashMap<String,RuleMedicare> mapMedicare;
         DaoUpdateResult result1;
         ConnUtil.closeAutoCommit(conn);
         List<Detail1> detail1List = new ArrayList<>();//添加补缴明细的集合
@@ -527,10 +526,10 @@ public class Settlement1Service {
             detail1 = calculateSocial(detail1,setting,baseS,social);
             //个人社保合计
             float sum1 = detail1.getPension1()+detail1.getDisease1()+detail1.getUnemployment1()
-                    +detail1.getMedicare1()+detail1.getFund1();
+                    +detail1.getMedicare1();
             //单位社保合计
             float sum2 =detail1.getPension2()+detail1.getMedicare2()+detail1.getDisease2()+detail1.getBirth()+detail1.getUnemployment2()
-                    +detail1.getInjury()+detail1.getFund2();
+                    +detail1.getInjury();
 
             SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
             try {
@@ -590,8 +589,18 @@ public class Settlement1Service {
     //社保补差
     public static DaoUpdateResult makeup(Connection conn, String[] eids, String start, String end, long sid) {
         DaoUpdateResult result = new DaoUpdateResult();
+        DaoUpdateResult result1;
+        ConnUtil.closeAutoCommit(conn);
         List<Detail1> detail1List = new ArrayList<>();
+        List<Detail1> detail2List = new ArrayList<>();
         for(String eid:eids){
+            //获取该员工正常的结算单明细
+            QueryConditions conditions1 = new QueryConditions();
+            conditions1.add("eid","=",eid);
+            conditions1.add("sid","=",sid);
+            conditions1.add("status","=",0);
+            ViewDetail1 detail =(ViewDetail1) Detail1Dao.get(conn,conditions1).data;
+
             //该员工的信息
             QueryConditions conditions = new QueryConditions();
             conditions.add("id","=",Long.parseLong(eid));
@@ -622,74 +631,99 @@ public class Settlement1Service {
                 String year = start.split("-")[0];//年
                 int month1 = c1.get(Calendar.MONTH);
                 int month2 = c2.get(Calendar.MONTH);
-                for(int i=month1;i<=month2;i++){
-                    String month =year+"-"+(month1+1)+"-"+"01";
+                //个人社保合计
+                float sum1=0;
+                //单位社保合计
+                float sum2=0;
+                for(int i=month1;i<=month2;i++) {
+                    String month = year + "-" + (month1 + 1) + "-" + "01";
                     //获取该员工当月分的结算单明细
-                    QueryConditions conditions1 = new QueryConditions();
-                    conditions1.add("eid","=",eid);
-                    conditions1.add("month","=",month);
-                    ViewDetail1 detail1 = (ViewDetail1) Detail1Dao.get(conn,conditions).data;
-                    if(detail1==null){
-                        result.msg = "该员工"+employee.getName()+","+month+"的结算单明细不存在,请核对";
-                        return result;
-                    }
-                    //重新生成一个明细用于计算医保和社保
-                    Detail1 detail2 = new Detail1();
-                    //计算医保相关
-                    int SettingM = setting.getSettingM();//员工医保设置
-                    float baseM = 0;
-                    switch (SettingM){
-                        case 0://最低标准
-                            baseM = medicare.getBase();
-                             break;
-                        case 1://不缴纳
-                            baseM = 0;
-                             break;
-                        case 2://自定义基数
-                            baseM = setting.getValM();
-                           break;
-                    }
-                    detail2 = calculateMedicare(detail2,setting,baseM,medicare);
+                    QueryConditions conditions2 = new QueryConditions();
+                    conditions2.add("eid", "=", eid);
+                    conditions2.add("month", "=", month);
+                    ViewDetail1 detail1 = (ViewDetail1) Detail1Dao.get(conn, conditions2).data;
+                    if (detail1 != null) {
+                        //重新生成一个明细用于计算医保和社保
+                        Detail1 detail2 = new Detail1();
+                        //计算医保相关
+                        int SettingM = setting.getSettingM();//员工医保设置
+                        float baseM = 0;
+                        switch (SettingM) {
+                            case 0://最低标准
+                                baseM = medicare.getBase();
+                                break;
+                            case 1://不缴纳
+                                baseM = 0;
+                                break;
+                            case 2://自定义基数
+                                baseM = setting.getValM();
+                                break;
+                        }
+                        detail2 = calculateMedicare(detail2, setting, baseM, medicare);
 
-                    //计算社保相关
-                    int SettingS = setting.getSettingS();//员工社保设置
-                    float baseS = 0;
-                    switch (SettingS){
-                        case 0://最低标准
-                            baseS =social.getBase();
-                            break;
-                        case 1://不缴纳
-                            baseS =social.getBase();
-                            break;
-                        case 2://自定义工资
-                            baseS=setting.getValS();
-                            break;
+                        //计算社保相关
+                        int SettingS = setting.getSettingS();//员工社保设置
+                        float baseS = 0;
+                        switch (SettingS) {
+                            case 0://最低标准
+                                baseS = social.getBase();
+                                break;
+                            case 1://不缴纳
+                                baseS = social.getBase();
+                                break;
+                            case 2://自定义工资
+                                baseS = setting.getValS();
+                                break;
+                        }
+                        detail2 = calculateSocial(detail2, setting, baseS, social);
+
+                        //计算补差的社保医保,并重新赋值
+                        detail2.setMedicare2(detail2.getMedicare1() - detail1.getMedicare1());
+                        detail2.setMedicare2(detail2.getMedicare2() - detail1.getMedicare2());
+                        detail2.setBirth(detail2.getBirth() - detail1.getBirth());
+                        detail2.setDisease1(detail2.getDisease1() - detail1.getDisease1());
+                        detail2.setDisease2(detail2.getDisease2() - detail1.getDisease2());
+                        detail2.setPension1(detail2.getPension1() - detail1.getPension1());
+                        detail2.setPension2(detail2.getPension2() - detail1.getPension2());
+                        detail2.setUnemployment1(detail2.getUnemployment1() - detail1.getUnemployment1());
+                        detail2.setUnemployment2(detail2.getUnemployment2() - detail1.getUnemployment2());
+                        detail2.setInjury(detail2.getInjury() - detail1.getInjury());
+                        detail2.setEid(Long.parseLong(eid));
+                        detail2.setSid(sid);
+                        detail2.setStatus(Detail1.STATUS_BALANCE);
+                        detail2.setComments1(month+"个人补差");
+                        detail2.setComments2(month+"单位补差");
+                        detail1List.add(detail2);
+
+                        //个人社保合计
+                       sum1 += detail2.getPension1()+detail2.getDisease1()+detail2.getUnemployment1()
+                                +detail2.getMedicare1();
+                        //单位社保合计
+                       sum2 +=detail2.getPension2()+detail2.getMedicare2()+detail2.getDisease2()+detail2.getBirth()+detail2.getUnemployment2()
+                                +detail2.getInjury();
                     }
-                    detail2 = calculateSocial(detail2,setting,baseS,social);
-
-                    //计算补差的社保医保,并重新赋值
-                    detail2.setMedicare2(detail2.getMedicare1()-detail1.getMedicare1());
-                    detail2.setMedicare2(detail2.getMedicare2() -detail1.getMedicare2());
-                    detail2.setBirth(detail2.getBirth()-detail1.getBirth());
-                    detail2.setDisease1(detail2.getDisease1() - detail1.getDisease1());
-                    detail2.setDisease2(detail2.getDisease2() - detail1.getDisease2());
-                    detail2.setPension1(detail2.getPension1() - detail1.getPension1());
-                    detail2.setPension2(detail2.getPension2() - detail1.getPension2());
-                    detail2.setUnemployment1(detail2.getUnemployment1() - detail1.getUnemployment1());
-                    detail2.setUnemployment2(detail2.getUnemployment2() - detail1.getUnemployment2());
-                    detail2.setInjury(detail2.getInjury() - detail1.getInjury());
-                    detail2.setEid(Long.parseLong(eid));
-                    detail2.setSid(sid);
-                    detail2.setStatus(Detail1.STATUS_BALANCE);
-
-                    detail1List.add(detail2);
                 }
+                detail.setExtra1(detail.getExtra1()-sum1);
+                detail.setExtra2(detail.getExtra2()+sum2);
+                detail.setComments1("补差");
+                detail2List.add(detail);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
-        //批量导入
+
+        //批量插入补缴明细
         result = Detail1Dao.importDetails(conn,detail1List);
+
+        //批量修改正常明细
+        result1= Detail1Dao.update(conn,detail2List);
+        if(!result.success&&!result1.success){
+            ConnUtil.rollback(conn);
+            result.msg ="数据库操作错误";
+            return result;
+        }
+
+        ConnUtil.commit(conn);
         return result;
     }
 
