@@ -45,6 +45,7 @@ import javax.servlet.http.*;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -1125,42 +1126,93 @@ public class FileServlet extends HttpServlet {
     //导出商业保险结算单明细
     private void exportDetail3(Connection conn, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
         response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=details3.xls");
+        String fileName = URLEncoder.encode("商业保险参保单.xls","utf-8");
+
+        response.setHeader("Content-Disposition", "attachment; filename="+fileName);
 
         long sid = Long.parseLong(request.getParameter("id"));//结算单id
-        QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("sid","=",sid);
-        DaoQueryListResult result = Detail3Dao.getList(conn,parameter);
-        String rows = JSONObject.toJSONString(result.rows);
 
-        List<ViewDetail3> detail3s = JSONArray.parseArray(rows, ViewDetail3.class);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        //获取结算单的单位名称和保险产品名称
+        QueryParameter p1 = new QueryParameter();
+        p1.addCondition("id","=",sid);
+        DaoQueryListResult res1 = Settlement3Dao.getList(conn,p1);
+        ViewSettlement3 settlement3 = ((List<ViewSettlement3>)res1.rows).get(0);
+        String cname = settlement3.getCname();
+        String pname = settlement3.getPname();
+
+        //获取新增
+        QueryParameter p2 = new QueryParameter();
+        p2.addCondition("sid","=",sid);
+        p2.addCondition("status","=",Detail3.STATUS_INSERT);
+        DaoQueryListResult res2 = Detail3Dao.getList(conn,p2);
+        List<ViewDetail3> details_insert = (List<ViewDetail3>) res2.rows;
+
+        //获取替换
+        QueryParameter p3 = new QueryParameter();
+        p3.addCondition("sid","=",sid);
+        p3.addCondition("status","=",Detail3.STATUS_REPLACING_DOWN);
+        DaoQueryListResult res3 = Detail3Dao.getList(conn,p3);
+        List<ViewDetail3> details_replace = (List<ViewDetail3>) res3.rows;
+
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
-        WritableSheet sheet1 = book.createSheet("商业保险结算单明细", 0);
+        WritableSheet sheet1 = book.createSheet("新增", 0);
+        WritableSheet sheet2 = book.createSheet("替换", 1);
         try {
-            sheet1.addCell(new Label(0, 0, "员工姓名"));
-            sheet1.addCell(new Label(1, 0, "身份证号码"));
-            sheet1.addCell(new Label(2, 0, "工作地点"));
-            sheet1.addCell(new Label(3, 0, "工作岗位"));
-            sheet1.addCell(new Label(4, 0, "人员类别"));
-
+            sheet1.addCell(new Label(0, 0, "序号"));
+            sheet1.addCell(new Label(1, 0, "姓名"));
+            sheet1.addCell(new Label(2, 0, "证件号码"));
+            sheet1.addCell(new Label(3, 0, "工作单位"));
+            sheet1.addCell(new Label(4, 0, "工作地点"));
+            sheet1.addCell(new Label(5, 0, "工作岗位"));
+            sheet1.addCell(new Label(6, 0, "职业类别"));
+            sheet1.addCell(new Label(7, 0, "保险产品"));
 
             int index = 1;
-            for(ViewDetail3 detail3:detail3s){
-                sheet1.addCell(new Label(0, index, detail3.getName()));
-                sheet1.addCell(new Label(1, index, detail3.getCardId()));
-                sheet1.addCell(new Label(2, index, detail3.getPlace()));
-                sheet1.addCell(new Label(3, index, detail3.getPost()));
-                sheet1.addCell(new jxl.write.Number(4, index, detail3.getCategory()));
+            for(ViewDetail3 d:details_insert){
+                sheet1.addCell(new Label(0, index, String.format("%d",index)));
+                sheet1.addCell(new Label(1, index, d.getName()));
+                sheet1.addCell(new Label(2, index, d.getCardId()));
+                sheet1.addCell(new Label(3, index, cname));
+                sheet1.addCell(new Label(4, index, d.getPlace()));
+                sheet1.addCell(new Label(5, index, d.getPost()));
+                sheet1.addCell(new Label(6, index, d.getCategoryString()));
+                sheet1.addCell(new Label(7, index, pname));
                 index++;
             }
+
+            sheet2.addCell(new Label(0, 0, "序号"));
+            sheet2.addCell(new Label(1, 0, "姓名"));
+            sheet2.addCell(new Label(2, 0, "证件号码"));
+            sheet2.addCell(new Label(3, 0, "工作单位"));
+            sheet2.addCell(new Label(4, 0, "工作地点"));
+            sheet2.addCell(new Label(5, 0, "工作岗位"));
+            sheet2.addCell(new Label(6, 0, "职业类别"));
+            sheet2.addCell(new Label(7, 0, "保险产品"));
+            sheet2.addCell(new Label(8, 0, "替换姓名"));
+            sheet2.addCell(new Label(9, 0, "替换证件号码"));
+
+            index = 1;
+            for(ViewDetail3 d:details_replace){
+                sheet2.addCell(new Label(0, index, String.format("%d",index)));
+                sheet2.addCell(new Label(1, index, d.getName()));
+                sheet2.addCell(new Label(2, index, d.getCardId()));
+                sheet2.addCell(new Label(3, index, cname));
+                sheet2.addCell(new Label(4, index, d.getPlace()));
+                sheet2.addCell(new Label(5, index, d.getPost()));
+                sheet2.addCell(new Label(6, index, d.getCategoryString()));
+                sheet2.addCell(new Label(7, index, pname));
+                sheet2.addCell(new Label(8, index, d.getUname()));
+                sheet2.addCell(new Label(9, index, d.getUcardId()));
+                index++;
+            }
+
             //设置列宽
-            sheet1.setColumnView(0,10);
+            /*sheet1.setColumnView(0,10);
             sheet1.setColumnView(1,10);
             sheet1.setColumnView(2,10);
             sheet1.setColumnView(3,10);
             sheet1.setColumnView(4,10);
-            sheet1.setColumnView(5,10);
+            sheet1.setColumnView(5,10);*/
             book.write();
             book.close();
         } catch (WriteException e) {

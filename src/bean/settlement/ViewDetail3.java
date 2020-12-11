@@ -7,6 +7,9 @@ public class ViewDetail3 extends Detail3 {
     private String place;//工作地点
     private String post;//工作岗位
     private byte category;//人员类别
+    private String ucardId;//替换的身份证号码
+    private String uname;//替换的姓名
+
 
     public String getCardId() {
         return cardId;
@@ -46,5 +49,39 @@ public class ViewDetail3 extends Detail3 {
 
     public void setCategory(byte category) {
         this.category = category;
+    }
+
+    public String getUcardId() {
+        return ucardId;
+    }
+
+    public void setUcardId(String ucardId) {
+        this.ucardId = ucardId;
+    }
+
+    public String getUname() {
+        return uname;
+    }
+
+    public void setUname(String uname) {
+        this.uname = uname;
+    }
+
+    public String getCategoryString() {
+        switch (category){
+            case 0:
+                return "一类";
+            case 1:
+                return "二类";
+            case 2:
+                return "三类";
+            case 3:
+                return "四类";
+            case 4:
+                return "五类";
+            case 5:
+                return "六类";
+        }
+        return "";
     }
 }

@@ -18,10 +18,11 @@
         <div class="dialog-content">
             <!--顶部工具栏-->
             <div class="layui-hide" id="top_bar_detail">
-                <a class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 新增</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="replace"><i class="layui-icon layui-icon-edit"></i> 替换</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="confirm1"><i class="layui-icon layui-icon-edit"></i> 确认新增</a>
-                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="confirm2"><i class="layui-icon layui-icon-edit"></i> 确认替换</a>
+                <a class="layui-btn layui-btn-sm" lay-event="insert">新增</a>
+                <a class="layui-btn layui-btn-sm" lay-event="confirm1">确认新增</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="replace">替换</a>
+                <a class="layui-btn layui-btn-danger layui-btn-sm" lay-event="confirm2">确认替换</a>
+                <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="export">导出</a>
                 <div class="layui-input-inline" style="width:120px">
                     <select id="" lay-filter="filter_status">
                         <option selected disabled hidden>按状态筛选</option>
@@ -130,6 +131,9 @@
                             break;
                         case "confirm2":
                             confirm2(details);
+                            break;
+                        case "export":
+                            exportDetails();
                             break;
                     };
                 });
@@ -334,6 +338,16 @@
                 });
 
                 return true;
+            }
+
+            //导出
+            function exportDetails(){
+                var url = "/hrms/verify/file?op=exportDetail3&id="+sid;
+                var form = $('<form method="POST"></form>');
+                form.attr('action', url);
+                form.appendTo($('body'));
+                form.submit();
+                form.remove();
             }
         </script>
     </body>

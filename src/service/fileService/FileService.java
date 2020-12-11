@@ -24,6 +24,7 @@ import jxl.write.biff.RowsExceededException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.Connection;
 import java.sql.Date;
 import java.text.ParseException;
@@ -619,6 +620,13 @@ public class FileService {
         } catch (WriteException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void exportDetail3(Connection conn, HttpServletResponse response) throws IOException {
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        String fileName = URLEncoder.encode("商业保险参保单.xls","utf-8");
+        response.setHeader("Content-Disposition", "attachment; filename="+fileName);
+
     }
 
 }

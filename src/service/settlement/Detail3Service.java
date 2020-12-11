@@ -51,10 +51,9 @@ public class Detail3Service {
         ConnUtil.closeAutoCommit(conn);
         DaoUpdateResult res1 = Detail3Dao.importDetails(conn,member2);
 
-        long []ids = (long[]) res1.extra;
         for(int i=0; i<member1.size(); i++){
             Detail3 d = member1.get(i);
-            d.setUid(ids[i]);
+            d.setUid(member2.get(i).getEid());
             d.setStatus(Detail3.STATUS_REPLACING_DOWN);
         }
         DaoUpdateResult res2 = Detail3Dao.update(conn,member1);
