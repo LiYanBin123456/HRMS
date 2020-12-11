@@ -16,10 +16,7 @@ public class Settlemet {
     private String ccid;//合同id
     private Date month;//月份
     private byte status;
-    /**来源
-     0_派遣单位录入
-     1_合作单位录入
-     */
+
     private byte flag;
 
     public Settlemet() {

@@ -1360,15 +1360,21 @@ public class FileServlet extends HttpServlet {
     private String readDeducts(Connection conn,HttpServletRequest request)throws IOException, ServletException {
         DaoQueryListResult result = new DaoQueryListResult();
         Part part = request.getPart("file");
+        long cid = Long.parseLong(request.getParameter("cid"));
         try {//获取part中的文件，读取数据
             InputStream is = part.getInputStream();
             List<ViewDeduct> data = XlsUtil.readDeducts(is);
-            result=DeductService.addDeducts(conn,data);
+            if(cid!=0){//代表是导入部分扣除
+                result=DeductService.addPartDeducts(conn,data,cid);
+            }else {
+                result=DeductService.addDeducts(conn,data);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
         return JSONObject.toJSONString(result);
     }
+
     //导出参保单
     private void exportInsurance(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {
         byte category = Byte.parseByte(request.getParameter("category"));
@@ -1396,6 +1402,7 @@ public class FileServlet extends HttpServlet {
                 break;
         }
     }
+
     //导出银行
     private void exportBank(Connection conn, HttpServletRequest request,HttpServletResponse response) throws IOException {
         byte category = Byte.parseByte(request.getParameter("category"));

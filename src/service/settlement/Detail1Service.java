@@ -35,6 +35,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.DeflaterInputStream;
 
+import static utills.IDCardUtil.getLastday_Month;
+
 public class Detail1Service {
 
     public static DaoQueryListResult getList(Connection conn, QueryParameter param, long id) {
@@ -78,14 +80,17 @@ public class Detail1Service {
 
         //获取结算单
         Settlement1 settlement = (Settlement1) Settlement1Dao.get(conn, sid).data;
-        Date month = settlement.getMonth();
+        Date month = settlement.getMonth();//该月份第一天
+
+        Date month2 =getLastday_Month(month);//改为该月份最后一天
         byte flag = settlement.getFlag();//判断是否计算社保
 
-        //获取除补缴、补差和自定义工资的结算单明细
+        //获取除了补缴、补差和自定义工资的结算单明细
         QueryParameter param = new QueryParameter();
         param.conditions.add("sid", "=", sid);
-        param.conditions.add("status", "!=",1);
-        param.conditions.add("status", "!=",2);
+        param.conditions.add("status", "!=",Detail1.STATUS_REPLENISH);
+        param.conditions.add("status", "!=",Detail1.STATUS_BALANCE);
+        param.conditions.add("status", "!=",Detail1.STATUS_CUSTOM);
         DaoQueryListResult result1 = Detail1Dao.getList(conn, param);
         List<Detail1> detail1s = (List<Detail1>) result1.rows;
 
@@ -98,34 +103,19 @@ public class Detail1Service {
         RuleSocial social;
 
         //根据月份获取自定义工资项
-        MapSalary mapSalary = (MapSalary) MapSalaryDao.selectByMonth(cid, conn, month).data;
+        MapSalary mapSalary = (MapSalary) MapSalaryDao.selectByMonth(cid, conn, month2).data;
         if ((flag & ((byte) 1)) == 0) {//不需要社保
-            QueryParameter parameter = new QueryParameter();
-            parameter.addCondition("month", "=", month);
-            parameter.addCondition("cid", "=", settlement.getCid());
-            parameter.addCondition("type", "=", settlement.getType());
-            parameter.addCondition("id", "!=", settlement.getId());
-            //获取当月除此结算单之外的其它结算单
-            List<Settlement1> settlementList = (List<Settlement1>) Settlement1Dao.getList(conn, parameter).rows;
-            for (Settlement1 s : settlementList) {
-                QueryParameter param2 = new QueryParameter();
-                param2.conditions.add("sid", "=", s.getId());
-                DaoQueryListResult result2 = Detail1Dao.getList(conn, param2);
-                List<Detail1> details = (List<Detail1>) result2.rows;
-                for (Detail1 d : details) {
-                    for (Detail1 d2 : detail1s) {
-                        if (d.getEid() == d2.getEid()) {
-                            float payable;
-                            float tax;
-                            payable = d2.getPayable() + d.getPayable();
-                            tax = d2.getTax() + d.getTax();
-                            d2.setPayable(payable);
-                            d2.setTax(tax);
-                        }
-                    }
-                }
-            }
             for (Detail1 d3 : detail1s) {
+                //获取该公司当月所有结算单明细个税和应发总和
+                QueryConditions condition = new QueryConditions();
+                condition.add("month","=",month);
+                condition.add("cid","=",cid);
+                condition.add("type","=",settlement.getType());
+                condition.add("eid","=",d3.getEid());
+                ViewDetailTotal data = (ViewDetailTotal) Detail1Dao.getTotal(conn, condition).data;
+                d3.setTax(data.getTaxs());
+                d3.setPayable(data.getPayables());
+
                 //获取员工
                 QueryConditions conditions = new QueryConditions();
                 conditions.add("id", "=", d3.getEid());
@@ -164,28 +154,33 @@ public class Detail1Service {
                 //获取该地市的医保规则
                 medicare = mapMedicare.get(city);
                 if (medicare == null) {
-                    medicare = (RuleMedicare) RuleMedicareDao.get(conn, city, month).data;
+                    medicare = (RuleMedicare) RuleMedicareDao.get(conn, city, month2).data;
                     mapMedicare.put(city, medicare);
                 }
                 //获取该地市的社保规则
                 social = mapSocial.get(city);
                 if (social == null) {
-                    social = (RuleSocial) RuleSocialDao.get(conn, city, month).data;
+                    social = (RuleSocial) RuleSocialDao.get(conn, city, month2).data;
                     mapSocial.put(city, social);
                 }
-                //仍然获取不到该地区的医保社保规则
-                if (medicare == null || social == null) {
-                    result.msg = "请确认系统中该员工" + employee.getName() + "的社保所在地是否存在";
-                    return result;
+
+                if(settlement.getType()!=2){//代发工资不需要检验社保
+                    //仍然获取不到该地区的医保社保规则
+                    if (medicare == null || social == null) {
+                        result.msg = "请确认系统中该员工" + employee.getName() + "的社保所在地是否存在";
+                        return result;
+                    }
                 }
 
                 //获取员工个税专项扣除
                 Deduct deduct = (Deduct) DeductDao.get(conn, d.getEid()).data;
-                if (deduct == null) {
-                    result.msg = "请完善" + employee.getName() + "的个税专项扣除";
-                    return result;
-                }
 
+                if(settlement.getType()!=3) {//代发社保不需要检验个税专项
+                    if (deduct == null) {
+                        result.msg = "请完善" + employee.getName() + "的个税专项扣除";
+                        return result;
+                    }
+                }
                 //计算结算单明细
                 Detail1 detail1 = Calculate.calculateDetail1(settlement, d, medicare, social, setting, mapSalary, deduct, injuryPer);
                 detail1List.add(detail1);

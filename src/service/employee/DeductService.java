@@ -3,6 +3,7 @@ package service.employee;
 import bean.employee.Deduct;
 import bean.employee.Employee;
 import bean.employee.ViewDeduct;
+import bean.employee.ViewEmployee;
 import dao.employee.DeductDao;
 import dao.employee.EmployeeDao;
 import database.*;
@@ -104,12 +105,12 @@ public class DeductService {
              //判断员工是否存在
             ViewDeduct d = getDeduct(deductList,deduct.getCardId());
             if(d!=null){
-                 d.setDeduct1(d.getDeduct1()+deduct.getDeduct1());
-                 d.setDeduct2(d.getDeduct2()+deduct.getDeduct2());
-                 d.setDeduct3(d.getDeduct3()+deduct.getDeduct3());
-                 d.setDeduct4(d.getDeduct4()+deduct.getDeduct4());
-                 d.setDeduct5(d.getDeduct5()+deduct.getDeduct5());
-                 d.setDeduct6(d.getDeduct6()+deduct.getDeduct6());
+                 d.setDeduct1(deduct.getDeduct1());
+                 d.setDeduct2(deduct.getDeduct2());
+                 d.setDeduct3(deduct.getDeduct3());
+                 d.setDeduct4(deduct.getDeduct4());
+                 d.setDeduct5(deduct.getDeduct5());
+                 d.setDeduct6(deduct.getDeduct6());
                  deductList1.add(d);
              }else {
                 QueryConditions conditions = new QueryConditions();
@@ -153,5 +154,57 @@ public class DeductService {
             }
         }
         return null;
+    }
+
+    /**
+     * @param conn
+     * @param data
+     * @param cid
+     */
+    public static DaoQueryListResult addPartDeducts(Connection conn, List<ViewDeduct> data, long cid) {
+        /**
+         * 流程
+         * 1、先根据合作单位id 查询出所属该公司的员工列表
+         * 2、遍历data数据，查询出所属的员工
+         * 3、
+         */
+        ConnUtil.closeAutoCommit(conn);
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("cid","=",cid);
+        List<ViewEmployee> employeeList = (List<ViewEmployee>) EmployeeDao.getList(conn,parameter).rows;
+
+        DaoUpdateResult result1 = new DaoUpdateResult();
+        result1.success=true;
+        DaoUpdateResult result2 = new DaoUpdateResult();
+        result2.success=true;
+        DaoQueryListResult result = new DaoQueryListResult();
+        result.success=true;
+        List<Deduct> deductList = new ArrayList<>();//用于保存修改的个税
+        List<Deduct> deductList2 = new ArrayList<>();//用于保存添加的个税
+        for(Employee employee:employeeList){
+            ViewDeduct d =getDeduct(data,employee.getCardId());
+            if(d!=null){
+               d.setEid(employee.getId());
+               if(DeductDao.exist(conn,employee.getId()).exist){//如果存在则添加到要修改的个税集合中
+                   deductList.add(d);
+               }else {//不存在则添加到导入个税集合中
+                   deductList2.add(d);
+               }
+            }
+        }
+        if(deductList.size()>0){
+            result1=DeductDao.updateDeducts(conn,deductList);
+        }
+        if(deductList2.size()>0){
+            result2=DeductDao.importDeducts(conn,deductList2);
+        }
+        if(!result1.success&&!result2.success){//失败回滚
+            ConnUtil.rollback(conn);
+            result.success=false;
+            return result;
+        }
+        //提交
+        ConnUtil.commit(conn);
+        return result;
     }
 }

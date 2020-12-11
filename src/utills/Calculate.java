@@ -432,7 +432,8 @@ public class Calculate {
     public static double calculateTax(float income1, Deduct deduct){
         double tax;//个税 = 应税额*税率（A） – 速算扣除（B） – 累计已预缴税额（C）
         float taxDue;//应税额 = 累计收入额（D）+ 本期收入 – 个税累计专项扣除（E）– 累计减除费用（F）
-        taxDue=deduct.getIncome()+income1-deduct.getDeduct()-deduct.getFree();
+        float deducts = deduct.getDeduct()+deduct.getDeduct1()+deduct.getDeduct2()+deduct.getDeduct3()+deduct.getDeduct4()+deduct.getDeduct5()+deduct.getDeduct6();
+        taxDue=deduct.getIncome()+income1-deducts-deduct.getFree();
 
         float rate = 0;//税率
         float d = 0;//速算扣除
