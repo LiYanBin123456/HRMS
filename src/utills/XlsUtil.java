@@ -131,6 +131,7 @@ public class XlsUtil {
 
             } catch (Exception e) {
                 e.printStackTrace();
+                break out;
             }
             data.add(o);
         }

@@ -75,28 +75,6 @@
                     form = layui.form;
                     upload = layui.upload;
                     upload.render({
-                        elem: '#import' //绑定元素
-                        , url: '/hrms/verify/file' //上传接口
-                        , accept: 'file'
-                        , exts: 'xls'
-                        , acceptMime: '.xls'
-                        ,before: function(file){
-                            this.data={op:"readDeduct",file:JSON.stringify(file)}
-                        }
-                        , done: function (res) {
-                            if (res.success){
-                                var deducts = res.data;
-                                showConfirmDlg(deducts1);
-                            }else {
-                                layer.msg("xls文件不符合要求，请下载模板再重新填写");
-                            }
-                        }
-                        , error: function () {
-                            //请求异常回调
-                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
-                        }
-                    });
-                    upload.render({
                         elem: '#importDeduct' //绑定元素
                         , url: '/hrms/verify/file' //上传接口
                         , accept: 'file'
@@ -108,8 +86,10 @@
                         , done: function (res) {
                             if (res.success){
                                 var deducts = res.rows;
-                                if (deducts1!=null){
-                                    showErrDlg(deducts1);
+                                if (deducts!=null){
+                                    showErrDlg(deducts);
+                                }else {
+                                    layer.msg("导入成功");
                                 }
                             }else {
                                 layer.msg("xls文件不符合要求，请下载模板再重新填写");
@@ -159,13 +139,10 @@
                 table.on('toolbar(filter_tb_deduct)', function(obj){
                     switch(obj.event){
                         case 'import':
-                            $("#import").click();
+                           showConfirmDlg();
                             break;
                         case 'importDeduct':
                             $("#importDeduct").click();
-                            break;
-                        case 'importMakeUp':
-                            showMakeUp();
                             break;
                     }
                 });
@@ -196,8 +173,8 @@
                 });
             }
 
-            function showConfirmDlg(deducts) {
-                var content = "../dialog/importDeducts.html?deducts="+encodeURIComponent(JSON.stringify(deducts1));
+            function showConfirmDlg() {
+                var content = "../dialog/importDeducts.html?";
                 layer.open({
                     title:"核对明细",
                     type: 2,
@@ -206,7 +183,7 @@
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
                         var deducts = window["layui-layer-iframe" + index].callbackData();
-                        iEmployee.importDeducts(JSON.stringify(deducts1),function () {
+                        iEmployee.importDeducts(deducts,function () {
                             layer.close(index);
                             layer.msg("导入成功");
                             getDeducts();
@@ -216,6 +193,7 @@
                     }
                 });
             }
+
 
             function showErrDlg(deducts) {
                 var content = "../dialog/importDeducts.html?deducts="+encodeURIComponent(JSON.stringify(deducts1));
