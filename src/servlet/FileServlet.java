@@ -607,9 +607,9 @@ public class FileServlet extends HttpServlet {
                     sheet2.addCell(new Label(1, c, "float"));
                 }
                 sheet2.addCell(new Label(1, c+1, "float"));
-                sheet2.addCell(new Label(1, c+2, "float"));
+                sheet2.addCell(new Label(1, c+2, "string"));
                 sheet2.addCell(new Label(1, c+3, "float"));
-                sheet2.addCell(new Label(1, c+4, "float"));
+                sheet2.addCell(new Label(1, c+4, "string"));
                 sheet2.addCell(new Label(1, c+5, "float"));
                 sheet2.addCell(new Label(1, c+6, "float"));
                 sheet2.addCell(new Label(1, c+7, "float"));
@@ -628,9 +628,9 @@ public class FileServlet extends HttpServlet {
                 sheet2.addCell(new Label(1,c+20,  "float"));
             }else {
                 sheet2.addCell(new Label(1, 3, "float"));
-                sheet2.addCell(new Label(1, 4, "float"));
+                sheet2.addCell(new Label(1, 4, "String"));
                 sheet2.addCell(new Label(1, 5, "float"));
-                sheet2.addCell(new Label(1, 6, "float"));
+                sheet2.addCell(new Label(1, 6, "String"));
                 sheet2.addCell(new Label(1, 7, "float"));
                 sheet2.addCell(new Label(1, 8, "float"));
                 sheet2.addCell(new Label(1, 9, "float"));

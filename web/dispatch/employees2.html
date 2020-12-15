@@ -26,7 +26,7 @@
             <button class="layui-btn layui-btn-sm" lay-event="import" id="import"><i class="layui-icon "></i> 批量导入</button>
             <button class="layui-btn layui-btn-sm" lay-event="" onclick="download()"><i class="layui-icon "></i> 下载模板</button>
             <button class="layui-btn layui-btn-sm" lay-event="dispatch"><i class="layui-icon "></i> 批量派遣</button>
-            <button class="layui-btn layui-btn-sm" lay-event="setting"><i class="layui-icon "></i> 批量设置</button>
+            <button class="layui-btn layui-btn-sm" lay-event="setting"><i class="layui-icon "></i> 社保批量设置</button>
             <form class="layui-form searchbox" lay-filter="form_top_bar">
                 <div class="layui-input-inline">
                     <select id="select_cooperation" lay-filter="filter_cooperation" placeholder="按合作客户筛选"></select>
@@ -390,7 +390,7 @@
             }
             function batchS(employees,setting){
                 var msg = "确认统一设置"+employees.length+"个员工的社保信息吗?";
-                layer.confirm(msg, {icon: 3, title:'批量设置'}, function(index){
+                layer.confirm(msg, {icon: 3, title:'社保批量设置'}, function(index){
                     var ids = getKeyArray(employees,"id");
                     iEmployee.settingBatch(ids,setting,function () {
                         layer.msg('设置成功');

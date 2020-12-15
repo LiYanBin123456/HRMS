@@ -20,7 +20,9 @@
     </head>
 
     <body class="layui-layout-body">
-        <div class="dialog-content">
+    <button class="layui-btn layui-btn-sm" id="import"><i class="layui-icon "></i> 批量导入</button>
+
+    <div class="dialog-content">
             <div id="container">
             <table id="tbl_detail" lay-filter="filter_tb_detail"></table>
             </div>
@@ -41,17 +43,14 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
+            var upload;
             var param_query = new QueryParam();
             param_query.setOrder("id",true);
-            param_query.setPagination(1,10);
-            var deducts =  JSON.parse($.query.get("deducts"));//导入的明细1
+            var deducts ;
             $(function () {
                 loadLayuiModule();
             });
-            //向调用页面返回选中的员工
-            var callbackData = function () {
-               return deducts;
-            };
+
             function loadLayuiModule() {
                 layui.use(['table','form','element','layer','upload','laypage'], function() {
                     table = layui.table;
@@ -59,7 +58,30 @@
                     element = layui.element;
                     laypage = layui.laypage;
                     form = layui.form;
-                    initPage();
+                    upload = layui.upload;
+                    upload.render({
+                        elem: '#import' //绑定元素
+                        , url: '/hrms/verify/file' //上传接口
+                        , accept: 'file'
+                        , exts: 'xls'
+                        , acceptMime: '.xls'
+                        ,before: function(file){
+                            this.data={op:"readDeduct",file:JSON.stringify(file)}
+                        }
+                        , done: function (res) {
+                            if (res.success){
+                                deducts = JSON.stringify(res.data);
+                                console.log(deducts)
+                                initPage();
+                            }else {
+                                layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                            }
+                        }
+                        , error: function () {
+                            //请求异常回调
+                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                        }
+                    });
                 });
             }
 
@@ -82,12 +104,12 @@
                 //单元格编辑
                 table.on('edit(filter_tb_detail)', update);
                 table.reload('tbl_detail', {
-                    data:deducts
+                    data:JSON.parse(deducts)
                 });
                 laypage.render({
                     elem: 'pager'
                     ,curr:param_query.pagination.page
-                    ,count: deducts.length //数据总数
+                    ,count: JSON.parse(deducts).length  //数据总数
                     ,limit: param_query.pagination.size
                     ,limits: [10, 20, 50, 100, 200]
                     ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
@@ -110,7 +132,10 @@
                 }
                 layer.msg(field + ' 字段更改为：'+ value);
             }
-
+            //向调用页面返回选中的员工
+            var callbackData = function () {
+                return deducts;
+            };
         </script>
     </body>
 </html>
