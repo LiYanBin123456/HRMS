@@ -41,21 +41,20 @@ public class Detail3Service {
      */
     public static DaoUpdateResult replaceDetails(Connection conn, List<Detail3> member1, List<Detail3> member2) {
         long sid = member1.get(0).getSid();
-        Date date = new Date();
-        byte day = (byte) date.getDate();
-        for(Detail3 d:member2){
+        for(int i=0; i<member2.size(); i++){
+            Detail3 d = member2.get(i);
+            //设置结算单编号、被替换人员id、修改状态为替换上
             d.setSid(sid);
-            d.setDay(day);
+            d.setUid(member1.get(i).getEid());
             d.setStatus(Detail3.STATUS_REPLACING_UP);
         }
+
+        for(Detail3 d:member1){
+            d.setStatus(Detail3.STATUS_REPLACING_DOWN);//修改状态为替换下
+        }
+
         ConnUtil.closeAutoCommit(conn);
         DaoUpdateResult res1 = Detail3Dao.importDetails(conn,member2);
-
-        for(int i=0; i<member1.size(); i++){
-            Detail3 d = member1.get(i);
-            d.setUid(member2.get(i).getEid());
-            d.setStatus(Detail3.STATUS_REPLACING_DOWN);
-        }
         DaoUpdateResult res2 = Detail3Dao.update(conn,member1);
 
         if(res1.success && res2.success){
