@@ -113,13 +113,18 @@
                 });
 
                 form.on('radio(type)', function(data){
-                    var value = data.value;
-                    type = value;
-                    param_query.addCondition("type","=",type);
-                    getCooperations(true);
+                    switchCategory(Number(data.value));
                 });
                 initTable();
                 getCooperations(false);
+            }
+
+            function switchCategory(value) {
+                $("#container").empty();
+                $("#container").append('<table id="tbl_cooperation" lay-filter="filter_tb_cooperation"></table>');
+                type = value;
+                param_query.addCondition("type","=",type);
+                initTable()
             }
 
             function initTable() {
@@ -185,6 +190,8 @@
                             break;
                     };
                 });
+
+                getCooperations(false);
 
             }
 

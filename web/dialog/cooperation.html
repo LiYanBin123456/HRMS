@@ -447,14 +447,22 @@
         function generateColumns() {
             var columns = [];
             for (var i in salary_items_fixed) {
-                var item = salary_items_fixed[i];
-                var field = {field: i, title: item, width: 15 * item.length + 30};
-                columns.push(field);
-            }
-            for (var i in salary_items_defined) {
-                var item = salary_items_defined[i];
-                var field = {field: i, title: item, width: 15 * item.length + 30};
-                columns.push(field);
+                if(i==0){
+                    var item = salary_items_fixed[i];
+                    var field = {field: i, title: item, width: 15 * item.length + 30};
+                    columns.push(field);
+                    for (var m in salary_items_defined) {
+                        var items = salary_items_defined[m];
+                        var v = items.split(',');
+                        var fields = {field: m, title: v[0], width: 15 * item.length + 30};
+                        columns.push(fields);
+                    }
+                }
+                if(i>0){
+                    var item = salary_items_fixed[i];
+                    var field = {field: i, title: item, width: 15 * item.length + 30};
+                    columns.push(field);
+                }
             }
             return [columns];
         }
