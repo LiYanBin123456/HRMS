@@ -89,9 +89,11 @@ public class Settlement1Service {
                 //查询出类别为代发工资（4）或者代缴社保（5）的员工
                 parameter.addCondition("category","=",settlement.getType()+2);
             }
+
             parameter.addCondition("status","=",0);
             List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
             List<Detail1> details = new ArrayList<>();
+
             byte status = ((settlement.getFlag()&((byte)1)) == 0)?Detail1.STATUS_MAKEUP:Detail1.STATUS_NORMAL;
             for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
                 Detail1 detail1 = new Detail1();
@@ -256,6 +258,7 @@ public class Settlement1Service {
     public static DaoUpdateResult confirm(Connection conn, long sid, Account account) {
         /**流程
          * 1、修改结算单状态为发放
+         * 2、判断是否为补发
          * 2、获取结算单明细并且修改员工个税专项扣除中的累计收入，累计已预缴税额，累计减免
          * 3、插入日志
          */
@@ -270,16 +273,69 @@ public class Settlement1Service {
         parameter.addCondition("status","!=",Detail1.STATUS_BALANCE);
         List<Detail1> detailList = (List<Detail1>) Detail1Dao.getList(conn,parameter).rows;
         List<Deduct> deductList = new ArrayList<>();
-        for (Detail1 detail1:detailList){
-            Deduct deduct = (Deduct) DeductDao.get(conn,detail1.getEid()).data;
-            //累计收入=累计收入+当月应发；
-            deduct.setIncome(deduct.getIncome()+detail1.getPayable());
-            //累计减免=累计减免+5000；
-            deduct.setFree(deduct.getFree()+5000);
-            //累计已预缴税额=累计已预缴税额+个税
-            deduct.setPrepaid(deduct.getPrepaid()+detail1.getTax());
-            deductList.add(deduct);
+
+        //判断是否是补发
+        Settlement1 settlement1 = (Settlement1) Settlement1Dao.get(conn,sid).data;
+        boolean flag=false;//判断是否是补发工资,默认否计默认是普通结算单
+        byte flag1 = settlement1.getFlag();//判断是否计算社保
+        if ((flag1 & ((byte) 1)) == 0) {//补发工资
+            flag=true;
         }
+
+        for (Detail1 detail1:detailList){
+            float deducts=0;
+            if(deductList.size()>0){//个税专项扣除集合中有数据，就需要判断是否有重复的
+                Deduct deduct1 = getDeduct(detail1,deductList);
+                if(deduct1!=null){//个税专项扣除存在于集合中，只需要加累计收入和累计已预缴税额
+                    //累计收入
+                    deduct1.setIncome(deduct1.getIncome()+detail1.getPayable());
+                    //累计已预缴税额=累计已预缴税额+个税
+                    deduct1.setPrepaid(deduct1.getPrepaid()+detail1.getTax());
+
+                }else{//不存在于该集合中
+
+                    //去数据库中找到该员工的个税专项扣除
+                    Deduct deduct = (Deduct) DeductDao.get(conn,detail1.getEid()).data;
+
+                    //累计收入=累计收入+当月应发；
+                    deduct.setIncome(deduct.getIncome()+detail1.getPayable());
+
+                    //累计已预缴税额=累计已预缴税额+个税
+                    deduct.setPrepaid(deduct.getPrepaid()+detail1.getTax());
+
+                    if(!flag) {//如果不是补发结算单，就需要累加累计减免和累加个税专项扣除
+                        //累计减免=累计减免+5000；
+                        deduct.setFree(deduct.getFree()+5000);
+
+                        //将该月的个税专项扣除总额累加
+                        deducts=deduct.getDeduct()+deduct.getDeduct1()+deduct.getDeduct2()+deduct.getDeduct3()+deduct.getDeduct4()+deduct.getDeduct5()+deduct.getDeduct6();
+                        deduct.setDeduct(deducts);
+                    }
+                    deductList.add(deduct);
+                }
+            }else {//集合中没有数据
+                //去数据库中找到该员工的个税专项扣除
+                Deduct deduct = (Deduct) DeductDao.get(conn,detail1.getEid()).data;
+                //累计收入=累计收入+当月应发；
+                deduct.setIncome(deduct.getIncome()+detail1.getPayable());
+
+                //累计已预缴税额=累计已预缴税额+个税
+                deduct.setPrepaid(deduct.getPrepaid()+detail1.getTax());
+
+                if(!flag) {//如果不是补发结算单，就需要累加累计减免和累加个税专项扣除
+                    //累计减免=累计减免+5000；
+                    deduct.setFree(deduct.getFree()+5000);
+
+                    //将该月的个税专项扣除总额累加
+                    deducts=deduct.getDeduct()+deduct.getDeduct1()+deduct.getDeduct2()+deduct.getDeduct3()+deduct.getDeduct4()+deduct.getDeduct5()+deduct.getDeduct6();
+                    deduct.setDeduct(deducts);
+                }
+
+                deductList.add(deduct);
+            }
+
+        }
+
         //批量修改个税信息
         DaoUpdateResult result1 = DeductDao.updateDeducts(conn,deductList);
 
@@ -304,6 +360,17 @@ public class Settlement1Service {
         }
         return result;
     }
+
+    private static Deduct getDeduct(Detail1 detail1, List<Deduct> deductList) {
+        Deduct deduct = null;
+        for(Deduct deduct1:deductList){
+            if(detail1.getEid()==deduct1.getEid()){
+                deduct=deduct1;
+            }
+        }
+        return deduct;
+    }
+
     //获取该结算单的所有日志
     public static DaoQueryListResult getLogs(Connection conn, long id, QueryParameter parameter) {
         parameter.conditions.add("type","=",0);
@@ -415,21 +482,10 @@ public class Settlement1Service {
                         return result;
                     }
                     break;
-                case 1://实际工资,当前月的实际工资
-                    QueryConditions conditions1 = new QueryConditions();
-                    conditions1.add("sid","=",sid);
-                    conditions1.add("eid","=",Long.parseLong(eids[i]));
-                    Detail1 detail1 = (Detail1) Detail1Dao.get(conn,conditions1).data;
-                    if(detail1!=null){
-                        baseM = detail1.getPayable();
-                    }else {
-                        baseM = 0;
-                    }
-                    break;
-                case 2://不缴纳
+                case 1://不缴纳
                     baseM = 0;
                     break;
-                case 3://自定义基数
+                case 2://自定义工资
                     baseM = setting.getValM();
                     break;
             }
@@ -460,21 +516,10 @@ public class Settlement1Service {
                         return result;
                     }
                     break;
-                case 1://实际工资，当前月的实际工资
-                    QueryConditions conditions2 = new QueryConditions();
-                    conditions2.add("sid","=",sid);
-                    conditions2.add("eid","=",Long.parseLong(eids[i]));
-                    Detail1 detail1 = (Detail1) Detail1Dao.get(conn,conditions2).data;
-                    if(detail1!=null){
-                        baseS = detail1.getPayable();
-                    }else {
-                        baseS = 0;
-                    }
-                    break;
-                case 2://不缴纳
+                case 1://不缴纳
                     baseS = 0;
                     break;
-                case 3://自定义基数
+                case 2://自定义基数
                     baseS = setting.getValS();
                     break;
             }
@@ -740,6 +785,7 @@ public class Settlement1Service {
         ConnUtil.commit(conn);
         return result;
     }
+
 
 
 }

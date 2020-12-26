@@ -56,7 +56,7 @@ public class Detail1Dao {
 
 
     public static DaoQueryResult getTotal(Connection conn,QueryConditions conditions){
-         return DbUtil.get(conn,"view_detail_total",conditions, ViewDetailTotal.class);
+         return DbUtil.get(conn,"view_detail1_total",conditions, ViewDetailTotal.class);
     }
 
 }

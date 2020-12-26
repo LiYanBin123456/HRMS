@@ -20,17 +20,12 @@ public class DeductService {
 
     //修改
     public static DaoUpdateResult update(Connection conn, Deduct deduct) {
-        float deducts = deduct.getDeduct1()+deduct.getDeduct2()+deduct.getDeduct3()+deduct.getDeduct4()+deduct.getDeduct5()+deduct.getDeduct6();
-        deduct.setDeduct(deducts);
-        return DeductDao.update(conn,deduct);
+         return DeductDao.update(conn,deduct);
     }
 
     //增加
     public static DaoUpdateResult insert(Connection conn, Deduct deduct) {
         DaoUpdateResult result;
-        //计算专项扣除总额
-        float deducts = deduct.getDeduct1()+deduct.getDeduct2()+deduct.getDeduct3()+deduct.getDeduct4()+deduct.getDeduct5()+deduct.getDeduct6();
-        deduct.setDeduct(deducts);
         if(!DeductDao.exist(conn,deduct.getEid()).exist){
            result = DeductDao.insert(conn,deduct);
         }else {//已存在则修改

@@ -853,7 +853,7 @@ public class FileServlet extends HttpServlet {
                 sheet2.addCell(new Label(c+3, 1, "个人失业"));
                 sheet2.addCell(new Label(c+4, 1, "个人大病"));
                 sheet2.addCell(new Label(c+5, 1, "个人公积金"));
-                sheet2.addCell(new Label(c+6, 1, "应发工资"));
+                sheet2.addCell(new Label(c+6, 1, "税前工资"));
                 sheet2.addCell(new Label(c+7, 1, "个税"));
                 sheet2.addCell(new Label(c+8, 1, "实发工资"));
             }else {
@@ -877,7 +877,7 @@ public class FileServlet extends HttpServlet {
                 sheet2.addCell(new Label(5, 1, "个人失业"));
                 sheet2.addCell(new Label(6, 1, "个人大病"));
                 sheet2.addCell(new Label(7, 1, "个人公积金"));
-                sheet2.addCell(new Label(8, 1, "应发工资"));
+                sheet2.addCell(new Label(8, 1, "税前工资"));
                 sheet2.addCell(new Label(9, 1, "个税"));
                 sheet2.addCell(new Label(10, 1, "实发工资"));
             }

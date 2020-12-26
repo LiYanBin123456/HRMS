@@ -81,6 +81,8 @@
                                 var deducts = res.rows;
                                 if (deducts!=null){
                                     showErrDlg(deducts);
+                                }else{
+                                    layer.msg("成功");
                                 }
                             }else {
                                 layer.msg("xls文件不符合要求，请下载模板再重新填写");

@@ -111,6 +111,13 @@ public class Calculate {
         paid=payable;
         income=payable+d.getPayable();
 
+        //确认发放之后个人专项扣除已经累计过，所以需要变回本月的初始状态
+        deduct.setIncome(deduct.getIncome()-d.getPayable());
+        deduct.setFree(deduct.getFree()-5000);
+        deduct.setPrepaid(deduct.getPrepaid()-d.getTax());
+        float deducts = deduct.getDeduct()-deduct.getDeduct1()-deduct.getDeduct2()-deduct.getDeduct3()-deduct.getDeduct4()-deduct.getDeduct5()-deduct.getDeduct6();
+        deduct.setDeduct(deducts);
+
         //计算个税
         double tax =calculateTax(income,deduct);
         tax=tax-d.getTax();
@@ -185,12 +192,18 @@ public class Calculate {
         if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){//如果有自定义工资
            payable = calculatePayable(payable,d,mapSalary);
         }
+
         //应发=应发-个人五险一金+个人核收补缴
         payable= payable-d.getPension1()-d.getMedicare1()-d.getUnemployment1()-d.getDisease1()-d.getFund1()+d.getExtra1();
         d.setPayable(payable);
 
         //计算个税
-        double tax =calculateTax(payable,deduct);
+        double tax = 0 ;
+        //代缴社保不需要计算个税
+        if(settlement1.getType()!=3){
+            tax =calculateTax(payable,deduct);
+        }
+
         d.setTax((float) tax);
 
         //计算国家减免项=单位养老+单位失业+单位工伤-工伤补充
@@ -374,6 +387,9 @@ public class Calculate {
                 tax = 0;
                 break;
 
+        }
+        if((settlement1.getFlag()&((byte)1)) == 0){//补发工资
+            manage = 0;
         }
         settlement1.setSalary(salary);
         settlement1.setSocial(social);

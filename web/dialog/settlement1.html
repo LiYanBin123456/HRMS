@@ -69,7 +69,6 @@
     var laypage;
     var element;
     var param_query = new QueryParam();
-    param_query.setPagination(1,10);
     //type ：0 1 派遣外包（需普通结算单合同）  2 3 代缴工资社保（人事代理合同）
     var type =  $.query.get("type");
 
@@ -91,7 +90,7 @@
             form.on('radio(mode)', function(data){
                 settlement.mode = data.value;
             });
-            if (type==3||type==4){//类型是代发工资和代缴社保,不需要自动计算社保的选项卡
+            if (type==2||type==3){//类型是代发工资和代缴社保,不需要自动计算社保的选项卡
                 $("#if_social").addClass("layui-hide");
             }else {
                 form.on('radio(calc)', function(data){
