@@ -134,14 +134,14 @@ public class Settlement0Servlet extends HttpServlet {
 
     //插入结算单
     private String insert(Connection conn, HttpServletRequest request) {
-        byte type = Byte.parseByte(request.getParameter("type"));//是否自动生成明细 0 不 1 自动生成
+        boolean needDetail = Boolean.parseBoolean(request.getParameter("needDetail"));//是否自动生成明细 0 不 1 自动生成
         DaoUpdateResult result = null;
         HttpSession session = request.getSession();
         //获取管理员所属的公司id
         long rid = ((Account) session.getAttribute("account")).getRid();
         Settlement0 settlement0 = JSONObject.parseObject(request.getParameter("settlement"), Settlement0.class);
         settlement0.setDid(rid);
-        result = Settlement0Service.insert(conn,settlement0,type);
+        result = Settlement0Service.insert(conn,settlement0,needDetail);
         return JSONObject.toJSONString(result);
     }
 

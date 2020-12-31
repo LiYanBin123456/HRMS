@@ -82,9 +82,6 @@ public class SettlementServlet extends HttpServlet {
             case "makeup"://补差
                 result = makeup(conn, request);
                 break;
-            case "readBase"://读取基数
-                result = readBase(conn, request);
-                break;
             case "commit"://提交
                 result = commit(conn, request);
                 break;
@@ -202,7 +199,8 @@ public class SettlementServlet extends HttpServlet {
     //插入结算单
     private String insert(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));//结算单类型
-        byte type = Byte.parseByte(request.getParameter("type"));//是否自动生成明细 0 不 1 自动生成
+        boolean needDetail = Boolean.parseBoolean(request.getParameter("needDetail"));//是否自动生成明细 0 不 1 自动生成
+        boolean needCalculateSocial = Boolean.parseBoolean(request.getParameter("needCalculateSocial"));//是否自动生成明细 0 不 1 自动生成
         DaoUpdateResult result = null;
         HttpSession session = request.getSession();
         //获取管理员所属的公司id
@@ -211,17 +209,18 @@ public class SettlementServlet extends HttpServlet {
             case 0://普通结算单
                 Settlement1 settlement1 = JSONObject.parseObject(request.getParameter("settlement"), Settlement1.class);
                 settlement1.setDid(rid);
-                result = Settlement1Service.insert(conn,settlement1,type);
+                settlement1.setNeedCalculateSocial(needCalculateSocial);
+                result = Settlement1Service.insert(conn,settlement1,needDetail);
                 break;
             case 1://小时工结算单
                 Settlement2 settlement2 = JSONObject.parseObject(request.getParameter("settlement"), Settlement2.class);
                 settlement2.setDid(rid);
-                result = Settlement2Service.insert(conn,settlement2,type);
+                result = Settlement2Service.insert(conn,settlement2,needDetail);
                 break;
             case 2://商业保险结算单
                 Settlement3 settlement3 = JSONObject.parseObject(request.getParameter("settlement"), Settlement3.class);
                 settlement3.setDid(rid);
-                result = Settlement3Service.insert(conn,settlement3,type);
+                result = Settlement3Service.insert(conn,settlement3,needDetail);
                 break;
         }
         return JSONObject.toJSONString(result);
@@ -273,7 +272,7 @@ public class SettlementServlet extends HttpServlet {
         DaoUpdateResult result = null;
         switch (category){
             case 0://普通结算单明细
-                List<Detail1> detail1s = JSONArray.parseArray(request.getParameter("details"),Detail1.class);
+                List<ViewDetail1> detail1s = JSONArray.parseArray(request.getParameter("details"),ViewDetail1.class);
                 result = Detail1Service.update(conn,detail1s);
                 break;
             case 1://小时工结算单明细
@@ -365,16 +364,6 @@ public class SettlementServlet extends HttpServlet {
     //导出明细
     private String exportDetails(Connection conn, HttpServletRequest request) {
         return null;
-    }
-
-    //读取社保医保基数
-    private String readBase(Connection conn, HttpServletRequest request) {
-        long sid = Long.parseLong(request.getParameter("sid"));//结算单id
-        String[] eids = request.getParameterValues("eids[]");
-        String start = request.getParameter("start");
-        String end = request.getParameter("end");
-        String result = Settlement1Service.readBase(start,end,eids,sid,conn);
-        return result;
     }
 
     //补缴

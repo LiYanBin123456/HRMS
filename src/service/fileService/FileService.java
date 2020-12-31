@@ -448,7 +448,7 @@ public class FileService {
 
                     sheet2.addCell(new jxl.write.Number(0, index, v.getPaid()));//金额上限,实发
                     sheet2.addCell(new Label(1, index, card.getCardNo()));//收方账号
-                    sheet2.addCell(new Label(3, index, "大正月"+v.getMonth()==null?"":sdf.format(v.getMonth())+"工资"));//附言
+                    //sheet2.addCell(new Label(3, index, "大正月"+v.getMonth()==null?"":sdf.format(v.getMonth())+"工资"));//附言
                 }
                 sheet1.addCell(new Label(8, index, v.getName()));//收方户名
                 sheet2.addCell(new Label(2, index, v.getName()));//收方户名

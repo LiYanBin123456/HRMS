@@ -30,9 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Settlement3Service {
-    static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
-    static String date = df.format(new Date(System.currentTimeMillis()));
-    static  Date time = Date.valueOf(date);//获取当前时间
 
     //获取结算列表
     public static DaoQueryListResult getList(Connection conn, QueryParameter param) {
@@ -40,7 +37,7 @@ public class Settlement3Service {
     }
 
     //添加
-    public static DaoUpdateResult insert(Connection conn, Settlement3 settlement, byte type) {
+    public static DaoUpdateResult insert(Connection conn, Settlement3 settlement, boolean needDetail) {
         /**
          * 获取合同服务项目中的商业保险id
          * 1、插入结算单 返回id，判断是否需要自动生成明细

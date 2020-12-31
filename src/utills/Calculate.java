@@ -6,6 +6,7 @@ import bean.contract.Serve;
 import bean.contract.ViewContractCooperation;
 import bean.employee.Deduct;
 import bean.employee.EnsureSetting;
+import bean.employee.ViewDeduct;
 import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
 import bean.settlement.*;
@@ -22,83 +23,8 @@ import java.util.List;
 
 public class Calculate {
 
-    /**
-     * 计算五险一金，下载模板的时候需要的，其他地方不需要
-     * @param eid 员工id
-     * @return detail 计算好五险一金的结算单明细
-     */
-    public static  Detail1 calculateInsurance(Long eid){
-        Connection conn = ConnUtil.getConnection();
-        //初始化明细
-        Detail1 detail= new Detail1();
-        detail.setEid(eid);
-        boolean existSetting=SettingDao.exist(conn,eid).exist;//员工设置是否存在
-        if(!existSetting){//不存在则养老等字段为0，直接返回
-            return  detail;
-        }
-        EnsureSetting setting = (EnsureSetting) SettingDao.get(conn,eid).data;//员工设置
-        String city = setting.getCity();//员工地市
-        RuleMedicare medicare= (RuleMedicare) RuleMedicareDao.getLast(conn,city).data;//获取该地市的最新医保
-        RuleSocial social = (RuleSocial) RuleSocialDao.getLast(conn,city).data;//获取该地市的最新社保
 
-        //先获取医保相关
-        int SettingM = setting.getSettingM();//员工医保设置
-        float baseM = 0;
-        switch (SettingM){
-            case 0://最低标准
-                if(medicare!=null){
-                    baseM = medicare.getBase();
-                }else {
-                    baseM = 0;
-                }
-                break;
-            case 1://实际工资，因为模板中暂时没有实际工资，为0
-                baseM=0;
-                break;
-            case 2://不交纳，为0
-                baseM = 0;
-                break;
-            case 3://自定义基数
-                float ValM = setting.getValM();//自定义的基数
-                baseM = ValM;
-                break;
-        }
-        detail = calculateMedicare(detail,setting,baseM,medicare);
-
-        //获取社保相关
-        int SettingS = setting.getSettingS();//员工社保设置
-        float baseS = 0;
-        switch (SettingS){
-            case 0://最低标准
-                if(social!=null){
-                    baseS =social.getBase();
-                }else {
-                    baseS=0;
-                }
-                break;
-            case 1://实际工资
-                baseS = 0;
-                break;
-            case 2://不缴纳，为0
-                baseS=0;
-                break;
-            case 3://自定义基数
-                float ValS=setting.getValS();//自定义的基数
-                baseS = ValS;
-                break;
-        }
-        calculateSocial(detail,setting,baseS,social);
-
-        //获取公积金相关
-        float FundBase = setting.getFundBase();//获取自定义的公积金基数
-        float FundPer  = setting.getFundPer()/100;//获取自定义公积金比例
-
-        detail.setFund1(FundBase*FundPer);//个人公积金
-        detail.setFund2(FundBase*FundPer);//个人公积金
-        ConnUtil.closeConnection(conn);
-        return  detail;
-    }
-
+/*
 
     public static Detail1 calculateDetail1(Detail1 d, MapSalary mapSalary, Deduct deduct) {
         //计算应发工资
@@ -129,7 +55,8 @@ public class Calculate {
 
         return d;
     }
-        /**
+        */
+/**
          * 计算普通结算单明细
          * @param d //结算单明细
          * @param medicare //所在地市的医保规则
@@ -138,7 +65,8 @@ public class Calculate {
          * @param mapSalary //合作单位的自定义工资
          * @param deduct   //所属员工的个税专项扣除
          * @return detail1 //计算好的结算单
-         */
+         *//*
+
     public static Detail1 calculateDetail1(Settlement1 settlement1,Detail1 d, RuleMedicare medicare, RuleSocial social, EnsureSetting setting, MapSalary mapSalary, Deduct deduct,float injueryPer){
         //获取医保基数
         int SettingM = setting.getSettingM();//员工医保设置
@@ -187,68 +115,59 @@ public class Calculate {
             d.setFund1(FundBase*FundPer);//个人公积金
             d.setFund2(FundBase*FundPer);//单位公积金
         }
-        //计算应发工资
+        //计算应发工资，应发=应发-个人五险一金+个人核收补缴
         float payable =d.getBase();//初始是基本工资
         if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){//如果有自定义工资
            payable = calculatePayable(payable,d,mapSalary);
         }
-
-        //应发=应发-个人五险一金+个人核收补缴
         payable= payable-d.getPension1()-d.getMedicare1()-d.getUnemployment1()-d.getDisease1()-d.getFund1()+d.getExtra1();
         d.setPayable(payable);
 
-        //计算个税
-        double tax = 0 ;
-        //代缴社保不需要计算个税
-        if(settlement1.getType()!=3){
-            tax =calculateTax(payable,deduct);
-        }
-
+        //计算个税，代缴社保不需要计算个税
+        double tax = settlement1.getType()==3?0:calculateTax(payable,deduct);
         d.setTax((float) tax);
 
         //计算国家减免项=单位养老+单位失业+单位工伤-工伤补充
         float free = d.getPension2()+d.getUnemployment2()+d.getInjury()-(d.getInjury()==0?0:social.getExtra());
         d.setFree(free);
 
-        float paid = 0;
-         //根据结算单类型，计算实发工资
-        switch (settlement1.getType()){
-            case 0://派遣结算单
-                //计算实发=应发-个税
-                paid = payable-(float) tax;
-                break;
-            case 1://外包结算单
-                //计算实发=应发-个税
-                paid = payable-(float) tax;
-                break;
-            case 2://代发工资
-                //计算实发=应发-个税 不需要计算五险一金 这里还有问题
-                paid = payable-(float) tax;
-                break;
-            case 3://代缴社保,只需要五险一金，其他为零
-                paid=0;
-                d.setPayable(0);
-                break;
+        //根据结算单类型，计算实发工资
+        if(settlement1.getType() == 3){
+            d.setPayable(0);
+            d.setPaid(0);
+        }else{
+            d.setPaid(payable-(float) tax);
         }
-        d.setPaid(paid);
         return  d;
     }
+*/
 
     /**
      * 计算医保
      * @param setting 员工设置
-     * @param base 基数
      * @param ruleMedicare  所属地方的医保
      * @return
      */
-    public static Detail1 calculateMedicare(Detail1 detail, EnsureSetting setting, float base, RuleMedicare ruleMedicare){
+    public static void calculateMedicare(Detail1 detail, EnsureSetting setting, RuleMedicare ruleMedicare){
 
         float medicare1=0;//个人医疗
         float disease1=0;//个人大病
         float medicare2=0;//单位医疗
         float disease2=0;//单位大病
         float birth=0;//单位生育
-
+        int SettingM = setting.getSettingM();//员工医保设置
+        float base = 0;
+        switch (SettingM) {
+            case 0://最低标准
+                base = ruleMedicare.getBase();
+                break;
+            case 1://不缴纳
+                base = 0;
+                break;
+            case 2://自定义基数
+                base = setting.getValM();
+                break;
+        }
         byte medicare = setting.getMedicare();//要计算的医保类别
         if((medicare&((byte)1)) != 0){
             medicare1 = base*(ruleMedicare.getPer2()/100);//个人医疗
@@ -266,18 +185,27 @@ public class Calculate {
         detail.setDisease1(disease1);
         detail.setDisease2(disease2);
         detail.setBirth(birth);
-
-        return detail;
-
     }
 
-    public static Detail1 calculateSocial(Detail1 detail, EnsureSetting setting, float base, RuleSocial ruleSocial){
-
+    public static void calculateSocial(Detail1 detail, EnsureSetting setting,RuleSocial ruleSocial){
         float pension1=0;//个人养老
         float unemployment1=0;//个人失业
         float pension2=0;//单位养老
         float unemployment2=0;//单位失业
         float injury=0;//单位工伤
+
+        float base = 0;
+        switch (setting.getSettingS()){
+            case 0://最低标准
+                base = ruleSocial.getBase();
+                break;
+            case 1://不缴纳
+                base=0;
+                break;
+            case 2://自定义工资
+                base=setting.getValS();//自定义的基数
+                break;
+        }
 
         byte social = setting.getSocial();//要计算的社保类别
         if((social&((byte)1)) != 0){
@@ -297,17 +225,16 @@ public class Calculate {
         detail.setUnemployment1(unemployment1);
         detail.setUnemployment2(unemployment2);
         detail.setInjury(injury);
-        return detail;
     }
 
     /**
      *计算普通结算单
-     * @param settlement1 结算单
-     * @param vc 合同视图
-     * @param detail1s 明细
+     * @param settlement 结算单
+     * @param contract 合同视图
+     * @param details 明细
      * @return
      */
-    public static Settlement1 calculateSettlement1(Settlement1 settlement1, ViewContractCooperation vc, List<ViewDetail1> detail1s){
+    public static void calculateSettlement1(Settlement1 settlement, ViewContractCooperation contract, List<ViewDetail1> details){
         float salary=0;//应发总额
         float social=0;//单位社保
         float medicare=0;//单位医保
@@ -318,41 +245,42 @@ public class Calculate {
         float free = 0;//国家减免项
         float tax = 0;//税费
 
-        for(ViewDetail1 v:detail1s){
+        for(ViewDetail1 detail:details){
             //应发总额+=明细中的应发总额
-           salary+=v.getPayable();
-           if(settlement1.getType()==3){//代缴社保结算单
+           salary+=detail.getPayable();
+           if(settlement.getType()==3){//代缴社保结算单
                //单位社保总额+=（单位失业+单位养老+单位工商）+个人社保
-               social+=(v.getPension2()+v.getUnemployment2()+v.getInjury()+v.getPension1()+v.getUnemployment1());
+               social+=(detail.getPension2()+detail.getUnemployment2()+detail.getInjury()+detail.getPension1()+detail.getUnemployment1());
                //单位医保总额+=（单位医保+单位大病+单位生育）+个人医保
-               medicare+=(v.getMedicare2()+v.getDisease2()+v.getBirth()+v.getMedicare1()+v.getDisease1());
+               medicare+=(detail.getMedicare2()+detail.getDisease2()+detail.getBirth()+detail.getMedicare1()+detail.getDisease1());
                //单位公积金总额+=单位公积金+个人公积金
-               fund+=(v.getFund2()+v.getFund1());
+               fund+=(detail.getFund2()+detail.getFund1());
            }else {
                //单位社保总额+=（单位失业+单位养老+单位工商）
-               social+=(v.getPension2()+v.getUnemployment2()+v.getInjury());
+               social+=(detail.getPension2()+detail.getUnemployment2()+detail.getInjury());
                //单位医保总额+=（单位医保+单位大病+单位生育）
-               medicare+=(v.getMedicare2()+v.getDisease2()+v.getBirth());
+               medicare+=(detail.getMedicare2()+detail.getDisease2()+detail.getBirth());
                //单位公积金总额+=单位公积金
-               fund+=v.getFund2();
+               fund+=detail.getFund2();
            }
             //补收核减
-           extra+=v.getExtra2();
+           extra+=detail.getExtra2();
            //国家减免
-           free+=v.getFree();
+           free+=detail.getFree();
         }
 
-        int type = vc.getStype();//合同服务项目中的类型
-        int category = vc.getCategory();//合同服务项目中的结算方式
-        int invoice = vc.getInvoice();//合同基础信息中的发票类型
-        float per = vc.getPer()/100;//税费比例（选择增值税专用发票（全额）需要用到）
-        float value = vc.getValue();//结算值，根据结算方式的不同，代表的意义不同
+        int type = contract.getStype();//合同服务项目中的类型
+        int category = contract.getCategory();//合同服务项目中的结算方式
+        int invoice = contract.getInvoice();//合同基础信息中的发票类型
+        float per = contract.getPer()/100;//税费比例（选择增值税专用发票（全额）需要用到）
+        float value = contract.getValue();//结算值，根据结算方式的不同，代表的意义不同
 
-        float num = detail1s.size();//总人数
+        float num = details.size();//总人数
         switch (type){
             case 0://劳务派遣
                 if(category==0){//按人数收取的结算方式
-                    manage = num*value;//管理费总额=人数*管理费
+                    //管理费总额=人数*管理费,如果不需要计算社保（即补发），不需要重复计算管理费
+                    manage = settlement.isNeedCalculateSocial()?num*value:0;
                     if(invoice==0){//增值税专用发票（全额）
                       tax=(salary+social+medicare+fund+manage)*per;//税费 = （应发总额+单位五险一金+管理费）*税率（基准6.72，但可以浮动）
                     }
@@ -370,7 +298,7 @@ public class Calculate {
                 break;
         }
 
-         byte stype = settlement1.getType();//结算单类型
+        byte stype = settlement.getType();//结算单类型
         switch (stype){
             case 0://派遣结算单
                 summary=salary+social+medicare+fund+manage+tax+extra-free;//总额
@@ -388,19 +316,16 @@ public class Calculate {
                 break;
 
         }
-        if((settlement1.getFlag()&((byte)1)) == 0){//补发工资
-            manage = 0;
-        }
-        settlement1.setSalary(salary);
-        settlement1.setSocial(social);
-        settlement1.setMedicare(medicare);
-        settlement1.setFund(fund);
-        settlement1.setManage(manage);
-        settlement1.setTax(tax);
-        settlement1.setSummary(summary);
-        settlement1.setExtra(extra);
-        settlement1.setFree(free);
-        return settlement1;
+
+        settlement.setSalary(salary);
+        settlement.setSocial(social);
+        settlement.setMedicare(medicare);
+        settlement.setFund(fund);
+        settlement.setManage(manage);
+        settlement.setTax(tax);
+        settlement.setSummary(summary);
+        settlement.setExtra(extra);
+        settlement.setFree(free);
     }
 
 
@@ -647,4 +572,150 @@ public class Calculate {
         return map;
     }
 
+    /**
+     * 计算补发结算单明细
+     * @param details
+     * @param mapSalary
+     * @param totals
+     * @param deducts
+     * @return
+     */
+    public static String calculateDetail1(List<ViewDetail1> details, MapSalary mapSalary, List<ViewDetailTotal> totals, List<ViewDeduct> deducts) {
+        for (Detail1 d : details) {
+            //计算个税累计扣除总额和应发总额
+            ViewDetailTotal total = getTotal(totals,d.getEid());
+            if(total==null){//如果不存在
+                total = new ViewDetailTotal();
+            }
+
+            //计算本期应发
+            float payable =d.getBase();//初始是基本工资
+            if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){//如果有自定义工资
+                payable = calculatePayable(payable,d,mapSalary);
+            }
+            d.setPayable(payable);
+
+            //计算个税
+            float income=payable+total.getPayables();//本期累计收入
+            ViewDeduct deduct = getDeduct(deducts,d.getEid());
+            if(deduct == null){
+                return "请完善" + deduct.getName() + "的个税专项扣除";
+            }
+            //确认发放之后个人专项扣除已经累计过，所以需要变回本月的初始状态
+            deduct.setIncome(deduct.getIncome()-d.getPayable());
+            deduct.setFree(deduct.getFree()-5000);
+            deduct.setPrepaid(deduct.getPrepaid()-d.getTax());
+            deduct.setDeduct(deduct.getDeduct()-deduct.getDeduct1()-deduct.getDeduct2()-deduct.getDeduct3()-deduct.getDeduct4()-deduct.getDeduct5()-deduct.getDeduct6());
+            double tax =calculateTax(income,deduct);
+            tax=tax-total.getTaxs();
+            d.setTax((float) tax);
+
+            //计算实发
+            d.setPaid(payable-d.getTax());
+        }
+        return null;
+    }
+
+    /**
+     * 计算普通结算单明细
+     * @param settlement
+     * @param details
+     * @param medicares
+     * @param socials
+     * @param settings
+     * @param mapSalary
+     * @param deducts
+     * @return
+     */
+    public static String calculateDetail1(Settlement1 settlement, List<ViewDetail1> details, HashMap<String, RuleMedicare> medicares, HashMap<String, RuleSocial> socials, List<EnsureSetting> settings, MapSalary mapSalary, List<ViewDeduct> deducts) {
+        for (ViewDetail1 d:details) {
+            EnsureSetting setting = getSetting(settings,d.getEid());
+
+            //计算医保(不是代缴工资，且需要交纳医保才需要计算医保)
+            if(settlement.getType()!=2){
+                if(setting == null){
+                    return "请完善" + d.getName() + "的社保设置";
+                }
+                if(setting.getSettingM()!=1) {
+                    RuleMedicare medicare = medicares.get(setting.getCity());
+                    calculateMedicare(d,setting,medicare);
+                }
+            }
+
+            //计算社保
+            if(settlement.getType()!=2){
+                if(setting == null){
+                    return "请完善" + d.getName() + "的社保设置";
+                }
+                if(setting.getSettingS()!=1) {
+                    RuleSocial social = socials.get(setting.getCity());
+                    calculateSocial(d,setting,social);
+                }
+            }
+
+            //计算公积金
+            float fund = setting.getFundBase()*setting.getFundPer()/100;
+            d.setFund1(fund);//个人公积金
+            d.setFund2(fund);//单位公积金
+
+            //计算应发工资，应发=应发-个人五险一金+个人核收补缴
+            if(settlement.getType() == 3) {
+                d.setPayable(0);
+            }else {
+                float payable = d.getBase();//初始是基本工资
+                if (mapSalary != null && mapSalary.getItems() != null && mapSalary.getItems().length() > 0) {//如果有自定义工资
+                    payable = calculatePayable(payable, d, mapSalary);
+                }
+                payable = payable - d.getPension1() - d.getMedicare1() - d.getUnemployment1() - d.getDisease1() - d.getFund1() + d.getExtra1();
+                d.setPayable(payable);
+            }
+
+            //计算个税(代缴社保不需要计算个税)
+            if(settlement.getType() == 3){
+                d.setTax(0);
+            }else {
+                ViewDeduct deduct = getDeduct(deducts,d.getEid());
+                if(deduct == null){
+                    return "请完善" + d.getName() + "的个税专项扣除";
+                }
+                double tax = settlement.getType() == 3 ? 0 : calculateTax(d.getPayable(), deduct);
+                d.setTax((float) tax);
+            }
+
+            //计算国家减免项=单位养老+单位失业+单位工伤-工伤补充
+            /*float free = d.getPension2()+d.getUnemployment2()+d.getInjury()-(d.getInjury()==0?0:social.getExtra());
+            d.setFree(free);*/
+
+            //计算实发工资
+            d.setPaid(d.getPayable()-d.getTax());
+        }
+        return null;
+    }
+
+    private static ViewDetailTotal getTotal(List<ViewDetailTotal> totals,long eid){
+        for(ViewDetailTotal d:totals){
+            if(d.getEid() == eid){
+                return d;
+            }
+        }
+        return null;
+    }
+
+    private static ViewDeduct getDeduct(List<ViewDeduct> deducts,long eid){
+        for(ViewDeduct d:deducts){
+            if(d.getEid() == eid){
+                return d;
+            }
+        }
+        return null;
+    }
+
+    private static EnsureSetting getSetting(List<EnsureSetting> settings,long eid){
+        for(EnsureSetting s:settings){
+            if(s.getEid() == eid){
+                return s;
+            }
+        }
+        return null;
+    }
 }

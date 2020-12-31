@@ -1,6 +1,9 @@
 package bean.settlement;
 
+import utills.Bit;
+
 import java.sql.Date;
+import java.util.BitSet;
 
 //结算单基类
 public class Settlemet {
@@ -87,6 +90,18 @@ public class Settlemet {
 
     public void setFlag(byte flag) {
         this.flag = flag;
+    }
+
+    public void setNeedCalculateSocial(boolean need){
+        if(need){
+            Bit.set(flag,0);
+        }else {
+            Bit.reset(flag,0);
+        }
+    }
+
+    public boolean isNeedCalculateSocial(){
+        return Bit.test(flag,0);
     }
 
     public String getCcid() {

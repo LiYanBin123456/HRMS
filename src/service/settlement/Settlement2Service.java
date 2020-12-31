@@ -24,9 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Settlement2Service {
-    static SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");//设置日期格式
-    static String date = df.format(new Date(System.currentTimeMillis()));
-    static  Date time = Date.valueOf(date);//获取当前时间
 
     //获取结算单列表
     public static DaoQueryListResult getList(Connection conn, QueryParameter param) {
@@ -34,7 +31,7 @@ public class Settlement2Service {
     }
 
     //插入结算单
-    public static DaoUpdateResult insert(Connection conn, Settlement2 settlement2, byte type) {
+    public static DaoUpdateResult insert(Connection conn, Settlement2 settlement2, boolean needDetail) {
         //关闭自动提交
         ConnUtil.closeAutoCommit(conn);
 
@@ -45,7 +42,7 @@ public class Settlement2Service {
         settlement2.setPrice(price);
         result = Settlement2Dao.insert(conn,settlement2);
 
-        if(result.success&&type==1){
+        if(result.success && needDetail){
             long sid = (long) result.extra;//结算单id
             long cid = settlement2.getCid();//合作单位id
             long did = settlement2.getDid();//派遣方id
@@ -134,7 +131,6 @@ public class Settlement2Service {
                 log.setSid(id);
                 log.setType((byte) 1);
                 log.setOperator(operator);
-                log.setTime(time);
                 log.setContent(content);
                 //插入log信息
                 LogDao.insert(conn,log);
@@ -158,7 +154,6 @@ public class Settlement2Service {
             log.setSid(id);
             log.setType((byte) 1);
             log.setOperator(operator);
-            log.setTime(time);
             log.setContent(content);
             //插入log信息
             LogDao.insert(conn,log);
@@ -182,7 +177,6 @@ public class Settlement2Service {
                 log.setSid(id);
                 log.setType((byte) 1);
                 log.setOperator(operator);
-                log.setTime(time);
                 log.setContent(content);
                 //插入log信息
                 LogDao.insert(conn,log);
@@ -207,7 +201,6 @@ public class Settlement2Service {
                 log.setSid(id);
                 log.setType((byte) 1);
                 log.setOperator(operator);
-                log.setTime(time);
                 log.setContent(content);
                 //插入log信息
                 LogDao.insert(conn,log);
@@ -231,7 +224,6 @@ public class Settlement2Service {
                 log.setSid(id);
                 log.setType((byte) 1);
                 log.setOperator(operator);
-                log.setTime(time);
                 log.setContent(content);
                 //插入log信息
                 LogDao.insert(conn,log);

@@ -710,6 +710,20 @@ var InterfaceEmployee = function () {
         access(url,para,1,success,fail);
     };
     /**
+     *
+     * @param start 开始月份
+     * @param end   结束月份
+     * @param eids 员工集合
+     * @param sid 结算单id
+     * @param success
+     * @param fail
+     */
+    this.readBase = function (start,end,eids,sid,success,fail) {
+        var para = {op: "readBase",start:start,end:end,eids:eids,sid:sid};
+        access(url,para,1,success,fail);
+    };
+
+    /**
      * 获取个税扣除
      * @param id 员工id
      * @param success
@@ -797,16 +811,17 @@ var InterfaceSettlement = function () {
         var para = {op: "getList", param:JSON.stringify(param),category:category};
         access(url,para,1,success,fail);
     };
+
     /**
      * 添加结算单
      * @param settlement 结算单信息
      * @param category 0-普通结算单 1-小时工结算单 2-商业保险结算单
-     * @param type 0_不生成明细 1_自动生成明细
+     * @param needDetail 0_不生成明细 1_自动生成明细
      * @param success
      * @param fail
      */
-    this.insert = function (settlement,category,type,success,fail) {
-        var para = {op: "insert",settlement:JSON.stringify(settlement), category:category,type:type};
+    this.insert = function (settlement,category,needDetail,needCalculateSocial,success,fail) {
+        var para = {op: "insert",settlement:JSON.stringify(settlement), category:category,needDetail:needDetail,needCalculateSocial:needCalculateSocial};
         access(url,para,1,success,fail);
     };
 
@@ -929,19 +944,6 @@ var InterfaceSettlement = function () {
         access(url,para,1,success,fail);
     };
 
-    /**
-     *
-     * @param start 开始月份
-     * @param end   结束月份
-     * @param eids 员工集合
-     * @param sid 结算单id
-     * @param success
-     * @param fail
-     */
-    this.readBase = function (start,end,eids,sid,success,fail) {
-        var para = {op: "readBase",start:start,end:end,eids:eids,sid:sid};
-        access(url,para,1,success,fail);
-    };
     /**
      * 补缴
      * @param start 起始月份

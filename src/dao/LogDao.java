@@ -11,8 +11,8 @@ import java.sql.Connection;
 public class LogDao {
     //插入日志
     public static DaoUpdateResult insert(Connection conn, Log l){
-      String sql = "insert into log(sid,type,operator,time,content) values (?,?,?,?,?)";
-        Object []params = {l.getSid(),l.getType(),l.getOperator(),l.getTime(),l.getContent()};
+      String sql = "insert into log(sid,type,operator,time,content) values (?,?,?,now(),?)";
+        Object []params = {l.getSid(),l.getType(),l.getOperator(),l.getContent()};
         return DbUtil.insert(conn,sql,params);
     }
 

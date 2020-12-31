@@ -15,6 +15,14 @@ public class SettingDao {
         return DbUtil.get(conn,"ensureSetting",conditions,EnsureSetting.class);
     }
 
+    //获取个税扣除视图列表
+    public static DaoQueryListResult getList(Connection conn, QueryParameter param){
+        if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
+            param.addCondition("name","like",param.conditions.extra);
+        }
+        return DbUtil.getList(conn,"ensureSetting",param, EnsureSetting.class);
+    }
+
     //修改
     public static DaoUpdateResult update(Connection conn, EnsureSetting s) {
         String sql = "update ensureSetting set city=?,settingM=?,valM=?,medicare=?,settingS=?,vaLS=?,social=?,fundPer=?,fundBase=?,product=? where eid=? ";

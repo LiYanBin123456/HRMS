@@ -6,6 +6,7 @@ import bean.contract.ViewContractCooperation;
 import bean.employee.Deduct;
 import bean.employee.Employee;
 import bean.employee.EnsureSetting;
+import bean.employee.ViewDeduct;
 import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
 import bean.settlement.*;
@@ -44,7 +45,7 @@ public class Detail1Service {
         return Detail1Dao.getList(conn, param);
     }
 
-    public static DaoUpdateResult update(Connection conn, List<Detail1> details) {
+    public static DaoUpdateResult update(Connection conn, List<ViewDetail1> details) {
         return Detail1Dao.update(conn, details);
     }
 
@@ -81,17 +82,24 @@ public class Detail1Service {
         return result;
     }
 
-    //计算结算单明细并修改
+
+    /**
+     * 计算结算单明细并修改
+     * @param conn
+     * @param sid 结算单编号
+     * @param cid 合作客户编号
+     * @return
+     */
     public static DaoUpdateResult saveDetail(Connection conn, long sid, long cid) {
         DaoUpdateResult result = new DaoUpdateResult();
-        List<Detail1> detail1List = new ArrayList<>();//新建一个集合用于存放计算好后的明细
 
         //获取结算单
         Settlement1 settlement = (Settlement1) Settlement1Dao.get(conn, sid).data;
         Date month = settlement.getMonth();//该月份第一天
 
+        //获取工资定义
         Date month2 =getLastday_Month(month);//改为该月份最后一天
-        byte flag = settlement.getFlag();//判断是否计算社保
+        MapSalary mapSalary = (MapSalary) MapSalaryDao.selectByMonth(cid, conn, month2).data;
 
         //获取除了补缴、补差和自定义工资的结算单明细
         QueryParameter param = new QueryParameter();
@@ -100,22 +108,40 @@ public class Detail1Service {
         param.conditions.add("status", "!=",Detail1.STATUS_BALANCE);
         param.conditions.add("status", "!=",Detail1.STATUS_CUSTOM);
         DaoQueryListResult result1 = Detail1Dao.getList(conn, param);
-        List<Detail1> detail1s = (List<Detail1>) result1.rows;
+        List<ViewDetail1> details = (List<ViewDetail1>) result1.rows;
 
-        //用于暂时存放医保规则
-        HashMap<String, RuleMedicare> mapMedicare = new HashMap<>();
-        RuleMedicare medicare = new RuleMedicare();
+        //获取明细中员工的当月其它结算单中应发总额和个税预缴总额
+        String eids = "";
+        for(Detail d:details){
+            eids += (d.getEid()+",");
+        }
+        eids = eids.substring(0,eids.length()-1);
+        eids = "("+eids+")";
+        QueryParameter p1 = new QueryParameter();
+        p1.addCondition("month","=",month);
+        p1.addCondition("cid","=",cid);
+        p1.addCondition("type","=",settlement.getType());
+        p1.addCondition("eid","in",eids);
+        List<ViewDetailTotal> totals = (List<ViewDetailTotal>) Detail1Dao.getTotals(conn, p1).rows;
 
-        //用于暂时存放社保规则
-        HashMap<String, RuleSocial> mapSocial = new HashMap<>();
-        RuleSocial social = new RuleSocial();
+        //获取明细中员工的个税专项扣除
+        QueryParameter p2 = new QueryParameter();
+        p2.addCondition("eid","in",eids);
+        List<ViewDeduct> deducts = (List<ViewDeduct>) DeductDao.getList(conn, p2).rows;
+
+
 
         //根据月份获取自定义工资项
-        MapSalary mapSalary = (MapSalary) MapSalaryDao.selectByMonth(cid, conn, month2).data;
-        if ((flag & ((byte) 1)) == 0) {//不需要计算社保，也就是补发工资
-            for (Detail1 d3 : detail1s) {
+        if (!settlement.isNeedCalculateSocial()) {//不需要计算社保，也就是补发工资
+            String res = Calculate.calculateDetail1(details, mapSalary,totals,deducts);
+            if(res != null){
+                result.success = false;
+                result.msg = res;
+                return result;
+            }
+            /*for (Detail1 d3 : details) {
                 //获取该员工在该公司当月其他结算单明细个税和应发总和
-                QueryConditions condition = new QueryConditions();
+                *//*QueryConditions condition = new QueryConditions();
                 condition.add("month","=",month);
                 condition.add("cid","=",cid);
                 condition.add("type","=",settlement.getType());
@@ -127,79 +153,62 @@ public class Detail1Service {
                 }else {//存在则需要累加
                     d3.setTax(data.getTaxs());
                     d3.setPayable(data.getPayables());
-                }
-
-                //获取员工
-                QueryConditions conditions = new QueryConditions();
-                conditions.add("id", "=", d3.getEid());
-                Employee employee = (Employee) EmployeeDao.get(conn, conditions).data;
+                }*//*
 
                 //获取员工个税专项扣除
-                Deduct deduct = (Deduct) DeductDao.get(conn, d3.getEid()).data;
+                *//*Deduct deduct = (Deduct) DeductDao.get(conn, d3.getEid()).data;
                 if (deduct == null) {
+                    //获取员工
+                    QueryConditions conditions = new QueryConditions();
+                    conditions.add("id", "=", d3.getEid());
+                    Employee employee = (Employee) EmployeeDao.get(conn, conditions).data;
                     result.msg = "请完善" + employee.getName() + "的个税专项扣除";
                     return result;
-                }
+                }*//*
                 d3 = Calculate.calculateDetail1(d3, mapSalary, deduct);
                 detail1List.add(d3);
-            }
+            }*/
         } else {
-            //获取合作客户
+            //用于暂时存放医保规则和社保规则
+            HashMap<String, RuleMedicare> medicares = new HashMap<>();
+            HashMap<String, RuleSocial> socials = new HashMap<>();
+
+            //获取明细中员工的社保设置
             QueryConditions conditions1 = new QueryConditions();
             conditions1.add("id", "=", settlement.getCid());
             Cooperation coop = (Cooperation) CooperationDao.get(conn, conditions1).data;
-            float injuryPer = coop.getPer1();//单位工伤比例
-
-            for (Detail1 d : detail1s) {
-                //获取员工
-                QueryConditions conditions = new QueryConditions();
-                conditions.add("id", "=", d.getEid());
-                Employee employee = (Employee) EmployeeDao.get(conn, conditions).data;
-
-                //获取员工社保设置
-                EnsureSetting setting = (EnsureSetting) SettingDao.get(conn, d.getEid()).data;
-                if(settlement.getType()!=2) {//代发工资不需要检验社保
-                    if (setting == null) {
-                        result.msg = "请完善" + employee.getName() + "的社保设置";
+            float injuryPer = coop.getPer1();
+            List<EnsureSetting> settings = (List<EnsureSetting>) SettingDao.getList(conn, p2).rows;
+            for(EnsureSetting s:settings){
+                s.setInjuryPer(injuryPer);
+                String city = s.getCity();//员工所处地市
+                //获取该地市的医保规则
+                RuleMedicare medicare = medicares.get(city);
+                if (medicare == null) {
+                    medicare = (RuleMedicare) RuleMedicareDao.get(conn, city, month2).data;
+                    if(medicare == null){
+                        result.success = false;
+                        result.msg = String.format("请确认%s的医保规则是否存在",city);
                         return result;
                     }
-                    String city = setting.getCity();//员工所处地市
-
-                    //获取该地市的医保规则
-                    medicare = mapMedicare.get(city);
-                    if (medicare == null) {
-                        medicare = (RuleMedicare) RuleMedicareDao.get(conn, city, month2).data;
-                        mapMedicare.put(city, medicare);
-                    }
-                    //获取该地市的社保规则
-                    social = mapSocial.get(city);
-                    if (social == null) {
-                        social = (RuleSocial) RuleSocialDao.get(conn, city, month2).data;
-                        mapSocial.put(city, social);
-                    }
-
-                    //仍然获取不到该地区的医保社保规则
-                    if (medicare == null || social == null) {
-                        result.msg = "请确认系统中该员工" + employee.getName() + "的社保所在地是否存在";
-                        return result;
-                    }
+                    medicares.put(city, medicare);
                 }
-
-                //获取员工个税专项扣除
-                Deduct deduct = (Deduct) DeductDao.get(conn, d.getEid()).data;
-
-                if(settlement.getType()!=3) {//代发社保不需要计算个税所有不需要检验个税专项
-                    if (deduct == null) {
-                        result.msg = "请完善" + employee.getName() + "的个税专项扣除";
+                RuleSocial social = socials.get(city);
+                if (social == null) {
+                    social = (RuleSocial) RuleSocialDao.get(conn, city, month2).data;
+                    if(social == null){
+                        result.success = false;
+                        result.msg = String.format("请确认%s的社保规则是否存在",city);
                         return result;
                     }
+                    socials.put(city, social);
                 }
-                //计算结算单明细
-                Detail1 detail1 = Calculate.calculateDetail1(settlement, d, medicare, social, setting, mapSalary, deduct, injuryPer);
-                detail1List.add(detail1);
             }
+
+            Calculate.calculateDetail1(settlement, details, medicares, socials, settings, mapSalary, deducts);
+
         }
-        return Detail1Dao.update(conn, detail1List);
+        return Detail1Dao.update(conn, details);
     }
 
 }

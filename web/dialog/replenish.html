@@ -201,7 +201,7 @@
                     return;
                 }
                 var eids = getKeyArray(member,"id");
-                iSettlement.readBase(start,end,eids,sid,function (result) {
+                iEmployee.readBase(start,end,eids,sid,function (result) {
                     var bases = result.data;
                     for (var i in bases){
                         var b = bases[i];
@@ -236,7 +236,8 @@
                 }
                 var  employees = new Array(member.length)
                 for (var i in member){
-                    employees[i] = {"eid":member[i].id,"baseM":member[i].baseM,"baseS":member[i].baseS};
+                    var e = member[i];
+                    employees[i] = {eid:e.id,cardId:e.cardId,name:e.name,baseM:e.baseM,baseS:e.baseS};
                 }
                 iSettlement.backup(start, end,sid,JSON.stringify(employees),function () {
                     layer.msg("补缴成功");

@@ -289,7 +289,7 @@
 
             //添加结算单
             function insertSettlement(settlement) {
-                iSettlement.insert(settlement,0,settlement.mode,function () {
+                iSettlement.insert(settlement,0,settlement.mode,settlement.calc,function () {
                     getSettlements();
                     layer.msg("创建结算单，cid:"+settlement.cid+",month:"+format_date(settlement.month));
                 });

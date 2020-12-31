@@ -2,6 +2,7 @@ package bean.settlement;
 
 import java.sql.Date;
 
+//特殊结算单
 public class Settlement0 {
     private long id;
     private long did;

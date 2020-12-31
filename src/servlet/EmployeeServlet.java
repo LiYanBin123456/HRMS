@@ -112,6 +112,9 @@ public class EmployeeServlet extends HttpServlet {
             case "deleteDeduct"://删除个税设置
                 result = deleteDeduct(conn,request);
                 break;
+            case "readBase"://读取基数
+                result = readBase(conn, request);
+                break;
         }
         ConnUtil.closeConnection(conn);
 
@@ -153,7 +156,6 @@ public class EmployeeServlet extends HttpServlet {
     //插入个税扣除
     private String insertDeduct(Connection conn, HttpServletRequest request) {
         Deduct deduct = JSONObject.parseObject(request.getParameter("deduct"), Deduct.class);
-        System.out.println("前台传过来的数据"+deduct);
         DaoUpdateResult result = DeductService.insert(conn, deduct);
         return  JSONObject.toJSONString(result);
     }
@@ -334,6 +336,16 @@ public class EmployeeServlet extends HttpServlet {
     }
 
 
+
+    //读取社保医保基数
+    private String readBase(Connection conn, HttpServletRequest request) {
+        long sid = Long.parseLong(request.getParameter("sid"));//结算单id
+        String[] eids = request.getParameterValues("eids[]");
+        String start = request.getParameter("start");
+        String end = request.getParameter("end");
+        String result = EmployeeService.readBase(start,end,eids,sid,conn);
+        return result;
+    }
 }
 
 

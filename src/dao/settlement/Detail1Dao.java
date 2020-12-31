@@ -15,7 +15,7 @@ public class Detail1Dao {
         return DbUtil.getList(conn,"view_detail1",param, ViewDetail1.class);
     }
 
-    public static DaoUpdateResult update(Connection conn, List<Detail1> ds){
+    public static DaoUpdateResult update(Connection conn, List<ViewDetail1> ds){
         String sql = "update detail1 set base=?,pension1=?,medicare1=?,unemployment1=?,disease1=?,fund1=?,pension2=?,medicare2=?,unemployment2=?,injury=?,disease2=?,birth=?,fund2=?,tax=?,free=?,extra1=?,extra2=?,payable=?,paid=?,f1=?,f2=?,f3=?,f4=?,f5=?,f6=?,f7=?,f8=?,f9=?,f10=?,f11=?,f12=?,f13=?,f14=?,f15=?,f16=?,f17=?,f18=?,f19=?,f20=?,comments1=?,comments2=? where id = ?";
         Object [][]params = new Object[ds.size()][];
         for (int i = 0; i < ds.size(); i++) {
@@ -57,6 +57,11 @@ public class Detail1Dao {
 
     public static DaoQueryResult getTotal(Connection conn,QueryConditions conditions){
          return DbUtil.get(conn,"view_detail1_total",conditions, ViewDetailTotal.class);
+    }
+
+
+    public static DaoQueryListResult getTotals(Connection conn,QueryParameter parameter){
+         return DbUtil.getList(conn,"view_detail1_total",parameter, ViewDetailTotal.class);
     }
 
 }
