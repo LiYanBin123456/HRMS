@@ -63,7 +63,9 @@
             var sid = $.query.get("id");//结算单id
             var cid = $.query.get("cid");//合作单位id
             var type = $.query.get("type");//结算单类型 0 派遣 1外包 2代缴工资 3代缴社保
+            var flag = $.query.get("flag");//判断结算单是否需要代缴社保，不需要就是补发的结算单，补发的结算单只能结算一次
             var month = format_month($.query.get("month"))+"-01";//结算单月份
+            var time = 0;//计时器，记录计算过多少次明细
             $(function () {
                 loadLayuiModule();
             });
@@ -163,12 +165,19 @@
 
             //保存结算单明细并且计算
             function  saveDetail() {
+                if (flag==0 && time!=0){//补发结算单且已经结算过一次，就不能再次结算
+                    var msg = "再次结算失败，该结算但只能结算一次";
+                    var title = "异常";
+                    layer.confirm(msg, {icon: 3, title:title});
+                    return false;
+                }
                 var msg = "保存后结算单将被设置为[保存]状态，同时会自动计算社保、医保和个税等，确认保存吗？";
                 var title = "保存结算单明细";
                 layer.confirm(msg, {icon: 3, title:title}, function(index){
                     iSettlement.saveDetail(sid,cid,0,function () {
                         layer.close(index);
                         layer.msg("保存成功");
+                        time++;
                         getDetails();
                     })
                 });

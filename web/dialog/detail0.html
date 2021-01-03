@@ -52,7 +52,7 @@
 
             var sid = $.query.get("id");//结算单id
             var cid = $.query.get("cid");//合作单位id
-
+            var type = $.query.get("type");//结算单类型 0 派遣 1 外包
             $(function () {
                 loadLayuiModule();
             });
@@ -149,7 +149,7 @@
 
             //核对导入的数据
             function showImportDlg() {
-                var content = "importDetails3.html";
+                var content = "importDetails0.html";
                 layer.open({
                     title:"核对明细",
                     type: 2,
@@ -157,12 +157,11 @@
                     content: content,
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
-                        var detail3s = window["layui-layer-iframe" + index].callbackData();
-                        iSettlement.importDetails(sid,detail3s,2,function () {
-                            layer.close(index);
-                            layer.msg("导入成功");
-                            getDetails();
-                        })
+                        var details = window["layui-layer-iframe" + index].callbackData();
+                        iSettlement0.importDetails(sid,details,function () {
+                            layer.msg("添加成功");
+                            layer.close(index)
+                        });
                     },btn2: function(index, layero){
                         layer.close(index);
                     }
@@ -223,19 +222,12 @@
 
             //下载
             function download() {
-                iFile.exist(6,0,function (result) {
-                    if(!result.exist){
-                        layer.msg("附件不存在或已删除");
-                        return;
-                    }
-
-                    var url = "/hrms/verify/file?op=download&category=6";
+                    var url = "/hrms/verify/file?op=downloadDetail0&type="+type+"&cid="+cid;
                     var form = $('<form method="POST"></form>');
                     form.attr('action', url);
                     form.appendTo($('body'));
                     form.submit();
                     form.remove();
-                })
             }
 
             //保存

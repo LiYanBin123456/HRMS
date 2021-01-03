@@ -74,8 +74,6 @@ public class Detail1Service {
                 v.setStatus(status);
             }
 
-
-
             ds.add(v);
         }
         result = Detail1Dao.importDetails(conn, ds);
@@ -111,63 +109,32 @@ public class Detail1Service {
         List<ViewDetail1> details = (List<ViewDetail1>) result1.rows;
 
         //获取明细中员工的当月其它结算单中应发总额和个税预缴总额
-        String eids = "";
+        String eids="";
         for(Detail d:details){
             eids += (d.getEid()+",");
         }
         eids = eids.substring(0,eids.length()-1);
-        eids = "("+eids+")";
-        QueryParameter p1 = new QueryParameter();
-        p1.addCondition("month","=",month);
-        p1.addCondition("cid","=",cid);
-        p1.addCondition("type","=",settlement.getType());
-        p1.addCondition("eid","in",eids);
-        List<ViewDetailTotal> totals = (List<ViewDetailTotal>) Detail1Dao.getTotals(conn, p1).rows;
 
         //获取明细中员工的个税专项扣除
         QueryParameter p2 = new QueryParameter();
         p2.addCondition("eid","in",eids);
         List<ViewDeduct> deducts = (List<ViewDeduct>) DeductDao.getList(conn, p2).rows;
 
-
-
         //根据月份获取自定义工资项
         if (!settlement.isNeedCalculateSocial()) {//不需要计算社保，也就是补发工资
+            QueryParameter p1 = new QueryParameter();
+            p1.addCondition("month","=",month);
+            p1.addCondition("cid","=",cid);
+            p1.addCondition("type","=",settlement.getType());
+            p1.addCondition("eid","in",eids);
+            List<ViewDetailTotal> totals = (List<ViewDetailTotal>) Detail1Dao.getTotals(conn, p1).rows;
+
             String res = Calculate.calculateDetail1(details, mapSalary,totals,deducts);
             if(res != null){
                 result.success = false;
                 result.msg = res;
                 return result;
             }
-            /*for (Detail1 d3 : details) {
-                //获取该员工在该公司当月其他结算单明细个税和应发总和
-                *//*QueryConditions condition = new QueryConditions();
-                condition.add("month","=",month);
-                condition.add("cid","=",cid);
-                condition.add("type","=",settlement.getType());
-                condition.add("eid","=",d3.getEid());
-                ViewDetailTotal data = (ViewDetailTotal) Detail1Dao.getTotal(conn, condition).data;
-                if(data==null){//如果不存在
-                    d3.setTax(0);
-                    d3.setPayable(0);
-                }else {//存在则需要累加
-                    d3.setTax(data.getTaxs());
-                    d3.setPayable(data.getPayables());
-                }*//*
-
-                //获取员工个税专项扣除
-                *//*Deduct deduct = (Deduct) DeductDao.get(conn, d3.getEid()).data;
-                if (deduct == null) {
-                    //获取员工
-                    QueryConditions conditions = new QueryConditions();
-                    conditions.add("id", "=", d3.getEid());
-                    Employee employee = (Employee) EmployeeDao.get(conn, conditions).data;
-                    result.msg = "请完善" + employee.getName() + "的个税专项扣除";
-                    return result;
-                }*//*
-                d3 = Calculate.calculateDetail1(d3, mapSalary, deduct);
-                detail1List.add(d3);
-            }*/
         } else {
             //用于暂时存放医保规则和社保规则
             HashMap<String, RuleMedicare> medicares = new HashMap<>();

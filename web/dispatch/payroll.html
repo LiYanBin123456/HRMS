@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <title>确认工资发放</title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
@@ -146,6 +146,11 @@
                         showBankDlg(data);
                         break;
                     case "confirm":
+                        if (data.status == 5){//已经发放的结算单
+                            var msg = "该结算单已发放过，请勿重复发放";
+                            layer.confirm(msg, {icon: 3, title:'异常'});
+                            break;
+                        }
                         confirm(data);
                         break;
                 }

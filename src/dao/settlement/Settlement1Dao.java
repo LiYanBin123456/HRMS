@@ -78,7 +78,7 @@ public class Settlement1Dao {
      * @return
      */
     public static DaoUpdateResult deduct(Connection conn,long id) {
-        String sql = "update settlement1 set status=5 where id = ?";
+        String sql = "update settlement1 set status=4 where id = ?";
         Object []params = {id};
         return DbUtil.update(conn,sql,params);
     }
@@ -90,7 +90,7 @@ public class Settlement1Dao {
      * @return
      */
     public static DaoUpdateResult confirm(Connection conn,long id) {
-        String sql = "update settlement1 set status=6 where id = ?";
+        String sql = "update settlement1 set status=5 where id = ?";
         Object []params = {id};
         return DbUtil.update(conn,sql,params);
     }

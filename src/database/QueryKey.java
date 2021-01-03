@@ -37,10 +37,20 @@ public class QueryKey {
 
     @Override
     public String toString() {
-        if (o.equals("like")) {
-            v = "%" + v + "%";
+        /*switch (o){
+            case "like":
+                return String.format("%s %s '%%?%%'", k, o);
+            case "in":
+                return String.format("%s %s (?)", k, o);
+            default:
+                return String.format("%s %s ?", k, o);
+        }*/
+        if(o.equals("in")){
+            return String.format("%s %s (?)", k, o);
         }
-
+        if(o.equals("like")){
+            v = "%"+v+"%";
+        }
         return String.format("%s %s ?", k, o);
     }
 }

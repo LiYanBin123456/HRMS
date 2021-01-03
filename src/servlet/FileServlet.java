@@ -89,6 +89,10 @@ public class FileServlet extends HttpServlet {
             case "exist"://判断文件是否存在
                 result = exist(request);
                 break;
+            case "downloadDetail0"://下载结算单明细模板
+                downloadDetail0(conn,request,response);
+                ConnUtil.closeConnection(conn);
+                return;
             case "downloadDetail1"://下载结算单明细模板
                 downloadDetail1(conn,request,response);
                 ConnUtil.closeConnection(conn);
@@ -138,6 +142,8 @@ public class FileServlet extends HttpServlet {
         out.flush();
         out.close();
     }
+
+
 
     //导出个税申报名单表
     private void exportTaxEmployee(Connection conn, HttpServletRequest request, HttpServletResponse response)  {
@@ -400,6 +406,65 @@ public class FileServlet extends HttpServlet {
         os.flush();
         os.close();
         bis.close();
+    }
+
+    //下载特殊结算单模板
+    private void downloadDetail0(Connection conn, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+        HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("account");
+        long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
+        byte type = Byte.parseByte(request.getParameter("type"));
+
+
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("cid","=",cid);
+        parameter.addCondition("did","=",user.getRid());
+        parameter.addCondition("type","=",1);
+        parameter.addCondition("category","=",type+1);
+        parameter.addCondition("status","=",0);
+        List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
+
+        String cname ="";
+        if(employeeList.size()>0){
+            cname=employeeList.get(0).getCname();
+        }
+
+        //文件名
+        String filename=cname+"特殊结算单明细模板";
+        filename = new String(filename.getBytes(),"iso-8859-1");
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.addHeader("Content-Disposition", "attachment;filename=\""
+                + filename + ".xls\"");
+
+        String fileName = "detail0.xls";
+        String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
+        File file = new File(fullFileName);
+        Workbook book;
+        try {
+            //获取模板
+            book = Workbook.getWorkbook(file);
+            // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
+            WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
+            WritableSheet sheet = workbook.getSheet("信息表");//获取第一个sheet
+
+            int index = 1;
+            for(Employee  e:employeeList){
+                sheet.addCell(new Label(0, index, e.getName()));//员工姓名
+                sheet.addCell(new Label(1, index, e.getCardId()));//身份证号
+                index++;
+            }
+            workbook.write();
+            workbook.close();
+            book.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (BiffException e) {
+            e.printStackTrace();
+        } catch (RowsExceededException e) {
+            e.printStackTrace();
+        } catch (WriteException e) {
+            e.printStackTrace();
+        }
     }
 
     //下载普通结算单明细模板

@@ -80,6 +80,7 @@ var columns_notice = [[
 
 //账号管理字段集合
 var columns_accounts  = [[
+    {title: '序号',width:80,type:'numbers'},
     {field:'nickname', title: '姓名',width:200},
     {field:'username', title: '登录账号',width:200},
     {fixed: 'right', title: '操作', toolbar: '#bar_accounts'}
@@ -87,6 +88,7 @@ var columns_accounts  = [[
 
 //合作单位合作客户管理字段集合
 var columns_cooperation_partner = [[
+    {title: '序号',width:80,type:'numbers'},
     {field:'id', title: '编号',width:100},
     {field:'name', title: '客户名称',width:200},
     {field:'category', title: '客户性质',width:100,templet:function (d) { return array_value2text(categorys_cooperation,d.category) }},
@@ -97,6 +99,7 @@ var columns_cooperation_partner = [[
 
 //合作单位潜在客户管理字段集合
 var columns_cooperation_potential = [[
+    {title: '序号',width:80,type:'numbers'},
     {field:'id', title: '编号',width:100},
     {field:'name', title: '客户名称',width:200},
     {field:'category', title: '客户性质',width:100,templet:function (d) { return array_value2text(categorys_cooperation,d.category) }},
@@ -107,6 +110,7 @@ var columns_cooperation_potential = [[
 
 //合作单位流失客户管理字段集合
 var columns_cooperation_loss = [[
+    {title: '序号',width:80,type:'numbers'},
     {field:'id', title: '编号',width:100},
     {field:'name', title: '客户名称',width:200},
     {field:'category', title: '客户性质',width:100,templet:function (d) { return array_value2text(categorys_cooperation,d.category) }},
@@ -117,6 +121,7 @@ var columns_cooperation_loss = [[
 
 //供应商管理字段集合
 var columns_supplier_partner = [[
+    {title: '序号',width:80,type:'numbers'},
     {field:'id', title: '编号',width:100},
     {field:'name', title: '名称'},
     {field:'business', title: '业务类别',width:90,templet:function (d) { return array_value2text(business_supplier,d.business) }},
@@ -127,6 +132,7 @@ var columns_supplier_partner = [[
 
 //供应商管理字段集合
 var columns_supplier_loss = [[
+    {title: '序号',width:80,type:'numbers'},
     {field:'name', title: '名称'},
     {field:'business', title: '业务类别',width:90,templet:function (d) { return array_value2text(business_supplier,d.business) }},
     {field:'contact', title: '联系人',width:100},
@@ -136,6 +142,7 @@ var columns_supplier_loss = [[
 
 //派遣方客户合同字段集合
 var columns_contract_dispatch = [[
+    {title: '序号',width:80,type:'numbers'},
     {field:'name', title: '合作客户'},
     {field:'start', title: '生效时间',width:130,templet:function (d) {return format_date(d.start)}},
     {field:'end', title: '到期时间',width:130,templet:function (d) {return format_date(d.end)}},
@@ -145,6 +152,7 @@ var columns_contract_dispatch = [[
 
 //合作单位客户合同字段集合
 var columns_contract_cooperation = [[
+    {title: '序号',width:80,type:'numbers'},
     {field:'name', title: '合作客户'},
     {field:'start', title: '生效时间',width:130,templet:function (d) {return format_date(d.start)}},
     {field:'end', title: '到期时间',width:130,templet:function (d) {return format_date(d.end)}},
@@ -164,6 +172,7 @@ var columns_contract_employee  = [[
 
 //内部员工管理字段集合
 var columns_employee_internal = [[
+    {title: '序号',width:80,type:'numbers'},
     {field:'cardId', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
     {field:'degree', title: '学历',width:80,templet:function (d) { return array_value2text(degrees_employee,d.degree) }},
@@ -175,6 +184,7 @@ var columns_employee_internal = [[
 //外派员工管理字段集合
 var columns_employee_expatriate = [[
     {fixed: 'left', type: 'checkbox'},
+    {title: '序号',width:80,type:'numbers'},
     {field:'cardId', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
     {field:'degree', title: '学历',width:100,templet:function (d) { return array_value2text(degrees_employee,d.degree) }},
@@ -187,6 +197,7 @@ var columns_employee_expatriate = [[
 //人才库字段集合
 var columns_employee_spare = [[
     {field:'cardId', title: '身份证号',width:200},
+    {title: '序号',width:80,type:'numbers'},
     {field:'name', title: '姓名',width:200},
     {field:'degree', title: '学历',width:230,templet:function (d) { return array_value2text(degrees_employee,d.degree) }},
     {field:'phone', title: '联系电话'},
@@ -918,3 +929,5 @@ function array_value2text(arr,value){
     }
     return "";
 }
+
+
