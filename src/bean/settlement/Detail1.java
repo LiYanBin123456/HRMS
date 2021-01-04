@@ -4,7 +4,6 @@ import java.sql.Date;
 
 //结算单明细
 public class Detail1 extends Detail {
-
     private float base;//基础工资
     private float pension1;//个人养老
     private float medicare1;//个人医疗
@@ -636,5 +635,42 @@ public class Detail1 extends Detail {
                 ", f20=" + f20 +
                 ", status=" + status +
                 '}';
+    }
+
+    /**
+     * 计算医保、社保差额
+     * @param d1
+     * @param d2
+     * @return
+     */
+    public static Detail1 subtract(Detail1 d1,Detail1 d2){
+        Detail1 d = new Detail1();
+        d.setMedicare2(d1.getMedicare1() - d2.getMedicare1());
+        d.setMedicare2(d1.getMedicare2() - d2.getMedicare2());
+        d.setBirth(d1.getBirth() - d2.getBirth());
+        d.setDisease1(d1.getDisease1() - d2.getDisease1());
+        d.setDisease2(d1.getDisease2() - d2.getDisease2());
+        d.setPension1(d1.getPension1() - d2.getPension1());
+        d.setPension2(d1.getPension2() - d2.getPension2());
+        d.setUnemployment1(d1.getUnemployment1() - d2.getUnemployment1());
+        d.setUnemployment2(d1.getUnemployment2() - d2.getUnemployment2());
+        d.setInjury(d1.getInjury() - d2.getInjury());
+        return d;
+    }
+
+    /**
+     * 获取社保个人部分
+     * @return
+     */
+    public float getTotalPerson(){
+        return pension1+disease1+unemployment1+medicare1;
+    }
+
+    /**
+     * 获取社保单位部分
+     * @return
+     */
+    public float getTotalDepartment(){
+        return pension2+disease2+unemployment2+medicare2+injury;
     }
 }
