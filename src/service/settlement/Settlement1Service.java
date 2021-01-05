@@ -28,7 +28,7 @@ import database.ConnUtil;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.QueryParameter;
-import utills.Calculate;
+import utills.Salary.Salary;
 import utills.CollectionUtil;
 
 import java.sql.Connection;
@@ -376,7 +376,7 @@ public class Settlement1Service {
         List<ViewDetail1> viewDetail1s = (List<ViewDetail1>) Detail1Dao.getList(conn,parm).rows;
 
         //计算结算单
-        Calculate.calculateSettlement1(settlement,viewContractCooperation,viewDetail1s);
+        Salary.calculateSettlement1(settlement,viewContractCooperation,viewDetail1s);
 
         return Settlement1Dao.update(conn,settlement);
     }
@@ -493,8 +493,8 @@ public class Settlement1Service {
                 d.setComments1(month+"月份个人社保补缴");
                 d.setComments2(month+"月份单位社保补缴");
 
-                Calculate.calculateMedicare(d,setting,medicare);//根据员工设置计算医保
-                Calculate.calculateSocial(d,setting,social);//根据员工设置计算社保
+                Salary.calculateMedicare(d,setting,medicare);//根据员工设置计算医保
+                Salary.calculateSocial(d,setting,social);//根据员工设置计算社保
 
                 detail_append.add(d);
 
@@ -623,8 +623,8 @@ public class Settlement1Service {
                     }
                     RuleMedicare medicare = medicares.get(setting.getCity());
                     RuleSocial social = socials.get(setting.getCity());
-                    Calculate.calculateMedicare(detail2, setting, medicare);
-                    Calculate.calculateSocial(detail2, setting, social);//计算社保相关
+                    Salary.calculateMedicare(detail2, setting, medicare);
+                    Salary.calculateSocial(detail2, setting, social);//计算社保相关
 
                     Detail1 d = Detail1.subtract(detail2,detail1);
                     d.setEid(eid);

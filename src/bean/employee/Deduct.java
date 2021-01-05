@@ -120,8 +120,12 @@ public class Deduct {
         this.deduct6 = deduct6;
     }
 
+    /**
+     * 计算历史累计应税额（累计收入额（D）– 个税累计专项扣除（E）– 累计减除费用（F）
+     * @return
+     */
     public float total(){
-        return deduct+deduct1+deduct2+deduct3+deduct4+deduct5+deduct6;
+        return income-(deduct+deduct1+deduct2+deduct3+deduct4+deduct5+deduct6+free);
     }
     @Override
     public String toString() {

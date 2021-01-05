@@ -2,8 +2,6 @@ package service.settlement;
 
 import bean.client.Cooperation;
 import bean.client.MapSalary;
-import bean.contract.ViewContractCooperation;
-import bean.employee.Deduct;
 import bean.employee.Employee;
 import bean.employee.EnsureSetting;
 import bean.employee.ViewDeduct;
@@ -12,29 +10,24 @@ import bean.rule.RuleSocial;
 import bean.settlement.*;
 import dao.client.CooperationDao;
 import dao.client.MapSalaryDao;
-import dao.contract.ContractDao;
 import dao.employee.DeductDao;
 import dao.employee.EmployeeDao;
 import dao.employee.SettingDao;
 import dao.rule.RuleMedicareDao;
 import dao.rule.RuleSocialDao;
 import dao.settlement.Detail1Dao;
-import dao.settlement.Detail2Dao;
 import dao.settlement.Settlement1Dao;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.QueryConditions;
 import database.QueryParameter;
-import utills.Calculate;
+import utills.Salary.Salary;
 
-import javax.print.attribute.standard.Chromaticity;
 import java.sql.Connection;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.zip.DeflaterInputStream;
 
 import static utills.IDCardUtil.getLastday_Month;
 
@@ -129,7 +122,7 @@ public class Detail1Service {
             p1.addCondition("eid","in",eids);
             List<ViewDetailTotal> totals = (List<ViewDetailTotal>) Detail1Dao.getTotals(conn, p1).rows;
 
-            String res = Calculate.calculateDetail1(details, mapSalary,totals,deducts);
+            String res = Salary.calculateDetail1(details, mapSalary,totals,deducts);
             if(res != null){
                 result.success = false;
                 result.msg = res;
@@ -172,7 +165,7 @@ public class Detail1Service {
                 }
             }
 
-            Calculate.calculateDetail1(settlement, details, medicares, socials, settings, mapSalary, deducts);
+            Salary.calculateDetail1(settlement, details, medicares, socials, settings, mapSalary, deducts);
 
         }
         return Detail1Dao.update(conn, details);

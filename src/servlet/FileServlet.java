@@ -7,10 +7,8 @@ import bean.client.MapSalary;
 import bean.contract.Serve;
 import bean.contract.ViewContractCooperation;
 import bean.employee.Employee;
-import bean.employee.EnsureSetting;
 import bean.employee.ViewDeduct;
 import bean.employee.ViewEmployee;
-import bean.insurance.ViewInsurance;
 import bean.settlement.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -21,7 +19,6 @@ import dao.contract.ServeDao;
 import dao.employee.EmployeeDao;
 
 
-import dao.employee.SettingDao;
 import dao.settlement.*;
 import database.*;
 import jxl.Workbook;
@@ -32,7 +29,7 @@ import jxl.write.biff.RowsExceededException;
 import org.apache.commons.io.IOUtils;
 import service.employee.DeductService;
 import service.fileService.FileService;
-import utills.Calculate;
+import utills.Salary.Salary;
 import utills.XlsUtil;
 import utills.IDCardUtil;
 
@@ -52,7 +49,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.List;
 
-import static utills.Calculate.calculateManageAndTax2;
+import static utills.Salary.Salary.calculateManageAndTax2;
 import static utills.IDCardUtil.getLastday_Month;
 
 @WebServlet(name = "FileServlet",urlPatterns = "/verify/file")
@@ -1006,7 +1003,7 @@ public class FileServlet extends HttpServlet {
                     sheet1.addCell(new jxl.write.Number(c2+8, index, sum));
                     sheet1.addCell(new jxl.write.Number(c2+9, index, v.getFree()));
                     //计算管理费和税费
-                    HashMap<String,Float> map2 = Calculate.calculateManageAndTax2(type,category,invoice,per,val,manage,tax2,v,salary);
+                    HashMap<String,Float> map2 = Salary.calculateManageAndTax2(type,category,invoice,per,val,manage,tax2,v,salary);
                     manage =  map2.get("manage");
                     tax2 = map2.get("tax2");
                     //管理费

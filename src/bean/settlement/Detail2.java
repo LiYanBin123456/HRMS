@@ -133,6 +133,10 @@ public class Detail2 extends Detail {
         this.paid = paid;
     }
 
+    /**
+     * 小时工本期收入
+     * @return
+     */
     public float total(){
         return hours*price-insurance-utilities-accommodation-food+other1+other2;
     }

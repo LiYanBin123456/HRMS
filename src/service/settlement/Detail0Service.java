@@ -1,33 +1,18 @@
 package service.settlement;
 
-import bean.client.Cooperation;
-import bean.client.MapSalary;
-import bean.employee.Deduct;
 import bean.employee.Employee;
-import bean.employee.EnsureSetting;
-import bean.rule.RuleMedicare;
-import bean.rule.RuleSocial;
 import bean.settlement.*;
-import dao.client.CooperationDao;
-import dao.client.MapSalaryDao;
-import dao.employee.DeductDao;
 import dao.employee.EmployeeDao;
-import dao.employee.SettingDao;
-import dao.rule.RuleMedicareDao;
-import dao.rule.RuleSocialDao;
 import dao.settlement.Detail0Dao;
-import dao.settlement.Detail1Dao;
-import dao.settlement.Settlement1Dao;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.QueryConditions;
 import database.QueryParameter;
-import utills.Calculate;
+import utills.Salary.Salary;
+import utills.Salary.Tax;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class Detail0Service {
@@ -72,9 +57,9 @@ public class Detail0Service {
         List<Detail0> detailList  = new ArrayList<>();//新建一个集合用于存放计算好后的明细
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid","=",sid);
-        List<ViewDetail0> vs = (List<ViewDetail0>) Detail0Dao.getList(conn,parameter).rows;
-        for(ViewDetail0 d:vs){
-            float tax = (float) Calculate.calculateTax(d.getAmount()/12);
+        List<ViewDetail0> details = (List<ViewDetail0>) Detail0Dao.getList(conn,parameter).rows;
+        for(ViewDetail0 d:details){
+            float tax = (float) Tax.tax2(d.getAmount()/12);
             float paid = d.getAmount()-tax;
             d.setTax(tax);
             d.setPaid(paid);

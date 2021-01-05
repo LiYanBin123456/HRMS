@@ -7,12 +7,11 @@ import bean.settlement.ViewDetail2;
 import dao.employee.DeductDao;
 import dao.employee.EmployeeDao;
 import dao.settlement.Detail2Dao;
-import dao.settlement.Detail3Dao;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.QueryConditions;
 import database.QueryParameter;
-import utills.Calculate;
+import utills.Salary.Salary;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -62,10 +61,9 @@ public class Detail2Service {
     public static DaoUpdateResult saveDetail(Connection conn, long sid) {
         QueryParameter param = new QueryParameter();
         param.addCondition("sid","=",sid);
-        List<Detail2> detailList = (List<Detail2>) Detail2Dao.getList(conn,param).rows;
-        List<Detail2> details = new ArrayList<>();
+        List<Detail2> details = (List<Detail2>) Detail2Dao.getList(conn,param).rows;
         DaoUpdateResult result = new DaoUpdateResult();
-        for(Detail2 detail:detailList){
+        for(Detail2 detail:details){
             QueryConditions conditions = new QueryConditions();
             conditions.add("id","=", detail.getEid());
             Employee employee = (Employee) EmployeeDao.get(conn,conditions).data;
@@ -74,7 +72,7 @@ public class Detail2Service {
                 result.msg="请完善该员工"+employee.getName()+"的个税专项扣除";
                 return result;
             }
-            details.add(Calculate.calculatteDetail2(detail,deduct));
+            Salary.calculateDetail2(detail,deduct);
         }
 
         return Detail2Dao.update(conn,details);

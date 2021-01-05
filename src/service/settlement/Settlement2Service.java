@@ -9,17 +9,15 @@ import bean.settlement.Settlement2;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.LogDao;
-import dao.admin.AccountDao;
 import dao.contract.ServeDao;
 import dao.employee.EmployeeDao;
 import dao.settlement.Detail2Dao;
 import dao.settlement.Settlement2Dao;
 import database.*;
-import utills.Calculate;
+import utills.Salary.Salary;
 
 import java.sql.Connection;
 import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -237,11 +235,12 @@ public class Settlement2Service {
     }
 
     public static DaoUpdateResult saveSettlement(Connection conn, long sid) {
-        Settlement2 settlement2 = (Settlement2) Settlement2Dao.get(conn,sid).data;
+        Settlement2 settlement = (Settlement2) Settlement2Dao.get(conn,sid).data;
         QueryParameter param = new QueryParameter();
         param.addCondition("sid","=",sid);
-        List<Detail2> detail2List = (List<Detail2>) Detail2Dao.getList(conn,param).rows;
-        Serve serve = (Serve) ServeDao.get(conn,settlement2.getCcid()).data;
-        return Settlement2Dao.update(conn, Calculate.calculateSettlement2(settlement2,detail2List,serve));
+        List<Detail2> details = (List<Detail2>) Detail2Dao.getList(conn,param).rows;
+        Serve serve = (Serve) ServeDao.get(conn,settlement.getCcid()).data;
+        Salary.calculateSettlement2(settlement,details,serve.getPayer());
+        return Settlement2Dao.update(conn, settlement);
     }
 }
