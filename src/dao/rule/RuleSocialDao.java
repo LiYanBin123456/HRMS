@@ -1,13 +1,12 @@
 package dao.rule;
 
 
-import bean.contract.Contract;
-import bean.rule.RuleMedicare;
+
 import bean.rule.RuleSocial;
 import database.*;
 
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 public class RuleSocialDao {

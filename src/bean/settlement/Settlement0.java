@@ -1,6 +1,6 @@
 package bean.settlement;
 
-import java.sql.Date;
+import java.util.Date;
 
 //特殊结算单
 public class Settlement0 {

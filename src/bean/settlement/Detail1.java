@@ -1,6 +1,6 @@
 package bean.settlement;
 
-import java.sql.Date;
+import java.util.Date;
 
 //结算单明细
 public class Detail1 extends Detail {

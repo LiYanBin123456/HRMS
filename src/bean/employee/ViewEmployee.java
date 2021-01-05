@@ -1,6 +1,6 @@
 package bean.employee;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class ViewEmployee extends Employee {
     private long aid;//派遣单位所属管理员

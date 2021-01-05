@@ -19,16 +19,16 @@ import dao.insurance.InsuranceDao;
 import dao.rule.RuleMedicareDao;
 import dao.rule.RuleSocialDao;
 import database.*;
+import utills.DateUtil;
 
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class EmployeeService {
-    static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     //获取列表
     public static DaoQueryListResult getList(Connection conn, QueryParameter param){
         return EmployeeDao.getList(conn,param);
@@ -239,8 +239,8 @@ public class EmployeeService {
             byte settingS = setting.getSettingS();//社保设置
             switch (settingM){
                 case 0://最低基数
-                    DaoQueryResult result1 = RuleMedicareDao.get(conn,setting.getCity(), Date.valueOf(start));
-                    DaoQueryResult result2 = RuleMedicareDao.get(conn,setting.getCity(), Date.valueOf(end));
+                    DaoQueryResult result1 = RuleMedicareDao.get(conn,setting.getCity(), DateUtil.parse(start,"yyyy-MM-dd"));
+                    DaoQueryResult result2 = RuleMedicareDao.get(conn,setting.getCity(), DateUtil.parse(end,"yyyy-MM-dd"));
                     if(result2.success){//结束月份存在规则
                         RuleMedicare medicare1 = (RuleMedicare) result1.data;
                         RuleMedicare medicare2 = (RuleMedicare) result2.data;
@@ -273,8 +273,8 @@ public class EmployeeService {
             }
             switch (settingS){
                 case 0://最低基数
-                    DaoQueryResult result1 = RuleSocialDao.get(conn,setting.getCity(), Date.valueOf(start));
-                    DaoQueryResult result2 = RuleSocialDao.get(conn,setting.getCity(), Date.valueOf(end));
+                    DaoQueryResult result1 = RuleSocialDao.get(conn,setting.getCity(), DateUtil.parse(start,"yyyy-MM-dd"));
+                    DaoQueryResult result2 = RuleSocialDao.get(conn,setting.getCity(), DateUtil.parse(end,"yyyy-MM-dd"));
                     if(result2.success){//结束月份存在规则
                         RuleSocial social1 = (RuleSocial) result1.data;
                         RuleSocial social2 = (RuleSocial) result2.data;

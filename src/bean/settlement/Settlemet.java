@@ -2,7 +2,7 @@ package bean.settlement;
 
 import utills.Bit;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.BitSet;
 
 //结算单基类

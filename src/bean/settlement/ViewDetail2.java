@@ -1,6 +1,6 @@
 package bean.settlement;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class ViewDetail2 extends Detail2{
     private String cardId;//员工身份证号

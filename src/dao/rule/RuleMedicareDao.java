@@ -1,16 +1,19 @@
 package dao.rule;
 
 import bean.rule.RuleMedicare;
-import bean.rule.RuleSocial;
 import database.*;
 
-import java.net.ConnectException;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class RuleMedicareDao {
 
+    public static void main(String[] args) throws ParseException {
+
+    }
     /**
      * 获取医保规则集合
      * @param conn 连接数据库
@@ -113,4 +116,5 @@ public class RuleMedicareDao {
         return res2;
 
     }
+
 }

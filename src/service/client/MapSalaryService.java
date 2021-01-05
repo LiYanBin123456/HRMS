@@ -6,7 +6,7 @@ import database.DaoQueryResult;
 import database.DaoUpdateResult;
 
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Calendar;
 
 public class MapSalaryService {

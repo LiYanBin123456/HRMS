@@ -1,6 +1,6 @@
 package bean.contract;
 
-import java.sql.Date;
+import java.util.Date;
 
 //员工合同视图
 public class ViewContractEmployee extends Contract{

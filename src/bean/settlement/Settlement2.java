@@ -1,7 +1,7 @@
 package bean.settlement;
 
 
-import java.sql.Date;
+import java.util.Date;
 
 //小时工结算单
 public class Settlement2 extends Settlemet{

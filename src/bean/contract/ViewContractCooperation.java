@@ -1,6 +1,6 @@
 package bean.contract;
 
-import java.sql.Date;
+import java.util.Date;
 
 //合作客户合同视图
 public class ViewContractCooperation extends Contract{

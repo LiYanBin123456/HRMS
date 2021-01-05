@@ -1,6 +1,6 @@
 package bean.settlement;
 
-import java.sql.Date;
+import java.util.Date;
 
 //商业保险结算单
 public class Settlement3 extends Settlemet {

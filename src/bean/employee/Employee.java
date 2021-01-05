@@ -1,6 +1,6 @@
 package bean.employee;
 
-import java.sql.Date;
+import java.util.Date;
 
 //员工表
 public class Employee {

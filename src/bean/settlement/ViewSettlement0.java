@@ -1,6 +1,6 @@
 package bean.settlement;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class ViewSettlement0 extends Settlement0{
     private String name;//合作客户名称

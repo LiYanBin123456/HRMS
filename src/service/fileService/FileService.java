@@ -2,7 +2,6 @@ package service.fileService;
 
 import bean.employee.EnsureSetting;
 import bean.employee.PayCard;
-import bean.employee.ViewDeduct;
 import bean.insurance.ViewInsurance;
 import bean.settlement.ViewDetail1;
 import com.alibaba.fastjson.JSONArray;
@@ -20,16 +19,16 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
+import utills.DateUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.sql.Connection;
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class FileService {
@@ -44,7 +43,6 @@ public class FileService {
         DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("新增社保单", 0);
         try {
@@ -69,12 +67,12 @@ public class FileService {
                 sheet1.addCell(new Label(0, index, v.getName()));
                 sheet1.addCell(new Label(1, index, v.getCode3()));
                 sheet1.addCell(new Label(2, index, v.getCardId()));
-                sheet1.addCell(new Label(3, index, v.getDate3()==null?"":sdf.format(v.getDate3())));
+                sheet1.addCell(new Label(3, index, v.getDate3()==null?"":DateUtil.format(v.getDate3(),"yyyy-MM-dd")));
                 sheet1.addCell(new jxl.write.Number(4, index, v.getBase3()));
                 sheet1.addCell(new Label(5, index, "正常参保登记"));
                 sheet1.addCell(new Label(6, index, "合同制"));
                 sheet1.addCell(new Label(7, index, msg));
-                sheet1.addCell(new Label(8, index, v.getEntry()==null?"":sdf.format(v.getEntry())));
+                sheet1.addCell(new Label(8, index, v.getEntry()==null?"":DateUtil.format(v.getEntry(),"yyyy-MM-dd")));
                 sheet1.addCell(new Label(9, index, v.getPhone()));
                 sheet1.addCell(new Label(10, index, houseHold));
                 sheet1.addCell(new Label(11, index, v.getAddress()));
@@ -106,11 +104,8 @@ public class FileService {
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);
         //获取本月最后一天
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar cale = Calendar.getInstance();
-        cale.add(Calendar.MONTH, 1);
-        cale.set(Calendar.DAY_OF_MONTH, 0);
-        String lastDay = sdf.format(cale.getTime());//本月最后一天
+        Date date = DateUtil.getLastDayofMonth(new Date());
+        String lastDay = DateUtil.format(date,"yyyy-MM-dd");//本月最后一天
 
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("停保社保单", 0);
@@ -155,9 +150,6 @@ public class FileService {
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);
 
-        //获取本月最后一天
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("续保医保单", 0);
         try {
@@ -174,7 +166,7 @@ public class FileService {
                 sheet1.addCell(new Label(2, index, insurance.getCardId()));
                 sheet1.addCell(new jxl.write.Number(3, index, insurance.getBase1()));
                 sheet1.addCell(new Label(4, index, "医疗、大病、生育"));
-                sheet1.addCell(new Label(5, index, insurance.getDate1()==null?"":sdf.format(insurance.getDate1())));
+                sheet1.addCell(new Label(5, index, insurance.getDate1()==null?"":DateUtil.format(insurance.getDate1(),"yyyy-MM-dd")));
                 index++;
             }
             //设置列宽
@@ -204,12 +196,8 @@ public class FileService {
         List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);
 
         //获取本月最后一天
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Calendar cale = Calendar.getInstance();
-        cale.add(Calendar.MONTH, 1);
-        cale.set(Calendar.DAY_OF_MONTH, 0);
-        String lastDay = sdf.format(cale.getTime());//本月最后一天
-
+        Date date = DateUtil.getLastDayofMonth(new Date());
+        String lastDay = DateUtil.format(date,"yyyy-MM-dd");
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("停保医保单", 0);
         try {
@@ -253,7 +241,6 @@ public class FileService {
         DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         try {
             //获取模板
             book = Workbook.getWorkbook(file);
@@ -271,7 +258,7 @@ public class FileService {
                 sheet.addCell(new jxl.write.Number(0, index, index-5));//序号
                 sheet.addCell(new Label(1, index, v.getName()));//职工姓名
                 sheet.addCell(new Label(2, index, v.getCardId()));//证件号
-                sheet.addCell(new Label(3, index, v.getDate2()==null?"":sdf.format(v.getDate2())));//起缴时间
+                sheet.addCell(new Label(3, index, v.getDate2()==null?"":DateUtil.format(v.getDate2(),"yyyy-MM-dd")));//起缴时间
                 sheet.addCell(new jxl.write.Number(4, index, v.getBase2()));//工资基数
                 sheet.addCell(new jxl.write.Number(5, index, per));//单位比例
                 sheet.addCell(new jxl.write.Number(6, index, per));//个人比例
@@ -426,7 +413,6 @@ public class FileService {
         DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewDetail1> viewDetail1s = JSONArray.parseArray(rows, ViewDetail1.class);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM");
         try {
             //获取模板
             book = Workbook.getWorkbook(file);
@@ -479,7 +465,6 @@ public class FileService {
         DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewDetail1> viewDetail1s = JSONArray.parseArray(rows, ViewDetail1.class);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM");
         try {
             //获取模板
             book = Workbook.getWorkbook(file);
@@ -499,13 +484,13 @@ public class FileService {
                     sheet1.addCell(new Label(4, index, card.getBankNo()));
                     sheet1.addCell(new Label(5, index, card.getBank2()));
                     sheet1.addCell(new jxl.write.Number(6, index, v.getPaid()));
-                    sheet1.addCell(new Label(7, index, v.getMonth()==null?"":sdf.format(v.getMonth()) + "工资"));
+                    sheet1.addCell(new Label(7, index, v.getMonth()==null?"": DateUtil.format(v.getMonth(),"yyyy.MM") + "工资"));
 
                     //序号	卡号	姓名	金额	备注
                     sheet2.addCell(new jxl.write.Number(0, index, index ));
                     sheet2.addCell(new Label(1, index, card.getCardNo()));
                     sheet2.addCell(new jxl.write.Number(3, index, v.getPaid()));
-                    sheet2.addCell(new Label(4, index, v.getMonth()==null?"":sdf.format(v.getMonth()) + "工资"));
+                    sheet2.addCell(new Label(4, index, v.getMonth()==null?"":DateUtil.format(v.getMonth(),"yyyy.MM") + "工资"));
                 }
                 sheet1.addCell(new Label(2, index, v.getName()));
                 sheet2.addCell(new Label(2, index, v.getName()));
@@ -535,8 +520,7 @@ public class FileService {
         String rows = JSONObject.toJSONString(result.rows);
 
         List<ViewDetail1> details = JSONArray.parseArray(rows, ViewDetail1.class);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String month = details.get(0).getMonth()==null?"":(sdf.format(details.get(0).getMonth()).split("-"))[1];
+        String month = details.get(0).getMonth()==null?"":(DateUtil.format(details.get(0).getMonth(),"yyyy-MM-dd").split("-"))[1];
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("浦发银行", 0);
         try {
@@ -583,8 +567,7 @@ public class FileService {
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewDetail1> details = JSONArray.parseArray(rows, ViewDetail1.class);
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM");
-        String month = details.get(0).getMonth()==null?"":sdf.format(details.get(0).getMonth());
+        String month = details.get(0).getMonth()==null?"":DateUtil.format(details.get(0).getMonth(),"yyyy.MM");
 
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("浦发银行", 0);

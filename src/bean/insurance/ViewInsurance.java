@@ -1,6 +1,6 @@
 package bean.insurance;
 
-import java.sql.Date;
+import java.util.Date;
 
 //参保单视图
 public class ViewInsurance extends Insurance{

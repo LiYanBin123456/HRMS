@@ -24,7 +24,7 @@ import database.*;
 
 import javax.sound.midi.Soundbank;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;

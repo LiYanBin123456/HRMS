@@ -1,7 +1,7 @@
 package bean.rule;
 
 
-import java.sql.Date;
+import java.util.Date;
 
 //医保规则
 public class RuleMedicare extends Rule{

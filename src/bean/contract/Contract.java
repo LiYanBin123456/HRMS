@@ -1,6 +1,6 @@
 package bean.contract;
 
-import java.sql.Date;
+import java.util.Date;
 
 //合同
 public class Contract {

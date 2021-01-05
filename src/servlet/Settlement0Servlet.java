@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 //特殊结算单
