@@ -1,5 +1,7 @@
 package bean.employee;
 
+import sun.text.resources.sr.FormatData_sr_Latn;
+
 public class Deduct {
     private long eid;//员工外键
     private float income;//累计收入总额
@@ -118,7 +120,9 @@ public class Deduct {
         this.deduct6 = deduct6;
     }
 
-
+    public float total(){
+        return deduct+deduct1+deduct2+deduct3+deduct4+deduct5+deduct6;
+    }
     @Override
     public String toString() {
         return "Deduct{" +

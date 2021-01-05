@@ -658,12 +658,28 @@ public class Detail1 extends Detail {
         return d;
     }
 
+    public float getSocialPerson(){
+        return pension1+unemployment1;
+    }
+
+    public float getMedicalePerson(){
+        return disease1+medicare1;
+    }
+
+    public float getSocialDepartment(){
+        return pension2+unemployment2+injury;
+    }
+
+    public float getMedicaleDepartment(){
+        return disease2+medicare2+birth;
+    }
+
     /**
-     * 获取社保个人部分
+     * 获取社保和医保个人部分
      * @return
      */
     public float getTotalPerson(){
-        return pension1+disease1+unemployment1+medicare1;
+        return getMedicalePerson()+getSocialPerson();
     }
 
     /**
@@ -671,6 +687,15 @@ public class Detail1 extends Detail {
      * @return
      */
     public float getTotalDepartment(){
-        return pension2+disease2+unemployment2+medicare2+injury;
+        return getMedicaleDepartment()+getSocialDepartment();
+    }
+
+    /**
+     * 获取不考虑自定义工资项的应发工资
+     * @param flag 是否扣除个人社保医保-个人公积金+核收补减
+     * @return
+     */
+    public float getPayable0(boolean flag){
+        return flag?base - getTotalPerson() - getFund1() + extra1:base;
     }
 }

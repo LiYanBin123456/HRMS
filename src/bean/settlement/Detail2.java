@@ -133,6 +133,10 @@ public class Detail2 extends Detail {
         this.paid = paid;
     }
 
+    public float total(){
+        return hours*price-insurance-utilities-accommodation-food+other1+other2;
+    }
+
     @Override
     public String toString() {
         return "Detail2{" +

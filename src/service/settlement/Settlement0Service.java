@@ -1,42 +1,28 @@
 package service.settlement;
 
 import bean.admin.Account;
-import bean.contract.ViewContractCooperation;
-import bean.employee.Employee;
-import bean.employee.EnsureSetting;
 import bean.employee.ViewEmployee;
 import bean.log.Log;
 import bean.log.Transaction;
-import bean.rule.RuleMedicare;
-import bean.rule.RuleSocial;
-import bean.settlement.*;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import bean.settlement.Detail0;
+import bean.settlement.Settlement0;
+import bean.settlement.Settlement1;
+import bean.settlement.ViewDetail0;
 import dao.LogDao;
 import dao.client.FinanceDao;
-import dao.contract.ContractDao;
 import dao.employee.EmployeeDao;
-import dao.employee.SettingDao;
-import dao.rule.RuleMedicareDao;
-import dao.rule.RuleSocialDao;
 import dao.settlement.Detail0Dao;
-import dao.settlement.Detail1Dao;
 import dao.settlement.Settlement0Dao;
 import dao.settlement.Settlement1Dao;
-import database.*;
-import utills.Calculate;
+import database.ConnUtil;
+import database.DaoQueryListResult;
+import database.DaoUpdateResult;
+import database.QueryParameter;
 
 import java.sql.Connection;
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-
-import static utills.Calculate.calculateMedicare;
-import static utills.Calculate.calculateSocial;
 
 //普通结算单
 public class Settlement0Service {

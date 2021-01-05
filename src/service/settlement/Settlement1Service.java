@@ -2,56 +2,41 @@ package service.settlement;
 
 import bean.admin.Account;
 import bean.contract.ViewContractCooperation;
-import bean.employee.*;
-import bean.insurance.ViewInsurance;
+import bean.employee.Deduct;
+import bean.employee.EnsureSetting;
+import bean.employee.ViewEmployee;
 import bean.log.Log;
 import bean.log.Transaction;
 import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
-import bean.settlement.*;
+import bean.settlement.Detail1;
+import bean.settlement.Settlement1;
+import bean.settlement.ViewDetail1;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.LogDao;
-import dao.admin.AccountDao;
 import dao.client.FinanceDao;
 import dao.contract.ContractDao;
 import dao.employee.DeductDao;
 import dao.employee.EmployeeDao;
-import dao.employee.PayCardDao;
 import dao.employee.SettingDao;
-import dao.insurance.InsuranceDao;
 import dao.rule.RuleMedicareDao;
 import dao.rule.RuleSocialDao;
 import dao.settlement.Detail1Dao;
-import dao.settlement.Detail3Dao;
 import dao.settlement.Settlement1Dao;
-import database.*;
-import jxl.Workbook;
-import jxl.read.biff.BiffException;
-import jxl.write.Label;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
-import jxl.write.biff.RowsExceededException;
+import database.ConnUtil;
+import database.DaoQueryListResult;
+import database.DaoUpdateResult;
+import database.QueryParameter;
 import utills.Calculate;
 import utills.CollectionUtil;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.swing.text.View;
-import java.io.File;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-
-import static jdk.nashorn.internal.runtime.regexp.joni.Syntax.Java;
-import static utills.Calculate.calculateMedicare;
-import static utills.Calculate.calculateSocial;
 
 
 public class Settlement1Service {
@@ -408,8 +393,7 @@ public class Settlement1Service {
          * 7、批量插入补缴明细
          * 8、批量修改正常结算单明细
          */
-        DaoUpdateResult result = new DaoUpdateResult();
-        DaoUpdateResult result1;
+        DaoUpdateResult res1 = new DaoUpdateResult();
         ConnUtil.closeAutoCommit(conn);
 
         String ids = "";
@@ -433,36 +417,38 @@ public class Settlement1Service {
         //获取所有地市的医保和社保规则,使用缓冲机制保存相关地市的医保规则和社保规则
         HashMap<String, RuleMedicare> medicares = new HashMap<>();
         HashMap<String, RuleSocial> socials = new HashMap<>();
+
+        int year = Integer.parseInt(start.split("-")[0]);//年
+        int month1 = Integer.parseInt(start.split("-")[1]);//起始月
+        int month2 = Integer.parseInt(end.split("-")[1]);//结束月
+        Calendar c = Calendar.getInstance();
+        c.set(year,month1,1);
+
         for(EnsureSetting s:settings){
             String city = s.getCity();//员工所处地市
-            int year = Integer.parseInt(start.split("-")[0]);//年
-            int month1 = Integer.parseInt(start.split("-")[1]);//起始月
-            int month2 = Integer.parseInt(end.split("-")[1]);//结束月
-            Calendar c = Calendar.getInstance();
-            c.set(year,month1,1);
             for(int i=0;i<=month2-month1;i++) {
                 c.set(Calendar.MONTH, c.get(Calendar.MONTH) + i);
                 Date date = (Date) c.getTime();
                 //获取该地市的医保规则
-                RuleMedicare medicare = medicares.get(city+date);
+                RuleMedicare medicare = medicares.get(city+date.getTime());
                 if (medicare == null) {
                     medicare = (RuleMedicare) RuleMedicareDao.get(conn, city, date).data;
                     if (medicare == null) {
-                        result.success = false;
-                        result.msg = String.format("请确认%s的医保规则是否存在", city);
-                        return result;
+                        res1.success = false;
+                        res1.msg = String.format("请确认%s的医保规则是否存在", city);
+                        return res1;
                     }
                     medicares.put(city+date, medicare);
                 }
-                RuleSocial social = socials.get(city+date);
+                RuleSocial social = socials.get(city+date.getTime());
                 if (social == null) {
                     social = (RuleSocial) RuleSocialDao.get(conn, city, date).data;
                     if (social == null) {
-                        result.success = false;
-                        result.msg = String.format("请确认%s的社保规则是否存在", city);
-                        return result;
+                        res1.success = false;
+                        res1.msg = String.format("请确认%s的社保规则是否存在", city);
+                        return res1;
                     }
-                    socials.put(city+date, social);
+                    socials.put(city+date.getTime(), social);
                 }
             }
         }
@@ -477,94 +463,64 @@ public class Settlement1Service {
 
             //获取该员工正常的结算单明细
             ViewDetail1 detail = CollectionUtil.getElement(details11,"eid",eid);
+
             EnsureSetting setting = CollectionUtil.getElement(settings,"eid",eid);//获取员工社保设置
             if(setting==null){//员工设置为空
-                result.msg = String.format("请先完善%s的社保设置",object.getString("name"));
-               return result;
+                res1.msg = String.format("请先完善%s的社保设置",object.getString("name"));
+               return res1;
             }
+            //设置医保社保为自定义基数
             setting.setSettingM((byte) 2);
             setting.setValM(baseM);
             setting.setSettingS((byte) 2);
             setting.setValS(baseS);
-            //医保规则
-            RuleMedicare medicare = (RuleMedicare)RuleMedicareDao.get(conn,setting.getCity(),Date.valueOf(end)).data;
-            //社保规则
-            RuleSocial social = (RuleSocial)RuleSocialDao.get(conn,setting.getCity(),Date.valueOf(end)).data;
-            if(medicare==null||social==null){//医保规则空或者社保为空
-                result.msg = String.format("%s的社保或医保所在地的规则为空，请核对",object.getString("name"));
-                return result;
+
+            float sum1=0;//个人累计社保合计
+            float sum2=0;//单位累计社保合计
+            for(int i=0;i<=month2-month1;i++) {//遍历月份，有多少个月生成多少个明细
+                //获取该地市指定月份的医保和社保规则
+                c.set(Calendar.MONTH, c.get(Calendar.MONTH) + i);
+                Date date = (Date) c.getTime();
+                RuleMedicare medicare = medicares.get(setting.getCity()+date.getTime());
+                RuleSocial social = socials.get(setting.getCity()+date.getTime());
+
+                //新建明细,并且初始化
+                Detail1 d = new Detail1();
+                d.setSid(sid);
+                d.setEid(eid);
+                d.setStatus(Detail1.STATUS_REPLENISH);//补缴
+                int month = c.get(Calendar.MONTH)+i;
+                d.setComments1(month+"月份个人社保补缴");
+                d.setComments2(month+"月份单位社保补缴");
+
+                Calculate.calculateMedicare(d,setting,medicare);//根据员工设置计算医保
+                Calculate.calculateSocial(d,setting,social);//根据员工设置计算社保
+
+                detail_append.add(d);
+
+                sum1 += d.getTotalPerson();//个人社保合计
+                sum2 +=d.getTotalDepartment();//单位社保合计
             }
+            detail.setExtra1(detail.getExtra1()-sum1);  //将个人社保合计赋值给该员工正常结算单明细的单位核收补减，正数
+            detail.setComments1("个人社保补缴合计");
+            detail.setExtra2(detail.getExtra2()+sum2); //将单位社保合计赋值给该员工正常结算单明细的单位核收补减，正数
+            detail.setComments2("单位社保补缴合计");
+            detail_update.add(detail);//添加进正常明细集合
 
-            //新建明细
-            Detail1 detail1 = new Detail1();
-            detail1.setSid(sid);
-            detail1.setEid(eid);
-            detail1.setStatus(Detail1.STATUS_REPLENISH);//补缴
-
-            //根据员工设置计算医保
-            calculateMedicare(detail1,setting,medicare);
-            //根据员工设置计算社保
-            calculateSocial(detail1,setting,social);
-            //个人社保合计
-            float sum1 = detail1.getPension1()+detail1.getDisease1()+detail1.getUnemployment1()
-                    +detail1.getMedicare1();
-            //单位社保合计
-            float sum2 =detail1.getPension2()+detail1.getMedicare2()+detail1.getDisease2()+detail1.getBirth()+detail1.getUnemployment2()
-                    +detail1.getInjury();
-
-            SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
-            try {
-                Calendar c1 = Calendar.getInstance();
-                Calendar c2 = Calendar.getInstance();
-                java.util.Date date1 = sdf.parse(start);
-                java.util.Date date2 = sdf.parse(end);
-                c1.setTime(date1);
-                c2.setTime(date2);
-                int month1 = c1.get(Calendar.MONTH)+1;
-                int month2 = c2.get(Calendar.MONTH)+1;
-                int monthInterval = (month2 - month1)+1;
-                //将个人社保合计赋值给该员工正常结算单明细的个人核收补减*月数，且是负数
-                detail.setExtra1(detail1.getExtra1()-(sum1*monthInterval));
-                detail.setComments1("个人社保补缴合计");
-                //将单位社保合计赋值给该员工正常结算单明细的单位核收补减*月数，正数
-                detail.setExtra2(detail.getExtra2()+sum2*monthInterval);
-                detail.setComments2("单位社保补缴合计");
-                detail_update.add(detail);//添加进正常明细集合
-                for (int i = 0;i<monthInterval;i++){//有多少个月 生成多少个明细
-                    Detail1 detail2 = new Detail1();
-                    detail2.setSid(sid);
-                    detail2.setEid(eid);
-                    detail2.setComments1((month1+i)+"月补缴");
-                    detail2.setDisease1(detail1.getDisease1());
-                    detail2.setDisease2(detail1.getDisease2());
-                    detail2.setMedicare1(detail1.getMedicare1());
-                    detail2.setMedicare2(detail1.getMedicare2());
-                    detail2.setPension1(detail1.getPension1());
-                    detail2.setPension2(detail1.getPension2());
-                    detail2.setUnemployment1(detail1.getUnemployment1());
-                    detail2.setUnemployment2(detail1.getUnemployment2());
-                    detail2.setInjury(detail1.getInjury());
-                    detail2.setBirth(detail1.getBirth());
-                    detail2.setStatus((byte) 1);//补缴
-                    detail_append.add(detail2);//添加至集合
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
         }
 
         //批量插入补缴明细
-        result = Detail1Dao.importDetails(conn,detail_append);
+        res1 = Detail1Dao.importDetails(conn,detail_append);
 
         //批量修改正常明细
-        result1= Detail1Dao.update(conn,detail_update);
-        if(!result.success&&!result1.success){
+        DaoUpdateResult res2= Detail1Dao.update(conn,detail_update);
+        if(!res1.success || !res2.success){
             ConnUtil.rollback(conn);
-            result.msg ="数据库操作错误";
-            return result;
+            res1.msg ="数据库操作错误";
+            return res1;
         }
         ConnUtil.commit(conn);
-        return result;
+        return res1;
     }
 
     //社保补差
@@ -581,8 +537,7 @@ public class Settlement1Service {
          * 7、批量插入差额明细
          * 8、批量修改当前结算单明细
          */
-        DaoUpdateResult result = new DaoUpdateResult();
-        DaoUpdateResult result1;
+        DaoUpdateResult res1 = new DaoUpdateResult();
         ConnUtil.closeAutoCommit(conn);
         List<Detail1> details_append = new ArrayList<>();
         List<ViewDetail1> details_update = new ArrayList<>();
@@ -615,9 +570,9 @@ public class Settlement1Service {
             if (medicare == null) {
                 medicare = (RuleMedicare) RuleMedicareDao.getLast(conn, city).data;
                 if(medicare == null){
-                    result.success = false;
-                    result.msg = String.format("请确认%s的医保规则是否存在",city);
-                    return result;
+                    res1.success = false;
+                    res1.msg = String.format("请确认%s的医保规则是否存在",city);
+                    return res1;
                 }
                 medicares.put(city, medicare);
             }
@@ -625,9 +580,9 @@ public class Settlement1Service {
             if (social == null) {
                 social = (RuleSocial) RuleSocialDao.getLast(conn, city).data;
                 if(social == null){
-                    result.success = false;
-                    result.msg = String.format("请确认%s的社保规则是否存在",city);
-                    return result;
+                    res1.success = false;
+                    res1.msg = String.format("请确认%s的社保规则是否存在",city);
+                    return res1;
                 }
                 socials.put(city, social);
             }
@@ -662,14 +617,14 @@ public class Settlement1Service {
                     //计算医保相关
                     EnsureSetting setting = CollectionUtil.getElement(settings,"eid",eid);
                     if(setting == null){
-                        result.success = false;
-                        result.msg = String.format("请确认%s的社保设置是否存在",detail1.getName());
-                        return result;
+                        res1.success = false;
+                        res1.msg = String.format("请确认%s的社保设置是否存在",detail1.getName());
+                        return res1;
                     }
                     RuleMedicare medicare = medicares.get(setting.getCity());
                     RuleSocial social = socials.get(setting.getCity());
-                    calculateMedicare(detail2, setting, medicare);
-                    calculateSocial(detail2, setting, social);//计算社保相关
+                    Calculate.calculateMedicare(detail2, setting, medicare);
+                    Calculate.calculateSocial(detail2, setting, social);//计算社保相关
 
                     Detail1 d = Detail1.subtract(detail2,detail1);
                     d.setEid(eid);
@@ -692,17 +647,17 @@ public class Settlement1Service {
             details_update.add(detail1);
         }
 
-        result = Detail1Dao.importDetails(conn,details_append);//批量插入补缴明细
-        result1= Detail1Dao.update(conn,details_update);//批量修改正常明细
+        res1 = Detail1Dao.importDetails(conn,details_append);//批量插入补缴明细
+        DaoUpdateResult res2 = Detail1Dao.update(conn,details_update);//批量修改正常明细
 
-        if(!result.success&&!result1.success){
+        if(!res1.success || !res2 .success){
             ConnUtil.rollback(conn);
-            result.msg ="数据库操作错误";
-            return result;
+            res1.msg ="数据库操作错误";
+            return res1;
         }
 
         ConnUtil.commit(conn);
-        return result;
+        return res1;
     }
 
     private static ViewDetail1 getDetail(List<ViewDetail1> detail1s2, long eid, Date date) {

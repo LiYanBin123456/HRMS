@@ -74,7 +74,7 @@ public class Detail0Service {
         parameter.addCondition("sid","=",sid);
         List<ViewDetail0> vs = (List<ViewDetail0>) Detail0Dao.getList(conn,parameter).rows;
         for(ViewDetail0 d:vs){
-            float tax = (float) Calculate.calculateTax(d.getAmount());
+            float tax = (float) Calculate.calculateTax(d.getAmount()/12);
             float paid = d.getAmount()-tax;
             d.setTax(tax);
             d.setPaid(paid);

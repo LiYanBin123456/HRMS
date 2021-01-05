@@ -10,14 +10,9 @@ import bean.employee.ViewDeduct;
 import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
 import bean.settlement.*;
-import dao.employee.SettingDao;
-import dao.rule.RuleMedicareDao;
-import dao.rule.RuleSocialDao;
-import database.ConnUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -32,7 +27,7 @@ public class Calculate {
         float payable =d.getBase();//初始是基本工资
         float paid;
         if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){//如果有自定义工资
-            payable = calculatePayable(payable,d,mapSalary);
+            payable = sumDefinedSalaryItem(payable,d,mapSalary);
         }
         paid=payable;
         income=payable+d.getPayable();
@@ -118,7 +113,7 @@ public class Calculate {
         //计算应发工资，应发=应发-个人五险一金+个人核收补缴
         float payable =d.getBase();//初始是基本工资
         if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){//如果有自定义工资
-           payable = calculatePayable(payable,d,mapSalary);
+           payable = sumDefinedSalaryItem(payable,d,mapSalary);
         }
         payable= payable-d.getPension1()-d.getMedicare1()-d.getUnemployment1()-d.getDisease1()-d.getFund1()+d.getExtra1();
         d.setPayable(payable);
@@ -245,36 +240,28 @@ public class Calculate {
         float free = 0;//国家减免项
         float tax = 0;//税费
 
-        for(ViewDetail1 detail:details){
+        //计算社保、医保、公积金和核收补减总额
+        for (ViewDetail1 detail : details) {
             //应发总额+=明细中的应发总额
-           salary+=detail.getPayable();
-           if(settlement.getType()==3){//代缴社保结算单
-               //单位社保总额+=（单位失业+单位养老+单位工商）+个人社保
-               social+=(detail.getPension2()+detail.getUnemployment2()+detail.getInjury()+detail.getPension1()+detail.getUnemployment1());
-               //单位医保总额+=（单位医保+单位大病+单位生育）+个人医保
-               medicare+=(detail.getMedicare2()+detail.getDisease2()+detail.getBirth()+detail.getMedicare1()+detail.getDisease1());
-               //单位公积金总额+=单位公积金+个人公积金
-               fund+=(detail.getFund2()+detail.getFund1());
-           }else {
-               //单位社保总额+=（单位失业+单位养老+单位工商）
-               social+=(detail.getPension2()+detail.getUnemployment2()+detail.getInjury());
-               //单位医保总额+=（单位医保+单位大病+单位生育）
-               medicare+=(detail.getMedicare2()+detail.getDisease2()+detail.getBirth());
-               //单位公积金总额+=单位公积金
-               fund+=detail.getFund2();
-           }
+            salary += detail.getPayable();
+            social += detail.getSocialDepartment();//单位社保总额
+            medicare += detail.getMedicaleDepartment();//单位医保总额
+            fund += detail.getFund2();//单位公积金总额
+            if (settlement.getType() == 3) {//代缴社保还需加上个人部分
+                social += detail.getSocialPerson();
+                medicare += detail.getMedicalePerson();
+                fund += detail.getFund1();
+            }
             //补收核减
-           extra+=detail.getExtra2();
-           //国家减免
-           free+=detail.getFree();
+            extra += detail.getExtra2();
         }
 
+        //计算管理费和税费
         int type = contract.getStype();//合同服务项目中的类型
         int category = contract.getCategory();//合同服务项目中的结算方式
         int invoice = contract.getInvoice();//合同基础信息中的发票类型
         float per = contract.getPer()/100;//税费比例（选择增值税专用发票（全额）需要用到）
         float value = contract.getValue();//结算值，根据结算方式的不同，代表的意义不同
-
         float num = details.size();//总人数
         switch (type){
             case 0://劳务派遣
@@ -298,11 +285,10 @@ public class Calculate {
                 break;
         }
 
+        //计算总额
         byte stype = settlement.getType();//结算单类型
         switch (stype){
             case 0://派遣结算单
-                summary=salary+social+medicare+fund+manage+tax+extra-free;//总额
-                break;
             case 1://外包结算单
                 summary=salary+social+medicare+fund+manage+tax+extra-free;//总额
                 break;
@@ -330,24 +316,25 @@ public class Calculate {
 
 
     /**
-     *计算普通结算单应发工资
-     * @param v 结算单明细
+     *计算自定义工资项总额
+     * @param detail 结算单明细
      * @param mapSalary 自定义工资
      * @return
      */
-    private static float calculatePayable(float payable,Detail1 v, MapSalary mapSalary){
+    private static float sumDefinedSalaryItem(Detail1 detail, MapSalary mapSalary){
         /**
          * 思路：
          */
+        float value = 0;
         List<Items> itemList = mapSalary.getItemList();
         for (int i = 0; i <itemList.size(); i++) {
             int index = i + 1;
             String name = "getF" + index;
-            float value2 = 0;
+            float v = 0;
             Method method;
             try {//通过反射获取对应的值
-                method = v.getClass().getSuperclass().getMethod(name);
-                value2 = Float.parseFloat(method.invoke(v).toString());
+                method = detail.getClass().getSuperclass().getMethod(name);
+                v = Float.parseFloat(method.invoke(detail).toString());
             } catch (NoSuchMethodException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -356,52 +343,26 @@ public class Calculate {
                 e.printStackTrace();
             }
             if(itemList.get(i).getType()==0){//加项
-                payable+=value2;
+                value+=v;
             }else {//减项
-                payable-=value2;
+                value-=v;
             }
         }
-        return  payable;
+        return  value;
     }
 
 
     /**
      * 计算普通结算单的个税
-     * @param income1 本期收入
+     * @param income 本期收入
      * @return v
      */
-    public static double calculateTax(float income1, Deduct deduct){
-        double tax;//个税 = 应税额*税率（A） – 速算扣除（B） – 累计已预缴税额（C）
-        float taxDue;//应税额 = 累计收入额（D）+ 本期收入 – 个税累计专项扣除（E）– 累计减除费用（F）
-        float deducts = deduct.getDeduct()+deduct.getDeduct1()+deduct.getDeduct2()+deduct.getDeduct3()+deduct.getDeduct4()+deduct.getDeduct5()+deduct.getDeduct6();
-        taxDue=deduct.getIncome()+income1-deducts-deduct.getFree();
+    public static double calculateTax(float income, Deduct deduct){
+        float deducts = deduct.total();
+        float taxDue=deduct.getIncome()+income-deducts-deduct.getFree();//应税额 = 累计收入额（D）+ 本期收入 – 个税累计专项扣除（E）– 累计减除费用（F）
 
-        float rate = 0;//税率
-        float d = 0;//速算扣除
-        if(taxDue>0&&taxDue<=36000){//根据个税比例报表计算个税
-            rate = 0.03f;
-            d = 0;
-        }else if(taxDue<=144000){
-            rate = 0.1f;
-            d = 2520;
-        }else if(taxDue<=300000){
-            rate = 0.2f;
-            d = 16920;
-        }else if(taxDue<=420000){
-            rate = 0.25f;
-            d = 31920;
-        }else if(taxDue<=660000){
-            rate = 0.3f;
-            d = 52920;
-        }else if(taxDue<=960000){
-            rate = 0.35f;
-            d = 85920;
-        }else if(taxDue>960000){
-            rate = 0.45f;
-            d = 181920;
-        }
-
-        tax = taxDue*rate-d-deduct.getPrepaid();
+        double tax = calculateTax(taxDue);
+        tax -= deduct.getPrepaid();
 
         if(tax < 0 ){
             tax = 0;
@@ -411,13 +372,11 @@ public class Calculate {
 
     /**
      * 计算年终奖的个税
-     * @param income 本期收入
+     * @param taxDue 应税额
      * @return v
      */
-    public static double calculateTax(float income){
+    public static double calculateTax(float taxDue){
         double tax;//个税 = 应税额*税率（A） – 速算扣除（B） – 累计已预缴税额（C）
-        float taxDue;//应税额 = 年终奖/12；
-        taxDue = income/12;
         float rate = 0;//税率
         float d = 0;//速算扣除
         if(taxDue>0&&taxDue<=3000){//根据个税比例报表计算个税
@@ -442,7 +401,7 @@ public class Calculate {
             rate = 0.45f;
             d = 15160;
         }
-        tax = income*rate-d;
+        tax = taxDue*rate-d;
         if(tax < 0 ){
             tax = 0;
         }
@@ -456,34 +415,12 @@ public class Calculate {
      * @return 计算好的结算单明细
      */
     public static Detail2 calculatteDetail2(Detail2 d,Deduct deduct){
-        float payable;//应付金额
-        float paid;//实付金额
-       //应付=工时*单价-水电-餐费-住宿费-保险+其他1+其他2
-        payable = d.getHours()*d.getPrice()-d.getInsurance()-d.getUtilities()-d.getAccommodation()-d.getFood()+d.getOther1()+d.getOther2();
-        double tax=0;//个税 = 应税额*税率（A） – 速算扣除（B） – 累计已预缴税额（C）
-        float income1;//本期收入 = 本月应发（G）
-        float taxDue;//应税额 = 累计收入额（D）+ 本期收入 – 个税累计专项扣除（E）– 累计减除费用（F）
+        float payable = d.total();
+        float taxDue=deduct.getIncome()+payable-deduct.getDeduct()-deduct.getFree();
+        double tax = calculateTax(taxDue);
+        tax -= deduct.getPrepaid();
 
-        income1 =payable ;
-        taxDue=deduct.getIncome()+income1-deduct.getDeduct()-deduct.getFree();
-
-        if(taxDue>0&&taxDue<=36000){//根据个税比例报表计算个税
-            tax = taxDue*0.03-deduct.getPrepaid();
-        }else if(taxDue>36000&&taxDue<=144000){
-            tax = taxDue*0.1-2520-deduct.getPrepaid();
-        }else if(taxDue>144000&&taxDue<=300000){
-            tax = taxDue*0.2-16920-deduct.getPrepaid();
-        }else if(taxDue>300000&&taxDue<=420000){
-            tax = taxDue*0.25-31920-deduct.getPrepaid();
-        }else if(taxDue>420000&&taxDue<=660000){
-            tax = taxDue*0.3-52920-deduct.getPrepaid();
-        }else if(taxDue>660000&&taxDue<=960000){
-            tax = taxDue*0.35-85920-deduct.getPrepaid();
-        }else if(taxDue>960000){
-            tax = taxDue*0.45-181920-deduct.getPrepaid();
-        }
-
-        paid = payable-(float) tax;
+        float paid = payable-(float) tax;
 
         d.setPayable(payable);
         d.setTax((float) tax);
@@ -589,9 +526,9 @@ public class Calculate {
             }
 
             //计算本期应发
-            float payable =d.getBase();//初始是基本工资
+            float payable =d.getPayable0(false);//初始是基本工资
             if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){//如果有自定义工资
-                payable = calculatePayable(payable,d,mapSalary);
+                payable += sumDefinedSalaryItem(d,mapSalary);
             }
             d.setPayable(payable);
 
@@ -662,11 +599,10 @@ public class Calculate {
             if(settlement.getType() == 3) {
                 d.setPayable(0);
             }else {
-                float payable = d.getBase();//初始是基本工资
+                float payable = d.getPayable0(true);
                 if (mapSalary != null && mapSalary.getItems() != null && mapSalary.getItems().length() > 0) {//如果有自定义工资
-                    payable = calculatePayable(payable, d, mapSalary);
+                    payable += sumDefinedSalaryItem(d, mapSalary);
                 }
-                payable = payable - d.getPension1() - d.getMedicare1() - d.getUnemployment1() - d.getDisease1() - d.getFund1() + d.getExtra1();
                 d.setPayable(payable);
             }
 
