@@ -1,6 +1,6 @@
 package bean.rule;
 
-import java.sql.Date;
+import java.util.Date;
 
 //社保规则
 public class RuleSocial extends Rule{

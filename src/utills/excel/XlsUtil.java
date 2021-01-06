@@ -25,8 +25,8 @@ public class XlsUtil {
             scheme.addField(new Field(2,"f3","成绩",Field.FLOAT,100));
 
             //写数据测试
-            /*FileOutputStream os = new FileOutputStream(file);
-            String []sheetNames = {"test1"};
+            FileOutputStream os = new FileOutputStream(file);
+            String sheetNames = "test1";
             JSONObject o1 = new JSONObject();
             o1.put("f1","张三");
             o1.put("f2",12.0);
@@ -40,12 +40,12 @@ public class XlsUtil {
             data.add(o2);
             JSONArray []datas = {data};
 
-            XlsUtil.write(os,sheetNames,schemes,datas);*/
+            XlsUtil.write(os,sheetNames,scheme,data);
 
             //读数据测试
-            FileInputStream is = new FileInputStream(file);
-            JSONArray data = XlsUtil.read(is,scheme,1);
-            System.out.println(data);
+//            FileInputStream is = new FileInputStream(file);
+//            JSONArray data = XlsUtil.read(is,scheme,1);
+//            System.out.println(data);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -86,8 +86,8 @@ public class XlsUtil {
         try {
             JSONArray data = new JSONArray();
             Workbook book = Workbook.getWorkbook(is);
-                Sheet sheet = book.getSheet(0);
-                readSheet(sheet,scheme,rowIndex,data);
+            Sheet sheet = book.getSheet(0);
+            readSheet(sheet,scheme,rowIndex,data);
             book.close();
             return data;
         } catch (Exception e) {

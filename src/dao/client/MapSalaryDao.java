@@ -5,7 +5,7 @@ import bean.rule.RuleMedicare;
 import database.*;
 
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 public class MapSalaryDao {

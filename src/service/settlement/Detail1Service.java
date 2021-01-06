@@ -21,15 +21,14 @@ import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.QueryConditions;
 import database.QueryParameter;
+import utills.DateUtil;
 import utills.Salary.Salary;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-
-import static utills.IDCardUtil.getLastday_Month;
 
 public class Detail1Service {
 
@@ -89,7 +88,7 @@ public class Detail1Service {
         Date month = settlement.getMonth();//该月份第一天
 
         //获取工资定义
-        Date month2 =getLastday_Month(month);//改为该月份最后一天
+        Date month2 = DateUtil.getLastDayofMonth(month);//改为该月份最后一天
         MapSalary mapSalary = (MapSalary) MapSalaryDao.selectByMonth(cid, conn, month2).data;
 
         //获取除了补缴、补差和自定义工资的结算单明细

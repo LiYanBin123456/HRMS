@@ -13,7 +13,7 @@ import dao.rule.RuleSocialDao;
 import database.*;
 
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.text.SimpleDateFormat;
 
 public class SettingService {

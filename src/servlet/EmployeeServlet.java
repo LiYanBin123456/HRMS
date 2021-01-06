@@ -2,13 +2,11 @@ package servlet;
 
 import bean.admin.Account;
 import bean.employee.*;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
-import dao.employee.ExtraDao;
 import database.*;
 import service.employee.*;
+import utills.DateUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,9 +17,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
-import java.util.StringTokenizer;
 
 @WebServlet(name = "EmployeeServlet",urlPatterns = "/verify/employee")
 public class EmployeeServlet extends HttpServlet {
@@ -290,7 +287,7 @@ public class EmployeeServlet extends HttpServlet {
     private String leave(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong((request.getParameter("id")));
-        Date date = Date.valueOf(request.getParameter("date"));
+        Date date = DateUtil.parse(request.getParameter("date"),"yyyy-MM-dd");
         byte reason = Byte.parseByte(request.getParameter("reason"));
         return EmployeeService.leave(conn,id,category,reason,date);
     }

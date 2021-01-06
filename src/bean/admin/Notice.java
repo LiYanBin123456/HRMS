@@ -1,6 +1,6 @@
 package bean.admin;
 
-import java.sql.Date;
+import java.util.Date;
 
 //公告
 public class Notice {

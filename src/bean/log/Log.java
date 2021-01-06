@@ -1,6 +1,6 @@
 package bean.log;
 
-import java.sql.Date;
+import java.util.Date;
 //日志单
 public class Log {
     private long sid;//结算单id

@@ -3,13 +3,15 @@ package servlet;
 
 import bean.admin.Account;
 import bean.client.*;
-import com.alibaba.fastjson.*;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import dao.client.CooperationDao;
 import dao.client.DispatchDao;
 import dao.client.MapSalaryDao;
 import dao.client.SupplierDao;
 import database.*;
 import service.client.*;
+import utills.DateUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,12 +23,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.Date;
-import java.text.ParseException;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-
-import static utills.IDCardUtil.getLastday_Month;
 
 @WebServlet(urlPatterns = "/verify/client")
 public class ClientServlet extends HttpServlet {
@@ -106,8 +105,7 @@ public class ClientServlet extends HttpServlet {
     private String getSalaryDefineByMonth(Connection conn, HttpServletRequest request) {
         String month = request.getParameter("month");
         long cid = Long.parseLong(request.getParameter("id"));
-        month = getLastday_Month(month);
-        DaoQueryResult result = MapSalaryDao.selectByMonth(cid,conn, Date.valueOf(month));
+        DaoQueryResult result = MapSalaryDao.selectByMonth(cid,conn,DateUtil.getLastDayofMonth(month));
         return JSONObject.toJSONString(result);
     }
 

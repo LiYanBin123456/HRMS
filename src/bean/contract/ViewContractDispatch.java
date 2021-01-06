@@ -1,6 +1,6 @@
 package bean.contract;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class ViewContractDispatch extends Contract{
     private String name;//派遣方名字

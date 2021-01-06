@@ -14,6 +14,7 @@ import database.DaoUpdateResult;
 import database.QueryParameter;
 import service.employee.SettingService;
 import service.settlement.*;
+import utills.DateUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -25,7 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 @WebServlet(name = "SettlementServlet",urlPatterns = "/verify/settlement")
@@ -250,7 +251,7 @@ public class SettlementServlet extends HttpServlet {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
         String mont=request.getParameter("month");
-        Date month = Date.valueOf(mont+"-"+"01");
+        Date month = DateUtil.parse(mont+"-"+"01","yyyy-MM-dd");
         DaoUpdateResult result = null;
         switch (category){
             case 0://普通结算单

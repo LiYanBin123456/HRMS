@@ -28,11 +28,12 @@ import database.ConnUtil;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.QueryParameter;
+import utills.DateUtil;
 import utills.Salary.Salary;
 import utills.CollectionUtil;
 
 import java.sql.Connection;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -426,30 +427,27 @@ public class Settlement1Service {
 
         for(EnsureSetting s:settings){
             String city = s.getCity();//员工所处地市
-            for(int i=0;i<=month2-month1;i++) {
-                c.set(Calendar.MONTH, c.get(Calendar.MONTH) + i);
-                Date date = (Date) c.getTime();
-                //获取该地市的医保规则
-                RuleMedicare medicare = medicares.get(city+date.getTime());
+            Date date = DateUtil.parse(year+"-12-31","yyyy-MM-dd");
+            //获取该地市的医保规则
+            RuleMedicare medicare = medicares.get(city);
+            if (medicare == null) {
+                medicare = (RuleMedicare) RuleMedicareDao.get(conn, city, date).data;
                 if (medicare == null) {
-                    medicare = (RuleMedicare) RuleMedicareDao.get(conn, city, date).data;
-                    if (medicare == null) {
-                        res1.success = false;
-                        res1.msg = String.format("请确认%s的医保规则是否存在", city);
-                        return res1;
-                    }
-                    medicares.put(city+date, medicare);
+                    res1.success = false;
+                    res1.msg = String.format("请确认%s的医保规则是否存在", city);
+                    return res1;
                 }
-                RuleSocial social = socials.get(city+date.getTime());
+                medicares.put(city, medicare);
+            }
+            RuleSocial social = socials.get(city);
+            if (social == null) {
+                social = (RuleSocial) RuleSocialDao.get(conn, city, date).data;
                 if (social == null) {
-                    social = (RuleSocial) RuleSocialDao.get(conn, city, date).data;
-                    if (social == null) {
-                        res1.success = false;
-                        res1.msg = String.format("请确认%s的社保规则是否存在", city);
-                        return res1;
-                    }
-                    socials.put(city+date.getTime(), social);
+                    res1.success = false;
+                    res1.msg = String.format("请确认%s的社保规则是否存在", city);
+                    return res1;
                 }
+                socials.put(city, social);
             }
         }
 
@@ -475,15 +473,12 @@ public class Settlement1Service {
             setting.setSettingS((byte) 2);
             setting.setValS(baseS);
 
+            RuleMedicare medicare = medicares.get(setting.getCity());
+            RuleSocial social = socials.get(setting.getCity());
+
             float sum1=0;//个人累计社保合计
             float sum2=0;//单位累计社保合计
-            for(int i=0;i<=month2-month1;i++) {//遍历月份，有多少个月生成多少个明细
-                //获取该地市指定月份的医保和社保规则
-                c.set(Calendar.MONTH, c.get(Calendar.MONTH) + i);
-                Date date = (Date) c.getTime();
-                RuleMedicare medicare = medicares.get(setting.getCity()+date.getTime());
-                RuleSocial social = socials.get(setting.getCity()+date.getTime());
-
+            for(int i=0;i<=month2-month1;i++) {//有多少个月生成多少条明细
                 //新建明细,并且初始化
                 Detail1 d = new Detail1();
                 d.setSid(sid);
@@ -600,7 +595,7 @@ public class Settlement1Service {
         int month1 = Integer.parseInt(start.split("-")[1]);//起始月
         int month2 = Integer.parseInt(end.split("-")[1]);//结束月
         Calendar c = Calendar.getInstance();
-        c.set(year,month1,1);
+        c.set(year,month1-1,1);
         for(String id:eids){
             long eid = Long.parseLong(id);
             //个人社保合计
@@ -610,7 +605,7 @@ public class Settlement1Service {
             for(int i=0;i<=month2-month1;i++) {
                 c.set(Calendar.MONTH,c.get(Calendar.MONTH)+i);
                 //获取该员工当月分的结算单明细
-                ViewDetail1 detail1 = getDetail(detail1s2,eid, (Date) c.getTime());
+                ViewDetail1 detail1 = getDetail(detail1s2,eid, c.getTime());
                 if (detail1 != null) {
                     //重新生成一个明细用于计算医保和社保
                     Detail1 detail2 = new Detail1();
@@ -660,9 +655,9 @@ public class Settlement1Service {
         return res1;
     }
 
-    private static ViewDetail1 getDetail(List<ViewDetail1> detail1s2, long eid, Date date) {
-        for(ViewDetail1 d:detail1s2){
-            if(d.getMonth().equals(date) && d.getEid()==eid){
+    private static ViewDetail1 getDetail(List<ViewDetail1> details, long eid, Date date) {
+        for(ViewDetail1 d:details){
+            if(DateUtil.equal(date,d.getMonth()) && d.getEid()==eid){
                 return d;
             }
         }
