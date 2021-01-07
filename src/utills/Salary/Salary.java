@@ -10,6 +10,9 @@ import bean.employee.ViewDeduct;
 import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
 import bean.settlement.*;
+import dao.employee.DeductDao;
+import database.ConnUtil;
+import database.QueryParameter;
 import utills.CollectionUtil;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,8 +20,10 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 
+import java.sql.Connection;
 //工资计算
 public class Salary {
+
     /**
      *计算普通结算单
      * @param settlement 结算单
@@ -270,7 +275,7 @@ public class Salary {
      * @return 计算好的结算单明细
      */
     public static void calculateDetail2(Detail2 d, Deduct deduct){
-        float income = d.total();//本期收入
+        float income = d.total(d.getPrice());//本期收入
         float taxDue=deduct.total()+income;//应税额=累计应税额+本期收入
         double tax = Tax.tax1(taxDue);
         tax -= deduct.getPrepaid();
@@ -283,18 +288,21 @@ public class Salary {
     }
 
     /**
-     * 计算管理费和税费（只适用于导出结算单）
-     * @param type 合同服务项目中的类型
-     * @param category 合同服务项目中的结算方式
-     * @param invoice 合同基础信息中的发票类型
-     * @param per 税费比例（选择增值税专用发票（全额）需要用到）
-     * @param val 结算值，根据结算方式的不同，代表的意义不同
-     * @param manage 管理费
-     * @param tax2 税费
+     *计算管理费和税费
+     * @param vc 合同视图
      * @param v 明细
+     * @param salary 自定义工资和
+     * @return
      */
-    public  static HashMap<String, Float> calculateManageAndTax2(int type, int category, int invoice, float per, float val, float manage, float tax2, ViewDetail1 v,float salary){
-        HashMap<String,Float> map = new HashMap<String, Float>();
+    public  static HashMap<String, Float> calculateManageAndTax2( ViewContractCooperation vc,ViewDetail1 v,float salary){
+        int type = vc.getStype();//合同服务项目中的类型
+        int category = vc.getCategory();//合同服务项目中的结算方式
+        int invoice = vc.getInvoice();//合同基础信息中的发票类型
+        float per = vc.getPer()/100;//税费比例（选择增值税专用发票（全额）需要用到）
+        float val = vc.getValue();//结算值，根据结算方式的不同，代表的意义不同
+        float manage=0;
+        float tax2=0;
+        HashMap<String,Float> map = new HashMap<>();
         //计算管理费
         switch (type){
             case 0://劳务派遣
@@ -302,12 +310,49 @@ public class Salary {
                     manage=val;//管理费=管理费
                     if(invoice==0){//增值税专用发票（全额）
                         //税费=（基本工资+自定义工资项+单位五险一金+管理费-国家减免+单位核收补减）
-                        tax2 += (v.getBase()+salary+v.getPension2()+v.getUnemployment2()+v.getMedicare2()+v.getDisease2()+v.getInjury()+v.getBirth()+v.getFund2()+manage-v.getFree()+v.getExtra2())*per;
+                        tax2 +=  (v.getTaxDueOfDepartment(salary)+manage)*per;
                     }
                 }else if(category==1){//按比例收取的结算方式
                     //此时服务项目中value为比例所以需要转成小数
                     //管理费 = （基本工资+自定义工资项+单位五险一金-国家减免+单位核收补减）*比例（从服务项目中的比例）
-                    manage += (v.getBase()+salary+v.getPension2()+v.getUnemployment2()+v.getMedicare2()+v.getDisease2()+v.getBirth()+v.getFund2()+v.getInjury()-v.getFree()+v.getExtra2())*(val/100);
+                    manage +=  (v.getTaxDueOfDepartment(salary))*(val/100);
+                    tax2=0;
+                }else {//按外包整体核算方式
+
+                }
+                break;
+            case 1://人事代理
+                tax2=0;
+                manage = val;//管理费=人数*单价
+                break;
+        }
+        map.put("manage",manage);
+        map.put("tax2",tax2);
+        return map;
+    }
+
+    public  static HashMap<String, Float> calculateManageAndTax3( ViewContractCooperation vc, ViewDetail0 v,float salary){
+        int type = vc.getStype();//合同服务项目中的类型
+        int category = vc.getCategory();//合同服务项目中的结算方式
+        int invoice = vc.getInvoice();//合同基础信息中的发票类型
+        float per = vc.getPer()/100;//税费比例（选择增值税专用发票（全额）需要用到）
+        float val = vc.getValue();//结算值，根据结算方式的不同，代表的意义不同
+        float manage=0;
+        float tax2=0;
+        HashMap<String,Float> map = new HashMap<String, Float>();
+        //计算管理费
+        switch (type){
+            case 0://劳务派遣
+                if(category==0){//按人数收取的结算方式
+                    manage=0;//管理费=0
+                    if(invoice==0){//增值税专用发票（全额）
+                        //税费=奖金*比例
+                        tax2 += v.getAmount()*per;
+                    }
+                }else if(category==1){//按比例收取的结算方式
+                    //此时服务项目中value为比例所以需要转成小数
+                    //管理费 = 奖金*比例（从服务项目中的比例）
+                    manage += v.getAmount()*(val/100);
                     tax2=0;
                 }else {//按外包整体核算方式
 
@@ -329,7 +374,7 @@ public class Salary {
      * @param mapSalary 自定义工资
      * @return
      */
-    private static float sumDefinedSalaryItem(Detail1 detail, MapSalary mapSalary){
+    public static float sumDefinedSalaryItem(Detail1 detail, MapSalary mapSalary){
         /**
          * 思路：
          */

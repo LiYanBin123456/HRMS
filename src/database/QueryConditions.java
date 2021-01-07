@@ -42,7 +42,9 @@ public class QueryConditions {
     public List<Object> extraValues(){
         List<Object> values = new ArrayList<>();
         for (QueryKey key:keys) {
-            values.add(key.getV());
+            if(!key.getO().equals("in")) {
+                values.add(key.getV());
+            }
         }
         return values;
     }

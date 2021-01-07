@@ -463,7 +463,7 @@ public class XlsUtil {
         }
     }
 
-    //读继续教育教育
+    //读继续教育
     private static  void readDeduct2(Sheet sheet,List<ViewDeduct> deductList) {
         out:for(int line=2; ; line++) {
             String v1;

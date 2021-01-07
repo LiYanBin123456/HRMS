@@ -202,6 +202,7 @@ public class SettlementServlet extends HttpServlet {
         byte category = Byte.parseByte(request.getParameter("category"));//结算单类型
         boolean needDetail = Boolean.parseBoolean(request.getParameter("needDetail"));//是否自动生成明细 0 不 1 自动生成
         boolean needCalculateSocial = Boolean.parseBoolean(request.getParameter("needCalculateSocial"));//是否自动生成明细 0 不 1 自动生成
+
         DaoUpdateResult result = null;
         HttpSession session = request.getSession();
         //获取管理员所属的公司id

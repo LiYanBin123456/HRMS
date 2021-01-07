@@ -137,7 +137,9 @@ public class Detail1Service {
             conditions1.add("id", "=", settlement.getCid());
             Cooperation coop = (Cooperation) CooperationDao.get(conn, conditions1).data;
             float injuryPer = coop.getPer1();
-            List<EnsureSetting> settings = (List<EnsureSetting>) SettingDao.getList(conn, p2).rows;
+            QueryParameter p3 = new QueryParameter();
+            p3.addCondition("eid","in",eids);
+            List<EnsureSetting> settings = (List<EnsureSetting>) SettingDao.getList(conn, p3).rows;
             for(EnsureSetting s:settings){
                 s.setInjuryPer(injuryPer);
                 String city = s.getCity();//员工所处地市

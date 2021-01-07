@@ -32,8 +32,8 @@
             <span class="x-red">*</span>是否生成明细
         </label>
         <div class="layui-input-inline" >
-            <input type="radio" name="mode" title="是" value="1" lay-filter="mode" checked="checked">
-            <input type="radio" name="mode" title="否" value="0" lay-filter="mode">
+            <input type="radio" name="mode" title="是" value="true" lay-filter="mode" checked="checked">
+            <input type="radio" name="mode" title="否" value="false" lay-filter="mode">
         </div>
     </div>
     <div class="layui-form-item" id="if_social">
@@ -41,8 +41,8 @@
             <span class="x-red">*</span>是否计算社保
         </label>
         <div class="layui-input-inline" >
-            <input type="radio" name="calc" title="是" value="1" lay-filter="calc" checked="checked">
-            <input type="radio" name="calc" title="否" value="0" lay-filter="calc">
+            <input type="radio" name="calc" title="是" value="true" lay-filter="calc" checked="checked">
+            <input type="radio" name="calc" title="否" value="false" lay-filter="calc">
         </div>
     </div>
     <div class="layui-form-item">
@@ -62,7 +62,7 @@
 <script src="../js/interface.js"></script>
 <script src="../js/queryParam.js"></script>
 <script>
-    var settlement = {mode:1,flag:1};
+    var settlement = {mode:true,calc:true};
     var form;
     var laydate;
     var table;
@@ -94,7 +94,7 @@
                 $("#if_social").addClass("layui-hide");
             }else {
                 form.on('radio(calc)', function(data){
-                    settlement.flag = data.value;
+                    settlement.calc = data.value;
                 });
             }
 

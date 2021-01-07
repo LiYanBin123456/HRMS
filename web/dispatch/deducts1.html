@@ -81,7 +81,7 @@
                         , exts: 'xls'
                         , acceptMime: '.xls'
                         ,before: function(file){
-                            this.data={op:"readDeducts",file:JSON.stringify(file)}
+                            this.data={op:"readDeducts",file:JSON.stringify(file),cid:0}
                         }
                         , done: function (res) {
                             if (res.success){
@@ -196,7 +196,7 @@
 
 
             function showErrDlg(deducts) {
-                var content = "../dialog/importDeducts.html?deducts="+encodeURIComponent(JSON.stringify(deducts1));
+                var content = "../dialog/importDeducts.html?deducts="+encodeURIComponent(JSON.stringify(deducts));
                 layer.open({
                     title:"以下名单异常，请核对",
                     type: 2,

@@ -37,13 +37,13 @@ public class Field {
         this.isNull = true;
     }
 
-    public Field(int col,String name, String type) {
+    public Field(int col,String name, String type, boolean isNull) {
         this.col = col;
         this.name = name;
         this.title = "";
         this.type = type;
+        this.isNull = isNull;
         this.width = 0;
         this.decimal = 0;
-        this.isNull = true;
     }
 }
