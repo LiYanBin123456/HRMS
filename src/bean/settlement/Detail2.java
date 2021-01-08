@@ -4,7 +4,7 @@ import java.util.Date;
 
 //小时工结算单明细
 public class Detail2 extends Detail {
-
+    private long cid;//合作客户编号
     private int hours;//工时
     private float price;//员工表中的价格
     private float food;//餐费
@@ -35,6 +35,14 @@ public class Detail2 extends Detail {
         this.other2 = other2;
         this.payable = payable;
         this.paid = paid;
+    }
+
+    public long getCid() {
+        return cid;
+    }
+
+    public void setCid(long cid) {
+        this.cid = cid;
     }
 
     public int getHours() {

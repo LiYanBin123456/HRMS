@@ -3,6 +3,7 @@ package bean.settlement;
 import java.util.Date;
 
 public class ViewDetail1 extends Detail1 {
+    private long cid;//合作客户编号
     private String cardId;//员工身份证号
     private String name;//员工姓名
     private Date month;//月份
@@ -41,6 +42,14 @@ public class ViewDetail1 extends Detail1 {
         this.cardId = cardId;
         this.name = name;
         this.month = month;
+    }
+
+    public long getCid() {
+        return cid;
+    }
+
+    public void setCid(long cid) {
+        this.cid = cid;
     }
 
     public Date getMonth() {
