@@ -145,7 +145,7 @@ public class Detail2 extends Detail {
      * 小时工本期收入
      * @return
      */
-    public float total(){
+    public float total(float price){
         return hours*price-insurance-utilities-accommodation-food+other1+other2;
     }
 

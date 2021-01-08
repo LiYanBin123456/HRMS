@@ -7,6 +7,7 @@ import bean.employee.ViewEmployee;
 import dao.employee.DeductDao;
 import dao.employee.EmployeeDao;
 import database.*;
+import utills.CollectionUtil;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -98,7 +99,7 @@ public class DeductService {
         result.success=true;
          for(ViewDeduct deduct:data){//遍历excel中的扣除信息
              //判断员工是否存在
-            ViewDeduct d = getDeduct(deductList,deduct.getCardId());
+            ViewDeduct d = CollectionUtil.getElement(deductList,"cardId",deduct.getCardId());
             if(d!=null){
                  d.setDeduct1(deduct.getDeduct1());
                  d.setDeduct2(deduct.getDeduct2());

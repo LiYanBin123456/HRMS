@@ -1,7 +1,9 @@
 package service.fileService;
 
+import bean.employee.Deduct;
 import bean.employee.EnsureSetting;
 import bean.employee.PayCard;
+import bean.employee.ViewDeduct;
 import bean.insurance.ViewInsurance;
 import bean.settlement.ViewDetail1;
 import com.alibaba.fastjson.JSONArray;
@@ -19,6 +21,7 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
+import utills.CollectionUtil;
 import utills.DateUtil;
 
 import javax.servlet.http.HttpServletResponse;
@@ -26,8 +29,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.sql.Connection;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -610,6 +615,92 @@ public class FileService {
         String fileName = URLEncoder.encode("商业保险参保单.xls","utf-8");
         response.setHeader("Content-Disposition", "attachment; filename="+fileName);
 
+    }
+
+    //读累计扣除数
+    public static List<ViewDeduct> readDeduct(JSONArray[] data) {
+        List<ViewDeduct> deductList = new ArrayList<>();
+        JSONArray a1=data[1];//子女教育支出数据
+        JSONArray a2=data[2];//继续教育数据
+        JSONArray a3=data[3];//住房贷款数据
+        JSONArray a4=data[4];//住房租金数据
+        JSONArray a5=data[5];//赡养老人数据
+
+        for(int i =0;i<a1.size();i++){//获取子女教育累计扣除
+            JSONObject o = (JSONObject) a1.get(i);
+            String per = o.getString("per");
+            Number num = null;
+            try {
+                num = (NumberFormat.getInstance().parse(per));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+          float deduct = Deduct.DEDUCT1*(num.intValue()/100);//换算成扣除金额
+          ViewDeduct d = CollectionUtil.getElement(deductList,"cardId",o.getString("cardId"));
+          if(d == null){//不在
+              d = new ViewDeduct();
+              d.setCardId(o.getString("cardId"));
+              d.setName(o.getString("name"));
+              d.setDeduct1(deduct);
+              deductList.add(d);
+          }else{
+              d.setDeduct1(d.getDeduct1()+deduct);
+          }
+        }
+        for(int i =0;i<a2.size();i++){//获取继续教育累计扣除
+            JSONObject o = (JSONObject) a2.get(i);
+            ViewDeduct d = CollectionUtil.getElement(deductList,"cardId",o.getString("cardId"));
+            if(d == null){//不在
+                d = new ViewDeduct();
+                d.setCardId(o.getString("cardId"));
+                d.setName(o.getString("name"));
+                d.setDeduct3(Deduct.DEDUCT3);
+                deductList.add(d);
+            }else{
+                d.setDeduct3(d.getDeduct3()+Deduct.DEDUCT3);
+            }
+        }
+        for(int i =0;i<a3.size();i++){//读住房贷款利息
+            JSONObject o = (JSONObject) a3.get(i);
+            ViewDeduct d = CollectionUtil.getElement(deductList,"cardId",o.getString("cardId"));
+            if(d == null){//不在
+                d = new ViewDeduct();
+                d.setCardId(o.getString("cardId"));
+                d.setName(o.getString("name"));
+                d.setDeduct5(Deduct.DEDUCT5);
+                deductList.add(d);
+            }else{
+                d.setDeduct5(d.getDeduct5()+Deduct.DEDUCT5);
+            }
+        }
+        for(int i =0;i<a4.size();i++){//读租房租金
+            JSONObject o = (JSONObject) a4.get(i);
+            ViewDeduct d = CollectionUtil.getElement(deductList,"cardId",o.getString("cardId"));
+            if(d == null){//不在
+                d = new ViewDeduct();
+                d.setCardId(o.getString("cardId"));
+                d.setName(o.getString("name"));
+                d.setDeduct6(Deduct.DEDUCT6);
+                deductList.add(d);
+            }else{
+                d.setDeduct6(d.getDeduct6()+Deduct.DEDUCT6);
+            }
+        }
+        for(int i =0;i<a5.size();i++){//赡养老人
+            JSONObject o = (JSONObject) a5.get(i);
+            float deduct= o.getFloat("per");
+            ViewDeduct d = CollectionUtil.getElement(deductList,"cardId",o.getString("cardId"));
+            if(d == null){//不在
+                d = new ViewDeduct();
+                d.setCardId(o.getString("cardId"));
+                d.setName(o.getString("name"));
+                d.setDeduct2(deduct);
+                deductList.add(d);
+            }else{
+                d.setDeduct2(d.getDeduct2()+deduct);
+            }
+        }
+        return deductList;
     }
 
 }

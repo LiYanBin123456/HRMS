@@ -50,4 +50,32 @@ public class CollectionUtil {
         }
         return null;
     }
+
+    /**
+     * 从集合中按照主键获取元素
+     * @param collection 集合
+     * @param key 键名，要保证元素有对应的get方法，如key="id",则应有方法名getId
+     * @param value 键值，应为long或者int类型
+     * @param <T> 元素类型
+     * @return 获取的元素，没有则返回null，
+     */
+    public static <T> T getElement(List<T> collection,String key,String value){
+        Method method = null;
+        String v;
+        try {
+            for(T o:collection){
+                if(method == null) {
+                    String functionName = String.format("get%s%s",key.substring(0,1).toUpperCase(),key.substring(1));
+                    method = o.getClass().getMethod(functionName);
+                }
+                v = (String) method.invoke(o);
+                if(value.equals(v)){
+                    return o;
+                }
+            }
+        } catch (Exception e) {
+            return null;
+        }
+        return null;
+    }
 }

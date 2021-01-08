@@ -1,8 +1,11 @@
 package bean.employee;
 
-import sun.text.resources.sr.FormatData_sr_Latn;
-
 public class Deduct {
+    public final static int DEDUCT1 = 1000;//每个子女教育的减免标准
+    public final static int DEDUCT3 = 400;//每个继续教育的减免标准
+    public final static int DEDUCT4 = 0;//大病的减免标准预留
+    public final static int DEDUCT5 = 1000;//住房贷款的减免标准
+    public final static int DEDUCT6 = 800;//租房的减免标准
     private long eid;//员工外键
     private float income;//累计收入总额
     private float free;//累计减免扣除
@@ -13,7 +16,7 @@ public class Deduct {
     private float deduct3;//继续教育
     private float deduct4;//大病医疗
     private float deduct5;//住房贷款利息
-    private float deduct6;//住房租金
+    private float deduct6;//租房租金
 
     public Deduct() {
     }

@@ -1,11 +1,9 @@
 package bean.settlement;
 
-import java.util.Date;
-
 public class ViewDetail2 extends Detail2{
     private String cardId;//员工身份证号
     private String name;//员工姓名
-
+    private float sum;//汇款明细
     public ViewDetail2() {
     }
 
@@ -13,6 +11,13 @@ public class ViewDetail2 extends Detail2{
         super(id, sid, eid, hours, price, food, traffic, accommodation, utilities, insurance, tax, other1, other2, payable, paid);
         this.cardId = cardId;
         this.name = name;
+    }
+
+    public ViewDetail2(long id, long sid, long eid, int hours, float price, float food, float traffic, float accommodation, float utilities, float insurance, float tax, float other1, float other2, float payable, float paid, String cardId, String name, float sum) {
+        super(id, sid, eid, hours, price, food, traffic, accommodation, utilities, insurance, tax, other1, other2, payable, paid);
+        this.cardId = cardId;
+        this.name = name;
+        this.sum = sum;
     }
 
     public String getCardId() {
@@ -29,6 +34,14 @@ public class ViewDetail2 extends Detail2{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public float getSum() {
+        return sum;
+    }
+
+    public void setSum(float sum) {
+        this.sum = sum;
     }
 
     @Override

@@ -698,4 +698,14 @@ public class Detail1 extends Detail {
     public float getPayable0(boolean flag){
         return flag?base - getTotalPerson() - getFund1() + extra1:base;
     }
+
+    /**
+     * 计算派遣单位应税额
+     * @param salary 自定义工资和
+     * @return
+     */
+    public float getTaxDueOfDepartment(float salary){
+        //基本工资+单位社保合计+公积金+单位核收补减
+        return base+getTotalDepartment()+fund2+extra2;
+    }
 }

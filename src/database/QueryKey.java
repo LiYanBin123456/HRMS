@@ -46,7 +46,7 @@ public class QueryKey {
                 return String.format("%s %s ?", k, o);
         }*/
         if(o.equals("in")){
-            return String.format("%s %s (?)", k, o);
+            return String.format("%s in(%s)", k, v);
         }
         if(o.equals("like")){
             v = "%"+v+"%";
