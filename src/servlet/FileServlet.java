@@ -20,6 +20,7 @@ import dao.employee.EmployeeDao;
 import dao.settlement.*;
 import database.ConnUtil;
 import database.DaoQueryListResult;
+import database.DaoUpdateResult;
 import database.QueryParameter;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
@@ -34,7 +35,6 @@ import service.fileService.FileService;
 import utills.DateUtil;
 import utills.IDCardUtil;
 import utills.Salary.Salary;
-import utills.XlsUtil;
 import utills.excel.Field;
 import utills.excel.Scheme;
 
@@ -44,15 +44,9 @@ import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.net.URLEncoder;
 import java.sql.Connection;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-
-import static utills.Salary.Salary.calculateManageAndTax2;
 
 @WebServlet(name = "FileServlet",urlPatterns = "/verify/file")
 @MultipartConfig
@@ -534,12 +528,12 @@ public class FileServlet extends HttpServlet {
                 break;
         }
         parameter.addCondition("status","=",0);
-        List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
+        List<ViewEmployee> employees = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
 
         //获取结算单视图
-        ViewSettlement1 vs = (ViewSettlement1) Settlement1Dao.get(conn,sid).data;
+        ViewSettlement1 settlement = (ViewSettlement1) Settlement1Dao.get(conn,sid).data;
         //结算单类型
-        byte types = vs.getType();
+        byte types = settlement.getType();
         String typeMsg="";
         switch (types){
             case 0:
@@ -556,8 +550,10 @@ public class FileServlet extends HttpServlet {
                 break;
         }
 
+
+
         //文件名
-        String fileName=vs.getName()+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy年MM月"))+typeMsg+"结算单明细模板";
+        String fileName=settlement.getName()+(settlement.getMonth()==null?"":DateUtil.format(settlement.getMonth(),"yyyy年MM月"))+typeMsg+"结算单明细模板";
         fileName = new String(fileName.getBytes(),"iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.addHeader("Content-Disposition", "attachment;filename=\""
@@ -624,7 +620,7 @@ public class FileServlet extends HttpServlet {
                 sheet1.setColumnView(22,20);
             }
             int index = 1;
-            for( ViewEmployee viewEmployee:employeeList){//根据员工生成明细，如果没有员工则不生成
+            for( ViewEmployee viewEmployee:employees){//根据员工生成明细，如果没有员工则不生成
                 sheet1.addCell(new Label(0, index, viewEmployee.getName()));
                 sheet1.addCell(new Label(1, index, viewEmployee.getCardId()));
                 if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){
@@ -953,79 +949,61 @@ public class FileServlet extends HttpServlet {
         scheme1.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
         scheme1.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
         scheme1.addField(new Field(2, "base", "基本工资", Field.FLOAT, 100));
+        //自定义工资项
+        int c1 = 3;
         if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0) {
             List<Items> itemList = mapSalary.getItemList();//获取自定义工资项集合
-            int c = 0;
             for (int i = 0; i < itemList.size(); i++) {
-                c = i + 3;
-                scheme1.addField(new Field(c, "f"+(i+1), itemList.get(i).getField(), Field.FLOAT, 100));
+                scheme1.addField(new Field(c1, "f"+(i+1), itemList.get(i).getField(), Field.FLOAT, 100));
+                c1++;
             }
-            scheme1.addField(new Field(c+1, "pension2", "单位养老", Field.FLOAT, 100));
-            scheme1.addField(new Field(c+2, "medicare2", "单位医疗", Field.FLOAT, 100));
-            scheme1.addField(new Field(c+3, "disease2", "单位大病", Field.FLOAT, 100));
-            scheme1.addField(new Field(c+4, "birth", "单位生育", Field.FLOAT, 100));
-            scheme1.addField(new Field(c+5, "unemployment2", "单位失业", Field.FLOAT, 100));
-            scheme1.addField(new Field(c+6, "injury", "单位工伤", Field.FLOAT, 100));
-            scheme1.addField(new Field(c+7, "fund2", "单位公积金", Field.FLOAT, 100));
-            scheme1.addField(new Field(c+8, "total2", "单位社保合计", Field.FLOAT, 100));
-            scheme1.addField(new Field(c+9, "manage", "管理费", Field.FLOAT, 100));
-            scheme1.addField(new Field(c+10, "extra2", "核收补减", Field.FLOAT, 100));
-            scheme1.addField(new Field(c+11, "tax2", "税费", Field.FLOAT, 100));
-            scheme1.addField(new Field(c+12, "summary", "汇款总额", Field.FLOAT, 100));
-            scheme1.addField(new Field(c+13, "comments", "备注", Field.STRING, 100));
-        }else{
-            scheme1.addField(new Field(3, "pension2", "单位养老", Field.FLOAT, 100));
-            scheme1.addField(new Field(4, "medicare2", "单位医疗", Field.FLOAT, 100));
-            scheme1.addField(new Field(5, "disease2", "单位大病", Field.FLOAT, 100));
-            scheme1.addField(new Field(6, "birth", "单位生育", Field.FLOAT, 100));
-            scheme1.addField(new Field(7, "unemployment2", "单位失业", Field.FLOAT, 100));
-            scheme1.addField(new Field(8, "injury", "单位工伤", Field.FLOAT, 100));
-            scheme1.addField(new Field(9, "fund2", "单位公积金", Field.FLOAT, 100));
-            scheme1.addField(new Field(10, "total2", "单位社保合计", Field.FLOAT, 100));
-            scheme1.addField(new Field(11, "manage", "管理费", Field.FLOAT, 100));
-            scheme1.addField(new Field(12, "extra2", "核收补减", Field.FLOAT, 100));
-            scheme1.addField(new Field(13, "tax2", "税费", Field.FLOAT, 100));
-            scheme1.addField(new Field(14, "summary", "汇款总额", Field.FLOAT, 100));
-            scheme1.addField(new Field(15, "comments", "备注", Field.FLOAT, 100));
         }
+        scheme1.addField(new Field(c1, "pension2", "单位养老", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+1, "medicare2", "单位医疗", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+2, "disease2", "单位大病", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+3, "birth", "单位生育", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+4, "unemployment2", "单位失业", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+5, "injury", "单位工伤", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+6, "fund2", "单位公积金", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+7, "total2", "单位社保合计", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+8, "manage", "管理费", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+9, "extra2", "核收补减", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+10, "tax2", "税费", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+11, "summary", "汇款总额", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+12, "comments", "备注", Field.STRING, 100));
+
         Scheme scheme2 = new Scheme();
         scheme2.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
         scheme2.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
         scheme2.addField(new Field(2, "base", "基本工资", Field.FLOAT, 100));
+
+        //自定义工资项
+        int c2 = 3;
         if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0) {
             List<Items> itemList = mapSalary.getItemList();//获取自定义工资项集合
-            int c = 0;
             for (int i = 0; i < itemList.size(); i++) {
-                c = i + 3;
-                scheme2.addField(new Field(c, "f"+(i+1), itemList.get(i).getField(), Field.FLOAT, 100));
+                scheme2.addField(new Field(c2, "f"+(i+1), itemList.get(i).getField(), Field.FLOAT, 100));
+                c2++;
             }
-            scheme2.addField(new Field(c+1, "pension1", "个人养老", Field.FLOAT, 100));
-            scheme2.addField(new Field(c+2, "medicare1", "个人医疗", Field.FLOAT, 100));
-            scheme2.addField(new Field(c+3, "disease1", "个人大病", Field.FLOAT, 100));
-            scheme2.addField(new Field(c+4, "fund1", "个人公积金", Field.FLOAT, 100));
-            scheme2.addField(new Field(c+5, "payable", "税前工资", Field.FLOAT, 100));
-            scheme2.addField(new Field(c+6, "tax", "个税", Field.FLOAT, 100));
-            scheme2.addField(new Field(c+7, "paid", "实发工资", Field.FLOAT, 100));
-        }else{
-            scheme2.addField(new Field(3, "pension1", "个人养老", Field.FLOAT, 100));
-            scheme2.addField(new Field(4, "medicare1", "个人医疗", Field.FLOAT, 100));
-            scheme2.addField(new Field(5, "disease1", "个人大病", Field.FLOAT, 100));
-            scheme2.addField(new Field(6, "fund1", "个人公积金", Field.FLOAT, 100));
-            scheme2.addField(new Field(7, "payable", "税前工资", Field.FLOAT, 100));
-            scheme2.addField(new Field(8, "tax", "个税", Field.FLOAT, 100));
-            scheme2.addField(new Field(9, "paid", "实发工资", Field.FLOAT, 100));
         }
-        for(ViewDetail1 v:details){
+        scheme2.addField(new Field(c2+0, "pension1", "个人养老", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+1, "medicare1", "个人医疗", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+2, "disease1", "个人大病", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+3, "fund1", "个人公积金", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+4, "payable", "税前工资", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+5, "tax", "个税", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+6, "paid", "实发工资", Field.FLOAT, 100));
+        for(ViewDetail1 d:details){
             //计算自定义工资项总和
-            float salary =Salary.sumDefinedSalaryItem(v,mapSalary);
+            float salary =Salary.sumDefinedSalaryItem(d,mapSalary);
             //计算管理费和税费
-            HashMap<String,Float> map= Salary.calculateManageAndTax2(vc,v,salary);//计算管理费和税费
-            v.setManage(map.get("manage"));
-            v.setTax2(map.get("tax2"));
+            HashMap<String,Float> map= Salary.calculateManageAndTax2(vc,d,salary);//计算管理费和税费
+            d.setManage(map.get("manage"));
+            d.setTax2(map.get("tax2"));
             //汇款总额 = 基本工资+自定义工资项+单位社保总额+管理费+税费+（单位）核收补减
-            float summary = v.getBase()+salary+v.getTotalDepartment()+v.getManage()+v.getTax2()+v.getExtra2();
-            v.setSummary(summary);
-            v.setTotal2(v.getTotalDepartment()+v.getFund2());
+            float summary = d.getBase()+salary+d.getTotalDepartment()+d.getManage()+d.getTax2()+d.getExtra2();
+            d.setSummary(summary);
+            d.setTotal2(d.getTotalDepartment()+d.getFund2());
         }
 
         JSONArray data = JSONArray.parseArray(JSON.toJSONString(details));
@@ -1212,7 +1190,7 @@ public class FileServlet extends HttpServlet {
 
     //读取专项扣除数据
     private String readDeducts(Connection conn,HttpServletRequest request)throws IOException, ServletException {
-        DaoQueryListResult result = new DaoQueryListResult();
+        DaoUpdateResult result = new DaoUpdateResult();
         Part part = request.getPart("file");
         long cid = Long.parseLong(request.getParameter("cid"));
         try {//获取part中的文件，读取数据
@@ -1239,10 +1217,10 @@ public class FileServlet extends HttpServlet {
             JSONArray[] data =utills.excel.XlsUtil.read(is,schemes,cows);
             List<ViewDeduct> deductList = FileService.readDeduct(data);
             if(cid!=0){//代表是导入部分扣除
-                 result=DeductService.addPartDeducts(conn,deductList,cid);
+                 result=DeductService.updateDeducts(conn,deductList,cid);
              }else {
-                 result=DeductService.addDeducts(conn,deductList);
-             }
+                 result=DeductService.updateDeducts(conn,deductList);
+            }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }

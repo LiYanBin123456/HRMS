@@ -2,19 +2,13 @@ package service.employee;
 
 
 import bean.client.Cooperation;
-import bean.employee.Employee;
-import bean.employee.EmployeeExtra;
-import bean.employee.EnsureSetting;
-import bean.employee.PayCard;
+import bean.employee.*;
 import bean.insurance.Insurance;
 import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
 import com.alibaba.fastjson.JSONObject;
 import dao.client.CooperationDao;
-import dao.employee.EmployeeDao;
-import dao.employee.ExtraDao;
-import dao.employee.PayCardDao;
-import dao.employee.SettingDao;
+import dao.employee.*;
 import dao.insurance.InsuranceDao;
 import dao.rule.RuleMedicareDao;
 import dao.rule.RuleSocialDao;
@@ -48,12 +42,29 @@ public class EmployeeService {
 
     //增加
     public static String insert(Connection conn, Employee employee) {
+        //关闭自动提交
+        ConnUtil.closeAutoCommit(conn);
+
         QueryConditions conditions = new QueryConditions();
         conditions.add("cardId","=",employee.getCardId());
         if(EmployeeDao.exist(conn,conditions).exist){
             return DaoResult.fail("该员工已经存在");
         }
         DaoUpdateResult res = EmployeeDao.insert(conn,employee);
+        if(!res.success){
+            return JSONObject.toJSONString(res);
+        }
+        Deduct deduct = new Deduct();
+        deduct.setEid(employee.getId());
+        DaoUpdateResult res2= DeductDao.insert(conn,deduct);
+
+        if(res.success&&res2.success){
+           ConnUtil.commit(conn);
+        }else {
+            ConnUtil.rollback(conn);
+            res.success=false;
+            res.msg="数据库操作错误";
+        }
         return JSONObject.toJSONString(res);
     }
 
@@ -83,10 +94,12 @@ public class EmployeeService {
         //关闭自动提交
         ConnUtil.closeAutoCommit(conn);
 
-        DaoUpdateResult result;
+        DaoUpdateResult result=new DaoUpdateResult();
+        result.success=true;
         List<Employee> employees =new ArrayList<>();
         List<EmployeeExtra> extras =new ArrayList<>();
         List<PayCard> payCards =new ArrayList<>();
+        List<Deduct> deducts = new ArrayList<>();
         for(JSONObject v : viewEmployees) {
             long cid = v.getLong("cid");
             //无外派单位
@@ -101,19 +114,25 @@ public class EmployeeService {
 
             PayCard payCard = new PayCard(0,v.getString("bank1"),v.getString("bank2"),v.getString("bankNo"),v.getString("cardNo"));
             payCards.add(payCard);
+
         }
 
         result = EmployeeDao.insertBatch(conn,employees);//批量插入员工数据
+        if(!result.success){
+           return result;
+        }
         long[] eids = (long[]) result.extra;
         for(int i = 0;i<eids.length;i++){//员工补充信息添加对应eid
             extras.get(i).setEid(eids[i]);
             payCards.get(i).setEid(eids[i]);
+            Deduct deduct=new Deduct();
+            deduct.setEid(eids[i]);
+            deducts.add(deduct);
         }
-
         DaoUpdateResult result1 = ExtraDao.insertBatch(conn,extras);//批量插入员工补充数据
         DaoUpdateResult result2 =PayCardDao.insertBatch(conn,payCards);
-
-        if(result.success&&result1.success&&result2.success){//事务处理
+        DaoUpdateResult result3 = DeductDao.insertBatch(conn,deducts);
+        if(result1.success&&result2.success&&result3.success){//事务处理
             ConnUtil.commit(conn);
             return  result;
         }else {

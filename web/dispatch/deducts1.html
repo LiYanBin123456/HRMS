@@ -30,6 +30,7 @@
         <!--顶部工具栏-->
         <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
         <button class="layui-btn layui-btn-sm" style="display: none" id="importDeduct"><i class="layui-icon "></i> 导入专项扣除</button>
+        <button class="layui-btn layui-btn-sm" style="display: none" id="importMakeUp"><i class="layui-icon "></i> 导入补发专项扣除</button>
         <div class="layui-hide" id="top_bar_deduct">
             <button class="layui-btn layui-btn-sm" lay-event="import"><i class="layui-icon "></i> 导入</button>
             <button class="layui-btn layui-btn-sm" lay-event="importDeduct"><i class="layui-icon "></i> 导入专项扣除</button>
@@ -85,14 +86,12 @@
                         }
                         , done: function (res) {
                             if (res.success){
-                                var deducts = res.rows;
-                                if (deducts!=null){
-                                    showErrDlg(deducts);
-                                }else {
-                                    layer.msg("导入成功");
-                                }
+                               layer.msg("导入成功");
                             }else {
-                                layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                                var deducts = res.extra;
+                                console.log(deducts);
+                                showErrDlg(deducts);
+                                layer.msg("异常员工信息，请核对");
                             }
                         }
                         , error: function () {
@@ -144,6 +143,9 @@
                         case 'importDeduct':
                             $("#importDeduct").click();
                             break;
+                        case 'importMakeUp':
+                            showMakeUp();
+                            break;
                     }
                 });
                 getDeducts();
@@ -193,10 +195,29 @@
                     }
                 });
             }
-
+            function showMakeUp() {
+                var content = "../dialog/importMakeUpDeducts.html?";
+                layer.open({
+                    title:"核对明细",
+                    type: 2,
+                    area: ['95%', '95%'],
+                    content: content,
+                    btn: ['添加', '关闭']
+                    ,yes: function(index, layero){
+                        var deducts = window["layui-layer-iframe" + index].callbackData();
+                        iEmployee.importDeducts(deducts,function () {
+                            layer.close(index);
+                            layer.msg("导入成功");
+                            getDeducts();
+                        })
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
+                });
+            }
 
             function showErrDlg(deducts) {
-                var content = "../dialog/importDeducts.html?deducts="+encodeURIComponent(JSON.stringify(deducts));
+                var content = "../dialog/showErr.html?deducts="+encodeURIComponent(JSON.stringify(deducts));
                 layer.open({
                     title:"以下名单异常，请核对",
                     type: 2,

@@ -83,4 +83,17 @@ public class DeductDao {
         }
         return DbUtil.insertBatch(conn,sql,params);
     }
+
+    public static DaoUpdateResult insertBatch(Connection conn, List<Deduct> p) {
+        String sql = "insert deduct (eid,deduct,deduct1,deduct2,deduct3,deduct4,deduct5,deduct6,income,free,prepaid) values (?,?,?,?,?,?,?,?,?,?,?)";
+        Object [][]params = new Object[p.size()][];
+        for (int i = 0; i < p.size(); i++) {
+            params[i] = new Object[]{
+                    p.get(i).getEid(),p.get(i).getDeduct(),p.get(i).getDeduct1(),
+                    p.get(i).getDeduct2(),p.get(i).getDeduct3(),p.get(i).getDeduct4(),
+                    p.get(i).getDeduct5(),p.get(i).getDeduct6(),p.get(i).getIncome(),p.get(i).getFree(),p.get(i).getPrepaid()
+            };
+        }
+        return DbUtil.insertBatch(conn,sql,params);
+    }
 }

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+        <link rel="stylesheet" href="../css/font.css">
+        <link rel="stylesheet" href="../css/xadmin.css">
+        <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+        <script src="../layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../js/xadmin.js"></script>
+        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+        <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <div class="layui-form-item">
+        <label class="layui-form-label"><span class="x-red">*</span>选择结算单位</label>
+        <div class="layui-input-inline">
+            <select name="cid" id="select_cooperation" lay-filter="filter_cooperation" lay-verify="required"></select>
+        </div>
+    </div>
+
+    <body class="layui-layout-body">
+    <button class="layui-btn layui-btn-sm" id="import"><i class="layui-icon "></i> 批量导入</button>
+
+    <div class="dialog-content">
+            <div id="container">
+            <table id="tbl_detail" lay-filter="filter_tb_detail"></table>
+            </div>
+            <div class="layui-table-page" id="pager"></div>
+
+            <!--行内工具栏-->
+            <script type="text/html" id="bar_detail">
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+            </script>
+        </div>
+        <script src="../js/fieldSet.js"></script>
+        <script src="../js/interface.js"></script>
+        <script src="../js/jquery.params.js"></script>
+        <script src="../js/queryParam.js"></script>
+        <script>
+            var cid =0;
+            var table;//数据表格对象
+            var laypage;//分页对象
+            var form;//分页对象
+            var layer;//弹出窗口
+            var element;
+            var upload;
+            var param_query = new QueryParam();
+            param_query.setOrder("id",true);
+            var deducts ;
+            $(function () {
+                loadLayuiModule();
+            });
+
+            function loadLayuiModule() {
+                layui.use(['table','form','element','layer','upload','laypage'], function() {
+                    table = layui.table;
+                    layer = layui.layer;
+                    element = layui.element;
+                    laypage = layui.laypage;
+                    form = layui.form;
+                    upload = layui.upload;
+                    initCoop();
+                    form.on('select(filter_cooperation)', function(data){
+                        cid = data.value;
+                        console.log(cid);
+                    });
+                    upload.render({
+                        elem: '#import' //绑定元素
+                        , url: '/hrms/verify/file' //上传接口
+                        , accept: 'file'
+                        , exts: 'xls'
+                        , acceptMime: '.xls'
+                        ,before: function(file){
+                            this.data={op:"readDeducts",file:JSON.stringify(file),cid:cid}
+                        }
+                        , done: function (res) {
+                            if (res.success){
+                                deducts = JSON.stringify(res.data);
+                                initPage();
+                            }else {
+                                layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                            }
+                        }
+                        , error: function () {
+                            //请求异常回调
+                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                        }
+                    });
+                });
+            }
+
+            function initPage() {
+                initTable(0);
+            }
+
+            function initTable() {
+                var cols =columns_deduct;
+                //初始化数据表格
+                table.render({
+                    elem: '#tbl_detail',
+                    toolbar: '#top_bar_detail', //开启头部工具栏，并为其绑定左侧模板
+                    title: '列表',
+                    cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                    cols: cols,
+                    limit: 200,
+                    id: 'tbl_detail'
+                });
+                //单元格编辑
+                table.on('edit(filter_tb_detail)', update);
+                table.reload('tbl_detail', {
+                    data:JSON.parse(deducts)
+                });
+                laypage.render({
+                    elem: 'pager'
+                    ,curr:param_query.pagination.page
+                    ,count: JSON.parse(deducts).length  //数据总数
+                    ,limit: param_query.pagination.size
+                    ,limits: [10, 20, 50, 100, 200]
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                    ,jump: function(obj,first){
+                        //首次不执行
+                        if(!first){
+                            param_query.setPagination(obj.curr,obj.limit);
+                        }
+                    }
+                });
+          }
+
+            function update(obj) {
+                var value = obj.value; //得到修改后的值
+                var field = obj.field; //得到字段
+                var e = obj.data;//得到所在行所有键值
+                for (var i in deducts){
+                    if (deducts[i].cardId == e.cardId || deducts[i].name == e.name){
+                        deducts[i][field] = value;
+                    }
+                }
+                layer.msg(field + ' 字段更改为：'+ value);
+            }
+
+
+            //查询所属的所有合作方
+            function initCoop() {
+                param_query.addCondition("type","=",0);
+                iClient.getList(param_query,1,function(result){
+                    var cooperations = result.rows;
+                    var select_cooperation = $("#select_cooperation");
+                    select_cooperation.append("<option value='-2' selected disabled hidden>选择合作客户</option>");
+                    for(var i in cooperations){
+                        var cooperation = cooperations[i];
+                        var option = $("<option>").val(cooperation.id).text(cooperation.name);
+                        select_cooperation.append(option);
+                    }
+                    form.render('select', 'form_settlement');
+                });
+            }
+            //向调用页面返回选中的员工
+            var callbackData = function () {
+                return deducts;
+            };
+        </script>
+    </body>
+</html>
