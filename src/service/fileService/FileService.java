@@ -6,6 +6,7 @@ import bean.employee.PayCard;
 import bean.employee.ViewDeduct;
 import bean.insurance.ViewInsurance;
 import bean.settlement.ViewDetail1;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.employee.PayCardDao;
@@ -23,6 +24,8 @@ import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 import utills.CollectionUtil;
 import utills.DateUtil;
+import utills.excel.Field;
+import utills.excel.Scheme;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -50,6 +53,21 @@ public class FileService {
         List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("新增社保单", 0);
+
+        Scheme scheme = new Scheme();
+        scheme.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
+        scheme.addField(new Field(1, "cardId", "个人代码", Field.STRING, 300));
+        scheme.addField(new Field(2, "pension2", "证件号码", Field.FLOAT, 100));
+        scheme.addField(new Field(3, "medicare2", "参保开始年月", Field.FLOAT, 100));
+        scheme.addField(new Field(4, "disease2", "月缴费工资", Field.FLOAT, 100));
+        scheme.addField(new Field(5, "unemployment2", "变更原因", Field.FLOAT, 100));
+        scheme.addField(new Field(6, "birth", "用工形式", Field.FLOAT, 100));
+        scheme.addField(new Field(7, "injury", "是否补收（不填表示否）", Field.FLOAT, 100));
+        scheme.addField(new Field(8, "fund2", "参加工作时间", Field.FLOAT, 100));
+        scheme.addField(new Field(9, "total2", "联系电话", Field.FLOAT, 100));scheme.addField(new Field(3, "pension2", "单位养老", Field.FLOAT, 100));
+        scheme.addField(new Field(10, "pension1", "户口性质", Field.FLOAT, 100));
+        scheme.addField(new Field(11, "medicare1", "户籍地址", Field.FLOAT, 100));
+
         try {
             sheet1.addCell(new Label(0, 0, "姓名"));
             sheet1.addCell(new Label(1, 0, "个人代码"));
@@ -417,7 +435,37 @@ public class FileService {
 
         DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
-        List<ViewDetail1> viewDetail1s = JSONArray.parseArray(rows, ViewDetail1.class);
+        List<ViewDetail1> details = JSONArray.parseArray(rows, ViewDetail1.class);
+
+//        Scheme scheme1 = new Scheme();
+//        scheme1.addField(new Field(1, "paid", "金额上限", Field.STRING, 100));
+//        scheme1.addField(new Field(7, "cardNo", "收方账号", Field.STRING, 300));
+//        scheme1.addField(new Field(8, "name", "姓名", Field.STRING, 300));
+//        scheme1.addField(new Field(10, "bank1", "收方行名称", Field.STRING, 100));
+//        scheme1.addField(new Field(11, "bankNo", "收方行行号", Field.STRING, 100));
+//        scheme1.addField(new Field(13, "comments1", "附言", Field.STRING, 100));
+//
+//        Scheme scheme2 = new Scheme();
+//        scheme2.addField(new Field(0, "paid", "金额上限", Field.STRING, 100));
+//        scheme2.addField(new Field(1, "cardNo", "收方账号", Field.STRING, 300));
+//        scheme2.addField(new Field(2, "name", "姓名", Field.STRING, 300));
+//        for(ViewDetail1 v:details){
+//           v.setComments1("融金工资");
+//        }
+//        JSONArray data = JSONArray.parseArray(JSON.toJSONString(details));
+//
+//
+//        Scheme[] schemes = {scheme1, scheme2};
+//        JSONArray[] datas = {data, data};
+//        try {
+//            book = Workbook.getWorkbook(file);
+//            utills.excel.XlsUtil.write(response.getOutputStream(),book, 2,schemes, datas);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (BiffException e) {
+//            e.printStackTrace();
+//        }
+
         try {
             //获取模板
             book = Workbook.getWorkbook(file);
@@ -426,8 +474,9 @@ public class FileService {
             WritableSheet sheet1 = workbook.getSheet(0);//获取第一个sheet
             WritableSheet sheet2 = workbook.getSheet(1);//获取第二个sheet
 
+
             int index = 1;
-            for(ViewDetail1 v:viewDetail1s){
+            for(ViewDetail1 v:details){
                 //金额上限（发放额）、收方账号、收方户名、收方行名称、收方行行号、附言
                 PayCard card = (PayCard) PayCardDao.get(conn,v.getEid()).data;
                 if(card!=null){
@@ -436,6 +485,7 @@ public class FileService {
                     sheet1.addCell(new Label(10, index,card.getBank1()));//收方行名称
                     sheet1.addCell(new Label(11, index, card.getBankNo()));//收方行行号
                     sheet1.addCell(new Label(13, index, "融金2月工资"));//附言
+
 
                     sheet2.addCell(new jxl.write.Number(0, index, v.getPaid()));//金额上限,实发
                     sheet2.addCell(new Label(1, index, card.getCardNo()));//收方账号

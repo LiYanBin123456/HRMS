@@ -142,6 +142,24 @@ public class XlsUtil {
     }
 
     /**
+     * 获取已有excel表然后写数据，不需要表头
+     * @param os
+     * @param workbook
+     * @param scheme
+     * @param data
+     */
+    public static void write(OutputStream os,Workbook workbook, Scheme scheme, JSONArray data){
+        try {
+            WritableWorkbook book = Workbook.createWorkbook(os,workbook);
+            WritableSheet sheet = book.getSheet( 0);
+            writeSheet2(sheet,scheme,data);
+            book.write();
+            book.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    /**
      * 向xls写入数据（多sheet）
      * @param os 输出流
      * @param sheetNames sheet名集合（支持多个sheet）
@@ -154,6 +172,27 @@ public class XlsUtil {
             for(int i=0; i<sheetNames.length; i++){
                 WritableSheet sheet = book.createSheet(sheetNames[i], i);
                 writeSheet(sheet,titles[i],schemes[i],datas[i]);
+            }
+            book.write();
+            book.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 向已存在的xls写入数据（多sheet），不需要表头
+     * @param os 输出流
+     * @param sheetNames sheet数量
+     * @param schemes 表结构定义集合（与sheet名集合对应，一个sheet对应一个表结构）
+     * @param datas 表数据集合（与sheet名集合对应，一个sheet对应一个表数据）
+     */
+    public static void write(OutputStream os,Workbook workbook, int sheetNames, Scheme []schemes, JSONArray []datas){
+        try {
+            WritableWorkbook book = Workbook.createWorkbook(os,workbook);
+            for(int i=0; i<sheetNames; i++){
+                WritableSheet sheet = book.getSheet(i);
+                writeSheet2(sheet,schemes[i],datas[i]);
             }
             book.write();
             book.close();
@@ -207,6 +246,45 @@ public class XlsUtil {
         }
         for (Field f:fields) {
             sheet.addCell(new Label(f.col, start, f.title));//表头
+
+            String fieldName = f.name;
+            for (int row = 0; row < data.size(); row++) {
+                JSONObject record = (JSONObject) data.get(row);
+                WritableCell cell;
+                switch (f.type){
+                    case Field.DOUBLE:
+                        cell = new Number(f.col,row+start+1, record.getDouble(fieldName),cf1);
+                        break;
+                    case Field.FLOAT:
+                        cell = new Number(f.col,row+start+1, record.getFloat(fieldName),cf1);
+                        break;
+                    case Field.INT:
+                        cell = new Number(f.col,row+start+1, record.getInteger(fieldName),cf2);
+                        break;
+                    case Field.LONG:
+                        cell = new Number(f.col,row+start+1, record.getLong(fieldName),cf2);
+                        break;
+                    default:
+                        cell = new Label(f.col, row+start+1, record.getString(fieldName));
+                }
+                sheet.addCell(cell);
+            }
+        }
+    }
+
+    /**
+     * 向sheet写入数据,不需要写表头
+     * @param sheet 表
+     * @param scheme 表结构
+     * @param data 表数据
+     * @throws WriteException
+     */
+    private static void writeSheet2(WritableSheet sheet, Scheme scheme, JSONArray data) throws WriteException {
+        List<Field> fields = scheme.getFields();
+        WritableCellFormat cf1 = new WritableCellFormat(NumberFormats.FLOAT);
+        WritableCellFormat cf2 = new WritableCellFormat(NumberFormats.INTEGER);
+        int start = 0;//表头开始的行号
+        for (Field f:fields) {
 
             String fieldName = f.name;
             for (int row = 0; row < data.size(); row++) {
