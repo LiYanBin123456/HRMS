@@ -32,9 +32,8 @@
         <button class="layui-btn layui-btn-sm" style="display: none" id="importDeduct"><i class="layui-icon "></i> 导入专项扣除</button>
         <button class="layui-btn layui-btn-sm" style="display: none" id="importMakeUp"><i class="layui-icon "></i> 导入补发专项扣除</button>
         <div class="layui-hide" id="top_bar_deduct">
-            <button class="layui-btn layui-btn-sm" lay-event="import"><i class="layui-icon "></i> 导入</button>
-            <button class="layui-btn layui-btn-sm" lay-event="importDeduct"><i class="layui-icon "></i> 导入专项扣除</button>
-            <button class="layui-btn layui-btn-sm" lay-event="importMakeUp"><i class="layui-icon "></i> 导入补发专项扣除</button>
+            <button class="layui-btn layui-btn-sm" lay-event="import1"><i class="layui-icon "></i> 导入初始数据</button>
+            <button class="layui-btn layui-btn-sm" lay-event="import2"><i class="layui-icon "></i> 导入专项扣除</button>
             <form class="layui-form searchbox">
                 <div class="layui-input-inline">
                     <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
@@ -61,6 +60,7 @@
             var layer;//弹出窗口
             var element;
             var upload;
+            var cid = 0;
             var param_query = new QueryParam();
             param_query.setPagination(1,10);
             $(function () {
@@ -75,30 +75,6 @@
                     laypage = layui.laypage;
                     form = layui.form;
                     upload = layui.upload;
-                    upload.render({
-                        elem: '#importDeduct' //绑定元素
-                        , url: '/hrms/verify/file' //上传接口
-                        , accept: 'file'
-                        , exts: 'xls'
-                        , acceptMime: '.xls'
-                        ,before: function(file){
-                            this.data={op:"readDeducts",file:JSON.stringify(file),cid:0}
-                        }
-                        , done: function (res) {
-                            if (res.success){
-                               layer.msg("导入成功");
-                            }else {
-                                var deducts = res.extra;
-                                console.log(deducts);
-                                showErrDlg(deducts);
-                                layer.msg("异常员工信息，请核对");
-                            }
-                        }
-                        , error: function () {
-                            //请求异常回调
-                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
-                        }
-                    });
                     initPage();
                 });
             }
@@ -110,6 +86,29 @@
                     param_query.addKeyword(keyword);
                     getDeducts();
                     return false; //阻止表单跳转
+                });
+
+                upload.render({
+                    elem: '#importDeduct' //绑定元素
+                    , url: '/hrms/verify/file' //上传接口
+                    , accept: 'file'
+                    , exts: 'xls'
+                    , acceptMime: '.xls'
+                    ,before: function(file){
+                        this.data={op:"readDeducts",cid:cid}
+                    }
+                    , done: function (res) {
+                        if (res.success){
+                            layer.msg("导入成功");
+                        }else {
+                            var deducts = res.extra;
+                            showErrDlg(deducts);
+                        }
+                    }
+                    , error: function () {
+                        //请求异常回调
+                        layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                    }
                 });
             }
 
@@ -137,14 +136,11 @@
                 //顶部工具栏事件处理
                 table.on('toolbar(filter_tb_deduct)', function(obj){
                     switch(obj.event){
-                        case 'import':
-                           showConfirmDlg();
+                        case 'import1':
+                           import1();
                             break;
-                        case 'importDeduct':
-                            $("#importDeduct").click();
-                            break;
-                        case 'importMakeUp':
-                            showMakeUp();
+                        case 'import2':
+                            import2();
                             break;
                     }
                 });
@@ -175,7 +171,7 @@
                 });
             }
 
-            function showConfirmDlg() {
+            function import1() {
                 var content = "../dialog/importDeducts.html?";
                 layer.open({
                     title:"核对明细",
@@ -195,40 +191,46 @@
                     }
                 });
             }
-            function showMakeUp() {
-                var content = "../dialog/importMakeUpDeducts.html?";
+            function import2() {
+                var msg = "请选择整体导入或者部分导入<br>整体导入是导入xls文件中的所有数据<br>部分导入是导入xls文件中指定合作客户的数据";
                 layer.open({
-                    title:"核对明细",
-                    type: 2,
-                    area: ['95%', '95%'],
-                    content: content,
-                    btn: ['添加', '关闭']
+                    title:"导入专项扣除",
+                    content:msg,
+                    btn: ['择整体导入', '部分导入']
                     ,yes: function(index, layero){
-                        var deducts = window["layui-layer-iframe" + index].callbackData();
-                        iEmployee.importDeducts(deducts,function () {
-                            layer.close(index);
-                            layer.msg("导入成功");
-                            getDeducts();
-                        })
-                    },btn2: function(index, layero){
                         layer.close(index);
+                        $("#importDeduct").click();
+                    }
+                    ,btn2: function(index, layero){
+                        layer.close(index);
+                        layer.open({
+                            title:"选择需导入的合作单位",
+                            type: 2,
+                            area: ['240px', '300px'],
+                            content: "../dialog/selectCooperation.html",
+                            btn: ['确定', '关闭']
+                            ,yes: function(index2, layero){
+                                var cooperation = window["layui-layer-iframe" + index2].callbackData();
+                                cid = cooperation.id;
+                                $("#importDeduct").click();//触发文件上传
+                                layer.close(index2);
+                            },btn2: function(index2, layero){
+                                layer.close(index2);
+                            }
+                        });
                     }
                 });
             }
 
             function showErrDlg(deducts) {
-                var content = "../dialog/showErr.html?deducts="+encodeURIComponent(JSON.stringify(deducts));
+                var msg = "以下员工信息不存在，请确认！<br>";
+                for(var i in deducts){
+                    msg += (deducts[i].name+",");
+                }
+                msg = msg.substr(0,msg.length-1);
                 layer.open({
-                    title:"以下名单异常，请核对",
-                    type: 2,
-                    area: ['95%', '95%'],
-                    content: content,
-                    btn: ['确定', '关闭']
-                    ,yes: function(index, layero){
-                        layer.close(index);
-                    },btn2: function(index, layero){
-                        layer.close(index);
-                    }
+                    title:"导入失败",
+                    content: msg
                 });
             }
 
