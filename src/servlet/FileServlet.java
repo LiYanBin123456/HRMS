@@ -37,6 +37,7 @@ import utills.IDCardUtil;
 import utills.Salary.Salary;
 import utills.excel.Field;
 import utills.excel.Scheme;
+import utills.excel.XlsUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
@@ -81,7 +82,7 @@ public class FileServlet extends HttpServlet {
             FileOutputStream os = new FileOutputStream(file);
             String sheetNames = "test1";
             JSONArray data=JSONArray.parseArray(JSON.toJSONString(details));
-            //   utills.excel.XlsUtil.write(os, sheetNames, scheme, data);
+            //   XlsUtil.write(os, sheetNames, scheme, data);
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -109,8 +110,8 @@ public class FileServlet extends HttpServlet {
                 download(request,response);
                 ConnUtil.closeConnection(conn);
                 return;
-            case "readDeduct"://读取个税表中的数据
-                result = readDeduct(request);
+            case "initDeducts"://初始化个税专项扣除累计
+                result = initDeducts(request);
                 break;
             case "readDeducts"://读取个税表中的数据
                 result = readDeducts(conn,request);
@@ -293,7 +294,7 @@ public class FileServlet extends HttpServlet {
         Part part = request.getPart("file");
             try {//获取part中的文件，读取数据
                 InputStream is = part.getInputStream();
-                JSONArray data= utills.excel.XlsUtil.read(is,"信息表","元数据");
+                JSONArray data= XlsUtil.read(is,"信息表","元数据");
                 if(null == data){
                     result = "{\"success\":false,\"msg\":\"xls文件不符合要求，请下载模板再重新填写\"}";
                 }else{
@@ -899,7 +900,7 @@ public class FileServlet extends HttpServlet {
         String[] sheetNames = {"汇款表", "明细表"};
         Scheme[] schemes = {scheme1, scheme2};
         JSONArray[] datas = {data, data};
-        utills.excel.XlsUtil.write(response.getOutputStream(), sheetNames,titles, schemes, datas);
+        XlsUtil.write(response.getOutputStream(), sheetNames,titles, schemes, datas);
 
     }
 
@@ -1014,7 +1015,7 @@ public class FileServlet extends HttpServlet {
         String[] sheetNames = {"汇款表", "明细表"};
         Scheme[] schemes = {scheme1, scheme2};
         JSONArray[] datas = {data, data};
-        utills.excel.XlsUtil.write(response.getOutputStream(), sheetNames,titles, schemes, datas);
+        XlsUtil.write(response.getOutputStream(), sheetNames,titles, schemes, datas);
     }
 
     //导出小时工结算的明细
@@ -1085,7 +1086,7 @@ public class FileServlet extends HttpServlet {
         String[] sheetNames = {"小时工汇款表", "小时工明细表"};
         Scheme[] schemes = {scheme1, scheme2};
         JSONArray[] datas = {data, data};
-        utills.excel.XlsUtil.write(response.getOutputStream(), sheetNames,titles, schemes, datas);
+        XlsUtil.write(response.getOutputStream(), sheetNames,titles, schemes, datas);
 
     }
 
@@ -1150,30 +1151,16 @@ public class FileServlet extends HttpServlet {
     String sheetName =vs.getName()+""+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM")+"代缴社保汇款表");
     String title="汇款表";
 
-    utills.excel.XlsUtil.write(response.getOutputStream(),sheetName,title,scheme, data);
+    XlsUtil.write(response.getOutputStream(),sheetName,title,scheme, data);
     }
 
-    //读取个税专项扣除
-    private String readDeduct(HttpServletRequest request)throws IOException, ServletException {
+    //初始化个税专项扣除累计
+    private String initDeducts(HttpServletRequest request)throws IOException, ServletException {
         String result = null;
         Part part = request.getPart("file");
         try {//获取part中的文件，读取数据
             InputStream is = part.getInputStream();
-            //List<JSONObject> data = XlsUtil.readDeduct(is,0);
-            Scheme scheme = new Scheme();
-            scheme.addField(new Field(1,"name","姓名",Field.STRING,100));
-            scheme.addField(new Field(3,"cardId","身份证号",Field.STRING,100));
-            scheme.addField(new Field(18,"income","累计收入",Field.FLOAT,100));
-            scheme.addField(new Field(20,"free","累计减免费用",Field.FLOAT,100));
-            scheme.addField(new Field(22,"deduct1","累计子女教育扣除",Field.FLOAT,100));
-            scheme.addField(new Field(23,"deduct3","累计继续教育扣除额",Field.FLOAT,100));
-            scheme.addField(new Field(24,"deduct5","累计住房贷款利息",Field.FLOAT,100));
-            scheme.addField(new Field(25,"deduct6","累计住房租金",Field.FLOAT,100));
-            scheme.addField(new Field(26,"deduct2","累计赡养老人",Field.FLOAT,100));
-            scheme.addField(new Field(35,"prepaid","累计已预缴税额",Field.FLOAT,100));
-
-            JSONArray data = utills.excel.XlsUtil.read(is,scheme,1);
-
+            JSONArray data = XlsUtil.read(is,new Scheme(Scheme.SCHEME_DEDUCT_TOTAL),1);
             if(null == data){
                 result = "{\"success\":false,\"msg\":\"xls文件不符合要求，请下载模板再重新填写\"}";
             }else{
@@ -1188,33 +1175,16 @@ public class FileServlet extends HttpServlet {
         return result;
     }
 
-    //读取专项扣除数据
+    //读取每月专项扣除数据
     private String readDeducts(Connection conn,HttpServletRequest request)throws IOException, ServletException {
         DaoUpdateResult result = new DaoUpdateResult();
         Part part = request.getPart("file");
         long cid = Long.parseLong(request.getParameter("cid"));
         try {//获取part中的文件，读取数据
             InputStream is = part.getInputStream();
-            //读子女教育支出
-            Scheme scheme1 = new Scheme();
-            scheme1.addField(new Field(1,"name",Field.STRING,false));
-            scheme1.addField(new Field(3,"cardId",Field.STRING,false));
-            scheme1.addField(new Field(17,"per",Field.STRING,false));
-
-            //读继续教育支出,住房贷款，住房租金
-            Scheme scheme2 = new Scheme();
-            scheme2.addField(new Field(1,"name",Field.STRING,false));
-            scheme2.addField(new Field(3,"cardId",Field.STRING,false));
-
-            //读赡养老人
-            Scheme scheme3 = new Scheme();
-            scheme3.addField(new Field(1,"name",Field.STRING,false));
-            scheme3.addField(new Field(3,"cardId",Field.STRING,false));
-            scheme3.addField(new Field(6,"per",Field.FLOAT,false));
-
-            Scheme[] schemes = {scheme2,scheme1,scheme2,scheme2,scheme2,scheme3};
+            Scheme[] schemes = {new Scheme(Scheme.SCHEME_DEDUCT_SPOUSE),new Scheme(Scheme.SCHEME_DEDUCT_CHILDREN),new Scheme(Scheme.SCHEME_DEDUCT_EDUCATION),new Scheme(Scheme.SCHEME_DEDUCT_LOAN),new Scheme(Scheme.SCHEME_DEDUCT_RENT),new Scheme(Scheme.SCHEME_DEDUCT_ELDER)};
             int[] cows={1,1,2,2,1,2};
-            JSONArray[] data =utills.excel.XlsUtil.read(is,schemes,cows);
+            JSONArray[] data =XlsUtil.read(is,schemes,cows);
             List<ViewDeduct> deductList = FileService.readDeduct(data);
             if(cid!=0){//代表是导入部分扣除
                  result=DeductService.updateDeducts(conn,deductList,cid);

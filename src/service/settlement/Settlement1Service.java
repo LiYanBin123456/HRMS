@@ -365,6 +365,7 @@ public class Settlement1Service {
             return result1;
         }
     }
+
     //保存结算单；实质是计算结算单并且修改
     public static DaoUpdateResult saveSettlement(Connection conn, long sid) {
         //结算单
@@ -663,6 +664,4 @@ public class Settlement1Service {
         }
         return null;
     }
-
-
 }

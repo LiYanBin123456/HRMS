@@ -40,7 +40,7 @@ public class InsuranceService {
      * @param data 校对的数据
      * @return
      */
-    public static DaoUpdateResult checkMedicare(Connection conn, List<JSONObject> data){
+    public static DaoUpdateResult checkMedicare(Connection conn, JSONArray data){
       /*
         * 校对流程
         * （1）获取导入的名册data1（参数传递）
@@ -50,7 +50,8 @@ public class InsuranceService {
         * （5）判断data2中“在保”状态的是否也存在于data1中，若不存在则将其状态置为“异常”
         * */
         HashMap<String, String> data1 = new HashMap<>();
-        for(JSONObject o:data){//k:身份证号，v:个人代码
+        for(int i=0; i<data.size(); i++){//k:身份证号，v:个人代码
+            JSONObject o = (JSONObject) data.get(i);
             data1.put(o.getString("cardId"),o.getString("code"));
         }
 
@@ -93,7 +94,7 @@ public class InsuranceService {
      * @param type 社保类型 0 养老 1 失业 2 工伤
      * @return
      */
-    public static DaoUpdateResult checkSocial(Connection conn, List<JSONObject> data,byte type) {
+    public static DaoUpdateResult checkSocial(Connection conn, JSONArray data,byte type) {
         /*
         * 校对流程
         * （1）获取导入的名册data1（参数传递）
@@ -104,7 +105,8 @@ public class InsuranceService {
         * （6）判断data2中“在保”状态的是否也存在于data1中，若不存在则将其状态置为“异常”
         * */
         HashMap<String, String> data1 = new HashMap<>();
-        for(JSONObject o:data){//k:身份证号，v:个人代码
+        for(int i=0; i<data.size(); i++){//k:身份证号，v:个人代码
+            JSONObject o = (JSONObject) data.get(i);
             data1.put(o.getString("cardId"),o.getString("code"));
         }
 
@@ -197,7 +199,7 @@ public class InsuranceService {
      * @param data 校对的数据
      * @return
      */
-    public static DaoUpdateResult checkFund(Connection conn, List<JSONObject> data){
+    public static DaoUpdateResult checkFund(Connection conn, JSONArray data){
       /*
         * 校对流程
         * （1）获取导入的名册data1（参数传递）
@@ -207,7 +209,8 @@ public class InsuranceService {
         * （5）判断data2中“在保”状态的是否也存在于data1中，若不存在则将其状态置为“异常”
         * */
         HashMap<String, String> data1 = new HashMap<>();
-        for(JSONObject o:data){//k:身份证号，v:个人代码
+        for(int i=0; i<data.size(); i++){//k:身份证号，v:个人代码
+            JSONObject o = (JSONObject) data.get(i);
             data1.put(o.getString("cardId"),o.getString("code"));
         }
 

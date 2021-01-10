@@ -9,6 +9,7 @@ import dao.employee.EmployeeDao;
 import dao.settlement.Detail1Dao;
 import dao.settlement.Detail2Dao;
 import database.*;
+import utills.DateUtil;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class SalaryService {
             if(details.size()>0){
                 List<MapSalary> mapSalaries = new ArrayList<>();
                 for(ViewDetail1 d:details){
-                    MapSalary mapSalary = (MapSalary) MapSalaryDao.get(d.getSid(),month,conn).data;
+                    MapSalary mapSalary = (MapSalary) MapSalaryDao.selectByMonth(d.getCid(),conn, DateUtil.parse(month,"yyyy-MM-dd")).data;
                     mapSalaries.add(mapSalary);
                 }
                 res.extra = mapSalaries;

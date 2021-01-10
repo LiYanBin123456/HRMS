@@ -8,7 +8,8 @@ public class Employee {
     public static final byte LEAVED = 1;
     public static final byte RETIRE = 2;
     public static final byte OTHER = 3;
-   private long id;
+
+    private long id;
     private long did;//派遣方id
     private long cid;//合作单位id
     private String  cardId;//身份证号
@@ -42,8 +43,8 @@ public class Employee {
     private String post;//岗位
     /**户口性质
      0_null、
-     1_外派、
-     2_派遣、
+     1_派遣、
+     2_外包、
      3_小时工、
      4_代缴工资
      5_代缴社保

@@ -79,8 +79,6 @@ public class DeductService {
      * @return 返回更新结果，如果存在导入的员工不存在数据库的信息置于extra中
      */
     public static DaoUpdateResult updateDeducts(Connection conn, List<ViewDeduct> data){
-
-
         QueryParameter parameter = new QueryParameter();
         //获取数据库中所有员工个税专项扣除
         List<ViewDeduct> deducts_all = (List<ViewDeduct>) DeductDao.getList(conn,parameter).rows;
@@ -118,14 +116,7 @@ public class DeductService {
         return result;
     }
 
-    private static ViewDeduct getDeduct(List<ViewDeduct> deductList, String cardId) {
-        for(ViewDeduct deduct:deductList){
-            if(deduct.getCardId().equals(cardId)){
-                return deduct;
-            }
-        }
-        return null;
-    }
+
 
     /**
      *
@@ -144,18 +135,17 @@ public class DeductService {
         //获取该公司所有员工的信息
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("cid","=",cid);
-        List<ViewEmployee> employeeList = (List<ViewEmployee>) EmployeeDao.getList(conn,parameter).rows;
+        List<ViewEmployee> employees = (List<ViewEmployee>) EmployeeDao.getList(conn,parameter).rows;
 
-        List<Deduct> deductList = new ArrayList<>();//用于保存修改的个税
-        for(Employee employee:employeeList){
-            ViewDeduct d = CollectionUtil.getElement(data,"cardId",employee.getCardId());
-            if(d!=null){
-               d.setEid(employee.getId());
-               deductList.add(d);
+        List<Deduct> deducts = new ArrayList<>();//用于保存修改的个税
+        for(Employee e:employees){
+            ViewDeduct d = CollectionUtil.getElement(data,"cardId",e.getCardId());
+            if(d != null){
+                d.setEid(e.getId());
+                deducts.add(d);
             }
         }
-        DaoUpdateResult result=DeductDao.updateDeducts(conn,deductList);
-
+        DaoUpdateResult result=DeductDao.updateDeducts(conn,deducts);
         return result;
     }
 }

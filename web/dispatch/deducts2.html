@@ -74,7 +74,7 @@
                         , exts: 'xls'
                         , acceptMime: '.xls'
                         ,before: function(file){
-                            this.data={op:"readDeducts",file:JSON.stringify(file),cid:cid}
+                            this.data={op:"readDeducts",cid:cid}
                         }
                         , done: function (res) {
                             if (res.success){

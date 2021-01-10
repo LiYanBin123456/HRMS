@@ -2,19 +2,13 @@ package servlet;
 
 
 import bean.insurance.Insurance;
-import bean.insurance.ViewInsurance;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-
 import dao.insurance.InsuranceDao;
 import database.*;
-import jxl.Workbook;
-import jxl.write.Label;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
 import service.insurance.InsuranceService;
-import utills.XlsUtil;
+import utills.excel.Scheme;
+import utills.excel.XlsUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -23,11 +17,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
-import java.io.*;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.sql.Connection;
-import java.util.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 
@@ -78,7 +72,7 @@ public class InsuranceServlet extends HttpServlet {
         byte type = Byte.parseByte(request.getParameter("status"));//判断社保的类型
         Part part = request.getPart("file");
         InputStream is=null;
-        List<JSONObject> data;
+        JSONArray data;
         try {//获取part中的文件，读取数据
              is = part.getInputStream();
         } catch (FileNotFoundException e) {
@@ -86,15 +80,15 @@ public class InsuranceServlet extends HttpServlet {
         }
         switch (category){
             case 0://校对社保
-                data = XlsUtil.readSocial(is,0);//读第一个sheet
+                data = XlsUtil.read(is,new Scheme(Scheme.SCHEME_SOCIAL),1);
                 result = InsuranceService.checkSocial(conn,data,type);
                 break;
             case 1://校对医保
-                data = XlsUtil.readMedicare(is,0);
+                data = XlsUtil.read(is,new Scheme(Scheme.SCHEME_MEDICAL),1);
                 result = InsuranceService.checkMedicare(conn,data);
                 break;
             case 2://校对公积金
-                data = XlsUtil.readFund(is,0);
+                data = XlsUtil.read(is,new Scheme(Scheme.SCHEME_FUND),1);
                 result = InsuranceService.checkFund(conn,data);
                 break;
         }
