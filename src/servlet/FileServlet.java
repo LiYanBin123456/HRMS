@@ -1168,7 +1168,7 @@ public class FileServlet extends HttpServlet {
         Part part = request.getPart("file");
         try {//获取part中的文件，读取数据
             InputStream is = part.getInputStream();
-            JSONArray data = XlsUtil.read(is,new Scheme(Scheme.SCHEME_DEDUCT_TOTAL),1);
+            JSONArray data = XlsUtil.read(is,Scheme.SCHEME_DEDUCT_TOTAL,1);
             if(null == data){
                 result = "{\"success\":false,\"msg\":\"xls文件不符合要求，请下载模板再重新填写\"}";
             }else{
@@ -1190,7 +1190,7 @@ public class FileServlet extends HttpServlet {
         long cid = Long.parseLong(request.getParameter("cid"));
         try {//获取part中的文件，读取数据
             InputStream is = part.getInputStream();
-            Scheme[] schemes = {new Scheme(Scheme.SCHEME_DEDUCT_SPOUSE),new Scheme(Scheme.SCHEME_DEDUCT_CHILDREN),new Scheme(Scheme.SCHEME_DEDUCT_EDUCATION),new Scheme(Scheme.SCHEME_DEDUCT_LOAN),new Scheme(Scheme.SCHEME_DEDUCT_RENT),new Scheme(Scheme.SCHEME_DEDUCT_ELDER)};
+            Scheme[] schemes = {Scheme.SCHEME_DEDUCT_SPOUSE,Scheme.SCHEME_DEDUCT_CHILDREN,Scheme.SCHEME_DEDUCT_EDUCATION,Scheme.SCHEME_DEDUCT_LOAN,Scheme.SCHEME_DEDUCT_RENT,Scheme.SCHEME_DEDUCT_ELDER};
             int[] cows={1,1,2,2,1,2};
             JSONArray[] data =XlsUtil.read(is,schemes,cows);
             List<ViewDeduct> deductList = FileService.readDeduct(data);
