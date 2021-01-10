@@ -73,6 +73,7 @@ public class XlsUtil {
             Scheme scheme = readMeta(sheet_meta);
             readSheet(sheet_data,scheme,1,data);
             book.close();
+            is.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -96,6 +97,7 @@ public class XlsUtil {
                 readSheet(sheet,schemes[i],rowIndexs[i],datas[i]);
             }
             book.close();
+            is.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -116,6 +118,7 @@ public class XlsUtil {
             Sheet sheet = book.getSheet(0);
             readSheet(sheet,scheme,rowIndex,data);
             book.close();
+            is.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -136,6 +139,7 @@ public class XlsUtil {
             writeSheet(sheet,title,scheme,data);
             book.write();
             book.close();
+            os.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -155,6 +159,7 @@ public class XlsUtil {
             writeSheet2(sheet,scheme,data);
             book.write();
             book.close();
+            os.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -175,6 +180,7 @@ public class XlsUtil {
             }
             book.write();
             book.close();
+            os.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -196,6 +202,7 @@ public class XlsUtil {
             }
             book.write();
             book.close();
+            os.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
