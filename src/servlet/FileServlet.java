@@ -459,7 +459,7 @@ public class FileServlet extends HttpServlet {
         }
 
         //文件名
-        String filename=cname+"特殊结算单明细模板";
+        String filename=cname+"特殊结算单模板";
         filename = new String(filename.getBytes(),"iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.addHeader("Content-Disposition", "attachment;filename=\""
@@ -468,32 +468,50 @@ public class FileServlet extends HttpServlet {
         String fileName = "detail0.xls";
         String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
         File file = new File(fullFileName);
+
+        Scheme scheme = new Scheme();
+        scheme.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
+        scheme.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
+
+        JSONArray data = JSONArray.parseArray(JSON.toJSONString(employeeList));
         Workbook book;
         try {
             //获取模板
             book = Workbook.getWorkbook(file);
-            // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
-            WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
-            WritableSheet sheet = workbook.getSheet("信息表");//获取第一个sheet
-
-            int index = 1;
-            for(Employee  e:employeeList){
-                sheet.addCell(new Label(0, index, e.getName()));//员工姓名
-                sheet.addCell(new Label(1, index, e.getCardId()));//身份证号
-                index++;
-            }
-            workbook.write();
-            workbook.close();
-            book.close();
+            utills.excel.XlsUtil.write(response.getOutputStream(),book,scheme, data);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (BiffException e) {
             e.printStackTrace();
-        } catch (RowsExceededException e) {
-            e.printStackTrace();
-        } catch (WriteException e) {
-            e.printStackTrace();
         }
+
+
+//        Workbook book;
+//        try {
+//            //获取模板
+//            book = Workbook.getWorkbook(file);
+//            // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
+//            WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
+//            WritableSheet sheet = workbook.getSheet("信息表");//获取第一个sheet
+//
+//            int index = 1;
+//            for(Employee  e:employeeList){
+//                sheet.addCell(new Label(0, index, e.getName()));//员工姓名
+//                sheet.addCell(new Label(1, index, e.getCardId()));//身份证号
+//                index++;
+//            }
+//            workbook.write();
+//            workbook.close();
+//            book.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (BiffException e) {
+//            e.printStackTrace();
+//        } catch (RowsExceededException e) {
+//            e.printStackTrace();
+//        } catch (WriteException e) {
+//            e.printStackTrace();
+//        }printStackTrace
     }
 
     //下载普通结算单明细模板
@@ -818,8 +836,9 @@ public class FileServlet extends HttpServlet {
         parameter.addCondition("status","=",0);
         List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
 
+
         //文件名
-        String filename="小时工结算单明细模板";
+        String filename=employeeList.get(0).getCname()+"小时工结算单明细模板";
         filename = new String(filename.getBytes(),"iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.addHeader("Content-Disposition", "attachment;filename=\""
@@ -828,31 +847,20 @@ public class FileServlet extends HttpServlet {
         String fileName = "detail2.xls";
         String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
         File file = new File(fullFileName);
-        FileInputStream is = new FileInputStream(file);
+
+        Scheme scheme = new Scheme();
+        scheme.addField(new Field(0, "name", "员工姓名*", Field.STRING, 100));
+        scheme.addField(new Field(1, "cardId", "身份证号码*", Field.STRING, 300));
+
+        JSONArray data = JSONArray.parseArray(JSON.toJSONString(employeeList));
         Workbook book;
         try {
             //获取模板
             book = Workbook.getWorkbook(file);
-            // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
-            WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
-            WritableSheet sheet = workbook.getSheet("信息表");//获取第一个sheet
-
-            int index = 1;
-            for(Employee  e:employeeList){
-                sheet.addCell(new Label(0, index, e.getName()));//员工姓名
-                sheet.addCell(new Label(1, index, e.getCardId()));//身份证号
-                index++;
-            }
-            workbook.write();
-            workbook.close();
-            book.close();
+            utills.excel.XlsUtil.write(response.getOutputStream(),book,scheme, data);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (BiffException e) {
-            e.printStackTrace();
-        } catch (RowsExceededException e) {
-            e.printStackTrace();
-        } catch (WriteException e) {
             e.printStackTrace();
         }
     }
