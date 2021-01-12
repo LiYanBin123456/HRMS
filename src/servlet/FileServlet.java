@@ -469,16 +469,12 @@ public class FileServlet extends HttpServlet {
         String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
         File file = new File(fullFileName);
 
-        Scheme scheme = new Scheme();
-        scheme.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
-        scheme.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
-
         JSONArray data = JSONArray.parseArray(JSON.toJSONString(employeeList));
         Workbook book;
         try {
             //获取模板
             book = Workbook.getWorkbook(file);
-            utills.excel.XlsUtil.write(response.getOutputStream(),book,scheme, data);
+            utills.excel.XlsUtil.write(response.getOutputStream(),book,Scheme.SCHEME_DETAIL_EXPORT, data);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (BiffException e) {
@@ -848,16 +844,12 @@ public class FileServlet extends HttpServlet {
         String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
         File file = new File(fullFileName);
 
-        Scheme scheme = new Scheme();
-        scheme.addField(new Field(0, "name", "员工姓名*", Field.STRING, 100));
-        scheme.addField(new Field(1, "cardId", "身份证号码*", Field.STRING, 300));
-
         JSONArray data = JSONArray.parseArray(JSON.toJSONString(employeeList));
         Workbook book;
         try {
             //获取模板
             book = Workbook.getWorkbook(file);
-            utills.excel.XlsUtil.write(response.getOutputStream(),book,scheme, data);
+            utills.excel.XlsUtil.write(response.getOutputStream(),book,Scheme.SCHEME_DETAIL_EXPORT, data);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (BiffException e) {
@@ -1057,34 +1049,6 @@ public class FileServlet extends HttpServlet {
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.addHeader("Content-Disposition", "attachment;filename=\""
                 + fileName + ".xls\"");
-        Scheme scheme1 = new Scheme();
-        scheme1.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
-        scheme1.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
-        scheme1.addField(new Field(2, "hours", "工时", Field.INT, 100));
-        scheme1.addField(new Field(3, "price", "公司单价", Field.FLOAT, 100));
-        scheme1.addField(new Field(4, "food", "餐费", Field.FLOAT, 100));
-        scheme1.addField(new Field(5, "traffic", "交通费", Field.FLOAT, 100));
-        scheme1.addField(new Field(6, "accommodation", "住宿费", Field.FLOAT, 100));
-        scheme1.addField(new Field(7, "utilities", "水电费", Field.FLOAT, 100));
-        scheme1.addField(new Field(8, "insurance", "保险费", Field.FLOAT, 100));
-        scheme1.addField(new Field(9, "other1", "其他1", Field.FLOAT, 100));
-        scheme1.addField(new Field(10, "other2", "其他2", Field.FLOAT, 100));
-        scheme1.addField(new Field(11, "sum", "汇款总额", Field.FLOAT, 100));
-
-        Scheme scheme2 = new Scheme();
-        scheme2.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
-        scheme2.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
-        scheme2.addField(new Field(2, "hours", "工时", Field.INT, 100));
-        scheme2.addField(new Field(3, "price", "公司单价", Field.FLOAT, 100));
-        scheme2.addField(new Field(4, "food", "餐费", Field.FLOAT, 100));
-        scheme2.addField(new Field(5, "traffic", "交通费", Field.FLOAT, 100));
-        scheme2.addField(new Field(6, "accommodation", "住宿费", Field.FLOAT, 100));
-        scheme2.addField(new Field(7, "utilities", "水电费", Field.FLOAT, 100));
-        scheme2.addField(new Field(8, "insurance", "保险费", Field.FLOAT, 100));
-        scheme2.addField(new Field(9, "other1", "其他1", Field.FLOAT, 100));
-        scheme2.addField(new Field(10, "other2", "其他2", Field.FLOAT, 100));
-        scheme2.addField(new Field(11, "payable", "实付", Field.FLOAT, 100));
-        scheme2.addField(new Field(12, "paid", "应付", Field.FLOAT, 100));
 
         JSONArray data = JSONArray.parseArray(JSON.toJSONString(details));
 
@@ -1092,7 +1056,7 @@ public class FileServlet extends HttpServlet {
         String title2 =vs.getName()+""+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM")+"小时工工资明细表");
         String[] titles ={title1,title2};
         String[] sheetNames = {"小时工汇款表", "小时工明细表"};
-        Scheme[] schemes = {scheme1, scheme2};
+        Scheme[] schemes = {Scheme.SCHEME_DETAIL2_PAID, Scheme.SCHEME_DETAIL2_DETAIL};
         JSONArray[] datas = {data, data};
         XlsUtil.write(response.getOutputStream(), sheetNames,titles, schemes, datas);
 

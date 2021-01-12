@@ -2,18 +2,21 @@ package service.settlement;
 
 import bean.admin.Account;
 import bean.contract.Serve;
+import bean.employee.Deduct;
+import bean.employee.ViewDeduct;
 import bean.employee.ViewEmployee;
 import bean.log.Log;
-import bean.settlement.Detail2;
-import bean.settlement.Settlement2;
+import bean.settlement.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.LogDao;
 import dao.contract.ServeDao;
+import dao.employee.DeductDao;
 import dao.employee.EmployeeDao;
 import dao.settlement.Detail2Dao;
 import dao.settlement.Settlement2Dao;
 import database.*;
+import utills.CollectionUtil;
 import utills.Salary.Salary;
 
 import java.sql.Connection;
@@ -209,24 +212,63 @@ public class Settlement2Service {
     //发放
     public static DaoUpdateResult confirm(Connection conn, long id, Account account) {
         /**流程
-         *1、修改结算单状态为发放
-         * 2、根据aid查询出管理员
-         * 2、插入日志
+         * 1、修改结算单状态为发放
+         * 2、获取结算单明细并且修改员工个税专项扣除中的累计收入，累计已预缴税额，累计减免
+         * 3、插入日志
          */
-        DaoUpdateResult result = Settlement2Dao.confirm(conn, id);
-        if(result.success){//修改成功，插入日志
-                //封装log信息
-                String operator = account.getNickname()+"("+account.getId()+")";
-                String content = "发放";
-                Log log = new Log();
-                log.setSid(id);
-                log.setType((byte) 1);
-                log.setOperator(operator);
-                log.setContent(content);
-                //插入log信息
-                LogDao.insert(conn,log);
+        ConnUtil.closeAutoCommit(conn);
+        //确认发放
+        DaoUpdateResult res1 = Settlement2Dao.confirm(conn, id);
+
+        //获取所有小时工明细
+        QueryParameter p1 = new QueryParameter();
+        p1.addCondition("sid","=",id);
+        List<ViewDetail2> details= (List<ViewDetail2>) Detail2Dao.getList(conn,p1).rows;
+
+        //获取所有员工的eid，用于获取所有的员工个税专项扣除
+        String eids="";
+        for(ViewDetail2 d:details){
+            eids += (d.getEid()+",");
         }
-        return result;
+        eids = eids.substring(0,eids.length()-1);
+
+        QueryParameter p2 = new QueryParameter();
+        p2.addCondition("eid","in",eids);
+        List<Deduct> deducts = (List<Deduct>) DeductDao.getList(conn, p2).rows;
+
+        //修改员工的个税专项扣除
+        for (ViewDetail2 d:details){
+            Deduct deduct = CollectionUtil.getElement(deducts,"eid",d.getEid());
+            if(deduct!=null){//个税专项扣除存在于集合中，只需要加累计收入和累计已预缴税额
+                //累计收入
+                deduct.setIncome(deduct.getIncome()+d.getPayable());
+                //累计已预缴税额=累计已预缴税额+个税
+                deduct.setPrepaid(deduct.getPrepaid()+d.getTax());
+            }
+        }
+
+        DaoUpdateResult res2 = DeductDao.updateDeducts(conn,deducts);
+
+
+        //日志
+        String operator = account.getNickname()+"("+account.getId()+")";
+        String content = "发放";
+        Log log = new Log();
+        log.setSid(id);
+        log.setType((byte) 1);
+        log.setOperator(operator);
+        log.setContent(content);
+
+        DaoUpdateResult res3 = LogDao.insert(conn,log);
+        if(res1.success&&res2.success&&res3.success){
+           ConnUtil.commit(conn);
+        }else {
+            ConnUtil.rollback(conn);
+            res1.success=false;
+            res1.msg="数据库操作错误";
+        }
+
+        return res1;
     }
     //获取该结算单的所有日志
     public static DaoQueryListResult getLogs(Connection conn, long id, QueryParameter parameter) {

@@ -255,10 +255,10 @@ public class Settlement1Service {
         List<Detail1> details = (List<Detail1>) Detail1Dao.getList(conn,parameter).rows;
         List<Deduct> deductList = new ArrayList<>();
 
-        //判断是否是补发
+
         Settlement1 settlement = (Settlement1) Settlement1Dao.get(conn,sid).data;
         for (Detail1 detail:details){
-            float deducts=0;
+            float deducts;
             Deduct deduct1 = getDeduct(deductList,detail.getEid());
             if(deduct1!=null){//个税专项扣除存在于集合中，只需要加累计收入和累计已预缴税额
                 //累计收入

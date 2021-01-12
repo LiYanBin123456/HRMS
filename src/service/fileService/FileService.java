@@ -54,20 +54,20 @@ public class FileService {
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("新增社保单", 0);
 
-        Scheme scheme = new Scheme();
-        scheme.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
-        scheme.addField(new Field(1, "cardId", "个人代码", Field.STRING, 300));
-        scheme.addField(new Field(2, "pension2", "证件号码", Field.FLOAT, 100));
-        scheme.addField(new Field(3, "medicare2", "参保开始年月", Field.FLOAT, 100));
-        scheme.addField(new Field(4, "disease2", "月缴费工资", Field.FLOAT, 100));
-        scheme.addField(new Field(5, "unemployment2", "变更原因", Field.FLOAT, 100));
-        scheme.addField(new Field(6, "birth", "用工形式", Field.FLOAT, 100));
-        scheme.addField(new Field(7, "injury", "是否补收（不填表示否）", Field.FLOAT, 100));
-        scheme.addField(new Field(8, "fund2", "参加工作时间", Field.FLOAT, 100));
-        scheme.addField(new Field(9, "total2", "联系电话", Field.FLOAT, 100));scheme.addField(new Field(3, "pension2", "单位养老", Field.FLOAT, 100));
-        scheme.addField(new Field(10, "pension1", "户口性质", Field.FLOAT, 100));
-        scheme.addField(new Field(11, "medicare1", "户籍地址", Field.FLOAT, 100));
-
+//        Scheme scheme = new Scheme();
+//        scheme.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
+//        scheme.addField(new Field(1, "cardId", "个人代码", Field.STRING, 300));
+//        scheme.addField(new Field(2, "code", "证件号码", Field.FLOAT, 100));
+//        scheme.addField(new Field(3, "date3", "参保开始年月", Field.FLOAT, 100));
+//        scheme.addField(new Field(4, "base3", "月缴费工资", Field.FLOAT, 100));
+//        scheme.addField(new Field(5, "xxx", "变更原因", Field.FLOAT, 100));
+//        scheme.addField(new Field(6, "xxx", "用工形式", Field.FLOAT, 100));
+//        scheme.addField(new Field(7, "xxx", "是否补收（不填表示否）", Field.FLOAT, 100));
+//        scheme.addField(new Field(8, "entry", "参加工作时间", Field.FLOAT, 100));
+//        scheme.addField(new Field(9, "phone", "联系电话", Field.FLOAT, 100));scheme.addField(new Field(3, "pension2", "单位养老", Field.FLOAT, 100));
+//        scheme.addField(new Field(10, "xxx", "户口性质", Field.STRING, 100));
+//        scheme.addField(new Field(11, "address", "户籍地址", Field.STRING, 100));
+//
         try {
             sheet1.addCell(new Label(0, 0, "姓名"));
             sheet1.addCell(new Label(1, 0, "个人代码"));
