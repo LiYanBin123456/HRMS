@@ -147,14 +147,16 @@ public class XlsUtil {
 
     /**
      * 获取已有excel表然后写数据，不需要表头
-     * @param os
-     * @param workbook
-     * @param scheme
-     * @param data
+     * @param os 文件输出流
+     * @param template 模板文件
+     * @param scheme 表结构
+     * @param data 表数据
      */
-    public static void write(OutputStream os,Workbook workbook, Scheme scheme, JSONArray data){
+    public static void write(OutputStream os,String template, Scheme scheme, JSONArray data){
         try {
-            WritableWorkbook book = Workbook.createWorkbook(os,workbook);
+            File file = new File(template);
+            Workbook book_template = Workbook.getWorkbook(file);
+            WritableWorkbook book = Workbook.createWorkbook(os,book_template);
             WritableSheet sheet = book.getSheet( 0);
             writeSheet2(sheet,scheme,data);
             book.write();
@@ -177,28 +179,6 @@ public class XlsUtil {
             for(int i=0; i<sheetNames.length; i++){
                 WritableSheet sheet = book.createSheet(sheetNames[i], i);
                 writeSheet(sheet,titles[i],schemes[i],datas[i]);
-            }
-            book.write();
-            book.close();
-            os.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 向已存在的xls写入数据（多sheet），不需要表头
-     * @param os 输出流
-     * @param sheetNames sheet数量
-     * @param schemes 表结构定义集合（与sheet名集合对应，一个sheet对应一个表结构）
-     * @param datas 表数据集合（与sheet名集合对应，一个sheet对应一个表数据）
-     */
-    public static void write(OutputStream os,Workbook workbook, int sheetNames, Scheme []schemes, JSONArray []datas){
-        try {
-            WritableWorkbook book = Workbook.createWorkbook(os,workbook);
-            for(int i=0; i<sheetNames; i++){
-                WritableSheet sheet = book.getSheet(i);
-                writeSheet2(sheet,schemes[i],datas[i]);
             }
             book.write();
             book.close();
@@ -309,6 +289,9 @@ public class XlsUtil {
                         break;
                     case Field.LONG:
                         cell = new Number(f.col,row+start+1, record.getLong(fieldName),cf2);
+                        break;
+                    case Field.NULL:
+                        cell = new Label(f.col, row+start+1, "");
                         break;
                     default:
                         cell = new Label(f.col, row+start+1, record.getString(fieldName));

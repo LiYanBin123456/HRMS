@@ -106,24 +106,24 @@ public class IDCardUtil {
         String year="";
         String month="";
         String day="";
-            //15位身份证号
-            if (IDCard.length() == FIFTEEN_ID_CARD){
-                // 身份证上的年份(15位身份证为1980年前的)
-                year = "19" + IDCard.substring(6, 8);
-                //身份证上的月份
-                month = IDCard.substring(8, 10);
-                //身份证上的日期
-                day= IDCard.substring(10, 12);
-                //18位身份证号
-            }else if(IDCard.length() == EIGHTEEN_ID_CARD){
-                // 身份证上的年份
-                year = IDCard.substring(6).substring(0, 4);
-                // 身份证上的月份
-                month = IDCard.substring(10).substring(0, 2);
-                //身份证上的日期
-                day=IDCard.substring(12).substring(0,2);
-            }
-            birthday=year+"-"+month+"-"+day;
+        //15位身份证号
+        if (IDCard.length() == FIFTEEN_ID_CARD){
+            // 身份证上的年份(15位身份证为1980年前的)
+            year = "19" + IDCard.substring(6, 8);
+            //身份证上的月份
+            month = IDCard.substring(8, 10);
+            //身份证上的日期
+            day= IDCard.substring(10, 12);
+            //18位身份证号
+        }else if(IDCard.length() == EIGHTEEN_ID_CARD){
+            // 身份证上的年份
+            year = IDCard.substring(6).substring(0, 4);
+            // 身份证上的月份
+            month = IDCard.substring(10).substring(0, 2);
+            //身份证上的日期
+            day=IDCard.substring(12).substring(0,2);
+        }
+        birthday=year+"-"+month+"-"+day;
         return birthday;
     }
 
@@ -133,17 +133,13 @@ public class IDCardUtil {
      * @return 是否有效
      */
     public static boolean isValid(String id){
-        Boolean validResult = true;
         //校验长度只能为15或18
         int len = id.length();
         if (len != FIFTEEN_ID_CARD && len != EIGHTEEN_ID_CARD){
-            validResult = false;
+            return false;
         }
         //校验生日
-        if (!validDate(id)){
-            validResult = false;
-        }
-        return validResult;
+        return validDate(id);
     }
 
     /**

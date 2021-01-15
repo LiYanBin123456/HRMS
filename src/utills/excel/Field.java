@@ -8,6 +8,7 @@ public class Field {
     public static final String DOUBLE = "double";
     public static final String STRING = "string";
     public static final String ENUM = "enum";
+    public static final String NULL = "";
 
     public int col;//对应xls中的列号
     public String name;//字段名

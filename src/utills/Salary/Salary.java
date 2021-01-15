@@ -1,8 +1,6 @@
 package utills.Salary;
 
-import bean.client.Items;
 import bean.client.MapSalary;
-import bean.contract.Serve;
 import bean.contract.ViewContractCooperation;
 import bean.employee.Deduct;
 import bean.employee.EnsureSetting;
@@ -10,9 +8,6 @@ import bean.employee.ViewDeduct;
 import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
 import bean.settlement.*;
-import dao.employee.DeductDao;
-import database.ConnUtil;
-import database.QueryParameter;
 import utills.CollectionUtil;
 
 import java.lang.reflect.InvocationTargetException;
@@ -20,7 +15,6 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 
-import java.sql.Connection;
 //工资计算
 public class Salary {
 
@@ -379,7 +373,7 @@ public class Salary {
          * 思路：
          */
         float value = 0;
-        List<Items> itemList = mapSalary.getItemList();
+        List<MapSalary.SalaryItem> itemList = mapSalary.getItemList();
         for (int i = 0; i <itemList.size(); i++) {
             int index = i + 1;
             String name = "getF" + index;

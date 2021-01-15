@@ -222,12 +222,12 @@
 
             //下载
             function download() {
-                    var url = "/hrms/verify/file?op=downloadDetail0&type="+type+"&cid="+cid;
-                    var form = $('<form method="POST"></form>');
-                    form.attr('action', url);
-                    form.appendTo($('body'));
-                    form.submit();
-                    form.remove();
+                var url = "/hrms/verify/file?op=downloadTemplateDetail0&type="+type+"&cid="+cid;
+                var form = $('<form method="POST"></form>');
+                form.attr('action', url);
+                form.appendTo($('body'));
+                form.submit();
+                form.remove();
             }
 
             //保存

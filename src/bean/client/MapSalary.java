@@ -48,20 +48,47 @@ public class MapSalary {
      * 返回结果[{type:1,field:考勤扣款},{type:0,field:加班工资}]
      * @return itemList；
      */
-    public List<Items> getItemList(){
-        List<Items> itemList = new ArrayList<>();
-        String str = getItems();
-        if(str!=null&&str.length()>0){
-            String maps[] = str.split(";");
+    public List<SalaryItem> getItemList(){
+        List<SalaryItem> salaryItems = new ArrayList<>();
+        if(items!=null&&items.length()>0){
+            String maps[] = items.split(";");
             for (String map:maps){
                 String value[] = map.split(",");
-                Items items = new Items();
-                items.setField(value[0]);
-                items.setType(Short.parseShort(value[1]));
-                itemList.add(items);
+                SalaryItem item = new SalaryItem();
+                item.setField(value[0]);
+                item.setType(Short.parseShort(value[1]));
+                salaryItems.add(item);
             }
         }
-        return itemList;
+        return salaryItems;
+    }
+
+    public int numberOfItems(){
+        if(items!=null&&items.length()>0){
+            return items.split(";").length;
+        }
+        return 0;
+    }
+
+    public class SalaryItem {
+        private short type;//类型
+        private String field;//字段值
+
+        public short getType() {
+            return type;
+        }
+
+        public void setType(short type) {
+            this.type = type;
+        }
+
+        public String getField() {
+            return field;
+        }
+
+        public void setField(String field) {
+            this.field = field;
+        }
     }
     
 }

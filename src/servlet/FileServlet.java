@@ -1,7 +1,6 @@
 package servlet;
 
 import bean.admin.Account;
-import bean.client.Items;
 import bean.client.MapSalary;
 import bean.contract.Serve;
 import bean.contract.ViewContractCooperation;
@@ -37,6 +36,7 @@ import utills.IDCardUtil;
 import utills.Salary.Salary;
 import utills.excel.Field;
 import utills.excel.Scheme;
+import utills.excel.SchemeDefined;
 import utills.excel.XlsUtil;
 
 import javax.servlet.ServletException;
@@ -119,16 +119,16 @@ public class FileServlet extends HttpServlet {
             case "exist"://判断文件是否存在
                 result = exist(request);
                 break;
-            case "downloadDetail0"://下载结算单明细模板
-                downloadDetail0(conn,request,response);
+            case "downloadTemplateDetail0"://下载结算单明细模板
+                downloadTemplateDetail0(conn,request,response);
                 ConnUtil.closeConnection(conn);
                 return;
-            case "downloadDetail1"://下载结算单明细模板
-                downloadDetail1(conn,request,response);
+            case "downloadTemplateDetail1"://下载结算单明细模板
+                downloadTemplateDetail1(conn,request,response);
                 ConnUtil.closeConnection(conn);
                 return;
-            case "downloadDetail2"://下载小时工结算单明细模板
-                downloadDetail2(conn,request,response);
+            case "downloadTemplateDetail2"://下载小时工结算单明细模板
+                downloadTemplateDetail2(conn,request,response);
                 ConnUtil.closeConnection(conn);
                 return;
             case "exportDetail0"://导出结算单明细
@@ -176,53 +176,32 @@ public class FileServlet extends HttpServlet {
 
 
     //导出个税申报名单表
-    private void exportTaxEmployee(Connection conn, HttpServletRequest request, HttpServletResponse response)  {
+    private void exportTaxEmployee(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.setHeader("Content-Disposition", "attachment; filename=tax1.xls");
 
         //读取模板
-        String fileName = "tax1.xls";
-        String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
-        File file = new File(fullFileName);
-        Workbook book = null;
+        String template = getServletContext().getRealPath("/excelFile/tax1.xls");
 
         //查询出员工，条件限制先留着以后交流修改
         QueryParameter parameter = new QueryParameter();
-        List<Employee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),Employee.class);
-        try {
-            //获取模板
-            book = Workbook.getWorkbook(file);
-
-            // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
-            //WritableWorkbook如果直接createWorkbook模版文件会覆盖原有的文件
-            WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
-            WritableSheet sheet = workbook.getSheet(0);//获取第一个sheet
-            int index = 1;
-
-            for(Employee e:employeeList){
-                sheet.addCell(new Label(0, index, ""));//工号
-                sheet.addCell(new Label(1, index, e.getName()));//姓名
-                sheet.addCell(new Label(2, index, "居民身份证"));//证件类型
-                sheet.addCell(new Label(3, index,e.getCardId()));//证件号码
-                sheet.addCell(new Label(4, index,"中国"));//国籍
-                sheet.addCell(new Label(5, index,e.getCardId()==null?"":IDCardUtil.getSex(e.getCardId())));//性别
-                sheet.addCell(new Label(6, index,e.getCardId()==null?"":IDCardUtil.getBirthday(e.getCardId())));//出生日期
-                sheet.addCell(new Label(8, index, "雇员"));//任职受雇从业类型
-                sheet.addCell(new Label(9, index,e.getPhone()));//手机号码
-                index++;
+        List<Employee> employees = (List<Employee>) EmployeeDao.getList(conn,parameter).rows;
+        JSONArray data = JSONArray.parseArray(JSONObject.toJSONString(employees));
+        for(int i=0; i<data.size(); i++){
+            JSONObject o = (JSONObject) data.get(i);
+            o.put("cardType","居民身份证");
+            o.put("nation","中国");
+            o.put("type","雇员");
+            String cardId = o.getString("cardId");
+            if(cardId!=null && IDCardUtil.isValid(cardId)) {
+                o.put("sex", IDCardUtil.getSex(cardId));
+                o.put("birthday", IDCardUtil.getBirthday(cardId));
+            }else{
+                o.put("sex", "-");
+                o.put("birthday", "-");
             }
-            workbook.write();
-            workbook.close();
-            book.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (BiffException e) {
-            e.printStackTrace();
-        } catch (RowsExceededException e) {
-            e.printStackTrace();
-        } catch (WriteException e) {
-            e.printStackTrace();
         }
+        XlsUtil.write(response.getOutputStream(),template, SchemeDefined.SCHEME_TAX1,data);
     }
 
     //导出个税申报表
@@ -438,81 +417,36 @@ public class FileServlet extends HttpServlet {
     }
 
     //下载特殊结算单模板
-    private void downloadDetail0(Connection conn, HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+    private void downloadTemplateDetail0(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         Account user = (Account) session.getAttribute("account");
         long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
         byte type = Byte.parseByte(request.getParameter("type"));
 
-
+        //获取名单准备数据
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("cid","=",cid);
         parameter.addCondition("did","=",user.getRid());
         parameter.addCondition("type","=",1);
         parameter.addCondition("category","=",type+1);
         parameter.addCondition("status","=",0);
-        List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
+        List<ViewEmployee> employees = (List<ViewEmployee>) EmployeeDao.getList(conn,parameter).rows;
+        JSONArray data = JSONArray.parseArray(JSON.toJSONString(employees));
 
-        String cname ="";
-        if(employeeList.size()>0){
-            cname=employeeList.get(0).getCname();
-        }
-
-        //文件名
+        //准备目标文件和模板文件
+        String cname =employees.size()>0?employees.get(0).getCname():"";
         String filename=cname+"特殊结算单模板";
         filename = new String(filename.getBytes(),"iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
-        response.addHeader("Content-Disposition", "attachment;filename=\""
-                + filename + ".xls\"");
+        response.addHeader("Content-Disposition", "attachment;filename=\""+ filename + ".xls\"");
+        String template = getServletContext().getRealPath("/excelFile/detail0.xls");
 
-        String fileName = "detail0.xls";
-        String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
-        File file = new File(fullFileName);
-
-        JSONArray data = JSONArray.parseArray(JSON.toJSONString(employeeList));
-        Workbook book;
-        try {
-            //获取模板
-            book = Workbook.getWorkbook(file);
-            utills.excel.XlsUtil.write(response.getOutputStream(),book,Scheme.SCHEME_DETAIL_EXPORT, data);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (BiffException e) {
-            e.printStackTrace();
-        }
-
-
-//        Workbook book;
-//        try {
-//            //获取模板
-//            book = Workbook.getWorkbook(file);
-//            // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
-//            WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
-//            WritableSheet sheet = workbook.getSheet("信息表");//获取第一个sheet
-//
-//            int index = 1;
-//            for(Employee  e:employeeList){
-//                sheet.addCell(new Label(0, index, e.getName()));//员工姓名
-//                sheet.addCell(new Label(1, index, e.getCardId()));//身份证号
-//                index++;
-//            }
-//            workbook.write();
-//            workbook.close();
-//            book.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (BiffException e) {
-//            e.printStackTrace();
-//        } catch (RowsExceededException e) {
-//            e.printStackTrace();
-//        } catch (WriteException e) {
-//            e.printStackTrace();
-//        }printStackTrace
+        //写Excel
+        XlsUtil.write(response.getOutputStream(),template,SchemeDefined.SCHEME_DETAIL_EXPORT, data);
     }
 
     //下载普通结算单明细模板
-    private void downloadDetail1(Connection conn, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+    private void downloadTemplateDetail1(Connection conn, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Account user = (Account) session.getAttribute("account");
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
@@ -583,63 +517,40 @@ public class FileServlet extends HttpServlet {
             sheet1.addCell(new Label(1, 0, "身份证号码*"));
             sheet1.setColumnView(1,20);
             sheet1.addCell(new Label(2, 0, "基本工资"));
+            int  col = 3;
             if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){
-                int  c = 0;
-                List<Items> itemList = mapSalary.getItemList();
+                List<MapSalary.SalaryItem> itemList = mapSalary.getItemList();
                 for(int i = 0;i<itemList.size();i++){
-                    c = i+3;
-                    sheet1.addCell(new Label(c, 0, itemList.get(i).getField()));
+                    sheet1.addCell(new Label(col++, 0, itemList.get(i).getField()));
                 }
-                sheet1.addCell(new Label(c+1, 0, "个人核收补减"));
-                sheet1.addCell(new Label(c+2, 0, "备注1"));
-                sheet1.addCell(new Label(c+3, 0, "单位核收补减"));
-                sheet1.addCell(new Label(c+4, 0, "备注2"));
-                sheet1.addCell(new Label(c+5, 0, "个人养老"));
-                sheet1.addCell(new Label(c+6, 0, "个人医疗"));
-                sheet1.addCell(new Label(c+7, 0, "个人失业"));
-                sheet1.addCell(new Label(c+8, 0, "个人大病"));
-                sheet1.addCell(new Label(c+9, 0, "个人公积金"));
-                sheet1.addCell(new Label(c+10, 0, "单位养老"));
-                sheet1.addCell(new Label(c+11, 0, "单位医疗"));
-                sheet1.addCell(new Label(c+12, 0, "单位失业"));
-                sheet1.addCell(new Label(c+13, 0, "单位工伤"));
-                sheet1.addCell(new Label(c+14, 0, "单位大病"));
-                sheet1.addCell(new Label(c+15, 0, "单位生育"));
-                sheet1.addCell(new Label(c+16, 0, "单位公积金"));
-                sheet1.addCell(new Label(c+17, 0, "个税"));
-                sheet1.addCell(new Label(c+18, 0, "应付"));
-                sheet1.addCell(new Label(c+19, 0, "实付"));
-                sheet1.addCell(new Label(c+20, 0, "是否为自定义工资条（0否1是）*"));
-                sheet1.setColumnView(c+20,20);
-            }else {
-                sheet1.addCell(new Label(3, 0, "个人核收补减"));
-                sheet1.addCell(new Label(4, 0, "备注1"));
-                sheet1.addCell(new Label(5, 0, "单位核收补减"));
-                sheet1.addCell(new Label(6, 0, "备注2"));
-                sheet1.addCell(new Label(7, 0, "个人养老"));
-                sheet1.addCell(new Label(8, 0, "个人医疗"));
-                sheet1.addCell(new Label(9, 0, "个人失业"));
-                sheet1.addCell(new Label(10, 0, "个人大病"));
-                sheet1.addCell(new Label(11, 0, "个人公积金"));
-                sheet1.addCell(new Label(12, 0, "单位养老"));
-                sheet1.addCell(new Label(13, 0, "单位医疗"));
-                sheet1.addCell(new Label(14, 0, "单位失业"));
-                sheet1.addCell(new Label(15, 0, "单位工伤"));
-                sheet1.addCell(new Label(16, 0, "单位大病"));
-                sheet1.addCell(new Label(17, 0, "单位生育"));
-                sheet1.addCell(new Label(18, 0, "单位公积金"));
-                sheet1.addCell(new Label(19, 0, "个税"));
-                sheet1.addCell(new Label(20, 0, "应付"));
-                sheet1.addCell(new Label(21, 0, "实付"));
-                sheet1.addCell(new Label(22, 0, "是否为自定义工资条（0否1是）*"));
-                sheet1.setColumnView(22,20);
             }
+            sheet1.addCell(new Label(col+0, 0, "个人核收补减"));
+            sheet1.addCell(new Label(col+1, 0, "备注1"));
+            sheet1.addCell(new Label(col+2, 0, "单位核收补减"));
+            sheet1.addCell(new Label(col+3, 0, "备注2"));
+            sheet1.addCell(new Label(col+4, 0, "个人养老"));
+            sheet1.addCell(new Label(col+5, 0, "个人医疗"));
+            sheet1.addCell(new Label(col+6, 0, "个人失业"));
+            sheet1.addCell(new Label(col+7, 0, "个人大病"));
+            sheet1.addCell(new Label(col+8, 0, "个人公积金"));
+            sheet1.addCell(new Label(col+9, 0, "单位养老"));
+            sheet1.addCell(new Label(col+10, 0, "单位医疗"));
+            sheet1.addCell(new Label(col+11, 0, "单位失业"));
+            sheet1.addCell(new Label(col+12, 0, "单位工伤"));
+            sheet1.addCell(new Label(col+13, 0, "单位大病"));
+            sheet1.addCell(new Label(col+14, 0, "单位生育"));
+            sheet1.addCell(new Label(col+15, 0, "单位公积金"));
+            sheet1.addCell(new Label(col+16, 0, "个税"));
+            sheet1.addCell(new Label(col+17, 0, "应付"));
+            sheet1.addCell(new Label(col+18, 0, "实付"));
+            sheet1.addCell(new Label(col+19, 0, "是否为自定义工资条（0否1是）*"));
+            sheet1.setColumnView(col+19,20);
             int index = 1;
             for( ViewEmployee viewEmployee:employees){//根据员工生成明细，如果没有员工则不生成
                 sheet1.addCell(new Label(0, index, viewEmployee.getName()));
                 sheet1.addCell(new Label(1, index, viewEmployee.getCardId()));
                 if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){
-                    List<Items> itemList = mapSalary.getItemList();
+                    List<MapSalary.SalaryItem> itemList = mapSalary.getItemList();
                     int c = itemList.size()+2;
                     sheet1.addCell(new Label(c+20, index,  "0"));
 
@@ -653,63 +564,42 @@ public class FileServlet extends HttpServlet {
             sheet2.addCell(new Label(0, 1, "name"));
             sheet2.addCell(new Label(0, 2, "cardId"));
             sheet2.addCell(new Label(0, 3, "base"));
-            if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){
-                int  c = 0;
-                List<Items> itemList = mapSalary.getItemList();
-                for(int i = 0;i<itemList.size();i++){
-                    c = i+4;
-                    String name = "f"+(i+1);
-                    sheet2.addCell(new Label(0, c, name));
+            int  row = 4;
+            if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0) {
+                List<MapSalary.SalaryItem> itemList = mapSalary.getItemList();
+                for (int i = 0; i < itemList.size(); i++) {
+                    String name = "f" + (i + 1);
+                    sheet2.addCell(new Label(0, row++, name));
                 }
-                sheet2.addCell(new Label(0, c+1, "extra1"));
-                sheet2.addCell(new Label(0, c+2, "comments1"));
-                sheet2.addCell(new Label(0, c+3, "extra2"));
-                sheet2.addCell(new Label(0, c+4, "comments2"));
-                sheet2.addCell(new Label(0, c+5, "pension1"));
-                sheet2.addCell(new Label(0, c+6, "medicare1"));
-                sheet2.addCell(new Label(0, c+7, "unemployment1"));
-                sheet2.addCell(new Label(0, c+8, "disease1"));
-                sheet2.addCell(new Label(0, c+9, "fund1"));
-                sheet2.addCell(new Label(0, c+10, "pension2"));
-                sheet2.addCell(new Label(0, c+11, "medicare2"));
-                sheet2.addCell(new Label(0, c+12, "unemployment2"));
-                sheet2.addCell(new Label(0, c+13, "injury"));
-                sheet2.addCell(new Label(0, c+14, "disease2"));
-                sheet2.addCell(new Label(0, c+15, "birth"));
-                sheet2.addCell(new Label(0, c+16, "fund2"));
-                sheet2.addCell(new Label(0, c+17, "tax"));
-                sheet2.addCell(new Label(0, c+18,  "payable"));
-                sheet2.addCell(new Label(0, c+19,  "paid"));
-                sheet2.addCell(new Label(0, c+20,  "status"));
-            }else {
-                sheet2.addCell(new Label(0, 4, "extra1"));
-                sheet2.addCell(new Label(0, 5, "comments1"));
-                sheet2.addCell(new Label(0, 6, "extra2"));
-                sheet2.addCell(new Label(0, 7, "comments2"));
-                sheet2.addCell(new Label(0, 8, "pension1"));
-                sheet2.addCell(new Label(0, 9, "medicare1"));
-                sheet2.addCell(new Label(0, 10, "unemployment1"));
-                sheet2.addCell(new Label(0, 11, "disease1"));
-                sheet2.addCell(new Label(0, 12, "fund1"));
-                sheet2.addCell(new Label(0, 13, "pension2"));
-                sheet2.addCell(new Label(0, 14, "medicare2"));
-                sheet2.addCell(new Label(0, 15, "unemployment2"));
-                sheet2.addCell(new Label(0, 16, "injury"));
-                sheet2.addCell(new Label(0, 17, "disease2"));
-                sheet2.addCell(new Label(0, 18, "birth"));
-                sheet2.addCell(new Label(0, 19, "fund2"));
-                sheet2.addCell(new Label(0, 20, "tax"));
-                sheet2.addCell(new Label(0, 21,  "payable"));
-                sheet2.addCell(new Label(0, 22,  "paid"));
-                sheet2.addCell(new Label(0, 23,  "status"));
             }
+            sheet2.addCell(new Label(0, row++, "extra1"));
+            sheet2.addCell(new Label(0, row++, "comments1"));
+            sheet2.addCell(new Label(0, row++, "extra2"));
+            sheet2.addCell(new Label(0, row++, "comments2"));
+            sheet2.addCell(new Label(0, row++, "pension1"));
+            sheet2.addCell(new Label(0, row++, "medicare1"));
+            sheet2.addCell(new Label(0, row++, "unemployment1"));
+            sheet2.addCell(new Label(0, row++, "disease1"));
+            sheet2.addCell(new Label(0, row++, "fund1"));
+            sheet2.addCell(new Label(0, row++, "pension2"));
+            sheet2.addCell(new Label(0, row++, "medicare2"));
+            sheet2.addCell(new Label(0, row++, "unemployment2"));
+            sheet2.addCell(new Label(0, row++, "injury"));
+            sheet2.addCell(new Label(0, row++, "disease2"));
+            sheet2.addCell(new Label(0, row++, "birth"));
+            sheet2.addCell(new Label(0, row++, "fund2"));
+            sheet2.addCell(new Label(0, row++, "tax"));
+            sheet2.addCell(new Label(0, row++,  "payable"));
+            sheet2.addCell(new Label(0, row++,  "paid"));
+            sheet2.addCell(new Label(0, row++,  "status"));
+
             sheet2.addCell(new Label(1, 0, "类型"));
             sheet2.addCell(new Label(1, 1, "string"));
             sheet2.addCell(new Label(1, 2, "string"));
             sheet2.addCell(new Label(1, 3, "float"));
             if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){
                 int  c = 0;
-                List<Items> itemList = mapSalary.getItemList();
+                List<MapSalary.SalaryItem> itemList = mapSalary.getItemList();
                 for(int i = 0;i<itemList.size();i++){
                     c = i+4;
                     sheet2.addCell(new Label(1, c, "float"));
@@ -764,7 +654,7 @@ public class FileServlet extends HttpServlet {
             sheet2.addCell(new Label(2, 3, "TRUE"));
             if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0){
                 int  c = 0;
-                List<Items> itemList = mapSalary.getItemList();
+                List<MapSalary.SalaryItem> itemList = mapSalary.getItemList();
                 for(int i = 0;i<itemList.size();i++){
                     c = i+4;
                     sheet2.addCell(new Label(2, c, "TRUE"));
@@ -819,42 +709,31 @@ public class FileServlet extends HttpServlet {
     }
 
     //下载小时工结算明细模板
-    private void downloadDetail2(Connection conn, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    private void downloadTemplateDetail2(Connection conn, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         Account user = (Account) session.getAttribute("account");
         long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
 
+        //获取名单准备数据
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("cid","=",cid);
         parameter.addCondition("did","=",user.getRid());
         parameter.addCondition("type","=",1);
         parameter.addCondition("category","=",3);
         parameter.addCondition("status","=",0);
-        List<ViewEmployee> employeeList = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
+        List<ViewEmployee> employees = (List<ViewEmployee>) EmployeeDao.getList(conn,parameter).rows;
+        JSONArray data = JSONArray.parseArray(JSON.toJSONString(employees));
 
 
-        //文件名
-        String filename=employeeList.get(0).getCname()+"小时工结算单明细模板";
+        //准备目标文件和模板文件
+        String filename=employees.size()>0?employees.get(0).getCname():""+"小时工结算单明细模板";
         filename = new String(filename.getBytes(),"iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
-        response.addHeader("Content-Disposition", "attachment;filename=\""
-                + filename + ".xls\"");
+        response.addHeader("Content-Disposition", "attachment;filename=\""+ filename + ".xls\"");
+        String template = getServletContext().getRealPath("/excelFile/detail2.xls");
 
-        String fileName = "detail2.xls";
-        String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
-        File file = new File(fullFileName);
-
-        JSONArray data = JSONArray.parseArray(JSON.toJSONString(employeeList));
-        Workbook book;
-        try {
-            //获取模板
-            book = Workbook.getWorkbook(file);
-            utills.excel.XlsUtil.write(response.getOutputStream(),book,Scheme.SCHEME_DETAIL_EXPORT, data);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (BiffException e) {
-            e.printStackTrace();
-        }
+        //写Excel
+        XlsUtil.write(response.getOutputStream(),template,SchemeDefined.SCHEME_DETAIL_EXPORT, data);
     }
 
     //导出特殊结算单的明细
@@ -867,41 +746,22 @@ public class FileServlet extends HttpServlet {
         //获取特殊结算单明细
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid", "=", sid);
-        DaoQueryListResult result = Detail0Dao.getList(conn, parameter);
-        String rows = JSONObject.toJSONString(result.rows);
-        List<ViewDetail0> details = JSONArray.parseArray(rows, ViewDetail0.class);
+        List<ViewDetail0> details = (List<ViewDetail0>) Detail0Dao.getList(conn, parameter).rows;
+        JSONArray data = JSONArray.parseArray(JSON.toJSONString(details));
 
         //文件名
         fileName = vs.getName()+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM") + "特殊结算单");
         fileName = new String(fileName.getBytes(), "iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
-        response.addHeader("Content-Disposition", "attachment;filename=\""
-                + fileName + ".xls\"");
-        Scheme scheme1 = new Scheme();
-        scheme1.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
-        scheme1.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
-        scheme1.addField(new Field(2, "amount", "金额", Field.INT, 100));
-        scheme1.addField(new Field(3, "manage", "管理费", Field.FLOAT, 100));
-        scheme1.addField(new Field(3, "tax", "税费", Field.FLOAT, 100));
-        scheme1.addField(new Field(4, "paid", "总额", Field.FLOAT, 100));
-
-        Scheme scheme2 = new Scheme();
-        scheme2.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
-        scheme2.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
-        scheme2.addField(new Field(2, "amount", "金额", Field.INT, 100));
-        scheme2.addField(new Field(3, "tax", "税费", Field.FLOAT, 100));
-        scheme2.addField(new Field(4, "paid", "实发", Field.FLOAT, 100));
-
-        JSONArray data = JSONArray.parseArray(JSON.toJSONString(details));
+        response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + ".xls\"");
 
         String title1 =vs.getName()+""+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM")+"特殊工资汇款表");
         String title2 =vs.getName()+""+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM")+"特殊工资明细表");
         String[] titles ={title1,title2};
         String[] sheetNames = {"汇款表", "明细表"};
-        Scheme[] schemes = {scheme1, scheme2};
+        Scheme[] schemes = {SchemeDefined.SCHEME_DETAIL0_1, SchemeDefined.SCHEME_DETAIL0_2};
         JSONArray[] datas = {data, data};
         XlsUtil.write(response.getOutputStream(), sheetNames,titles, schemes, datas);
-
     }
 
     //导出普通结算单明细
@@ -953,7 +813,7 @@ public class FileServlet extends HttpServlet {
         //自定义工资项
         int c1 = 3;
         if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0) {
-            List<Items> itemList = mapSalary.getItemList();//获取自定义工资项集合
+            List<MapSalary.SalaryItem> itemList = mapSalary.getItemList();//获取自定义工资项集合
             for (int i = 0; i < itemList.size(); i++) {
                 scheme1.addField(new Field(c1, "f"+(i+1), itemList.get(i).getField(), Field.FLOAT, 100));
                 c1++;
@@ -981,7 +841,7 @@ public class FileServlet extends HttpServlet {
         //自定义工资项
         int c2 = 3;
         if(mapSalary!=null&&mapSalary.getItems()!=null&&mapSalary.getItems().length()>0) {
-            List<Items> itemList = mapSalary.getItemList();//获取自定义工资项集合
+            List<MapSalary.SalaryItem> itemList = mapSalary.getItemList();//获取自定义工资项集合
             for (int i = 0; i < itemList.size(); i++) {
                 scheme2.addField(new Field(c2, "f"+(i+1), itemList.get(i).getField(), Field.FLOAT, 100));
                 c2++;
@@ -1056,7 +916,7 @@ public class FileServlet extends HttpServlet {
         String title2 =vs.getName()+""+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM")+"小时工工资明细表");
         String[] titles ={title1,title2};
         String[] sheetNames = {"小时工汇款表", "小时工明细表"};
-        Scheme[] schemes = {Scheme.SCHEME_DETAIL2_PAID, Scheme.SCHEME_DETAIL2_DETAIL};
+        Scheme[] schemes = {SchemeDefined.SCHEME_DETAIL2_PAID, SchemeDefined.SCHEME_DETAIL2_DETAIL};
         JSONArray[] datas = {data, data};
         XlsUtil.write(response.getOutputStream(), sheetNames,titles, schemes, datas);
 
@@ -1132,7 +992,7 @@ public class FileServlet extends HttpServlet {
         Part part = request.getPart("file");
         try {//获取part中的文件，读取数据
             InputStream is = part.getInputStream();
-            JSONArray data = XlsUtil.read(is,Scheme.SCHEME_DEDUCT_TOTAL,1);
+            JSONArray data = XlsUtil.read(is,SchemeDefined.SCHEME_DEDUCT_TOTAL,1);
             if(null == data){
                 result = "{\"success\":false,\"msg\":\"xls文件不符合要求，请下载模板再重新填写\"}";
             }else{
@@ -1154,7 +1014,7 @@ public class FileServlet extends HttpServlet {
         long cid = Long.parseLong(request.getParameter("cid"));
         try {//获取part中的文件，读取数据
             InputStream is = part.getInputStream();
-            Scheme[] schemes = {Scheme.SCHEME_DEDUCT_SPOUSE,Scheme.SCHEME_DEDUCT_CHILDREN,Scheme.SCHEME_DEDUCT_EDUCATION,Scheme.SCHEME_DEDUCT_LOAN,Scheme.SCHEME_DEDUCT_RENT,Scheme.SCHEME_DEDUCT_ELDER};
+            Scheme[] schemes = {SchemeDefined.SCHEME_DEDUCT_SPOUSE,SchemeDefined.SCHEME_DEDUCT_CHILDREN,SchemeDefined.SCHEME_DEDUCT_EDUCATION,SchemeDefined.SCHEME_DEDUCT_LOAN,SchemeDefined.SCHEME_DEDUCT_RENT,SchemeDefined.SCHEME_DEDUCT_ELDER};
             int[] cows={1,1,2,2,1,2};
             JSONArray[] data =XlsUtil.read(is,schemes,cows);
             List<ViewDeduct> deductList = FileService.readDeduct(data);

@@ -8,6 +8,7 @@ import dao.insurance.InsuranceDao;
 import database.*;
 import service.insurance.InsuranceService;
 import utills.excel.Scheme;
+import utills.excel.SchemeDefined;
 import utills.excel.XlsUtil;
 
 import javax.servlet.ServletException;
@@ -80,15 +81,15 @@ public class InsuranceServlet extends HttpServlet {
         }
         switch (category){
             case 0://校对社保
-                data = XlsUtil.read(is,Scheme.SCHEME_SOCIAL,1);
+                data = XlsUtil.read(is, SchemeDefined.SCHEME_SOCIAL,1);
                 result = InsuranceService.checkSocial(conn,data,type);
                 break;
             case 1://校对医保
-                data = XlsUtil.read(is,Scheme.SCHEME_MEDICAL,1);
+                data = XlsUtil.read(is,SchemeDefined.SCHEME_MEDICAL,1);
                 result = InsuranceService.checkMedicare(conn,data);
                 break;
             case 2://校对公积金
-                data = XlsUtil.read(is,Scheme.SCHEME_FUND,1);
+                data = XlsUtil.read(is,SchemeDefined.SCHEME_FUND,1);
                 result = InsuranceService.checkFund(conn,data);
                 break;
         }
