@@ -166,13 +166,31 @@ public class XlsUtil {
             e.printStackTrace();
         }
     }
+
     /**
-     * 向xls写入数据（多sheet）
+     *向已经存在的模板中写多组数据
      * @param os 输出流
-     * @param sheetNames sheet名集合（支持多个sheet）
+     * @param template 模板
      * @param schemes 表结构定义集合（与sheet名集合对应，一个sheet对应一个表结构）
      * @param datas 表数据集合（与sheet名集合对应，一个sheet对应一个表数据）
      */
+    public static void write(OutputStream os,String template, Scheme []schemes, JSONArray []datas){
+        try {
+            File file = new File(template);
+            Workbook book_template = Workbook.getWorkbook(file);
+            WritableWorkbook book = Workbook.createWorkbook(os,book_template);
+            for(int i=0; i<datas.length; i++){
+                WritableSheet sheet = book.getSheet( i);
+                writeSheet(sheet,"",schemes[i],datas[i]);
+            }
+            book.write();
+            book.close();
+            os.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void write(OutputStream os, String []sheetNames,String []titles, Scheme []schemes, JSONArray []datas){
         try {
             WritableWorkbook book = Workbook.createWorkbook(os);
@@ -187,7 +205,6 @@ public class XlsUtil {
             e.printStackTrace();
         }
     }
-
     /**
      * 读取sheet数据
      * @param sheet 工作表

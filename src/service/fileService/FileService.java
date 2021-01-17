@@ -24,12 +24,16 @@ import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 import utills.CollectionUtil;
 import utills.DateUtil;
+import utills.IDCardUtil;
 import utills.excel.Field;
 import utills.excel.Scheme;
+import utills.excel.SchemeDefined;
+import utills.excel.XlsUtil;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.sql.Connection;
 import java.text.NumberFormat;
@@ -42,8 +46,11 @@ import java.util.List;
 public class FileService {
     //导出新增社保单
     public static void exportSocial1(Connection conn, HttpServletResponse response) throws IOException {
+        //文件名
+        String fileName ="员工新增社保单";
+        fileName = new String(fileName.getBytes(), "iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=exportSocial1.xls");
+        response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + ".xls\"");
 
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("status3","=",1);
@@ -51,74 +58,29 @@ public class FileService {
         DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);
-        WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
-        WritableSheet sheet1 = book.createSheet("新增社保单", 0);
+        JSONArray data = JSONArray.parseArray(JSONObject.toJSONString(insurances));
 
-//        Scheme scheme = new Scheme();
-//        scheme.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
-//        scheme.addField(new Field(1, "cardId", "个人代码", Field.STRING, 300));
-//        scheme.addField(new Field(2, "code", "证件号码", Field.FLOAT, 100));
-//        scheme.addField(new Field(3, "date3", "参保开始年月", Field.FLOAT, 100));
-//        scheme.addField(new Field(4, "base3", "月缴费工资", Field.FLOAT, 100));
-//        scheme.addField(new Field(5, "xxx", "变更原因", Field.FLOAT, 100));
-//        scheme.addField(new Field(6, "xxx", "用工形式", Field.FLOAT, 100));
-//        scheme.addField(new Field(7, "xxx", "是否补收（不填表示否）", Field.FLOAT, 100));
-//        scheme.addField(new Field(8, "entry", "参加工作时间", Field.FLOAT, 100));
-//        scheme.addField(new Field(9, "phone", "联系电话", Field.FLOAT, 100));scheme.addField(new Field(3, "pension2", "单位养老", Field.FLOAT, 100));
-//        scheme.addField(new Field(10, "xxx", "户口性质", Field.STRING, 100));
-//        scheme.addField(new Field(11, "address", "户籍地址", Field.STRING, 100));
-//
-        try {
-            sheet1.addCell(new Label(0, 0, "姓名"));
-            sheet1.addCell(new Label(1, 0, "个人代码"));
-            sheet1.addCell(new Label(2, 0, "证件号码"));
-            sheet1.addCell(new Label(3, 0, "参保开始年月"));
-            sheet1.addCell(new Label(4, 0, "月缴费工资"));
-            sheet1.addCell(new Label(5, 0, "变更原因"));
-            sheet1.addCell(new Label(6, 0, "用工形式"));
-            sheet1.addCell(new Label(7, 0, "是否补收（不填表示否）"));
-            sheet1.addCell(new Label(8, 0, "参加工作时间"));
-            sheet1.addCell(new Label(9, 0, "联系电话"));
-            sheet1.addCell(new Label(10, 0, "户口性质"));
-            sheet1.addCell(new Label(11, 0, "户籍地址"));
-            int index = 1;
-            for(ViewInsurance v:insurances){
-                //转化户口性质
-                String houseHold =  houseHold(v.getHousehold());
-                //比较时间
-                String msg = compareDate(v.getEntry());
-                sheet1.addCell(new Label(0, index, v.getName()));
-                sheet1.addCell(new Label(1, index, v.getCode3()));
-                sheet1.addCell(new Label(2, index, v.getCardId()));
-                sheet1.addCell(new Label(3, index, v.getDate3()==null?"":DateUtil.format(v.getDate3(),"yyyy-MM-dd")));
-                sheet1.addCell(new jxl.write.Number(4, index, v.getBase3()));
-                sheet1.addCell(new Label(5, index, "正常参保登记"));
-                sheet1.addCell(new Label(6, index, "合同制"));
-                sheet1.addCell(new Label(7, index, msg));
-                sheet1.addCell(new Label(8, index, v.getEntry()==null?"":DateUtil.format(v.getEntry(),"yyyy-MM-dd")));
-                sheet1.addCell(new Label(9, index, v.getPhone()));
-                sheet1.addCell(new Label(10, index, houseHold));
-                sheet1.addCell(new Label(11, index, v.getAddress()));
-                index++;
-            }
-            //设置列宽
-            sheet1.setColumnView(0,8);
-            sheet1.setColumnView(1,11);
-            sheet1.setColumnView(2,19);
-            sheet1.setColumnView(3,8);
-            sheet1.setColumnView(4,8);
-            sheet1.setColumnView(5,40);
-            book.write();
-            book.close();
-        } catch (WriteException e) {
-            e.printStackTrace();
+        for(int i=0; i<data.size(); i++){
+            JSONObject o = (JSONObject) data.get(i);
+            String makeUp = o.getDate("entry")==null?"":compareDate(o.getDate("entry"));
+            String house = o.getByte("household")==null?"":houseHold(o.getByte("household"));
+            o.put("startDate",o.getDate("date3")==null?"":DateUtil.format(o.getDate("date3"),"yyyy-MM-dd"));
+            o.put("changeReason","正常参保登记");
+            o.put("form","合同制");
+            o.put("makeUp",makeUp);
+            o.put("entryDate",o.getDate("entry")==null?"":DateUtil.format(o.getDate("entry"),"yyyy-MM-dd"));
+            o.put("house",house);
         }
+        XlsUtil.write(response.getOutputStream(),"","员工新增社保单", SchemeDefined.SCHEME_exportSocial1, data);
     }
 
     //导出停保社保单
     public static void exportSocial2(Connection conn, HttpServletResponse response) throws IOException {
+        //文件名
+        String fileName ="员工停保社保单";
+        fileName = new String(fileName.getBytes(), "iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=exportSocial2.xls");
+        response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + ".xls\"");
 
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("status3","=",4);
@@ -130,41 +92,24 @@ public class FileService {
         Date date = DateUtil.getLastDayofMonth(new Date());
         String lastDay = DateUtil.format(date,"yyyy-MM-dd");//本月最后一天
 
-        WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
-        WritableSheet sheet1 = book.createSheet("停保社保单", 0);
-        try {
-            sheet1.addCell(new Label(0, 0, "个人代码"));
-            sheet1.addCell(new Label(1, 0, "姓名"));
-            sheet1.addCell(new Label(2, 0, "证件号码"));
-            sheet1.addCell(new Label(3, 0, "变更日期"));
-            sheet1.addCell(new Label(4, 0, "变更原因"));
-            int index = 1;
-            for(ViewInsurance insurance:insurances){
-                sheet1.addCell(new Label(1, index, insurance.getCode3()));
-                sheet1.addCell(new Label(0, index, insurance.getName()));
-                sheet1.addCell(new Label(2, index, insurance.getCardId()));
-                sheet1.addCell(new Label(3, index, lastDay));
-                sheet1.addCell(new Label(4, index, insurance==null?"":chageReason(insurance.getReason())));
-                index++;
-            }
-            //设置列宽
-            sheet1.setColumnView(0,8);
-            sheet1.setColumnView(1,11);
-            sheet1.setColumnView(2,19);
-            sheet1.setColumnView(3,8);
-            sheet1.setColumnView(4,8);
-            sheet1.setColumnView(5,40);
-            book.write();
-            book.close();
-        } catch (WriteException e) {
-            e.printStackTrace();
+        JSONArray data = JSONArray.parseArray(JSONObject.toJSONString(insurances));
+        for(int i=0; i<data.size(); i++){
+            JSONObject o = (JSONObject) data.get(i);
+            String changeReason = o.getByte("reason")==null?"":chageReason(o.getByte("reason"));
+            o.put("changeDate",lastDay);
+            o.put("changeReason",changeReason);
         }
+        XlsUtil.write(response.getOutputStream(),"","员工停保社保单",SchemeDefined.SCHEME_exportSocial2, data);
+
     }
 
     //导出续保医保单
     public static void exportMedicare1(Connection conn, HttpServletResponse response) throws IOException {
+        //文件名
+        String fileName ="员工续保医保单";
+        fileName = new String(fileName.getBytes(), "iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=exportMedicare1.xls");
+        response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + ".xls\"");
 
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("status1","=",2);
@@ -173,43 +118,22 @@ public class FileService {
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);
 
-        WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
-        WritableSheet sheet1 = book.createSheet("续保医保单", 0);
-        try {
-            sheet1.addCell(new Label(1, 0, "个人编号"));
-            sheet1.addCell(new Label(0, 0, "姓名"));
-            sheet1.addCell(new Label(2, 0, "证件号码"));
-            sheet1.addCell(new Label(3, 0, "参保基数"));
-            sheet1.addCell(new Label(4, 0, "参保险种"));
-            sheet1.addCell(new Label(4, 0, "参保时间"));
-            int index = 1;
-            for(ViewInsurance insurance:insurances){
-                sheet1.addCell(new Label(1, index, insurance.getCode1()));
-                sheet1.addCell(new Label(0, index, insurance.getName()));
-                sheet1.addCell(new Label(2, index, insurance.getCardId()));
-                sheet1.addCell(new jxl.write.Number(3, index, insurance.getBase1()));
-                sheet1.addCell(new Label(4, index, "医疗、大病、生育"));
-                sheet1.addCell(new Label(5, index, insurance.getDate1()==null?"":DateUtil.format(insurance.getDate1(),"yyyy-MM-dd")));
-                index++;
-            }
-            //设置列宽
-            sheet1.setColumnView(0,8);
-            sheet1.setColumnView(1,11);
-            sheet1.setColumnView(2,19);
-            sheet1.setColumnView(3,8);
-            sheet1.setColumnView(4,8);
-            sheet1.setColumnView(5,40);
-            book.write();
-            book.close();
-        } catch (WriteException e) {
-            e.printStackTrace();
+        JSONArray data = JSONArray.parseArray(JSONObject.toJSONString(insurances));
+        for(int i=0; i<data.size(); i++){
+            JSONObject o = (JSONObject) data.get(i);
+            o.put("insurance","医疗、大病、生育");
+            o.put("startDate",o.getDate("date1")==null?"":DateUtil.format(o.getDate("date1"),"yyyy-MM-dd"));
         }
+        XlsUtil.write(response.getOutputStream(),"","员工续保医保单",SchemeDefined.SCHEME_exportMedicare1, data);
     }
 
     //导出停保医保单
     public static void exportMedicare2(Connection conn, HttpServletResponse response) throws IOException {
+        //文件名
+        String fileName ="员工停保医保单";
+        fileName = new String(fileName.getBytes(), "iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=exportMedicare2.xls");
+        response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + ".xls\"");
 
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("status1","=",4);
@@ -221,35 +145,16 @@ public class FileService {
         //获取本月最后一天
         Date date = DateUtil.getLastDayofMonth(new Date());
         String lastDay = DateUtil.format(date,"yyyy-MM-dd");
-        WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
-        WritableSheet sheet1 = book.createSheet("停保医保单", 0);
-        try {
-            sheet1.addCell(new Label(1, 0, "个人代码"));
-            sheet1.addCell(new Label(0, 0, "姓名"));
-            sheet1.addCell(new Label(2, 0, "证件号码"));
-            sheet1.addCell(new Label(3, 0, "变更日期"));
-            sheet1.addCell(new Label(4, 0, "变更原因"));
-            int index = 1;
-            for(ViewInsurance Insurance:insurances){
-                sheet1.addCell(new Label(1, index, Insurance.getCode1()));
-                sheet1.addCell(new Label(0, index, Insurance.getName()));
-                sheet1.addCell(new Label(2, index, Insurance.getCardId()));
-                sheet1.addCell(new Label(3, index, lastDay));
-                sheet1.addCell(new Label(4, index, chageReason(Insurance.getReason())));
-                index++;
-            }
-            //设置列宽
-            sheet1.setColumnView(0,8);
-            sheet1.setColumnView(1,11);
-            sheet1.setColumnView(2,19);
-            sheet1.setColumnView(3,8);
-            sheet1.setColumnView(4,8);
-            sheet1.setColumnView(5,40);
-            book.write();
-            book.close();
-        } catch (WriteException e) {
-            e.printStackTrace();
+
+        JSONArray data = JSONArray.parseArray(JSONObject.toJSONString(insurances));
+        for(int i=0; i<data.size(); i++){
+            JSONObject o = (JSONObject) data.get(i);
+            String changeReason = o.getByte("reason")==null?"":chageReason(o.getByte("reason"));
+            o.put("changeDate",lastDay);
+            o.put("changeReason",changeReason);
         }
+        XlsUtil.write(response.getOutputStream(),"","员工停保医保单",SchemeDefined.SCHEME_exportMedicare2, data);
+
     }
 
     //导出公积金
@@ -304,7 +209,270 @@ public class FileService {
         }
     }
 
-    //转换用户性质
+    //导出招行
+    public static void exportBank1(Connection conn, long sid, HttpServletResponse response, String file) throws UnsupportedEncodingException {
+        //文件名
+        String fileName ="招商银行工资报表";
+        fileName = new String(fileName.getBytes(), "iso-8859-1");
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + ".xls\"");
+
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("sid", "=", sid);
+
+        DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
+        String rows = JSONObject.toJSONString(result.rows);
+        List<ViewDetail1> details = JSONArray.parseArray(rows, ViewDetail1.class);
+        String month = details.get(0).getMonth()==null?"":(DateUtil.format(details.get(0).getMonth(),"yyyy-MM-dd").split("-"))[1];
+        String eids = "";
+        for(ViewDetail1 d:details){
+            eids+=(d.getEid()+",");
+        }
+        eids = eids.substring(0,eids.length()-1);
+        //批量获取员工的工资卡
+        QueryParameter p1 =new QueryParameter();
+        p1.addCondition("eid","in",eids);
+        List<PayCard> payCards = (List<PayCard>) PayCardDao.getList(conn,p1).rows;
+        JSONArray data = JSONArray.parseArray(JSONObject.toJSONString(details));
+
+        for(int i=0; i<data.size(); i++){
+            JSONObject o = (JSONObject) data.get(i);
+            o.put("comments",month+"月工资");
+            PayCard p = CollectionUtil.getElement(payCards,"eid",o.getLong("eid"));
+            if(p!=null){
+                o.put("cardNo",p.getCardNo());
+                o.put("bank1",p.getBank1());
+                o.put("bankNo",p.getBankNo());
+            }else {
+                o.put("cardNo","");
+                o.put("bank1","");
+                o.put("bankNo","");
+            }
+        }
+        Scheme[] schemes = {SchemeDefined.SCHEME_BANK_CMCC1, SchemeDefined.SCHEME_BANK_CMCC2};
+        JSONArray[] datas = {data, data};
+        try {
+           utills.excel.XlsUtil.write(response.getOutputStream(),file,schemes, datas);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    //导出农行
+    public static void exportBank2(Connection conn, long sid, HttpServletResponse response, String file) throws UnsupportedEncodingException {
+        //文件名
+        String fileName ="农业银行工资报表";
+        fileName = new String(fileName.getBytes(), "iso-8859-1");
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + ".xls\"");
+
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("sid", "=", sid);
+
+        DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
+        String rows = JSONObject.toJSONString(result.rows);
+        List<ViewDetail1> viewDetail1s = JSONArray.parseArray(rows, ViewDetail1.class);
+        String eids = "";
+        for(ViewDetail1 d:viewDetail1s){
+            eids+=(d.getEid()+",");
+        }
+        eids = eids.substring(0,eids.length()-1);
+        //批量获取员工的工资卡
+        QueryParameter p1 =new QueryParameter();
+        p1.addCondition("eid","in",eids);
+        List<PayCard> payCards = (List<PayCard>) PayCardDao.getList(conn,p1).rows;
+        JSONArray data = JSONArray.parseArray(JSONObject.toJSONString(viewDetail1s));
+        String month = viewDetail1s.get(0).getMonth()==null?"":DateUtil.format(viewDetail1s.get(0).getMonth(),"yyyy.MM");
+
+        for(int i=0; i<data.size(); i++){
+            JSONObject o = (JSONObject) data.get(i);
+            o.put("comments",month+"工资");
+            PayCard p = CollectionUtil.getElement(payCards,"eid",o.getLong("eid"));
+            if(p!=null){
+                o.put("cardNo",p.getCardNo());
+                o.put("bank1",p.getBank1());
+                o.put("bankNo",p.getBankNo());
+                o.put("bank2",p.getBank2());
+                }else {
+                o.put("cardNo","");
+                o.put("bank1","");
+                o.put("bankNo","");
+                o.put("bank2","");
+            }
+        }
+        Scheme[] schemes = {SchemeDefined.SCHEME_BANK_AG1, SchemeDefined.SCHEME_BANK_AG1};
+        JSONArray[] datas = {data, data};
+        try {
+            utills.excel.XlsUtil.write(response.getOutputStream(),file,schemes, datas);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    //导出浦发
+    public static void exportBank3(Connection conn, long sid, HttpServletResponse response) throws IOException {
+        //文件名
+        String fileName ="浦发银行工资报表";
+        fileName = new String(fileName.getBytes(), "iso-8859-1");
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + ".xls\"");
+
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("sid","=",sid);
+        DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
+        String rows = JSONObject.toJSONString(result.rows);
+
+        List<ViewDetail1> details = JSONArray.parseArray(rows, ViewDetail1.class);
+        String month = details.get(0).getMonth()==null?"":(DateUtil.format(details.get(0).getMonth(),"yyyy-MM-dd").split("-"))[1];
+        String eids = "";
+        for(ViewDetail1 d:details){
+            eids+=(d.getEid()+",");
+        }
+        eids = eids.substring(0,eids.length()-1);
+        //批量获取员工的工资卡
+        QueryParameter p1 =new QueryParameter();
+        p1.addCondition("eid","in",eids);
+        List<PayCard> payCards = (List<PayCard>) PayCardDao.getList(conn,p1).rows;
+        JSONArray data = JSONArray.parseArray(JSONObject.toJSONString(details));
+
+        for(int i=0; i<data.size(); i++){
+            JSONObject o = (JSONObject) data.get(i);
+            o.put("comments",month+"月工资");
+            o.put("code","");
+            PayCard p = CollectionUtil.getElement(payCards,"eid",o.getLong("eid"));
+            if(p!=null){
+                o.put("cardNo",p.getCardNo());
+            }else {
+                o.put("cardNo","");
+            }
+        }
+        XlsUtil.write(response.getOutputStream(),"","浦发银行",SchemeDefined.SCHEME_BANK_SPDB, data);
+
+    }
+    //导出交通
+    public static void exportBank4(Connection conn, long sid, HttpServletResponse response) throws IOException {
+        //文件名
+        String fileName ="交通银行工资报表";
+        fileName = new String(fileName.getBytes(), "iso-8859-1");
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + ".xls\"");
+
+        QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("sid","=",sid);
+        DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
+        String rows = JSONObject.toJSONString(result.rows);
+        List<ViewDetail1> details = JSONArray.parseArray(rows, ViewDetail1.class);
+
+        String month = details.get(0).getMonth()==null?"":(DateUtil.format(details.get(0).getMonth(),"yyyy-MM-dd").split("-"))[1];
+        String eids = "";
+        for(ViewDetail1 d:details){
+            eids+=(d.getEid()+",");
+        }
+        eids = eids.substring(0,eids.length()-1);
+        //批量获取员工的工资卡
+        QueryParameter p1 =new QueryParameter();
+        p1.addCondition("eid","in",eids);
+        List<PayCard> payCards = (List<PayCard>) PayCardDao.getList(conn,p1).rows;
+        JSONArray data = JSONArray.parseArray(JSONObject.toJSONString(details));
+
+        for(int i=0; i<data.size(); i++){
+            JSONObject o = (JSONObject) data.get(i);
+            o.put("comments",month+"月工资");
+            PayCard p = CollectionUtil.getElement(payCards,"eid",o.getLong("eid"));
+            if(p!=null){
+                o.put("cardNo",p.getCardNo());
+            }else {
+                o.put("cardNo","");
+            }
+        }
+        XlsUtil.write(response.getOutputStream(),"","交通银行",SchemeDefined.SCHEME_BANK_BOCOM, data);
+    }
+
+    //读累计扣除数
+    public static List<ViewDeduct> readDeduct(JSONArray[] data) {
+        List<ViewDeduct> deductList = new ArrayList<>();
+        JSONArray a1=data[1];//子女教育支出数据
+        JSONArray a2=data[2];//继续教育数据
+        JSONArray a3=data[3];//住房贷款数据
+        JSONArray a4=data[4];//住房租金数据
+        JSONArray a5=data[5];//赡养老人数据
+
+        for(int i =0;i<a1.size();i++){//获取子女教育累计扣除
+            JSONObject o = (JSONObject) a1.get(i);
+            String per = o.getString("per");
+            Number num = null;
+            try {
+                num = (NumberFormat.getInstance().parse(per));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+          float deduct = Deduct.DEDUCT1*(num.intValue()/100);//换算成扣除金额
+          ViewDeduct d = CollectionUtil.getElement(deductList,"cardId",o.getString("cardId"));
+          if(d == null){//不在
+              d = new ViewDeduct();
+              d.setCardId(o.getString("cardId"));
+              d.setName(o.getString("name"));
+              d.setDeduct1(deduct);
+              deductList.add(d);
+          }else{
+              d.setDeduct1(d.getDeduct1()+deduct);
+          }
+        }
+        for(int i =0;i<a2.size();i++){//获取继续教育累计扣除
+            JSONObject o = (JSONObject) a2.get(i);
+            ViewDeduct d = CollectionUtil.getElement(deductList,"cardId",o.getString("cardId"));
+            if(d == null){//不在
+                d = new ViewDeduct();
+                d.setCardId(o.getString("cardId"));
+                d.setName(o.getString("name"));
+                d.setDeduct3(Deduct.DEDUCT3);
+                deductList.add(d);
+            }else{
+                d.setDeduct3(d.getDeduct3()+Deduct.DEDUCT3);
+            }
+        }
+        for(int i =0;i<a3.size();i++){//读住房贷款利息
+            JSONObject o = (JSONObject) a3.get(i);
+            ViewDeduct d = CollectionUtil.getElement(deductList,"cardId",o.getString("cardId"));
+            if(d == null){//不在
+                d = new ViewDeduct();
+                d.setCardId(o.getString("cardId"));
+                d.setName(o.getString("name"));
+                d.setDeduct5(Deduct.DEDUCT5);
+                deductList.add(d);
+            }else{
+                d.setDeduct5(d.getDeduct5()+Deduct.DEDUCT5);
+            }
+        }
+        for(int i =0;i<a4.size();i++){//读租房租金
+            JSONObject o = (JSONObject) a4.get(i);
+            ViewDeduct d = CollectionUtil.getElement(deductList,"cardId",o.getString("cardId"));
+            if(d == null){//不在
+                d = new ViewDeduct();
+                d.setCardId(o.getString("cardId"));
+                d.setName(o.getString("name"));
+                d.setDeduct6(Deduct.DEDUCT6);
+                deductList.add(d);
+            }else{
+                d.setDeduct6(d.getDeduct6()+Deduct.DEDUCT6);
+            }
+        }
+        for(int i =0;i<a5.size();i++){//赡养老人
+            JSONObject o = (JSONObject) a5.get(i);
+            float deduct= o.getFloat("per");
+            ViewDeduct d = CollectionUtil.getElement(deductList,"cardId",o.getString("cardId"));
+            if(d == null){//不在
+                d = new ViewDeduct();
+                d.setCardId(o.getString("cardId"));
+                d.setName(o.getString("name"));
+                d.setDeduct2(deduct);
+                deductList.add(d);
+            }else{
+                d.setDeduct2(d.getDeduct2()+deduct);
+            }
+        }
+        return deductList;
+    }
+
+    //转换户口性质
     public static String houseHold(byte h){
         String houseHold = null;
         switch (h){
@@ -422,335 +590,6 @@ public class FileService {
                 break;
         }
         return reason;
-    }
-
-    //导出招行
-    public static void exportBank1(Connection conn, long sid, HttpServletResponse response, File file) {
-        response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=bank1.xls");
-
-        Workbook book ;
-        QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("sid", "=", sid);
-
-        DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
-        String rows = JSONObject.toJSONString(result.rows);
-        List<ViewDetail1> details = JSONArray.parseArray(rows, ViewDetail1.class);
-
-//        Scheme scheme1 = new Scheme();
-//        scheme1.addField(new Field(1, "paid", "金额上限", Field.STRING, 100));
-//        scheme1.addField(new Field(7, "cardNo", "收方账号", Field.STRING, 300));
-//        scheme1.addField(new Field(8, "name", "姓名", Field.STRING, 300));
-//        scheme1.addField(new Field(10, "bank1", "收方行名称", Field.STRING, 100));
-//        scheme1.addField(new Field(11, "bankNo", "收方行行号", Field.STRING, 100));
-//        scheme1.addField(new Field(13, "comments1", "附言", Field.STRING, 100));
-//
-//        Scheme scheme2 = new Scheme();
-//        scheme2.addField(new Field(0, "paid", "金额上限", Field.STRING, 100));
-//        scheme2.addField(new Field(1, "cardNo", "收方账号", Field.STRING, 300));
-//        scheme2.addField(new Field(2, "name", "姓名", Field.STRING, 300));
-//        for(ViewDetail1 v:details){
-//           v.setComments1("融金工资");
-//        }
-//        JSONArray data = JSONArray.parseArray(JSON.toJSONString(details));
-//
-//
-//        Scheme[] schemes = {scheme1, scheme2};
-//        JSONArray[] datas = {data, data};
-//        try {
-//            book = Workbook.getWorkbook(file);
-//            utills.excel.XlsUtil.write(response.getOutputStream(),book, 2,schemes, datas);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        } catch (BiffException e) {
-//            e.printStackTrace();
-//        }
-
-        try {
-            //获取模板
-            book = Workbook.getWorkbook(file);
-            // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
-            WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
-            WritableSheet sheet1 = workbook.getSheet(0);//获取第一个sheet
-            WritableSheet sheet2 = workbook.getSheet(1);//获取第二个sheet
-
-
-            int index = 1;
-            for(ViewDetail1 v:details){
-                //金额上限（发放额）、收方账号、收方户名、收方行名称、收方行行号、附言
-                PayCard card = (PayCard) PayCardDao.get(conn,v.getEid()).data;
-                if(card!=null){
-                    sheet1.addCell(new jxl.write.Number(1, index, v.getPaid()));//金额上限,实发
-                    sheet1.addCell(new Label(7, index, card.getCardNo()));//收方账号
-                    sheet1.addCell(new Label(10, index,card.getBank1()));//收方行名称
-                    sheet1.addCell(new Label(11, index, card.getBankNo()));//收方行行号
-                    sheet1.addCell(new Label(13, index, "融金2月工资"));//附言
-
-
-                    sheet2.addCell(new jxl.write.Number(0, index, v.getPaid()));//金额上限,实发
-                    sheet2.addCell(new Label(1, index, card.getCardNo()));//收方账号
-                    //sheet2.addCell(new Label(3, index, "大正月"+v.getMonth()==null?"":sdf.format(v.getMonth())+"工资"));//附言
-                }
-                sheet1.addCell(new Label(8, index, v.getName()));//收方户名
-                sheet2.addCell(new Label(2, index, v.getName()));//收方户名
-                index++;
-            }
-            workbook.write();
-            workbook.close();
-            book.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (BiffException e) {
-            e.printStackTrace();
-        } catch (RowsExceededException e) {
-            e.printStackTrace();
-        } catch (WriteException e) {
-            e.printStackTrace();
-        }
-    }
-    //导出农行
-    public static void exportBank2(Connection conn, long sid, HttpServletResponse response, File file) {
-        response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=bank2.xls");
-
-        Workbook book = null;
-        QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("sid", "=", sid);
-
-        DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
-        String rows = JSONObject.toJSONString(result.rows);
-        List<ViewDetail1> viewDetail1s = JSONArray.parseArray(rows, ViewDetail1.class);
-        try {
-            //获取模板
-            book = Workbook.getWorkbook(file);
-            // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
-            WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
-            WritableSheet sheet1 = workbook.getSheet(0);//获取第一个sheet
-            WritableSheet sheet2 = workbook.getSheet(1);//获取第二个sheet
-
-            int index = 1;
-            for(ViewDetail1 v:viewDetail1s){
-                //序号	卡号	姓名	开户银行（行别）	大额行号	开户行支行名称	实发	项目
-                PayCard card = (PayCard) PayCardDao.get(conn,v.getEid()).data;
-                if(card!=null) {
-                    sheet1.addCell(new jxl.write.Number(0, index, index ));
-                    sheet1.addCell(new Label(1, index, card.getCardNo()));
-                    sheet1.addCell(new Label(3, index, card.getBank1()));
-                    sheet1.addCell(new Label(4, index, card.getBankNo()));
-                    sheet1.addCell(new Label(5, index, card.getBank2()));
-                    sheet1.addCell(new jxl.write.Number(6, index, v.getPaid()));
-                    sheet1.addCell(new Label(7, index, v.getMonth()==null?"": DateUtil.format(v.getMonth(),"yyyy.MM") + "工资"));
-
-                    //序号	卡号	姓名	金额	备注
-                    sheet2.addCell(new jxl.write.Number(0, index, index ));
-                    sheet2.addCell(new Label(1, index, card.getCardNo()));
-                    sheet2.addCell(new jxl.write.Number(3, index, v.getPaid()));
-                    sheet2.addCell(new Label(4, index, v.getMonth()==null?"":DateUtil.format(v.getMonth(),"yyyy.MM") + "工资"));
-                }
-                sheet1.addCell(new Label(2, index, v.getName()));
-                sheet2.addCell(new Label(2, index, v.getName()));
-                index++;
-            }
-            workbook.write();
-            workbook.close();
-            book.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (BiffException e) {
-            e.printStackTrace();
-        } catch (RowsExceededException e) {
-            e.printStackTrace();
-        } catch (WriteException e) {
-            e.printStackTrace();
-        }
-    }
-    //导出浦发
-    public static void exportBank3(Connection conn, long sid, HttpServletResponse response) throws IOException {
-        response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=bank3.xls");
-
-        QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("sid","=",sid);
-        DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
-        String rows = JSONObject.toJSONString(result.rows);
-
-        List<ViewDetail1> details = JSONArray.parseArray(rows, ViewDetail1.class);
-        String month = details.get(0).getMonth()==null?"":(DateUtil.format(details.get(0).getMonth(),"yyyy-MM-dd").split("-"))[1];
-        WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
-        WritableSheet sheet1 = book.createSheet("浦发银行", 0);
-        try {
-            //卡号（或账号）	金额	客户姓名	第三方编号	摘要
-            sheet1.addCell(new Label(0, 0, "卡号（或账号）"));
-            sheet1.addCell(new Label(1, 0, "金额"));
-            sheet1.addCell(new Label(2, 0, "客户姓名"));
-            sheet1.addCell(new Label(3, 0, "第三方编号"));
-            sheet1.addCell(new Label(4, 0, "摘要"));
-
-            int index = 1;
-            for(ViewDetail1 detail1:details){
-                PayCard card = (PayCard) PayCardDao.get(conn,detail1.getEid()).data;
-                if(card!=null){
-                    sheet1.addCell(new Label(0, index, card.getCardNo()));
-                    sheet1.addCell(new jxl.write.Number(1, index, detail1.getPaid()));
-                    sheet1.addCell(new Label(3, index, ""));
-                    sheet1.addCell(new Label(4, index, month+"月工资"));
-                }
-                sheet1.addCell(new Label(2, index, detail1.getName()));
-                index++;
-            }
-            //设置列宽
-            sheet1.setColumnView(0,10);
-            sheet1.setColumnView(1,10);
-            sheet1.setColumnView(2,10);
-            sheet1.setColumnView(3,10);
-            sheet1.setColumnView(4,10);
-            sheet1.setColumnView(5,10);
-            book.write();
-            book.close();
-        } catch (WriteException e) {
-            e.printStackTrace();
-        }
-    }
-    //导出交通
-    public static void exportBank4(Connection conn, long sid, HttpServletResponse response) throws IOException {
-        response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=bank4.xls");
-
-        QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("sid","=",sid);
-        DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
-        String rows = JSONObject.toJSONString(result.rows);
-        List<ViewDetail1> details = JSONArray.parseArray(rows, ViewDetail1.class);
-
-        String month = details.get(0).getMonth()==null?"":DateUtil.format(details.get(0).getMonth(),"yyyy.MM");
-
-        WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
-        WritableSheet sheet1 = book.createSheet("浦发银行", 0);
-        try {
-            //序号	卡号	姓名	实发	项目
-            sheet1.addCell(new Label(0, 0, "序号"));
-            sheet1.addCell(new Label(1, 0, "卡号"));
-            sheet1.addCell(new Label(2, 0, "姓名"));
-            sheet1.addCell(new Label(3, 0, "实发"));
-            sheet1.addCell(new Label(4, 0, "项目"));
-
-            int index = 1;
-            for(ViewDetail1 detail1:details){
-                PayCard card = (PayCard) PayCardDao.get(conn,detail1.getEid()).data;
-                if(card!=null){
-                    sheet1.addCell(new jxl.write.Number(0, index, index));
-                    sheet1.addCell(new Label(1, index, card.getCardNo()));
-                    sheet1.addCell(new jxl.write.Number(3, index, detail1.getPaid()));
-                    sheet1.addCell(new Label(4, index, month+"月工资"));
-                }
-                sheet1.addCell(new Label(2, index, detail1.getName()));
-                index++;
-            }
-            //设置列宽
-            sheet1.setColumnView(0,10);
-            sheet1.setColumnView(1,10);
-            sheet1.setColumnView(2,10);
-            sheet1.setColumnView(3,10);
-            sheet1.setColumnView(4,10);
-            sheet1.setColumnView(5,10);
-            book.write();
-            book.close();
-        } catch (WriteException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void exportDetail3(Connection conn, HttpServletResponse response) throws IOException {
-        response.setContentType("APPLICATION/OCTET-STREAM");
-        String fileName = URLEncoder.encode("商业保险参保单.xls","utf-8");
-        response.setHeader("Content-Disposition", "attachment; filename="+fileName);
-
-    }
-
-    //读累计扣除数
-    public static List<ViewDeduct> readDeduct(JSONArray[] data) {
-        List<ViewDeduct> deductList = new ArrayList<>();
-        JSONArray a1=data[1];//子女教育支出数据
-        JSONArray a2=data[2];//继续教育数据
-        JSONArray a3=data[3];//住房贷款数据
-        JSONArray a4=data[4];//住房租金数据
-        JSONArray a5=data[5];//赡养老人数据
-
-        for(int i =0;i<a1.size();i++){//获取子女教育累计扣除
-            JSONObject o = (JSONObject) a1.get(i);
-            String per = o.getString("per");
-            Number num = null;
-            try {
-                num = (NumberFormat.getInstance().parse(per));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-          float deduct = Deduct.DEDUCT1*(num.intValue()/100);//换算成扣除金额
-          ViewDeduct d = CollectionUtil.getElement(deductList,"cardId",o.getString("cardId"));
-          if(d == null){//不在
-              d = new ViewDeduct();
-              d.setCardId(o.getString("cardId"));
-              d.setName(o.getString("name"));
-              d.setDeduct1(deduct);
-              deductList.add(d);
-          }else{
-              d.setDeduct1(d.getDeduct1()+deduct);
-          }
-        }
-        for(int i =0;i<a2.size();i++){//获取继续教育累计扣除
-            JSONObject o = (JSONObject) a2.get(i);
-            ViewDeduct d = CollectionUtil.getElement(deductList,"cardId",o.getString("cardId"));
-            if(d == null){//不在
-                d = new ViewDeduct();
-                d.setCardId(o.getString("cardId"));
-                d.setName(o.getString("name"));
-                d.setDeduct3(Deduct.DEDUCT3);
-                deductList.add(d);
-            }else{
-                d.setDeduct3(d.getDeduct3()+Deduct.DEDUCT3);
-            }
-        }
-        for(int i =0;i<a3.size();i++){//读住房贷款利息
-            JSONObject o = (JSONObject) a3.get(i);
-            ViewDeduct d = CollectionUtil.getElement(deductList,"cardId",o.getString("cardId"));
-            if(d == null){//不在
-                d = new ViewDeduct();
-                d.setCardId(o.getString("cardId"));
-                d.setName(o.getString("name"));
-                d.setDeduct5(Deduct.DEDUCT5);
-                deductList.add(d);
-            }else{
-                d.setDeduct5(d.getDeduct5()+Deduct.DEDUCT5);
-            }
-        }
-        for(int i =0;i<a4.size();i++){//读租房租金
-            JSONObject o = (JSONObject) a4.get(i);
-            ViewDeduct d = CollectionUtil.getElement(deductList,"cardId",o.getString("cardId"));
-            if(d == null){//不在
-                d = new ViewDeduct();
-                d.setCardId(o.getString("cardId"));
-                d.setName(o.getString("name"));
-                d.setDeduct6(Deduct.DEDUCT6);
-                deductList.add(d);
-            }else{
-                d.setDeduct6(d.getDeduct6()+Deduct.DEDUCT6);
-            }
-        }
-        for(int i =0;i<a5.size();i++){//赡养老人
-            JSONObject o = (JSONObject) a5.get(i);
-            float deduct= o.getFloat("per");
-            ViewDeduct d = CollectionUtil.getElement(deductList,"cardId",o.getString("cardId"));
-            if(d == null){//不在
-                d = new ViewDeduct();
-                d.setCardId(o.getString("cardId"));
-                d.setName(o.getString("name"));
-                d.setDeduct2(deduct);
-                deductList.add(d);
-            }else{
-                d.setDeduct2(d.getDeduct2()+deduct);
-            }
-        }
-        return deductList;
     }
 
 }
