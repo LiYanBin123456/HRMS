@@ -53,16 +53,13 @@
     function save() {
         var finance = form.val('form_finance');
         var id = $.query.get("id");
-        iFinance.arrive(finance.balance,id,onSuccess,onFail);
+        webInterface.finance.arrive({balance:finance.balance,id:id,success:onSuccess});
         function onSuccess() {
             layer.alert("确认成功", {icon: 6,time:2000},function(){
                 var index = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(index);
                 window.parent.location.reload();
             });
-        }
-        function onFail(result) {
-            layer.msg(result.msg);
         }
     }
 </script>

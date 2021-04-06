@@ -125,12 +125,6 @@
                 table.reload('tbl_account', {
                     data:result.rows
                 });
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                /*iNotice.getList(param_query,function (result) {
-                    table.reload('tbl_notice', {
-                        data:result.rows
-                    });
-                });*/
             }
 
 
@@ -156,14 +150,14 @@
                 });
             }
 
-            //删除公告
+            //删除账号
             function del(account) {
                 layer.confirm('确定删除管理员'+account.name, {icon: 3, title:'删除'}, function(index){
-                    iNotice.delete(account.id,function () {
+                    webInterface.account.delete({id:account.id,success:function () {
                         layer.close(index);
                         getAccounts();
                         layer.msg('删除成功');
-                    });
+                    }});
                 });
             }
 

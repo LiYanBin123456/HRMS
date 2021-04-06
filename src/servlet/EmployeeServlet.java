@@ -19,6 +19,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @WebServlet(name = "EmployeeServlet",urlPatterns = "/verify/employee")
 public class EmployeeServlet extends HttpServlet {
@@ -125,7 +126,7 @@ public class EmployeeServlet extends HttpServlet {
     private String settingBatch(Connection conn, HttpServletRequest request) {
         EnsureSetting setting = JSONObject.parseObject(request.getParameter("setting"), EnsureSetting.class);
         String[] eids = request.getParameterValues("eids[]");
-        return EmployeeService.settingBatch(conn,eids,setting );
+        return SettingService.settingBatch(conn,eids,setting );
     }
 
     //插入员工信息

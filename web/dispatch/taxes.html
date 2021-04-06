@@ -27,27 +27,25 @@
     </head>
 
     <body class="layui-layout-body">
-        <!--顶部工具栏-->
-        <div class="layui-hide" id="top_bar_tax">
-            <button class="layui-btn layui-btn-sm" lay-event="export1"><i class="layui-icon "></i> 导出个税申报名单</button>
-            <button class="layui-btn layui-btn-sm" lay-event="export2"><i class="layui-icon "></i> 导出个税申报表</button>
-            <form class="layui-form searchbox">
-                <div class="layui-input-inline">
-                    <input type="text" class="layui-input" autocomplete="off" id="filter_month" lay-filter="filter_month" placeholder="按月份过滤">
-                </div>
-                <div class="layui-input-inline">
-                    <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
-                </div>
-                <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
-            </form>
-
-        </div>
+        <button class="layui-btn layui-btn-sm" lay-event="export1"><i class="layui-icon "></i> 导出个税申报名单</button>
+        <button class="layui-btn layui-btn-sm" lay-event="export2"><i class="layui-icon "></i> 导出个税申报表</button>
+        <form class="layui-form searchbox">
+            <div class="layui-input-inline">
+                <input type="text" class="layui-input" id="filter_month" placeholder="按月份过滤">
+            </div>
+            <div class="layui-input-inline">
+                <input name="keyword" class="layui-input" placeholder="请输入要查找的员工">
+            </div>
+            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+        </form>
         <table id="tbl_tax" lay-filter="filter_tb_tax"></table>
         <div class="layui-table-page" id="pager"></div>
+
+        <script src="../js/date.js"></script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/queryParam.js"></script>
-        <script src="../js/util.js"></script>
+
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -74,20 +72,16 @@
             }
 
             function initPage() {
-
                 laydate.render({
                     elem: '#filter_month'
                     ,type: 'month'
-                    ,change: function(value, date, endDate){
-                        var month = value+"-01";
-                        param_query.addCondition("month","=",month);
-                        getTaxes(true);
-                    },
-                    done: function(value, date, endDate){
-                        if (!value){
+                    ,done: function(value, date, endDate){
+                        if(value) {
+                            param_query.addCondition("month", "=", value + "-01");
+                        }else{
                             param_query.removeCondition("month");
-                            getTaxes(true);
                         }
+                        getTaxes(true);
                     }
                 });
                 form.on('submit(search)', function (data) {
@@ -105,7 +99,6 @@
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_tax',
-                    toolbar: '#top_bar_tax', //开启头部工具栏，并为其绑定左侧模板
                     title: '列表',
                     cols: columns_tax,
                     limit: 200,
@@ -127,8 +120,7 @@
             }
 
             function getTaxes(reserve) {
-                //暂时数据是写死的，待后台写好后，换成下面的代码就行了
-                iFinance.getTaxs(param_query,function (result) {
+                webInterface.finance.getTaxs({param:param_query,success:function (result) {
                     table.reload('tbl_tax', {
                         data:result.rows,
                         reserve:reserve
@@ -149,12 +141,12 @@
                             }
                         }
                     });
-                });
+                }});
             }
 
             //导出个税申报名单
             function export1() {
-                var url = "/hrms/verify/file?op=exportTaxEmployee";
+                var url = "/verify/file?op=exportTaxEmployee";
                 var form = $('<form method="POST"></form>');
                 form.attr('action', url);
                 form.appendTo($('body'));
@@ -164,7 +156,7 @@
 
             //导出个税申报表
             function export2() {
-                var url = "/hrms/verify/file?op=exportTax";
+                var url = "/verify/file?op=exportTax";
                 var form = $('<form method="POST"></form>');
                 form.attr('action', url);
                 form.appendTo($('body'));

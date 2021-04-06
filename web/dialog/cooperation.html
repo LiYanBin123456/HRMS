@@ -335,12 +335,12 @@
 
     function getFinance() {
         if(cooperation.id) {
-            iClient.getFinance(cooperation.id, 1, function (result) {
+            webInterface.client.getFinance({id:cooperation.id, category:1, success:function (result) {
                 if(result.data) {
                     finance = result.data;
                     form.val('form_finance', finance);
                 }
-            });
+            }});
         }
     }
 
@@ -351,7 +351,7 @@
         }
 
         //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
-        iClient.getLastSalaryDefine(cooperation.id,function (result) {
+        webInterface.client.getLastSalaryDefine({id:cooperation.id,success:function (result) {
             mapSalary = result.data;
             if(mapSalary && mapSalary.items) {
                 salary_items_defined = mapSalary.items.split(";");
@@ -367,7 +367,7 @@
                 mapSalary = {};
                 salary_items_defined = [];
             }
-        });
+        }});
 
     }
 
@@ -424,9 +424,9 @@
         }
 
         var data = {cid:cooperation.id,items:items};
-        iClient.insertSalaryDefine(data, function (result) {
+        webInterface.client.insertSalaryDefine({mapSalary:data,success:function (result) {
             layer.msg("保存成功");
-        });
+        }});
     }
 
     //预览工资定义
@@ -473,15 +473,15 @@
     function saveCooperation() {
         cooperation = form.val('form_cooperation');
         if(cooperation.id) {
-            iClient.update(cooperation,1,function (result){
+            webInterface.client.update({client:cooperation,category:1,success:function (result){
                 layer.msg("修改成功");
-            });
+            }});
         }else{
-            iClient.insert(cooperation,1,function (result){
+            webInterface.client.insert({client:cooperation,category:1,success:function (result){
                 cooperation.id = result.extra;
                 salary_items_defined = [];
                 layer.alert("基础信息保存成功，请完善财务信息", {icon: 20});
-            });
+            }});
         }
     }
 
@@ -493,15 +493,15 @@
         var data = form.val('form_finance');
         data.cid = cooperation.id;
         if(finance) {
-            iClient.updateFinance(data,function (result){
+            webInterface.client.updateFinance({finance:data,success:function (result){
                 finance = data;
                 layer.msg("修改成功");
-            });
+            }});
         }else{
-            iClient.insertFinance(data,function (result){
+            webInterface.client.insertFinance({finance:data,success:function (result){
                 finance = data;
                 layer.alert("财务信息保存成功，请完善自定义工资信息", {icon: 20});
-            });
+            }});
         }
     }
 </script>

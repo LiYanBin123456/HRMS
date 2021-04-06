@@ -3,7 +3,7 @@ package bean.settlement;
 import java.util.Date;
 
 //商业保险结算单
-public class Settlement3 extends Settlemet {
+public class Settlement3 extends Settlement {
     private long pid;//产品id
     private float price;//单价
     private int amount;//人数

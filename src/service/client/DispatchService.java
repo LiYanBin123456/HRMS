@@ -1,12 +1,12 @@
 package service.client;
 
+import bean.admin.Account;
 import bean.client.Dispatch;
+import com.alibaba.fastjson.JSONObject;
+import dao.admin.AccountDao;
 import dao.client.DispatchDao;
 import dao.client.FinanceDao;
-import database.DaoQueryListResult;
-import database.DaoQueryResult;
-import database.DaoUpdateResult;
-import database.QueryParameter;
+import database.*;
 
 import java.sql.Connection;
 
@@ -24,8 +24,24 @@ public class DispatchService {
         return DispatchDao.update(conn, dispatch);
     }
 
-    public static DaoUpdateResult insert(Connection conn, Dispatch dispatch) {
-        return DispatchDao.insert(conn, dispatch);
+    public static String insert(Connection conn, Dispatch dispatch) {
+        ConnUtil.closeAutoCommit(conn);
+        Account account = new Account();
+        account.setUsername(dispatch.getNickname());
+        account.setNickname(dispatch.getNickname());
+        account.setRole(Account.ROLE_DISPATCH);
+        account.setPassword(dispatch.getPhone());
+        account.setRid(dispatch.getId());
+        account.setPermission(2251832025939967L);
+        DaoUpdateResult res1 = DispatchDao.insert(conn,dispatch);
+        DaoUpdateResult res2 = AccountDao.insert(conn,account);
+        if(res1.success && res2.success){
+            ConnUtil.commit(conn);
+            return JSONObject.toJSONString(res1);
+        }else{
+            ConnUtil.rollback(conn);
+            return DaoResult.fail("数据库操作错误");
+        }
     }
 
     //删除客户实质是修改状态

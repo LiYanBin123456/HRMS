@@ -62,7 +62,7 @@
         var data = form.val('form_retire');
         var date = data.retirement_time;
         var reason = 0;
-        iEmployee.leave(id,reason,date,1,onUpdateSuccess);
+        webInterface.employee.leave({id:id,reason:reason,date:date,category:1,success:onUpdateSuccess});
     }
     function onUpdateSuccess() {
         layer.msg("操作成功", {icon: 6,time:1000}, function() {

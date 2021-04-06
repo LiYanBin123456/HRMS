@@ -7,7 +7,7 @@ public class Tax {
      * @param taxDue 应税额
      * @return 应缴个税
      */
-    public static double tax1(float taxDue){
+    public static float tax1(float taxDue){
        float rate = 0;//税率
        float dudect = 0;//速算扣除数
         if(taxDue <= 36000){//根据个税比例报表计算个税

@@ -24,7 +24,6 @@ import java.util.List;
 
 
 @WebServlet(urlPatterns = ("/verify/contract"))
-@MultipartConfig
 public class ContractServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);

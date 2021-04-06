@@ -68,6 +68,7 @@
 <script src="../js/jquery.params.js"></script>
 <script src="../js/queryParam.js"></script>
 <script src="../js/fieldSet.js"></script>
+<script src="../js/date.js"></script>
 <script>
     $(function () {
         getLogs();
@@ -78,20 +79,18 @@
     function getLogs() {
         var category = $.query.get("category");
         var id = $.query.get("id");
-        iSettlement.getLogs(param_query,id,category,function (result) {
+        level.getLogs({param:param_query,id:id,category:category,success:function (result) {
             //显示操作日志
             var logs = result.rows;
             for (var i in logs) {
                 var log = logs[i];
                 var node = $("#template [name=log]").clone();
-                node.find("[name=time]").text(format_date(log.time));
+                node.find("[name=time]").text(dateUtil.format_date(log.time));
                 node.find("[name=operator]").text(log.operator);
                 node.find("[name=content]").text(log.content);
                 $("#logs").append(node);
             }
-        });
-
-
+        }});
     }
 
 </script>

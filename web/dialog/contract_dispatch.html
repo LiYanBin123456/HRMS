@@ -106,7 +106,7 @@
             laydate = layui.laydate;
             upload.render({
                 elem: '#btn_upload' //绑定元素
-                , url: '/hrms//verify/file' //上传接口
+                , url: '/verify/file' //上传接口
                 , accept: 'file'
                 , exts: 'pdf'
                 , acceptMime: '.pdf'
@@ -147,24 +147,24 @@
 
     function initData() {
         contract = JSON.parse($.query.get("contract"));
-        contract.start = format_date(contract.start);
-        contract.end = format_date(contract.end);
+        contract.start = dateUtil.format_date(contract.start);
+        contract.end = dateUtil.format_date(contract.end);
         form.val('form_contract', contract);
         layedit.setContent(editer, contract.content, false);
         $("[name=client]").attr("disabled", 'disabled');
         form.render('select', 'form_contract');
-        iFile.exist(1,contract.id,function (result) {
+        webInterface.file.exist({category:1,id:contract.id,success:function (result) {
             if(result.exist){
                 var src = "../accessory/contract1/"+contract.id+".pdf";
                 $('#preview_contact').attr('src', src); //图片预览
             }else {
                 $("#preview_contact").text("合同附件不存在，请上传");
             }
-        });
+        }});
     }
 
     function initdispatch() {
-        iClient.getList({},0,function(result){
+        webInterface.client.getList({category:0,success:function(result){
             var dispatchs = result.rows;
             var select_dispatch = $("#select_dispatch");
             select_dispatch.append("<option value='-2' disabled hidden>选择合作客户</option>");
@@ -179,40 +179,38 @@
                 select_dispatch.append(option);
             }
             form.render('select', 'form_contract');
-        })
+        }});
     }
 
     function download(){
-        iFile.exist(1,contract.id,function (result) {
+        webInterface.file.exist({category:1,id:contract.id,success:function (result) {
             if(!result.exist){
                 layer.msg("附件不存在或已删除");
                 return;
             }
 
-            var url = "/hrms/verify/file?op=downloadContract&id="+contract.id;
+            var url = "/verify/file?op=downloadContract&id="+contract.id;
             var form = $('<form method="POST"></form>');
             form.attr('action', url);
             form.appendTo($('body'));
             form.submit();
             form.remove();
-        })
-
+        }});
     }
 
     function saveContract() {
         contract = form.val('form_contract');
         if (contract.id) {
-            iContract.update(contract,function (result) {
+            webInterface.contract.update({contract:contract,success:function (result) {
                 layer.msg("修改成功");
-            });
+            }});
         } else {
-            iContract.insert(contract, function (result) {
+            webInterface.contract.insert({contract:contract, success:function (result) {
                 contract.id = result.extra;
                 form.val('form_contract',contract);
                 element.tabChange('tab_contract', 'element_upload');
                 layer.alert("合同保存成功，请上传复印件", {icon: 20});
-
-            });
+            }});
         }
     }
 </script>

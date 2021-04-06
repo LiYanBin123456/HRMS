@@ -104,20 +104,20 @@
     });
 
     function getLoginInfo() {
-        iAccount.get(function (result) {
+        webInterface.account.get({success:function (result) {
             var account = result.data;
             $("#loginName").html(account.nickname);
             var html = loadMenuCooperation(account.permission);
             $("#nav").html(html);
-        });
+        }});
     }
 
 
 
     function quit() {
-        iAccount.quit(function (result) {
+        webInterface.account.quit({success:function (result) {
             window.location.href = "../login.html";
-        });
+        }});
     }
 </script>
 </body>

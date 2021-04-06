@@ -69,7 +69,7 @@
                     upload = layui.upload;
                     upload.render({
                         elem: '#importDeduct' //绑定元素
-                        , url: '/hrms/verify/file' //上传接口
+                        , url: '/verify/file' //上传接口
                         , accept: 'file'
                         , exts: 'xls'
                         , acceptMime: '.xls'
@@ -140,7 +140,7 @@
             }
 
             function getDeducts() {
-                iEmployee.getDeducts(param_query,function (result) {
+                webInterface.employee.getDeducts({param:param_query,success:function (result) {
                     table.reload('tbl_deduct', {
                         data:result.rows
                     });
@@ -160,7 +160,7 @@
                             }
                         }
                     });
-                });
+                }});
             }
 
             function showImportDlg() {
@@ -190,11 +190,11 @@
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
                         var deducts = window["layui-layer-iframe" + index].callbackData();
-                        iEmployee.importDeducts(JSON.stringify(deducts),function () {
+                        webInterface.employee.importDeducts({deducts:deducts,success:function () {
                             layer.close(index);
                             layer.msg("导入成功");
                             getDeducts();
-                        })
+                        }});
                     },btn2: function(index, layero){
                         layer.close(index);
                     }
@@ -220,11 +220,11 @@
             //删除
             function del(deduct) {
                 layer.confirm('确定删除'+deduct.name+'的员工个税?', {icon: 3, title:'删除'}, function(index){
-                    iEmployee.deleteDeduct(deduct.eid,function () {
+                    webInterface.employee.deleteDeduct({id:deduct.eid,success:function () {
                         layer.close(index);
                         getDeducts();
                         layer.msg('删除成功');
-                    });
+                    }});
                 });
             }
 

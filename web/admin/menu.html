@@ -65,59 +65,7 @@
 <!-- 左侧菜单开始 -->
 <div class="left-nav">
     <div id="side-nav">
-        <ul id="nav">
-            <li>
-                <a href="javascript:;">
-                    <i class="iconfont">&#xe70b;</i>
-                    <cite>客户管理</cite>
-                    <i class="iconfont nav_right">&#xe697;</i></a>
-                <ul class="sub-menu">
-                    <li>
-                        <a onclick="xadmin.add_tab('合作单位','dispatches.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>合作单位</cite></a>
-                    </li>
-                    <li>
-                        <a onclick="xadmin.add_tab('合同管理','contracts.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>合同管理</cite></a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a href="javascript:;">
-                    <i class="iconfont">&#xe70b;</i>
-                    <cite>规则设置</cite>
-                    <i class="iconfont nav_right">&#xe697;</i></a>
-                <ul class="sub-menu">
-                    <li>
-                        <a onclick="xadmin.add_tab('医保规则','medicares.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>医保规则</cite></a>
-                    </li>
-                    <li>
-                        <a onclick="xadmin.add_tab('社保规则','socials.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>社保规则</cite></a>
-                    </li>
-                    <li>
-                        <a onclick="xadmin.add_tab('公积金规则','funds.html')">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>公积金规则</cite></a>
-                    </li>
-                </ul>
-            </li>
-            <li>
-                <a onclick="xadmin.add_tab('通知公告','notices.html')">
-                    <i class="iconfont">&#xe6a7;</i>
-                    <cite>通知公告</cite></a>
-            </li>
-            <li>
-                <a onclick="xadmin.add_tab('账户管理','accounts.html')">
-                    <i class="iconfont">&#xe6a7;</i>
-                    <cite>账户管理</cite></a>
-            </li>
-        </ul>
+        <ul id="nav"></ul>
     </div>
 </div>
 -->
@@ -154,23 +102,27 @@
 </body>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/interface.js"></script>
+<script src="../js/menu.js"></script>
 <script>
     $(function () {
         getLoginInfo();
     });
 
     function getLoginInfo() {
-        iAccount.get(function (result) {
-            $("#loginName").html(result.data.nickname);
-        });
+        webInterface.account.get({success:function (result) {
+            var account = result.data;
+            $("#loginName").html(account.nickname);
+            var html = loadMenuAdmin("0,127");
+            $("#nav").html(html);
+        }});
     }
 
 
 
     function quit() {
-        iAccount.quit(function (result) {
+        webInterface.account.quit({success:function (result) {
             window.location.href = "../login.html";
-        });
+        }});
     }
 </script>
 </html>

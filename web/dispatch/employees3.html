@@ -48,7 +48,7 @@
         <script src="../js/jquery.min.js"></script>
         <script src="../js/jquery.params.js"></script>
         <script src="../js/queryParam.js"></script>
-        <script src="../js/util.js"></script>
+
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -57,6 +57,7 @@
             var element;
             var upload;
             var param_query = new QueryParam();
+            param_query.setOrder("id",false);
             param_query.setPagination(1,10);
 
             $(function () {
@@ -73,7 +74,7 @@
                     upload = layui.upload;
                     upload.render({
                         elem: '#import' //绑定元素
-                        , url: '/hrms/verify/file' //上传接口
+                        , url: '/verify/file' //上传接口
                         , accept: 'file'
                         , exts: 'xls'
                         , acceptMime: '.xls'
@@ -136,7 +137,7 @@
             }
 
             function getEmployees() {
-                iEmployee.getList(param_query,2,function (result) {
+                webInterface.employee.getList({param:param_query,type:2,success:function (result) {
                     table.reload('tbl_employee', {
                         data:result.rows
                     });
@@ -156,17 +157,17 @@
                             }
                         }
                     });
-                });
+                }});
             }
 
             //删除
             function del(employee) {
                 layer.confirm('确定删除'+employee.name, {icon: 3, title:'删除员工'}, function(index){
-                    iEmployee.delete(employee.id,1,function () {
+                    webInterface.employee.delete({id:employee.id,category:1,success:function () {
                         layer.close(index);
                         getEmployees();
                         layer.msg('删除成功');
-                    });
+                    }});
                 });
             }
 
@@ -184,11 +185,11 @@
                 });
                 function employ(eid,category) {
                     layer.confirm('确定要聘用吗？', {icon: 3, title:'聘用'}, function(index){
-                        iEmployee.employ(eid,category,function () {
+                        webInterface.employee.employ({id:eid,category:category,success:function () {
                             layer.close(index);
                             layer.msg('聘用成功');
                             getEmployees();
-                        })
+                        }});
                     });
                 }
             }

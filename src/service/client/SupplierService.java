@@ -1,6 +1,7 @@
 package service.client;
 
 import bean.client.Supplier;
+import com.alibaba.fastjson.JSONObject;
 import dao.client.SupplierDao;
 import database.DaoQueryListResult;
 import database.DaoQueryResult;
@@ -27,8 +28,9 @@ public class SupplierService {
         return result;
     }
 
-    public static DaoUpdateResult insert(Supplier supplier, Connection conn){
-        return SupplierDao.insert(conn,supplier);
+    public static String insert(Supplier supplier, Connection conn){
+        DaoUpdateResult  res = SupplierDao.insert(conn,supplier);
+        return JSONObject.toJSONString(res);
     }
 
 }

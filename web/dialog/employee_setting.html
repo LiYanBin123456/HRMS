@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>员工社保设置</title>
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <link href="../layui/extend/city-picker/city-picker.css" rel="stylesheet"/>
+    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+</head>
+<body>
+    <form name="form_city">
+        <div class="layui-form-item">
+            <label class="layui-form-label">社保所在地</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" id="city-picker" name="city" readonly="readonly" data-toggle="city-picker" placeholder="请选择城市" style="width: 200px">
+            </div>
+        </div>
+    </form>
+    <fieldset class="layui-elem-field layui-hide">
+        <legend>社保</legend>
+        <div class="layui-field-box">
+            <form class="layui-form" lay-filter="form_social" name="form_social">
+                &emsp;&emsp;&emsp;
+                <input type="radio" lay-filter="buyS" name="buy" value="0" title="不缴纳" checked>
+                <input type="radio" lay-filter="buyS" name="buy" value="1" title="缴纳">
+            </form>
+            <form class="layui-form layui-hide" lay-filter="form_baseS" name="form_baseS">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">缴纳基数</label>
+                    <div class="layui-input-inline" style="width: 130px;">
+                        <input type="number" name="base" autocomplete="off" class="layui-input" value="0">
+                    </div>
+                    <div class="layui-input-inline" style="width: 300px;">
+                        &emsp;
+                        <input type="radio" lay-filter="baseTypeS" name="baseType" value="0" title="最低标准">
+                        <input type="radio" lay-filter="baseTypeS" name="baseType" value="1" title="自定义基数" checked>
+                    </div>
+                </div>
+            </form>
+            <form class="layui-form layui-hide" lay-filter="form_social1">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">养老保险</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="checkbox" lay-skin="primary" lay-filter="buyS1" name="buy">
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="s1">
+                        <label class="layui-form-label">单位比例</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
+                        </div>
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="s1">
+                        <label class="layui-form-label">个人比例</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <form class="layui-form layui-hide" lay-filter="form_social2">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">工伤保险</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="checkbox" lay-skin="primary" lay-filter="buyS2" name="buy">
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="s2">
+                        <label class="layui-form-label">单位比例</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
+                        </div>
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="s2">
+                        <label class="layui-form-label">补充金额</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <form class="layui-form layui-hide" lay-filter="form_social3">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">失业保险</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="checkbox" lay-skin="primary" lay-filter="buyS3" name="buy">
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="s3">
+                        <label class="layui-form-label">单位比例</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
+                        </div>
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="s3">
+                        <label class="layui-form-label">个人比例</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </fieldset>
+    <fieldset class="layui-elem-field layui-hide">
+        <legend>医保</legend>
+        <div class="layui-field-box">
+            <form class="layui-form" lay-filter="form_medical" name="form_medical">
+                &emsp;&emsp;&emsp;
+                <input type="radio" lay-filter="buyM" name="buy" value="0" title="不缴纳" checked>
+                <input type="radio" lay-filter="buyM" name="buy" value="1" title="缴纳">
+            </form>
+            <form class="layui-form layui-hide" lay-filter="form_baseM" name="form_baseM">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">缴纳基数</label>
+                    <div class="layui-input-inline" style="width: 130px;">
+                        <input type="number" name="base" autocomplete="off" class="layui-input">
+                    </div>
+                    <div class="layui-input-inline" style="width: 300px;">
+                        &emsp;
+                        <input type="radio" lay-filter="baseTypeM" name="baseType" value="0" title="最低标准" checked>
+                        <input type="radio" lay-filter="baseTypeM" name="baseType" value="1" title="自定义基数">
+                    </div>
+                </div>
+            </form>
+            <form class="layui-form layui-hide" lay-filter="form_medical1">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">医疗保险</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="checkbox" lay-skin="primary" lay-filter="buyM1" name="buy">
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="m1">
+                        <label class="layui-form-label">单位比例</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
+                        </div>
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="m1">
+                        <label class="layui-form-label">个人比例</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <form class="layui-form layui-hide" lay-filter="form_medical2">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">大病保险</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="checkbox" lay-skin="primary" lay-filter="buyM2" name="buy">
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="m2">
+                        <label class="layui-form-label">单位金额</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
+                        </div>
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="m2">
+                        <label class="layui-form-label">个人金额</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <form class="layui-form layui-hide" lay-filter="form_medical3">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">生育保险</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="checkbox" lay-skin="primary" lay-filter="buyM3" name="buy">
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="m3">
+                        <label class="layui-form-label">单位比例</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </fieldset>
+    <fieldset class="layui-elem-field layui-hide">
+        <legend>公积金</legend>
+        <div class="layui-field-box">
+            <form class="layui-form" lay-filter="form_fund" name="form_fund">
+                <div class="layui-form-item">
+                    &emsp;&emsp;&emsp;
+                    <input type="radio" lay-filter="buyF" name="buy" value="0" title="不缴纳" checked>
+                    <input type="radio" lay-filter="buyF" name="buy" value="1" title="缴纳">
+                </div>
+                <div class="layui-form-item layui-hide" name="f1">
+                    <label class="layui-form-label">缴纳基数</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="number" name="base" autocomplete="off" class="layui-input">
+                    </div>
+                    <label class="layui-form-label">缴纳比例</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="number" name="v1" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </fieldset>
+    <button type="button" class="layui-btn layui-btn-fluid" name="save">保存</button>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.params.js"></script>
+<script src="../js/queryParam.js"></script>
+<script src="../js/interface.js"></script>
+<script src="../js/xadmin.js"></script>
+<script src="../layui/extend/city-picker/city-picker.data.js"></script>
+<script src="../js/city.js"></script>
+<script src="../js/string.js"></script>
+<script src="../js/validator.js"></script>
+<script src="../js/CollectionUtil.js"></script>
+<script>
+    layui.extend({
+        index: 'lib/index' //主入口模块
+        , citypicker: '../layui/extend/city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
+    }).use(['form','citypicker'], function () {
+        var eid = $.query.get("eid");
+        var city = null;
+        var insurances;
+        var op = ['insert','insert','insert','insert','insert','insert','insert'];//更新还是新增
+        var rule_social;
+        var rule_medical;
+        var rule_fun;
+        var layform = layui.form;
+        var picker = layui.citypicker;
+        cityPicker = new picker("#city-picker", {
+            provincename: "provinceId",
+            cityname: "city",
+            level: 'city',
+            onCitySelected:function (code) {
+                city = code;
+                readRules(city)
+            }
+        });
+
+        layform.verify({
+            length: validator.length,
+            range: validator.range
+        });
+        layform.on('radio(buyM)', function(data){
+            var buy = Number(data.value);
+            if(buy) {
+                $("[name=form_medical]~form").removeClass("layui-hide");
+            }else{
+                var insurance = {buy:false,v1:0,v2:0};
+                layform.val('form_medical1',insurance);
+                layform.val('form_medical2',insurance);
+                layform.val('form_medical3',insurance);
+                $("[name=form_medical]~form").addClass("layui-hide");
+            }
+        });
+        layform.on('radio(buyS)', function(data){
+            var buy = Number(data.value);
+            if(buy) {
+                $("[name=form_social]~form").removeClass("layui-hide");
+            }else{
+                var insurance = {buy:false,v1:0,v2:0};
+                layform.val('form_social1',insurance);
+                layform.val('form_social2',insurance);
+                layform.val('form_social3',insurance);
+                $("[name=form_social]~form").addClass("layui-hide");
+            }
+        });
+        layform.on('radio(buyF)', function(data){
+            var buy = Number(data.value);
+            if(buy) {
+                $("[name=f1]").removeClass("layui-hide");
+            }else{
+                $("[name=f1]").addClass("layui-hide");
+            }
+        });
+        layform.on('radio(baseTypeS)', function(data){
+            var type = Number(data.value);
+            if(type==0) {
+                $("[name=form_baseS] [name=base]").addClass("layui-disabled").prop("disabled",true).val(rule_social.base);
+            }else{
+                $("[name=form_baseS] [name=base]").removeClass("layui-disabled").prop("disabled",false);
+            }
+        });
+        layform.on('radio(baseTypeM)', function(data){
+            var type = Number(data.value);
+            if(type==0) {
+                $("[name=form_baseM] [name=base]").addClass("layui-disabled").prop("disabled",true).val(rule_medical.base);
+            }else{
+                $("[name=form_baseM] [name=base]").removeClass("layui-disabled").prop("disabled",false);
+            }
+        });
+        layform.on('checkbox(buyM1)', function(data){
+            if(data.elem.checked){
+                $("[name=m1]").removeClass("layui-hide");
+                var ins = {buy:true,v1:rule_medical.per1,v2:rule_medical.per2};
+                layform.val('form_medical1',ins);
+            }else{
+                $("[name=m1]").addClass("layui-hide");
+            }
+        });
+        layform.on('checkbox(buyM2)', function(data){
+            if(data.elem.checked){
+                $("[name=m2]").removeClass("layui-hide");
+                var ins = {buy:true,v1:rule_medical.fin1,v2:rule_medical.fin2};
+                layform.val('form_medical2',ins);
+            }else{
+                $("[name=m2]").addClass("layui-hide");
+            }
+        });
+        layform.on('checkbox(buyM3)', function(data){
+            if(data.elem.checked){
+                $("[name=m3]").removeClass("layui-hide");
+                var ins = {buy:true,v1:rule_medical.per3,v2:0};
+                layform.val('form_medical3',ins);
+            }else{
+                $("[name=m3]").addClass("layui-hide");
+            }
+        });
+        layform.on('checkbox(buyS1)', function(data){
+            if(data.elem.checked){
+                $("[name=s1]").removeClass("layui-hide");
+                var ins = {buy:true,v1:rule_social.per1,v2:rule_social.per2};
+                layform.val('form_social1',ins);
+            }else{
+                $("[name=s1]").addClass("layui-hide");
+            }
+        });
+        layform.on('checkbox(buyS2)', function(data){
+            if(data.elem.checked){
+                $("[name=s2]").removeClass("layui-hide");
+                var ins = {buy:true,v1:rule_social.per3,v2:rule_social.extra};
+                layform.val('form_social2',ins);
+            }else{
+                $("[name=s2]").addClass("layui-hide");
+            }
+        });
+        layform.on('checkbox(buyS3)', function(data){
+            if(data.elem.checked){
+                $("[name=s3]").removeClass("layui-hide");
+                var ins = {buy:true,v1:rule_social.per4,v2:rule_social.per5};
+                layform.val('form_social3',ins);
+            }else{
+                $("[name=s3]").addClass("layui-hide");
+            }
+        });
+        $("[name=save]").click(saveInsurances);
+
+        initPage();
+
+        function initPage() {
+            getInsurances();
+        }
+
+        function readRules(city) {
+            webInterface.rule.getLast({city:city,category:0,async:webInterface.SYNC,success:function (result) {
+                rule_medical = result.data;
+                var range1 = stringUtil.format("{0}-{1}",rule_medical.base,99999);
+                $("[name=form_baseM] [name=base]").attr("placeholder","基数"+range1);
+                //$("[name=perM]").val(rule_medical.)
+            }});
+            webInterface.rule.getLast({city:city,category:1,async:webInterface.SYNC,success:function (result) {
+                rule_social = result.data;
+                var range1 = stringUtil.format("{0}-{1}",rule_social.base,99999);
+                $("[name=form_baseS] [name=base]").attr("placeholder","基数"+range1);
+            }});
+
+            webInterface.rule.getLast({city:city,category:2,async:webInterface.SYNC,success:function (result) {
+                rule_fund = result.data;
+                var range1 = stringUtil.format("{0}-{1}",rule_fund.min,rule_fund.max);
+                var range2 = stringUtil.format("{0}-{1}",rule_fund.per1,rule_fund.per2);
+                $("[name=form_fund] [name=base]").attr("placeholder","基数"+range1);
+                $("[name=form_fund] [name=v1]").attr("placeholder","比例"+range2);
+            }});
+            $("[name=form_city]~fieldset").removeClass("layui-hide");
+        }
+
+        function getInsurances() {
+            webInterface.insurance.get({eid: eid,success: function (result) {
+                insurances = result.rows;
+                if(insurances.length > 0) {
+                    city = insurances[0].city;
+                    cityPicker.setValue(getCityText2(city));
+                    readRules(city);
+                    showInsurances(insurances);
+                }
+            }});
+
+            function showInsurances(insurances) {
+                var insurances_medical = [];
+                var insurances_social = [];
+                var insurances_fund = [];
+                for(var i in insurances){
+                    var ins = insurances[i];
+                    switch (ins.category){
+                        case 0:
+                            op[0] = "update";
+                            insurances_social.push(ins);
+                            break;
+                        case 1:
+                            op[1] = "update";
+                            insurances_social.push(ins);
+                            break;
+                        case 2:
+                            op[2] = "update";
+                            insurances_social.push(ins);
+                            break;
+                        case 3:
+                            op[3] = "update";
+                            insurances_medical.push(ins);
+                            break;
+                        case 4:
+                            op[4] = "update";
+                            insurances_medical.push(ins);
+                            break;
+                        case 5:
+                            op[5] = "update";
+                            insurances_medical.push(ins);
+                            break;
+                        case 6:
+                            op[6] = "update";
+                            insurances_fund.push(ins);
+                            break;
+                    }
+                }
+                if(insurances_medical.length>0) {
+                    showInsuanceMedical(insurances_medical);
+                }
+                if(insurances_social.length>0) {
+                    showInsuanceSocial(insurances_social);
+                }
+                if(insurances_fund.length>0) {
+                    showInsuanceFund(insurances_fund[0]);
+                }
+            }
+
+            function showInsuanceMedical(insurances) {
+                $("[name=form_medical]~form").removeClass("layui-hide");
+                layform.val('form_medical',{buy:1});
+                layform.val('form_baseM',insurances[0]);
+                if(insurances[0].baseType==0){
+                    $("[name=form_baseM] [name=base]").addClass("layui-disabled").prop("disabled", true);
+                }else{
+                    $("[name=form_baseM] [name=base]").removeClass("layui-disabled").prop("disabled", false);
+                }
+
+                for(var i in insurances){
+                    var ins = insurances[i];
+                    switch(ins.category){
+                        case 3:
+                            ins.buy = true;
+                            layform.val('form_medical1',ins);
+                            $("[name=m1]").removeClass("layui-hide");
+                            break
+                        case 4:
+                            ins.buy = true;
+                            layform.val('form_medical2',ins);
+                            $("[name=m2]").removeClass("layui-hide");
+                            break
+                        case 5:
+                            ins.buy = true;
+                            layform.val('form_medical3',ins);
+                            $("[name=m3]").removeClass("layui-hide");
+                            break
+                    }
+                }
+            }
+
+            function showInsuanceSocial(insurances) {
+                $("[name=form_social]~form").removeClass("layui-hide");
+                layform.val('form_social',{buy:1});
+                layform.val('form_baseS',insurances[0]);
+                if(insurances[0].baseType==0){
+                    $("[name=form_baseS] [name=base]").addClass("layui-disabled").prop("disabled", true);
+                }else{
+                    $("[name=form_baseS] [name=base]").removeClass("layui-disabled").prop("disabled", false);
+                }
+
+                for(var i in insurances){
+                    var ins = insurances[i];
+                    switch(ins.category){
+                        case 0:
+                            ins.buy = true;
+                            layform.val('form_social1',ins);
+                            $("[name=s1]").removeClass("layui-hide");
+                            break
+                        case 1:
+                            ins.buy = true;
+                            layform.val('form_social2',ins);
+                            $("[name=s2]").removeClass("layui-hide");
+                            break
+                        case 2:
+                            ins.buy = true;
+                            layform.val('form_social3',ins);
+                            $("[name=s3]").removeClass("layui-hide");
+                            break
+                    }
+                }
+            }
+
+            function showInsuanceFund(insurance) {
+                $("[name=f1]").removeClass("layui-hide");
+                insurance.buy = true;
+                layform.val('form_fund',insurance);
+            }
+        }
+
+        function saveInsurances() {
+            if(!city){
+                layer.alert("请选择社保所在地", {icon: 20});
+                return;
+            }
+
+            var insurances_insert = [];//新增
+            var insurances_update = [];//修改
+
+            var baseS = layform.val("form_baseS");
+            if(baseS.base < rule_social.base){
+                layer.alert("社保缴纳基数不得低于最低标准"+rule_social.base);
+                return;
+            }
+            var social1 = layform.val("form_social1");
+            if(social1.buy == "on"){
+                social1.eid = eid;
+                social1.city = city;
+                social1.category = 0;
+                social1.base = baseS.base;
+                social1.baseType = baseS.baseType;
+                if(op[0] == "insert") {
+                    social1.status = 1;
+                    insurances_insert.push(social1);
+                }else{
+                    insurances_update.push(social1);
+                }
+            }else{
+                var e = collectionUtil.getElement(insurances,"category",0)
+                if(e != null){
+                    e.status = 3;
+                    insurances_update.push(e);
+                }
+            }
+            var social2 = layform.val("form_social2");
+            if(social2.buy == "on"){
+                social2.eid = eid;
+                social2.city = city;
+                social2.category = 1;
+                social2.base = baseS.base;
+                social2.baseType = baseS.baseType;
+                if(op[1] == "insert") {
+                    social2.status = 1;
+                    insurances_insert.push(social2);
+                }else{
+                    insurances_update.push(social2);
+                }
+            }else{
+                var e = collectionUtil.getElement(insurances,"category",1)
+                if(e != null){
+                    e.status = 3;
+                    insurances_update.push(e);
+                }
+            }
+            var social3 = layform.val("form_social3");
+            if(social3.buy == "on"){
+                social3.eid = eid;
+                social3.city = city;
+                social3.category = 2;
+                social3.base = baseS.base;
+                social3.baseType = baseS.baseType;
+                if(op[2] == "insert") {
+                    social3.status = 1;
+                    insurances_insert.push(social3);
+                }else{
+                    insurances_update.push(social3);
+                }
+            }else{
+                var e = collectionUtil.getElement(insurances,"category",2)
+                if(e != null){
+                    e.status = 3;
+                    insurances_update.push(e);
+                }
+            }
+            var baseM = layform.val("form_baseM");
+            if(baseM.base < rule_medical.base){
+                layer.alert("医保缴纳基数不得低于最低标准"+rule_medical.base);
+                return;
+            }
+            var medical1 = layform.val("form_medical1");
+            if(medical1.buy == "on"){
+                medical1.eid = eid;
+                medical1.city = city;
+                medical1.category = 3;
+                medical1.base = baseM.base;
+                medical1.baseType = baseM.baseType;
+                if(op[3] == "insert") {
+                    medical1.status = 1;
+                    insurances_insert.push(medical1);
+                }else{
+                    insurances_update.push(medical1);
+                }
+            }else{
+                var e = collectionUtil.getElement(insurances,"category",3)
+                if(e != null){
+                    e.status = 3;
+                    insurances_update.push(e);
+                }
+            }
+            var medical2 = layform.val("form_medical2");
+            if(medical2.buy == "on"){
+                medical2.eid = eid;
+                medical2.city = city;
+                medical2.category = 4;
+                medical2.base = baseM.base;
+                medical2.baseType = baseM.baseType;
+                if(op[4] == "insert") {
+                    medical2.status = 1;
+                    insurances_insert.push(medical2);
+                }else{
+                    insurances_update.push(medical2);
+                }
+            }else{
+                var e = collectionUtil.getElement(insurances,"category",4)
+                if(e != null){
+                    e.status = 3;
+                    insurances_update.push(e);
+                }
+            }
+            var medical3 = layform.val("form_medical3");
+            if(medical3.buy == "on"){
+                medical3.eid = eid;
+                medical3.city = city;
+                medical3.category = 5;
+                medical3.base = baseM.base;
+                medical3.baseType = baseM.baseType;
+                if(op[5] == "insert") {
+                    medical3.status = 1;
+                    insurances_insert.push(medical3);
+                }else{
+                    insurances_update.push(medical3);
+                }
+            }else{
+                var e = collectionUtil.getElement(insurances,"category",5)
+                if(e != null){
+                    e.status = 3;
+                    insurances_update.push(e);
+                }
+            }
+
+            var fund = layform.val("form_fund");
+            if(fund.base < rule_fund.min || fund.base > rule_fund.max){
+                var msg = stringUtil.format("公积金缴纳基数范围为[{0}-{1}]",rule_fund.min,rule_fund.max);
+                layer.alert(msg);
+                return;
+            }
+            if(fund.v1 < rule_fund.per1 || fund.v1 > rule_fund.per2){
+                var msg = stringUtil.format("公积金缴纳比例范围为[{0}-{1}]",rule_fund.per1,rule_fund.per2);
+                layer.alert(msg);
+                return;
+            }
+            if(fund.buy == "1"){
+                fund.eid = eid;
+                fund.city = city;
+                fund.category = 6;
+                if(op[6] == "insert") {
+                    fund.status = 1;
+                    insurances_insert.push(fund);
+                }else{
+                    insurances_update.push(fund);
+                }
+            }else{
+                var e = collectionUtil.getElement(insurances,"category",6)
+                if(e != null){
+                    e.status = 3;
+                    insurances_update.push(e);
+                }
+            }
+
+            if(insurances_insert.length >0){
+                webInterface.insurance.insert({insurances:insurances_insert,success:function (res) {
+                    for(var i in insurances_insert){
+                        op[insurances_insert[i].category] = "update";
+                    }
+                    layer.msg("添加参保成功");
+                }});
+            }
+            if(insurances_update.length >0){
+                webInterface.insurance.update({insurances:insurances_update,success:function (res) {
+                    layer.msg("修改参保成功");
+                }});
+            }
+
+            /*webInterface.employee.insertEnsureSetting({setting:setting,success:function (res) {
+                op = "update";
+                layform.val('form_setting',setting);
+                layer.msg("保存成功");
+            }});*/
+        }
+    });
+</script>
+
+</html>

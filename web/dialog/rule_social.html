@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+        <link rel="stylesheet" href="../css/font.css">
+        <link rel="stylesheet" href="../css/xadmin.css">
+        <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../js/xadmin.js"></script>
+        <link href="../layui/extend/city-picker/city-picker.css" rel="stylesheet" />
+        <style type="text/css">
+
+.frm-layout{
+
+    width: 100%;
+
+    border-collapse: separate;
+
+    border-spacing: 10px;
+
+}
+
+.frm-layout td.title{
+
+    text-align: right;
+
+    padding-right: 10px;
+
+    width: 85px;
+
+}
+
+/* 防止下拉框的下拉列表被隐藏---必须设置--- */
+
+.frm-layout .layui-table-cell { overflow: visible !important; }
+
+/* 使得下拉框与单元格刚好合适 */
+
+.frm-layout td .layui-form-select{
+
+    margin-top: 0px;
+
+    margin-left: 0px;
+
+    margin-right: 0px;
+
+}
+
+</style>
+        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+        <!--[if lt IE 9]>
+            <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+            <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <body>
+    <form id="frmEdit" lay-filter="form_social" class="layui-form" lay-filter="frm" style="padding: 20px">
+    <input type="hidden" name="id" lay-verify="" placeholder="" autocomplete="off" class="layui-input" value="">
+        <div class="layui-form-item">
+            <label  class="layui-form-label">
+                <span class="x-red">*</span>地市</label>
+            <div class="layui-input-block">
+                <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city-picker" readonly="readonly" data-toggle="city-picker" placeholder="请选择">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label  class="layui-form-label">
+                <span class="x-red">*</span>生效时间</label>
+            <div class="layui-input-block">
+                <input type="text" id="start" name="start" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>基数(元)</label>
+            <div class="layui-input-block">
+                <input type="number" name="base" autocomplete="off" placeholder="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>单位养老(%)</label>
+            <div class="layui-input-block">
+                <input type="number" name="per1" autocomplete="off" placeholder="比如21%，就输入21" class="layui-input">
+            </div>
+        </div>
+         <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>个人养老(%)</label>
+            <div class="layui-input-block">
+                <input type="number" name="per2" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>单位工伤(%)</label>
+            <div class="layui-input-block">
+                <input type="number" name="per3" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+         <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>工伤补充(元)</label>
+            <div class="layui-input-block">
+                <input type="number" name="extra" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>单位失业(%)</label>
+            <div class="layui-input-block">
+                <input type="number" name="per4" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>个人失业(%)</label>
+            <div class="layui-input-block">
+                <input type="number" name="per5" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item" >
+            <div class="layui-input-block">
+                <button type="button" class="layui-btn" onclick="save()">保存</button>
+            </div>
+        </div>
+    </form>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.params.js"></script>
+<script src="../js/interface.js"></script>
+<script src="../layui/extend/city-picker/city-picker.data.js"></script>
+<script src="../js/city.js"></script>
+<script src="../js/fieldSet.js"></script>
+<script>
+    var op = "insert";
+    var form;//表单对象
+    var cityPicker;
+    var laydate;
+    loadLayuiModule();
+
+    function loadLayuiModule() {
+        layui.extend({
+            index: 'lib/index' //主入口模块
+            , citypicker: '../layui/extend/city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
+        }).use(['form','jquery','citypicker','laydate'], function () {
+            form = layui.form;
+            laydate = layui.laydate;
+            var picker = layui.citypicker;
+            cityPicker = new picker("#city-picker", {
+                provincename:"provinceId",
+                cityname:"city",
+                level: 'city'// 级别
+            });
+            laydate.render({
+                elem: '#start'
+                ,type: 'date'
+            });
+            initData();
+        });
+    }
+
+    function initData() {
+        var param = $.query.get("social");
+        if (param) {
+            var social = JSON.parse(param);
+            rule_social.start = dateUtil.format_date(rule_social.start);
+            form.val('form_social', rule_social);
+            var city = getCityText2(rule_social.city);
+            cityPicker.setValue(city);
+            op = "update";
+        }
+    }
+
+    function save() {
+        var rule = form.val('form_social');
+        if(op == "insert") {
+            webInterface.rule.insert({category:1,rule:rule,success:onInsertSuccess});
+        }else{
+            webInterface.rule.update({category:1,rule:rule,success:onUpdateSuccess});
+        }
+
+        function onInsertSuccess() {
+            layer.alert("添加成功", {icon: 6,time:2000},function () {
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                    window.parent.location.reload();
+                });
+        }
+
+        function onUpdateSuccess() {
+            layer.alert("修改成功", {icon: 6,time:2000},function () {
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.location.reload();
+            });
+        }
+    }
+</script>
+
+</html>

@@ -78,4 +78,40 @@ public class CollectionUtil {
         }
         return null;
     }
+
+    public static<T> List<Object> getKeyArray(List<T> collection,String key){
+        Method method = null;
+        List<Object> res = new ArrayList<>();
+        try {
+            for(T o:collection){
+                if(method == null) {
+                    String functionName = String.format("get%s%s",key.substring(0,1).toUpperCase(),key.substring(1));
+                    method = o.getClass().getMethod(functionName);
+                }
+                Object v = method.invoke(o);
+                res.add(v);
+            }
+            return res;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public static<T> String getKeySerial(List<T> collection,String key){
+        Method method = null;
+        String res = "";
+        try {
+            for(T o:collection){
+                if(method == null) {
+                    String functionName = String.format("get%s%s",key.substring(0,1).toUpperCase(),key.substring(1));
+                    method = o.getClass().getMethod(functionName);
+                }
+                long v = (long)method.invoke(o);
+                res += (v+",");
+            }
+            return res.substring(0,res.length()-1);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

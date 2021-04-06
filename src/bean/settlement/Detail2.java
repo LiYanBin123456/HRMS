@@ -1,5 +1,8 @@
 package bean.settlement;
 
+import bean.employee.Deduct;
+import utills.Salary.Tax;
+
 import java.util.Date;
 
 //小时工结算单明细
@@ -165,5 +168,14 @@ public class Detail2 extends Detail {
                 ", payable=" + payable +
                 ", paid=" + paid +
                 '}';
+    }
+
+    public void calc(Deduct deduct) {
+        this.payable = this.total(this.price);//本期收入
+        float taxDue=deduct.total()+this.payable;//应税额=累计应税额+本期收入
+        float tax = Tax.tax1(taxDue);
+        tax -= deduct.getPrepaid();
+        this.tax = tax<=0?0:tax;
+        this.paid = this.payable-this.tax;
     }
 }

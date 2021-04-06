@@ -9,6 +9,14 @@ public class Employee {
     public static final byte RETIRE = 2;
     public static final byte OTHER = 3;
 
+    //外派员工类型
+     public static final byte CATEGORY_0 = 0;//null
+     public static final byte CATEGORY_1 = 1;//派遣
+     public static final byte CATEGORY_2 = 2;//外包
+     public static final byte CATEGORY_3 = 3;//代缴工资
+     public static final byte CATEGORY_4 = 4;//代缴社保
+     public static final byte CATEGORY_5 = 5;//小时工
+
     private long id;
     private long did;//派遣方id
     private long cid;//合作单位id
@@ -41,13 +49,13 @@ public class Employee {
      */
     private String department;//部门
     private String post;//岗位
-    /**户口性质
+    /**外派员工类型
      0_null、
-     1_派遣、
-     2_外包、
-     3_小时工、
-     4_代缴工资
-     5_代缴社保
+     1_派遣
+     2_外包
+     3_代缴工资
+     4_代缴社保
+     5_小时工
      */
     private byte category;
     private float price;//小时工时间报酬

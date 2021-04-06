@@ -1,6 +1,15 @@
 package bean.settlement;
 
-import java.util.Date;
+import bean.client.MapSalary;
+import bean.employee.Deduct;
+import bean.employee.EnsureSetting;
+import bean.rule.RuleMedicare;
+import bean.rule.RuleSocial;
+import utills.Salary.Tax;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.List;
 
 //结算单明细
 public class Detail1 extends Detail {
@@ -49,12 +58,6 @@ public class Detail1 extends Detail {
     public static final byte STATUS_BALANCE = 2;//补差
     public static final byte STATUS_CUSTOM = 3;//自定义（什么都不计算）
     public static final byte STATUS_MAKEUP = 4;//补发工资（只计算个税）
-
-    /**状态
-     0正常
-     1补缴
-     2补差
-     */
     private byte status;
     private String comments1;//个人备注
     private String comments2;//单位备注
@@ -708,4 +711,130 @@ public class Detail1 extends Detail {
         //基本工资+单位社保合计+公积金+单位核收补减
         return base+getTotalDepartment()+fund2+extra2;
     }
+
+    public void calculateTax(Deduct deduct){
+        float taxDue=deduct.total()+this.getPayable();//应税额 = 累计应税额+ 本期收入
+        float tax = Tax.tax1(taxDue);
+        tax -= deduct.getPrepaid();//本期个税 = 累计应缴个税-累计预缴个税
+        this.tax = tax<=0?0:tax;
+    }
+    /**
+     * 计算医保
+     * @param setting 员工设置
+     * @param ruleMedicare  所属地方的医保
+     * @return
+     */
+    public void calculateMedicare(EnsureSetting setting, RuleMedicare ruleMedicare){
+        int SettingM = setting.getSettingM();//员工医保设置
+        float base = 0;
+        switch (SettingM) {
+            case 0://最低标准
+                base = ruleMedicare.getBase();
+                break;
+            case 1://不缴纳
+                base = 0;
+                break;
+            case 2://自定义基数
+                base = setting.getBaseM();
+                break;
+        }
+        byte medicare = setting.getMedicare();//要计算的医保类别
+        if((medicare&((byte)1)) != 0){
+            this.medicare1 = base*(ruleMedicare.getPer2()/100);//个人医疗
+            this.medicare2 =base*(ruleMedicare.getPer1()/100);//单位医疗
+        }
+        if((medicare&((byte)2)) != 0){
+            this.disease1 = ruleMedicare.getFin2();//个人大病
+            this.disease2 = ruleMedicare.getFin1();//单位大病
+        }
+        if((medicare&((byte)4)) != 0){
+            this.birth = base*(ruleMedicare.getPer3()/100);//单位生育
+        }
+    }
+
+    public void calculateSocial(EnsureSetting setting,RuleSocial ruleSocial){
+        float base = 0;
+        switch (setting.getSettingS()){
+            case 0://最低标准
+                base = ruleSocial.getBase();
+                break;
+            case 1://不缴纳
+                base=0;
+                break;
+            case 2://自定义工资
+                base=setting.getBaseS();//自定义的基数
+                break;
+        }
+
+        byte social = setting.getSocial();//要计算的社保类别
+        if((social&((byte)1)) != 0){
+            this.pension1=base*(ruleSocial.getPer2()/100);//个人养老
+            this.pension2=base*(ruleSocial.getPer1()/100);//单位养老
+        }
+        if((social&((byte)2)) != 0){
+            this.unemployment1=base*(ruleSocial.getPer5()/100);//个人失业
+            this.unemployment2=base*(ruleSocial.getPer4()/100);//单位失业
+        }
+        if((social&((byte)4)) != 0) {
+            this.injury = base * (setting.getPerInjury()/100)+ruleSocial.getExtra();//单位工伤
+        }
+    }
+
+    /**
+     * 计算公积金（计算结果通过工资明细带回）
+     * @param setting 医社保设置
+     */
+    public void calcFund(EnsureSetting setting) {
+        float fund = setting.getBaseFund()*setting.getPerFund()/100;
+        this.fund1 = fund;//个人公积金
+        this.fund2 = fund;//单位公积金
+    }
+
+    public void calcPayed() {
+        this.paid = this.payable - this.tax;
+    }
+
+    public void calcPayable(MapSalary mapSalary) {
+        this.payable = getPayable0(true);
+        if (mapSalary != null && mapSalary.getItems() != null && mapSalary.getItems().length() > 0) {//如果有自定义工资
+            this.sumDefinedSalaryItem(mapSalary);
+        }
+    }
+
+
+    /**
+     *计算自定义工资项总额
+     * @param mapSalary 自定义工资
+     * @return
+     */
+    public void sumDefinedSalaryItem(MapSalary mapSalary){
+        /**
+         * 思路：
+         */
+        List<MapSalary.SalaryItem> itemList = mapSalary.getItemList();
+        for (int i = 0; i <itemList.size(); i++) {
+            int index = i + 1;
+            String name = "getF" + index;
+            float v = 0;
+            Method method;
+            try {//通过反射获取对应的值
+                method = this.getClass().getMethod(name);
+                v = Float.parseFloat(method.invoke(this).toString());
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            if(itemList.get(i).getType()==0){//加项
+                this.payable += v;
+            }else {//减项
+                this.payable -= v;
+            }
+        }
+    }
+
+
+
 }

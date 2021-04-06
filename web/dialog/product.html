@@ -151,9 +151,9 @@
         });
         product.allow=people;
         if(op == "insert") {
-            iProduct.insert(product, onInsertSuccess);
+            webInterface.product.insert({product:product, success:onInsertSuccess});
         }else{
-            iProduct.update(product,onUpdateSuccess);
+            webInterface.product.update({product:product,success:onUpdateSuccess});
         }
 
         function onInsertSuccess() {

@@ -8,6 +8,10 @@ function loadMenuCooperation(permission) {
     return getMenuHtml(menuItems_cooperation,permission);
 }
 
+function loadMenuAdmin(permission) {
+    return getMenuHtml(menuItems_admin,permission);
+}
+
 /**
  * 派遣方菜单项
  */
@@ -29,44 +33,44 @@ var menuItems_dispatch = [
     },
     {id:"0,896",title:"劳务派遣",icon:"&#xe63c",children:
         [
-            {id:"0,128",   title:"结算",href:"settlements11.html",icon:"&#xe602"},
-            {id:"0,256",   title:"初审",href:"check11.html?type=0",icon:"&#xe602"},
-            {id:"0,512",   title:"终审",href:"check11.html?type=1",icon:"&#xe602"}
+            {id:"0,128",   title:"结算",href:"settlements.html?category=1&type=1",icon:"&#xe602"},
+            {id:"0,256",   title:"初审",href:"check.html?category=1&level=0&type=1",icon:"&#xe602"},
+            {id:"0,512",   title:"终审",href:"check.html?category=1&level=1&type=1",icon:"&#xe602"}
         ]
     },
     {id:"0,7168",title:"劳务外包",icon:"&#xe63c",children:
         [
-            {id:"0,1024",   title:"结算",href:"settlements12.html",icon:"&#xe602"},
-            {id:"0,2048",   title:"初审",href:"check12.html?type=0",icon:"&#xe602"},
-            {id:"0,4096",   title:"终审",href:"check12.html?type=1",icon:"&#xe602"}
+            {id:"0,1024",   title:"结算",href:"settlements.html?category=1&type=2",icon:"&#xe602"},
+            {id:"0,2048",   title:"初审",href:"check.html?category=1&level=0&type=2",icon:"&#xe602"},
+            {id:"0,4096",   title:"终审",href:"check.html?category=1&level=1&type=2",icon:"&#xe602"}
         ]
     },
     {id:"0,57344",title:"代发工资",icon:"&#xe63c",children:
         [
-            {id:"0,8192",   title:"结算",href:"settlements13.html",icon:"&#xe602"},
-            {id:"0,16384",   title:"初审",href:"check13.html?type=0",icon:"&#xe602"},
-            {id:"0,32768",   title:"终审",href:"check13.html?type=1",icon:"&#xe602"}
+            {id:"0,8192",   title:"结算",href:"settlements.html?category=1&type=3",icon:"&#xe602"},
+            {id:"0,16384",   title:"初审",href:"check.html?category=1&level=0&type=3",icon:"&#xe602"},
+            {id:"0,32768",   title:"终审",href:"check.html?category=1&level=1&type=3",icon:"&#xe602"}
         ]
     },
     {title:"代缴社保",id:"0,458752",icon:"&#xe63c",children:
         [
-            {id:"0,65536",   title:"结算",href:"settlements14.html",icon:"&#xe602"},
-            {id:"0,131072",   title:"初审",href:"check14.html?type=0",icon:"&#xe602"},
-            {id:"0,262144",   title:"终审",href:"check14.html?type=1",icon:"&#xe602"}
+            {id:"0,65536",   title:"结算",href:"settlements.html?category=1&type=4",icon:"&#xe602"},
+            {id:"0,131072",   title:"初审",href:"check.html?category=1&level=0&type=4",icon:"&#xe602"},
+            {id:"0,262144",   title:"终审",href:"check.html?category=1&level=1&type=4",icon:"&#xe602"}
         ]
     },
     {title:"小时工",id:"0,3670016",icon:"&#xe63c",children:
         [
-            {id:"0,524288",   title:"结算",href:"settlements2.html",icon:"&#xe602"},
-            {id:"0,1048576",   title:"初审",href:"check21.html?type=0",icon:"&#xe602"},
-            {id:"0,2097152",   title:"终审",href:"check22.html?type=1",icon:"&#xe602"}
+            {id:"0,524288",   title:"结算",href:"settlements.html?category=2",icon:"&#xe602"},
+            {id:"0,1048576",   title:"初审",href:"check.html?category=2&level=0",icon:"&#xe602"},
+            {id:"0,2097152",   title:"终审",href:"check.html?category=2&level=1",icon:"&#xe602"}
         ]
     },
     {title:"特殊结算",id:"0,29360128",icon:"&#xe63c",children:
         [
-            {id:"0,4194304",   title:"结算",href:"settlements0.html",icon:"&#xe602"},
-            {id:"0,8388608",   title:"初审",href:"check0.html?type=0",icon:"&#xe602"},
-            {id:"0,16777216",   title:"终审",href:"check0.html?type=1",icon:"&#xe602"}
+            {id:"0,4194304",   title:"结算",href:"settlements.html?category=4",icon:"&#xe602"},
+            {id:"0,8388608",   title:"初审",href:"check.html?category=4&level=0",icon:"&#xe602"},
+            {id:"0,16777216",   title:"终审",href:"check.html?category=4&level=1",icon:"&#xe602"}
         ]
     },
     {title:"商业保险",id:"0,234881024",icon:"&#xe63c",children:
@@ -85,7 +89,7 @@ var menuItems_dispatch = [
             {id:"2,0",   title:"个税申报",href:"taxes.html",icon:"&#xe602"}
         ]
     },
-    {title:"五险一金",id:"4,0",href:"insureds.html",icon:"&#xe656"}
+    {title:"五险一金",id:"4,0",href:"insurances.html",icon:"&#xe656"}
 ];
 
 /**
@@ -100,8 +104,8 @@ var menuItems_cooperation = [
     },
     {id:"0,12",title:"劳务派遣",icon:"&#xe6a7",children:
         [
-            {id:"0,4",   title:"结算单",href:"settlements11.html",icon:"&#xe602"},
-            {id:"0,8",   title:"汇总统计",href:"check11.html",icon:"&#xe602"},
+            {id:"0,4",   title:"结算单",href:"settlements.html",icon:"&#xe602"},
+            {id:"0,8",   title:"汇总统计",href:"check.html",icon:"&#xe602"},
         ]
     },
     {id:"0,48",title:"劳务外包",icon:"&#xe6a7",children:
@@ -135,6 +139,27 @@ var menuItems_cooperation = [
             {id:"0,16384",   title:"汇总统计",href:"check2.html",icon:"&#xe602"},
         ]
     }
+];
+
+/**
+ * 管理员菜单项
+ */
+var menuItems_admin = [
+    {id:"0,3",title:"客户管理",icon:"&#xe770",children:
+        [
+            {id:"0,1",   title:"合作单位",href:"dispatches.html",icon:"&#xe602"},
+            {id:"0,2",   title:"合同管理",href:"contracts.html",icon:"&#xe602"}
+        ]
+    },
+    {id:"0,28",title:"规则设置",icon:"&#xe6a7",children:
+        [
+            {id:"0,4",   title:"医保规则",href:"rules_medicare.html",icon:"&#xe602"},
+            {id:"0,8",   title:"社保规则",href:"rules_social.html",icon:"&#xe602"},
+            {id:"0,16",   title:"公积金规则",href:"rules_fund.html",icon:"&#xe602"},
+        ]
+    },
+    {title:"通知公告",id:"0,32",icon:"&#xe6a7",href:"notices.html",icon:"&#xe602"},
+    {title:"账户管理",id:"0,64",icon:"&#xe6a7",href:"accounts.html",icon:"&#xe602"}
 ];
 
 function getMenuHtml(items, permission) {

@@ -30,8 +30,14 @@ import java.util.List;
 
 public class InsuranceService {
     //批量插入
-    public static DaoUpdateResult insertBatch(Connection conn, List<Insurance> insurances) {
-       return InsuranceDao.insertBatch(conn,insurances);
+    public static String insertBatch(Connection conn, List<Insurance> insurances) {
+       DaoUpdateResult res = InsuranceDao.insert(conn,insurances);
+       return JSONObject.toJSONString(res);
+    }
+    //批量插入
+    public static String updateBatch(Connection conn, List<Insurance> insurances) {
+        DaoUpdateResult res = InsuranceDao.update(conn,insurances);
+       return JSONObject.toJSONString(res);
     }
 
     /**
@@ -58,32 +64,32 @@ public class InsuranceService {
         QueryParameter param = new QueryParameter();
         List<ViewInsurance> data2 = (List<ViewInsurance>) InsuranceDao.getList(conn,param).rows;
 
-        List<ViewInsurance> data3 = new ArrayList<>();//需要修改的数据
+        List<Insurance> data3 = new ArrayList<>();//需要修改的数据
         for(ViewInsurance insurance:data2){
-            byte status = insurance.getStatus1();//该员工的医保状态
+            byte status = insurance.getStatus();//该员工的医保状态
             if(status == Insurance.STATUS_APPENDING){//新增
                 String code = data1.get(insurance.getCardId());
                 if(code != null){
-                    insurance.setCode1(code);
-                    insurance.setStatus1(Insurance.STATUS_NORMAL);//设置为在保
+                    insurance.setCode(code);
+                    insurance.setStatus(Insurance.STATUS_NORMAL);//设置为在保
                     data3.add(insurance);
                 }
             }else if(status == Insurance.STATUS_STOPING){//拟停
                 String code = data1.get(insurance.getCardId());
                 if(code == null){//如果code不存在，也就是说明校对数据中不存在该员工
-                    insurance.setStatus1(Insurance.STATUS_STOPED);//设置为停保
+                    insurance.setStatus(Insurance.STATUS_STOPED);//设置为停保
                     data3.add(insurance);
                 }
             }else if(status == Insurance.STATUS_NORMAL){//在保
                 String code = data1.get(insurance.getCardId());
                 if(code == null){//校对名单中不存在
-                    insurance.setStatus1(Insurance.STATUS_ERROR);//设置为异常
+                    insurance.setStatus(Insurance.STATUS_ERROR);//设置为异常
                     data3.add(insurance);
                 }
             }
         }
         //批量修改
-        DaoUpdateResult result = InsuranceDao.updateBatch(conn,data3);
+        DaoUpdateResult result = InsuranceDao.update(conn,data3);
         return result;
     }
 
@@ -113,75 +119,75 @@ public class InsuranceService {
         QueryParameter param = new QueryParameter();
         List<ViewInsurance> data2 = (List<ViewInsurance>) InsuranceDao.getList(conn,param).rows;
 
-        List<ViewInsurance> data3 = new ArrayList<>();//需要修改的数据
+        List<Insurance> data3 = new ArrayList<>();//需要修改的数据
         byte status;//医保状态
         for(ViewInsurance insurance:data2){
             switch (type){
                 case 0://校对养老参保单
-                    status = insurance.getStatus3();
+                    status = insurance.getStatus();
                     if(status == Insurance.STATUS_APPENDING){//新增
                         String code = data1.get(insurance.getCardId());
                         if(code != null){
-                            insurance.setCode3(code);
-                            insurance.setStatus3(Insurance.STATUS_NORMAL);//设置为在保
+                            insurance.setCode(code);
+                            insurance.setStatus(Insurance.STATUS_NORMAL);//设置为在保
                             data3.add(insurance);
                         }
                     }else if(status == Insurance.STATUS_STOPING){//拟停
                         String code = data1.get(insurance.getCardId());
                         if(code == null){//如果code不存在，也就是说明校对数据中不存在该员工
-                            insurance.setStatus3(Insurance.STATUS_STOPED);//设置为停保
+                            insurance.setStatus(Insurance.STATUS_STOPED);//设置为停保
                             data3.add(insurance);
                         }
                     }else if(status == Insurance.STATUS_NORMAL){//在保
                         String code = data1.get(insurance.getCardId());
                         if(code == null){//校对名单中不存在
-                            insurance.setStatus3(Insurance.STATUS_ERROR);//设置为异常
+                            insurance.setStatus(Insurance.STATUS_ERROR);//设置为异常
                             data3.add(insurance);
                         }
                     }
                     break;
                 case 1://校对失业参保单
-                    status = insurance.getStatus4();
+                    status = insurance.getStatus();
                     if(status == Insurance.STATUS_APPENDING){//新增
                         String code = data1.get(insurance.getCardId());
                         if(code != null){
-                            insurance.setCode3(code);
-                            insurance.setStatus4(Insurance.STATUS_NORMAL);//设置为在保
+                            insurance.setCode(code);
+                            insurance.setStatus(Insurance.STATUS_NORMAL);//设置为在保
                             data3.add(insurance);
                         }
                     }else if(status == Insurance.STATUS_STOPING){//拟停
                         String code = data1.get(insurance.getCardId());
                         if(code == null){//如果code不存在，也就是说明校对数据中不存在该员工
-                            insurance.setStatus4(Insurance.STATUS_STOPED);//设置为停保
+                            insurance.setStatus(Insurance.STATUS_STOPED);//设置为停保
                             data3.add(insurance);
                         }
                     }else if(status == Insurance.STATUS_NORMAL){//在保
                         String code = data1.get(insurance.getCardId());
                         if(code == null){//校对名单中不存在
-                            insurance.setStatus3(Insurance.STATUS_ERROR);//设置为异常
+                            insurance.setStatus(Insurance.STATUS_ERROR);//设置为异常
                             data3.add(insurance);
                         }
                     }
                     break;
                 case 2://校对工伤参保单
-                    status = insurance.getStatus5();
+                    status = insurance.getStatus();
                     if(status == Insurance.STATUS_APPENDING){//新增
                         String code = data1.get(insurance.getCardId());
                         if(code != null){
-                            insurance.setCode3(code);
-                            insurance.setStatus5(Insurance.STATUS_NORMAL);//设置为在保
+                            insurance.setCode(code);
+                            insurance.setStatus(Insurance.STATUS_NORMAL);//设置为在保
                             data3.add(insurance);
                         }
                     }else if(status == Insurance.STATUS_STOPING){//拟停
                         String code = data1.get(insurance.getCardId());
                         if(code == null){//如果code不存在，也就是说明校对数据中不存在该员工
-                            insurance.setStatus5(Insurance.STATUS_STOPED);//设置为停保
+                            insurance.setStatus(Insurance.STATUS_STOPED);//设置为停保
                             data3.add(insurance);
                         }
                     }else if(status == Insurance.STATUS_NORMAL){//在保
                         String code = data1.get(insurance.getCardId());
                         if(code == null){//校对名单中不存在
-                            insurance.setStatus3(Insurance.STATUS_ERROR);//设置为异常
+                            insurance.setStatus(Insurance.STATUS_ERROR);//设置为异常
                             data3.add(insurance);
                         }
                     }
@@ -189,7 +195,7 @@ public class InsuranceService {
             }
         }
         //批量修改
-        DaoUpdateResult result = InsuranceDao.updateBatch(conn,data3);
+        DaoUpdateResult result = InsuranceDao.update(conn,data3);
         return result;
     }
 
@@ -217,32 +223,32 @@ public class InsuranceService {
         QueryParameter param = new QueryParameter();
         List<ViewInsurance> data2 = (List<ViewInsurance>) InsuranceDao.getList(conn,param).rows;
 
-        List<ViewInsurance> data3 = new ArrayList<>();//需要修改的数据
+        List<Insurance> data3 = new ArrayList<>();//需要修改的数据
         for(ViewInsurance insurance:data2){
-            byte status = insurance.getStatus2();//该员工的公积金状态
+            byte status = insurance.getStatus();//该员工的公积金状态
             if(status == Insurance.STATUS_APPENDING){//新增
                 String code = data1.get(insurance.getCardId());
                 if(code != null){
-                    insurance.setCode1(code);
-                    insurance.setStatus2(Insurance.STATUS_NORMAL);//设置为在保
+                    insurance.setCode(code);
+                    insurance.setStatus(Insurance.STATUS_NORMAL);//设置为在保
                     data3.add(insurance);
                 }
             }else if(status == Insurance.STATUS_STOPING){//拟停
                 String code = data1.get(insurance.getCardId());
                 if(code == null){//如果code不存在，也就是说明校对数据中不存在该员工
-                    insurance.setStatus2(Insurance.STATUS_STOPED);//设置为停保
+                    insurance.setStatus(Insurance.STATUS_STOPED);//设置为停保
                     data3.add(insurance);
                 }
             }else if(status == Insurance.STATUS_NORMAL){//在保
                 String code = data1.get(insurance.getCardId());
                 if(code == null){//校对名单中不存在
-                    insurance.setStatus2(Insurance.STATUS_ERROR);//设置为异常
+                    insurance.setStatus(Insurance.STATUS_ERROR);//设置为异常
                     data3.add(insurance);
                 }
             }
         }
         //批量修改
-        DaoUpdateResult result = InsuranceDao.updateBatch(conn,data3);
+        DaoUpdateResult result = InsuranceDao.update(conn,data3);
         return result;
     }
 

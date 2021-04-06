@@ -60,6 +60,7 @@
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
+<script src="../js/date.js"></script>
 <script>
     var op = "insert";
     var form;//表单对象
@@ -88,28 +89,20 @@
         var param = $.query.get("notice");
         if (param) {
             var notice = JSON.parse(param);
-            notice.date = format_date(notice.date);
+            notice.date = dateUtil.format_date(notice.date);
             form.val('form_notice', notice);
             layedit.setContent(editer, notice.content, false);
             op = "update";
         }
     }
 
-    function format_date(timestamp) {
-        var d = new Date(timestamp);
-        var year=d.getFullYear();
-        var month=d.getMonth()+1;
-        var date=d.getDate();
-        return year+"-"+month+"-"+date;
-    }
-
     function save() {
         layedit.getContent(editer);
         var notice = form.val('form_notice');
         if(op == "insert") {
-            iNotice.insert(notice, onInsertSuccess);
+            webInterface.notice.insert({notice:notice, success:onInsertSuccess});
         }else{
-            iNotice.update(notice,onUpdateSuccess);
+            webInterface.notice.update({notice:notice,success:onUpdateSuccess});
         }
 
         function onInsertSuccess() {

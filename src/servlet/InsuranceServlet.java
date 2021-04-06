@@ -27,7 +27,6 @@ import java.util.List;
 
 
 @WebServlet(name = "InsuranceServlet",urlPatterns = "/verify/insurance")
-@MultipartConfig
 public class InsuranceServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
@@ -40,14 +39,11 @@ public class InsuranceServlet extends HttpServlet {
         Connection conn = ConnUtil.getConnection();
         String op = request.getParameter("op");
         switch (op) {
-            case "insertBatch"://批量插入参保单
-                result = insertBatch(conn,request);
+            case "insert"://批量插入参保单
+                result = insert(conn,request);
                 break;
             case "update"://修改参保单
                 result = update(conn,request);
-                break;
-            case "delete"://删除参保单
-                result = delete(conn,request);
                 break;
             case "getList"://获取参保单列表
                 result = getList(conn,request);
@@ -98,10 +94,8 @@ public class InsuranceServlet extends HttpServlet {
 
     //获取
     private String get(Connection conn, HttpServletRequest request) {
-        long id = Long.parseLong(request.getParameter("id"));
-        QueryConditions conditions = new QueryConditions();
-        conditions.add("eid","=",id);
-        DaoQueryResult result = InsuranceDao.get(conn,conditions);
+        long eid = Long.parseLong(request.getParameter("eid"));
+        DaoQueryListResult result = InsuranceDao.getList(conn,eid);
         return JSONObject.toJSONString(result);
     }
 
@@ -111,26 +105,16 @@ public class InsuranceServlet extends HttpServlet {
         DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
         return JSONObject.toJSONString(result);
     }
-
-    //删除
-    private String delete(Connection conn, HttpServletRequest request) {
-        long id = Long.parseLong(request.getParameter("id"));
-        DaoUpdateResult result = InsuranceDao.delete(conn,id);
-        return JSONObject.toJSONString(result);
-    }
-
     //修改
     private String update(Connection conn, HttpServletRequest request) {
-        Insurance insurance =JSONObject.parseObject(request.getParameter("insurance"), Insurance.class);
-        DaoUpdateResult result = InsuranceDao.update(conn,insurance);
-        return JSONObject.toJSONString(result);
+        List<Insurance> insurances = JSONArray.parseArray(request.getParameter("insurances"),Insurance.class);
+        return InsuranceService.updateBatch(conn,insurances);
     }
 
     //批量插入
-    private String insertBatch(Connection conn, HttpServletRequest request) {
+    private String insert(Connection conn, HttpServletRequest request) {
         List<Insurance> insurances = JSONArray.parseArray(request.getParameter("insurances"),Insurance.class);
-        DaoUpdateResult result = InsuranceService.insertBatch(conn,insurances);
-        return  JSONObject.toJSONString(result);
+        return InsuranceService.insertBatch(conn,insurances);
     }
 
 }

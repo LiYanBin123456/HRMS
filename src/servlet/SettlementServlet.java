@@ -2,17 +2,16 @@ package servlet;
 
 
 import bean.admin.Account;
+import bean.employee.Employee;
 import bean.settlement.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.JSONPObject;
 import dao.settlement.*;
 import database.ConnUtil;
 import database.DaoQueryListResult;
 import database.DaoUpdateResult;
 import database.QueryParameter;
-import service.employee.SettingService;
 import service.settlement.*;
 import utills.DateUtil;
 
@@ -22,7 +21,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -77,8 +75,8 @@ public class SettlementServlet extends HttpServlet {
             case "confirmDetails2"://确认商业保险替换
                 result = confirmDetails2(conn, request);
                 break;
-            case "backup"://补缴
-                result = backup(conn, request);
+            case "fillup"://补缴
+                result = fillup(conn, request);
                 break;
             case "makeup"://补差
                 result = makeup(conn, request);
@@ -92,11 +90,11 @@ public class SettlementServlet extends HttpServlet {
             case "reset"://重置
                 result = reset(conn, request);
                 break;
-            case "deduct"://扣款
-                result = deduct(conn, request);
+            case "charge"://扣款
+                result = charge(conn, request);
                 break;
-            case "confirm"://确认到账
-                result = confirm(conn, request);
+            case "payroll"://确认发放
+                result = payroll(conn, request);
                 break;
             case "getLogs"://查询日志
                 result = getLogs(conn, request);
@@ -104,15 +102,15 @@ public class SettlementServlet extends HttpServlet {
             case "deleteDetail"://删除结算单明细
                 result = deleteDetail(conn, request);
                 break;
-            case "saveSettlement"://保存结算单
-                result = saveSettlement(conn, request);
+            case "calculate"://保存结算单
+                result = calculate(conn, request);
                 break;
-            case "saveDetail"://保存结算单明细
-                result = saveDetail(conn, request);
+            case "calcDetail"://保存结算单明细
+                result = calcDetail(conn, request);
                 break;
-            case "updateExtra"://修改结算单额外信息
+            /*case "updateExtra"://修改结算单额外信息
                 result = update(conn, request);
-                break;
+                break;*/
         }
         ConnUtil.closeConnection(conn);
 
@@ -123,45 +121,48 @@ public class SettlementServlet extends HttpServlet {
 
     }
 
-    //修改普通结算单额外信息
+    /*//修改普通结算单额外信息
     private String update(Connection conn, HttpServletRequest request) {
         Settlement1 settlement1 = JSON.parseObject(request.getParameter("settlement"),Settlement1.class);
         DaoUpdateResult result = Settlement1Dao.updateExtra(conn,settlement1);
         return JSONObject.toJSONString(result);
-    }
+    }*/
 
     //保存并且计算结算单明细
-    private String saveDetail(Connection conn, HttpServletRequest request) {
+    private String calcDetail(Connection conn, HttpServletRequest request) {
         int category = Integer.parseInt(request.getParameter("category"));//类别
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
         long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
         DaoUpdateResult result = null;
         switch (category){
-            case 0://普通结算单明细
-                result = Detail1Service.saveDetail(conn,sid,cid);
-                break;
-            case 1://小时工结算单明细
-                result = Detail2Service.saveDetail(conn,sid);
-                break;
+            case 1://普通结算单
+                return DetailService1.calcDetail(conn,sid,cid);
+            case 2://小时工结算单
+                return DetailService2.calcDetail(conn,sid);
+            case 4://特殊结算单
+                return DetailService4.calcDetail(conn,sid);
         }
         return JSONObject.toJSONString(result);
     }
 
     //保存并且计算结算单
-    private String saveSettlement(Connection conn, HttpServletRequest request) {
+    private String calculate(Connection conn, HttpServletRequest request) {
         int category = Integer.parseInt(request.getParameter("category"));
         long sid = Long.parseLong(request.getParameter("sid"));
         DaoUpdateResult result = null;
         switch (category){
-            case 0://普通结算单
-                result =Settlement1Service.saveSettlement(conn,sid);
+            case 1://普通结算单
+                result = SettlementService1.calculate(conn,sid);
                 break;
-            case 1://小时工结算单
-                result =Settlement2Service.saveSettlement(conn,sid);
+            case 2://小时工结算单
+                result = SettlementService2.saveSettlement(conn,sid);
                 break;
            /* case 2://商业保险结算单
-                result =Settlement3Service.saveSettlement(conn,sid);
+                result =Settlement3Service.calculate(conn,sid);
                 break;*/
+            case 4://特殊结算单
+                result = SettlementService4.saveSettlement(conn,sid);
+                break;
         }
         return JSONObject.toJSONString(result);
     }
@@ -184,14 +185,17 @@ public class SettlementServlet extends HttpServlet {
 
         DaoQueryListResult result = null;
         switch (category){
-            case 0://普通结算单
-                result = Settlement1Service.getList(conn,param);
+            case 1://普通结算单
+                result = SettlementService1.getList(conn,param);
                 break;
-            case 1://小时工结算单
-                result = Settlement2Service.getList(conn,param);
+            case 2://小时工结算单
+                result = SettlementService2.getList(conn,param);
                 break;
-            case 2://商业保险结算单
-              result = Settlement3Service.getList(conn,param);
+            case 3://商业保险结算单
+              result = SettlementService3.getList(conn,param);
+                break;
+            case 4://特殊结算单
+              result = SettlementService4.getList(conn,param);
                 break;
         }
         return JSONObject.toJSONString(result);
@@ -201,29 +205,33 @@ public class SettlementServlet extends HttpServlet {
     private String insert(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));//结算单类型
         boolean needDetail = Boolean.parseBoolean(request.getParameter("needDetail"));//是否自动生成明细 0 不 1 自动生成
-        boolean needCalculateSocial = Boolean.parseBoolean(request.getParameter("needCalculateSocial"));//是否自动生成明细 0 不 1 自动生成
+        boolean needCalculateSocial = Boolean.parseBoolean(request.getParameter("needCalculateSocial"));//是否计算社保
 
         DaoUpdateResult result = null;
         HttpSession session = request.getSession();
         //获取管理员所属的公司id
         long rid = ((Account) session.getAttribute("account")).getRid();
         switch (category){
-            case 0://普通结算单
+            case 1://普通结算单
                 Settlement1 settlement1 = JSONObject.parseObject(request.getParameter("settlement"), Settlement1.class);
                 settlement1.setDid(rid);
                 settlement1.setNeedCalculateSocial(needCalculateSocial);
-                result = Settlement1Service.insert(conn,settlement1,needDetail);
+                result = SettlementService1.insert(conn,settlement1,needDetail);
                 break;
-            case 1://小时工结算单
+            case 2://小时工结算单
                 Settlement2 settlement2 = JSONObject.parseObject(request.getParameter("settlement"), Settlement2.class);
                 settlement2.setDid(rid);
-                result = Settlement2Service.insert(conn,settlement2,needDetail);
+                result = SettlementService2.insert(conn,settlement2,needDetail);
                 break;
-            case 2://商业保险结算单
+            case 3://商业保险结算单
                 Settlement3 settlement3 = JSONObject.parseObject(request.getParameter("settlement"), Settlement3.class);
                 settlement3.setDid(rid);
-                result = Settlement3Service.insert(conn,settlement3,needDetail);
+                result = SettlementService3.insert(conn,settlement3,needDetail);
                 break;
+            case 4:
+                Settlement4 settlement4 = JSONObject.parseObject(request.getParameter("settlement"), Settlement4.class);
+                settlement4.setDid(rid);
+                result = SettlementService4.insert(conn,settlement4,needDetail);
         }
         return JSONObject.toJSONString(result);
     }
@@ -234,14 +242,17 @@ public class SettlementServlet extends HttpServlet {
         long id = Long.parseLong(request.getParameter("id"));
         DaoUpdateResult result = null;
         switch (category){
-            case 0://普通结算单
-                result = Settlement1Service.delete(conn,id);
+            case 1://普通结算单
+                result = SettlementService1.delete(conn,id);
                 break;
-            case 1://小时工结算单
-                result = Settlement2Service.delete(conn,id);
+            case 2://小时工结算单
+                result = SettlementService2.delete(conn,id);
                 break;
-            case 2://商业保险结算单
-                result = Settlement3Service.delete(conn,id);
+            case 3://商业保险结算单
+                result = SettlementService3.delete(conn,id);
+                break;
+            case 4://特殊结算单
+                result = SettlementService4.delete(conn,id);
                 break;
         }
         return JSONObject.toJSONString(result);
@@ -255,14 +266,17 @@ public class SettlementServlet extends HttpServlet {
         Date month = DateUtil.parse(mont+"-"+"01","yyyy-MM-dd");
         DaoUpdateResult result = null;
         switch (category){
-            case 0://普通结算单
-                result = Settlement1Service.saveAs(conn,id,month);
+            case 1://普通结算单
+                result = SettlementService1.saveAs(conn,id,month);
                 break;
-            case 1://小时工结算单
-                result = Settlement2Service.saveAs(conn,id,month);
+            case 2://小时工结算单
+                result = SettlementService2.saveAs(conn,id,month);
                 break;
-            case 2://商业保险结算单
-                result = Settlement3Service.saveAs(conn,id,month);
+            case 3://商业保险结算单
+                result = SettlementService3.saveAs(conn,id,month);
+                break;
+            case 4://特殊结算单
+                result = SettlementService4.saveAs(conn,id,month);
                 break;
         }
         return JSONObject.toJSONString(result);
@@ -273,17 +287,21 @@ public class SettlementServlet extends HttpServlet {
         byte category = Byte.parseByte(request.getParameter("category"));
         DaoUpdateResult result = null;
         switch (category){
-            case 0://普通结算单明细
-                List<ViewDetail1> detail1s = JSONArray.parseArray(request.getParameter("details"),ViewDetail1.class);
-                result = Detail1Service.update(conn,detail1s);
+            case 1://普通结算单
+                List<ViewDetail1> details1 = JSONArray.parseArray(request.getParameter("details"),ViewDetail1.class);
+                result = DetailService1.update(conn,details1);
                 break;
-            case 1://小时工结算单明细
-                List<Detail2> detail2s = JSONArray.parseArray(request.getParameter("details"),Detail2.class);
-                result = Detail2Service.update(conn,detail2s);
+            case 2://小时工结算单
+                List<Detail2> details2 = JSONArray.parseArray(request.getParameter("details"),Detail2.class);
+                result = DetailService2.update(conn,details2);
                 break;
-            case 2://商业保险结算单明细
-                List<Detail3> detail3s = JSONArray.parseArray(request.getParameter("details"),Detail3.class);
-                result = Detail3Service.update(conn,detail3s);
+            case 3://商业保险结算单
+                List<Detail3> details3 = JSONArray.parseArray(request.getParameter("details"),Detail3.class);
+                result = DetailService3.update(conn,details3);
+                break;
+            case 4://特殊结算单
+                List<Detail4> details4 = JSONArray.parseArray(request.getParameter("details"),Detail4.class);
+                result = DetailService4.update(conn,details4);
                 break;
         }
         return JSONObject.toJSONString(result);
@@ -296,14 +314,17 @@ public class SettlementServlet extends HttpServlet {
         QueryParameter param = JSONObject.parseObject(request.getParameter("param"),QueryParameter.class);
         DaoQueryListResult result = null;
         switch (category){
-            case 0://普通结算单明细
-                result = Detail1Service.getList(conn,param,id);
+            case 1://普通结算单
+                result = DetailService1.getList(conn,param,id);
                 break;
-            case 1://小时工结算单明细
-                result = Detail2Service.getList(conn,param,id);
+            case 2://小时工结算单
+                result = DetailService2.getList(conn,param,id);
                 break;
-            case 2://商业保险结算单明细
-                result = Detail3Service.getList(conn,param,id);
+            case 3://商业保险结算单
+                result = DetailService3.getList(conn,param,id);
+                break;
+            case 4://特殊结算单
+                result = DetailService4.getList(conn,param,id);
                 break;
         }
         return JSONObject.toJSONString(result);
@@ -317,17 +338,21 @@ public class SettlementServlet extends HttpServlet {
         HttpSession session = request.getSession();
         long did = ((Account) session.getAttribute("account")).getRid();//当前操作的管理员所属公司id
         switch (category){
-            case 0://普通结算单明细
-                List<ViewDetail1> detail1s = JSONArray.parseArray(request.getParameter("details"),ViewDetail1.class);
-                result = Detail1Service.importDetails(conn,id,detail1s,did);
+            case 1://普通结算单
+                List<ViewDetail1> details1 = JSONArray.parseArray(request.getParameter("details"),ViewDetail1.class);
+                result = DetailService1.importDetails(conn,id,details1,did);
                 break;
-            case 1://小时工结算单明细
-                List<ViewDetail2> ViewDetail2s = JSONArray.parseArray(request.getParameter("details"),ViewDetail2.class);
-                result = Detail2Service.importDetails(conn,id,ViewDetail2s,did);
+            case 2://小时工结算单
+                List<ViewDetail2> details2 = JSONArray.parseArray(request.getParameter("details"),ViewDetail2.class);
+                result = DetailService2.importDetails(conn,id,details2,did);
                 break;
-            case 2://商业保险结算单明细
-                List<Detail3> detail3s = JSONArray.parseArray(request.getParameter("details"),Detail3.class);
-                result = Detail3Service.importDetails(conn,id,detail3s);
+            case 3://商业保险结算单
+                List<Detail3> details3 = JSONArray.parseArray(request.getParameter("details"),Detail3.class);
+                result = DetailService3.importDetails(conn,id,details3);
+                break;
+            case 4://特殊结算单
+                List<ViewDetail4> details4 = JSONArray.parseArray(request.getParameter("details"),ViewDetail4.class);
+                result = DetailService4.importDetails(conn,id,details4,did);
                 break;
         }
         return JSONObject.toJSONString(result);
@@ -338,7 +363,7 @@ public class SettlementServlet extends HttpServlet {
         List<Detail3> member1 = JSONArray.parseArray(request.getParameter("member1"),Detail3.class);
         List<Detail3> member2 = JSONArray.parseArray(request.getParameter("member2"),Detail3.class);
 
-        DaoUpdateResult res = Detail3Service.replaceDetails(conn,member1,member2);
+        DaoUpdateResult res = DetailService3.replaceDetails(conn,member1,member2);
         return JSONObject.toJSONString(res);
     }
 
@@ -348,7 +373,7 @@ public class SettlementServlet extends HttpServlet {
         byte day = Byte.parseByte(request.getParameter("day"));
         String[] ids = request.getParameterValues("ids[]");
 
-        DaoUpdateResult res = Detail3Service.confirmDetails(conn,sid,ids,day);
+        DaoUpdateResult res = DetailService3.confirmDetails(conn,sid,ids,day);
         return JSONObject.toJSONString(res);
     }
 
@@ -359,7 +384,7 @@ public class SettlementServlet extends HttpServlet {
         String[] ids1 = request.getParameterValues("ids1[]");
         String[] ids2 = request.getParameterValues("ids2[]");
 
-        DaoUpdateResult res = Detail3Service.confirmDetails(conn,sid,ids1,ids2,day);
+        DaoUpdateResult res = DetailService3.confirmDetails(conn,sid,ids1,ids2,day);
         return JSONObject.toJSONString(res);
     }
 
@@ -369,12 +394,12 @@ public class SettlementServlet extends HttpServlet {
     }
 
     //补缴
-    private String backup(Connection conn, HttpServletRequest request) {
+    private String fillup(Connection conn, HttpServletRequest request) {
         String start = request.getParameter("start");//起始月份
         String end = request.getParameter("end");//结束月份
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
         List<JSONObject> employees = JSONArray.parseArray(request.getParameter("employees"),JSONObject.class);
-        DaoUpdateResult result = Settlement1Service.backup(start,end,sid,employees,conn);
+        DaoUpdateResult result = SettlementService1.fillup(start,end,sid,employees,conn);
         return JSONObject.toJSONString(result);
     }
 
@@ -383,9 +408,9 @@ public class SettlementServlet extends HttpServlet {
         String start = request.getParameter("start");//起始月份
         String end = request.getParameter("end");//结束月份
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
-        String[] eids = request.getParameterValues("eids[]");//员工id数组
+        List<Employee> employees = JSONArray.parseArray(request.getParameter("employees"),Employee.class);
 
-        DaoUpdateResult result = Settlement1Service.makeup(conn,eids,start,end,sid);
+        DaoUpdateResult result = SettlementService1.makeup(conn,employees,start,end,sid);
         return JSONObject.toJSONString(result);
 
     }
@@ -397,15 +422,18 @@ public class SettlementServlet extends HttpServlet {
         long id = Long.parseLong(request.getParameter("id"));
         DaoUpdateResult result = null;
         switch (category){
-            case 0://普通结算单明细
-                result = Settlement1Service.commit(conn, id, user);
+            case 1://普通结算单
+                result = SettlementService1.commit(conn, id, user);
                 break;
-            case 1://小时工结算单明细
-                result = Settlement2Service.commit(conn, id, user);
+            case 2://小时工结算单
+                result = SettlementService2.commit(conn, id, user);
                 break;
-            /*case 2://商业保险结算单明细
+            /*case 2://商业保险结算单
                 result = Settlement3Service.commit(conn, id, user);
                 break;*/
+            case 4://特殊结算单
+                result = SettlementService4.commit(conn, id, user);
+                break;
         }
         return JSONObject.toJSONString(result);
     }
@@ -414,21 +442,24 @@ public class SettlementServlet extends HttpServlet {
     private String check(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
-        byte type = Byte.parseByte(request.getParameter("type"));
+        byte level = Byte.parseByte(request.getParameter("level"));
         boolean pass = Boolean.parseBoolean(request.getParameter("pass"));
         String reason = request.getParameter("reason");
         Account user = (Account) request.getSession().getAttribute("account");
         DaoUpdateResult res = null;
         switch (category){
-            case 0://普通结算单明细
-                res = Settlement1Service.check(conn,id,type,pass,reason,user);
+            case 1://普通结算单
+                res = SettlementService1.check(conn,id,level,pass,reason,user);
                 break;
-            case 1://小时工结算单明细
-                res = Settlement2Service.check(conn,id,type,pass,reason,user);
+            case 2://小时工结算单
+                res = SettlementService2.check(conn,id,level,pass,reason,user);
                 break;
-            /*case 2://商业保险结算单明细
+            /*case 2://商业保险结算单
                 res = Settlement3Service.check(conn,id,type,pass,reason,user);
                 break;*/
+            case 4://特殊结算单
+                res = SettlementService4.check(conn,id,level,pass,reason,user);
+                break;
         }
         return JSONObject.toJSONString(res);
     }
@@ -440,51 +471,60 @@ public class SettlementServlet extends HttpServlet {
         Account user = (Account) request.getSession().getAttribute("account");
         DaoUpdateResult result = null;
         switch (category){
-            case 0://普通结算单明细
-                result = Settlement1Service.reset(conn, id, user);
+            case 1://普通结算单
+                result = SettlementService1.reset(conn, id, user);
                 break;
-            case 1://小时工结算单明细
-                result = Settlement2Service.reset(conn, id, user);
+            case 2://小时工结算单
+                result = SettlementService2.reset(conn, id, user);
                 break;
-            /*case 2://商业保险结算单明细
+            /*case 2://商业保险结算单
                 result = Settlement3Service.reset(conn, id, user);
                 break;*/
+            case 4://特殊结算单
+                result = SettlementService4.reset(conn, id, user);
+                break;
         }
         return JSONObject.toJSONString(result);
     }
 
     //确认扣款
-    private String deduct(Connection conn, HttpServletRequest request) {
+    private String charge(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));
         Account user = (Account) request.getSession().getAttribute("account");
         DaoUpdateResult result = null;
         switch (category){
-            case 0://普通结算单明细
-                result = Settlement1Service.deduct(conn,id,user);
+            case 1://普通结算单
+                result = SettlementService1.charge(conn,id,user);
                 break;
-            case 1://小时工结算单明细
-                result = Settlement2Service.deduct(conn,id,user);
+            case 2://小时工结算单
+                result = SettlementService2.charge(conn,id,user);
                 break;
-            /*case 2://商业保险结算单明细
-                result = Settlement3Service.deduct(conn,id,user);
+            /*case 2://商业保险结算单
+                result = Settlement3Service.charge(conn,id,user);
                 break;*/
+            case 4://特殊结算单
+                result = SettlementService4.charge(conn, id, user);
+                break;
         }
         return JSONObject.toJSONString(result);
     }
 
     //确认发放
-    private String confirm(Connection conn, HttpServletRequest request) {
+    private String payroll(Connection conn, HttpServletRequest request) {
         byte category = Byte.parseByte(request.getParameter("category"));
         long id = Long.parseLong(request.getParameter("id"));//结算单id
         Account user = (Account) request.getSession().getAttribute("account");
         DaoUpdateResult result = null;
         switch (category){
-            case 0://普通结算单明细
-                result = Settlement1Service.confirm(conn, id, user);
+            case 1://普通结算单
+                result = SettlementService1.payroll(conn, id, user);
                 break;
-            case 1://小时工结算单明细
-                result = Settlement2Service.confirm(conn, id, user);
+            case 2://小时工结算单
+                result = SettlementService2.payroll(conn, id, user);
+                break;
+            case 4://特殊结算单
+                result = SettlementService4.payroll(conn, id, user);
                 break;
         }
         return JSONObject.toJSONString(result);
@@ -497,14 +537,17 @@ public class SettlementServlet extends HttpServlet {
         QueryParameter param = JSONObject.parseObject(request.getParameter("param"),QueryParameter.class);
         DaoQueryListResult result = null;
         switch (category){
-            case 0://普通结算单明细
-                result = Settlement1Service.getLogs(conn,id,param);
+            case 1://普通结算单
+                result = SettlementService1.getLogs(conn,id,param);
                 break;
-            case 1://小时工结算单明细
-                result = Settlement2Service.getLogs(conn,id,param);
+            case 2://小时工结算单
+                result = SettlementService2.getLogs(conn,id,param);
                 break;
-            case 2://商业保险结算单明细
-                result = Settlement3Service.getLogs(conn,id,param);
+            case 3://商业保险结算单
+                result = SettlementService3.getLogs(conn,id,param);
+                break;
+            case 4://特殊结算单
+                result = SettlementService4.getLogs(conn,id,param);
                 break;
         }
      return JSONObject.toJSONString(result);
@@ -516,14 +559,17 @@ public class SettlementServlet extends HttpServlet {
         long id = Long.parseLong(request.getParameter("id"));
         DaoUpdateResult result = null;
         switch (category){
-            case 0://删除普通结算明细
+            case 1://普通结算
                 result = Detail1Dao.delete(conn,id);
                 break;
-            case 1://删除小时工结算明细
+            case 2://小时工结算
                 result = Detail2Dao.delete(conn,id);
                 break;
-            case 2://删除商业结算明细
+            case 3://商业结算
                 result = Detail3Dao.delete(conn,id);
+                break;
+            case 4://特殊结算单
+                result = Detail4Dao.delete(conn,id);
                 break;
         }
         return JSONObject.toJSONString(result);

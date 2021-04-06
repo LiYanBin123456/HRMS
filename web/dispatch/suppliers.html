@@ -68,7 +68,7 @@
         <script src="../js/jquery.min.js"></script>
         <script src="../js/jquery.params.js"></script>
         <script src="../js/queryParam.js"></script>
-        <script src="../js/util.js"></script>
+
         <script>
             var category = 0;//记录是显示供应商，流失供应商
             var table;//数据表格对象
@@ -169,28 +169,28 @@
 
             function getSuppliers(reserve) {
                 param_query.addCondition('type','=',category);
-                iClient.getList(param_query,2,function (result) {
+                webInterface.client.getList({param:param_query,category:2,success:function (result) {
                     table.reload('tbl_supplier', {
                         data:result.rows,
                         reserve:reserve
                     });
-                //初始化分页
-                laypage.render({
-                    elem: 'pager1'
-                    ,curr:param_query.pagination.page
-                    ,count: result.total //数据总数
-                    ,limit: param_query.pagination.size
-                    ,limits: [10, 20, 50, 100, 200]
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.setPagination(obj.curr,obj.limit);
-                            getSuppliers(true);
+                    //初始化分页
+                    laypage.render({
+                        elem: 'pager1'
+                        ,curr:param_query.pagination.page
+                        ,count: result.total //数据总数
+                        ,limit: param_query.pagination.size
+                        ,limits: [10, 20, 50, 100, 200]
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                        ,jump: function(obj,first){
+                            //首次不执行
+                            if(!first){
+                                param_query.setPagination(obj.curr,obj.limit);
+                                getSuppliers(true);
+                            }
                         }
-                    }
-                });
-            });
+                    });
+                }});
             }
 
 
@@ -219,22 +219,22 @@
             //删除供应商
             function del(supplier) {
                 layer.confirm('确定删除'+supplier.name, {icon: 3, title:'删除'}, function(index){
-                    iClient.delete(supplier.id,2,0,function () {
+                    webInterface.client.delete({id:supplier.id,category:2,type:0,success:function () {
                         layer.close(index);
                         getSuppliers();
                         layer.msg('删除成功');
-                    });
+                    }});
                 });
             }
 
             //修改为供应商
             function update(coop){
                 layer.confirm('确定修改'+coop.name+"为合作供应商?", {icon: 3, title:'修改为合作供应商'}, function(index) {
-                    iClient.updateType(coop.id, 2, 0, function () {
+                    webInterface.client.updateType({id:coop.id, category:2, type:0, success:function () {
                         layer.close(index);
                         getSuppliers();
                         layer.msg('修改成功');
-                    });
+                    }});
                 });
             }
         </script>

@@ -127,13 +127,13 @@
     function saveInfo(data) {
         var account = data.field;
         if (op == "insert") {
-            iAccount.insert(account, function (result) {
+            webInterface.account.insert({account:account, success:function (result) {
                 layer.msg("添加成功");
-            });
+            }});
         } else {
-            iAccount.update(account, function (result) {
+            webInterface.account.update({account:account, success:function (result) {
                 layer.msg("修改成功");
-            });
+            }});
         }
     }
 
@@ -143,9 +143,9 @@
         $("input:checkbox[name='permit']:checked").each(function (i) {
             permit += Number($(this).val());
         });
-        iAccount.permit(id, permit, function (result) {
+        webInterface.account.permit({id:id, permit:permit, success:function (result) {
             layer.msg("权限分配成功！");
-        });
+        }});
     }
 </script>
 

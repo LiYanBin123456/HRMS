@@ -29,7 +29,7 @@
                 <button class="layui-btn layui-btn-sm" lay-event="import" ><i class="layui-icon "></i> 导入</button>
                 <button class="layui-btn layui-btn-sm" lay-event="download" ><i class="layui-icon "></i> 下载模板</button>
                 <button class="layui-btn layui-btn-sm" lay-event="save" onclick="updateDetail()"><i class="layui-icon "></i> 保存</button>
-                <button class="layui-btn layui-btn-sm" lay-event="save" onclick="saveDetail()"><i class="layui-icon "></i> 计算</button>
+                <button class="layui-btn layui-btn-sm" lay-event="save" onclick="calcDetail()"><i class="layui-icon "></i> 计算</button>
 
             </div>
                 <form class="layui-form" style="display: inline">
@@ -62,10 +62,11 @@
 
             var param_query = new QueryParam();
             param_query.setPagination(1,10);
-            param_query.setOrder("id",true);
+            param_query.setOrder("id",false);
 
-            var sid = $.query.get("id");//结算单id
-            var cid = $.query.get("cid");//合作单位id
+            var settlement = JSON.parse($.query.get("settlement"));//结算单
+            var sid = settlement.id;//合作单位id
+            var cid = settlement.cid;//合作单位id
             $(function () {
                 loadLayuiModule();
             });
@@ -145,7 +146,7 @@
                 getDetails();
           }
             function getDetails() {
-                iSettlement.getDetails(param_query,sid,1,function (result) {
+                webInterface.settlement.getDetails({param:param_query,sid:sid,category:2,success:function (result) {
                     console.log(result)
                     table.reload('tbl_detail', {
                         data:result.rows
@@ -167,7 +168,7 @@
                             }
                         }
                     });
-                });
+                }});
             }
 
             //核对导入的数据
@@ -180,12 +181,12 @@
                     content: content,
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
-                        var detail2s = window["layui-layer-iframe" + index].callbackData();
-                        iSettlement.importDetails(sid,detail2s,1,function () {
+                        var details = window["layui-layer-iframe" + index].callbackData();
+                        webInterface.settlement.importDetails({sid:sid,details:details,category:2,success:function () {
                             layer.close(index);
                             layer.msg("导入成功");
                             getDetails();
-                        })
+                        }});
                     },btn2: function(index, layero){
                         layer.close(index);
                     }
@@ -198,7 +199,7 @@
                 param.addCondition("cid","=",cid);
                 param.addCondition("type","=",1);
                 param.addCondition("status","=",0);
-                param.addCondition("category","=",3);
+                param.addCondition("category","=",5);
                 var content = "member.html?param="+encodeURIComponent(JSON.stringify(param));
                 layer.open({
                     title:"添加明细",
@@ -214,9 +215,9 @@
                             details[i] = {"eid":member[i].id};
                             console.log(details)
                         }
-                        iSettlement.importDetails(sid,JSON.stringify(details),1,function () {
+                        webInterface.settlement.importDetails({sid:sid,details:details,category:2,success:function () {
                             layer.msg("添加成功")
-                        });
+                        }});
                         getDetails();
                     },btn2: function(index, layero){
                         layer.close(index);
@@ -228,16 +229,16 @@
             //删除结算单明细
             function del(detail) {
                 layer.confirm('确定删除'+detail.name+"的结算单明细吗", {icon: 3, title:'删除'}, function(index){
-                    iSettlement.deleteDetail(detail.id,1,function () {
+                    webInterface.settlement.deleteDetail({id:detail.id,category:2,success:function () {
                         layer.close(index);
                         getDetails();
                         layer.msg('删除成功');
-                    });
+                    }});
                 });
             }
             //导出
             function exports(){
-                var url = "/hrms/verify/file?op=exportDetail2&id="+sid;
+                var url = "/verify/file?op=exportDetail2&id="+sid;
                 var form = $('<form method="POST"></form>');
                 form.attr('action', url);
                 form.appendTo($('body'));
@@ -247,7 +248,7 @@
 
             //下载模板
             function download() {
-                    var url = "/hrms/verify/file?op=downloadTemplateDetail2&cid="+cid;
+                    var url = "/verify/file?op=downloadTemplateDetail2&cid="+cid;
                     var form = $('<form method="POST"></form>');
                     form.attr('action', url);
                     form.appendTo($('body'));
@@ -256,15 +257,15 @@
             }
 
             //保存结算单明细并且计算
-            function  saveDetail() {
+            function  calcDetail() {
                 var msg = "保存后结算单将被设置为[保存]状态，同时会自动计算社保、医保和个税等，确认保存吗？";
                 var title = "保存结算单明细";
                 layer.confirm(msg, {icon: 3, title:title}, function(index){
-                    iSettlement.saveDetail(sid,cid,1,function () {
+                    webInterface.settlement.calcDetail({sid:sid,cid:cid,category:2,success:function () {
                         layer.close(index);
                         layer.msg("修改成功");
                         getDetails();
-                    })
+                    }})
                 });
             };
 
@@ -275,11 +276,11 @@
                 var msg = "修改结算单";
                 var title = "修改结算单";
                 layer.confirm(msg, {icon: 3, title:title}, function(index){
-                    iSettlement.updateDetails(details,1,function () {
+                    webInterface.settlement.updateDetails({details:details,category:2,success:function () {
                         layer.close(index);
                         layer.msg("修改成功");
                         getDetails();
-                    })
+                    }});
                 });
             };
         </script>

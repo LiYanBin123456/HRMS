@@ -100,7 +100,7 @@
              * 约束条件有该合作单位cid，员工类型type，用工性质category，在职状态status
              */
             function getMember() {
-                iEmployee.getList(param_query,1,function (result) {
+                webInterface.employee.getList({param:param_query,type:1,success:function (result) {
                     table.reload('tbl_member', {
                         data:result.rows
                     });
@@ -119,11 +119,8 @@
                             }
                         }
                     });
-                });
+                }});
             }
-
-
-
         </script>
     </body>
 </html>

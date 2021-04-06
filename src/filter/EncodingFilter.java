@@ -12,7 +12,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 
 
-@WebFilter(urlPatterns={"/hrms/*"})
+@WebFilter(urlPatterns={"/*"})
 public class EncodingFilter implements Filter {
     private String charset = "UTF-8";
     @Override

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="x-admin-sm">
+<html>
 
 <head>
     <meta charset="UTF-8">
@@ -10,415 +10,33 @@
           content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
     <link rel="stylesheet" href="../css/font.css">
     <link rel="stylesheet" href="../css/xadmin.css">
-    <link href="../layui/extend/city-picker/city-picker.css" rel="stylesheet"/>
-
     <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
     <script type="text/javascript" src="../js/xadmin.js"></script>
-    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
-    <!--[if lt IE 9]>
-    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <style>
-        .headImg{
-            width: 200px;
-            height: 300px;
-            border: 1px solid grey;
-        }
-    </style>
 </head>
 <body>
 <div class="layui-tab layui-tab-brief" lay-filter="tab_employ">
     <ul class="layui-tab-title">
-        <li class="layui-this">基础信息</li>
-        <li>补充信息</li>
-        <li>社保设置</li>
-        <li>个人专项扣除</li>
-        <li>工资卡</li>
+        <li lay-id="base" class="layui-this">基础信息</li>
+        <li lay-id="extra">补充信息</li>
+        <li lay-id="setting">五险一金</li>
+        <li lay-id="deduct">个人专项扣除</li>
+        <li lay-id="card">工资卡</li>
     </ul>
     <div class="layui-tab-content">
         <div class="layui-tab-item layui-show">
-            <form lay-filter="form_employee" class="layui-form layui-row">
-                <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
-                    <input type="hidden" name="id">
-                    <input type="hidden" name="type">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class="x-red">*</span>身份证号</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="cardId" required="" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class="x-red">*</span>姓名</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="name" required="" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class="x-red">*</span>联系电话</label>
-                        <div class="layui-input-inline">
-                            <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="phone"
-                                   required="" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label"><span class="x-red">*</span>学历</label>
-                        <div class="layui-input-inline">
-                            <select name="degree" lay-verify="required">
-                                <option value="0">高中以下</option>
-                                <option value="1">高中</option>
-                                <option value="2">中专</option>
-                                <option value="3">大专</option>
-                                <option value="4">本科</option>
-                                <option value="5">硕士</option>
-                                <option value="6">博士</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class="x-red">*</span>入职时间</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="entry" name="entry" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item layui-hide" name="t1">
-                        <label class="layui-form-label"><span class="x-red">*</span>用工性质</label>
-                        <div class="layui-input-inline">
-                            <select name="category" lay-verify="required" lay-filter="filter_category">
-                                <option value="0">无</option>
-                                <option value="1">派遣</option>
-                                <option value="2">外包</option>
-                                <option value="3">小时工</option>
-                                <option value="4">代发工资</option>
-                                <option value="5">代缴社保</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-form-item layui-hide" name="t2">
-                        <label class="layui-form-label"><span class="x-red">*</span>小时工报酬</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="price" required="" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item layui-hide" name="t1">
-                        <label class="layui-form-label"><span class="x-red">*</span>外派单位</label>
-                        <div class="layui-input-inline">
-                            <select name="cid" id="select_cooperation" lay-filter="filter_cooperation" lay-verify="required"></select>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">
-                            <span class="x-red">*</span>岗位</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="post" required="" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label"><span class="x-red">*</span>在职状态</label>
-                        <div class="layui-input-inline">
-                            <select name="status" lay-verify="required">
-                                <option value=""></option>
-                                <option value="0">在职</option>
-                                <option value="1">离职</option>
-                                <option value="2">退休</option>
-                                <option value="3">其他</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-form-item" style="text-align: center" >
-                        <button type="button" class="layui-btn " onclick="saveEmployee()">保存</button>
-                </div>
-            </form>
+            <iframe id="frame_base" src="" width="100%" height="400px" frameborder="0"></iframe>
         </div>
         <div class="layui-tab-item">
-            <form lay-filter="form_extra" class="layui-form layui-row">
-                <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
-                    <input type="hidden" name="eid">
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">档案编号</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="rid" required="" autocomplete="off" class="layui-input"></div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">毕业学校</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="school" required="" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">毕业专业</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="major" required="" autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">户口性质</label>
-                        <div class="layui-input-inline">
-                            <select name="household">
-                                <option value=""></option>
-                                <option value="0">外地城镇</option>
-                                <option value="1">本地城镇</option>
-                                <option value="2">外地农村</option>
-                                <option value="3">城镇</option>
-                                <option value="4">农村</option>
-                                <option value="5">港澳台</option>
-                                <option value="6">外籍</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">户籍地址</label>
-                        <div class="layui-input-inline">
-                            <input type="text" name="address" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">离职时间</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="date1" name="date1" class="layui-input layui-disabled" disabled>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">退休时间</label>
-                        <div class="layui-input-inline">
-                            <input type="text" id="date2" name="date2" class="layui-input layui-disabled" disabled>
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">离职原因</label>
-                        <div class="layui-input-inline">
-                            <input type="hidden" name="reason">
-                            <input type="text" name="reasonText" class="layui-input layui-disabled" disabled>
-                        </div>
-                    </div>
-                    <div class="layui-form-item" >
-                        <div class="layui-input-block">
-                            <button type="button" class="layui-btn " onclick="saveExtra()">保存</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
-                    <div class="layui-form-item" >
-                        <div class="layui-input-block">
-                            <img id="headImg" alt="请上传照片" class="headImg">
-                        </div>
-                    </div>
-                    <div class="layui-form-item" >
-                        <div class="layui-input-block">
-                            <button type="button" class="layui-btn" id="btn_upload">上传照片</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
+            <iframe id="frame_extra" src="" width="100%" height="400px" frameborder="0"></iframe>
         </div>
         <div class="layui-tab-item">
-            <form lay-filter="form_ensure" class="layui-form">
-                <input type="hidden" name="eid">
-                <div class="layui-form-item">
-                    <label class="layui-form-label">社保所在地</label>
-                    <div class="layui-input-block">
-                        <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city" readonly="readonly" data-toggle="city-picker" placeholder="请选择">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <fieldset class="layui-elem-field">
-                        <legend>医保</legend>
-                        <div class="layui-field-box">
-                            <div class="layui-inline">
-                                <input type="radio" lay-filter="settingM" name="settingM" value="0" title="最低标准" checked>
-                                <input type="radio" lay-filter="settingM" name="settingM" value="1" title="不缴纳">
-                                <input type="radio" lay-filter="settingM" name="settingM" value="2" title="自定义基数">
-
-                            </div>
-                            <div class="layui-inline layui-hide" name="m1">
-                                <input type="text" name="valM" required="" placeholder="自定义基数" autocomplete="off" class="layui-input " onchange="verifyMedicalBase(this.value)">
-                            </div>
-                        </div>
-                        <div class="layui-field-box">
-                            <input type="checkbox" lay-skin="primary" name="bMedicare" value="1" title="医疗保险" checked>
-                            <input type="checkbox" lay-skin="primary" name="bMedicare" value="2" title="大病保险" checked>
-                            <input type="checkbox" lay-skin="primary" name="bMedicare" value="4" title="生育保险" checked>
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="layui-form-item">
-                    <fieldset class="layui-elem-field">
-                        <legend>社保</legend>
-                        <div class="layui-field-box">
-                            <div class="layui-inline">
-                                <input type="radio" lay-filter="settingS" name="settingS" value="0" title="最低标准" checked>
-                                <input type="radio" lay-filter="settingS" name="settingS" value="1" title="不缴纳">
-                                <input type="radio" lay-filter="settingS" name="settingS" value="2" title="自定义基数">
-                            </div>
-                            <div class="layui-inline layui-hide" name="s1">
-                                <input type="text" name="valS" required="" placeholder="自定义基数" autocomplete="off" class="layui-input" onchange="verifySocialBase(this.value)" >
-                            </div>
-                        </div>
-                        <div class="layui-field-box">
-                            <input type="checkbox" lay-skin="primary" name="bSocial" value="1" title="养老保险" checked>
-                            <input type="checkbox" lay-skin="primary" name="bSocial" value="2" title="失业保险" checked>
-                            <input type="checkbox" lay-skin="primary" name="bSocial" value="4" title="工伤保险" lay-filter="injury" checked>
-                            <div class="layui-inline" name="i1">
-                                <input type="text" id="per" name="per" required="" placeholder="工伤比例" autocomplete="off" readonly class="layui-input">
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="layui-form-item">
-                    <fieldset class="layui-elem-field">
-                        <legend>公积金</legend>
-                        <div class="layui-field-box">
-                            基数
-                            <div class="layui-inline" name="f1">
-                                <input type="text" name="fundBase" required="" placeholder="基数" autocomplete="off" class="layui-input" onchange="verifyFundBase(this.value)">
-                            </div>
-                            比例
-                            <div class="layui-inline" name="f1">
-                                <input type="text" name="fundPer" required="" placeholder="%" autocomplete="off" class="layui-input" onchange="verifyFundPer(this.value)">
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="layui-form-item">
-                    <fieldset class="layui-elem-field">
-                        <legend>保险产品</legend>
-                        <div class="layui-field-box">
-                            <div class="layui-inline">
-                                <input type="radio" lay-filter="settingP" name="product" value="0" title="无" checked>
-                                <input type="radio" lay-filter="settingP" name="product" value="1" title="购买">
-                            </div>
-                        </div>
-                    </fieldset>
-                </div>
-                <div class="layui-form-item" style="text-align: center" >
-                    <button class="layui-btn" onclick="saveEnsureSetting()" type="button">保存</button>
-                </div>
-            </form>
+            <iframe id="frame_setting" src="" width="100%" height="420px" frameborder="0"></iframe>
         </div>
         <div class="layui-tab-item">
-            <form lay-filter="form_deduct" class="layui-form">
-                <input type="hidden" name="eid">
-                <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>累计收入额
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="income" required="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>累计减除费用
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="free" required="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>累计已预缴税额
-                    </label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="prepaid" required="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
-                    <legend>个税专项扣除实时数据</legend>
-                </fieldset>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>累计总额</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="deduct" required="" autocomplete="off"
-                               class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>子女教育</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="deduct1" required="" autocomplete="off"
-                               class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>赡养老人</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="deduct2" required="" autocomplete="off"
-                               class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>继续教育</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="deduct3" required="" autocomplete="off"
-                               class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>大病医疗</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="deduct4" required="" autocomplete="off" class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>住房贷款利息</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="deduct5" required="" autocomplete="off"
-                               class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">
-                        <span class="x-red">*</span>住房租金</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="deduct6" required="" autocomplete="off" class="layui-input"></div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                    <button type="button" class="layui-btn" onclick="saveDeduct()">保存</button>
-                    </div>
-                </div>
-            </form>
+            <iframe id="frame_deduct" src="" width="100%" height="420px" frameborder="0"></iframe>
         </div>
         <div class="layui-tab-item">
-            <form lay-filter="form_salary_card" class="layui-form">
-                <input type="hidden" name="eid">
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><span class="x-red">*</span>选择发行卡</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="bank1" required=""
-                               class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><span class="x-red">*</span>开户行</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="bank2" required="" autocomplete="off"
-                               class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><span class="x-red">*</span>行号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="bankNo" required="" autocomplete="off"
-                               class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label"><span class="x-red">*</span>账号</label>
-                    <div class="layui-input-inline">
-                        <input type="text" name="cardNo" required="" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                    <button type="button" class="layui-btn" onclick="saveCard()">保存</button>
-                    </div>
-                </div>
-            </form>
+            <iframe id="frame_card" src="" width="100%" height="300px" frameborder="0"></iframe>
         </div>
     </div>
 </div>
@@ -427,10 +45,11 @@
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
 <script src="../js/xadmin.js"></script>
-<script src="../layui/extend/city-picker/city-picker.data.js"></script>
-<script src="../js/fieldSet.js"></script>
-<script src="../js/city.js"></script>
+<script src="../js/date.js"></script>
+<script src="../js/string.js"></script>
 <script>
+    var eid;
+    var type;
     var op = "insert";
     var form;//表单对象
     var cityPicker;
@@ -439,379 +58,55 @@
     var upload;
     var employee = {degree:1,category:0,status:0,entry:new Date().getTime()};
 
+    layui.use(['element'], function () {
+        element = layui.element;element.on('tab(tab_employ)', function(data) {
+            if(!eid){
+                layer.msg("请先输入基本信息");
+                element.tabChange('tab_employ', 'base');
+                return;
+            }
 
-    loadLayuiModule();
-
-    function loadLayuiModule() {
-        layui.extend({
-            index: 'lib/index' //主入口模块
-            , citypicker: '../layui/extend/city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
-        }).use(['form', 'element','citypicker','laydate', 'upload'], function () {
-            form = layui.form;
-            laydate = layui.laydate;
-            element = layui.element;
-            var picker = layui.citypicker;
-            cityPicker = new picker("#city-picker", {
-                provincename: "provinceId",
-                cityname: "city",
-                level: 'city'
-            });
-            upload = layui.upload;
-            upload.render({
-                elem: '#btn_upload' //绑定元素
-                , url: '/hrms//verify/file' //上传接口
-                , accept: 'file'
-                , exts: 'jpg'
-                , acceptMime: '.jpg'
-                ,before: function(obj,file,id){
-                    obj.preview(function(index, file, result){
-                        $('#headImg').attr('src', result); //图片预览
-                    });
-                    this.data={op:"upload",category:0,id:employee.id}
-                }
-                , done: function (res) {
-                    layer.msg(res.success?"上传成功":"上传失败");
-                }
-                , error: function () {
-                    //请求异常回调
-                }
-            });
-            laydate.render({
-                elem: '#entry'
-            });
-            initPage();
-            initTab();
-        });
-    }
-
-    function initTab() {
-        element.on('tab(tab_employ)', function(data) {
             switch (data.index) {
-                case 0:
-                    getEmployee();//获取员工基础信息
-                    break;
                 case 1:
-                    getExtra();//获取员工补充信息
+                    if(!$("#frame_extra").attr("src")){
+                        $("#frame_extra").attr("src","employee_extra.html?eid="+eid);
+                    }
                     break;
                 case 2:
-                    getEnsureSetting();//获取社保设置
+                    if(!$("#frame_setting").attr("src")){
+                        $("#frame_setting").attr("src","employee_setting.html?eid="+eid);
+                    }
                     break;
                 case 3:
-                    getDeduct();//获取个人专项扣除
+                    if(!$("#frame_deduct").attr("src")){
+                        $("#frame_deduct").attr("src","employee_deduct.html?eid="+eid);
+                    }
                     break;
                 case 4:
-                    getCard();//获取工资卡详情
+                    if(!$("#frame_card").attr("src")){
+                        $("#frame_card").attr("src","employee_paycard.html?eid="+eid);
+                    }
                     break;
             }
         });
-    }
+        initPage();
+    });
 
     function initPage() {
-        form.on('radio(settingM)', function(data){
-            var settingM = data.value;
-            if(settingM == 2){
-                $("[name=m1]").removeClass("layui-hide");
-            }else{
-                $("[name=m1]").addClass("layui-hide");
-            }
-            if(settingM == 1){
-                $("[name=bMedicare]").prop("checked", false);
-                form.render('checkbox');
-            }else{
-                $("[name=bMedicare]").prop("checked", true);
-                form.render('checkbox');
-            }
-        });
-        form.on('radio(settingS)', function(data){
-            var settingS = data.value;
-            if(settingS == 2){
-                $("[name=s1]").removeClass("layui-hide");
-            }else{
-                $("[name=s1]").addClass("layui-hide");
-            }
-            if(settingS == 1){
-                $("[name=bSocial]").prop("checked", false);
-                form.render('checkbox');
-            }else{
-                $("[name=bSocial]").prop("checked", true);
-                form.render('checkbox');
-            }
-        });
-        form.on('checkbox(injury)', function(data){
-            if(data.elem.checked){
-                $("[name=i1]").removeClass("layui-hide");
-            }else{
-                $("[name=i1]").addClass("layui-hide");
-            }
-        });
+        eid = $.query.get("eid");
+        if(!eid){
+            eid = undefined;
+        }
+        type = $.query.get("type");
 
-        //监听用工性质选项变化
-        form.on('select(filter_category)', function(data){
-            var category = data.value;
-            if(category == 3){
-                $("[name=t2]").removeClass("layui-hide");
-            }else{
-                $("[name=t2]").addClass("layui-hide");
-            }
-        });
-        getEmployee();
-
-    }
-
-    function getEmployee() {
-        var id = $.query.get("id");
-        if(id){
-            iEmployee.get(id,function (result) {
-                employee = result.data;
-                showEmployee(employee);
-                op = "update";
-            });
+        var url;
+        if(eid){
+            url = stringUtil.format("employee_base.html?eid={0}&type={1}",eid,type);
         }else{
-            var type = $.query.get("type");
-            employee.type = type;
-            showEmployee(employee);
+            url = stringUtil.format("employee_base.html?type={0}",type);
         }
-        function showEmployee(employee) {
-            employee.entry = format_date(employee.entry);
-            if(employee.type == 1){
-                //外派员工应显示显示外派单位，小时工应显示小时单价
-                $("[name=t1]").removeClass("layui-hide");
-                if(employee && employee.category==3){
-                    $("[name=t2]").removeClass("layui-hide");
-                }
-                //获取可选外派单位
-                var param_query ={conditions: {keys:[{k:"type",o:"=",v:0}]},order: {need:false},pagination: {need:false}};
-                iClient.getList(param_query,1,function(result){
-                    var cooperations = result.rows;
-                    var select_cooperation = $("#select_cooperation");
-                    select_cooperation.append("<option value='-2' selected disabled hidden>选择合作客户</option>");
-                    for(var i in cooperations){
-                        var cooperation = cooperations[i];
-                        var option = $("<option>").val(cooperation.id).text(cooperation.name);
-                        select_cooperation.append(option);
-                    }
-                    form.render('select', 'form_employee');
-                    form.val('form_employee', employee);
-                });
-            }else{
-                form.val('form_employee', employee);
-            }
-        }
-    }
+        $("#frame_base").attr("src",url);
 
-    function getExtra() {
-        if(employee.id){
-            iEmployee.getExtra(employee.id,function (result) {
-                var extra = result.data;
-                showExtra(extra);
-            });
-        }
-
-        function showExtra(extra) {
-            extra.date1 = format_date(extra.date1);
-            extra.date2 = format_date(extra.date2);
-            extra.reasonText = array_value2text(reason_employee,extra.reason);
-            form.val('form_extra', extra);
-
-            var src = "../accessory/headImg/"+employee.id+".jpg?t="+Math.random();
-            $('#headImg').attr('src', src); //图片预览
-        }
-    }
-    
-    function getEnsureSetting () {
-        if(employee.id){
-            iEmployee.getEnsureSetting(employee.id,function (result) {
-                var setting = result.data;
-                if(setting){
-                    showEnsureSetting(setting)
-                }else{
-                    layer.alert("尚未设置社保信息，请设置并保存", {icon: 20});
-                }
-            });
-        }
-
-        function showEnsureSetting(setting) {
-            if(setting.settingS == 2){
-                $("[name=s1]").removeClass("layui-hide");
-            }
-            if(setting.settingM == 2){
-                $("[name=m1]").removeClass("layui-hide");
-            }
-            var text = getCityText2(setting.city);
-            cityPicker.setValue(text);
-
-            $('input[name=bMedicare]').each(function() {
-                var checked = (setting.medicare&Number(this.value)) != 0;
-                $(this).attr("checked",checked);
-            });
-
-            $('input[name=bSocial]').each(function() {
-                var checked = (setting.social&Number(this.value)) != 0;
-                $(this).attr("checked",checked);
-                if(this.value == 4){
-                    if(!checked){
-                        $("[name=i1]").addClass("layui-hide");
-                    }
-                }
-            });
-            form.val('form_ensure',setting);
-        }
-    }
-
-    function getDeduct() {
-        if(employee.id){
-            iEmployee.getDeduct(employee.id,function (result) {
-                var  deduct = result.data;
-                if(deduct){
-                    form.val('form_deduct',deduct);
-                }
-            })
-        }
-    }
-    
-    function getCard() {
-        if(employee.id){
-            iEmployee.getCard(employee.id,function (result) {
-                var card = result.data;
-                if(card){
-                    form.val('form_salary_card',card);
-                }
-            })
-        }
-    }
-
-    
-    function saveEmployee() {
-         employee = form.val('form_employee');
-        if(employee.type==1 && employee.cid<1){
-            layer.alert("请选择外派单位", {icon: 20});
-            return;
-        }
-        if(employee.id){
-            iEmployee.update(employee,onSaveSuccess);
-        } else {
-            iEmployee.insert(employee,function (result){
-                employee.id = result.extra;
-                layer.alert("保存成功", {icon: 20});
-            });
-        }
-    }
-
-    function saveExtra() {
-        var extra = form.val('form_extra');
-        if(extra.eid){
-            iEmployee.updateExtra(extra,onSaveSuccess);
-        }else{
-            extra.eid = employee.id;
-            iEmployee.insertExtra(extra,onSaveSuccess);
-        }
-    }
-
-    function saveEnsureSetting() {
-        var setting = form.val('form_ensure');
-        if(!setting.city){
-            layer.alert("请选择社保所在地", {icon: 20});
-            return;
-        }
-        setting.medicare = 0;
-        $('input[name=bMedicare]:checked').each(function() {
-            setting.medicare += Number($(this).val());
-        });
-        setting.social = 0;
-        $('input[name=bSocial]:checked').each(function() {
-            setting.social += Number($(this).val());
-        });
-        if(setting.eid){
-            iEmployee.updateEnsureSetting(setting,onSaveSuccess);
-        }else{
-            setting.eid = employee.id;
-            iEmployee.insertEnsureSetting(setting,onSaveSuccess);
-        }
-    }
-
-    function saveDeduct() {
-        var deduct = form.val('form_deduct');
-        if(deduct.eid){
-            iEmployee.updateDeduct(deduct,onSaveSuccess);
-        }else {
-            deduct.eid = employee.id;
-            iEmployee.insertDeduct(deduct,onSaveSuccess);
-        }
-
-    }
-
-    function saveCard() {
-        var payCard = form.val('form_salary_card');
-        if(payCard.eid){
-            iEmployee.updateCard(payCard,onSaveSuccess);
-        }else {
-            payCard.eid = employee.id;
-            iEmployee.insertCard(payCard,onSaveSuccess);
-        }
-    }
-
-    function verifyMedicalBase(base) {
-        var setting = form.val('form_ensure');
-        if(!setting.city){
-            layer.alert("请选择社保所在地", {icon: 20});
-            return;
-        }
-        iRule.getLast(setting.city,0,function (result) {
-            if(base < result.data.base){
-                layer.msg("自定义医保基数不能低于最低基数"+result.data.base);
-            };
-        });
-    }
-
-    function verifySocialBase(base) {
-        var setting = form.val('form_ensure');
-        if(!setting.city){
-            layer.alert("请选择社保所在地", {icon: 20});
-            return;
-        }
-        iRule.getLast(setting.city,1,function (result) {
-            if(base < result.data.base){
-                layer.msg("自定义社保基数不能低于最低基数"+result.data.base);
-            };
-        });
-    }
-
-    function verifyFundBase(base) {
-        var setting = form.val('form_ensure');
-        if(!setting.city){
-            layer.alert("请选择社保所在地", {icon: 20});
-            return;
-        }
-        iRule.getLast(setting.city,2,function (result) {
-            if(base < result.data.min || base > result.data.max){
-                layer.msg("公积金基数必须介于["+result.data.min+","+result.data.max+"]");
-            };
-        });
-    }
-
-    function verifyFundPer(per) {
-        var setting = form.val('form_ensure');
-        if(!setting.city){
-            layer.alert("请选择社保所在地", {icon: 20});
-            return;
-        }
-        iRule.getLast(setting.city,2,function (result) {
-            if(per < result.data.per1 || per > result.data.per2){
-                layer.msg("公积金缴纳比例必须介于["+result.data.per1+","+result.data.per2+"]");
-            };
-        });
-    }
-
-    function onSaveSuccess() {
-        layer.msg("保存成功");
-    }
-
-    function onUpdateSuccess() {
-        layer.alert("修改成功", {icon: 6,time:2000},function () {
-            var index = parent.layer.getFrameIndex(window.name);
-            parent.layer.close(index);
-            window.parent.location.reload();
-        });
     }
 
 </script>

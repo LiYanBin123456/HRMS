@@ -44,7 +44,7 @@
             var element;
             var upload;
             var param_query = new QueryParam();
-            param_query.setOrder("id",true);
+            param_query.setOrder("id",false);
             param_query.setPagination(1,10);
             var cid = $.query.get("cid");//合作单位id
             var month = $.query.get("month");//月份
@@ -67,7 +67,7 @@
                     upload = layui.upload;
                     upload.render({
                         elem: '#import' //绑定元素
-                        , url: '/hrms/verify/file' //上传接口
+                        , url: '/verify/file' //上传接口
                         , accept: 'file'
                         , exts: 'xls'
                         , acceptMime: '.xls'
@@ -143,7 +143,7 @@
                     {field:'status', title: '是否为自定义工资条（0否1是）',width:160},
                 ]];
                 //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
-                iClient.selectSalaryDefineByMoth(cid,month,function (result) {
+                webInterface.client.selectSalaryDefineByMoth({id:cid,month:month,success:function (result) {
                     mapSalary = result.data;
                     var items = mapSalary.items;
                     if(items) {
@@ -154,7 +154,7 @@
                             columns_detail1_full[0].push({field:'f'+Number(Number(i)+1), title: v[0],width:80,edit: 'text'}) ;
                         }
                     }
-                });
+                }});
                 return columns_detail1_full;
             }
             function update(obj) {

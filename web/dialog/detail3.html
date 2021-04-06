@@ -60,10 +60,11 @@
 
             var param_query = new QueryParam();
             param_query.setPagination(1,10);
-            param_query.setOrder("id",true);
+            param_query.setOrder("id",false);
 
-            var sid = $.query.get("id");//结算单id
-            var cid = $.query.get("cid");//合作单位id
+            var settlement = JSON.parse($.query.get("settlement"));//结算单
+            var sid = settlement.id;//合作单位id
+            var cid = settlement.cid;//合作单位id
 
             $(function () {
                 loadLayuiModule();
@@ -140,7 +141,7 @@
           }
 
             function getDetails(reserve) {
-                iSettlement.getDetails(param_query,sid,2,function (result) {
+                webInterface.settlement.getDetails({param:param_query,sid:sid,category:3,success:function (result) {
                     rows = result.rows;
                     table.reload('tbl_detail', {
                         data:result.rows,
@@ -162,7 +163,7 @@
                             }
                         }
                     });
-                });
+                }});
             }
 
             //打开添加对话框
@@ -185,10 +186,10 @@
                         for (var i in member){
                             details[i] = {"eid":member[i].id,"sid":sid};
                         }
-                        iSettlement.importDetails(sid,JSON.stringify(details),2,function () {
+                        webInterface.settlement.importDetails({sid:sid,details:details,category:3,success:function () {
                             layer.msg("添加成功")
                             getDetails();
-                        });
+                        }});
                     },btn2: function(index, layero){
                         layer.close(index);
                     }
@@ -198,11 +199,11 @@
             //删除
             function del(detail) {
                 layer.confirm('确定删除'+detail.name+"的参保吗？", {icon: 3, title:'删除'}, function(index){
-                    iSettlement.deleteDetail(detail.id,2,function () {
+                    webInterface.settlement.deleteDetail({id:detail.id,category:3,success:function () {
                         layer.close(index);
                         getDetails();
                         layer.msg('删除成功');
-                    });
+                    }});
                 });
             }
 
@@ -256,10 +257,10 @@
                         replaced.push({"eid":members2[i].id});
                     }
 
-                    iSettlement.replaceDetails(JSON.stringify(members1),JSON.stringify(replaced),function () {
+                    webInterface.settlement.replaceDetails({members1:members1,members2:replaced,success:function () {
                         layer.msg("替换成功")
                         getDetails();
-                    });
+                    }});
 
                     return true;
                 }
@@ -290,10 +291,10 @@
                 }, function(value, index, elem){
                     var day = Number(value);
                     if(day>=1&&day<=30) {
-                        iSettlement.confirmDetails1(sid, ids, day, function () {
+                        webInterface.settlement.confirmDetails1({sid:sid, ids:ids, day:day, success:function () {
                             layer.msg("确认成功")
                             getDetails();
-                        });
+                        }});
                     }
                     layer.close(index);
                 });
@@ -328,10 +329,10 @@
                 }, function(value, index, elem){
                     var day = Number(value);
                     if(day>=1&&day<=30) {
-                        iSettlement.confirmDetails2(sid, ids1,ids2, day, function () {
+                        webInterface.settlement.confirmDetails2({sid:sid, ids1:ids1,ids2:ids2, day:day, success:function () {
                             layer.msg("确认成功")
                             getDetails();
-                        });
+                        }});
                     }
                     layer.close(index);
                 });
@@ -341,7 +342,7 @@
 
             //导出
             function exportDetails(){
-                var url = "/hrms/verify/file?op=exportDetail3&id="+sid;
+                var url = "/verify/file?op=exportDetail3&id="+sid;
                 var form = $('<form method="POST"></form>');
                 form.attr('action', url);
                 form.appendTo($('body'));

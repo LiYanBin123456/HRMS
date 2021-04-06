@@ -131,27 +131,25 @@ public class ClientServlet extends HttpServlet {
 
     //添加
     private String insert(Connection conn,HttpServletRequest request) {
-        DaoUpdateResult res = null;
         byte category = Byte.parseByte(request.getParameter("category"));
         HttpSession session = request.getSession();
         Account user = (Account) session.getAttribute("account");
         switch (category) {
             case 0://派遣单位客户
                 Dispatch dispatch = JSON.parseObject(request.getParameter("client"), Dispatch.class);
-                res = DispatchService.insert(conn, dispatch);
-                break;
+                dispatch.setAid(user.getId());
+                return DispatchService.insert(conn, dispatch);
             case 1://合作单位客户
                Cooperation cooperation= JSON.parseObject(request.getParameter("client"), Cooperation.class);
                cooperation.setDid(user.getRid());
-               res = CooperationService.insert(cooperation,conn);
-               break;
+               cooperation.setAid(user.getId());
+               return CooperationService.insert(cooperation,conn);
             case 2://供应商客户
                 Supplier supplier= JSON.parseObject(request.getParameter("client"), Supplier.class);
                 supplier.setDid(user.getRid());
-                res = SupplierService.insert(supplier,conn);
-                break;
+                return SupplierService.insert(supplier,conn);
         }
-        return JSONObject.toJSONString(res);
+        return "";
     }
 
     //删除

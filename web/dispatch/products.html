@@ -129,7 +129,7 @@
             }
 
             function getProducts() {
-                iProduct.getList(param_query,function (result) {
+                webInterface.product.getList({param:param_query,success:function (result) {
                     table.reload('tbl_product', {
                         data:result.rows
                     });
@@ -149,7 +149,7 @@
                             }
                         }
                     });
-                });
+                }});
             }
 
 
@@ -189,11 +189,11 @@
             //删除保险铲平
             function del(product) {
                 layer.confirm('确定删除'+product.name, {icon: 3, title:'删除保险产品'}, function(index){
-                    iProduct.delete(product.id,function () {
+                    webInterface.product.delete({id:product.id,success:function () {
                         layer.close(index);
                         getProducts();
                         layer.msg('删除成功');
-                    });
+                    }});
                 });
             }
 

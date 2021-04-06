@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>员工基本信息</title>
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+</head>
+<body>
+    <form lay-filter="form_employee" class="layui-form layui-row">
+        <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <input type="hidden" name="id">
+            <input type="hidden" name="type">
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>身份证号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="cardId" required="" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>姓名</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" required="" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>联系电话</label>
+                <div class="layui-input-inline">
+                    <input type="text" onkeyup="this.value=this.value.replace(/[^0-9]+/,'');" name="phone"
+                           required="" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="x-red">*</span>学历</label>
+                <div class="layui-input-inline">
+                    <select name="degree" lay-verify="required">
+                        <option value="0">高中以下</option>
+                        <option value="1">高中</option>
+                        <option value="2">中专</option>
+                        <option value="3">大专</option>
+                        <option value="4">本科</option>
+                        <option value="5">硕士</option>
+                        <option value="6">博士</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>入职时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="entry" name="entry" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item layui-hide" name="t1">
+                <label class="layui-form-label"><span class="x-red">*</span>用工性质</label>
+                <div class="layui-input-inline">
+                    <select name="category" lay-verify="required" lay-filter="filter_category">
+                        <option value="0">无</option>
+                        <option value="1">派遣</option>
+                        <option value="2">外包</option>
+                        <option value="3">代发工资</option>
+                        <option value="4">代缴社保</option>
+                        <option value="5">小时工</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item layui-hide" name="t2">
+                <label class="layui-form-label"><span class="x-red">*</span>小时工报酬</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="price" required="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item layui-hide" name="t1">
+                <label class="layui-form-label"><span class="x-red">*</span>外派单位</label>
+                <div class="layui-input-inline">
+                    <select name="cid" id="select_cooperation" lay-filter="filter_cooperation" lay-verify="required"></select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>岗位</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="post" required="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"><span class="x-red">*</span>在职状态</label>
+                <div class="layui-input-inline">
+                    <select name="status" lay-verify="required">
+                        <option value=""></option>
+                        <option value="0">在职</option>
+                        <option value="1">离职</option>
+                        <option value="2">退休</option>
+                        <option value="3">其他</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item" style="text-align: center" >
+            <button type="button" class="layui-btn layui-btn-fluid" lay-submit lay-filter="saveEmployee">保存</button>
+        </div>
+    </form>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.params.js"></script>
+<script src="../js/interface.js"></script>
+<script src="../js/xadmin.js"></script>
+<script src="../js/date.js"></script>
+<script src="../js/string.js"></script>
+<script>
+    layui.use(['form','laydate'], function () {
+        var eid= $.query.get("eid");
+        var type= $.query.get("type");
+        var op = 'insert';//更新还是新增
+        var layform = layui.form;
+        laydate = layui.laydate;
+
+        laydate.render({
+            elem: '#entry'
+        });
+
+        initPage();
+
+        function initPage() {
+            //监听用工性质选项变化
+            layform.on('select(filter_category)', function(data){
+                var category = data.value;
+                if(category == 3){
+                    $("[name=t2]").removeClass("layui-hide");
+                }else{
+                    $("[name=t2]").addClass("layui-hide");
+                }
+            });
+            layform.on('submit(saveEmployee)', function (data) {
+                saveEmployee(data.field);
+            });
+            getEmployee();
+        }
+
+        function getEmployee() {
+            if(eid){
+                webInterface.employee.get({id:eid,success:function (result) {
+                    var employee = result.data;
+                    if(employee) {
+                        showEmployee(employee);
+                        op = "update";
+                    }
+                }});
+            }else{
+                var employee = {type:type};
+                showEmployee(employee);
+            }
+            function showEmployee(employee) {
+                employee.entry = dateUtil.format_date(employee.entry);
+                if(employee.type == 1){
+                    //外派员工应显示显示外派单位，小时工应显示小时单价
+                    $("[name=t1]").removeClass("layui-hide");
+                    if(employee && employee.category==3){
+                        $("[name=t2]").removeClass("layui-hide");
+                    }
+                    //获取可选外派单位
+                    var param_query ={conditions: {keys:[{k:"type",o:"=",v:0}]},order: {need:false},pagination: {need:false}};
+                    webInterface.client.getList({param:param_query,category:1,success:function(result){
+                        var cooperations = result.rows;
+                        var select_cooperation = $("#select_cooperation");
+                        select_cooperation.append("<option value='-2' selected disabled hidden>选择合作客户</option>");
+                        for(var i in cooperations){
+                            var cooperation = cooperations[i];
+                            var option = $("<option>").val(cooperation.id).text(cooperation.name);
+                            select_cooperation.append(option);
+                        }
+                        layform.render('select', 'form_employee');
+                        layform.val('form_employee', employee);
+                    }});
+                }else{
+                    layform.val('form_employee', employee);
+                }
+            }
+        }
+
+        function saveEmployee(employee) {
+            if(employee.type==1 && employee.cid<1){
+                layer.alert("请选择外派单位", {icon: 20});
+                return;
+            }
+            if(op == "update"){
+                webInterface.employee.update({employee:employee,success:function (res) {
+                    layer.msg("保存成功");
+                }});
+            } else {
+                webInterface.employee.insert({employee:employee,success:function (result){
+                    employee.id = result.extra;
+                    parent.eid = employee.id;
+                    op = "update";
+                    layform.val('form_employee',employee);
+                    layer.alert("保存成功", {icon: 20});
+                }});
+            }
+        }
+    });
+</script>
+
+</html>

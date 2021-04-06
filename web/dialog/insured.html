@@ -109,7 +109,7 @@
     function initCooperationList() {
         var param = new QueryParam();
         param.addCondition("type","=",0);
-        iClient.getList(param,1,function (result) {
+        webInterface.client.getList({param:param,category:1,success:function (result) {
             var cooperations = result.rows;
             var select_cooperation = $("#select_cooperation");
             for (var i in cooperations) {
@@ -118,7 +118,7 @@
                 select_cooperation.append(option);
             }
             form.render('select', 'form_insured');
-        });
+        }});
     }
 
     function saveInsured() {

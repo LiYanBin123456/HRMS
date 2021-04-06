@@ -12,6 +12,7 @@ public class ViewDetail1 extends Detail1 {
     private float total1;//个人社保合计
     private float total2;//单位社保合计
     private float summary;//汇款总额
+    private byte statusSettlement;//结算单状态
     public ViewDetail1() {
     }
 
@@ -130,6 +131,14 @@ public class ViewDetail1 extends Detail1 {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public byte getStatusSettlement() {
+        return statusSettlement;
+    }
+
+    public void setStatusSettlement(byte statusSettlement) {
+        this.statusSettlement = statusSettlement;
     }
 
     @Override

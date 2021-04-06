@@ -85,8 +85,10 @@
                  </div>
              </form>
          </div>
+     </div>
  </div>
 </body>
+<script src="../js/date.js"></script>
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
@@ -110,7 +112,7 @@
             upload = layui.upload;
             upload.render({
                 elem: '#btn_upload' //绑定元素
-                , url: '/hrms//verify/file' //上传接口
+                , url: '/verify/file' //上传接口
                 , accept: 'file'
                 , exts: 'pdf'
                 , acceptMime: '.pdf'
@@ -144,30 +146,30 @@
 
     function initData() {
         contract = JSON.parse($.query.get("contract"));
-        contract.start = format_date(contract.start);
-        contract.end = format_date(contract.end);
+        contract.start = dateUtil.format_date(contract.start);
+        contract.end = dateUtil.format_date(contract.end);
         form.val('form_contract', contract);
         layedit.setContent(editer, contract.content, false);
-        iFile.exist(3,contract.id,function (result) {
+        webInterface.file.exist({category:3,id:contract.id,success:function (result) {
             if(result.exist){
                 var src = "../accessory/contract3/"+contract.id+".pdf";
                 $('#preview_contact').attr('src', src); //图片预览
             }else {
                 $("#preview_contact").text("合同附件不存在，请上传");
             }
-        });
+        }});
     }
 
     function save() {
         var contract = form.val('form_contract');
         if(contract.id) {
-            iContract.update(contract,function (result) {
+            webInterface.contract.update({contract:contract,success:function (result) {
                 layer.alert("修改成功", {icon: 6,time:2000});
-            });
+            }});
         }else{
-            iContract.insert(contract, function (result) {
+            webInterface.contract.insert({contract:contract, success:function (result) {
                 layer.alert("添加成功", {icon: 6,time:2000});
-            });
+            }});
         }
     }
 </script>

@@ -28,8 +28,8 @@
     <body>
     <form class="layui-form" style="display: inline">
         <div class="layui-input-inline">
-            <input type="radio" name="category" title="普通" value="0" lay-filter="category" checked="checked">
-            <input type="radio" name="category" title="小时工" value="1" lay-filter="category" >
+            <input type="radio" name="category" title="普通" value="1" lay-filter="category" checked="checked">
+            <input type="radio" name="category" title="小时工" value="2" lay-filter="category" >
         </div>
     </form>
     <form class="layui-form searchbox">
@@ -41,14 +41,11 @@
             <input type="text" class="layui-input" id="filter_month" placeholder="按月份过滤">
         </div>
         <div class="layui-input-inline">
-            <select name="state"   lay-verify="required" >
+            <select name="state" lay-filter="select_state">
                 <option value="">按状态过滤</option>
-                <option value="0">编辑</option>
-                <option value="1">提交</option>
-                <option value="2">初审</option>
-                <option value="3">终审</option>
-                <option value="4">扣款</option>
-                <option value="5">发放</option>
+                <option value="3">已终审</option>
+                <option value="4" selected>已扣款</option>
+                <option value="5">已发放</option>
             </select>
         </div>
     </form>
@@ -58,15 +55,19 @@
     <!--行内工具栏-->
     <script type="text/html" id="bar_settlement">
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export"><i class="layui-icon "></i>导出工资发放表</a>
-        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="confirm"><i class="layui-icon "></i> 确认发放</a>
+        {{#  if((d.status==4)){ }}
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="payroll"><i class="layui-icon "></i> 确认发放</a>
+        {{#  } }}
     </script>
     <script src="../js/fieldSet.js"></script>
     <script src="../js/interface.js"></script>
     <script src="../js/jquery.min.js"></script>
     <script src="../js/jquery.params.js"></script>
     <script src="../js/queryParam.js"></script>
+    <script src="../js/date.js"></script>
+    <script src="../js/string.js"></script>
     <script>
-        var category = 0;//记录是显示普通结算单还是小时工结算单
+        var category = 1;//记录是显示普通结算单还是小时工结算单
         var table;//数据表格对象
         var laypage;//分页对象
         var form;//分页对象
@@ -74,6 +75,7 @@
         var element;
         var laydate;
         var param_query = new QueryParam();
+        param_query.addCondition("status","=",4)
         param_query.setOrder("month",true);
         param_query.setPagination(1,10);
         $(function () {
@@ -97,6 +99,14 @@
             laydate.render({
                 elem: '#filter_month'
                 ,type: 'month'
+                ,done: function(value, date, endDate){
+                    if(value) {
+                        param_query.addCondition("month", "=", value + "-01");
+                    }else{
+                        param_query.removeCondition("month");
+                    }
+                    getSettlements();
+                }
             });
             form.on('submit(search)', function (data) {
                 var keyword = data.field.keyword;
@@ -106,6 +116,15 @@
             });
             form.on('radio(category)', function(data){
                 switchCategory(Number(data.value));
+            });
+            form.on('select(select_state)', function(data){
+                var status = data.value;
+                if(status) {
+                    param_query.addCondition("status", "=", data.value);
+                }else{
+                    param_query.removeCondition("status");
+                }
+                getSettlements();
             });
         }
 
@@ -145,13 +164,8 @@
                     case "export":
                         showBankDlg(data);
                         break;
-                    case "confirm":
-                        if (data.status == 5){//已经发放的结算单
-                            var msg = "该结算单已发放过，请勿重复发放";
-                            layer.confirm(msg, {icon: 3, title:'异常'});
-                            break;
-                        }
-                        confirm(data);
+                    case "payroll":
+                        payroll(data);
                         break;
                 }
             });
@@ -172,27 +186,27 @@
         }
 
         function getSettlements() {
-            iSettlement.getList(param_query,category,function (result) {
+            webInterface.settlement.getList({param:param_query,category:category,success:function (result) {
                 table.reload('tbl_settlement', {
                     data:result.rows
                 });
                 //初始化分页
-                    laypage.render({
-                        elem: 'pager'
-                        ,curr:param_query.pagination.page
-                        ,count: result.total //数据总数
-                        ,limit: param_query.pagination.size
-                        ,limits: [10, 20, 50, 100, 200]
-                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                        ,jump: function(obj,first){
-                            //首次不执行
-                            if(!first){
-                                param_query.setPagination(obj.curr,obj.limit);
-                                getSettlements();
-                            }
+                laypage.render({
+                    elem: 'pager'
+                    ,curr:param_query.pagination.page
+                    ,count: result.total //数据总数
+                    ,limit: param_query.pagination.size
+                    ,limits: [10, 20, 50, 100, 200]
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                    ,jump: function(obj,first){
+                        //首次不执行
+                        if(!first){
+                            param_query.setPagination(obj.curr,obj.limit);
+                            getSettlements();
                         }
-                    });
-            });
+                    }
+                });
+            }});
         }
 
 
@@ -216,7 +230,7 @@
         }
 
         function exportBank(settlement,bank) {
-            var url = "/hrms/verify/file?op=exportBank&category="+bank+"&id="+settlement.id;
+            var url = "/verify/file?op=exportBank&category="+bank+"&id="+settlement.id;
             var form = $('<form method="POST"></form>');
             form.attr('action', url);
             form.appendTo($('body'));
@@ -225,14 +239,14 @@
         }
 
         //打开工资确认发放对话框
-        function confirm(settlement) {
-            var msg = "确认["+settlement.name+settlement.month+"]的工资已发放?";
+        function payroll(settlement) {
+            var msg = stringUtil.format("确认发放[{0}{1}]的工资",settlement.name,dateUtil.format_month(settlement.month));
             layer.confirm(msg, {icon: 3, title:'确认工资发放'}, function(index){
-                iSettlement.confirm(settlement.id,category,function () {
+                webInterface.settlement.payroll({id:settlement.id,category:category,success:function () {
                     layer.close(index);
                     getSettlements();
                     layer.msg("确认成功");
-                })
+                }});
             });
         }
 

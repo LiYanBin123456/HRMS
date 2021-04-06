@@ -44,7 +44,7 @@
             var element;
             var upload;
             var param_query = new QueryParam();
-            param_query.setOrder("id",true);
+            param_query.setOrder("id",false);
             param_query.setPagination(1,10);
             var details=null;//导入的明细2
             $(function () {
@@ -64,7 +64,7 @@
                     upload = layui.upload;
                     upload.render({
                         elem: '#import' //绑定元素
-                        , url: '/hrms/verify/file' //上传接口
+                        , url: '/verify/file' //上传接口
                         , accept: 'file'
                         , exts: 'xls'
                         , acceptMime: '.xls'

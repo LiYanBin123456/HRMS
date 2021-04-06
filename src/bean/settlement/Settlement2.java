@@ -2,9 +2,10 @@ package bean.settlement;
 
 
 import java.util.Date;
+import java.util.List;
 
 //小时工结算单
-public class Settlement2 extends Settlemet{
+public class Settlement2 extends Settlement {
 
     private  int hours;//总工时
     private  float price;//合作客户所给的单价
@@ -91,5 +92,28 @@ public class Settlement2 extends Settlemet{
                 ", extra=" + extra +
                 ", summary=" + summary +
                 '}';
+    }
+
+    public void calc(List<Detail2> details, byte payer) {
+        hours=0;//总工时
+        traffic=0;//交通费
+        extra=0;//附加
+        summary = 0;//总额
+        for (Detail2 detail2:details){
+            hours+=detail2.getHours();
+            traffic+=detail2.getTraffic();
+            extra+=(detail2.getOther1()+detail2.getOther2());
+        }
+        if(payer==0){//派遣方发工资
+            //总额= 总工时*单位的单价+交通费+额外收入
+            summary=hours*price+traffic+extra;
+        }else {//合作方发工资
+            //差额 = 单位的单价-小时工的单价
+            float difference = price-details.get(0).getPrice();//差额 = 单位的单价-小时工的单价
+            //总额= 总工时*单位与员工的单价差+交通费+额外收入
+            summary=hours*difference;
+            extra=0;
+            traffic=0;
+        }
     }
 }

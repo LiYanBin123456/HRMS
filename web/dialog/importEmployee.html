@@ -32,6 +32,7 @@
                 <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
             </script>
         </div>
+        <script src="../js/date.js"></script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/jquery.params.js"></script>
@@ -60,7 +61,7 @@
                     upload = layui.upload;
                     upload.render({
                         elem: '#import' //绑定元素
-                        , url: '/hrms/verify/file' //上传接口
+                        , url: '/verify/file' //上传接口
                         , accept: 'file'
                         , exts: 'xls'
                         , acceptMime: '.xls'

@@ -1,7 +1,6 @@
 package dao.settlement;
 
 
-import bean.settlement.Settlement1;
 import bean.settlement.Settlement2;
 import bean.settlement.ViewSettlement2;
 import database.*;
@@ -35,71 +34,15 @@ public class Settlement2Dao {
         return DbUtil.delete(conn,"settlement2",conditions);
     }
 
-
     /**
-     * 提交，将结算单的status 设置为 1
+     * 修改结算单状态
      * @param conn
-     * @param id  要提交的结算单id
+     * @param id
      * @return
      */
-    public static DaoUpdateResult commit(Connection conn, long id) {
-        String sql = "update settlement2 set status=1 where id = ?";
-        Object []params = {id};
-        return DbUtil.update(conn,sql,params);
-    }
-
-    /**
-     * 审核，修改结算单状态为几审
-     * @param conn
-     * @param id 要审核的结算单id
-     * @param type  初审/终审
-     * @return
-     */
-    public static DaoUpdateResult check(Connection conn, long id,byte type,boolean result) {
-        byte status;
-        if(type==0){
-            status = result?Settlement1.STATUS_CHECKED1:Settlement1.STATUS_EDITING;
-        }else{
-            status = result?Settlement1.STATUS_CHECKED2:Settlement1.STATUS_COMMITED;
-        }
+    public static DaoUpdateResult updateStatus(Connection conn,long id, byte status) {
         String sql = "update settlement2 set status=? where id = ?";
         Object []params = {status,id};
-        return DbUtil.update(conn,sql,params);
-    }
-
-    /**
-     * 重置结算单，将结算单的状态设置为0编辑状态
-     * @param conn
-     * @param id
-     * @return
-     */
-    public static DaoUpdateResult reset(Connection conn,long id) {
-        String sql = "update settlement2 set status=0 where id = ?";
-        Object []params = {id};
-        return DbUtil.update(conn,sql,params);
-    }
-
-    /**
-     * 确认扣款 设置结算单为扣款
-     * @param conn
-     * @param id
-     * @return
-     */
-    public static DaoUpdateResult deduct(Connection conn,long id) {
-        String sql = "update settlement2 set status=5 where id = ?";
-        Object []params = {id};
-        return DbUtil.update(conn,sql,params);
-    }
-
-    /**
-     * 确认发放，修改结算单状态为发放
-     * @param conn
-     * @param id
-     * @return
-     */
-    public static DaoUpdateResult confirm(Connection conn,long id) {
-        String sql = "update settlement2 set status=6 where id = ?";
-        Object []params = {id};
         return DbUtil.update(conn,sql,params);
     }
 

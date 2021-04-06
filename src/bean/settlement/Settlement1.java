@@ -1,11 +1,18 @@
 package bean.settlement;
 
+import bean.contract.ViewContractCooperation;
+
 import java.util.Date;
+import java.util.List;
 
 //结算单
-public class Settlement1 extends Settlemet{
+public class Settlement1 extends Settlement {
+    public static final byte TYPE_1 = 1;//派遣
+    public static final byte TYPE_2 = 2;//外包
+    public static final byte TYPE_3 = 3;//代发工资
+    public static final byte TYPE_4 = 4;//代缴社保
 
-    private byte type;//0 普通结算  1 人事代理结算单
+    private byte type;
     private float salary;//应发工资总额
     private float social;//单位社保总额
     private float medicare;//单位医保总额
@@ -170,5 +177,112 @@ public class Settlement1 extends Settlemet{
                 ", tax=" + tax +
                 ", summary=" + summary +
                 '}';
+    }
+
+    public void calc(ViewContractCooperation contract, List<ViewDetail1> details) {
+        this.salary=0;//应发总额
+        this.social=0;//单位社保
+        this.medicare=0;//单位医保
+        this.fund = 0;//单位公积金
+        this.summary=0;//实发总额
+        this.manage =0;//管理费
+        this.extra = 0;//额外
+        this.free = 0;//国家减免项
+        this.tax = 0;//税费
+
+        //计算社保、医保、公积金和核收补减总额
+        for (ViewDetail1 detail : details) {
+            //应发总额+=明细中的应发总额
+            this.salary += detail.getPayable();
+            this.social += detail.getSocialDepartment();//单位社保总额
+            this.medicare += detail.getMedicaleDepartment();//单位医保总额
+            this.fund += detail.getFund2();//单位公积金总额
+            if (this.type == Settlement1.TYPE_4) {//代缴社保还需加上个人部分
+                this.social += detail.getSocialPerson();
+                this.medicare += detail.getMedicalePerson();
+                this.fund += detail.getFund1();
+            }
+            //补收核减
+            this.extra += detail.getExtra2();
+        }
+
+        //计算管理费和税费
+        int type = contract.getStype();//合同服务项目中的类型
+        int category = contract.getCategory();//合同服务项目中的结算方式
+        int invoice = contract.getInvoice();//合同基础信息中的发票类型
+        float per = contract.getPer()/100;//税费比例（选择增值税专用发票（全额）需要用到）
+        float value = contract.getValue();//结算值，根据结算方式的不同，代表的意义不同
+        float num = details.size();//总人数
+        switch (type){
+            case 0://劳务派遣
+                if(category==0){//按人数收取的结算方式
+                    //管理费总额=人数*管理费,如果不需要计算社保（即补发），不需要重复计算管理费
+                    this.manage = this.isNeedCalculateSocial()?num*value:0;
+                    if(invoice==0){//增值税专用发票（全额）
+                        this.tax=(salary+social+medicare+fund+manage)*per;//税费 = （应发总额+单位五险一金+管理费）*税率（基准6.72，但可以浮动）
+                    }
+                }else if(category==1){//按比例收取的结算方式
+                    //此时服务项目中value为比例所以需要转成小数
+                    this.manage = (salary+social+medicare+fund)*(value/100);//管理费 = （应发总额+单位五险一金）*比例（从服务项目中的比例）
+                    this.tax = 0;
+                }else {//按外包整体核算方式
+
+                }
+                break;
+            case 1://人事代理
+                this.tax=0;
+                this.manage = num*value;//管理费=人数*单价
+                break;
+        }
+
+        //计算总额
+        switch (this.getType()){
+            case Settlement1.TYPE_1://派遣结算单
+            case Settlement1.TYPE_2://外包结算单
+                this.summary=salary+social+medicare+fund+manage+tax+extra-free;//总额
+                break;
+            case Settlement1.TYPE_3://代发工资
+                this.summary=salary+manage+tax+extra-free;
+                break;
+            case Settlement1.TYPE_4://代缴社保
+                this.summary=social+medicare+fund+manage+extra-free;
+                this.salary=0;
+                this.tax = 0;
+                break;
+
+        }
+    }
+
+    public void calcManageAndTax(ViewContractCooperation contract, ViewDetail1 detail) {
+        int type = contract.getStype();//合同服务项目中的类型
+        int category = contract.getCategory();//合同服务项目中的结算方式
+        int invoice = contract.getInvoice();//合同基础信息中的发票类型
+        float per = contract.getPer()/100;//税费比例（选择增值税专用发票（全额）需要用到）
+        float val = contract.getValue();//结算值，根据结算方式的不同，代表的意义不同
+        manage=0;
+        tax=0;
+        //计算管理费
+        switch (type){
+            case 0://劳务派遣
+                if(category==0){//按人数收取的结算方式
+                    manage=val;//管理费=管理费
+                    if(invoice==0){//增值税专用发票（全额）
+                        //税费=（基本工资+自定义工资项+单位五险一金+管理费-国家减免+单位核收补减）
+                        tax +=  (detail.getTaxDueOfDepartment(detail.getPayable())+manage)*per;
+                    }
+                }else if(category==1){//按比例收取的结算方式
+                    //此时服务项目中value为比例所以需要转成小数
+                    //管理费 = （基本工资+自定义工资项+单位五险一金-国家减免+单位核收补减）*比例（从服务项目中的比例）
+                    manage +=  (detail.getTaxDueOfDepartment(detail.getPayable()))*(val/100);
+                    tax=0;
+                }else {//按外包整体核算方式
+
+                }
+                break;
+            case 1://人事代理
+                tax=0;
+                manage = val;//管理费=人数*单价
+                break;
+        }
     }
 }

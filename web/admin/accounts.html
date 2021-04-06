@@ -104,7 +104,7 @@
             }
 
             function getAccounts() {
-                iAccount.getList(param_query,function (result) {
+                webInterface.account.getList({param:param_query,success:function (result) {
                     table.reload('tbl_account', {
                         data:result.rows
                     });
@@ -124,7 +124,7 @@
                             }
                         }
                     });
-                });
+                }});
             }
 
             //模糊查找
@@ -165,11 +165,11 @@
             //删除
             function del(account) {
                 layer.confirm('确定删除管理员'+account.nickname, {icon: 3, title:'删除管理员'}, function(index){
-                    iAccount.delete(account.id,function () {
+                    webInterface.account.delete({id:account.id,success:function () {
                         layer.close(index);
                         getAccounts();
                         layer.msg('删除成功');
-                    });
+                    }});
                 });
             }
 

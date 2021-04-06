@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>员工工资卡</title>
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+</head>
+<body>
+    <form lay-filter="form_deduct" class="layui-form lay-row">
+        <input type="hidden" name="eid">
+        <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>子女教育</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="deduct1" required="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>赡养老人</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="deduct2" required="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>继续教育</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="deduct3" required="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>大病医疗</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="deduct4" required="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>住房贷款利息</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="deduct5" required="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>住房租金</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="deduct6" required="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>累计扣除总额</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="deduct" class="layui-input layui-disabled">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>累计收入额
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="income" class="layui-input layui-disabled">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>累计减除费用
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="free" class="layui-input layui-disabled">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>累计预缴税额
+                </label>
+                <div class="layui-input-inline">
+                    <input type="text" name="prepaid" class="layui-input layui-disabled">
+                </div>
+            </div>
+        </div>
+        <button type="button" class="layui-btn layui-btn-fluid" lay-submit lay-filter="saveDeduct">保存</button>
+    </form>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.params.js"></script>
+<script src="../js/interface.js"></script>
+<script src="../js/xadmin.js"></script>
+<script>
+    layui.use(['form'], function () {
+        eid = $.query.get("eid");
+        var op = 'insert';//更新还是新增
+        var layform = layui.form;
+
+        initPage();
+
+        function initPage() {
+            layform.on('submit(saveDeduct)', function (data) {
+                saveDeduct(data.field);
+            });
+            getDeduct();
+        }
+
+        function getDeduct() {
+            webInterface.employee.getDeduct({id:eid,success:function (result) {
+                var deduct = result.data;
+                if(deduct){
+                    op = 'update';
+                    layform.val('form_deduct',deduct);
+                }
+            }});
+        }
+
+        function saveDeduct(deduct) {
+            if(op == "update"){
+                webInterface.employee.updateDeduct({deduct:deduct,success:function (res) {
+                    layer.msg("保存成功");
+                }});
+            }else {
+                card.eid = eid;
+                webInterface.employee.insertDeduct({deduct:deduct,success:function (res) {
+                    op = "update";
+                    layform.val('form_deduct',card);
+                    layer.msg("保存成功");
+                }});
+            }
+        }
+    });
+</script>
+
+</html>

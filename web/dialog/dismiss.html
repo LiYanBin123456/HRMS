@@ -87,7 +87,7 @@
             var upload = layui.upload;
             upload.render({
                 elem: '#btn_upload' //绑定元素
-                , url: '/hrms//verify/file' //上传接口
+                , url: '/verify/file' //上传接口
                 , accept: 'file'
                 , exts: 'jpg'
                 , acceptMime: '.jpg'
@@ -113,14 +113,14 @@
 
     function initPage() {
         eid = $.query.get("id");
-        var data = {leave:0,date:format_date(new Date().getTime())};
+        var data = {leave:0,date:dateUtil.format_date(new Date().getTime())};
         form.val('form_leave',data);
     }
     function save() {
         var data = form.val('form_leave');
         var leave = data.leave;
         var date = data.date;
-        iEmployee.leave(eid,leave,date,0,onUpdateSuccess);
+        webInterface.employee.leave({id:eid,leave:leave,date:date,category:0,success:onUpdateSuccess});
     }
     function onUpdateSuccess() {
         layer.msg("操作成功", {icon: 6,time:1000}, function() {

@@ -1,7 +1,11 @@
 package service.client;
 
+import bean.admin.Account;
 import bean.client.Cooperation;
+import com.alibaba.fastjson.JSONObject;
+import dao.admin.AccountDao;
 import dao.client.CooperationDao;
+import dao.client.DispatchDao;
 import dao.client.FinanceDao;
 import database.*;
 
@@ -26,8 +30,24 @@ public class CooperationService {
     }
 
     //添加客户
-    public static DaoUpdateResult insert(Cooperation cooperation, Connection conn){
-        return CooperationDao.insert(conn,cooperation);
+    public static String insert(Cooperation cooperation, Connection conn){
+        ConnUtil.closeAutoCommit(conn);
+        Account account = new Account();
+        account.setUsername(cooperation.getNickname());
+        account.setNickname(cooperation.getNickname());
+        account.setRole(Account.ROLE_COOPERATION);
+        account.setPassword(cooperation.getPhone());
+        account.setRid(cooperation.getId());
+        account.setPermission(2251805182394367L);
+        DaoUpdateResult res1 = CooperationDao.insert(conn,cooperation);
+        DaoUpdateResult res2 = AccountDao.insert(conn,account);
+        if(res1.success && res2.success){
+            ConnUtil.commit(conn);
+            return JSONObject.toJSONString(res1);
+        }else{
+            ConnUtil.rollback(conn);
+            return DaoResult.fail("数据库操作错误");
+        }
     }
 
     //删除客户实质是修改状态

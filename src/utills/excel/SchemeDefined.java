@@ -13,8 +13,8 @@ public class SchemeDefined {
     public static Scheme SCHEME_MEDICAL;//医保核对
     public static Scheme SCHEME_FUND;//公积金核对
     public static Scheme SCHEME_DETAIL_EXPORT;//导出员工模板
-    public static Scheme SCHEME_DETAIL0_1;//特殊结算单汇款表
-    public static Scheme SCHEME_DETAIL0_2;//特殊结算单明细表
+    public static Scheme SCHEME_DETAIL4_1;//特殊结算单汇款表
+    public static Scheme SCHEME_DETAIL4_2;//特殊结算单明细表
     public static Scheme SCHEME_DETAIL2_PAID;//小时工汇款表
     public static Scheme SCHEME_DETAIL2_DETAIL;//小时工明细表
     public static Scheme SCHEME_TAX1;//个税申报名单表
@@ -112,21 +112,21 @@ public class SchemeDefined {
         SCHEME_DETAIL2_DETAIL.addField(new Field(12, "paid", "应付", Field.FLOAT, 100));
 
         //特殊结算单回款表
-        SCHEME_DETAIL0_1 = new Scheme();
-        SCHEME_DETAIL0_1.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
-        SCHEME_DETAIL0_1.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
-        SCHEME_DETAIL0_1.addField(new Field(2, "amount", "金额", Field.INT, 100));
-        SCHEME_DETAIL0_1.addField(new Field(3, "manage", "管理费", Field.FLOAT, 100));
-        SCHEME_DETAIL0_1.addField(new Field(3, "tax", "税费", Field.FLOAT, 100));
-        SCHEME_DETAIL0_1.addField(new Field(4, "paid", "总额", Field.FLOAT, 100));
+        SCHEME_DETAIL4_1 = new Scheme();
+        SCHEME_DETAIL4_1.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
+        SCHEME_DETAIL4_1.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
+        SCHEME_DETAIL4_1.addField(new Field(2, "amount", "金额", Field.INT, 100));
+        SCHEME_DETAIL4_1.addField(new Field(3, "manage", "管理费", Field.FLOAT, 100));
+        SCHEME_DETAIL4_1.addField(new Field(3, "tax", "税费", Field.FLOAT, 100));
+        SCHEME_DETAIL4_1.addField(new Field(4, "paid", "总额", Field.FLOAT, 100));
 
         //特殊结算单明细
-        SCHEME_DETAIL0_2 = new Scheme();
-        SCHEME_DETAIL0_2.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
-        SCHEME_DETAIL0_2.addField(new Field(2, "amount", "金额", Field.INT, 100));
-        SCHEME_DETAIL0_2.addField(new Field(3, "tax", "税费", Field.FLOAT, 100));
-        SCHEME_DETAIL0_2.addField(new Field(4, "paid", "实发", Field.FLOAT, 100));
-        SCHEME_DETAIL0_2.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
+        SCHEME_DETAIL4_2 = new Scheme();
+        SCHEME_DETAIL4_2.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
+        SCHEME_DETAIL4_2.addField(new Field(2, "amount", "金额", Field.INT, 100));
+        SCHEME_DETAIL4_2.addField(new Field(3, "tax", "税费", Field.FLOAT, 100));
+        SCHEME_DETAIL4_2.addField(new Field(4, "paid", "实发", Field.FLOAT, 100));
+        SCHEME_DETAIL4_2.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
 
         //个税申报名单表
         SCHEME_TAX1 = new Scheme();
@@ -140,5 +140,15 @@ public class SchemeDefined {
         SCHEME_TAX1.addField(new Field(7, "", "人员状态", Field.NULL, 100));
         SCHEME_TAX1.addField(new Field(8, "type", "任职受雇从业类型", Field.STRING, 100));
         SCHEME_TAX1.addField(new Field(9, "phone", "手机号码", Field.STRING, 160));
+
+
+
+
+
+
+
+
+
+
     }
 }

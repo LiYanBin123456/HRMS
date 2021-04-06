@@ -33,7 +33,6 @@ import service.employee.DeductService;
 import service.fileService.FileService;
 import utills.DateUtil;
 import utills.IDCardUtil;
-import utills.Salary.Salary;
 import utills.excel.Field;
 import utills.excel.Scheme;
 import utills.excel.SchemeDefined;
@@ -46,7 +45,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.*;
 import java.sql.Connection;
-import java.util.HashMap;
 import java.util.List;
 
 @WebServlet(name = "FileServlet",urlPatterns = "/verify/file")
@@ -119,8 +117,8 @@ public class FileServlet extends HttpServlet {
             case "exist"://判断文件是否存在
                 result = exist(request);
                 break;
-            case "downloadTemplateDetail0"://下载结算单明细模板
-                downloadTemplateDetail0(conn,request,response);
+            case "downloadTemplateDetail4"://下载结算单明细模板
+                downloadTemplateDetail4(conn,request,response);
                 ConnUtil.closeConnection(conn);
                 return;
             case "downloadTemplateDetail1"://下载结算单明细模板
@@ -131,10 +129,6 @@ public class FileServlet extends HttpServlet {
                 downloadTemplateDetail2(conn,request,response);
                 ConnUtil.closeConnection(conn);
                 return;
-            case "exportDetail0"://导出结算单明细
-                exportDetail0(conn,request,response);
-                ConnUtil.closeConnection(conn);
-                return;
             case "exportDetail1"://导出结算单明细
                 exportDetail1(conn,request,response);
                 ConnUtil.closeConnection(conn);
@@ -143,7 +137,11 @@ public class FileServlet extends HttpServlet {
                 exportDetail2(conn,request,response);
                 ConnUtil.closeConnection(conn);
                 return;
-            case "exportDetail4"://导出代缴社保结算单明细
+            case "exportDetail14"://导出代缴社保结算单明细
+                exportDetail14(conn,request,response);
+                ConnUtil.closeConnection(conn);
+                return;
+            case "exportDetail4"://导出特殊结算单明细
                 exportDetail4(conn,request,response);
                 ConnUtil.closeConnection(conn);
                 return;
@@ -417,18 +415,16 @@ public class FileServlet extends HttpServlet {
     }
 
     //下载特殊结算单模板
-    private void downloadTemplateDetail0(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void downloadTemplateDetail4(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         Account user = (Account) session.getAttribute("account");
         long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
-        byte type = Byte.parseByte(request.getParameter("type"));
 
         //获取名单准备数据
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("cid","=",cid);
         parameter.addCondition("did","=",user.getRid());
         parameter.addCondition("type","=",1);
-        parameter.addCondition("category","=",type+1);
         parameter.addCondition("status","=",0);
         List<ViewEmployee> employees = (List<ViewEmployee>) EmployeeDao.getList(conn,parameter).rows;
         JSONArray data = JSONArray.parseArray(JSON.toJSONString(employees));
@@ -439,7 +435,7 @@ public class FileServlet extends HttpServlet {
         filename = new String(filename.getBytes(),"iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.addHeader("Content-Disposition", "attachment;filename=\""+ filename + ".xls\"");
-        String template = getServletContext().getRealPath("/excelFile/detail0.xls");
+        String template = getServletContext().getRealPath("/excelFile/detail4.xls");
 
         //写Excel
         XlsUtil.write(response.getOutputStream(),template,SchemeDefined.SCHEME_DETAIL_EXPORT, data);
@@ -451,55 +447,38 @@ public class FileServlet extends HttpServlet {
         Account user = (Account) session.getAttribute("account");
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
         long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
-        byte type = Byte.parseByte(request.getParameter("type"));//0 派遣 1 外包  2代缴工资 3代缴社保
         String month = request.getParameter("month");//获取结算单月份
 
-        //获取合作客户的自定义工资项
-        MapSalary mapSalary = (MapSalary)MapSalaryDao.selectByMonth(cid,conn, DateUtil.getLastDayofMonth(month)).data;
-
+        //获取结算单视图
+        ViewSettlement1 settlement = (ViewSettlement1) Settlement1Dao.get(conn,sid).data;
+        String typeMsg="派遣";
+        byte category = 1;//外派员工类别
+        switch (settlement.getType()){
+            case Settlement1.TYPE_1:
+                typeMsg = "派遣";
+                category = 1;
+                break;
+            case Settlement1.TYPE_2:
+                typeMsg = "外包";
+                category = 2;
+                break;
+            case Settlement1.TYPE_3:
+                typeMsg = "代发工资";
+                category = 3;
+                break;
+            case Settlement1.TYPE_4:
+                typeMsg = "代缴社保";
+                category = 4;
+                break;
+        }
         //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派或者派遣员工，用工性质不是小时工，在职
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("cid","=",cid);
         parameter.addCondition("did","=",user.getRid());
         parameter.addCondition("type","=",1);
-        switch (type){
-            case 0://派遣员工
-                parameter.addCondition("category","=",1);
-                break;
-            case 1://外包员工
-                parameter.addCondition("category","=",2);
-                break;
-            case 2://代缴工资
-                parameter.addCondition("category","=",4);
-                break;
-            case 3://代发工资
-                parameter.addCondition("category","=",5);
-                break;
-        }
+        parameter.addCondition("category","=",category);
         parameter.addCondition("status","=",0);
-        List<ViewEmployee> employees = JSONArray.parseArray(JSONObject.toJSONString(EmployeeDao.getList(conn,parameter).rows),ViewEmployee.class);
-
-        //获取结算单视图
-        ViewSettlement1 settlement = (ViewSettlement1) Settlement1Dao.get(conn,sid).data;
-        //结算单类型
-        byte types = settlement.getType();
-        String typeMsg="";
-        switch (types){
-            case 0:
-                typeMsg = "派遣";
-                break;
-            case 1:
-                typeMsg = "外包";
-                break;
-            case 2:
-                typeMsg = "代发工资";
-                break;
-            case 3:
-                typeMsg = "代缴社保";
-                break;
-        }
-
-
+        List<ViewEmployee> employees = (List<ViewEmployee>)EmployeeDao.getList(conn,parameter).rows;
 
         //文件名
         String fileName=settlement.getName()+(settlement.getMonth()==null?"":DateUtil.format(settlement.getMonth(),"yyyy年MM月"))+typeMsg+"结算单明细模板";
@@ -511,6 +490,9 @@ public class FileServlet extends HttpServlet {
         WritableWorkbook book = Workbook.createWorkbook(response.getOutputStream());
         WritableSheet sheet1 = book.createSheet("信息表", 0);
         WritableSheet sheet2 = book.createSheet("元数据", 1);
+
+        //获取合作客户的自定义工资项
+        MapSalary mapSalary = (MapSalary)MapSalaryDao.selectByMonth(cid,conn, DateUtil.getLastDayofMonth(month)).data;
 
         try {
             sheet1.addCell(new Label(0, 0, "员工姓名*"));
@@ -719,7 +701,7 @@ public class FileServlet extends HttpServlet {
         parameter.addCondition("cid","=",cid);
         parameter.addCondition("did","=",user.getRid());
         parameter.addCondition("type","=",1);
-        parameter.addCondition("category","=",3);
+        parameter.addCondition("category","=",Employee.CATEGORY_5);//小时工
         parameter.addCondition("status","=",0);
         List<ViewEmployee> employees = (List<ViewEmployee>) EmployeeDao.getList(conn,parameter).rows;
         JSONArray data = JSONArray.parseArray(JSON.toJSONString(employees));
@@ -737,16 +719,16 @@ public class FileServlet extends HttpServlet {
     }
 
     //导出特殊结算单的明细
-    private void exportDetail0(Connection conn, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+    private void exportDetail4(Connection conn, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
         String fileName;
         long sid = Long.parseLong(request.getParameter("id"));//结算单id
         //获取特殊结算单位视图
-        ViewSettlement0 vs = (ViewSettlement0) Settlement0Dao.get(conn, sid).data;
+        ViewSettlement4 vs = (ViewSettlement4) Settlement4Dao.get(conn, sid).data;
 
         //获取特殊结算单明细
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid", "=", sid);
-        List<ViewDetail0> details = (List<ViewDetail0>) Detail0Dao.getList(conn, parameter).rows;
+        List<ViewDetail4> details = (List<ViewDetail4>) Detail4Dao.getList(conn, parameter).rows;
         JSONArray data = JSONArray.parseArray(JSON.toJSONString(details));
 
         //文件名
@@ -759,7 +741,7 @@ public class FileServlet extends HttpServlet {
         String title2 =vs.getName()+""+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM")+"特殊工资明细表");
         String[] titles ={title1,title2};
         String[] sheetNames = {"汇款表", "明细表"};
-        Scheme[] schemes = {SchemeDefined.SCHEME_DETAIL0_1, SchemeDefined.SCHEME_DETAIL0_2};
+        Scheme[] schemes = {SchemeDefined.SCHEME_DETAIL4_1, SchemeDefined.SCHEME_DETAIL4_2};
         JSONArray[] datas = {data, data};
         XlsUtil.write(response.getOutputStream(), sheetNames,titles, schemes, datas);
     }
@@ -854,15 +836,16 @@ public class FileServlet extends HttpServlet {
         scheme2.addField(new Field(c2+4, "payable", "税前工资", Field.FLOAT, 100));
         scheme2.addField(new Field(c2+5, "tax", "个税", Field.FLOAT, 100));
         scheme2.addField(new Field(c2+6, "paid", "实发工资", Field.FLOAT, 100));
+        Settlement1 settlement = new Settlement1();
         for(ViewDetail1 d:details){
             //计算自定义工资项总和
-            float salary =Salary.sumDefinedSalaryItem(d,mapSalary);
+            d.sumDefinedSalaryItem(mapSalary);
             //计算管理费和税费
-            HashMap<String,Float> map= Salary.calculateManageAndTax2(vc,d,salary);//计算管理费和税费
-            d.setManage(map.get("manage"));
-            d.setTax2(map.get("tax2"));
+            settlement.calcManageAndTax(vc,d);//计算管理费和税费
+            d.setManage(settlement.getManage());
+            d.setTax2(settlement.getTax());
             //汇款总额 = 基本工资+自定义工资项+单位社保总额+管理费+税费+（单位）核收补减
-            float summary = d.getBase()+salary+d.getTotalDepartment()+d.getManage()+d.getTax2()+d.getExtra2();
+            float summary = d.getPayable()+d.getTotalDepartment()+d.getManage()+d.getTax2()+d.getExtra2();
             d.setSummary(summary);
             d.setTotal2(d.getTotalDepartment()+d.getFund2());
         }
@@ -923,7 +906,7 @@ public class FileServlet extends HttpServlet {
     }
 
     //导出代缴社保结算单明细
-    private void exportDetail4(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void exportDetail14(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid","=",sid);
@@ -966,11 +949,12 @@ public class FileServlet extends HttpServlet {
         scheme.addField(new Field(18, "tax2", "税费", Field.FLOAT, 100));
         scheme.addField(new Field(19, "summary", "汇款总额", Field.FLOAT, 100));
         scheme.addField(new Field(20, "comments", "备注", Field.STRING, 100));
+        Settlement1 settlement = new Settlement1();
        for(ViewDetail1 v:details){
         //计算管理费和税费
-        HashMap<String,Float> map= Salary.calculateManageAndTax2(vc,v,0);//计算管理费和税费
-        v.setManage(map.get("manage"));
-        v.setTax2(map.get("tax2"));
+        settlement.calcManageAndTax(vc,v);//计算管理费和税费
+        v.setManage(settlement.getManage());
+        v.setTax2(settlement.getTax());
         //汇款总额 = 社保总额+管理费+税费+（单位）核收补减
         float summary = v.getTotalDepartment()+v.getTotalPerson()+v.getFund1()+v.getFund2()+v.getManage()+v.getTax2()+v.getExtra2();
         v.setSummary(summary);

@@ -42,7 +42,7 @@
         <script src="../js/jquery.min.js"></script>
         <script src="../js/jquery.params.js"></script>
         <script src="../js/queryParam.js"></script>
-        <script src="../js/util.js"></script>
+
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -213,7 +213,7 @@
             }
 
             function download() {
-                var url = "/hrms/verify/file?op=download&category=7";
+                var url = "/verify/file?op=download&category=7";
                 var form = $('<form method="POST"></form>');
                 form.attr('action', url);
                 form.appendTo($('body'));

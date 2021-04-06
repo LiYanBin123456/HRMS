@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+        <link rel="stylesheet" href="../css/font.css">
+        <link rel="stylesheet" href="../css/xadmin.css">
+        <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+        <script src="../layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../js/xadmin.js"></script>
+        <link href="../layui/extend/city-picker/city-picker.css" rel="stylesheet" />
+    </head>
+
+    <body class="layui-layout-body">
+        <form class="layui-form">
+            <div class="layui-input-inline" style="width: 200px">
+                <input type="text" autocomplete="on" class="layui-input" id="city-picker" name="city-picker" readonly="readonly" data-toggle="city-picker" placeholder="按城市过滤">
+            </div>
+        </form>
+        <!--顶部工具栏-->
+        <div class="layui-hide" id="top_bar_social">
+            <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
+
+        </div>
+        <table id="tbl_social" lay-filter="filter_tb_social"></table>
+        <div class="layui-table-page" id="pager"></div>
+
+        <!--行内工具栏-->
+        <script type="text/html" id="bar_social">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+        </script>
+        <script src="../js/date.js"></script>
+        <script src="../js/fieldSet.js"></script>
+        <script src="../js/interface.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.params.js"></script>
+        <script src="../js/queryParam.js"></script>
+        <script src="../layui/extend/city-picker/city-picker.data.js"></script>
+        <script src="../js/city.js"></script>
+
+        <script>
+            var table;//数据表格对象
+            var laypage;//分页对象
+            var form;//分页对象
+            var layer;//弹出窗口
+            var element;
+            var param_query = new QueryParam();
+            param_query.setOrder("start",false);
+            param_query.setPagination(1,10);
+            $(function () {
+                loadLayuiModule();
+            });
+
+            function loadLayuiModule() {
+                layui.extend({
+                    index: 'lib/index' //主入口模块
+                    , citypicker: '../layui/extend/city-picker/city-picker' // {/}的意思即代表采用自有路径，即不跟随 base 路径
+                }).use(['table','form','element','layer','laypage','citypicker'], function() {
+                    table = layui.table;
+                    layer = layui.layer;
+                    element = layui.element;
+                    laypage = layui.laypage;
+                    form = layui.form;
+                    var picker = layui.citypicker;
+                    cityPicker = new picker("#city-picker", {
+                        provincename:"provinceId",
+                        cityname:"city",
+                        level: 'city',// 级别
+                        onCitySelected:function (code) {
+                            param_query.addCondition("city","=",code);
+                            getSocials(true);
+                        }
+                    });
+                    initPage();
+                    getSocials(false);
+                });
+            }
+
+            function initPage() {
+                initTable();
+            }
+
+            function initTable() {
+
+                //初始化数据表格
+                table.render({
+                    elem: '#tbl_social',
+                    toolbar: '#top_bar_social', //开启头部工具栏，并为其绑定左侧模板
+
+                    title: '规则列表',
+                    cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                    cols: columns_social,
+                    limit: 200,
+                    id: 'tbl_social'
+                });
+
+                //行内工具栏事件响应
+                table.on('tool(filter_tb_social)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                    var data = obj.data; //获得当前行数据
+                    switch (obj.event){
+                        case "detail":
+                            showDetailDlg(data);
+                            break;
+                        case "del":
+                            del(data);
+                            break;
+                    }
+                });
+
+                //顶部工具栏事件处理
+                table.on('toolbar(filter_tb_social)', function(obj){
+                    switch(obj.event){
+                        case 'insert':
+                            showInsertDlg();
+                            break;
+                        case 'search':
+                            search();
+                            break;
+                    }
+                });
+                getSocials();
+            }
+
+            function getSocials(reserve) {
+                webInterface.rule.getList({category:1,param:param_query,success:function (result) {
+                    table.reload('tbl_social', {
+                        data:result.rows,
+                        reserve:reserve
+                    });
+                    //初始化分页
+                    laypage.render({
+                        elem: 'pager'
+                        ,curr:param_query.pagination.page
+                        ,count: result.total //数据总数
+                        ,limit: param_query.pagination.size
+                        ,limits: [10, 20, 50, 100, 200]
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                        ,jump: function(obj,first){
+                            //首次不执行
+                            if(!first){
+                                param_query.setPagination(obj.curr,obj.limit);
+                                getSocials();
+                            }
+                        }
+                    });
+                }});
+            }
+
+
+
+            //打开详情对话框
+            function showDetailDlg(data) {
+                var content = "../dialog/rule_social.html?social="+encodeURIComponent(JSON.stringify(data));
+                layer.open({
+                    title:"详情",
+                    type: 2,
+                    area: ['60%', '90%'],
+                    content: content
+                });
+            }
+
+            //打开添加对话框
+            function showInsertDlg() {
+                var content = "../dialog/rule_social.html";
+                layer.open({
+                    title:"添加规则",
+                    type: 2,
+                    area: ['60%', '90%'],
+                    content: content
+                });
+            }
+
+            //删除公告
+            function del(data) {
+                var start = dateUtil.format_date(data.start);
+                var city = getCityArray2(data.city);
+                layer.confirm('确定删除'+'   '+city+'    '+start+'   '+'的社保规则', {icon: 3, title:'删除'}, function(index){
+                    webInterface.rule.delete({id:data.id,category:1,success:function(){
+                        layer.close(index);
+                        getSocials();
+                        layer.msg('删除成功');
+                    }});
+                });
+            }
+
+        </script>
+    </body>
+</html>

@@ -42,7 +42,7 @@
             var layer;//弹出窗口
             var element;
             var param_query = new QueryParam();
-            param_query.setOrder("id",true);
+            param_query.setOrder("id",false);
             param_query.setPagination(1,10);
             var deducts =  JSON.parse($.query.get("deducts"));//导入的明细1
             $(function () {

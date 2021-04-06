@@ -193,22 +193,22 @@
     function getDispatch() {
         var id = $.query.get("id");
         if(id){
-            iClient.get(id,0,function (result) {
+            webInterface.client.get({id:id,category:0,success:function (result) {
                 dispatch = result.data;
                 form.val('form_dispatch', dispatch);
                 layedit.setContent(editer, dispatch.content, false);
-            });
+            }});
         }
     }
 
     function getFinance() {
         if(dispatch && dispatch.id) {
-            iClient.getFinance(dispatch.id,0, function (result) {
+            webInterface.client.getFinance({id:dispatch.id,category:0, success:function (result) {
                 if(result.data) {
                     finance = result.data;
                     form.val('form_finance', finance);
                 }
-            });
+            }});
         }
     }
 
@@ -243,20 +243,21 @@
             return;
         }
         if (dispatch) {
-            iClient.update(data,0,function (result) {
+            webInterface.client.update({client:data,category:0,success:function (result) {
                 layer.msg("修改成功");
                 var index = parent.layer.getFrameIndex(window.name);
+                parent.getDispatchs(true);//刷新父页数据
                 parent.layer.close(index);
-                window.parent.location.reload();
-            });
+                //window.parent.location.reload();
+            }});
         } else {
-            iClient.insert(data,0, function (result) {
-                    dispatch.id = result.extra;
-                    element.tabChange('tab_dispatch', 'element_finance');
-                    layer.alert("基础信息保存成功，请完善财务信息", {icon: 20});
-
-                });
-            }
+            webInterface.client.insert({client:data,category:0, success:function (result) {
+                dispatch.id = result.extra;
+                element.tabChange('tab_dispatch', 'element_finance');
+                layer.alert("基础信息保存成功，请完善财务信息", {icon: 20});
+                parent.getDispatchs(true);//刷新父页数据
+            }});
+        }
         dispatch = data;
     }
 
@@ -293,16 +294,16 @@
         }
         data.cid = dispatch.id;
         if (finance) {
-            iClient.updateFinance(data,function (result) {
+            webInterface.client.updateFinance({finance:data,success:function (result) {
                 layer.msg("修改成功");
-            });
+            }});
         } else {
-            iClient.insertFinance(data, function (result) {
+            webInterface.client.insertFinance({finance:data, success:function (result) {
                 layer.msg("添加成功");
                 var index = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(index);
                 window.parent.location.reload();
-            });
+            }});
         }
         finance = data;
     }

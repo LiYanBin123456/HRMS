@@ -41,6 +41,7 @@
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
         </script>
+        <script src="../js/date.js"></script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/jquery.min.js"></script>
@@ -134,11 +135,11 @@
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
                         var contracts = window["layui-layer-iframe" + index].callbackData();
-                        iContract.insertContracts(contracts,function () {
+                        webInterface.contract.insertContracts({contracts:contracts,success:function () {
                             layer.close(index);
                             layer.msg("导入成功");
                             getContracts();
-                        })
+                        }});
                     },btn2: function(index, layero){
                         layer.close(index);
                     }
@@ -146,7 +147,7 @@
             }
 
             function getContracts() {
-                iContract.getList(param_query,"C",function (result) {
+                webInterface.contract.getList({param:param_query,type:"C",success:function (result) {
                     table.reload('tbl_contract', {
                         data:result.rows
                     });
@@ -167,7 +168,7 @@
                             }
                         }
                     });
-                });
+                }});
             }
 
 
@@ -204,28 +205,28 @@
             //删除公告
             function del(contract) {
                 layer.confirm('确定删除'+contract.name, {icon: 3, title:'删除合同'}, function(index){
-                    iContract.delete(contract.id,function () {
+                    webInterface.contract.delete({id:contract.id,success:function () {
                         layer.close(index);
                         getContracts();
                         layer.msg('删除成功');
-                    });
+                    }});
                 });
             }
 
             function download() {
-                iFile.exist(8,0,function (result) {
+                webInterface.file.exist({id:8,category:0,success:function (result) {
                     if(!result.exist){
                         layer.msg("附件不存在或已删除");
                         return;
                     }
 
-                    var url = "/hrms/verify/file?op=download&category=8";
+                    var url = "/verify/file?op=download&category=8";
                     var form = $('<form method="POST"></form>');
                     form.attr('action', url);
                     form.appendTo($('body'));
                     form.submit();
                     form.remove();
-                })
+                }});
             }
 
         </script>

@@ -86,9 +86,9 @@
         var account = data.field;
         account.role = 1;
         if(op == "insert") {
-            iAccount.insert(account, onInsertSuccess);
+            webInterface.account.insert({account:account, success:onInsertSuccess});
         }else{
-            iAccount.update(account,onUpdateSuccess);
+            webInterface.account.update({account:account,success:onUpdateSuccess});
         }
 
         function onInsertSuccess() {

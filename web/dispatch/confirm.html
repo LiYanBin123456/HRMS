@@ -100,7 +100,7 @@
             }
 
             function getConfirms() {
-                iClient.getFinances(param_query,function (result) {
+                webInterface.client.getFinances({param:param_query,success:function (result) {
                     table.reload('tbl_confirm', {
                         data:result.rows
                     });
@@ -120,7 +120,7 @@
                             }
                         }
                     });
-                });
+                }});
             }
 
             //打开确认对话框
@@ -136,7 +136,7 @@
 
             //打开明细对话框
             function showDetailDlg(data) {
-                var content = "../dialog/detail4.html?id="+data.id;
+                var content = "../dialog/detail_finance.html?id="+data.id;
                 layer.open({
                     title:"明细",
                     type: 2,

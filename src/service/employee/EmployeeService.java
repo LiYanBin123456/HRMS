@@ -17,7 +17,6 @@ import utills.DateUtil;
 
 import java.sql.Connection;
 import java.util.Date;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,8 +53,9 @@ public class EmployeeService {
         if(!res.success){
             return JSONObject.toJSONString(res);
         }
+        long eid = (long) res.extra;
         Deduct deduct = new Deduct();
-        deduct.setEid(employee.getId());
+        deduct.setEid(eid);
         DaoUpdateResult res2= DeductDao.insert(conn,deduct);
 
         if(res.success&&res2.success){
@@ -174,63 +174,13 @@ public class EmployeeService {
         ConnUtil.closeAutoCommit(conn);
         DaoUpdateResult res1 = EmployeeDao.updateStatus(conn,id,category==0? Employee.LEAVED :Employee.RETIRE);
         DaoUpdateResult res2 = ExtraDao.leave(conn,id,category,reason,date);
-        if(!res1.success || !res2.success){
+        DaoUpdateResult res3 = InsuranceDao.updateStatus(conn,id,Insurance.STATUS_STOPING,"离职/退休");//离职或者退休后将医社保状态设置为拟停
+        if(!res1.success || !res2.success || !res3.success){
             ConnUtil.rollback(conn);
-            JSONObject json = new JSONObject();
-            json.put("success",false);
-            json.put("msg","操作失败");
-            return json.toJSONString();
-        }
-        //离职或者退休后将医社保状态设置为拟停
-        QueryConditions conditions = new QueryConditions();
-        conditions.add("eid","=",id);
-        Insurance insurance = (Insurance) InsuranceDao.get(conn,conditions).data;
-        if(insurance!=null){//如果存在,将医社保参保状态全部设置为拟停
-            insurance.setStatus1(Insurance.STATUS_STOPING);
-            insurance.setStatus2(Insurance.STATUS_STOPING);
-            insurance.setStatus3(Insurance.STATUS_STOPING);
-            insurance.setStatus4(Insurance.STATUS_STOPING);
-            insurance.setStatus5(Insurance.STATUS_STOPING);
-            //修改参保单
-            InsuranceDao.update(conn,insurance);
+            return DaoResult.fail("操作失败");
         }
         ConnUtil.commit(conn);
         return JSONObject.toJSONString(res1);
-    }
-
-    public static String settingBatch(Connection conn, String[] eids, EnsureSetting setting) {
-        ConnUtil.closeAutoCommit(conn);
-        List<EnsureSetting> settingList=new ArrayList<>();
-        DaoUpdateResult result=new DaoUpdateResult();
-        for(int i=0;i<eids.length;i++){
-            EnsureSetting setting1=new EnsureSetting();
-            setting1.setEid(Long.parseLong(eids[i]));
-            setting1.setCity(setting.getCity());
-            setting1.setFundBase(setting.getFundBase());
-            setting1.setFundPer(setting.getFundPer());
-            setting1.setInjuryPer(setting.getInjuryPer());
-            setting1.setMedicare(setting.getMedicare());
-            setting1.setProduct(setting.getProduct());
-            setting1.setSettingM(setting.getSettingM());
-            setting1.setSettingS(setting.getSettingS());
-            setting1.setSocial(setting.getSocial());
-            setting1.setValM(setting.getValM());
-            setting1.setValS(setting.getValS());
-            settingList.add(setting1);
-        }
-        for (EnsureSetting s:settingList){
-            if(SettingDao.exist(conn,s.getEid()).exist){
-                result=SettingDao.update(conn,s);
-            }else {
-                result=SettingDao.insert(conn,s);
-            }
-            if(result.success=false){//事务处理
-                ConnUtil.rollback(conn);
-                return JSONObject.toJSONString(result);
-            }
-        }
-        ConnUtil.commit(conn);
-        return JSONObject.toJSONString(result);
     }
     //读取基数
     public static String readBase(String start, String end, String[] eids, long sid, Connection conn) {
@@ -287,7 +237,7 @@ public class EmployeeService {
                     baseM = 0;
                     break;
                 case 2://自定义工资
-                    baseM = setting.getValM();
+                    baseM = setting.getBaseM();
                     break;
             }
             switch (settingS){
@@ -321,7 +271,7 @@ public class EmployeeService {
                     baseS = 0;
                     break;
                 case 2://自定义基数
-                    baseS = setting.getValS();
+                    baseS = setting.getBaseS();
                     break;
             }
             object.put("id",eids[i]);

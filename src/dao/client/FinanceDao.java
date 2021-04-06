@@ -21,7 +21,7 @@ public class FinanceDao {
     public static DaoExistResult existFinance(Connection conn, long cid){
         QueryConditions conditions = new QueryConditions();
         conditions.add("type","=",1);
-        conditions.add("eid","=",cid);
+        conditions.add("cid","=",cid);
         return DbUtil.exist(conn,"finance",conditions);
     }
 

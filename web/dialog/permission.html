@@ -103,14 +103,14 @@
         var data = form.val('form_role');
         permit += calc(data.role);
 
-        iAccount.permit(account.id,permit,function (result) {
+        webInterface.account.permit({id:account.id,permit:permit,success:function (result) {
             layer.msg("权限分配成功！");// 获得frame索引
             var index = parent.layer.getFrameIndex(window.name);
             //关闭当前frame
             parent.layer.close(index);
             //修改成功后刷新父界面
             window.parent.location.reload();
-        });
+        }});
     }
 </script>
 

@@ -1952,13 +1952,13 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
       
       //表头和表体
       layui.each(data, function(i1, item1){
-        var vals = [];
+        var baseS = [];
         if(typeof id === 'object'){ //如果 id 参数直接为表头数据
           layui.each(id, function(i, item){
             i1 == 0 && dataTitle.push(item || '');
           });
           layui.each(table.clearCacheKey(item1), function(i2, item2){
-            vals.push('"'+ (item2 || '') +'"');
+            baseS.push('"'+ (item2 || '') +'"');
           });
         } else {
           table.eachCols(id, function(i3, item3){
@@ -1967,11 +1967,11 @@ layui.define(['laytpl', 'laypage', 'layer', 'form', 'util'], function(exports){
               if(content === undefined || content === null) content = '';
               
               i1 == 0 && dataTitle.push(item3.title || '');
-              vals.push('"'+ parseTempData(item3, content, item1, 'text') + '"');
+              baseS.push('"'+ parseTempData(item3, content, item1, 'text') + '"');
             }
           });
         }
-        dataMain.push(vals.join(','));
+        dataMain.push(baseS.join(','));
       });
 
       //表合计

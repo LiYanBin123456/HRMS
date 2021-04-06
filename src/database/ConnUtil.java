@@ -2,13 +2,31 @@ package database;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 import javax.sql.DataSource;
+import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class ConnUtil {
-    protected static DataSource ds = null;
+    protected static ComboPooledDataSource ds = null;
     static {
-        ds = new ComboPooledDataSource("myc3p0_hrms");
+        try {
+            ds = new ComboPooledDataSource();
+            ds.setDriverClass("com.mysql.jdbc.Driver");
+            //ds.setJdbcUrl("jdbc:mysql://39.103.135.238:3306/hrms?useUnicode=true&characterEncoding=UTF8");
+            ds.setJdbcUrl("jdbc:mysql://127.0.0.1:3306/hrms?useUnicode=true&characterEncoding=UTF8");
+            ds.setUser("root");
+            ds.setPassword("FB9CA5C6BC44BCB5B45DE45E504052A1");
+            ds.setAcquireIncrement(5);
+            ds.setInitialPoolSize(20);
+            ds.setMaxPoolSize(40);
+            ds.setMaxStatementsPerConnection(5);
+            ds.setIdleConnectionTestPeriod(18000);
+            //MySQL连接默认最大空闲时间为8小时，超过8小时，MySQL连接实际上已经无效了，但连接池并不知道，使用无效的连接就会出现异常
+            ds.setMaxIdleTime(25000);
+            ds.setTestConnectionOnCheckin(true);
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        }
     }
 
     /**

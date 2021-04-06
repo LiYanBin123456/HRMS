@@ -124,12 +124,21 @@ public class Deduct {
     }
 
     /**
-     * 计算历史累计应税额（累计收入额（D）– 个税累计专项扣除（E）– 累计减除费用（F）
+     * 计算历史累计应税额 累计收入额（D）– （个税累计专项扣除（E）+ 累计减除费用（F）+当月减除费用5000）
      * @return
      */
     public float total(){
-        return income-(deduct+deduct1+deduct2+deduct3+deduct4+deduct5+deduct6+free);
+        return income-(deduct+deduct1+deduct2+deduct3+deduct4+deduct5+deduct6+free+5000);
     }
+
+    /**
+     * 回撤累计扣除和累计减免
+     */
+    public void rollback(){
+        free -= 5000;
+        deduct -= (deduct1+deduct2+deduct3+deduct4+deduct5+deduct6);
+    }
+
     @Override
     public String toString() {
         return "Deduct{" +

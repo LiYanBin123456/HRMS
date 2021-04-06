@@ -1,6 +1,5 @@
 package dao.settlement;
 
-import bean.settlement.Settlement1;
 import bean.settlement.Settlement3;
 import bean.settlement.ViewSettlement3;
 import database.*;
@@ -38,33 +37,13 @@ public class Settlement3Dao {
         return DbUtil.delete(conn,"settlement3",conditions);
     }
 
-
-
-    /**
-     * 提交，将结算单的status 设置为 1
-     * @param conn
-     * @param id  要提交的结算单id
-     * @return
-     */
-    public static DaoUpdateResult commit(Connection conn, long id) {
-        String sql = "update settlement3 set status=1 where id = ?";
-        Object []params = {id};
-        return DbUtil.update(conn,sql,params);
-    }
-
     /**
      * 审核，修改结算单状态为几审
      * @param conn
      * @param id 要审核的结算单id
      * @return
      */
-    public static DaoUpdateResult check(Connection conn, long id,byte type,boolean result) {
-        byte status;
-        if(type==0){
-            status = result?Settlement1.STATUS_CHECKED1:Settlement1.STATUS_EDITING;
-        }else{
-            status = result?Settlement1.STATUS_CHECKED2:Settlement1.STATUS_COMMITED;
-        }
+    public static DaoUpdateResult updateStatus(Connection conn, long id,byte status) {
         String sql = "update settlement3 set status=? where id = ?";
         Object []params = {status,id};
         return DbUtil.update(conn,sql,params);

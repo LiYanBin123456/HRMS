@@ -29,6 +29,7 @@
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
             <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
         </script>
+        <script src="../js/date.js"></script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/queryParam.js"></script>
@@ -101,7 +102,7 @@
             }
 
             function getContracts() {
-                iContract.getList(param_query,"B",function (result) {
+                webInterface.contract.getList({param:param_query,type:"B",success:function (result) {
                     table.reload('tbl_contract', {
                         data:result.rows
                     });
@@ -122,7 +123,7 @@
                             }
                         }
                     });
-                });
+                }});
             }
 
 
@@ -144,11 +145,11 @@
             //删除合同
             function del(contract) {
                 layer.confirm('确定删除'+contract.name+'的合同', {icon: 3, title:'删除合同'}, function(index){
-                    iContract.delete(contract.id,function () {
+                    webInterface.contract.delete({id:contract.id,success:function () {
                         layer.close(index);
                         getContracts();
                         layer.msg('删除成功');
-                    });
+                    }});
                 });
             }
 

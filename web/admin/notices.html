@@ -48,6 +48,7 @@
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
         <script src="../js/queryParam.js"></script>
+        <script src="../js/date.js"></script>
         <script>
             var table;//数据表格对象
             var laypage;//分页对象
@@ -125,7 +126,7 @@
             }
 
             function getNotices() {
-                iNotice.getList(param_query,function (result) {
+                webInterface.notice.getList({param:param_query,success:function (result) {
                     table.reload('tbl_notice', {
                         data:result.rows
                     });
@@ -145,7 +146,7 @@
                             }
                         }
                     });
-                });
+                }});
             }
 
 
@@ -174,11 +175,11 @@
             //删除公告
             function del(notice) {
                 layer.confirm('确定删除主题为'+notice.title+'的公告', {icon: 3, title:'删除公告'}, function(index){
-                    iNotice.delete(notice.id,function () {
+                    webInterface.notice.delete({id:notice.id,success:function () {
                         layer.close(index);
                         getNotices();
                         layer.msg('删除成功');
-                    });
+                    }});
                 });
             }
 

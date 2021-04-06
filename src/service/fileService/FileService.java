@@ -6,7 +6,6 @@ import bean.employee.PayCard;
 import bean.employee.ViewDeduct;
 import bean.insurance.ViewInsurance;
 import bean.settlement.ViewDetail1;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.employee.PayCardDao;
@@ -24,8 +23,6 @@ import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
 import utills.CollectionUtil;
 import utills.DateUtil;
-import utills.excel.Field;
-import utills.excel.Scheme;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -88,10 +85,10 @@ public class FileService {
                 //比较时间
                 String msg = compareDate(v.getEntry());
                 sheet1.addCell(new Label(0, index, v.getName()));
-                sheet1.addCell(new Label(1, index, v.getCode3()));
+                sheet1.addCell(new Label(1, index, v.getCode()));
                 sheet1.addCell(new Label(2, index, v.getCardId()));
-                sheet1.addCell(new Label(3, index, v.getDate3()==null?"":DateUtil.format(v.getDate3(),"yyyy-MM-dd")));
-                sheet1.addCell(new jxl.write.Number(4, index, v.getBase3()));
+                sheet1.addCell(new Label(3, index, v.getDate()==null?"":DateUtil.format(v.getDate(),"yyyy-MM-dd")));
+                //sheet1.addCell(new jxl.write.Number(4, index, v.getBase()));
                 sheet1.addCell(new Label(5, index, "正常参保登记"));
                 sheet1.addCell(new Label(6, index, "合同制"));
                 sheet1.addCell(new Label(7, index, msg));
@@ -140,11 +137,11 @@ public class FileService {
             sheet1.addCell(new Label(4, 0, "变更原因"));
             int index = 1;
             for(ViewInsurance insurance:insurances){
-                sheet1.addCell(new Label(1, index, insurance.getCode3()));
+                sheet1.addCell(new Label(1, index, insurance.getCode()));
                 sheet1.addCell(new Label(0, index, insurance.getName()));
                 sheet1.addCell(new Label(2, index, insurance.getCardId()));
                 sheet1.addCell(new Label(3, index, lastDay));
-                sheet1.addCell(new Label(4, index, insurance==null?"":chageReason(insurance.getReason())));
+                sheet1.addCell(new Label(4, index, insurance==null?"":insurance.getReason()));
                 index++;
             }
             //设置列宽
@@ -184,12 +181,12 @@ public class FileService {
             sheet1.addCell(new Label(4, 0, "参保时间"));
             int index = 1;
             for(ViewInsurance insurance:insurances){
-                sheet1.addCell(new Label(1, index, insurance.getCode1()));
+                sheet1.addCell(new Label(1, index, insurance.getCode()));
                 sheet1.addCell(new Label(0, index, insurance.getName()));
                 sheet1.addCell(new Label(2, index, insurance.getCardId()));
-                sheet1.addCell(new jxl.write.Number(3, index, insurance.getBase1()));
+                //sheet1.addCell(new jxl.write.Number(3, index, insurance.getBase()));
                 sheet1.addCell(new Label(4, index, "医疗、大病、生育"));
-                sheet1.addCell(new Label(5, index, insurance.getDate1()==null?"":DateUtil.format(insurance.getDate1(),"yyyy-MM-dd")));
+                sheet1.addCell(new Label(5, index, insurance.getDate()==null?"":DateUtil.format(insurance.getDate(),"yyyy-MM-dd")));
                 index++;
             }
             //设置列宽
@@ -231,11 +228,11 @@ public class FileService {
             sheet1.addCell(new Label(4, 0, "变更原因"));
             int index = 1;
             for(ViewInsurance Insurance:insurances){
-                sheet1.addCell(new Label(1, index, Insurance.getCode1()));
+                sheet1.addCell(new Label(1, index, Insurance.getCode()));
                 sheet1.addCell(new Label(0, index, Insurance.getName()));
                 sheet1.addCell(new Label(2, index, Insurance.getCardId()));
                 sheet1.addCell(new Label(3, index, lastDay));
-                sheet1.addCell(new Label(4, index, chageReason(Insurance.getReason())));
+                sheet1.addCell(new Label(4, index, Insurance.getReason()));
                 index++;
             }
             //设置列宽
@@ -276,17 +273,17 @@ public class FileService {
             for(ViewInsurance v:insurances){
                 EnsureSetting setting = (EnsureSetting) SettingDao.get(conn,v.getEid()).data;
                 if(setting!=null){
-                    per = setting.getFundPer()/100;
+                    per = setting.getPerFund()/100;
                 }
                 sheet.addCell(new jxl.write.Number(0, index, index-5));//序号
                 sheet.addCell(new Label(1, index, v.getName()));//职工姓名
                 sheet.addCell(new Label(2, index, v.getCardId()));//证件号
-                sheet.addCell(new Label(3, index, v.getDate2()==null?"":DateUtil.format(v.getDate2(),"yyyy-MM-dd")));//起缴时间
-                sheet.addCell(new jxl.write.Number(4, index, v.getBase2()));//工资基数
+                sheet.addCell(new Label(3, index, v.getDate()==null?"":DateUtil.format(v.getDate(),"yyyy-MM-dd")));//起缴时间
+                //sheet.addCell(new jxl.write.Number(4, index, v.getBase()));//工资基数
                 sheet.addCell(new jxl.write.Number(5, index, per));//单位比例
                 sheet.addCell(new jxl.write.Number(6, index, per));//个人比例
-                sheet.addCell(new jxl.write.Number(7, index, v.getBase2()*per));//个人缴存标准
-                sheet.addCell(new jxl.write.Number(8, index, (v.getBase2()*per)*2));//缴存合计
+                //sheet.addCell(new jxl.write.Number(7, index, v.getBase()*per));//个人缴存标准
+                //sheet.addCell(new jxl.write.Number(8, index, (v.getBase()*per)*2));//缴存合计
                 sheet.addCell(new Label(10, index, v.getPhone()));//手机号码
                 index++;
             }

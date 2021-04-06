@@ -142,7 +142,7 @@
 
     function login() {
         var data = form.val("form_login");
-        iAccount.login(data.username,data.password,function (result) {
+        webInterface.account.login({username:data.username,password:data.password,success:function (result) {
             var role = result.role;
             switch (role){
                 case 0:
@@ -155,7 +155,7 @@
                     top.location = "cooperation/menu.html";
                     break;
             }
-        });
+        }});
     }
     /*function chooseRole() {
         layer.open({

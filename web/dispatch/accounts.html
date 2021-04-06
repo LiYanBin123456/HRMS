@@ -115,7 +115,7 @@
             }
 
             function getAccounts() {
-                iAccount.getList(param_query,function (result) {
+                webInterface.account.getList({param:param_query,success:function (result) {
                     table.reload('tbl_account', {
                         data:result.rows
                     });
@@ -135,7 +135,7 @@
                             }
                         }
                     });
-                });
+                }});
             }
 
 
@@ -187,11 +187,11 @@
             //删除账号
             function del(account) {
                 layer.confirm('确定删除账号'+account.nickname, {icon: 3, title:'删除'}, function(index){
-                    iNotice.delete(account.id,function () {
+                    webInterface.account.delete({id:account.id,success:function () {
                         layer.close(index);
                         getAccounts();
                         layer.msg('删除成功');
-                    });
+                    }});
                 });
             }
 

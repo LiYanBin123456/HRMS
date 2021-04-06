@@ -25,7 +25,7 @@
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
-<script src="../js/util.js"></script>
+<script src="../js/CollectionUtil.js"></script>
 <script>
     var transfer;
     var aid;
@@ -43,13 +43,13 @@
 
     function initPage() {
         aid = $.query.get("id");
-        iClient.getAllocating(0,function (result1) {
+        webInterface.client.getAllocating({category:0,success:function (result1) {
             var allocatings = result1.rows;
-            iClient.getAllocated(aid,0,function (result2) {
+            webInterface.client.getAllocated({aid:aid,category:0,success:function (result2) {
                 var allocateds = result2.rows;
                 initTransfer(allocatings, allocateds);
-            });
-        });
+            }});
+        }});
         function initTransfer(allocatings,allocateds) {
             var data = [];
             var value = [];
@@ -74,10 +74,10 @@
     }
 
     function allocate(data,direction) {
-        var cids = getKeyArray(data,"value");
-        iClient.allocate(direction==0?aid:0,0,cids,function (result) {
+        var cids = collectionUtil.getKeyArray(data,"value");
+        webInterface.client.allocate({aid:direction==0?aid:0,category:0,cids:cids,success:function (result) {
             layer.msg('分配成功');
-        });
+        }});
     }
 </script>
 
