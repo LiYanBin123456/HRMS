@@ -46,4 +46,11 @@ public class PayCardDao {
         }
         return DbUtil.insertBatch(conn,sql,params);
     }
+
+    public static DaoQueryListResult getList(Connection conn, QueryParameter param) {
+        if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
+            param.addCondition("name","like",param.conditions.extra);
+        }
+        return DbUtil.getList(conn,"paycard",param, PayCard.class);
+    }
 }

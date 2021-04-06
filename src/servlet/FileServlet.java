@@ -1047,19 +1047,16 @@ public class FileServlet extends HttpServlet {
         long sid = Long.parseLong(request.getParameter("id"));
         String fileName;
         String fullFileName;
-        File file;
         switch (category){
             case 0://招行
                 fileName = "bank1.xls";
                 fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
-                file = new File(fullFileName);
-                FileService.exportBank1(conn,sid,response,file);
+                FileService.exportBank1(conn,sid,response,fullFileName);
                 break;
             case 1://农行
                 fileName = "bank2.xls";
                 fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
-                file = new File(fullFileName);
-                FileService.exportBank2(conn,sid,response,file);
+                FileService.exportBank2(conn,sid,response,fullFileName);
                 break;
             case 2://浦发
                 FileService.exportBank3(conn,sid,response);
