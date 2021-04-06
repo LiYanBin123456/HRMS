@@ -95,7 +95,8 @@ public class DetailService1 {
          *
          */
         //获取结算单和明细（只有正常或补发的才需要计算，补缴和补差的已经并入正常的核收补减中去了。同时一个结算单不可能正常和补发并存）
-        Settlement1 settlement = (Settlement1) Settlement1Dao.get(conn, sid).data;
+        Settlement1 settlement = (Settlement1) Settlement1Dao.get(conn, sid).data;//获取结算单
+
         QueryParameter param = new QueryParameter();
         param.conditions.add("sid", "=", sid);
         param.conditions.add("status", "=",settlement.isNeedCalculateSocial()?Detail1.STATUS_NORMAL:Detail1.STATUS_MAKEUP);
@@ -105,16 +106,19 @@ public class DetailService1 {
         String eids = CollectionUtil.getKeySerial(details,"eid");
         Date month2 = DateUtil.getLastDayofMonth(settlement.getMonth());//获取结算月最后一天作为获取医社保规则条件
         MapSalary mapSalary = (MapSalary) MapSalaryDao.selectByMonth(cid, conn, month2).data;//获取工资定义
-        List<ViewDeduct> deducts = new ArrayList<>();
-        List<EnsureSetting> settings = new ArrayList<>();
-        HashMap<String, RuleMedicare> medicares = new HashMap<>();//用于暂时存放医保规则和社保规则
-        HashMap<String, RuleSocial> socials = new HashMap<>();
-        if(settlement.getType() != Settlement1.TYPE_4){
+
+        List<ViewDeduct> deducts = new ArrayList<>();//用于存放员工的个税专项扣除
+        List<EnsureSetting> settings = new ArrayList<>();//用于存放员工的社保设置
+        HashMap<String, RuleMedicare> medicares = new HashMap<>();//用于暂时存放医保规则
+        HashMap<String, RuleSocial> socials = new HashMap<>();//用于暂时存放社保规则
+
+        if(settlement.getType() != Settlement1.TYPE_4){//代缴社保不需要计算个税
             QueryParameter p = new QueryParameter();
             p.addCondition("eid","in",eids);
             deducts = (List<ViewDeduct>) DeductDao.getList(conn, p).rows;
         }
-        if(settlement.isNeedCalculateSocial()){
+
+        if(settlement.isNeedCalculateSocial()){//判断是否需要计算社保
             //获取医社保设置
             QueryParameter p3 = new QueryParameter();
             p3.addCondition("eid","in",eids);

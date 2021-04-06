@@ -142,7 +142,7 @@ public class FileServlet extends HttpServlet {
                 ConnUtil.closeConnection(conn);
                 return;
             case "exportDetail4"://导出特殊结算单明细
-                exportDetail4(conn,request,response);
+                //exportDetail4(conn,request,response);
                 ConnUtil.closeConnection(conn);
                 return;
             case "exportTax"://导出个税申报表
@@ -719,32 +719,32 @@ public class FileServlet extends HttpServlet {
     }
 
     //导出特殊结算单的明细
-    private void exportDetail4(Connection conn, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
-        String fileName;
-        long sid = Long.parseLong(request.getParameter("id"));//结算单id
-        //获取特殊结算单位视图
-        ViewSettlement4 vs = (ViewSettlement4) Settlement4Dao.get(conn, sid).data;
-
-        //获取特殊结算单明细
-        QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("sid", "=", sid);
-        List<ViewDetail4> details = (List<ViewDetail4>) Detail4Dao.getList(conn, parameter).rows;
-        JSONArray data = JSONArray.parseArray(JSON.toJSONString(details));
-
-        //文件名
-        fileName = vs.getName()+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM") + "特殊结算单");
-        fileName = new String(fileName.getBytes(), "iso-8859-1");
-        response.setContentType("APPLICATION/OCTET-STREAM");
-        response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + ".xls\"");
-
-        String title1 =vs.getName()+""+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM")+"特殊工资汇款表");
-        String title2 =vs.getName()+""+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM")+"特殊工资明细表");
-        String[] titles ={title1,title2};
-        String[] sheetNames = {"汇款表", "明细表"};
-        Scheme[] schemes = {SchemeDefined.SCHEME_DETAIL4_1, SchemeDefined.SCHEME_DETAIL4_2};
-        JSONArray[] datas = {data, data};
-        XlsUtil.write(response.getOutputStream(), sheetNames,titles, schemes, datas);
-    }
+//    private void exportDetail4(Connection conn, HttpServletRequest request, HttpServletResponse response)throws ServletException, IOException {
+//        String fileName;
+//        long sid = Long.parseLong(request.getParameter("id"));//结算单id
+//        //获取特殊结算单位视图
+//        ViewSettlement4 vs = (ViewSettlement4) Settlement4Dao.get(conn, sid).data;
+//
+//        //获取特殊结算单明细
+//        QueryParameter parameter = new QueryParameter();
+//        parameter.addCondition("sid", "=", sid);
+//        List<ViewDetail4> details = (List<ViewDetail4>) Detail4Dao.getList(conn, parameter).rows;
+//        JSONArray data = JSONArray.parseArray(JSON.toJSONString(details));
+//
+//        //文件名
+//        fileName = vs.getName()+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM") + "特殊结算单");
+//        fileName = new String(fileName.getBytes(), "iso-8859-1");
+//        response.setContentType("APPLICATION/OCTET-STREAM");
+//        response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + ".xls\"");
+//
+//        String title1 =vs.getName()+""+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM")+"特殊工资汇款表");
+//        String title2 =vs.getName()+""+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM")+"特殊工资明细表");
+//        String[] titles ={title1,title2};
+//        String[] sheetNames = {"汇款表", "明细表"};
+//        Scheme[] schemes = {SchemeDefined.SCHEME_DETAIL4_1, SchemeDefined.SCHEME_DETAIL4_2};
+//        JSONArray[] datas = {data, data};
+//        XlsUtil.write(response.getOutputStream(), sheetNames,titles, schemes, datas);
+//    }
 
     //导出普通结算单明细
     private void exportDetail1(Connection conn, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -1036,7 +1036,7 @@ public class FileServlet extends HttpServlet {
                 String fileName = "exportFund.xls";
                 String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
                 File file = new File(fullFileName);
-                FileService.exportFund(conn,response,file);
+                //FileService.exportFund(conn,response,file);
                 break;
         }
     }

@@ -179,6 +179,11 @@ public class Settlement1 extends Settlement {
                 '}';
     }
 
+    /**
+     * 计算普通结算单
+     * @param contract  合同
+     * @param details   员工明细
+     */
     public void calc(ViewContractCooperation contract, List<ViewDetail1> details) {
         this.salary=0;//应发总额
         this.social=0;//单位社保
@@ -253,6 +258,11 @@ public class Settlement1 extends Settlement {
         }
     }
 
+    /**
+     * 计算管理费和个税
+     * @param contract 合同
+     * @param detail 员工明细
+     */
     public void calcManageAndTax(ViewContractCooperation contract, ViewDetail1 detail) {
         int type = contract.getStype();//合同服务项目中的类型
         int category = contract.getCategory();//合同服务项目中的结算方式

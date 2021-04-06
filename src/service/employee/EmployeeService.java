@@ -121,7 +121,7 @@ public class EmployeeService {
         if(!result.success){
            return result;
         }
-        long[] eids = (long[]) result.extra;
+        int[] eids = (int[]) result.extra;
         for(int i = 0;i<eids.length;i++){//员工补充信息添加对应eid
             extras.get(i).setEid(eids[i]);
             payCards.get(i).setEid(eids[i]);

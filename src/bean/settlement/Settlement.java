@@ -99,11 +99,6 @@ public class Settlement {
             flag = (byte)Bit.reset(flag,0);
         }
     }
-
-    public boolean isNeedCalculateSocial(){
-        return Bit.test(flag,0);
-    }
-
     public String getCcid() {
         return ccid;
     }
@@ -111,6 +106,13 @@ public class Settlement {
     public void setCcid(String ccid) {
         this.ccid = ccid;
     }
+
+
+    //判断是否需要计算社保，实际就是补发工资
+    public boolean isNeedCalculateSocial(){
+        return Bit.test(flag,0);
+    }
+
 
     @Override
     public String toString() {

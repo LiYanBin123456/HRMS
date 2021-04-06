@@ -105,6 +105,7 @@ public class InsuranceServlet extends HttpServlet {
         DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
         return JSONObject.toJSONString(result);
     }
+
     //修改
     private String update(Connection conn, HttpServletRequest request) {
         List<Insurance> insurances = JSONArray.parseArray(request.getParameter("insurances"),Insurance.class);

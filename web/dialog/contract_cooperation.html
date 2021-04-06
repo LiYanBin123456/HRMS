@@ -391,6 +391,7 @@
 
     function saveContract() {
         contract = form.val('form_contract');
+        console.log("contract:"+contract);
         if(contract.id) {
             webInterface.contract.update({contract:contract,success:function (result) {
                 layer.msg("修改成功");
@@ -410,6 +411,7 @@
             return;
         }
         var data = form.val('form_service');
+        console.log("data:"+data);
         data.cid = contract.id;
         if (serve) {
             webInterface.contract.updateService({contract:data,success:function (result) {

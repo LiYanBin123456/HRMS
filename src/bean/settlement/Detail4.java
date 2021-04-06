@@ -1,6 +1,7 @@
 package bean.settlement;
 
 
+//特殊结算单
 public class Detail4 {
     private long id;
     private long sid;

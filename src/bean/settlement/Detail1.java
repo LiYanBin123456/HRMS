@@ -65,21 +65,6 @@ public class Detail1 extends Detail {
     public Detail1() {
     }
 
-    public Detail1(float pension1, float medicare1, float unemployment1, float disease1, float fund1, float pension2, float medicare2, float unemployment2, float injury, float disease2, float birth, float fund2) {
-        this.pension1 = pension1;
-        this.medicare1 = medicare1;
-        this.unemployment1 = unemployment1;
-        this.disease1 = disease1;
-        this.fund1 = fund1;
-        this.pension2 = pension2;
-        this.medicare2 = medicare2;
-        this.unemployment2 = unemployment2;
-        this.injury = injury;
-        this.disease2 = disease2;
-        this.birth = birth;
-        this.fund2 = fund2;
-    }
-
     public Detail1(long id, long sid, long eid, float base, float pension1, float medicare1, float unemployment1, float disease1, float fund1, float pension2, float medicare2, float unemployment2, float injury, float disease2, float birth, float fund2, float tax, float payable, float paid, float f1, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9, float f10, float f11, float f12, float f13, float f14, float f15, float f16, float f17, float f18, float f19, float f20, byte status) {
         super(id, sid, eid);
         this.base = base;
@@ -119,52 +104,6 @@ public class Detail1 extends Detail {
         this.f19 = f19;
         this.f20 = f20;
         this.status = status;
-    }
-
-    public Detail1(long id, long sid, long eid, float base, float pension1, float medicare1, float unemployment1, float disease1, float fund1, float pension2, float medicare2, float unemployment2, float injury, float disease2, float birth, float fund2, float tax, float free, float extra1, float extra2, float payable, float paid, float f1, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9, float f10, float f11, float f12, float f13, float f14, float f15, float f16, float f17, float f18, float f19, float f20, byte status, String comments1, String comments2) {
-        super(id, sid, eid);
-        this.base = base;
-        this.pension1 = pension1;
-        this.medicare1 = medicare1;
-        this.unemployment1 = unemployment1;
-        this.disease1 = disease1;
-        this.fund1 = fund1;
-        this.pension2 = pension2;
-        this.medicare2 = medicare2;
-        this.unemployment2 = unemployment2;
-        this.injury = injury;
-        this.disease2 = disease2;
-        this.birth = birth;
-        this.fund2 = fund2;
-        this.tax = tax;
-        this.free = free;
-        this.extra1 = extra1;
-        this.extra2 = extra2;
-        this.payable = payable;
-        this.paid = paid;
-        this.f1 = f1;
-        this.f2 = f2;
-        this.f3 = f3;
-        this.f4 = f4;
-        this.f5 = f5;
-        this.f6 = f6;
-        this.f7 = f7;
-        this.f8 = f8;
-        this.f9 = f9;
-        this.f10 = f10;
-        this.f11 = f11;
-        this.f12 = f12;
-        this.f13 = f13;
-        this.f14 = f14;
-        this.f15 = f15;
-        this.f16 = f16;
-        this.f17 = f17;
-        this.f18 = f18;
-        this.f19 = f19;
-        this.f20 = f20;
-        this.status = status;
-        this.comments1 = comments1;
-        this.comments2 = comments2;
     }
 
     public Detail1(long id, long sid, long eid, float base, float pension1, float medicare1, float unemployment1, float disease1, float fund1, float pension2, float medicare2, float unemployment2, float injury, float disease2, float birth, float fund2, float tax, float free, float extra1, float extra2, float manage, float sum, float payable, float paid, float f1, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9, float f10, float f11, float f12, float f13, float f14, float f15, float f16, float f17, float f18, float f19, float f20, byte status, String comments1, String comments2) {
@@ -661,19 +600,39 @@ public class Detail1 extends Detail {
         return d;
     }
 
+    /**
+     * 计算个人社保总额
+     * @return
+     */
     public float getSocialPerson(){
+        //个人社保总额=个人养老金+个人失业金
         return pension1+unemployment1;
     }
 
+    /**
+     * 计算个人医保总额
+     * @return
+     */
     public float getMedicalePerson(){
+        //个人医保总额=个人大病+个人医疗
         return disease1+medicare1;
     }
 
+    /**
+     * 计算单位社保总额
+     * @return
+     */
     public float getSocialDepartment(){
+        //单位社保总额=单位养老金+单位失业金+单位工伤
         return pension2+unemployment2+injury;
     }
 
+    /**
+     * 计算单位医保总额
+     * @return
+     */
     public float getMedicaleDepartment(){
+     //单位医保总额=单位大病+单位医疗+生育
         return disease2+medicare2+birth;
     }
 
@@ -712,6 +671,10 @@ public class Detail1 extends Detail {
         return base+getTotalDepartment()+fund2+extra2;
     }
 
+    /**
+     * 计算普通个税
+     * @param deduct
+     */
     public void calculateTax(Deduct deduct){
         float taxDue=deduct.total()+this.getPayable();//应税额 = 累计应税额+ 本期收入
         float tax = Tax.tax1(taxDue);
@@ -752,6 +715,11 @@ public class Detail1 extends Detail {
         }
     }
 
+    /**
+     * 计算社保
+     * @param setting
+     * @param ruleSocial
+     */
     public void calculateSocial(EnsureSetting setting,RuleSocial ruleSocial){
         float base = 0;
         switch (setting.getSettingS()){
@@ -790,10 +758,17 @@ public class Detail1 extends Detail {
         this.fund2 = fund;//单位公积金
     }
 
+    /**
+     * 计算实发工资
+     */
     public void calcPayed() {
         this.paid = this.payable - this.tax;
     }
 
+    /**
+     * 计算应发工资
+     * @param mapSalary
+     */
     public void calcPayable(MapSalary mapSalary) {
         this.payable = getPayable0(true);
         if (mapSalary != null && mapSalary.getItems() != null && mapSalary.getItems().length() > 0) {//如果有自定义工资
@@ -810,6 +785,10 @@ public class Detail1 extends Detail {
     public void sumDefinedSalaryItem(MapSalary mapSalary){
         /**
          * 思路：
+         * 1、获取自定义工资条[{type:1,field:考勤扣款},{type:0,field:加班工资}]形式
+         * 2、遍历通过反射获取对应的值，第一条数据对应getF1(),依次类推;
+         * 3、判断加项还是减项
+         * 4、返回自定义工资总额
          */
         List<MapSalary.SalaryItem> itemList = mapSalary.getItemList();
         for (int i = 0; i <itemList.size(); i++) {

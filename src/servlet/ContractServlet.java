@@ -62,7 +62,7 @@ public class ContractServlet extends HttpServlet {
             case "getService"://获取合同服务项目
                 result = getService(conn,request);
                 break;
-            case "updateService"://获取合同列表
+            case "updateService"://修改合同列表
                 result = updateService(conn,request);
                 break;
             case "getServiceList"://获取合同服务项目列表

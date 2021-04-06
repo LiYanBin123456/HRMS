@@ -408,7 +408,7 @@ var webInterface = {
          */
         updateService:function(param) {
             param.url = this.url;
-            param.data = {op: "updateService",serve:JSON.stringify(param.serve)};
+            param.data = {op: "updateService",serve:JSON.stringify(param.contract)};
             webInterface.access(param);
         },
         /**

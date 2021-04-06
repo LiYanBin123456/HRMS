@@ -94,6 +94,11 @@ public class Settlement2 extends Settlement {
                 '}';
     }
 
+    /**
+     * 计算小时工结算单
+     * @param details 员工明细
+     * @param payer 支付方 0_派遣方发工资  1_合作方发工资
+     */
     public void calc(List<Detail2> details, byte payer) {
         hours=0;//总工时
         traffic=0;//交通费

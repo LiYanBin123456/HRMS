@@ -158,56 +158,56 @@ public class FileService {
     }
 
     //导出公积金
-    public static void exportFund(Connection conn, HttpServletResponse response, File file) {
-        response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=exportFund.xls");
-
-        Workbook book = null;
-        //公积金的变更是什么状态
-        QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("status2","=",4);
-        DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
-        String rows = JSONObject.toJSONString(result.rows);
-        List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);
-        try {
-            //获取模板
-            book = Workbook.getWorkbook(file);
-            // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
-            WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
-            WritableSheet sheet = workbook.getSheet(0);//获取第一个sheet
-
-            int index = 6;
-            float per=0;
-            for(ViewInsurance v:insurances){
-                EnsureSetting setting = (EnsureSetting) SettingDao.get(conn,v.getEid()).data;
-                if(setting!=null){
-                    per = setting.getFundPer()/100;
-                }
-                sheet.addCell(new jxl.write.Number(0, index, index-5));//序号
-                sheet.addCell(new Label(1, index, v.getName()));//职工姓名
-                sheet.addCell(new Label(2, index, v.getCardId()));//证件号
-                sheet.addCell(new Label(3, index, v.getDate2()==null?"":DateUtil.format(v.getDate2(),"yyyy-MM-dd")));//起缴时间
-                sheet.addCell(new jxl.write.Number(4, index, v.getBase2()));//工资基数
-                sheet.addCell(new jxl.write.Number(5, index, per));//单位比例
-                sheet.addCell(new jxl.write.Number(6, index, per));//个人比例
-                sheet.addCell(new jxl.write.Number(7, index, v.getBase2()*per));//个人缴存标准
-                sheet.addCell(new jxl.write.Number(8, index, (v.getBase2()*per)*2));//缴存合计
-                sheet.addCell(new Label(10, index, v.getPhone()));//手机号码
-                index++;
-            }
-            workbook.write();
-            workbook.close();
-            book.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (BiffException e) {
-            e.printStackTrace();
-        } catch (RowsExceededException e) {
-            e.printStackTrace();
-        } catch (WriteException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void exportFund(Connection conn, HttpServletResponse response, File file) {
+//        response.setContentType("APPLICATION/OCTET-STREAM");
+//        response.setHeader("Content-Disposition", "attachment; filename=exportFund.xls");
+//
+//        Workbook book = null;
+//        //公积金的变更是什么状态
+//        QueryParameter parameter = new QueryParameter();
+//        parameter.addCondition("status2","=",4);
+//        DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
+//        String rows = JSONObject.toJSONString(result.rows);
+//        List<ViewInsurance> insurances = JSONArray.parseArray(rows, ViewInsurance.class);
+//        try {
+//            //获取模板
+//            book = Workbook.getWorkbook(file);
+//            // jxl.Workbook 对象是只读的，所以如果要修改Excel，需要创建一个可读的副本，副本指向原Excel文件（即下面的new File(excelpath)）
+//            WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
+//            WritableSheet sheet = workbook.getSheet(0);//获取第一个sheet
+//
+//            int index = 6;
+//            float per=0;
+//            for(ViewInsurance v:insurances){
+//                EnsureSetting setting = (EnsureSetting) SettingDao.get(conn,v.getEid()).data;
+//                if(setting!=null){
+//                    per = setting.getFundPer()/100;
+//                }
+//                sheet.addCell(new jxl.write.Number(0, index, index-5));//序号
+//                sheet.addCell(new Label(1, index, v.getName()));//职工姓名
+//                sheet.addCell(new Label(2, index, v.getCardId()));//证件号
+//                sheet.addCell(new Label(3, index, v.getDate2()==null?"":DateUtil.format(v.getDate2(),"yyyy-MM-dd")));//起缴时间
+//                sheet.addCell(new jxl.write.Number(4, index, v.getBase2()));//工资基数
+//                sheet.addCell(new jxl.write.Number(5, index, per));//单位比例
+//                sheet.addCell(new jxl.write.Number(6, index, per));//个人比例
+//                sheet.addCell(new jxl.write.Number(7, index, v.getBase2()*per));//个人缴存标准
+//                sheet.addCell(new jxl.write.Number(8, index, (v.getBase2()*per)*2));//缴存合计
+//                sheet.addCell(new Label(10, index, v.getPhone()));//手机号码
+//                index++;
+//            }
+//            workbook.write();
+//            workbook.close();
+//            book.close();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (BiffException e) {
+//            e.printStackTrace();
+//        } catch (RowsExceededException e) {
+//            e.printStackTrace();
+//        } catch (WriteException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     //导出招行
     public static void exportBank1(Connection conn, long sid, HttpServletResponse response, String file) throws UnsupportedEncodingException {
