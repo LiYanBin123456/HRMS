@@ -97,7 +97,7 @@ var webInterface = {
          */
         permit:function(param) {
             param.url = this.url;
-            param.data = {op:"permit",id:param.id,permission:param.permission};
+            param.data = {op:"permit",id:param.id,permission:param.permit};
             webInterface.access(param);
         }
     },
@@ -386,7 +386,7 @@ var webInterface = {
          */
         insertService:function(param) {
             param.url = this.url;
-            param.data = {op: "insertService",serve:JSON.stringify(param.serve)};
+            param.data = {op: "insertService",serve:JSON.stringify(param.contract)};
             webInterface.access(param);
         },
         /**
@@ -1018,7 +1018,7 @@ var webInterface = {
          * 保存结算单并且自动计算结算单明细
          * @param sid 结算单id
          * @param cid 合作单位id
-         * @param category 0_普通结算单 1_小时工结算单  2_商业保险结算单
+         * @param category 1_普通结算单 2_小时工结算单  3_商业保险结算单
          * @param success
          * @param fail
          */
@@ -1035,9 +1035,9 @@ var webInterface = {
          * @param success
          * @param fail
          */
-        saveSettlement:function (param) {
+        calcSettlement:function (param) {
             param.url = this.url;
-            param.data = {op: "saveSettlement",sid:param.sid,category:param.category};
+            param.data = {op: "calculate",sid:param.sid,category:param.category};
             webInterface.access(param);
         },
     },

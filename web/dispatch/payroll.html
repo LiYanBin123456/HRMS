@@ -44,7 +44,7 @@
             <select name="state" lay-filter="select_state">
                 <option value="">按状态过滤</option>
                 <option value="3">已终审</option>
-                <option value="4" selected>已扣款</option>
+                <option value="4">已扣款</option>
                 <option value="5">已发放</option>
             </select>
         </div>
@@ -55,9 +55,7 @@
     <!--行内工具栏-->
     <script type="text/html" id="bar_settlement">
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export"><i class="layui-icon "></i>导出工资发放表</a>
-        {{#  if((d.status==4)){ }}
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="payroll"><i class="layui-icon "></i> 确认发放</a>
-        {{#  } }}
     </script>
     <script src="../js/fieldSet.js"></script>
     <script src="../js/interface.js"></script>
@@ -67,7 +65,7 @@
     <script src="../js/date.js"></script>
     <script src="../js/string.js"></script>
     <script>
-        var category = 1;//记录是显示普通结算单还是小时工结算单
+        var category = 1;//记录是显示1_普通结算单还是2_小时工结算单
         var table;//数据表格对象
         var laypage;//分页对象
         var form;//分页对象
@@ -75,7 +73,7 @@
         var element;
         var laydate;
         var param_query = new QueryParam();
-        param_query.addCondition("status","=",4)
+
         param_query.setOrder("month",true);
         param_query.setPagination(1,10);
         $(function () {
@@ -141,10 +139,10 @@
 
             var cols;
             switch(Number(category)){
-                case 0:
+                case 1://普通结算单
                     cols = columns_settlement1;
                     break;
-                case 1:
+                case 2://小时工结算单
                     cols = columns_settlement2;
                     break;
             };

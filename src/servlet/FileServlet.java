@@ -835,7 +835,7 @@ public class FileServlet extends HttpServlet {
         scheme2.addField(new Field(c2+3, "fund1", "个人公积金", Field.FLOAT, 100));
         scheme2.addField(new Field(c2+4, "payable", "税前工资", Field.FLOAT, 100));
         scheme2.addField(new Field(c2+5, "tax", "个税", Field.FLOAT, 100));
-        scheme2.addField(new Field(c2+6, "paid", "实发工资", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+6, "paid", "实发工资", Field.DOUBLE, 100));
         Settlement1 settlement = new Settlement1();
         for(ViewDetail1 d:details){
             //计算自定义工资项总和

@@ -70,7 +70,7 @@ public class SettlementService1 {
             List<ViewEmployee> employeeList = (List<ViewEmployee>) EmployeeDao.getList(conn,parameter).rows;
             List<Detail1> details = new ArrayList<>();
 
-            byte status = (settlement.isNeedCalculateSocial())?Detail1.STATUS_NORMAL:Detail1.STATUS_MAKEUP;
+            byte status = (settlement.isNeedCalcInsurance()|| settlement.getType()==3)?Detail1.STATUS_NORMAL:Detail1.STATUS_MAKEUP;
             for(int i = 0;i<employeeList.size();i++){//封装明细信息,添加进集合
                 Detail1 detail1 = new Detail1();
                 detail1.setSid(sid);
@@ -273,7 +273,7 @@ public class SettlementService1 {
                 //累计已预缴税额=累计已预缴税额+个税
                 deduct.setPrepaid(deduct.getPrepaid()+detail.getTax());
 
-                if(settlement.isNeedCalculateSocial()) {//如果需要计算社保，就需要累加累计减免和累加个税专项扣除
+                if(settlement.isNeedCalcInsurance()) {//如果需要计算社保，就需要累加累计减免和累加个税专项扣除
                     //累计减免=累计减免+5000；
                     deduct.setFree(deduct.getFree()+5000);
 

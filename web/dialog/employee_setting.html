@@ -35,8 +35,8 @@
                     </div>
                     <div class="layui-input-inline" style="width: 300px;">
                         &emsp;
-                        <input type="radio" lay-filter="baseTypeS" name="baseType" value="0" title="最低标准">
-                        <input type="radio" lay-filter="baseTypeS" name="baseType" value="1" title="自定义基数" checked>
+                        <input type="radio" lay-filter="baseTypeS" name="baseType" value="0" title="最低标准" checked>
+                        <input type="radio" lay-filter="baseTypeS" name="baseType" value="1" title="自定义基数">
                     </div>
                 </div>
             </form>
@@ -49,13 +49,13 @@
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s1">
                         <label class="layui-form-label">单位比例</label>
                         <div class="layui-input-inline" style="width: 80px;">
-                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
+                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s1">
                         <label class="layui-form-label">个人比例</label>
                         <div class="layui-input-inline" style="width: 80px;">
-                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
+                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                 </div>
@@ -69,13 +69,13 @@
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s2">
                         <label class="layui-form-label">单位比例</label>
                         <div class="layui-input-inline" style="width: 80px;">
-                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
+                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s2">
                         <label class="layui-form-label">补充金额</label>
                         <div class="layui-input-inline" style="width: 80px;">
-                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
+                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                 </div>
@@ -89,13 +89,13 @@
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s3">
                         <label class="layui-form-label">单位比例</label>
                         <div class="layui-input-inline" style="width: 80px;">
-                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
+                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s3">
                         <label class="layui-form-label">个人比例</label>
                         <div class="layui-input-inline" style="width: 80px;">
-                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
+                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                 </div>
@@ -132,13 +132,13 @@
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="m1">
                         <label class="layui-form-label">单位比例</label>
                         <div class="layui-input-inline" style="width: 80px;">
-                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
+                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="m1">
                         <label class="layui-form-label">个人比例</label>
                         <div class="layui-input-inline" style="width: 80px;">
-                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
+                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                 </div>
@@ -152,13 +152,13 @@
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="m2">
                         <label class="layui-form-label">单位金额</label>
                         <div class="layui-input-inline" style="width: 80px;">
-                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
+                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="m2">
                         <label class="layui-form-label">个人金额</label>
                         <div class="layui-input-inline" style="width: 80px;">
-                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
+                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                 </div>
@@ -172,7 +172,7 @@
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="m3">
                         <label class="layui-form-label">单位比例</label>
                         <div class="layui-input-inline" style="width: 80px;">
-                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
+                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                 </div>
@@ -292,7 +292,7 @@
         layform.on('checkbox(buyM1)', function(data){
             if(data.elem.checked){
                 $("[name=m1]").removeClass("layui-hide");
-                var ins = {buy:true,v1:rule_medical.per1,v2:rule_medical.per2};
+                var ins = {buy:true,v1:rule_medical.per2,v2:rule_medical.per1};
                 layform.val('form_medical1',ins);
             }else{
                 $("[name=m1]").addClass("layui-hide");
@@ -301,7 +301,7 @@
         layform.on('checkbox(buyM2)', function(data){
             if(data.elem.checked){
                 $("[name=m2]").removeClass("layui-hide");
-                var ins = {buy:true,v1:rule_medical.fin1,v2:rule_medical.fin2};
+                var ins = {buy:true,v1:rule_medical.fin2,v2:rule_medical.fin1};
                 layform.val('form_medical2',ins);
             }else{
                 $("[name=m2]").addClass("layui-hide");
@@ -310,7 +310,7 @@
         layform.on('checkbox(buyM3)', function(data){
             if(data.elem.checked){
                 $("[name=m3]").removeClass("layui-hide");
-                var ins = {buy:true,v1:rule_medical.per3,v2:0};
+                var ins = {buy:true,v1:0,v2:rule_medical.per3};
                 layform.val('form_medical3',ins);
             }else{
                 $("[name=m3]").addClass("layui-hide");
@@ -319,7 +319,7 @@
         layform.on('checkbox(buyS1)', function(data){
             if(data.elem.checked){
                 $("[name=s1]").removeClass("layui-hide");
-                var ins = {buy:true,v1:rule_social.per1,v2:rule_social.per2};
+                var ins = {buy:true,v1:rule_social.per2,v2:rule_social.per1};
                 layform.val('form_social1',ins);
             }else{
                 $("[name=s1]").addClass("layui-hide");
@@ -328,7 +328,7 @@
         layform.on('checkbox(buyS2)', function(data){
             if(data.elem.checked){
                 $("[name=s2]").removeClass("layui-hide");
-                var ins = {buy:true,v1:rule_social.per3,v2:rule_social.extra};
+                var ins = {buy:true,v1:rule_social.extra,v2:rule_social.per3};
                 layform.val('form_social2',ins);
             }else{
                 $("[name=s2]").addClass("layui-hide");
@@ -337,7 +337,7 @@
         layform.on('checkbox(buyS3)', function(data){
             if(data.elem.checked){
                 $("[name=s3]").removeClass("layui-hide");
-                var ins = {buy:true,v1:rule_social.per4,v2:rule_social.per5};
+                var ins = {buy:true,v1:rule_social.per5,v2:rule_social.per4};
                 layform.val('form_social3',ins);
             }else{
                 $("[name=s3]").addClass("layui-hide");

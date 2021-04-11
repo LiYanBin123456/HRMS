@@ -63,7 +63,7 @@ public class Salary2 {
             case 0://劳务派遣
                 if(category==0){//按人数收取的结算方式
                     //管理费总额=人数*管理费,如果不需要计算社保（即补发），不需要重复计算管理费
-                    manage = settlement.isNeedCalculateSocial()?num*value:0;
+                    manage = settlement.isNeedCalcInsurance()?num*value:0;
                     if(invoice==0){//增值税专用发票（全额）
                       tax=(salary+social+medicare+fund+manage)*per;//税费 = （应发总额+单位五险一金+管理费）*税率（基准6.72，但可以浮动）
                     }

@@ -92,6 +92,7 @@ public class Settlement {
         this.flag = flag;
     }
 
+    //是否需要计算社保，补发工资和代发工资不需要计算五险一金
     public void setNeedCalculateSocial(boolean need){
         if(need){
             flag = (byte)Bit.set(flag,0);
@@ -108,8 +109,8 @@ public class Settlement {
     }
 
 
-    //判断是否需要计算社保，实际就是补发工资
-    public boolean isNeedCalculateSocial(){
+    //判断是否需要计算五险一金，补发工资和代发工资不需要计算五险一金
+    public boolean isNeedCalcInsurance(){
         return Bit.test(flag,0);
     }
 

@@ -52,6 +52,35 @@ public class CollectionUtil {
     }
 
     /**
+     * 过滤集合
+     * @param collection 集合
+     * @param key 键名，要保证元素有对应的get方法，如key="id",则应有方法名getId
+     * @param value 键值，应为long或者int类型
+     * @param <T> 元素类型
+     * @return 过滤好的集合 list
+     */
+    public static <T> List<T>  filter(List<T> collection,String key,long value){
+        Method method = null;
+        long v;
+        List<T> list = new ArrayList<>();
+        try {
+            for(T o:collection){
+                if(method == null) {
+                    String functionName = String.format("get%s%s",key.substring(0,1).toUpperCase(),key.substring(1));
+                    method = o.getClass().getMethod(functionName);
+                }
+                v = (long) method.invoke(o);
+                if(v == value){
+                    list.add(o);
+                }
+            }
+            return list;
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
      * 从集合中按照主键获取元素
      * @param collection 集合
      * @param key 键名，要保证元素有对应的get方法，如key="id",则应有方法名getId

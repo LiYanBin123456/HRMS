@@ -130,9 +130,10 @@ public class SettlementServlet extends HttpServlet {
 
     //保存并且计算结算单明细
     private String calcDetail(Connection conn, HttpServletRequest request) {
-        int category = Integer.parseInt(request.getParameter("category"));//类别
+        int category = Integer.parseInt(request.getParameter("category"));//结算单类别 1 普通结算单 2小时工结算单 3商业保险结算单 4 特殊结算单
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
         long cid = Long.parseLong(request.getParameter("cid"));//合作单位id
+
         DaoUpdateResult result = null;
         switch (category){
             case 1://普通结算单

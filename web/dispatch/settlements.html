@@ -365,7 +365,7 @@
                 var msg = "保存后结算单将被设置为[保存]状态，同时会自动计算社保、医保和个税等，确认保存吗？";
                 var title = "保存结算单-"+settlement.name+dateUtil.format_date(settlement.month);
                 layer.confirm(msg, {icon: 3, title:title}, function(index){
-                    webInterface.settlement.saveSettlement({id:settlement.id,category:category,success:function () {
+                    webInterface.settlement.calcSettlement({sid:settlement.id,category:category,success:function () {
                         layer.close(index);
                         layer.msg("保存成功");
                         getSettlements();

@@ -71,7 +71,7 @@
     var param_query_cooperator = new QueryParam();
     var param_query_contract = new QueryParam();
     var category =  $.query.get("category");//1-普通/2-小时工/3-商业保险/4-特殊结算单
-    var type =  $.query.get("type");//普通结算单的 0-劳务派遣/1-劳务外包/2-代发工资/3-代缴工资社保
+    var type =  $.query.get("type");//普通结算单的 1-劳务派遣 2-劳务外包 3-代发工资 4-代缴工资社保
 
     loadLayuiModule();
 
@@ -91,9 +91,13 @@
             form.on('radio(mode)', function(data){
                 settlement.mode = data.value;
             });
-            if (type!=1 && type!=2){//只有普通结算单的劳务派遣和劳务外包需要自动计算社保
+            if (type!=1 && type!=2){//代发工资和代缴社保不需要这个按钮，但是代缴社保需要计算五险一金
                 $("#if_social").addClass("layui-hide");
-                settlement.calc = false;
+                if (type ==3){//代发工资,不需要计算社保
+                    settlement.calc = false;
+                }else {//代缴社保需要计算五险一金
+                    settlement.calc = true;
+                }
             }else {
                 form.on('radio(calc)', function(data){
                     settlement.calc = data.value;
@@ -131,9 +135,9 @@
     function getContracts(cid) {
         switch (category){
             case 1:
-                if (type==0||type==1){//外包或者派遣
+                if (type==1||type==2){//外包或者派遣
                     param_query_contract.addCondition('stype','=',0);//获取劳务外包服务类型的合同
-                }else {//代缴社保工资
+                }else {//代缴社保工资和代发工资的合同
                     param_query_contract.addCondition('stype','=',1);//获取人事代理服务类型的合同
                 }
                 break;

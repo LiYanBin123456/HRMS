@@ -3,6 +3,7 @@ package bean.settlement;
 import bean.client.MapSalary;
 import bean.employee.Deduct;
 import bean.employee.EnsureSetting;
+import bean.insurance.Insurance;
 import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
 import utills.Salary.Tax;
@@ -53,7 +54,7 @@ public class Detail1 extends Detail {
     private float f19;
     private float f20;
 
-    public static final byte STATUS_NORMAL = 0;
+    public static final byte STATUS_NORMAL = 0;//正常
     public static final byte STATUS_REPLENISH = 1;//补缴
     public static final byte STATUS_BALANCE = 2;//补差
     public static final byte STATUS_CUSTOM = 3;//自定义（什么都不计算）
@@ -677,9 +678,49 @@ public class Detail1 extends Detail {
      */
     public void calculateTax(Deduct deduct){
         float taxDue=deduct.total()+this.getPayable();//应税额 = 累计应税额+ 本期收入
-        float tax = Tax.tax1(taxDue);
+        float tax = Tax.tax1(taxDue);//计算普通个税
         tax -= deduct.getPrepaid();//本期个税 = 累计应缴个税-累计预缴个税
         this.tax = tax<=0?0:tax;
+    }
+
+    /**
+     * 正常计算五险一金
+     * @param insurances 员工险种集合
+     */
+    public void calcInsurance(List<Insurance> insurances){
+        for(Insurance i:insurances){
+            float base = i.getBase();//基数
+            float v1 = i.getV1();//个人比例或者金额
+            float v2 = i.getV2();//单位比例或者金额
+            switch (i.getCategory()){
+                case Insurance.CATEGORY0:////养老保险
+                    this.pension1 = base*v1;//个人养老保险
+                    this.pension2 = base*v2;//单位养老保险
+                    break;
+                case Insurance.CATEGORY1://工伤保险
+                    this.injury = base*v2+v1;//工伤保险
+                    break;
+                case Insurance.CATEGORY2://失业保险
+                    this.unemployment1 = base*v1;//个人失业保险
+                    this.unemployment2 = base*v2;//单位失业保险
+                    break;
+                case Insurance.CATEGORY3://医疗保险
+                    this.medicare1=base*v1;//个人医疗保险
+                    this.medicare2=base*v2;//单位医疗保险
+                    break;
+                case Insurance.CATEGORY4://大病保险
+                    this.disease1 = v1;//个人大病
+                    this.disease2 = v2;//单位大病
+                    break;
+                case Insurance.CATEGORY5://生育保险
+                    this.birth = base*v2;//单位大病生育保险
+                    break;
+                case Insurance.CATEGORY6://公积金
+                    this.fund1 =base*v1;//单位和个人公积金比例一致
+                    this.fund2 =base*v1;
+                    break;
+            }
+        }
     }
     /**
      * 计算医保
@@ -703,15 +744,15 @@ public class Detail1 extends Detail {
         }
         byte medicare = setting.getMedicare();//要计算的医保类别
         if((medicare&((byte)1)) != 0){
-            this.medicare1 = base*(ruleMedicare.getPer2()/100);//个人医疗
-            this.medicare2 =base*(ruleMedicare.getPer1()/100);//单位医疗
+            this.medicare1 = base*(ruleMedicare.getPer2());//个人医疗
+            this.medicare2 =base*(ruleMedicare.getPer1());//单位医疗
         }
         if((medicare&((byte)2)) != 0){
             this.disease1 = ruleMedicare.getFin2();//个人大病
             this.disease2 = ruleMedicare.getFin1();//单位大病
         }
         if((medicare&((byte)4)) != 0){
-            this.birth = base*(ruleMedicare.getPer3()/100);//单位生育
+            this.birth = base*(ruleMedicare.getPer3());//单位生育
         }
     }
 
@@ -736,15 +777,15 @@ public class Detail1 extends Detail {
 
         byte social = setting.getSocial();//要计算的社保类别
         if((social&((byte)1)) != 0){
-            this.pension1=base*(ruleSocial.getPer2()/100);//个人养老
-            this.pension2=base*(ruleSocial.getPer1()/100);//单位养老
+            this.pension1=base*(ruleSocial.getPer2());//个人养老
+            this.pension2=base*(ruleSocial.getPer1());//单位养老
         }
         if((social&((byte)2)) != 0){
-            this.unemployment1=base*(ruleSocial.getPer5()/100);//个人失业
-            this.unemployment2=base*(ruleSocial.getPer4()/100);//单位失业
+            this.unemployment1=base*(ruleSocial.getPer5());//个人失业
+            this.unemployment2=base*(ruleSocial.getPer4());//单位失业
         }
         if((social&((byte)4)) != 0) {
-            this.injury = base * (setting.getPerInjury()/100)+ruleSocial.getExtra();//单位工伤
+            this.injury = base * (setting.getPerInjury())+ruleSocial.getExtra();//单位工伤
         }
     }
 
@@ -753,7 +794,7 @@ public class Detail1 extends Detail {
      * @param setting 医社保设置
      */
     public void calcFund(EnsureSetting setting) {
-        float fund = setting.getBaseFund()*setting.getPerFund()/100;
+        float fund = setting.getBaseFund()*setting.getPerFund();
         this.fund1 = fund;//个人公积金
         this.fund2 = fund;//单位公积金
     }

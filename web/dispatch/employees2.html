@@ -357,7 +357,7 @@
                     var msg = "确认将选中的"+employees.length+"个员工派遣至"+cooperation.name+"?";
                     layer.confirm(msg, {icon: 3, title:'批量派遣'}, function(index){
                         var ids = collectionUtil.getKeyArray(employees,"id");
-                        webInterface.employee.dispatch({eids:eids,cid:cooperation.id,success:function () {
+                        webInterface.employee.dispatch({eids:ids,cid:cooperation.id,success:function () {
                             layer.close(index);
                             layer.msg('派遣成功');
                         }});

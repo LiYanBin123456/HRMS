@@ -4,13 +4,14 @@ import java.util.Date;
 
 //参保单
 public class Insurance {
-    public static byte CATEGORY0 = 0;//养老保险
-    public static byte CATEGORY1 = 1;//失业保险
-    public static byte CATEGORY2 = 2;//工伤保险
-    public static byte CATEGORY3 = 3;//医疗保险
-    public static byte CATEGORY4 = 4;//生育保险
-    public static byte CATEGORY5 = 5;//大病保险
-    public static byte CATEGORY6 = 6;//公积金
+    public final static byte CATEGORY0 = 0;//养老保险
+    public final static byte CATEGORY1 = 1;//工伤
+    public final static byte CATEGORY2 = 2;//失业保险
+
+    public final static byte CATEGORY3 = 3;//医疗保险
+    public final static byte CATEGORY4 = 4;//大病保险
+    public final static byte CATEGORY5 = 5;//生育保险
+    public final static byte CATEGORY6 = 6;//公积金
 
     public static byte TYPE_MIN = 0;//最低标准
     public static byte TYPE_CUSTOM = 1;//自定义标准

@@ -145,23 +145,25 @@ public class EmployeeService {
 
     //批量派遣
     public static String dispatch(Connection conn, String[] eids,long cid) {
-        QueryConditions condition = new QueryConditions();
-        condition.add("id","=",cid);
-        DaoQueryResult res1 = CooperationDao.get(conn,condition);
-        Cooperation c = (Cooperation) res1.data;
+//        QueryConditions condition = new QueryConditions();
+//        condition.add("id","=",cid);
+//        DaoQueryResult res1 = CooperationDao.get(conn,condition);
+//        Cooperation c = (Cooperation) res1.data;
+//
+//        ConnUtil.closeAutoCommit(conn);
 
-        ConnUtil.closeAutoCommit(conn);
-        DaoUpdateResult res2 = SettingDao.updateInjuryPer(conn,eids,c.getPer1());
+        //为什么要修改工伤？
+        //DaoUpdateResult res2 = SettingDao.updateInjuryPer(conn,eids,c.getPer1());
         DaoUpdateResult res3 = EmployeeDao.dispatch(conn,eids,cid);
+        return JSONObject.toJSONString(res3);
 
-
-        if(res2.success && res3.success){
-            ConnUtil.commit(conn);
-            return DaoResult.success();
-        }else{
-            ConnUtil.rollback(conn);
-            return DaoResult.fail("数据库出错误");
-        }
+//        if(res2.success && res3.success){
+//            ConnUtil.commit(conn);
+//            return DaoResult.success();
+//        }else{
+//            ConnUtil.rollback(conn);
+//            return DaoResult.fail("数据库出错误");
+//        }
     }
 
     //雇用

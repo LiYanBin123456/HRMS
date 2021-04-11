@@ -59,7 +59,7 @@
         <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
             <div class="layui-form-item">
                 <label class="layui-form-label">
-                    <span class="x-red">*</span>累计扣除总额</label>
+                    <span class="x-red">*</span>累计专扣总额</label>
                 <div class="layui-input-inline">
                     <input type="text" name="deduct" class="layui-input layui-disabled">
                 </div>
@@ -127,10 +127,10 @@
                     layer.msg("保存成功");
                 }});
             }else {
-                card.eid = eid;
+                deduct.eid = eid;
                 webInterface.employee.insertDeduct({deduct:deduct,success:function (res) {
                     op = "update";
-                    layform.val('form_deduct',card);
+                    layform.val('form_deduct',deduct);
                     layer.msg("保存成功");
                 }});
             }

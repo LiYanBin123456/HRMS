@@ -12,7 +12,7 @@ public class Settlement1 extends Settlement {
     public static final byte TYPE_3 = 3;//代发工资
     public static final byte TYPE_4 = 4;//代缴社保
 
-    private byte type;
+    private byte type;//普通结算单类型 1 派遣 2外包 3代发工资 4 代缴社保
     private float salary;//应发工资总额
     private float social;//单位社保总额
     private float medicare;//单位医保总额
@@ -197,8 +197,8 @@ public class Settlement1 extends Settlement {
 
         //计算社保、医保、公积金和核收补减总额
         for (ViewDetail1 detail : details) {
-            //应发总额+=明细中的应发总额
-            this.salary += detail.getPayable();
+            //应发总额+=明细中的应发总额+个人五险一金（因为明细中的应发是减去了个人五险一金的，而这里不需要减去）
+            this.salary += (detail.getPayable()+detail.getTotalPerson() +detail.getFund1());
             this.social += detail.getSocialDepartment();//单位社保总额
             this.medicare += detail.getMedicaleDepartment();//单位医保总额
             this.fund += detail.getFund2();//单位公积金总额
@@ -222,7 +222,7 @@ public class Settlement1 extends Settlement {
             case 0://劳务派遣
                 if(category==0){//按人数收取的结算方式
                     //管理费总额=人数*管理费,如果不需要计算社保（即补发），不需要重复计算管理费
-                    this.manage = this.isNeedCalculateSocial()?num*value:0;
+                    this.manage = this.isNeedCalcInsurance()?num*value:0;
                     if(invoice==0){//增值税专用发票（全额）
                         this.tax=(salary+social+medicare+fund+manage)*per;//税费 = （应发总额+单位五险一金+管理费）*税率（基准6.72，但可以浮动）
                     }
