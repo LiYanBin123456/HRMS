@@ -66,6 +66,17 @@ public class InsuranceDao {
         return DbUtil.update(conn, sql, params);
     }
 
+    //批量修改状态
+    public static DaoUpdateResult updateStatus(Connection conn, List<Insurance> insurances) {
+        String sql = "update insurance set status=?,reason=? where eid=? and category=?";
+        Object [][]params = new Object[insurances.size()][];
+        for (int i = 0; i < insurances.size(); i++) {
+            Insurance s = insurances.get(i);
+            params[i] = new Object[]{s.getStatus(),s.getReason(),s.getEid(),s.getCategory()};
+        }
+        return DbUtil.batch(conn,sql,params);
+    }
+
     //插入
     public static DaoUpdateResult insert(Connection conn, Insurance in) {
         String sql = "insert insurance (eid,city,category,code,base,baseType,v1,v2,date,status,reason) values(?,?,?,?,?,?,?,?,?,?,?)";
@@ -82,6 +93,17 @@ public class InsuranceDao {
             params[i] = new Object[]{in.getEid(), in.getCity(),in.getCategory(), in.getCode(),in.getBase(),in.getBaseType(),in.getV1(),in.getV2(),in.getDate(),in.getStatus(),in.getReason()};
         }
         return DbUtil.insertBatch(conn, sql, params);
+    }
+
+    //批量删除
+    public static DaoUpdateResult delete(Connection conn, List<Insurance> insurances) {
+        String sql = "delete from insurance where eid = ? and category = ? ";
+        Object[][] params = new Object[insurances.size()][];
+        for (int i = 0; i < insurances.size(); i++) {
+            Insurance in = insurances.get(i);
+            params[i] = new Object[]{in.getEid(), in.getCategory()};
+        }
+        return DbUtil.batch(conn, sql, params);
     }
 
     //自动生成员工参保单

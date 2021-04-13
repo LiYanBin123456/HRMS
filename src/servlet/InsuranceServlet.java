@@ -7,12 +7,10 @@ import com.alibaba.fastjson.JSONObject;
 import dao.insurance.InsuranceDao;
 import database.*;
 import service.insurance.InsuranceService;
-import utills.excel.Scheme;
 import utills.excel.SchemeDefined;
 import utills.excel.XlsUtil;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -39,8 +37,11 @@ public class InsuranceServlet extends HttpServlet {
         Connection conn = ConnUtil.getConnection();
         String op = request.getParameter("op");
         switch (op) {
-            case "insert"://批量插入参保单
+            case "insert"://插入参保单
                 result = insert(conn,request);
+                break;
+            case "insertBatch"://批量插入参保单
+                result = insertBatch(conn,request);
                 break;
             case "update"://修改参保单
                 result = update(conn,request);
@@ -109,13 +110,20 @@ public class InsuranceServlet extends HttpServlet {
     //修改
     private String update(Connection conn, HttpServletRequest request) {
         List<Insurance> insurances = JSONArray.parseArray(request.getParameter("insurances"),Insurance.class);
-        return InsuranceService.updateBatch(conn,insurances);
+        return InsuranceService.update(conn,insurances);
     }
 
     //批量插入
     private String insert(Connection conn, HttpServletRequest request) {
         List<Insurance> insurances = JSONArray.parseArray(request.getParameter("insurances"),Insurance.class);
-        return InsuranceService.insertBatch(conn,insurances);
+        return InsuranceService.insert(conn,insurances);
+    }
+
+    //批量设置五险一金
+    private String insertBatch(Connection conn, HttpServletRequest request) {
+        List<Insurance> insurances = JSONArray.parseArray(request.getParameter("insurances"),Insurance.class);
+        String[] eids = request.getParameterValues("eids[]");//获取员工的eids
+        return InsuranceService.insertBatch(conn,eids,insurances);
     }
 
 }

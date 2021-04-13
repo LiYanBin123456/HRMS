@@ -15,27 +15,99 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
+import utills.CollectionUtil;
 
+import javax.jnlp.ExtensionInstallerService;
+import javax.lang.model.element.VariableElement;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
-import java.util.Date;
+import java.util.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
 
 public class InsuranceService {
-    //批量插入
-    public static String insertBatch(Connection conn, List<Insurance> insurances) {
+    //插入
+    public static String insert(Connection conn, List<Insurance> insurances) {
        DaoUpdateResult res = InsuranceDao.insert(conn,insurances);
        return JSONObject.toJSONString(res);
     }
-    //批量插入
-    public static String updateBatch(Connection conn, List<Insurance> insurances) {
+
+    //批量更新
+    public static String insertBatch(Connection conn, String[] eids,List<Insurance> insurances) {
+        /**
+         * 1、封装所有员工的五险一金信息
+         * 2、根据eids查询出所有的五险一金
+         * 3、校对，如果存在同种数据则覆盖并且放入修改集合中否则放入新增集合
+         * 4、如果数据库中存在，传递过来的数据中没有则需要停保
+         * 5、插入数据库
+         */
+        List<Insurance> list = new ArrayList<>();
+        List<Insurance> insurances_insert = new ArrayList<>();//新增集合
+        List<Insurance> insurances_update= new ArrayList<>();//修改集合
+        List<Insurance> insurances_delete= new ArrayList<>();//删除集合
+        List<Insurance> insurances_updateStatus= new ArrayList<>();//修改集合
+
+        for(int i = 0;i<eids.length;i++){
+            for(Insurance in:insurances){
+                Insurance insurance = new Insurance(Long.parseLong(eids[i]),in.getCity(),in.getCategory(),in.getCode(),in.getBase(),in.getBaseType()
+                ,in.getV1(),in.getV2(),in.getDate(),in.getStatus(),in.getReason());
+                list.add(insurance);
+            }
+        }
+
+        //根据eids查询出员工已存在所拥有的五险一金
+        QueryParameter p = new QueryParameter();
+        String ids= "";
+        for(int i =0 ;i<eids.length;i++){
+            ids+= eids[i]+",";
+        }
+        if(ids.length()>1){
+            ids = ids.substring(0,ids.length()-1);
+        }
+        p.addCondition("eid","in",ids);
+        List<Insurance> exists = (List<Insurance>) InsuranceDao.getList(conn, p).rows;
+
+        //遍历传递过来的参保信息，如果数据库中已存在则修改，否则添加
+        String []keys = {"eid","category"};
+        for(Insurance insurance:list){
+            Object []values = {insurance.getEid(),insurance.getCategory()};
+            if(CollectionUtil.filter(exists,keys,values).size() > 0){
+                insurances_update.add(insurance);
+            }else{
+                insurances_insert.add(insurance);
+            }
+        }
+
+        //遍历数据库中的参保信息，如果不存在于传递过来的参保则停保
+        for(Insurance insurance:exists){
+            Object []values = {insurance.getEid(),insurance.getCategory()};
+            if(CollectionUtil.filter(list,keys,values).size() == 0){
+                if(insurance.getStatus()==Insurance.STATUS_APPENDING){//如果该数据是新增的，则删除，否则修改为拟停状态
+                    insurances_delete.add(insurance);
+                }else {
+                    insurance.setStatus(Insurance.STATUS_STOPING);
+                    insurances_updateStatus.add(insurance);
+                }
+            }
+        }
+        ConnUtil.closeAutoCommit(conn);
+        DaoUpdateResult res1 = InsuranceDao.insert(conn,insurances_insert);//批量插入
+        DaoUpdateResult res2 = InsuranceDao.update(conn,insurances_update);//批量修改
+        DaoUpdateResult res3 = InsuranceDao.updateStatus(conn,insurances_updateStatus);//批量停保
+        DaoUpdateResult res4 = InsuranceDao.delete(conn,insurances_delete);//删除停保
+
+        if(res1.success && res2.success && res3.success && res4.success){
+           ConnUtil.commit(conn);
+        }else {
+            return DaoResult.fail("数据库错误");
+        }
+        return JSONObject.toJSONString(res1);
+    }
+
+    //修改
+    public static String update(Connection conn, List<Insurance> insurances) {
         DaoUpdateResult res = InsuranceDao.update(conn,insurances);
        return JSONObject.toJSONString(res);
     }

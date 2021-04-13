@@ -375,22 +375,22 @@
                     title:"设置为",
                     type: 2,
                     area: ['80%', '80%'],
-                    content: "../dialog/selectSetting.html",
+                    content: "../dialog/employee_setting2.html",
                     btn: ['保存', '关闭']
                     ,yes: function(index, layero){
-                        var setting = window["layui-layer-iframe" + index].callbackData();
+                        var insurances = window["layui-layer-iframe" + index].callbackData();
                         layer.close(index);
-                        batchSetting(employees,setting);
+                        batchSetting(employees,insurances);
                     },btn2: function(index, layero){
                         layer.close(index);
                     }
                 });
 
-                function batchSetting(employees,setting){
+                function batchSetting(employees,insurances){
                     var msg = "确认统一设置"+employees.length+"个员工的社保信息吗?";
                     layer.confirm(msg, {icon: 3, title:'社保批量设置'}, function(index){
-                        var ids = collectionUtil.getKeyArray(employees,"id");
-                        webInterface.employee.settingBatch({eids:ids,setting:setting,success:function () {
+                        var eids = collectionUtil.getKeyArray(employees,"id");
+                        webInterface.insurance.insertBatch({eids:eids,insurances:insurances,success:function () {
                             layer.msg('设置成功');
                             layer.close(index);
                         }});

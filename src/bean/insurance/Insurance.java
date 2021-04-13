@@ -22,8 +22,8 @@ public class Insurance {
     public static byte STATUS_STOPED = 4;//停保
     public static byte STATUS_ERROR = 5;//异常
 
-    private long eid;//员工id
-    private String city;//参保城市
+    private long eid;//员工id1
+    private String city;//参保城市1
     private byte category;//险种
     private String code;//代码
     private float base;//基数
@@ -33,6 +33,24 @@ public class Insurance {
     private Date date;//参保时间
     private byte status;//状态 0 未参保 1 新增 2 在保 3拟停 4 停保 5异常
     private String reason;//变动原因
+
+
+    public Insurance(long eid, String city, byte category, String code, float base, byte baseType, float v1, float v2, Date date, byte status, String reason) {
+        this.eid = eid;
+        this.city = city;
+        this.category = category;
+        this.code = code;
+        this.base = base;
+        this.baseType = baseType;
+        this.v1 = v1;
+        this.v2 = v2;
+        this.date = date;
+        this.status = status;
+        this.reason = reason;
+    }
+
+    public Insurance() {
+    }
 
     public long getEid() {
         return eid;

@@ -1107,6 +1107,18 @@ var webInterface = {
         },
 
         /**
+         * 添加参保单
+         * @param insurances 参保单集合
+         * @param success
+         * @param fail
+         */
+        insertBatch:function(param) {
+            param.url = this.url;
+            param.data = {op: "insertBatch", eids:param.eids,insurances:JSON.stringify(param.insurances)};
+            webInterface.access(param);
+        },
+
+        /**
          * 获取参保单详情
          * @param id 员工id
          * @param category 0-社保 1-医保 2-公积金

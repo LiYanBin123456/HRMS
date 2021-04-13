@@ -9,6 +9,8 @@ import java.util.List;
 
 public class CollectionUtil {
     public static void main(String[] args) {
+        int []arr = {1,2,3,4};
+        System.out.println(arr.toString());
         /*byte b = 0;
         Product d1 = new Product(1L,1L,"name1",0,0,0,b,b,b,b,"");
         Product d2 = new Product(2L,1L,"name2",0,0,0,b,b,b,b,"");
@@ -21,6 +23,10 @@ public class CollectionUtil {
         Product d = CollectionUtil.getElement(products,"id",4L);
         System.out.println(d);*/
 
+    }
+
+    public static String getType(Object o){ //获取变量类型方法
+        return o.getClass().toString(); //使用int类型的getClass()方法
     }
 
     /**
@@ -59,7 +65,7 @@ public class CollectionUtil {
      * @param <T> 元素类型
      * @return 过滤好的集合 list
      */
-    public static <T> List<T>  filter(List<T> collection,String key,long value){
+    public static <T> List<T>  filter(List<T> collection,String key,Object value){
         Method method = null;
         long v;
         List<T> list = new ArrayList<>();
@@ -69,15 +75,45 @@ public class CollectionUtil {
                     String functionName = String.format("get%s%s",key.substring(0,1).toUpperCase(),key.substring(1));
                     method = o.getClass().getMethod(functionName);
                 }
-                v = (long) method.invoke(o);
-                if(v == value){
-                    list.add(o);
+                String type = getType(value);
+                switch (type){
+                    case "class java.lang.Byte":
+                        v = (byte) method.invoke(o);
+                        if(v == (byte)value){
+                            list.add(o);
+                        }
+                        break;
+                    case "class java.lang.Integer":
+                        v = (int) method.invoke(o);
+                        if(v == (int)value){
+                            list.add(o);
+                        }
+                        break;
+                    case "class java.lang.Long":
+                        v = (long) method.invoke(o);
+                        if(v == (long)value){
+                            list.add(o);
+                        }
+                        break;
                 }
             }
             return list;
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public static <T> List<T>  filter(List<T> collection,String []keys,Object []values){
+        List<T> list = new ArrayList<>();
+        list.addAll(collection);
+        for(int i=0; i<keys.length; i++){
+            List<T> t = filter(list,keys[i],values[i]);
+            if(t == null){
+                return new ArrayList<>();
+            }
+            list = t;
+        }
+        return list;
     }
 
     /**
