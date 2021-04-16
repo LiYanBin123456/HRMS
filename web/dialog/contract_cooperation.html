@@ -211,6 +211,7 @@
                         $('#preview_contact').attr('src', "../images/PDF.png"); //图片链接（base64）
                     });
                     this.data={op:"upload",category:2,id:contract.id}
+                    layer.msg("正在上传");
                 }
                 , done: function (res) {
                     //直接修改src无法刷新，只能重新操作dom

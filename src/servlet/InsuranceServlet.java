@@ -11,6 +11,7 @@ import utills.excel.SchemeDefined;
 import utills.excel.XlsUtil;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ import java.util.List;
 
 
 @WebServlet(name = "InsuranceServlet",urlPatterns = "/verify/insurance")
+@MultipartConfig
 public class InsuranceServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doPost(request,response);
@@ -37,8 +39,8 @@ public class InsuranceServlet extends HttpServlet {
         Connection conn = ConnUtil.getConnection();
         String op = request.getParameter("op");
         switch (op) {
-            case "insert"://插入参保单
-                result = insert(conn,request);
+            case "insertAndupdate"://插入参保单
+                result = insertAndupdate(conn,request);
                 break;
             case "insertBatch"://批量插入参保单
                 result = insertBatch(conn,request);
@@ -66,8 +68,7 @@ public class InsuranceServlet extends HttpServlet {
     //校对参保单
     private String check(Connection conn, HttpServletRequest request) throws IOException, ServletException {
         DaoUpdateResult result=null;
-        byte category = Byte.parseByte(request.getParameter("category"));//判断是社保，医保，公积金
-        byte type = Byte.parseByte(request.getParameter("status"));//判断社保的类型
+        byte type = Byte.parseByte(request.getParameter("status"));//判断校对的类型 0养老 1工伤 2失业 3医疗 4工伤
         Part part = request.getPart("file");
         InputStream is=null;
         JSONArray data;
@@ -76,16 +77,18 @@ public class InsuranceServlet extends HttpServlet {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-        switch (category){
-            case 0://校对社保
+        switch (type){
+            case 0://校对养老
+            case 1://校对社保
+            case 2://校对社保
                 data = XlsUtil.read(is, SchemeDefined.SCHEME_SOCIAL,1);
                 result = InsuranceService.checkSocial(conn,data,type);
                 break;
-            case 1://校对医保
+            case 3://校对医保
                 data = XlsUtil.read(is,SchemeDefined.SCHEME_MEDICAL,1);
                 result = InsuranceService.checkMedicare(conn,data);
                 break;
-            case 2://校对公积金
+            case 4://校对公积金
                 data = XlsUtil.read(is,SchemeDefined.SCHEME_FUND,1);
                 result = InsuranceService.checkFund(conn,data);
                 break;
@@ -114,9 +117,11 @@ public class InsuranceServlet extends HttpServlet {
     }
 
     //批量插入
-    private String insert(Connection conn, HttpServletRequest request) {
-        List<Insurance> insurances = JSONArray.parseArray(request.getParameter("insurances"),Insurance.class);
-        return InsuranceService.insert(conn,insurances);
+    private String insertAndupdate(Connection conn, HttpServletRequest request) {
+        List<Insurance> insurances_insert = JSONArray.parseArray(request.getParameter("insurances_insert"),Insurance.class);
+        List<Insurance> insurances_update = JSONArray.parseArray(request.getParameter("insurances_update"),Insurance.class);
+
+        return InsuranceService.insertAndupdate(conn,insurances_insert,insurances_update);
     }
 
     //批量设置五险一金

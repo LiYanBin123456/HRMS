@@ -178,4 +178,9 @@ public class Detail2 extends Detail {
         this.tax = tax<=0?0:tax;
         this.paid = this.payable-this.tax;
     }
+
+    public void calc() {
+        this.payable = this.total(this.price);//本期收入
+        this.paid = this.payable;
+    }
 }

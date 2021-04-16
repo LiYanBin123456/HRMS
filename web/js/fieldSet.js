@@ -766,7 +766,11 @@ var status_insurance = [
     {value:2,text:"在保"},
     {value:3,text:"拟停"},
     {value:4,text:"停保"},
-    {value:5,text:"异常"}
+    {value:5,text:"新增异常"},
+    {value:6,text:"在保异常"},
+    {value:7,text:"拟停异常"},
+    {value:8,text:"停保异常"},
+    {value:9,text:"异常"}
 ];
 var period_product = [
     {value:0,text:"上班时间"},

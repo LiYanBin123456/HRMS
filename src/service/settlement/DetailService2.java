@@ -1,13 +1,18 @@
 package service.settlement;
 
+import bean.contract.Serve;
 import bean.employee.Deduct;
 import bean.employee.Employee;
 import bean.settlement.Detail2;
+import bean.settlement.Settlement2;
 import bean.settlement.ViewDetail2;
+import bean.settlement.ViewSettlement2;
 import com.alibaba.fastjson.JSONObject;
+import dao.contract.ServeDao;
 import dao.employee.DeductDao;
 import dao.employee.EmployeeDao;
 import dao.settlement.Detail2Dao;
+import dao.settlement.Settlement2Dao;
 import database.*;
 
 import java.sql.Connection;
@@ -59,6 +64,15 @@ public class DetailService2 {
         QueryParameter param = new QueryParameter();
         param.addCondition("sid","=",sid);
         List<Detail2> details = (List<Detail2>) Detail2Dao.getList(conn,param).rows;
+        //获取小时工结算单视图
+        ViewSettlement2 vs = (ViewSettlement2) Settlement2Dao.get(conn, sid).data;
+        Serve serve = (Serve) ServeDao.get(conn, vs.getCcid()).data;
+        byte payer = serve.getPayer();//0 派遣单位发放工资  1 合作客户发放工资
+        if (payer == 1) {//合作客户发放工资  单价=公司单价-员工单价
+            vs.setPrice(vs.getPrice()-details.get(0).getPrice());
+            Settlement2 settlement2 = vs;
+            Settlement2Dao.update(conn,settlement2);
+        }
 
         for(Detail2 detail:details){
             QueryConditions conditions = new QueryConditions();
@@ -68,9 +82,12 @@ public class DetailService2 {
             if(deduct==null){
                 return DaoResult.fail("请完善该员工"+employee.getName()+"的个税专项扣除");
             }
-            detail.calc(deduct);
+            if (payer == 1) {//合作客户发放工资  不计算个税
+                detail.calc();
+            }else {//派遣方发工资计算个税
+                detail.calc(deduct);
+            }
         }
-
         DaoUpdateResult res = Detail2Dao.update(conn,details);
         return JSONObject.toJSONString(res);
     }

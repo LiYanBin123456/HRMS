@@ -17,6 +17,7 @@ public class Deduct {
     private float deduct4;//大病医疗
     private float deduct5;//住房贷款利息
     private float deduct6;//租房租金
+    private boolean flag;//简易扣除方式标记
 
     public Deduct() {
     }
@@ -33,6 +34,21 @@ public class Deduct {
         this.deduct4 = deduct4;
         this.deduct5 = deduct5;
         this.deduct6 = deduct6;
+    }
+
+    public Deduct(long eid, float income, float free, float prepaid, float deduct, float deduct1, float deduct2, float deduct3, float deduct4, float deduct5, float deduct6, boolean flag) {
+        this.eid = eid;
+        this.income = income;
+        this.free = free;
+        this.prepaid = prepaid;
+        this.deduct = deduct;
+        this.deduct1 = deduct1;
+        this.deduct2 = deduct2;
+        this.deduct3 = deduct3;
+        this.deduct4 = deduct4;
+        this.deduct5 = deduct5;
+        this.deduct6 = deduct6;
+        this.flag = flag;
     }
 
     public long getEid() {
@@ -123,11 +139,22 @@ public class Deduct {
         this.deduct6 = deduct6;
     }
 
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
+
     /**
      * 计算历史累计应税额 累计收入额（D）– （个税累计专项扣除（E）+ 累计减除费用（F）+当月减除费用5000）
      * @return
      */
     public float total(){
+        if(flag){
+            return income-(deduct+deduct1+deduct2+deduct3+deduct4+deduct5+deduct6+60000);
+        }
         return income-(deduct+deduct1+deduct2+deduct3+deduct4+deduct5+deduct6+free+5000);
     }
 

@@ -130,7 +130,7 @@
             //监听用工性质选项变化
             layform.on('select(filter_category)', function(data){
                 var category = data.value;
-                if(category == 3){
+                if(category == 5){
                     $("[name=t2]").removeClass("layui-hide");
                 }else{
                     $("[name=t2]").addClass("layui-hide");
@@ -160,7 +160,7 @@
                 if(employee.type == 1){
                     //外派员工应显示显示外派单位，小时工应显示小时单价
                     $("[name=t1]").removeClass("layui-hide");
-                    if(employee && employee.category==3){
+                    if(employee && employee.category==5){
                         $("[name=t2]").removeClass("layui-hide");
                     }
                     //获取可选外派单位

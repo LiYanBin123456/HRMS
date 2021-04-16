@@ -16,54 +16,56 @@
 <body class="layui-layout-body">
 <div id="template" class="layui-hide">
     <li class="layui-timeline-item" name="log">
-        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+        <!--<i class="layui-icon layui-timeline-axis">&#xe63f;</i>-->
         <div class="layui-timeline-content layui-text">
             <h3 class="layui-timeline-title" name="time"></h3>
             <p name="operator"></p>
-            <p name="content"></p>
+            <!--<p name="content"></p>-->
         </div>
     </li>
 </div>
 
-<ul class="layui-timeline">
-    <li class="layui-timeline-item">
+<ul class="layui-timeline" id="logs">
+    <!--<li class="layui-timeline-item" id="edit" >-->
+        <!--<i class="layui-icon layui-timeline-axis">&#xe63f;</i>-->
+        <!--<div class="layui-timeline-content layui-text" name="p">-->
+            <!--<p class="layui-timeline-title">编辑</p>-->
+            <!--<p name="operator"></p>-->
+            <!--<h3 class="layui-timeline-title" name="time"></h3>-->
+        <!--</div>-->
+    <!--</li>-->
+    <li class="layui-timeline-item" >
         <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
-        <div class="layui-timeline-content layui-text">
-            <p class="layui-timeline-title">编辑</p>
-        </div>
-    </li>
-    <li class="layui-timeline-item">
-        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
-        <div class="layui-timeline-content layui-text">
+        <div class="layui-timeline-content layui-text" id="submit">
             <p class="layui-timeline-title">提交</p>
         </div>
     </li>
-    <li class="layui-timeline-item">
+    <li class="layui-timeline-item"  >
         <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
-        <div class="layui-timeline-content layui-text">
+        <div class="layui-timeline-content layui-text" id="check1">
             <p class="layui-timeline-title">初审</p>
         </div>
     </li>
-    <li class="layui-timeline-item">
+    <li class="layui-timeline-item" >
         <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
-        <div class="layui-timeline-content layui-text">
+        <div class="layui-timeline-content layui-text" id="check2">
             <p class="layui-timeline-title">终审</p>
         </div>
     </li>
-    <li class="layui-timeline-item">
-        <i class="layui-icon layui-timeline-axis" style="color: red">&#xe63f;</i>
-        <div class="layui-timeline-content layui-text">
+    <li class="layui-timeline-item" >
+        <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
+        <div class="layui-timeline-content layui-text" id="deduct">
             <p class="layui-timeline-title">扣款</p>
         </div>
     </li>
-    <li class="layui-timeline-item">
+    <li class="layui-timeline-item" >
         <i class="layui-icon layui-timeline-axis">&#xe63f;</i>
-        <div class="layui-timeline-content layui-text">
+        <div class="layui-timeline-content layui-text" id="put">
             <p class="layui-timeline-title">发放</p>
         </div>
     </li>
 </ul>
-<ul id="logs" class="layui-timeline"></ul>
+<!--<ul id="logs" class="layui-timeline"></ul>-->
 <script src="../js/interface.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/queryParam.js"></script>
@@ -79,17 +81,50 @@
     function getLogs() {
         var category = $.query.get("category");
         var id = $.query.get("id");
-        level.getLogs({param:param_query,id:id,category:category,success:function (result) {
+        webInterface.settlement.getLogs({param:param_query,id:id,category:category,success:function (result) {
             //显示操作日志
             var logs = result.rows;
-            for (var i in logs) {
-                var log = logs[i];
-                var node = $("#template [name=log]").clone();
-                node.find("[name=time]").text(dateUtil.format_date(log.time));
-                node.find("[name=operator]").text(log.operator);
-                node.find("[name=content]").text(log.content);
-                $("#logs").append(node);
+            if (logs.length>0){
+                for (var i in logs) {
+                    var log = logs[i];
+                    switch (log.content){
+                        case "提交":
+                            var node1 = $("#template [name=log]").clone();
+                            node1.find("[name=time]").text(dateUtil.format_date(log.time));
+                            node1.find("[name=operator]").text(log.operator);
+                            $("#submit").append(node1);
+                            ;
+                        case "初审":
+                            var node2 = $("#template [name=log]").clone();
+                            node2.find("[name=time]").text(dateUtil.format_date(log.time));
+                            node2.find("[name=operator]").text(log.operator);
+                            $("#check1").append(node2);
+                        case "终审":
+                            var node3 = $("#template [name=log]").clone();
+                            node3.find("[name=time]").text(dateUtil.format_date(log.time));
+                            node3.find("[name=operator]").text(log.operator);
+                            $("#check2").append(node3);
+                        case "扣款":
+                            var node4 = $("#template [name=log]").clone();
+                            node4.find("[name=time]").text(dateUtil.format_date(log.time));
+                            node4.find("[name=operator]").text(log.operator);
+                            $("#deduct").append(node4);
+                        case "发放":
+                            var node5 = $("#template [name=log]").clone();
+                            node5.find("[name=time]").text(dateUtil.format_date(log.time));
+                            node5.find("[name=operator]").text(log.operator);
+                            $("#put").append(node5);
+                    }
+                }
             }
+//            for (var i in logs) {
+//                var log = logs[i];
+//                var node = $("#template [name=log]").clone();
+//                node.find("[name=time]").text(dateUtil.format_date(log.time));
+//                node.find("[name=operator]").text(log.operator);
+//                node.find("[name=content]").text(log.content);
+//                $("#logs").append(node);
+//            }
         }});
     }
 

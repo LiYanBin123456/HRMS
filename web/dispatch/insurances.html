@@ -51,7 +51,12 @@
                     <option value="2">在保</option>
                     <option value="3">拟停</option>
                     <option value="4">停保</option>
-                    <option value="5">异常</option>
+                    <option value="5">新增异常</option>
+                    <option value="6">在保异常</option>
+                    <option value="7">拟停异常</option>
+                    <option value="8">停保异常</option>
+                    <option value="9">异常</option>
+
                 </select>
             </div>
             <div class="layui-input-inline">
@@ -65,7 +70,7 @@
         </form>
         <!--顶部工具栏-->
 
-        <button class="layui-btn layui-btn-sm" style="display: none" id="checkSocial"><i class="layui-icon "></i> 导入</button>
+        <button class="layui-btn layui-btn-sm" style="display: none" id="checkSocial"><i class="layui-icon "></i> 校对</button>
         <div class="layui-hide" id="top_bar">
             <button class="layui-btn layui-btn-sm" lay-event="add"><i class="layui-icon "></i> 添加</button>
             <button class="layui-btn layui-btn-sm" lay-event="export0" onclick="exportSocial1()"><i class="layui-icon "></i> 导出新增</button>
@@ -86,51 +91,8 @@
         <script src="../js/interface.js"></script>
         <script src="../js/queryParam.js"></script>
         <script>
-            var insurances = [
-                {
-                    title: '社保'
-                    , id: '0'
-                    , spread: true
-                    , children: [
-                        {
-                            title: '养老保险'
-                            , id: '0'
-                        },
-                        {
-                            title: '失业保险'
-                            , id: '1'
-                        },
-                        {
-                            title: '工伤保险'
-                            , id: '2'
-                        }
-                    ]
-                },
-                {
-                    title: '医保'
-                    , id: '0'
-                    , children: [
-                        {
-                            title: '医疗保险'
-                            , id: '3'
-                        },
-                        {
-                            title: '生育保险'
-                            , id: '4'
-                        },
-                        {
-                            title: '大病保险'
-                            , id: '5'
-                        }
-                    ]
-                },
-                {
-                    title: '公积金'
-                    , id: '6'
-                }
-            ];
             var category = 0;//记录是显示社保参保、医保参保还是公积金
-            var status=0;//记录选择的是养老、失业、工伤
+            var status;//记录选择的是养老、失业、工伤 0养老 1工伤 2失业 3医保 4公积金
 
             var param_query = new QueryParam();
             param_query.setPagination(1,10);
@@ -174,18 +136,19 @@
                     , exts: 'xls'
                     , acceptMime: '.xls'
                     ,before: function(file){
-                        this.data={op:"check",category:category,status:status}
+                        this.data={op:"check",status:status}
                     }
                     , done: function (res) {
                         if (res.success){
-                            layer.msg("校对成功");
+                            employees = JSON.stringify(res.data);
+                            initPage();
                         }else {
-                            layer.msg("xls文件不符合要求");
+                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
                         }
                     }
                     , error: function () {
                         //请求异常回调
-                        layer.msg("xls文件不符合要求");
+                        layer.msg("xls文件不符合要求，请下载模板再重新填写");
                     }
                 });
 
@@ -272,7 +235,7 @@
     
                 function checkSocial() {
                     layer.open({
-                        title:"选择需要校对的社保项",
+                        title:"选择需要校对的项目",
                         type: 2,
                         area: ['30%', '50%'],
                         content: "../dialog/selectSocial.html",

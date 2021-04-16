@@ -88,6 +88,14 @@
                     <input type="text" name="prepaid" class="layui-input layui-disabled">
                 </div>
             </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>简易运算
+                </label>
+                <div class="layui-input-inline">
+                    <input type="checkbox" name="flag" lay-skin="switch" lay-text="ON|OFF" >
+                </div>
+            </div>
         </div>
         <button type="button" class="layui-btn layui-btn-fluid" lay-submit lay-filter="saveDeduct">保存</button>
     </form>
@@ -106,7 +114,9 @@
 
         function initPage() {
             layform.on('submit(saveDeduct)', function (data) {
-                saveDeduct(data.field);
+                var deduct = data.field;
+                deduct.flag == "on"?deduct.flag=1:deduct.flag=0;
+                saveDeduct(deduct);
             });
             getDeduct();
         }
@@ -116,6 +126,7 @@
                 var deduct = result.data;
                 if(deduct){
                     op = 'update';
+                    deduct.flag==1?$("[name=flag]").prop("checked",true):"";
                     layform.val('form_deduct',deduct);
                 }
             }});

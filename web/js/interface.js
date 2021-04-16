@@ -846,7 +846,7 @@ var webInterface = {
          */
         importDetails:function (param) {
             param.url = this.url;
-            param.data = {op: "importDetails",id:param.id,details:JSON.stringify(param.details), category:param.category};
+            param.data = {op: "importDetails",id:param.id,details:param.details, category:param.category};
             webInterface.access(param);
         },
         /**
@@ -1095,14 +1095,14 @@ var webInterface = {
         },
 
         /**
-         * 添加参保单
+         * 添加和修改参保单
          * @param insurances 参保单集合
          * @param success
          * @param fail
          */
-        insert:function(param) {
+        insertAndupdate:function(param) {
             param.url = this.url;
-            param.data = {op: "insert", insurances:JSON.stringify(param.insurances)};
+            param.data = {op: "insertAndupdate", insurances_insert:JSON.stringify(param.insurances_insert),insurances_update:JSON.stringify(param.insurances_update)};
             webInterface.access(param);
         },
 

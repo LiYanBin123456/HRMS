@@ -69,13 +69,13 @@
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s2">
                         <label class="layui-form-label">单位比例</label>
                         <div class="layui-input-inline" style="width: 80px;">
-                            <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
+                            <input type="number" name="v2" autocomplete="off" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s2">
                         <label class="layui-form-label">补充金额</label>
                         <div class="layui-input-inline" style="width: 80px;">
-                            <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
+                            <input type="number" name="v1" autocomplete="off" class="layui-input ">
                         </div>
                     </div>
                 </div>
@@ -227,6 +227,11 @@
         var rule_fun;
         var layform = layui.form;
         var picker = layui.citypicker;
+
+        var insurances_medical = [];
+        var insurances_social = [];
+        var insurances_fund = [];
+
         cityPicker = new picker("#city-picker", {
             provincename: "provinceId",
             cityname: "city",
@@ -257,6 +262,7 @@
             var buy = Number(data.value);
             if(buy) {
                 $("[name=form_social]~form").removeClass("layui-hide");
+
             }else{
                 var insurance = {buy:false,v1:0,v2:0};
                 layform.val('form_social1',insurance);
@@ -386,9 +392,6 @@
             }});
 
             function showInsurances(insurances) {//展示员工的五险一金
-                var insurances_medical = [];
-                var insurances_social = [];
-                var insurances_fund = [];
                 for(var i in insurances){
                     var ins = insurances[i];
                     switch (ins.category){
@@ -514,9 +517,12 @@
             var insurances_update = [];//修改
 
             var baseS = layform.val("form_baseS");
-            if(baseS.base < rule_social.base){
-                layer.alert("社保缴纳基数不得低于最低标准"+rule_social.base);
-                return;
+            var buyS = layform.val("form_social");
+            if (buyS.buy == 1){//先判断缴纳与不缴纳
+                if(baseS.base < rule_social.base){
+                    layer.alert("社保缴纳基数不得低于最低标准"+rule_social.base);
+                    return;
+                }
             }
             var social1 = layform.val("form_social1");//养老保险数据
             if(social1.buy == "on"){
@@ -529,13 +535,11 @@
                     social1.status = 1;
                     insurances_insert.push(social1);
                 }else{
+                    var e = collectionUtil.getElement(insurances,"category",0);
+                    if(e != null){
+                        social1.status = e.status;
+                    }
                     insurances_update.push(social1);
-                }
-            }else{
-                var e = collectionUtil.getElement(insurances,"category",0)
-                if(e != null){
-                    e.status = 3;
-                    insurances_update.push(e);
                 }
             }
             var social2 = layform.val("form_social2");//工伤保险数据
@@ -549,13 +553,11 @@
                     social2.status = 1;
                     insurances_insert.push(social2);
                 }else{
+                    var e = collectionUtil.getElement(insurances,"category",1);
+                    if(e != null){
+                        social2.status = e.status;
+                    }
                     insurances_update.push(social2);
-                }
-            }else{
-                var e = collectionUtil.getElement(insurances,"category",1)
-                if(e != null){
-                    e.status = 3;
-                    insurances_update.push(e);
                 }
             }
             var social3 = layform.val("form_social3");//失业保险数据
@@ -569,19 +571,20 @@
                     social3.status = 1;
                     insurances_insert.push(social3);
                 }else{
+                    var e = collectionUtil.getElement(insurances,"category",2);
+                    if(e != null){
+                        social3.status = e.status;
+                    }
                     insurances_update.push(social3);
-                }
-            }else{
-                var e = collectionUtil.getElement(insurances,"category",2)
-                if(e != null){
-                    e.status = 3;
-                    insurances_update.push(e);
                 }
             }
             var baseM = layform.val("form_baseM");
-            if(baseM.base < rule_medical.base){
-                layer.alert("医保缴纳基数不得低于最低标准"+rule_medical.base);
-                return;
+            var buyM = layform.val("form_medical");
+            if (buyM.buy == 1){//先判断缴纳与不缴纳
+                if(baseM.base < rule_medical.base){
+                    layer.alert("医保缴纳基数不得低于最低标准"+rule_medical.base);
+                    return;
+                }
             }
             var medical1 = layform.val("form_medical1");//医疗保险数据
             if(medical1.buy == "on"){
@@ -594,13 +597,11 @@
                     medical1.status = 1;
                     insurances_insert.push(medical1);
                 }else{
+                    var e = collectionUtil.getElement(insurances,"category",3);
+                    if(e != null){
+                        medical1.status = e.status;
+                    }
                     insurances_update.push(medical1);
-                }
-            }else{
-                var e = collectionUtil.getElement(insurances,"category",3)
-                if(e != null){
-                    e.status = 3;
-                    insurances_update.push(e);
                 }
             }
             var medical2 = layform.val("form_medical2");//大病保险数据
@@ -614,13 +615,11 @@
                     medical2.status = 1;
                     insurances_insert.push(medical2);
                 }else{
+                    var e = collectionUtil.getElement(insurances,"category",4);
+                    if(e != null){
+                        medical2.status = e.status;
+                    }
                     insurances_update.push(medical2);
-                }
-            }else{
-                var e = collectionUtil.getElement(insurances,"category",4)
-                if(e != null){
-                    e.status = 3;
-                    insurances_update.push(e);
                 }
             }
             var medical3 = layform.val("form_medical3");//生育保险数据
@@ -634,26 +633,26 @@
                     medical3.status = 1;
                     insurances_insert.push(medical3);
                 }else{
+                    var e = collectionUtil.getElement(insurances,"category",5);
+                    if(e != null){
+                        medical3.status = e.status;
+                    }
                     insurances_update.push(medical3);
-                }
-            }else{
-                var e = collectionUtil.getElement(insurances,"category",5)
-                if(e != null){
-                    e.status = 3;
-                    insurances_update.push(e);
                 }
             }
 
             var fund = layform.val("form_fund");//公积金数据
-            if(fund.base < rule_fund.min || fund.base > rule_fund.max){
-                var msg = stringUtil.format("公积金缴纳基数范围为[{0}-{1}]",rule_fund.min,rule_fund.max);
-                layer.alert(msg);
-                return;
-            }
-            if(fund.v1 < rule_fund.per1 || fund.v1 > rule_fund.per2){
-                var msg = stringUtil.format("公积金缴纳比例范围为[{0}-{1}]",rule_fund.per1,rule_fund.per2);
-                layer.alert(msg);
-                return;
+            if (fund.buy == 1){//先判断缴纳与不缴纳
+                if(fund.base < rule_fund.min || fund.base > rule_fund.max){
+                    var msg = stringUtil.format("公积金缴纳基数范围为[{0}-{1}]",rule_fund.min,rule_fund.max);
+                    layer.alert(msg);
+                    return;
+                }
+                if(fund.v1 < rule_fund.per1 || fund.v1 > rule_fund.per2){
+                    var msg = stringUtil.format("公积金缴纳比例范围为[{0}-{1}]",rule_fund.per1,rule_fund.per2);
+                    layer.alert(msg);
+                    return;
+                }
             }
             if(fund.buy == "1"){
                 fund.eid = eid;
@@ -663,29 +662,27 @@
                     fund.status = 1;
                     insurances_insert.push(fund);
                 }else{
+                    var e = collectionUtil.getElement(insurances,"category",5);
+                    if(e != null){
+                        fund.status = e.status;
+                    }
                     insurances_update.push(fund);
                 }
-            }else{
-                var e = collectionUtil.getElement(insurances,"category",6)
-                if(e != null){
-                    e.status = 3;
-                    insurances_update.push(e);
-                }
             }
-
-            if(insurances_insert.length >0){
-                webInterface.insurance.insert({insurances:insurances_insert,success:function (res) {
+            console.log(insurances_insert.length,insurances_update);
+            if(insurances_insert.length >0 || insurances_update.length>0){
+                webInterface.insurance.insertAndupdate({insurances_insert:insurances_insert,insurances_update:insurances_update,success:function (res) {
                     for(var i in insurances_insert){
                         op[insurances_insert[i].category] = "update";
                     }
                     layer.msg("添加参保成功");
                 }});
             }
-            if(insurances_update.length >0){
-                webInterface.insurance.update({insurances:insurances_update,success:function (res) {
-                    layer.msg("修改参保成功");
-                }});
-            }
+//            if(insurances_update.length >0){
+//                webInterface.insurance.update({insurances:insurances_update,success:function (res) {
+//                    layer.msg("修改参保成功");
+//                }});
+//            }
 
             /*webInterface.employee.insertEnsureSetting({setting:setting,success:function (res) {
                 op = "update";

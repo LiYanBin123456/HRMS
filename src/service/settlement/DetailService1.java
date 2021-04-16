@@ -125,7 +125,7 @@ public class DetailService1 {
             QueryParameter p3 = new QueryParameter();
             p3.addCondition("eid","in",eids);//只查询出新增、在保的参保单
            //p3.addCondition("(status","=",Insurance.STATUS_APPENDING +" or status =" +Insurance.STATUS_NORMAL+")");//只查询出新增、在保的参保单
-            //insurances = (List<Insurance>) InsuranceDao.getList(conn, p3).rows;
+            insurances = (List<Insurance>) InsuranceDao.getList(conn, p3).rows;
          /*//获取医社保规则
             QueryConditions conditions1 = new QueryConditions();
             conditions1.add("id", "=", settlement.getCid());

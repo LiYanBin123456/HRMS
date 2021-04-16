@@ -8,8 +8,8 @@ public class ViewDeduct extends Deduct{
     public ViewDeduct() {
     }
 
-    public ViewDeduct(long eid, float income, float free, float prepaid, float deduct, float deduct1, float deduct2, float deduct3, float deduct4, float deduct5, float deduct6, String name, String cardId) {
-        super(eid, income, free, prepaid, deduct, deduct1, deduct2, deduct3, deduct4, deduct5, deduct6);
+    public ViewDeduct(long eid, float income, float free, float prepaid, float deduct, float deduct1, float deduct2, float deduct3, float deduct4, float deduct5, float deduct6, boolean flag, String name, String cardId) {
+        super(eid, income, free, prepaid, deduct, deduct1, deduct2, deduct3, deduct4, deduct5, deduct6, flag);
         this.name = name;
         this.cardId = cardId;
     }

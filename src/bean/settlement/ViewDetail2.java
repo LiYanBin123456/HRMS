@@ -4,6 +4,9 @@ public class ViewDetail2 extends Detail2{
     private String cardId;//员工身份证号
     private String name;//员工姓名
     private float sum;//汇款明细
+    private float price1;//公司单价
+    private float price2;//员工单价
+    private float price3;//差价
     public ViewDetail2() {
     }
 
@@ -18,6 +21,15 @@ public class ViewDetail2 extends Detail2{
         this.cardId = cardId;
         this.name = name;
         this.sum = sum;
+    }
+
+    public ViewDetail2(String cardId, String name, float sum, float price1, float price2, float price3) {
+        this.cardId = cardId;
+        this.name = name;
+        this.sum = sum;
+        this.price1 = price1;
+        this.price2 = price2;
+        this.price3 = price3;
     }
 
     public String getCardId() {
@@ -42,6 +54,30 @@ public class ViewDetail2 extends Detail2{
 
     public void setSum(float sum) {
         this.sum = sum;
+    }
+
+    public float getPrice1() {
+        return price1;
+    }
+
+    public void setPrice1(float price1) {
+        this.price1 = price1;
+    }
+
+    public float getPrice2() {
+        return price2;
+    }
+
+    public void setPrice2(float price2) {
+        this.price2 = price2;
+    }
+
+    public float getPrice3() {
+        return price3;
+    }
+
+    public void setPrice3(float price3) {
+        this.price3 = price3;
     }
 
     @Override

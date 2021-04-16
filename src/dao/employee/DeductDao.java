@@ -18,8 +18,8 @@ public class DeductDao {
 
     //修改
     public static DaoUpdateResult update(Connection conn, Deduct d) {
-            String sql = "update deduct set income=?,free=?,prepaid=?,deduct=?,deduct1=?,deduct2=?,deduct3=?,deduct4=?,deduct5=?,deduct6=? where eid=? ";
-            Object []params = {d.getIncome(),d.getFree(),d.getPrepaid(),d.getDeduct(),d.getDeduct1(),d.getDeduct2(),d.getDeduct3(),d.getDeduct4(),d.getDeduct5(),d.getDeduct6(),d.getEid()};
+            String sql = "update deduct set income=?,free=?,prepaid=?,deduct=?,deduct1=?,deduct2=?,deduct3=?,deduct4=?,deduct5=?,deduct6=?,flag =? where eid=? ";
+            Object []params = {d.getIncome(),d.getFree(),d.getPrepaid(),d.getDeduct(),d.getDeduct1(),d.getDeduct2(),d.getDeduct3(),d.getDeduct4(),d.getDeduct5(),d.getDeduct6(),d.isFlag(),d.getEid()};
         return  DbUtil.update(conn,sql,params);
     }
 

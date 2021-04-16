@@ -95,22 +95,24 @@ public class SchemeDefined {
         SCHEME_DETAIL2_PAID.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
         SCHEME_DETAIL2_PAID.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
         SCHEME_DETAIL2_PAID.addField(new Field(2, "hours", "工时", Field.INT, 100));
-        SCHEME_DETAIL2_PAID.addField(new Field(3, "price", "公司单价", Field.FLOAT, 100));
-        SCHEME_DETAIL2_PAID.addField(new Field(4, "food", "餐费", Field.FLOAT, 100));
-        SCHEME_DETAIL2_PAID.addField(new Field(5, "traffic", "交通费", Field.FLOAT, 100));
-        SCHEME_DETAIL2_PAID.addField(new Field(6, "accommodation", "住宿费", Field.FLOAT, 100));
-        SCHEME_DETAIL2_PAID.addField(new Field(7, "utilities", "水电费", Field.FLOAT, 100));
-        SCHEME_DETAIL2_PAID.addField(new Field(8, "insurance", "保险费", Field.FLOAT, 100));
-        SCHEME_DETAIL2_PAID.addField(new Field(9, "other1", "其他1", Field.FLOAT, 100));
-        SCHEME_DETAIL2_PAID.addField(new Field(10, "other2", "其他2", Field.FLOAT, 100));
-        SCHEME_DETAIL2_PAID.addField(new Field(11, "sum", "汇款总额", Field.FLOAT, 100));
+        SCHEME_DETAIL2_PAID.addField(new Field(3, "price1", "公司单价", Field.FLOAT, 100));
+        SCHEME_DETAIL2_PAID.addField(new Field(4, "price2", "员工单价", Field.FLOAT, 100));
+        SCHEME_DETAIL2_PAID.addField(new Field(5, "price3", "差价", Field.FLOAT, 100));
+        SCHEME_DETAIL2_PAID.addField(new Field(6, "food", "餐费", Field.FLOAT, 100));
+        SCHEME_DETAIL2_PAID.addField(new Field(7, "traffic", "交通费", Field.FLOAT, 100));
+        SCHEME_DETAIL2_PAID.addField(new Field(8, "accommodation", "住宿费", Field.FLOAT, 100));
+        SCHEME_DETAIL2_PAID.addField(new Field(9, "utilities", "水电费", Field.FLOAT, 100));
+        SCHEME_DETAIL2_PAID.addField(new Field(10, "insurance", "保险费", Field.FLOAT, 100));
+        SCHEME_DETAIL2_PAID.addField(new Field(11, "other1", "其他1", Field.FLOAT, 100));
+        SCHEME_DETAIL2_PAID.addField(new Field(12, "other2", "其他2", Field.FLOAT, 100));
+        SCHEME_DETAIL2_PAID.addField(new Field(13, "sum", "汇款总额", Field.FLOAT, 100));
 
         //小时工明细表
         SCHEME_DETAIL2_DETAIL = new Scheme();
         SCHEME_DETAIL2_DETAIL.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
         SCHEME_DETAIL2_DETAIL.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
         SCHEME_DETAIL2_DETAIL.addField(new Field(2, "hours", "工时", Field.INT, 100));
-        SCHEME_DETAIL2_DETAIL.addField(new Field(3, "price", "公司单价", Field.FLOAT, 100));
+        SCHEME_DETAIL2_DETAIL.addField(new Field(3, "price", "员工单价", Field.FLOAT, 100));
         SCHEME_DETAIL2_DETAIL.addField(new Field(4, "food", "餐费", Field.FLOAT, 100));
         SCHEME_DETAIL2_DETAIL.addField(new Field(5, "traffic", "交通费", Field.FLOAT, 100));
         SCHEME_DETAIL2_DETAIL.addField(new Field(6, "accommodation", "住宿费", Field.FLOAT, 100));

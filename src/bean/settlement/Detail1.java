@@ -683,6 +683,7 @@ public class Detail1 extends Detail {
         this.tax = tax<=0?0:tax;
     }
 
+
     /**
      * 正常计算五险一金
      * @param insurances 员工险种集合

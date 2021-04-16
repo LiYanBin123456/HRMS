@@ -20,7 +20,11 @@ public class Insurance {
     public static byte STATUS_NORMAL = 2;//在保
     public static byte STATUS_STOPING = 3;//拟停
     public static byte STATUS_STOPED = 4;//停保
-    public static byte STATUS_ERROR = 5;//异常
+    public static byte STATUS_APPENDING_ERROR = 5;//新增异常
+    public static byte STATUS_NORMAL_ERROR = 6;//在保异常
+    public static byte STATUS_STOPING_ERROR = 7;//拟停异常
+    public static byte STATUS_STOPED_ERROR = 8;//停保异常
+    public static byte STATUS_ERROR = 9;//异常
 
     private long eid;//员工id1
     private String city;//参保城市1
