@@ -224,11 +224,11 @@ public class Settlement1 extends Settlement {
                     //管理费总额=人数*管理费,如果不需要计算社保（即补发），不需要重复计算管理费
                     this.manage = this.isNeedCalcInsurance()?num*value:0;
                     if(invoice==0){//增值税专用发票（全额）
-                        this.tax=(salary+social+medicare+fund+manage)*per;//税费 = （应发总额+单位五险一金+管理费）*税率（基准6.72，但可以浮动）
+                        this.tax=(salary+social+medicare+fund+manage+extra)*per;//税费 = （应发总额+单位五险一金+管理费+核收补减）*税率（基准6.72，但可以浮动）
                     }
                 }else if(category==1){//按比例收取的结算方式
                     //此时服务项目中value为比例所以需要转成小数
-                    this.manage = (salary+social+medicare+fund)*(value/100);//管理费 = （应发总额+单位五险一金）*比例（从服务项目中的比例）
+                    this.manage = (salary+social+medicare+fund+extra)*(value/100);//管理费 = （应发总额+单位五险一金）*比例（从服务项目中的比例）
                     this.tax = 0;
                 }else {//按外包整体核算方式
 

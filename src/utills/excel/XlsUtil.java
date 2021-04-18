@@ -224,7 +224,6 @@ public class XlsUtil {
                 if (!f.isNull && v.isEmpty()) {
                     break out;
                 }
-
                 record.put(f.name, convert(v,f.type));
             }
             records.add(record);

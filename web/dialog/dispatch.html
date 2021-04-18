@@ -29,6 +29,8 @@
     <ul class="layui-tab-title">
         <li class="layui-this">基本信息</li>
         <li lay-id="element_finance" >财务信息</li>
+        <li lay-id="element_add" >账号</li>
+        <li lay-id="element_permit" >业务</li>
     </ul>
     <div class="layui-tab-content">
         <div class="layui-tab-item layui-show">
@@ -143,6 +145,28 @@
                 </div>
             </form>
         </div>
+        <div class="layui-tab-item" >
+            <form lay-filter="element_add" class="layui-form">
+                <input type='hidden' name='id'/>
+                <input type='hidden' name='cid'/>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>登录账号</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="username" required=""  placeholder="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>初始密码</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="password" required=""  placeholder="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item" style="text-align: center" >
+                    <button type="submit" lay-submit lay-filter="submit_finance" class="layui-btn" >保存</button>
+                    <button  class="layui-btn" onclick="cancel()" >取消</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 </body>
@@ -178,6 +202,10 @@
                 case 1:
                     getFinance();//获取合同服务项目
                     break;
+                case 2:
+                    getUser();//获取账号信息
+                    break;
+
             }
         });
         form.on('submit(submit_dispatch)', function(data){
@@ -202,6 +230,17 @@
     }
 
     function getFinance() {
+        if(dispatch && dispatch.id) {
+            webInterface.client.getFinance({id:dispatch.id,category:0, success:function (result) {
+                if(result.data) {
+                    finance = result.data;
+                    form.val('form_finance', finance);
+                }
+            }});
+        }
+    }
+
+    function getUser() {
         if(dispatch && dispatch.id) {
             webInterface.client.getFinance({id:dispatch.id,category:0, success:function (result) {
                 if(result.data) {

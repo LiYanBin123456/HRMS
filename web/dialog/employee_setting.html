@@ -669,15 +669,14 @@
                     insurances_update.push(fund);
                 }
             }
-            console.log(insurances_insert.length,insurances_update);
-            if(insurances_insert.length >0 || insurances_update.length>0){
-                webInterface.insurance.insertAndupdate({insurances_insert:insurances_insert,insurances_update:insurances_update,success:function (res) {
-                    for(var i in insurances_insert){
-                        op[insurances_insert[i].category] = "update";
-                    }
-                    layer.msg("添加参保成功");
-                }});
-            }
+
+            webInterface.insurance.insertAndupdate({eid:eid,insurances_insert:insurances_insert,insurances_update:insurances_update,success:function (res) {
+                for(var i in insurances_insert){
+                    op[insurances_insert[i].category] = "update";
+                }
+                layer.msg("添加参保成功");
+            }});
+
 //            if(insurances_update.length >0){
 //                webInterface.insurance.update({insurances:insurances_update,success:function (res) {
 //                    layer.msg("修改参保成功");

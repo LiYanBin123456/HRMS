@@ -121,7 +121,8 @@ public class InsuranceServlet extends HttpServlet {
         List<Insurance> insurances_insert = JSONArray.parseArray(request.getParameter("insurances_insert"),Insurance.class);
         List<Insurance> insurances_update = JSONArray.parseArray(request.getParameter("insurances_update"),Insurance.class);
 
-        return InsuranceService.insertAndupdate(conn,insurances_insert,insurances_update);
+        long eid = Long.parseLong(request.getParameter("eid"));
+        return InsuranceService.insertAndupdate(conn,eid,insurances_insert,insurances_update);
     }
 
     //批量设置五险一金

@@ -303,12 +303,24 @@ public class EmployeeServlet extends HttpServlet {
 
     //批量插入
     private String insertBatch(Connection conn, HttpServletRequest request) {
+        List<Employee> employees;
+        List<EmployeeExtra> extras;
+        List<PayCard> cards;
+        try {
+            employees = JSONArray.parseArray(request.getParameter("employees"),Employee.class);
+            extras = JSONArray.parseArray(request.getParameter("extras"),EmployeeExtra.class);
+            cards = JSONArray.parseArray(request.getParameter("cards"),PayCard.class);
+        } catch (Exception e) {
+            return DaoResult.fail("数据有误，请仔细核对员工数据");
+        }
+
         HttpSession session = request.getSession();
         Account user = (Account) session.getAttribute("account");
-        List<JSONObject> viewEmployees = JSONArray.parseArray(request.getParameter("employees"),JSONObject.class);
+        for(Employee e:employees){
+            e.setDid(user.getRid());
+        }
 
-        DaoUpdateResult res = EmployeeService.insertBatch(conn,viewEmployees,user.getRid());
-        return  JSONObject.toJSONString(res);
+        return EmployeeService.insertBatch(conn,employees,extras,cards);
     }
 
     //获取员工工资卡

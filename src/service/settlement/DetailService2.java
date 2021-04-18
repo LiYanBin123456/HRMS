@@ -30,33 +30,38 @@ public class DetailService2 {
     public static DaoUpdateResult importDetails(Connection conn, long sid, List<ViewDetail2> ViewDetail2s, long did){
         DaoUpdateResult result = new DaoUpdateResult();
         List<Detail2> detail2s =new ArrayList<>();
-
-        for(ViewDetail2 v2 :ViewDetail2s){
-            if(v2.getEid()!=0){//员工id存在
-                QueryConditions conditions = new QueryConditions();
-                conditions.add("id","=",v2.getEid());
-                Employee employee = (Employee) EmployeeDao.get(conn,conditions).data; //根据员工身份证获取员工id
-                Detail2 detail2 = new Detail2(0,sid,employee.getId(),v2.getHours(),employee.getPrice(),v2.getFood()
-                        ,v2.getTraffic(),v2.getAccommodation(),v2.getUtilities(),v2.getInsurance(),v2.getTax(),v2.getOther1()
-                        ,v2.getOther2(),v2.getPayable(),v2.getPaid());
-                detail2s.add(detail2);//封装detail2
-            }else {//员工id不存在
-                QueryConditions conditions = new QueryConditions();
-                conditions.add("cardId","=",v2.getCardId());
-                conditions.add("did","=",did);
-                if(!EmployeeDao.exist(conn,conditions).exist){
-                    result.msg = "用户"+v2.getName()+"不存在，或者身份证id不正确，请核对";
-                    return  result;
+        try {
+            for(ViewDetail2 v2 :ViewDetail2s){
+                if(v2.getEid()!=0){//员工id存在
+                    QueryConditions conditions = new QueryConditions();
+                    conditions.add("id","=",v2.getEid());
+                    Employee employee = (Employee) EmployeeDao.get(conn,conditions).data; //根据员工身份证获取员工id
+                    Detail2 detail2 = new Detail2(0,sid,employee.getId(),v2.getHours(),employee.getPrice(),v2.getFood()
+                            ,v2.getTraffic(),v2.getAccommodation(),v2.getUtilities(),v2.getInsurance(),v2.getTax(),v2.getOther1()
+                            ,v2.getOther2(),v2.getPayable(),v2.getPaid());
+                    detail2s.add(detail2);//封装detail2
+                }else {//员工id不存在
+                    QueryConditions conditions = new QueryConditions();
+                    conditions.add("cardId","=",v2.getCardId());
+                    conditions.add("did","=",did);
+                    if(!EmployeeDao.exist(conn,conditions).exist){
+                        result.msg = "用户"+v2.getName()+"不存在，或者身份证id不正确，请核对";
+                        return  result;
+                    }
+                    Employee employee = (Employee) EmployeeDao.get(conn,conditions).data; //根据员工身份证获取员工id
+                    Detail2 detail2 = new Detail2(0,sid,employee.getId(),v2.getHours(),employee.getPrice(),v2.getFood()
+                            ,v2.getTraffic(),v2.getAccommodation(),v2.getUtilities(),v2.getInsurance(),v2.getTax(),v2.getOther1()
+                            ,v2.getOther2(),v2.getPayable(),v2.getPaid());
+                    detail2s.add(detail2);//封装detail2
                 }
-                Employee employee = (Employee) EmployeeDao.get(conn,conditions).data; //根据员工身份证获取员工id
-                Detail2 detail2 = new Detail2(0,sid,employee.getId(),v2.getHours(),employee.getPrice(),v2.getFood()
-                        ,v2.getTraffic(),v2.getAccommodation(),v2.getUtilities(),v2.getInsurance(),v2.getTax(),v2.getOther1()
-                        ,v2.getOther2(),v2.getPayable(),v2.getPaid());
-                detail2s.add(detail2);//封装detail2
-            }
 
+            }
+            result =Detail2Dao.importDetails(conn,detail2s);
+        } catch (Exception e) {
+            result.msg="批量导入数据失败，请核对数据是否正确，或者改为手动添加";
+            result.success=false;
+            return result;
         }
-        result =Detail2Dao.importDetails(conn,detail2s);
         return  result;
     }
 

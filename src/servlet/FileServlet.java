@@ -272,6 +272,7 @@ public class FileServlet extends HttpServlet {
             try {//获取part中的文件，读取数据
                 InputStream is = part.getInputStream();
                 JSONArray data= XlsUtil.read(is,"信息表","元数据");
+
                 if(null == data){
                     result = "{\"success\":false,\"msg\":\"xls文件不符合要求，请下载模板再重新填写\"}";
                 }else{
@@ -810,7 +811,7 @@ public class FileServlet extends HttpServlet {
         scheme1.addField(new Field(c1+6, "fund2", "单位公积金", Field.FLOAT, 100));
         scheme1.addField(new Field(c1+7, "total2", "单位社保合计", Field.FLOAT, 100));
         scheme1.addField(new Field(c1+8, "manage", "管理费", Field.FLOAT, 100));
-        scheme1.addField(new Field(c1+9, "extra2", "核收补减", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+9, "extra2", "单位核收补减", Field.FLOAT, 100));
         scheme1.addField(new Field(c1+10, "tax2", "税费", Field.FLOAT, 100));
         scheme1.addField(new Field(c1+11, "summary", "汇款总额", Field.FLOAT, 100));
         scheme1.addField(new Field(c1+12, "comments", "备注", Field.STRING, 100));
@@ -830,16 +831,16 @@ public class FileServlet extends HttpServlet {
             }
         }
         scheme2.addField(new Field(c2+0, "pension1", "个人养老", Field.FLOAT, 100));
-        scheme2.addField(new Field(c2+1, "medicare1", "个人医疗", Field.FLOAT, 100));
-        scheme2.addField(new Field(c2+2, "disease1", "个人大病", Field.FLOAT, 100));
-        scheme2.addField(new Field(c2+3, "fund1", "个人公积金", Field.FLOAT, 100));
-        scheme2.addField(new Field(c2+4, "payable", "税前工资", Field.FLOAT, 100));
-        scheme2.addField(new Field(c2+5, "tax", "个税", Field.FLOAT, 100));
-        scheme2.addField(new Field(c2+6, "paid", "实发工资", Field.DOUBLE, 100));
+        scheme2.addField(new Field(c2+1, "unemployment1", "个人失业", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+2, "medicare1", "个人医疗", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+3, "disease1", "个人大病", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+4, "fund1", "个人公积金", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+5, "total1", "个人社保合计", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+6, "payable", "税前工资", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+7, "tax", "个税", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+8, "paid", "实发工资", Field.DOUBLE, 100));
         Settlement1 settlement = new Settlement1();
         for(ViewDetail1 d:details){
-            //计算自定义工资项总和
-            d.sumDefinedSalaryItem(mapSalary);
             //计算管理费和税费
             settlement.calcManageAndTax(vc,d);//计算管理费和税费
             d.setManage(settlement.getManage());
@@ -847,11 +848,11 @@ public class FileServlet extends HttpServlet {
             float summary;
             if(types==4){//代缴社保
                 d.setTotal1(d.getTotalPerson()+d.getFund1());
-                //汇款总额 = 基本工资+自定义工资项+单位社保总额+个人社保合计+单位公积金+个人公积金+管理费+税费+（单位）核收补减
-                summary= d.getPayable()+d.getTotalDepartment()+d.getTotalPerson()+d.getFund2()+d.getFund2()+d.getManage()+d.getTax2()+d.getExtra2();
+                //汇款总额 = 单位社保总额+个人社保合计+单位公积金+个人公积金+管理费+税费+（单位）核收补减
+                summary= d.getTotalDepartment()+d.getTotalPerson()+d.getFund2()+d.getFund2()+d.getManage()+d.getTax2()+d.getExtra2();
             }else {
-                //汇款总额 = 基本工资+自定义工资项+单位社保总额+单位公积金+管理费+税费+（单位）核收补减
-                summary= d.getPayable()+d.getTotalDepartment()+d.getFund2()+d.getManage()+d.getTax2()+d.getExtra2();
+                //汇款总额 = 基本工资+自定义工资项+单位个人社保总额（因为应发减掉了个人五险一金）+单位社保总额+单位公积金+管理费+税费+（单位）核收补减
+                summary= d.getPayable()+d.getTotalPerson()+d.getFund1()+d.getTotalDepartment()+d.getFund2()+d.getManage()+d.getTax2()+d.getExtra2();
             }
             d.setSummary(summary);
             d.setTotal2(d.getTotalDepartment()+d.getFund2());
@@ -861,23 +862,24 @@ public class FileServlet extends HttpServlet {
         scheme3.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
         scheme3.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
         scheme3.addField(new Field(2, "pension1", "个人养老", Field.FLOAT, 100));
-        scheme3.addField(new Field(3, "medicare1", "个人医疗", Field.FLOAT, 100));
-        scheme3.addField(new Field(4, "disease1", "个人大病", Field.FLOAT, 100));
-        scheme3.addField(new Field(5, "fund1", "个人公积金", Field.FLOAT, 100));
-        scheme3.addField(new Field(6, "total1", "个人社保合计", Field.FLOAT, 100));
-        scheme3.addField(new Field(7, "pension2", "单位养老", Field.FLOAT, 100));
-        scheme3.addField(new Field(7, "medicare2", "单位医疗", Field.FLOAT, 100));
-        scheme3.addField(new Field(8, "disease2", "单位大病", Field.FLOAT, 100));
-        scheme3.addField(new Field(9, "birth", "单位生育", Field.FLOAT, 100));
-        scheme3.addField(new Field(10, "unemployment2", "单位失业", Field.FLOAT, 100));
-        scheme3.addField(new Field(11, "injury", "单位工伤", Field.FLOAT, 100));
-        scheme3.addField(new Field(12, "fund2", "单位公积金", Field.FLOAT, 100));
-        scheme3.addField(new Field(13, "total2", "单位社保合计", Field.FLOAT, 100));
-        scheme3.addField(new Field(14, "manage", "管理费", Field.FLOAT, 100));
-        scheme3.addField(new Field(15, "extra2", "核收补减", Field.FLOAT, 100));
-        scheme3.addField(new Field(16, "tax2", "税费", Field.FLOAT, 100));
-        scheme3.addField(new Field(17, "summary", "汇款总额", Field.FLOAT, 100));
-        scheme3.addField(new Field(18, "comments", "备注", Field.STRING, 100));
+        scheme3.addField(new Field(3, "unemployment1", "个人失业", Field.FLOAT, 100));
+        scheme3.addField(new Field(4, "medicare1", "个人医疗", Field.FLOAT, 100));
+        scheme3.addField(new Field(5, "disease1", "个人大病", Field.FLOAT, 100));
+        scheme3.addField(new Field(6, "fund1", "个人公积金", Field.FLOAT, 100));
+        scheme3.addField(new Field(7, "total1", "个人社保合计", Field.FLOAT, 100));
+        scheme3.addField(new Field(8, "pension2", "单位养老", Field.FLOAT, 100));
+        scheme3.addField(new Field(9, "medicare2", "单位医疗", Field.FLOAT, 100));
+        scheme3.addField(new Field(10, "disease2", "单位大病", Field.FLOAT, 100));
+        scheme3.addField(new Field(11, "birth", "单位生育", Field.FLOAT, 100));
+        scheme3.addField(new Field(12, "unemployment2", "单位失业", Field.FLOAT, 100));
+        scheme3.addField(new Field(13, "injury", "单位工伤", Field.FLOAT, 100));
+        scheme3.addField(new Field(14, "fund2", "单位公积金", Field.FLOAT, 100));
+        scheme3.addField(new Field(15, "total2", "单位社保合计", Field.FLOAT, 100));
+        scheme3.addField(new Field(16, "manage", "管理费", Field.FLOAT, 100));
+        scheme3.addField(new Field(17, "extra2", "核收补减", Field.FLOAT, 100));
+        scheme3.addField(new Field(18, "tax2", "税费", Field.FLOAT, 100));
+        scheme3.addField(new Field(19, "summary", "汇款总额", Field.FLOAT, 100));
+        scheme3.addField(new Field(20, "comments", "备注", Field.STRING, 100));
 
         JSONArray data = JSONArray.parseArray(JSON.toJSONString(details));
         if(types!=4){//不是代缴社保

@@ -8,10 +8,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.settlement.*;
-import database.ConnUtil;
-import database.DaoQueryListResult;
-import database.DaoUpdateResult;
-import database.QueryParameter;
+import database.*;
 import service.settlement.*;
 import utills.DateUtil;
 
@@ -338,23 +335,27 @@ public class SettlementServlet extends HttpServlet {
         DaoUpdateResult result = null;
         HttpSession session = request.getSession();
         long did = ((Account) session.getAttribute("account")).getRid();//当前操作的管理员所属公司id
-        switch (category){
-            case 1://普通结算单
-                List<ViewDetail1> details1 = JSONArray.parseArray(request.getParameter("details"),ViewDetail1.class);
-                result = DetailService1.importDetails(conn,id,details1,did);
-                break;
-            case 2://小时工结算单
-                List<ViewDetail2> details2 = JSONArray.parseArray(request.getParameter("details"),ViewDetail2.class);
-                result = DetailService2.importDetails(conn,id,details2,did);
-                break;
-            case 3://商业保险结算单
-                List<Detail3> details3 = JSONArray.parseArray(request.getParameter("details"),Detail3.class);
-                result = DetailService3.importDetails(conn,id,details3);
-                break;
-            case 4://特殊结算单
-                List<ViewDetail4> details4 = JSONArray.parseArray(request.getParameter("details"),ViewDetail4.class);
-                result = DetailService4.importDetails(conn,id,details4,did);
-                break;
+        try {
+            switch (category){
+                case 1://普通结算单
+                    List<ViewDetail1> details1 = JSONArray.parseArray(request.getParameter("details"),ViewDetail1.class);
+                    result = DetailService1.importDetails(conn,id,details1,did);
+                    break;
+                case 2://小时工结算单
+                    List<ViewDetail2> details2 = JSONArray.parseArray(request.getParameter("details"),ViewDetail2.class);
+                    result = DetailService2.importDetails(conn,id,details2,did);
+                    break;
+                case 3://商业保险结算单
+                    List<Detail3> details3 = JSONArray.parseArray(request.getParameter("details"),Detail3.class);
+                    result = DetailService3.importDetails(conn,id,details3);
+                    break;
+                case 4://特殊结算单
+                    List<ViewDetail4> details4 = JSONArray.parseArray(request.getParameter("details"),ViewDetail4.class);
+                    result = DetailService4.importDetails(conn,id,details4,did);
+                    break;
+            }
+        } catch (Exception e) {
+            return DaoResult.fail("数据有误，请仔细核对员工数据");
         }
         return JSONObject.toJSONString(result);
     }

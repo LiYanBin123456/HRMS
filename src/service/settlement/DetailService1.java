@@ -47,31 +47,37 @@ public class DetailService1 {
     public static DaoUpdateResult importDetails(Connection conn, long sid, List<ViewDetail1> details, long did) {
         DaoUpdateResult result = new DaoUpdateResult();
         List<Detail1> ds = new ArrayList<>();
-        Settlement1 settlement = (Settlement1) Settlement1Dao.get(conn,sid).data;
-        for (ViewDetail1 v : details) {
-            v.setSid(sid);
-            if (v.getEid() == 0) {//通过导入方式，需要确认员工是否存在
-                QueryConditions conditions = new QueryConditions();
-                conditions.add("cardId", "=", v.getCardId());
-                conditions.add("did", "=", did);
-                if (!EmployeeDao.exist(conn, conditions).exist) {
-                    result.msg = "用户" + v.getName() + "不存在，或者身份证id不正确，请核对";
-                    return result;
+        try {
+            Settlement1 settlement = (Settlement1) Settlement1Dao.get(conn,sid).data;
+            for (ViewDetail1 v : details) {
+                v.setSid(sid);
+                if (v.getEid() == 0) {//通过导入方式，需要确认员工是否存在
+                    QueryConditions conditions = new QueryConditions();
+                    conditions.add("cardId", "=", v.getCardId());
+                    conditions.add("did", "=", did);
+                    if (!EmployeeDao.exist(conn, conditions).exist) {
+                        result.msg = "用户" + v.getName() + "不存在，或者身份证id不正确，请核对";
+                        return result;
+                    }
+                    Employee employee = (Employee) EmployeeDao.get(conn, conditions).data; //根据员工身份证获取员工id
+                    v.setEid(employee.getId());
                 }
-                Employee employee = (Employee) EmployeeDao.get(conn, conditions).data; //根据员工身份证获取员工id
-                v.setEid(employee.getId());
-            }
-            byte status = ((settlement.getFlag()&((byte)1)) == 0)?Detail1.STATUS_MAKEUP:Detail1.STATUS_NORMAL;
+                byte status = ((settlement.getFlag()&((byte)1)) == 0)?Detail1.STATUS_MAKEUP:Detail1.STATUS_NORMAL;
 
-            if(v.getStatus()!=0){//如果是自定义工资条
-               v.setStatus(Detail1.STATUS_CUSTOM);
-            }else {
-                v.setStatus(status);
-            }
+                if(v.getStatus()!=0){//如果是自定义工资条
+                   v.setStatus(Detail1.STATUS_CUSTOM);
+                }else {
+                    v.setStatus(status);
+                }
 
-            ds.add(v);
+                ds.add(v);
+            }
+            result = Detail1Dao.importDetails(conn, ds);
+        } catch (Exception e) {
+            result.success=false;
+            result.msg="批量导入数据失败，请核对数据是否正确，或者改为手动添加";
+            return result;
         }
-        result = Detail1Dao.importDetails(conn, ds);
         return result;
     }
 

@@ -293,15 +293,22 @@
                     content: content,
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
-                      var emploees = window["layui-layer-iframe" + index].callbackData();
-                        webInterface.employee.insertBatch({employees:emploees,success:function () {
-                            layer.close(index);
-                            layer.msg("导入成功");
-                        }});
+                      var datas = window["layui-layer-iframe" + index].callbackData();
+                      importEmployees(JSON.parse(datas),layer,index);
                     },btn2: function(index, layero){
                         layer.close(index);
                     }
                 });
+                
+                function importEmployees(datas,layer,index) {
+                    var employees = collectionUtil.map(datas,["cid","cardId","name","phone","degree","type","entry","status","department","post","category","price"]);
+                    var extras = collectionUtil.map(datas, ["rid","school","major","household","address"]);
+                    var cards = collectionUtil.map(datas, ["bank1","bank2","bankNo","cardNo"]);
+                    webInterface.employee.insertBatch({employees:employees,extras:extras,cards:cards,success:function () {
+                        layer.close(index);
+                        layer.msg("导入成功");
+                    }});
+                }
             }
 
             //打开添加对话框

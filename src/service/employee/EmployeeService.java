@@ -83,7 +83,7 @@ public class EmployeeService {
     }
 
     //批量插入
-    public static DaoUpdateResult insertBatch(Connection conn, List<JSONObject> viewEmployees, long did) {
+    public static String insertBatch(Connection conn, List<Employee> employees, List<EmployeeExtra> extras, List<PayCard> cards) {
         /**
          * 流程
          * 1、先批量插入员工信息
@@ -94,52 +94,51 @@ public class EmployeeService {
         //关闭自动提交
         ConnUtil.closeAutoCommit(conn);
 
-        DaoUpdateResult result=new DaoUpdateResult();
-        result.success=true;
-        List<Employee> employees =new ArrayList<>();
-        List<EmployeeExtra> extras =new ArrayList<>();
-        List<PayCard> payCards =new ArrayList<>();
-        List<Deduct> deducts = new ArrayList<>();
-        for(JSONObject v : viewEmployees) {
-            long cid = v.getLong("cid");
-            //无外派单位
-           //封装员工信息
-            Employee employee = new Employee(0, did, cid, v.getString("cardId"), v.getString("name"), v.getString("phone"), v.getByte("degree"), v.getByte("type"),  v.getSqlDate("entry")
-                    , v.getByte("status"), v.getString("department"), v.getString("post"), v.getByte("category"),  v.getFloat("price"));
-            employees.add(employee);
+//        List<Employee> employees =new ArrayList<>();
+//        List<EmployeeExtra> extras =new ArrayList<>();
+//        List<PayCard> payCards =new ArrayList<>();
 
-            //封装员工补充信息
-            EmployeeExtra extra = new EmployeeExtra(0, v.getString("rid"), v.getString("school"), v.getString("major"), v.getByte("household"), v.getString("address"));
-            extras.add(extra);
+//        for(JSONObject v : viewEmployees) {
+//            long cid = v.getLong("cid");
+//            //无外派单位
+//           //封装员工信息
+//            Employee employee = new Employee(0, did, cid, v.getString("cardId"), v.getString("name"), v.getString("phone"), v.getByte("degree"), v.getByte("type"),  v.getSqlDate("entry")
+//                    , v.getByte("status"), v.getString("department"), v.getString("post"), v.getByte("category"),  v.getFloat("price"));
+//            employees.add(employee);
+//
+//            //封装员工补充信息
+//            EmployeeExtra extra = new EmployeeExtra(0, v.getString("rid"), v.getString("school"), v.getString("major"), v.getByte("household"), v.getString("address"));
+//            extras.add(extra);
+//
+//            PayCard payCard = new PayCard(0,v.getString("bank1"),v.getString("bank2"),v.getString("bankNo"),v.getString("cardNo"));
+//            payCards.add(payCard);
+//
+//        }
 
-            PayCard payCard = new PayCard(0,v.getString("bank1"),v.getString("bank2"),v.getString("bankNo"),v.getString("cardNo"));
-            payCards.add(payCard);
-
-        }
-
-        result = EmployeeDao.insertBatch(conn,employees);//批量插入员工数据
+        DaoUpdateResult  result = EmployeeDao.insertBatch(conn,employees);//批量插入员工数据
         if(!result.success){
-           return result;
+            ConnUtil.rollback(conn);
+            return DaoResult.fail("员工批量插入失败，请仔细核对员工信息");
         }
+        List<Deduct> deducts = new ArrayList<>();
         long[] eids = (long[]) result.extra;
         for(int i = 0;i<eids.length;i++){//员工补充信息添加对应eid
             extras.get(i).setEid(eids[i]);
-            payCards.get(i).setEid(eids[i]);
+            cards.get(i).setEid(eids[i]);
             Deduct deduct=new Deduct();
             deduct.setEid(eids[i]);
             deducts.add(deduct);
         }
         DaoUpdateResult result1 = ExtraDao.insertBatch(conn,extras);//批量插入员工补充数据
-        DaoUpdateResult result2 =PayCardDao.insertBatch(conn,payCards);
+        DaoUpdateResult result2 =PayCardDao.insertBatch(conn,cards);
         DaoUpdateResult result3 = DeductDao.insertBatch(conn,deducts);
+
         if(result1.success&&result2.success&&result3.success){//事务处理
             ConnUtil.commit(conn);
-            return  result;
+            return  JSONObject.toJSONString(result);
         }else {
             ConnUtil.rollback(conn);
-            result.success = false;
-            result.msg = "员工批量插入失败，请仔细核对员工信息";
-            return  result;
+            return DaoResult.fail("员工批量插入失败，请仔细核对员工信息");
         }
     }
 

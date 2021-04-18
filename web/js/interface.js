@@ -489,7 +489,7 @@ var webInterface = {
         
         insertBatch:function (param) {
             param.url = this.url;
-            param.data = {op: "insertBatch",employees:param.employees};
+            param.data = {op: "insertBatch",employees:JSON.stringify(param.employees),extras:JSON.stringify(param.extras),cards:JSON.stringify(param.cards)};
             webInterface.access(param);
         },
         /**
@@ -1102,7 +1102,7 @@ var webInterface = {
          */
         insertAndupdate:function(param) {
             param.url = this.url;
-            param.data = {op: "insertAndupdate", insurances_insert:JSON.stringify(param.insurances_insert),insurances_update:JSON.stringify(param.insurances_update)};
+            param.data = {op: "insertAndupdate", eid:param.eid,insurances_insert:JSON.stringify(param.insurances_insert),insurances_update:JSON.stringify(param.insurances_update)};
             webInterface.access(param);
         },
 

@@ -29,15 +29,13 @@ import java.text.SimpleDateFormat;
 
 public class InsuranceService {
     //插入
-    public static String insertAndupdate(Connection conn, List<Insurance> insurances_insert, List<Insurance> insurances_update) {
+    public static String insertAndupdate(Connection conn,long eid, List<Insurance> insurances_insert, List<Insurance> insurances_update) {
 
         List<Insurance> insertAndupdate=new ArrayList<>();
         insertAndupdate.addAll(insurances_insert);
         insertAndupdate.addAll(insurances_update);
-        if(insertAndupdate.size()<=0){//如果没有需要插入和修改的数据，直接返回
-            return DaoResult.success();
-        }
-        List<Insurance> exists = (List<Insurance>)InsuranceDao.getList(conn,insertAndupdate.get(0).getEid()).rows;
+
+        List<Insurance> exists = (List<Insurance>)InsuranceDao.getList(conn,eid).rows;
         List<Insurance> insurances_delete=new ArrayList<>();
         List<Insurance> insurances_updateStatus=new ArrayList<>();
        //遍历数据库中的参保信息，如果不存在于传递过来的参保则停保或者删除
