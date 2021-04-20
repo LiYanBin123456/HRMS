@@ -169,7 +169,7 @@
                         url = "../dialog/detail4.html";
                         break;
                 }
-                var content = stringUtil.format("{0}?id={1}&month={2}",url,settlement.id,settlement.month);
+                var content = url+"?settlement="+encodeURIComponent(JSON.stringify(settlement));
                 layer.open({
                     title:"明细",
                     type: 2,

@@ -50,6 +50,7 @@
 <script>
     var eid;
     var type;
+    var url;
     var op = "insert";
     var form;//表单对象
     var cityPicker;
@@ -57,50 +58,47 @@
     var laydate;
     var upload;
     var employee = {degree:1,category:0,status:0,entry:new Date().getTime()};
-
+    eid = $.query.get("eid");
+    if(!eid){
+        eid = null;
+    }
+    type = $.query.get("type");
     layui.use(['element'], function () {
-        element = layui.element;element.on('tab(tab_employ)', function(data) {
+        element = layui.element;
+        element.on('tab(tab_employ)', function(data) {
             if(!eid){
                 layer.msg("请先输入基本信息");
-                element.tabChange('tab_employ', 'base');
                 return;
             }
-
             switch (data.index) {
-                case 1:
-                    if(!$("#frame_extra").attr("src")){
-                        $("#frame_extra").attr("src","employee_extra.html?eid="+eid);
-                    }
-                    break;
-                case 2:
-                    if(!$("#frame_setting").attr("src")){
-                        $("#frame_setting").attr("src","employee_setting.html?eid="+eid);
-                    }
-                    break;
-                case 3:
-                    if(!$("#frame_deduct").attr("src")){
-                        $("#frame_deduct").attr("src","employee_deduct.html?eid="+eid);
-                    }
-                    break;
-                case 4:
-                    if(!$("#frame_card").attr("src")){
-                        $("#frame_card").attr("src","employee_paycard.html?eid="+eid);
-                    }
-                    break;
-            }
+                    case 1:
+                        if(!$("#frame_extra").attr("src")){
+                            $("#frame_extra").attr("src","employee_extra.html?eid="+eid);
+                        }
+                        break;
+                    case 2:
+                        if(!$("#frame_setting").attr("src")){
+                            $("#frame_setting").attr("src","employee_setting.html?eid="+eid);
+                        }
+                        break;
+                    case 3:
+                        if(!$("#frame_deduct").attr("src")){
+                            $("#frame_deduct").attr("src","employee_deduct.html?eid="+eid);
+                        }
+                        break;
+                    case 4:
+                        if(!$("#frame_card").attr("src")){
+                            $("#frame_card").attr("src","employee_paycard.html?eid="+eid);
+                        }
+                        break;
+                }
         });
         initPage();
     });
 
     function initPage() {
-        eid = $.query.get("eid");
-        if(!eid){
-            eid = undefined;
-        }
-        type = $.query.get("type");
 
-        var url;
-        if(eid){
+        if(!eid){
             url = stringUtil.format("employee_base.html?eid={0}&type={1}",eid,type);
         }else{
             url = stringUtil.format("employee_base.html?type={0}",type);

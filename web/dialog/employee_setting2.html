@@ -201,6 +201,24 @@
             </form>
         </div>
     </fieldset>
+    <fieldset class="layui-elem-field layui-hide">
+        <legend>商业保险</legend>
+        <div class="layui-field-box">
+            <form class="layui-form" lay-filter="form_buss" name="form_buss">
+                <div class="layui-form-item">
+                    &emsp;&emsp;&emsp;
+                    <input type="radio" lay-filter="buyIN" name="buy" value="0" title="不缴纳" checked>
+                    <input type="radio" lay-filter="buyIN" name="buy" value="1" title="缴纳">
+                </div>
+                <div class="layui-form-item layui-hide" name="in">
+                    <label class="layui-form-label">保险金额</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="number" name="base" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </fieldset>
     <!--<button type="button" class="layui-btn layui-btn-fluid" name="save">保存</button>-->
 </body>
 <script src="../js/jquery.min.js"></script>
@@ -285,6 +303,15 @@
                 $("[name=f1]").addClass("layui-hide");
             }
         });
+        layform.on('radio(buyIN)', function(data){//设置商业保险
+            var buy = Number(data.value);
+            if(buy) {
+                $("[name=in]").removeClass("layui-hide");
+            }else{
+                $("[name=in]").addClass("layui-hide");
+            }
+        });
+
         layform.on('radio(baseTypeS)', function(data){
             var type = Number(data.value);
             if(type==0) {
@@ -874,6 +901,22 @@
             if(e != null){
                 e.status = 3;
                 insurances_update.push(e);
+            }
+        }
+
+        var buss = layform.val("form_buss");//商业保险数据
+        if(buss.buy == "1"){
+            buss.city = city;
+            buss.category = 7;
+            if(op[6] == "insert") {
+                buss.status = 1;
+                insurances_insert.push(buss);
+            }else{
+                var e = collectionUtil.getElement(insurances,"category",7);
+                if(e != null){
+                    buss.status = e.status;
+                }
+                insurances_update.push(buss);
             }
         }
         return insurances_insert;

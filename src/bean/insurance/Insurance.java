@@ -12,6 +12,7 @@ public class Insurance {
     public final static byte CATEGORY4 = 4;//大病保险
     public final static byte CATEGORY5 = 5;//生育保险
     public final static byte CATEGORY6 = 6;//公积金
+    public final static byte CATEGORY7 = 7;//商业保险
 
     public static byte TYPE_MIN = 0;//最低标准
     public static byte TYPE_CUSTOM = 1;//自定义标准

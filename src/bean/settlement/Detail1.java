@@ -51,8 +51,8 @@ public class Detail1 extends Detail {
     private float f16;
     private float f17;
     private float f18;
-    private float f19;
-    private float f20;
+    private float f19;//用于存放自定义工资之和
+    private float f20;//用于存放商业保险费用
 
     public static final byte STATUS_NORMAL = 0;//正常
     public static final byte STATUS_REPLENISH = 1;//补缴
@@ -638,7 +638,7 @@ public class Detail1 extends Detail {
     }
 
     /**
-     * 获取社保和医保个人部分
+     * 获取社保、医保个人部分
      * @return
      */
     public float getTotalPerson(){
@@ -646,7 +646,7 @@ public class Detail1 extends Detail {
     }
 
     /**
-     * 获取社保单位部分
+     * 获取社保单位和单位公积金
      * @return
      */
     public float getTotalDepartment(){
@@ -664,23 +664,11 @@ public class Detail1 extends Detail {
 
     /**
      * 计算派遣单位应税额
-     * @param salary 自定义工资和
      * @return
      */
-    public float getTaxDueOfDepartment(float salary){
-        //基本工资+单位社保合计+公积金+单位核收补减
-        return base+getTotalDepartment()+fund2+extra2;
-    }
-
-    /**
-     * 计算普通个税
-     * @param deduct
-     */
-    public void calculateTax(Deduct deduct){
-        float taxDue=deduct.total()+this.getPayable();//应税额 = 累计应税额+ 本期收入
-        float tax = Tax.tax1(taxDue);//计算普通个税
-        tax -= deduct.getPrepaid();//本期个税 = 累计应缴个税-累计预缴个税
-        this.tax = tax<=0?0:tax;
+    public float getTaxDueOfDepartment(){
+        //基本工资+自定义工资+单位五险一金+单位核收补减+商业保险费
+        return base+f19+getTotalDepartment()+fund2+extra2+f20;
     }
 
 
@@ -720,9 +708,13 @@ public class Detail1 extends Detail {
                     this.fund1 =base*v1;//单位和个人公积金比例一致
                     this.fund2 =base*v1;
                     break;
+                case Insurance.CATEGORY7://商业保险
+                    this.f20 =base;//商业保险金额
+                    break;
             }
         }
     }
+
     /**
      * 计算医保
      * @param setting 员工设置
@@ -800,19 +792,23 @@ public class Detail1 extends Detail {
         this.fund2 = fund;//单位公积金
     }
 
-    /**
-     * 计算实发工资
-     */
-    public void calcPayed() {
-        this.paid = this.payable - this.tax;
-    }
+
 
     /**
      * 计算应发工资
+     * @param flag 是否需要计算五险一金和个人核收补减
+     */
+    public void calcPayable( boolean flag) {
+        this.payable = flag?base - getTotalPerson()+fund1 + extra1:base;
+    }
+
+
+
+    /**
+     * 计算自定义工资项目
      * @param mapSalary
      */
-    public void calcPayable(MapSalary mapSalary) {
-        this.payable = getPayable0(true);
+    public void calcMapSalary(MapSalary mapSalary) {
         if (mapSalary != null && mapSalary.getItems() != null && mapSalary.getItems().length() > 0) {//如果有自定义工资
             this.sumDefinedSalaryItem(mapSalary);
         }
@@ -822,7 +818,7 @@ public class Detail1 extends Detail {
     /**
      *计算自定义工资项总额
      * @param mapSalary 自定义工资
-     * @return
+     * @return  f19 存放所有的自定义工资和
      */
     public void sumDefinedSalaryItem(MapSalary mapSalary){
         /**
@@ -832,6 +828,7 @@ public class Detail1 extends Detail {
          * 3、判断加项还是减项
          * 4、返回自定义工资总额
          */
+        this.f19=0;//初始化自定义工资项。
         List<MapSalary.SalaryItem> itemList = mapSalary.getItemList();
         for (int i = 0; i <itemList.size(); i++) {
             int index = i + 1;
@@ -849,13 +846,31 @@ public class Detail1 extends Detail {
                 e.printStackTrace();
             }
             if(itemList.get(i).getType()==0){//加项
-                this.payable += v;
+                this.f19 += v;
             }else {//减项
-                this.payable -= v;
+                this.f19 -= v;
             }
         }
     }
 
+
+    /**
+     * 计算普通个税
+     * @param deduct
+     */
+    public void calculateTax(Deduct deduct){
+        float taxDue=deduct.total()+this.getPayable();//应税额 = 累计应税额+ 本期收入
+        float tax = Tax.tax1(taxDue);//计算普通个税
+        tax -= deduct.getPrepaid();//本期个税 = 累计应缴个税-累计预缴个税
+        this.tax = tax<=0?0:tax;
+    }
+
+    /**
+     * 计算实发工资
+     */
+    public void calcPayed() {
+        this.paid = this.payable - this.tax;
+    }
 
 
 }

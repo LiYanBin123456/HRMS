@@ -810,11 +810,12 @@ public class FileServlet extends HttpServlet {
         scheme1.addField(new Field(c1+5, "injury", "单位工伤", Field.FLOAT, 100));
         scheme1.addField(new Field(c1+6, "fund2", "单位公积金", Field.FLOAT, 100));
         scheme1.addField(new Field(c1+7, "total2", "单位社保合计", Field.FLOAT, 100));
-        scheme1.addField(new Field(c1+8, "manage", "管理费", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+8, "f20", "商业保险费", Field.FLOAT, 100));
         scheme1.addField(new Field(c1+9, "extra2", "单位核收补减", Field.FLOAT, 100));
-        scheme1.addField(new Field(c1+10, "tax2", "税费", Field.FLOAT, 100));
-        scheme1.addField(new Field(c1+11, "summary", "汇款总额", Field.FLOAT, 100));
-        scheme1.addField(new Field(c1+12, "comments", "备注", Field.STRING, 100));
+        scheme1.addField(new Field(c1+10, "manage", "管理费", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+11, "tax2", "税费", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+12, "summary", "汇款总额", Field.FLOAT, 100));
+        scheme1.addField(new Field(c1+13, "comments", "备注", Field.STRING, 100));
 
         Scheme scheme2 = new Scheme();
         scheme2.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
@@ -836,26 +837,27 @@ public class FileServlet extends HttpServlet {
         scheme2.addField(new Field(c2+3, "disease1", "个人大病", Field.FLOAT, 100));
         scheme2.addField(new Field(c2+4, "fund1", "个人公积金", Field.FLOAT, 100));
         scheme2.addField(new Field(c2+5, "total1", "个人社保合计", Field.FLOAT, 100));
-        scheme2.addField(new Field(c2+6, "payable", "税前工资", Field.FLOAT, 100));
-        scheme2.addField(new Field(c2+7, "tax", "个税", Field.FLOAT, 100));
-        scheme2.addField(new Field(c2+8, "paid", "实发工资", Field.DOUBLE, 100));
-        Settlement1 settlement = new Settlement1();
+        scheme2.addField(new Field(c2+6, "extra1", "个人核收补减", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+7, "payable", "税前工资", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+8, "tax", "个税", Field.FLOAT, 100));
+        scheme2.addField(new Field(c2+9, "paid", "实发工资", Field.DOUBLE, 100));
+
         for(ViewDetail1 d:details){
             //计算管理费和税费
-            settlement.calcManageAndTax(vc,d);//计算管理费和税费
-            d.setManage(settlement.getManage());
-            d.setTax2(settlement.getTax());
+            vs.calcManageAndTax(vc,d);//计算管理费和税费
+            d.setManage(vs.getManage());
+            d.setTax2(vs.getTax());
+            d.setTotal1(d.getTotalPerson()+d.getFund1());//个人社保合计
+            d.setTotal2(d.getTotalDepartment()+d.getFund2());//单位社保合计
             float summary;
             if(types==4){//代缴社保
-                d.setTotal1(d.getTotalPerson()+d.getFund1());
-                //汇款总额 = 单位社保总额+个人社保合计+单位公积金+个人公积金+管理费+税费+（单位）核收补减
-                summary= d.getTotalDepartment()+d.getTotalPerson()+d.getFund2()+d.getFund2()+d.getManage()+d.getTax2()+d.getExtra2();
+                //汇款总额 = 个人社保合计+单位社保合计+管理费+税费+（单位）核收补减
+                summary= d.getTotal1()+d.getTotal2()+d.getManage()+d.getTax2()+d.getExtra2();
             }else {
-                //汇款总额 = 基本工资+自定义工资项+单位个人社保总额（因为应发减掉了个人五险一金）+单位社保总额+单位公积金+管理费+税费+（单位）核收补减
-                summary= d.getPayable()+d.getTotalPerson()+d.getFund1()+d.getTotalDepartment()+d.getFund2()+d.getManage()+d.getTax2()+d.getExtra2();
+                //汇款总额 = 基本工资+自定义工资项之和(f19)+单位社保总额+商业保险费(f20)+管理费+税费+（单位）核收补减
+               summary=d.getBase()+d.getF19()+d.getTotal2()+d.getF20()+d.getManage()+d.getTax2()+d.getExtra2();
             }
             d.setSummary(summary);
-            d.setTotal2(d.getTotalDepartment()+d.getFund2());
         }
 
         Scheme scheme3 = new Scheme();
@@ -875,8 +877,8 @@ public class FileServlet extends HttpServlet {
         scheme3.addField(new Field(13, "injury", "单位工伤", Field.FLOAT, 100));
         scheme3.addField(new Field(14, "fund2", "单位公积金", Field.FLOAT, 100));
         scheme3.addField(new Field(15, "total2", "单位社保合计", Field.FLOAT, 100));
-        scheme3.addField(new Field(16, "manage", "管理费", Field.FLOAT, 100));
-        scheme3.addField(new Field(17, "extra2", "核收补减", Field.FLOAT, 100));
+        scheme3.addField(new Field(16, "extra2", "核收补减", Field.FLOAT, 100));
+        scheme3.addField(new Field(17, "manage", "管理费", Field.FLOAT, 100));
         scheme3.addField(new Field(18, "tax2", "税费", Field.FLOAT, 100));
         scheme3.addField(new Field(19, "summary", "汇款总额", Field.FLOAT, 100));
         scheme3.addField(new Field(20, "comments", "备注", Field.STRING, 100));

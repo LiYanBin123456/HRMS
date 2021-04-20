@@ -115,10 +115,6 @@ public class DetailService1 {
         List<ViewDeduct> deducts = new ArrayList<>();//用于存放员工的个税专项扣除
         List<Insurance> insurances  = new ArrayList<>();//用于存放员工的社保设置
 
-        /*List<EnsureSetting> settings = new ArrayList<>();//用于存放员工的社保设置
-        HashMap<String, RuleMedicare> medicares = new HashMap<>();//用于暂时存放医保规则
-        HashMap<String, RuleSocial> socials = new HashMap<>();//用于暂时存放社保规则*/
-
         //准备参保单中所有人的个税扣除信息
         if(settlement.getType() != Settlement1.TYPE_4){//代缴社保不需要计算个税
             QueryParameter p = new QueryParameter();
@@ -132,41 +128,10 @@ public class DetailService1 {
             p3.addCondition("eid","in",eids);//只查询出新增、在保的参保单
            //p3.addCondition("(status","=",Insurance.STATUS_APPENDING +" or status =" +Insurance.STATUS_NORMAL+")");//只查询出新增、在保的参保单
             insurances = (List<Insurance>) InsuranceDao.getList(conn, p3).rows;
-         /*//获取医社保规则
-            QueryConditions conditions1 = new QueryConditions();
-            conditions1.add("id", "=", settlement.getCid());
-            Cooperation coop = (Cooperation) CooperationDao.get(conn, conditions1).data;
-            float perInjury = coop.getPer1();
-            for(EnsureSetting s:settings){
-                s.setPerInjury(perInjury);//设置工伤比例
-                String city = s.getCity();//员工所处地市
-                RuleMedicare medicare = medicares.get(city);//获取该地市的医保规则
-                if (medicare == null) {
-                    medicare = (RuleMedicare) RuleMedicareDao.get(conn, city, month2).data;
-                    if(medicare == null){
-                        return DaoResult.fail(String.format("请确认%s的医保规则是否存在",city));
-                    }
-                    medicares.put(city, medicare);
-                }
-                RuleSocial social = socials.get(city);
-                if (social == null) {
-                    social = (RuleSocial) RuleSocialDao.get(conn, city, month2).data;
-                    if(social == null){
-                        return DaoResult.fail(String.format("请确认%s的社保规则是否存在",city));
-                    }
-                    socials.put(city, social);
-                }
-            }*/
         }
         for(ViewDetail1 d:details){
             //2.1计算五险一金
             if(settlement.isNeedCalcInsurance()){
-                /*EnsureSetting setting = CollectionUtil.getElement(settings,"eid",d.getEid());
-                RuleMedicare ruleMedicare = medicares.get(setting.getCity());
-                RuleSocial ruleSocial = socials.get(setting.getCity());
-                d.calculateMedicare(setting,ruleMedicare);
-                d.calculateSocial(setting,ruleSocial);
-                d.calcFund(setting);*/
                 //根据员工过滤五险一金的参保单
                 List<Insurance> insurances_one = CollectionUtil.filter(insurances,"eid",d.getEid());
                 //计算员工的五险一金
@@ -175,8 +140,12 @@ public class DetailService1 {
                 }
             }
 
-            //2.2计算应发
-            d.calcPayable(mapSalary);
+            //2.2计算应发=基本工资+计算五险一金和个人核收补减
+            d.calcPayable(true);
+            //计算自定义工资项，所有自定义工资和置于f19
+            d.calcMapSalary(mapSalary);
+            //计算税前工资=应发+自定义工资项
+            d.setPayable(d.getPayable()+d.getF19());
 
             //2.3计算个税
             if(settlement.getType() != Settlement1.TYPE_4) {//代缴社保不需要计算个税

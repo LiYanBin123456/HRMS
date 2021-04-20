@@ -139,7 +139,9 @@
             layform.on('submit(saveEmployee)', function (data) {
                 saveEmployee(data.field);
             });
-            getEmployee();
+            if ((!eid && typeof eid != "undefined" && eid != 0)){
+                getEmployee();
+            }
         }
 
         function getEmployee() {

@@ -846,7 +846,7 @@ var webInterface = {
          */
         importDetails:function (param) {
             param.url = this.url;
-            param.data = {op: "importDetails",id:param.id,details:param.details, category:param.category};
+            param.data = {op: "importDetails",id:param.sid,details:param.details, category:param.category};
             webInterface.access(param);
         },
         /**

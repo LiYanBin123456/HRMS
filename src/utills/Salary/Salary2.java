@@ -296,12 +296,12 @@ public class Salary2 {
                     manage=val;//管理费=管理费
                     if(invoice==0){//增值税专用发票（全额）
                         //税费=（基本工资+自定义工资项+单位五险一金+管理费-国家减免+单位核收补减）
-                        tax2 +=  (v.getTaxDueOfDepartment(salary)+manage)*per;
+                        tax2 +=  (v.getTaxDueOfDepartment()+manage)*per;
                     }
                 }else if(category==1){//按比例收取的结算方式
                     //此时服务项目中value为比例所以需要转成小数
                     //管理费 = （基本工资+自定义工资项+单位五险一金-国家减免+单位核收补减）*比例（从服务项目中的比例）
-                    manage +=  (v.getTaxDueOfDepartment(salary))*(val/100);
+                    manage +=  (v.getTaxDueOfDepartment())*(val/100);
                     tax2=0;
                 }else {//按外包整体核算方式
 

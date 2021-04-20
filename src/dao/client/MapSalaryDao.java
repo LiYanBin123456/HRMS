@@ -40,11 +40,11 @@ public class MapSalaryDao {
         return DbUtil.getLast(conn, "map_salary", conditions,MapSalary.class,order);
     }
 
-    //获取最新自定义工资
+    //根据客户id获取最新的自定义工资
     public static DaoQueryResult getFirst(long id, Connection conn){
         QueryConditions conditions = new QueryConditions();
         conditions.add("cid", "=", id);
-        String order = " ORDER BY date asc limit 1";
+        String order = " ORDER BY date desc limit 1";
         return DbUtil.getLast(conn, "map_salary", conditions,MapSalary.class,order);
     }
 
@@ -80,7 +80,7 @@ public class MapSalaryDao {
         }
 
         List<MapSalary> mapSalaries = (List<MapSalary>) res1.rows;
-        if(mapSalaries.size() == 0){//如果未读到，就读距离这个月后的第一条
+        if(mapSalaries.size() == 0){//如果未读到，就读距离这个月后的最新一条
             DaoQueryResult res3 = getFirst(id,conn);
             if(res3.data==null){
                 res2.data = null;
@@ -93,4 +93,6 @@ public class MapSalaryDao {
         }
         return res2;
     }
+
+
 }

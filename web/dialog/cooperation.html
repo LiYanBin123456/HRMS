@@ -349,26 +349,26 @@
         if (salary_items_defined && salary_items_defined.length > 0) {
             return;
         }
-
-        //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
-        webInterface.client.getLastSalaryDefine({id:cooperation.id,success:function (result) {
-            mapSalary = result.data;
-            if(mapSalary && mapSalary.items) {
-                salary_items_defined = mapSalary.items.split(";");
-                for (var i in salary_items_defined) {
-                    var item = salary_items_defined[i];
-                    var v = item.split(',');
-                    var node = v[1] == '0' ? $("#template [name=salary_item_defined0]").clone() : $("#template [name=salary_item_defined1]").clone();
-                    node.text(v[0]);
-                    node.click(removeSalaryItem);
-                    $("#btn_append").before(node);
+        if (!cooperation.id){
+            //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
+            webInterface.client.getLastSalaryDefine({id:cooperation.id,success:function (result) {
+                mapSalary = result.data;
+                if(mapSalary && mapSalary.items) {
+                    salary_items_defined = mapSalary.items.split(";");
+                    for (var i in salary_items_defined) {
+                        var item = salary_items_defined[i];
+                        var v = item.split(',');
+                        var node = v[1] == '0' ? $("#template [name=salary_item_defined0]").clone() : $("#template [name=salary_item_defined1]").clone();
+                        node.text(v[0]);
+                        node.click(removeSalaryItem);
+                        $("#btn_append").before(node);
+                    }
+                }else{
+                    mapSalary = {};
+                    salary_items_defined = [];
                 }
-            }else{
-                mapSalary = {};
-                salary_items_defined = [];
-            }
-        }});
-
+            }});
+        }
     }
 
     //添加自定义字段

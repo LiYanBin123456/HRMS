@@ -9,18 +9,8 @@ public class ViewSettlement1 extends Settlement1{
 
     }
 
-    public ViewSettlement1(long id, long did, long cid, Date month, byte status, byte source, float salary, float social, float medicare, float fund, float manage, float tax, float summary, String name) {
-        super(id, did, cid, month, status, source, salary, social, medicare, fund, manage, tax, summary);
-        this.name = name;
-    }
-
-    public ViewSettlement1(long id, long did, long cid, String ccid, Date month, byte status, byte source, byte type, float salary, float social, float medicare, float fund, float manage, float tax, float summary, String name) {
-        super(id, did, cid, ccid, month, status, source, type, salary, social, medicare, fund, manage, tax, summary);
-        this.name = name;
-    }
-
-    public ViewSettlement1(byte type, float salary, float social, float medicare, float fund, float manage, float tax, float extra, float free, float summary, String comments, String name) {
-        super(type, salary, social, medicare, fund, manage, tax, extra, free, summary, comments);
+    public ViewSettlement1(long id, long did, long cid, String ccid, Date month, byte status, byte flag, byte type, float salary, float social, float medicare, float fund, float buss, float manage, float tax, float extra, float free, float summary, String comments, String name) {
+        super(id, did, cid, ccid, month, status, flag, type, salary, social, medicare, fund, buss, manage, tax, extra, free, summary, comments);
         this.name = name;
     }
 

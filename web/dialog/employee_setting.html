@@ -201,6 +201,24 @@
             </form>
         </div>
     </fieldset>
+    <fieldset class="layui-elem-field layui-hide">
+        <legend>商业保险</legend>
+        <div class="layui-field-box">
+            <form class="layui-form" lay-filter="form_buss" name="form_buss">
+                <div class="layui-form-item">
+                    &emsp;&emsp;&emsp;
+                    <input type="radio" lay-filter="buyIN" name="buy" value="0" title="不缴纳" checked>
+                    <input type="radio" lay-filter="buyIN" name="buy" value="1" title="缴纳">
+                </div>
+                <div class="layui-form-item layui-hide" name="in">
+                    <label class="layui-form-label">保险金额</label>
+                    <div class="layui-input-inline" style="width: 100px;">
+                        <input type="number" name="base" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+            </form>
+        </div>
+    </fieldset>
     <button type="button" class="layui-btn layui-btn-fluid" name="save">保存</button>
 </body>
 <script src="../js/jquery.min.js"></script>
@@ -228,9 +246,10 @@
         var layform = layui.form;
         var picker = layui.citypicker;
 
-        var insurances_medical = [];
-        var insurances_social = [];
-        var insurances_fund = [];
+        var insurances_medical = [];//医保集合
+        var insurances_social = [];//社保集合
+        var insurances_fund = [];//公积金集合
+        var insurances_buss = [];//商业保险集合
 
         cityPicker = new picker("#city-picker", {
             provincename: "provinceId",
@@ -246,6 +265,7 @@
             length: validator.length,
             range: validator.range
         });
+
         layform.on('radio(buyM)', function(data){//设置医保
             var buy = Number(data.value);
             if(buy) {
@@ -279,6 +299,16 @@
                 $("[name=f1]").addClass("layui-hide");
             }
         });
+
+        layform.on('radio(buyIN)', function(data){//设置商业保险
+            var buy = Number(data.value);
+            if(buy) {
+                $("[name=in]").removeClass("layui-hide");
+            }else{
+                $("[name=in]").addClass("layui-hide");
+            }
+        });
+
         layform.on('radio(baseTypeS)', function(data){
             var type = Number(data.value);
             if(type==0) {
@@ -423,6 +453,10 @@
                             op[6] = "update";
                             insurances_fund.push(ins);
                             break;
+                        case 7:
+                            op[7] = "update";
+                            insurances_buss.push(ins);
+                            break;
                     }
                 }
                 if(insurances_medical.length>0) {
@@ -433,6 +467,9 @@
                 }
                 if(insurances_fund.length>0) {
                     showInsuanceFund(insurances_fund[0]);
+                }
+                if(insurances_buss.length>0) {
+                    showInsuanceBuss(insurances_buss[0]);
                 }
             }
 
@@ -504,6 +541,11 @@
                 $("[name=f1]").removeClass("layui-hide");
                 insurance.buy = true;
                 layform.val('form_fund',insurance);
+            }
+            function showInsuanceBuss(insurance) {//展示公积金保险条数
+                $("[name=in]").removeClass("layui-hide");
+                insurance.buy = true;
+                layform.val('form_buss',insurance);
             }
         }
 
@@ -662,7 +704,7 @@
                     fund.status = 1;
                     insurances_insert.push(fund);
                 }else{
-                    var e = collectionUtil.getElement(insurances,"category",5);
+                    var e = collectionUtil.getElement(insurances,"category",6);
                     if(e != null){
                         fund.status = e.status;
                     }
@@ -670,6 +712,22 @@
                 }
             }
 
+            var buss = layform.val("form_buss");//商业保险数据
+            if(buss.buy == "1"){
+                buss.eid = eid;
+                buss.city = city;
+                buss.category = 7;
+                if(op[6] == "insert") {
+                    buss.status = 1;
+                    insurances_insert.push(buss);
+                }else{
+                    var e = collectionUtil.getElement(insurances,"category",7);
+                    if(e != null){
+                        buss.status = e.status;
+                    }
+                    insurances_update.push(buss);
+                }
+            }
             webInterface.insurance.insertAndupdate({eid:eid,insurances_insert:insurances_insert,insurances_update:insurances_update,success:function (res) {
                 for(var i in insurances_insert){
                     op[insurances_insert[i].category] = "update";

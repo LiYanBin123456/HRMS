@@ -206,7 +206,7 @@
                 btn: ['添加', '关闭']
                 ,yes: function(index, layero){
                     var details = window["layui-layer-iframe" + index].callbackData();
-                    webInterface.settlement.importDetails({id:sid,details:details,category:1,success:function () {
+                    webInterface.settlement.importDetails({sid:sid,details:details,category:1,success:function () {
                         layer.close(index);
                         layer.msg("导入成功");
                         getDetails();
@@ -240,7 +240,7 @@
                     for (var i in member){
                         details[i] = {"eid":member[i].id};
                     }
-                    webInterface.settlement.importDetails({sid:sid,details:details,category:1,success:function () {
+                    webInterface.settlement.importDetails({sid:sid,details:JSON.stringify(details),category:1,success:function () {
                         getDetails();
                         layer.msg("添加成功")
                     }});

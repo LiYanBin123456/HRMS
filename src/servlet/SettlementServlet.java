@@ -99,10 +99,10 @@ public class SettlementServlet extends HttpServlet {
             case "deleteDetail"://删除结算单明细
                 result = deleteDetail(conn, request);
                 break;
-            case "calculate"://保存结算单
+            case "calculate"://计算结算单
                 result = calculate(conn, request);
                 break;
-            case "calcDetail"://保存结算单明细
+            case "calcDetail"://计算结算单明细
                 result = calcDetail(conn, request);
                 break;
             /*case "updateExtra"://修改结算单额外信息
