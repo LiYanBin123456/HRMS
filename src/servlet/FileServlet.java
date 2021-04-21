@@ -137,12 +137,8 @@ public class FileServlet extends HttpServlet {
                 exportDetail2(conn,request,response);
                 ConnUtil.closeConnection(conn);
                 return;
-            case "exportDetail14"://导出代缴社保结算单明细
+            case "exportDetail4"://导出特殊结算单
                 exportDetail14(conn,request,response);
-                ConnUtil.closeConnection(conn);
-                return;
-            case "exportDetail4"://导出特殊结算单明细
-                //exportDetail4(conn,request,response);
                 ConnUtil.closeConnection(conn);
                 return;
             case "exportTax"://导出个税申报表
@@ -948,69 +944,59 @@ public class FileServlet extends HttpServlet {
 
     }
 
-    //导出代缴社保结算单明细
+    //导出特殊结算单明细
     private void exportDetail14(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {
         long sid = Long.parseLong(request.getParameter("sid"));//结算单id
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid","=",sid);
 
         //获取结算单视图
-        ViewSettlement1 vs = (ViewSettlement1) Settlement1Dao.get(conn,sid).data;
+        ViewSettlement4 vs = (ViewSettlement4) Settlement4Dao.get(conn,sid).data;
         //获取合作客户合同
         ViewContractCooperation vc = (ViewContractCooperation) ContractDao.getViewContractCoop(conn,vs.getCcid()).data;
         //获取结算单明细
-        DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
+        DaoQueryListResult result = Detail4Dao.getList(conn,parameter);
         String rows = JSONObject.toJSONString(result.rows);
-        List< ViewDetail1> details = JSONArray.parseArray(rows, ViewDetail1.class);
+        List< ViewDetail4> details = JSONArray.parseArray(rows, ViewDetail4.class);
 
         //文件名
-        String fileName = vs.getName()+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy年MM月"))+"代缴社保结算单";
+        String fileName = vs.getName()+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy年MM月"))+"特殊结算单";
         fileName = new String(fileName.getBytes(),"iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.addHeader("Content-Disposition", "attachment;filename=\""
                 + fileName + ".xls\"");
 
-        Scheme scheme = new Scheme();
-        scheme.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
-        scheme.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
-        scheme.addField(new Field(2, "pension2", "单位养老", Field.FLOAT, 100));
-        scheme.addField(new Field(3, "medicare2", "单位医疗", Field.FLOAT, 100));
-        scheme.addField(new Field(4, "disease2", "单位大病", Field.FLOAT, 100));
-        scheme.addField(new Field(5, "unemployment2", "单位失业", Field.FLOAT, 100));
-        scheme.addField(new Field(6, "birth", "单位生育", Field.FLOAT, 100));
-        scheme.addField(new Field(7, "injury", "单位工伤", Field.FLOAT, 100));
-        scheme.addField(new Field(8, "fund2", "单位公积金", Field.FLOAT, 100));
-        scheme.addField(new Field(9, "total2", "单位社保合计", Field.FLOAT, 100));scheme.addField(new Field(3, "pension2", "单位养老", Field.FLOAT, 100));
-        scheme.addField(new Field(10, "pension1", "个人养老", Field.FLOAT, 100));
-        scheme.addField(new Field(11, "medicare1", "个人医疗", Field.FLOAT, 100));
-        scheme.addField(new Field(12, "disease1", "个人大病", Field.FLOAT, 100));
-        scheme.addField(new Field(13, "unemployment1", "个人失业", Field.FLOAT, 100));
-        scheme.addField(new Field(14, "fund1", "个人公积金", Field.FLOAT, 100));
-        scheme.addField(new Field(15, "total1", "个人社保合计", Field.FLOAT, 100));
-        scheme.addField(new Field(16, "manage", "管理费", Field.FLOAT, 100));
-        scheme.addField(new Field(17, "extra2", "核收补减", Field.FLOAT, 100));
-        scheme.addField(new Field(18, "tax2", "税费", Field.FLOAT, 100));
-        scheme.addField(new Field(19, "summary", "汇款总额", Field.FLOAT, 100));
-        scheme.addField(new Field(20, "comments", "备注", Field.STRING, 100));
-        Settlement1 settlement = new Settlement1();
-       for(ViewDetail1 v:details){
-        //计算管理费和税费
-        settlement.calcManageAndTax(vc,v);//计算管理费和税费
-        v.setManage(settlement.getManage());
-        v.setTax2(settlement.getTax());
-        //汇款总额 = 社保总额+管理费+税费+（单位）核收补减
-        float summary = v.getTotalDepartment()+v.getTotalPerson()+v.getFund1()+v.getFund2()+v.getManage()+v.getTax2()+v.getExtra2();
-        v.setSummary(summary);
+        Scheme scheme1 = new Scheme();
+        scheme1.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
+        scheme1.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
+        scheme1.addField(new Field(2, "amount", "金额", Field.FLOAT, 100));
+        scheme1.addField(new Field(3, "manage", "管理费", Field.FLOAT, 100));
+        scheme1.addField(new Field(4, "tax2", "单位税费", Field.FLOAT, 100));
+        scheme1.addField(new Field(5, "sum", "单位实发", Field.FLOAT, 100));
 
-        v.setTotal1(v.getTotalPerson()+v.getFund1());
-        v.setTotal2(v.getTotalDepartment()+v.getFund2());
+        Scheme scheme2 = new Scheme();
+        scheme2.addField(new Field(0, "name", "员工姓名", Field.STRING, 100));
+        scheme2.addField(new Field(1, "cardId", "身份证号码", Field.STRING, 300));
+        scheme2.addField(new Field(2, "amount", "金额", Field.FLOAT, 100));
+        scheme2.addField(new Field(3, "tax", "税费", Field.FLOAT, 100));
+        scheme2.addField(new Field(4, "paid", "实发", Field.FLOAT, 100));
+
+        for(ViewDetail4 v:details){
+        //计算管理费和税费
+        vs.calcManageAndTax(vc,v);
+        v.setManage(vs.getManage());
+        v.setTax2(vs.getTax());
+        v.setSum(vs.getPaid());
     }
 
     JSONArray data = JSONArray.parseArray(JSON.toJSONString(details));
-    String sheetName =vs.getName()+""+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM")+"代缴社保汇款表");
-    String title="汇款表";
-
-    XlsUtil.write(response.getOutputStream(),sheetName,title,scheme, data);
+    String title1 =vs.getName()+""+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM")+"特殊结算单汇款表");
+    String title2 =vs.getName()+""+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM")+"特殊结算单明细表");
+    String[] titles ={title1,title2};
+    String[] sheetNames = {"汇款表", "明细表"};
+    Scheme[] schemes = {scheme1, scheme2};
+    JSONArray[] datas = {data, data};
+    XlsUtil.write(response.getOutputStream(), sheetNames,titles, schemes, datas);
     }
 
     //初始化个税专项扣除累计

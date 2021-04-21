@@ -341,6 +341,7 @@ var columns_settlement4  = [[
     {field:'name', title: '用工企业',fixed:"left"},
     {field:'month', title: '月份',width:100,templet:function (d) {return dateUtil.format_month(d.month)}},
     {field:'amount', title: '金额',width:120},
+    {field:'manage', title: '管理费',width:120},
     {field:'tax', title: '税费',width:100,edit: 'text'},
     {field:'paid', title: '实发',width:100,edit: 'text'},
     {field:'type', title: '类型',width:100,templet:function (d) { return array_value2text(type_settlement4,d.status)}},
@@ -485,7 +486,7 @@ var columns_detail4  = [[
     {field:'cardId', title: '身份证号',width:160},
     {field:'name', title: '姓名',width:80},
     {field:'amount', title: '金额',width:80,edit: 'text'},
-    {field:'tax', title: '税额',width:100},
+    {field:'tax', title: '税费',width:100},
     {field:'paid', title: '实发',width:100},
     {fixed: 'right', title: '操作', toolbar: '#bar_detail'}
 ]];
@@ -493,11 +494,11 @@ var columns_detail4  = [[
 
 
 //资金明细字段集合
-var columns_detail4  = [[
-    {field:'time', title: '日期',templet:function (d) {return dateUtil.format_date(d.time)}},
-    {field:'money', title: '金额',width:100},
-    {field:'comments', title: '事项',width:200}
-]];
+// var columns_detail4  = [[
+//     {field:'time', title: '日期',templet:function (d) {return dateUtil.format_date(d.time)}},
+//     {field:'money', title: '金额',width:100},
+//     {field:'comments', title: '事项',width:200}
+// ]];
 
 //补缴字段
 var columns_staff_with_base  = [[

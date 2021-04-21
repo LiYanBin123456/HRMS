@@ -17,8 +17,8 @@ public class Settlement4Dao {
     }
 
     public static DaoUpdateResult insert(Connection conn, Settlement4 s) {
-        String sql = "insert into settlement4 (did,cid,type,month,amount,tax,status,paid) values (?,?,?,?,?,?,?,?)";
-        Object []params = {s.getDid(),s.getCid(),s.getType(),s.getMonth(),s.getAmount(),s.getTax(),s.getStatus(),s.getPaid()};
+        String sql = "insert into settlement4 (did,cid,ccid,type,month,amount,manage,tax,status,paid) values (?,?,?,?,?,?,?,?,?,?)";
+        Object []params = {s.getDid(),s.getCid(),s.getCcid(),s.getType(),s.getMonth(),s.getAmount(),s.getManage(),s.getTax(),s.getStatus(),s.getPaid()};
         return DbUtil.insert(conn,sql,params);
     }
 
@@ -52,8 +52,8 @@ public class Settlement4Dao {
 
     //修改结算单
     public static DaoUpdateResult update(Connection conn, Settlement4 s) {
-        String sql = "update settlement4 set did=?,cid=?,type=?,month=?,amount=?,tax=?,status=?,paid=? where id = ?";
-        Object []params = {s.getDid(),s.getCid(),s.getType(),s.getMonth(),s.getAmount(),s.getTax(),s.getStatus(),s.getPaid(),s.getId()};
+        String sql = "update settlement4 set did=?,cid=?,ccid=?,type=?,month=?,amount=?,manage=?,tax=?,status=?,paid=? where id = ?";
+        Object []params = {s.getDid(),s.getCid(),s.getCcid(),s.getType(),s.getMonth(),s.getAmount(),s.getManage(),s.getTax(),s.getStatus(),s.getPaid(),s.getId()};
         return DbUtil.update(conn,sql,params);
     }
 

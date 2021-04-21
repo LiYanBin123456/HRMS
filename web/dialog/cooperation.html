@@ -349,7 +349,7 @@
         if (salary_items_defined && salary_items_defined.length > 0) {
             return;
         }
-        if (!cooperation.id){
+        if (cooperation.id != "undefined" && cooperation.id != 0 && cooperation.id != null){
             //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
             webInterface.client.getLastSalaryDefine({id:cooperation.id,success:function (result) {
                 mapSalary = result.data;

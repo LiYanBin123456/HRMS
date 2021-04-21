@@ -311,7 +311,7 @@
             }
 
             function insertSettlement(settlement) {
-                webInterface.settlement.insert({settlement:settlement,category:category,needDetail:settlement.mode,needCalculateSocial:settlement.calc,success:function () {
+                webInterface.settlement.insert({settlement:settlement,category:category,needDetail:settlement.mode,needCalculateSocial:settlement.calc,employee_category:settlement.employee_category,success:function () {
                     getSettlements();
                     layer.msg("创建结算单，cid:"+settlement.cid+",month:"+dateUtil.format_date(settlement.month));
                 }});

@@ -98,7 +98,7 @@
 
     function initPage() {
 
-        if(!eid){
+        if(eid != "undefined" && eid != 0 && eid != null){
             url = stringUtil.format("employee_base.html?eid={0}&type={1}",eid,type);
         }else{
             url = stringUtil.format("employee_base.html?type={0}",type);

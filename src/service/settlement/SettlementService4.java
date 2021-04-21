@@ -1,6 +1,7 @@
 package service.settlement;
 
 import bean.admin.Account;
+import bean.contract.ViewContractCooperation;
 import bean.employee.ViewEmployee;
 import bean.log.Log;
 import bean.log.Transaction;
@@ -10,6 +11,7 @@ import bean.settlement.Settlement4;
 import bean.settlement.ViewDetail4;
 import dao.LogDao;
 import dao.client.FinanceDao;
+import dao.contract.ContractDao;
 import dao.employee.EmployeeDao;
 import dao.settlement.Detail4Dao;
 import dao.settlement.Settlement4Dao;
@@ -36,12 +38,14 @@ public class SettlementService4 {
      * @param conn
      * @param settlement
      * @param needDetail 是否自动生成明细
+     * @param employee_category
      * @return
      */
-    public static DaoUpdateResult insert(Connection conn, Settlement4 settlement, boolean needDetail) {
+    public static DaoUpdateResult insert(Connection conn, Settlement4 settlement, boolean needDetail, byte employee_category) {
         //关闭自动提交
         ConnUtil.closeAutoCommit(conn);
 
+        settlement.setType(employee_category);
         DaoUpdateResult result = Settlement4Dao.insert(conn,settlement);
 
         if(result.success && needDetail){//自动生成结算单明细
@@ -52,7 +56,7 @@ public class SettlementService4 {
             QueryParameter parameter = new QueryParameter();
             parameter.addCondition("cid","=",cid);
             parameter.addCondition("did","=",did);
-            parameter.addCondition("type","=",1);
+            parameter.addCondition("type","=",employee_category);
             parameter.addCondition("status","=",0);
             List<ViewEmployee> emmployees = (List<ViewEmployee>) EmployeeDao.getList(conn,parameter).rows;
             List<Detail4> details = new ArrayList<>();
@@ -282,25 +286,15 @@ public class SettlementService4 {
     }
 
     //保存结算单；实质是计算结算单并且修改
-    public static DaoUpdateResult saveSettlement(Connection conn, long sid) {
-        float amount=0;
-        float tax=0;
-        float paid;
+    public static DaoUpdateResult calSettlement(Connection conn, long sid) {
         //结算单
         Settlement4 settlement = (Settlement4) Settlement4Dao.get(conn,sid).data;
-
         QueryParameter parm = new QueryParameter();
         parm.addCondition("sid","=",sid);
         //该结算单中的所有明细
         List<ViewDetail4> details = (List<ViewDetail4>) Detail4Dao.getList(conn,parm).rows;
-        for(ViewDetail4 d:details){
-            amount+=d.getAmount();
-            tax+=d.getTax();
-        }
-        paid=amount-tax;
-        settlement.setAmount(amount);
-        settlement.setTax(tax);
-        settlement.setPaid(paid);
+        ViewContractCooperation contract = (ViewContractCooperation) ContractDao.getViewContractCoop(conn,settlement.getCcid()).data;
+        settlement.calc(contract,details);
 
         return Settlement4Dao.update(conn,settlement);
     }

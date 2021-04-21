@@ -763,7 +763,8 @@ var webInterface = {
          */
         insert:function (param) {
             param.url = this.url;
-            param.data = {op: "insert",settlement:JSON.stringify(param.settlement), category:param.category,needDetail:param.needDetail,needCalculateSocial:param.needCalculateSocial};
+            param.data = {op: "insert",settlement:JSON.stringify(param.settlement), category:param.category,needDetail:param.needDetail
+                ,needCalculateSocial:param.needCalculateSocial,employee_category:param.employee_category};
             webInterface.access(param);
         },
         

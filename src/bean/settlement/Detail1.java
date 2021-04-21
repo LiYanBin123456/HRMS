@@ -799,7 +799,7 @@ public class Detail1 extends Detail {
      * @param flag 是否需要计算五险一金和个人核收补减
      */
     public void calcPayable( boolean flag) {
-        this.payable = flag?base - getTotalPerson()+fund1 + extra1:base;
+        this.payable = flag?base - getTotalPerson()-fund1 + extra1:base;
     }
 
 

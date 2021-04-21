@@ -186,7 +186,7 @@
                         for (var i in member){
                             details[i] = {"eid":member[i].id};
                         }
-                        webInterface.settlement.importDetails({sid:sid,details:details,category:4,success:function () {
+                        webInterface.settlement.importDetails({sid:sid,details:JSON.stringify(details),category:4,success:function () {
                             layer.msg("添加成功")
                         }});
                         getDetails();
@@ -198,7 +198,7 @@
 
             //删除公告
             function del(detail) {
-                layer.confirm('确定删除'+detail.cname+"的结算单明细吗", {icon: 3, title:'删除'}, function(index){
+                layer.confirm('确定删除'+detail.name+"的结算单明细吗", {icon: 3, title:'删除'}, function(index){
                     webInterface.settlement.deleteDetail({id:detail.id,category:4,success:function () {
                         layer.close(index);
                         getDetails();
@@ -209,7 +209,7 @@
 
             //导出
             function exports(){
-                var url = "/verify/file?op=exportDetail4&id="+sid;
+                var url = "/verify/file?op=exportDetail4&sid="+sid;
                 var form = $('<form method="POST"></form>');
                 form.attr('action', url);
                 form.appendTo($('body'));

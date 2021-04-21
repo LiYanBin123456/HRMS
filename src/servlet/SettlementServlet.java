@@ -4,7 +4,6 @@ package servlet;
 import bean.admin.Account;
 import bean.employee.Employee;
 import bean.settlement.*;
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import dao.settlement.*;
@@ -159,7 +158,7 @@ public class SettlementServlet extends HttpServlet {
                 result =Settlement3Service.calculate(conn,sid);
                 break;*/
             case 4://特殊结算单
-                result = SettlementService4.saveSettlement(conn,sid);
+                result = SettlementService4.calSettlement(conn,sid);
                 break;
         }
         return JSONObject.toJSONString(result);
@@ -228,8 +227,9 @@ public class SettlementServlet extends HttpServlet {
                 break;
             case 4:
                 Settlement4 settlement4 = JSONObject.parseObject(request.getParameter("settlement"), Settlement4.class);
+                byte employee_category= Byte.parseByte(request.getParameter("employee_category"));
                 settlement4.setDid(rid);
-                result = SettlementService4.insert(conn,settlement4,needDetail);
+                result = SettlementService4.insert(conn,settlement4,needDetail,employee_category);
         }
         return JSONObject.toJSONString(result);
     }

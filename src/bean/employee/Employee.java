@@ -13,7 +13,7 @@ public class Employee {
      public static final byte CATEGORY_0 = 0;//null
      public static final byte CATEGORY_1 = 1;//派遣
      public static final byte CATEGORY_2 = 2;//外包
-     public static final byte CATEGORY_3 = 3;//代缴工资
+     public static final byte CATEGORY_3 = 3;//代发工资
      public static final byte CATEGORY_4 = 4;//代缴社保
      public static final byte CATEGORY_5 = 5;//小时工
 
