@@ -536,7 +536,7 @@ var columns_deduct  = [[
 
 //个税申报字段集合
 var columns_tax  = [[
-    {field:'id', title: '工号',width:80,fixed:"left"},
+    {field:'eid', title: '员工编号',width:80,fixed:"left"},
     {field:'name', title: '姓名',width:80,fixed:"left"},
     {field:'cardId', title: '证照号码',width:160},
     {field:'month', title: '月份',width:160,templet:function (d) {return dateUtil.format_month(d.month)}},

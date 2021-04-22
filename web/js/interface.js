@@ -441,7 +441,7 @@ var webInterface = {
         /**
          * 获取员工列表
          * @param param 查询参数
-         * @param type 0 内部员工   1 外派员工 2人才库
+         * @param type 0 内部员工  1 外派员工 2人才库
          * @param success
          * @param fail
          */

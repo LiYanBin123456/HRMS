@@ -178,13 +178,15 @@ public class Settlement1 extends Settlement {
             this.medicare += detail.getMedicaleDepartment();//单位医保总额
             this.fund += detail.getFund2();//单位公积金总额
             this.buss += detail.getF20();//商业保险总额
+            //补收核减
+            this.extra += detail.getExtra2();
             if (this.type == Settlement1.TYPE_4) {//代缴社保还需加上个人部分
                 this.social += detail.getSocialPerson();
                 this.medicare += detail.getMedicalePerson();
                 this.fund += detail.getFund1();
+                this.extra += detail.getExtra1();
             }
-            //补收核减
-            this.extra += detail.getExtra2();
+
         }
 
         //计算管理费和税费

@@ -30,6 +30,7 @@
         <div class="layui-input-inline">
             <input type="radio" name="category" title="普通" value="1" lay-filter="category" checked="checked">
             <input type="radio" name="category" title="小时工" value="2" lay-filter="category" >
+            <input type="radio" name="category" title="特殊" value="4" lay-filter="category" >
         </div>
     </form>
     <form class="layui-form searchbox">
@@ -43,7 +44,7 @@
         <div class="layui-input-inline">
             <select name="state" lay-filter="select_state">
                 <option value="">按状态过滤</option>
-                <option value="3">已终审</option>
+                <option value="3" selected>已终审</option>
                 <option value="4">已扣款</option>
                 <option value="5">已发放</option>
             </select>
@@ -54,8 +55,9 @@
 
     <!--行内工具栏-->
     <script type="text/html" id="bar_settlement">
-        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export"><i class="layui-icon "></i>导出工资发放表</a>
-        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="payroll"><i class="layui-icon "></i> 确认发放</a>
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="showDetail"><i class="layui-icon "></i>明细</a>
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export"><i class="layui-icon "></i>导出</a>
+        <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="payroll"><i class="layui-icon "></i> 发放</a>
     </script>
     <script src="../js/fieldSet.js"></script>
     <script src="../js/interface.js"></script>
@@ -65,7 +67,7 @@
     <script src="../js/date.js"></script>
     <script src="../js/string.js"></script>
     <script>
-        var category = 1;//记录是显示1_普通结算单还是2_小时工结算单
+        var category = 1;//记录是显示1_普通结算单还是 2_小时工结算单
         var table;//数据表格对象
         var laypage;//分页对象
         var form;//分页对象
@@ -73,7 +75,7 @@
         var element;
         var laydate;
         var param_query = new QueryParam();
-
+        param_query.addCondition("status", "=", 3);
         param_query.setOrder("month",true);
         param_query.setPagination(1,10);
         $(function () {
@@ -118,6 +120,7 @@
             form.on('select(select_state)', function(data){
                 var status = data.value;
                 if(status) {
+                    param_query.removeCondition("status");
                     param_query.addCondition("status", "=", data.value);
                 }else{
                     param_query.removeCondition("status");
@@ -145,6 +148,9 @@
                 case 2://小时工结算单
                     cols = columns_settlement2;
                     break;
+                case 4://小时工结算单
+                    cols = columns_settlement4;
+                    break;
             };
 
             //初始化数据表格
@@ -159,6 +165,9 @@
             table.on('tool(filter_tb_settlement)', function(obj){
                 var data = obj.data; //获得当前行数据
                 switch (obj.event){
+                    case "showDetail":
+                        showDetailDlg(data);
+                        break;
                     case "export":
                         showBankDlg(data);
                         break;
@@ -171,9 +180,6 @@
             //顶部工具栏事件处理
             table.on('toolbar(filter_tb_settlement)', function(obj){
                 switch(obj.event){
-                    case 'insert':
-                        showInsertDlg();
-                        break;
                     case 'search':
                         search();
                         break;
@@ -207,6 +213,31 @@
             }});
         }
 
+        //打开明细对话框
+        function showDetailDlg(settlement) {
+            var url;
+            switch(category){
+                case 1://普通结算单
+                    url = "../dialog/detail1.html";
+                    break;
+                case 2://小时工结算单
+                    url = "../dialog/detail2.html";
+                    break;
+                case 3:
+                    url = "../dialog/detail3.html";
+                    break;
+                case 4://特殊结算单
+                    url = "../dialog/detail4.html";
+                    break;
+            }
+            var content = url+"?settlement="+encodeURIComponent(JSON.stringify(settlement));
+            layer.open({
+                title:"明细",
+                type: 2,
+                area: ['98%', '98%'],
+                content: content
+            });
+        }
 
         //打开银行选择对话框
         function showBankDlg(settlement) {

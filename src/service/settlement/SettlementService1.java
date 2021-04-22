@@ -6,6 +6,7 @@ import bean.employee.Deduct;
 import bean.employee.Employee;
 import bean.employee.EnsureSetting;
 import bean.employee.ViewEmployee;
+import bean.insurance.Insurance;
 import bean.log.Log;
 import bean.log.Transaction;
 import bean.rule.RuleMedicare;
@@ -21,6 +22,7 @@ import dao.contract.ContractDao;
 import dao.employee.DeductDao;
 import dao.employee.EmployeeDao;
 import dao.employee.SettingDao;
+import dao.insurance.InsuranceDao;
 import dao.rule.RuleMedicareDao;
 import dao.rule.RuleSocialDao;
 import dao.settlement.Detail1Dao;
@@ -509,14 +511,14 @@ public class SettlementService1 {
     //社保补差
     public static DaoUpdateResult makeup(Connection conn, List<Employee> employees, String start, String end, long sid) {
         /**
-         * 思路
-         * 1、获取所有员工的社保设置
-         * 2、获取最新社保和医保规则，并且放在缓存中
+         * 思路,确认已采用最新的规则设置好了员工的五险一金
+         * 1、获取所有员工正常的结算单明细
+         * 2、获取所有员工的所有五险一金的社保设置
          * 逐月完成步骤345
-         * 3、算出当月应缴的社保和医保
-         * 4、获取当月已交的社保和医保
+         * 3、重新计算员工的五险一金
+         * 4、获取当月已交的五险一金
          * 5、计算差额（以及累计差额）
-         * 6、将累计差额置于当前结算单明细中（先获取）的核收补减少，目的是计算完补差的数值后放到正常明细的核收补减中。
+         * 6、将累计差额置于当前结算单明细中（先获取）的核收补减中，目的是计算完补差的数值后放到正常明细的核收补减中。
          * 7、批量插入差额明细
          * 8、批量修改当前结算单明细
          */
@@ -525,7 +527,7 @@ public class SettlementService1 {
         List<Detail1> details_append = new ArrayList<>();
         List<ViewDetail1> details_update = new ArrayList<>();
 
-        //获取所有员工正常的结算单明细，后面计算完补差的数值后放到核收补减中
+        //获取所有员工当月正常的结算单明细，后面计算完补差的数值后放到核收补减中
         String ids = CollectionUtil.getKeySerial(employees,"id");
         QueryParameter p1 = new QueryParameter();
         p1.addCondition("eid","in",ids);
@@ -536,35 +538,8 @@ public class SettlementService1 {
         //获取所有员工的社保设置
         QueryParameter p2 = new QueryParameter();
         p2.addCondition("eid","in",ids);
-        List<EnsureSetting> settings = (List<EnsureSetting>) SettingDao.getList(conn,p2).rows;
+        List<Insurance> insuranceList = (List<Insurance>) InsuranceDao.getList(conn,p2).rows;
 
-        //获取所有地市的医保和社保规则,使用缓冲机制保存相关地市的医保规则和社保规则
-        HashMap<String, RuleMedicare> medicares = new HashMap<>();
-        HashMap<String, RuleSocial> socials = new HashMap<>();
-        for(EnsureSetting s:settings){
-            String city = s.getCity();//员工所处地市
-            //获取该地市的医保规则
-            RuleMedicare medicare = medicares.get(city);
-            if (medicare == null) {
-                medicare = (RuleMedicare) RuleMedicareDao.getLast(conn, city).data;
-                if(medicare == null){
-                    res1.success = false;
-                    res1.msg = String.format("请确认%s的医保规则是否存在",city);
-                    return res1;
-                }
-                medicares.put(city, medicare);
-            }
-            RuleSocial social = socials.get(city);
-            if (social == null) {
-                social = (RuleSocial) RuleSocialDao.getLast(conn, city).data;
-                if(social == null){
-                    res1.success = false;
-                    res1.msg = String.format("请确认%s的社保规则是否存在",city);
-                    return res1;
-                }
-                socials.put(city, social);
-            }
-        }
 
         //获取所有员工所有月份正常的的结算单明细
         QueryParameter p3 = new QueryParameter();
@@ -572,7 +547,7 @@ public class SettlementService1 {
         p3.addCondition("month","<=",end);
         p3.addCondition("status","=",Detail1.STATUS_NORMAL);
         p3.addCondition("eid","in",ids);
-        List<ViewDetail1> detail1s2 = (List<ViewDetail1>) Detail1Dao.getList(conn,p3).rows;
+        List<ViewDetail1> detail_exist = (List<ViewDetail1>) Detail1Dao.getList(conn,p3).rows;
 
         int year = Integer.parseInt(start.split("-")[0]);//年
         int month1 = Integer.parseInt(start.split("-")[1]);//起始月
@@ -585,42 +560,41 @@ public class SettlementService1 {
             for(int month=month1; month<=month2;month++) {
                 c.set(Calendar.MONTH,month-1);
                 //获取该员工当月的结算单明细
-                ViewDetail1 detail1 = getDetail(detail1s2,e.getId(), c.getTime());
+                ViewDetail1 detail1 = getDetail(detail_exist,e.getId(), c.getTime());
                 if(detail1 == null){
-                    res1.success = false;
-                    res1.msg = String.format("请确认%s的%d月工资明细是否存在",e.getName(),month);
-                    return res1;
+                   continue;
                 }
                 //重新生成一个明细用于计算医保和社保
                 Detail1 detail2 = new Detail1();
                 //计算医保相关
-                EnsureSetting setting = CollectionUtil.getElement(settings,"eid",e.getId());
-                if(setting == null){
-                    res1.success = false;
-                    res1.msg = String.format("请确认%s的社保设置是否存在",e.getName());
-                    return res1;
+                List<Insurance> insurances_one = CollectionUtil.filter(insuranceList,"eid",e.getId());
+                //计算员工的五险一金
+                if(insurances_one.size()>0){
+                    detail2.calcInsurance(insurances_one);
                 }
-                RuleMedicare medicare = medicares.get(setting.getCity());
-                RuleSocial social = socials.get(setting.getCity());
-                detail2.calculateMedicare(setting, medicare);
-                detail2.calculateSocial(setting, social);//计算社保相关
-
                 Detail1 d = Detail1.subtract(detail2,detail1);
                 d.setEid(e.getId());
                 d.setSid(sid);
                 d.setStatus(Detail1.STATUS_BALANCE);
+                d.setExtra1(d.getTotalPerson()+d.getFund1());
+                d.setExtra2(d.getTotalDepartment()+d.getFund2());
                 d.setComments1(month+"月个人补差");
                 d.setComments2(month+"月单位补差");
                 details_append.add(d);
 
-               sum1 += d.getTotalPerson();//个人社保合计
-               sum2 +=d.getTotalDepartment();//单位社保合计
+               sum1 += (d.getTotalPerson()+d.getFund1());//个人社保合计
+               sum2 += (d.getTotalDepartment()+d.getFund2());//单位社保合计
             }
 
             ViewDetail1 detail1 = CollectionUtil.getElement(details11,"eid",e.getId());
-            detail1.setExtra1(detail1.getExtra1()-sum1);
-            detail1.setExtra2(detail1.getExtra2()+sum2);
-            detail1.setComments1("补差");
+            if(e.getCategory()!=Employee.CATEGORY_4){//员工不是代缴社保
+                detail1.setExtra1(detail1.getExtra1()-sum1);//放在个人核收补减中应该减
+            }else {
+                detail1.setExtra1(detail1.getExtra1()+sum1);//放在个人核收补减中应该加
+            }
+            detail1.setExtra2(detail1.getExtra2()+sum2);//放在单位核收补减中应该加
+            detail1.setComments1("个人社保补差");
+            detail1.setComments2("单位社保补差");
             details_update.add(detail1);
         }
 

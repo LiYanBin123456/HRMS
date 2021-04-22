@@ -84,8 +84,8 @@ var menuItems_dispatch = [
         [
             {id:"0,268435456",   title:"工资发放",href:"payroll.html",icon:"&#xe602"},
             {id:"0,536870912",   title:"到账确认",href:"confirm.html",icon:"&#xe602"},
-            {id:"0,1073741824",   title:"个税扣除1",href:"deducts1.html",icon:"&#xe602"},
-            {id:"1,0",   title:"个税扣除2",href:"deducts2.html",icon:"&#xe602"},
+            {id:"0,1073741824",   title:"个税扣除",href:"deducts1.html",icon:"&#xe602"},
+            {id:"1,0",   title:"部分个税扣除",href:"deducts2.html",icon:"&#xe602"},
             {id:"2,0",   title:"个税申报",href:"taxes.html",icon:"&#xe602"}
         ]
     },

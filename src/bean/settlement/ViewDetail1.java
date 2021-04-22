@@ -12,7 +12,7 @@ public class ViewDetail1 extends Detail1 {
     private float total1;//个人社保合计
     private float total2;//单位社保合计
     private float summary;//汇款总额
-    private byte statusSettlement;//结算单状态
+    private String statusSettlement;//结算单状态
     public ViewDetail1() {
     }
 
@@ -57,8 +57,9 @@ public class ViewDetail1 extends Detail1 {
         this.cid = cid;
     }
 
-    public ViewDetail1(long id, long sid, long eid, float base, float pension1, float medicare1, float unemployment1, float disease1, float fund1, float pension2, float medicare2, float unemployment2, float injury, float disease2, float birth, float fund2, float tax, float tax2, float free, float extra1, float extra2, float manage, float sum, float payable, float paid, float f1, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9, float f10, float f11, float f12, float f13, float f14, float f15, float f16, float f17, float f18, float f19, float f20, byte status, String comments1, String comments2, String cardId, String name, Date month, float manage1, float tax21, float total1, float total2, float summary) {
+    public ViewDetail1(long id, long sid, long eid, float base, float pension1, float medicare1, float unemployment1, float disease1, float fund1, float pension2, float medicare2, float unemployment2, float injury, float disease2, float birth, float fund2, float tax, float tax2, float free, float extra1, float extra2, float manage, float sum, float payable, float paid, float f1, float f2, float f3, float f4, float f5, float f6, float f7, float f8, float f9, float f10, float f11, float f12, float f13, float f14, float f15, float f16, float f17, float f18, float f19, float f20, byte status, String comments1, String comments2, long cid, String cardId, String name, Date month, float manage1, float tax21, float total1, float total2, float summary, String statusSettlement) {
         super(id, sid, eid, base, pension1, medicare1, unemployment1, disease1, fund1, pension2, medicare2, unemployment2, injury, disease2, birth, fund2, tax, tax2, free, extra1, extra2, manage, sum, payable, paid, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10, f11, f12, f13, f14, f15, f16, f17, f18, f19, f20, status, comments1, comments2);
+        this.cid = cid;
         this.cardId = cardId;
         this.name = name;
         this.month = month;
@@ -67,6 +68,7 @@ public class ViewDetail1 extends Detail1 {
         this.total1 = total1;
         this.total2 = total2;
         this.summary = summary;
+        this.statusSettlement = statusSettlement;
     }
 
     public float getTotal1() {
@@ -133,12 +135,32 @@ public class ViewDetail1 extends Detail1 {
         this.name = name;
     }
 
-    public byte getStatusSettlement() {
+    public String getStatusSettlement() {
         return statusSettlement;
     }
 
-    public void setStatusSettlement(byte statusSettlement) {
+    public void setStatusSettlement(String statusSettlement) {
         this.statusSettlement = statusSettlement;
+    }
+
+    public void  setStatusText(byte status){
+        switch (status){
+            case 0://正常
+                this.statusSettlement ="正常";
+                break;
+            case 1://补缴
+                this.statusSettlement ="补缴";
+                break;
+            case 2://补差
+                this.statusSettlement ="补差";
+                break;
+            case 3://自定义
+                this.statusSettlement ="自定义";
+                break;
+            case 4://补发
+                this.statusSettlement ="补发";
+                break;
+        }
     }
 
     @Override

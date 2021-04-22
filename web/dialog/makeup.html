@@ -66,6 +66,7 @@
             var end;
             var cid = $.query.get("cid");//合作单位id
             var sid = $.query.get("sid");//合作单位id
+            var type = $.query.get("type");//结算单类型  1 派遣  2外包  3代发工资 4代缴社保
             var param_query = new QueryParam();
             param_query.setOrder("id",false);
             param_query.setPagination(1,10);
@@ -151,12 +152,11 @@
           }
 
             function getEmployees() {
-                //查询除出该单位，类型外派员工，用工性质派遣或者外包，状态在职的员工列表
+                //查询除出该单位，用工性质派遣或者外包，状态在职的员工列表
                 param_query.addCondition("cid","=",cid);
-                param_query.addCondition("type","=",1);
                 param_query.addCondition("status","=",0);
-                param_query.addCondition("category","!=",3);
-                webInterface.employee.getList({param:param_query,category:1,success:function (result) {
+                param_query.addCondition("category","=",type);
+                webInterface.employee.getList({param:param_query,type:1,success:function (result) {
                     table.reload('tbl_staff', {
                         data:result.rows
                     });
@@ -181,7 +181,7 @@
                 webInterface.settlement.makeup({start:start,end:end,sid:sid,employees:employees,success:function (result) {
                     layer.msg("补差成功");
                     parent.getDetails();
-                });
+                }});
             }
         </script>
     </body>
