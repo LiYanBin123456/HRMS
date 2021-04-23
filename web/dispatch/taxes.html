@@ -28,7 +28,7 @@
 
     <body class="layui-layout-body">
         <button class="layui-btn layui-btn-sm" lay-event="export1" onclick="export1()"><i class="layui-icon "></i> 导出个税申报名单</button>
-        <button class="layui-btn layui-btn-sm" lay-event="export2" onclick="export2()"><i class="layui-icon "></i> 导出个税申报表</button>
+        <button class="layui-btn layui-btn-sm" lay-event="export2" onclick="showExport()"><i class="layui-icon "></i> 导出个税申报表</button>
         <form class="layui-form searchbox">
             <div class="layui-input-inline">
                 <input type="text" class="layui-input" id="filter_month" placeholder="按月份过滤">
@@ -95,7 +95,6 @@
             }
 
             function initTable() {
-
                 //初始化数据表格
                 table.render({
                     elem: '#tbl_tax',
@@ -104,19 +103,28 @@
                     limit: 200,
                     id: 'tbl_tax'
                 });
+            }
 
-                //顶部工具栏事件处理
-                table.on('toolbar(filter_tb_tax)', function(obj){
-                    switch(obj.event){
-                        case 'export1':
-                            export1();
-                            break;
-                        case 'export2':
-                            export2();
-                            break;
-                    };
+            function showExport(){
+                var content = "../dialog/showExport.html";
+                layer.open({
+                    title:"添加",
+                    type: 2,
+                    area: ['80%', '95%'],
+                    content: content,
+                    btn: ['添加', '关闭']
+                    ,yes: function(index, layero){
+                        var month = window["layui-layer-iframe" + index].callbackData();
+                        if (!month ){
+                            layer.msg("插入失败,请选择月份");
+                            return;
+                        }
+                        export2(month);
+                        layer.close(index);
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
                 });
-
             }
 
             function getTaxes(reserve) {
@@ -144,6 +152,7 @@
                 }});
             }
 
+
             //导出个税申报名单
             function export1() {
                 var url = "/verify/file?op=exportTaxEmployee";
@@ -155,8 +164,8 @@
             }
 
             //导出个税申报表
-            function export2() {
-                var url = "/verify/file?op=exportTax";
+            function export2(month) {
+                var url = "/verify/file?op=exportTax&month="+month;
                 var form = $('<form method="POST"></form>');
                 form.attr('action', url);
                 form.appendTo($('body'));

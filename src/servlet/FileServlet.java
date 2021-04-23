@@ -23,10 +23,8 @@ import database.DaoUpdateResult;
 import database.QueryParameter;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
-import jxl.write.Label;
-import jxl.write.WritableSheet;
-import jxl.write.WritableWorkbook;
-import jxl.write.WriteException;
+import jxl.write.*;
+import jxl.write.Number;
 import jxl.write.biff.RowsExceededException;
 import org.apache.commons.io.IOUtils;
 import service.employee.DeductService;
@@ -171,14 +169,20 @@ public class FileServlet extends HttpServlet {
 
     //导出个税申报名单表
     private void exportTaxEmployee(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        String filename="个税申报名单表";
+        filename = new String(filename.getBytes(),"iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=tax1.xls");
+        response.addHeader("Content-Disposition", "attachment;filename=\""+ filename + ".xls\"");
+
 
         //读取模板
         String template = getServletContext().getRealPath("/excelFile/tax1.xls");
 
-        //查询出员工，条件限制先留着以后交流修改
+        //查询出在职且是外派的员工
         QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("status","=",0);
+        parameter.addCondition("type","=",1);
         List<Employee> employees = (List<Employee>) EmployeeDao.getList(conn,parameter).rows;
         JSONArray data = JSONArray.parseArray(JSONObject.toJSONString(employees));
         for(int i=0; i<data.size(); i++){
@@ -186,6 +190,8 @@ public class FileServlet extends HttpServlet {
             o.put("cardType","居民身份证");
             o.put("nation","中国");
             o.put("type","雇员");
+            o.put("status","正常");
+            o.put("entry",o.getDate("entry")==null?"":DateUtil.format(o.getDate("entry"),"yyyy-MM-dd"));
             String cardId = o.getString("cardId");
             if(cardId!=null && IDCardUtil.isValid(cardId)) {
                 o.put("sex", IDCardUtil.getSex(cardId));
@@ -199,18 +205,25 @@ public class FileServlet extends HttpServlet {
     }
 
     //导出个税申报表
-    private void exportTax(Connection conn, HttpServletRequest request, HttpServletResponse response)  {
+    private void exportTax(Connection conn, HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        String month = request.getParameter("month");
+        String month1= month.substring(0,month.length()-3);
+
+        String filename=month1+"个税申报表";
+        filename = new String(filename.getBytes(),"iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
-        response.setHeader("Content-Disposition", "attachment; filename=tax2.xls");
+        response.addHeader("Content-Disposition", "attachment;filename=\""+ filename + ".xls\"");
 
         //读取模板
         String fileName = "tax2.xls";
         String fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
         File file = new File(fullFileName);
-        Workbook book = null;
+        Workbook book;
 
         //查询出所有个税申报，但是目前还不清出需要那些条件限制
         QueryParameter parameter = new QueryParameter();
+        parameter.addCondition("month","=",month);
         List<ViewTax> viewTaxes = (List<ViewTax>) FinanceDao.getTaxs(conn,parameter).rows;
         try {
             //获取模板
@@ -220,7 +233,8 @@ public class FileServlet extends HttpServlet {
             //WritableWorkbook如果直接createWorkbook模版文件会覆盖原有的文件
             WritableWorkbook workbook = Workbook.createWorkbook(response.getOutputStream(),book);
             WritableSheet sheet = workbook.getSheet(0);//获取第一个sheet
-
+            WritableCellFormat cf1 = new WritableCellFormat(NumberFormats.FLOAT);
+            WritableCellFormat cf2 = new WritableCellFormat(NumberFormats.INTEGER);
             int index = 1;
             for(ViewTax v:viewTaxes){
                 sheet.addCell(new Label(0, index, ""));//工号
@@ -846,10 +860,12 @@ public class FileServlet extends HttpServlet {
             d.setTotal2(d.getTotalDepartment()+d.getFund2());//单位社保合计
             d.setStatusText(d.getStatus());
             //不是正常或者补发的结算单 不参与计算管理费、税费
-            if(d.getStatus()==Detail1.STATUS_NORMAL || d.getStatus()==Detail1.STATUS_MAKEUP){
+            if(d.getStatus()==Detail1.STATUS_NORMAL){
                 vs.calcManageAndTax(vc,d);//计算管理费和税费
                 d.setManage(vs.getManage());
                 d.setTax2(vs.getTax());
+            }
+            if(d.getStatus()==Detail1.STATUS_NORMAL || d.getStatus()==Detail1.STATUS_MAKEUP){
                 float summary;
                 if(types==4){//代缴社保
                     //汇款总额 = 个人社保合计+单位社保合计+管理费+税费+（单位）核收补减
@@ -1100,7 +1116,9 @@ public class FileServlet extends HttpServlet {
                 FileService.exportBank3(conn,sid,response);
                 break;
             case 3://交通
-                FileService.exportBank4(conn,sid,response);
+                fileName = "bank3.xls";
+                fullFileName = getServletContext().getRealPath("/excelFile/" + fileName);
+                FileService.exportBank4(conn,sid,response,fullFileName);
                 break;
         }
     }

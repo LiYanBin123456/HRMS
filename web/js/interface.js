@@ -549,7 +549,7 @@ var webInterface = {
          */
         leave:function (param) {
             param.url = this.url;
-            param.data = {op: "leave",reason:param.reason,id:param.id,date:param.date, category:param.category};
+            param.data = {op: "leave",id:param.id,reason:param.leave,date:param.date, category:param.category};
             webInterface.access(param);
         },
         /**

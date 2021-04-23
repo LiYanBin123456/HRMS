@@ -6,6 +6,7 @@ import bean.employee.PayCard;
 import bean.employee.ViewDeduct;
 import bean.insurance.ViewInsurance;
 import bean.settlement.ViewDetail1;
+import bean.settlement.ViewSettlement1;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -13,6 +14,7 @@ import dao.employee.PayCardDao;
 import dao.employee.SettingDao;
 import dao.insurance.InsuranceDao;
 import dao.settlement.Detail1Dao;
+import dao.settlement.Settlement1Dao;
 import database.DaoQueryListResult;
 import database.QueryParameter;
 import jxl.Workbook;
@@ -211,20 +213,25 @@ public class FileService {
 
     //导出招行
     public static void exportBank1(Connection conn, long sid, HttpServletResponse response, String file) throws UnsupportedEncodingException {
-        //文件名
-        String fileName ="招商银行工资报表";
-        fileName = new String(fileName.getBytes(), "iso-8859-1");
+        //获取结算单视图
+        ViewSettlement1 vs = (ViewSettlement1) Settlement1Dao.get(conn,sid).data;
+
+        //报表名称
+        String fileName = vs.getName()+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM-dd"))+"工资报表(招商银行)";
+        fileName = new String(fileName.getBytes(),"iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
-        response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + ".xls\"");
+        response.addHeader("Content-Disposition", "attachment;filename=\""
+                + fileName + ".xls\"");
 
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid", "=", sid);
-
         DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
+
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewDetail1> details = JSONArray.parseArray(rows, ViewDetail1.class);
         String month = details.get(0).getMonth()==null?"":(DateUtil.format(details.get(0).getMonth(),"yyyy-MM-dd").split("-"))[1];
         String eids = "";
+
         for(ViewDetail1 d:details){
             eids+=(d.getEid()+",");
         }
@@ -234,6 +241,8 @@ public class FileService {
         p1.addCondition("eid","in",eids);
         List<PayCard> payCards = (List<PayCard>) PayCardDao.getList(conn,p1).rows;
         JSONArray data = JSONArray.parseArray(JSONObject.toJSONString(details));
+        JSONArray data1 = new JSONArray();
+        JSONArray data2 = new JSONArray();
 
         for(int i=0; i<data.size(); i++){
             JSONObject o = (JSONObject) data.get(i);
@@ -243,32 +252,50 @@ public class FileService {
                 o.put("cardNo",p.getCardNo());
                 o.put("bank1",p.getBank1());
                 o.put("bankNo",p.getBankNo());
+                o.put("bank2",p.getBank2());
             }else {
                 o.put("cardNo","");
                 o.put("bank1","");
                 o.put("bankNo","");
+                o.put("bank2","");
             }
+
+            String bankName = p.getBank1()==null?"":p.getBank1();
+            if(bankName.equals("招商银行")){//招行转本行
+                data2.add(o);
+            }else {//招行转外行
+                data1.add(o);
+            }
+
         }
+
         Scheme[] schemes = {SchemeDefined.SCHEME_BANK_CMCC1, SchemeDefined.SCHEME_BANK_CMCC2};
-        JSONArray[] datas = {data, data};
+        JSONArray[] datas = {data1, data2};
         try {
            utills.excel.XlsUtil.write(response.getOutputStream(),file,schemes, datas);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
     //导出农行
     public static void exportBank2(Connection conn, long sid, HttpServletResponse response, String file) throws UnsupportedEncodingException {
-        //文件名
-        String fileName ="农业银行工资报表";
-        fileName = new String(fileName.getBytes(), "iso-8859-1");
-        response.setContentType("APPLICATION/OCTET-STREAM");
-        response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + ".xls\"");
 
+        //获取结算单视图
+        ViewSettlement1 vs = (ViewSettlement1) Settlement1Dao.get(conn,sid).data;
+
+        //报表名称
+        String fileName = vs.getName()+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM-dd"))+"工资报表(农业银行)";
+        fileName = new String(fileName.getBytes(),"iso-8859-1");
+        response.setContentType("APPLICATION/OCTET-STREAM");
+        response.addHeader("Content-Disposition", "attachment;filename=\""
+                + fileName + ".xls\"");
+
+        //获取该结算单的明细
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid", "=", sid);
-
         DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
+
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewDetail1> viewDetail1s = JSONArray.parseArray(rows, ViewDetail1.class);
         String eids = "";
@@ -283,24 +310,35 @@ public class FileService {
         JSONArray data = JSONArray.parseArray(JSONObject.toJSONString(viewDetail1s));
         String month = viewDetail1s.get(0).getMonth()==null?"":DateUtil.format(viewDetail1s.get(0).getMonth(),"yyyy.MM");
 
+        JSONArray data1 = new JSONArray();
+        JSONArray data2 = new JSONArray();
+
         for(int i=0; i<data.size(); i++){
             JSONObject o = (JSONObject) data.get(i);
-            o.put("comments",month+"工资");
+            o.put("comments",month+"月工资");
             PayCard p = CollectionUtil.getElement(payCards,"eid",o.getLong("eid"));
             if(p!=null){
                 o.put("cardNo",p.getCardNo());
                 o.put("bank1",p.getBank1());
                 o.put("bankNo",p.getBankNo());
                 o.put("bank2",p.getBank2());
-                }else {
+            }else {
                 o.put("cardNo","");
                 o.put("bank1","");
                 o.put("bankNo","");
                 o.put("bank2","");
             }
+
+            String bankName = p.getBank1()==null?"":p.getBank1();
+            if(bankName.equals("农业银行")){//交行转本行
+                data2.add(o);
+            }else {//交行转外行
+                data1.add(o);
+            }
         }
-        Scheme[] schemes = {SchemeDefined.SCHEME_BANK_AG1, SchemeDefined.SCHEME_BANK_AG1};
-        JSONArray[] datas = {data, data};
+
+        Scheme[] schemes = {SchemeDefined.SCHEME_BANK_AG1, SchemeDefined.SCHEME_BANK_AG2};
+        JSONArray[] datas = {data1, data2};
         try {
             utills.excel.XlsUtil.write(response.getOutputStream(),file,schemes, datas);
         } catch (IOException e) {
@@ -309,11 +347,15 @@ public class FileService {
     }
     //导出浦发
     public static void exportBank3(Connection conn, long sid, HttpServletResponse response) throws IOException {
-        //文件名
-        String fileName ="浦发银行工资报表";
-        fileName = new String(fileName.getBytes(), "iso-8859-1");
+        //获取结算单视图
+        ViewSettlement1 vs = (ViewSettlement1) Settlement1Dao.get(conn,sid).data;
+
+        //报表名称
+        String fileName = vs.getName()+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM-dd"))+"工资报表(浦发银行)";
+        fileName = new String(fileName.getBytes(),"iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
-        response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + ".xls\"");
+        response.addHeader("Content-Disposition", "attachment;filename=\""
+                + fileName + ".xls\"");
 
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("sid","=",sid);
@@ -340,50 +382,85 @@ public class FileService {
             PayCard p = CollectionUtil.getElement(payCards,"eid",o.getLong("eid"));
             if(p!=null){
                 o.put("cardNo",p.getCardNo());
+                o.put("bank1",p.getBank1());
+                o.put("bankNo",p.getBankNo());
+                o.put("bank2",p.getBank2());
             }else {
                 o.put("cardNo","");
+                o.put("bank1","");
+                o.put("bankNo","");
+                o.put("bank2","");
             }
         }
         XlsUtil.write(response.getOutputStream(),"","浦发银行",SchemeDefined.SCHEME_BANK_SPDB, data);
 
     }
+
     //导出交通
-    public static void exportBank4(Connection conn, long sid, HttpServletResponse response) throws IOException {
-        //文件名
-        String fileName ="交通银行工资报表";
-        fileName = new String(fileName.getBytes(), "iso-8859-1");
+    public static void exportBank4(Connection conn, long sid, HttpServletResponse response, String file) throws IOException {
+        //获取结算单视图
+        ViewSettlement1 vs = (ViewSettlement1) Settlement1Dao.get(conn,sid).data;
+
+        //报表名称
+        String fileName = vs.getName()+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM-dd"))+"工资报表(招商银行)";
+        fileName = new String(fileName.getBytes(),"iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
-        response.addHeader("Content-Disposition", "attachment;filename=\"" + fileName + ".xls\"");
+        response.addHeader("Content-Disposition", "attachment;filename=\""
+                + fileName + ".xls\"");
 
         QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("sid","=",sid);
+        parameter.addCondition("sid", "=", sid);
         DaoQueryListResult result = Detail1Dao.getList(conn,parameter);
+
         String rows = JSONObject.toJSONString(result.rows);
         List<ViewDetail1> details = JSONArray.parseArray(rows, ViewDetail1.class);
-
         String month = details.get(0).getMonth()==null?"":(DateUtil.format(details.get(0).getMonth(),"yyyy-MM-dd").split("-"))[1];
         String eids = "";
+
         for(ViewDetail1 d:details){
             eids+=(d.getEid()+",");
         }
+
         eids = eids.substring(0,eids.length()-1);
         //批量获取员工的工资卡
         QueryParameter p1 =new QueryParameter();
         p1.addCondition("eid","in",eids);
         List<PayCard> payCards = (List<PayCard>) PayCardDao.getList(conn,p1).rows;
         JSONArray data = JSONArray.parseArray(JSONObject.toJSONString(details));
+        JSONArray data1 = new JSONArray();
+        JSONArray data2 = new JSONArray();
 
         for(int i=0; i<data.size(); i++){
             JSONObject o = (JSONObject) data.get(i);
             o.put("comments",month+"月工资");
+            o.put("type","否");
             PayCard p = CollectionUtil.getElement(payCards,"eid",o.getLong("eid"));
             if(p!=null){
                 o.put("cardNo",p.getCardNo());
+                o.put("bank1",p.getBank1());
+                o.put("bankNo",p.getBankNo());
+                o.put("bank2",p.getBank2());
             }else {
                 o.put("cardNo","");
+                o.put("bank1","");
+                o.put("bankNo","");
+                o.put("bank2","");
+            }
+
+            String bankName = p.getBank1()==null?"":p.getBank1();
+            if(bankName.equals("交通银行")){//交行转本行
+                data2.add(o);
+            }else {//交行转外行
+                data1.add(o);
             }
         }
-        XlsUtil.write(response.getOutputStream(),"","交通银行",SchemeDefined.SCHEME_BANK_BOCOM, data);
+        Scheme[] schemes = {SchemeDefined.SCHEME_BANK_BOCOM1, SchemeDefined.SCHEME_BANK_BOCOM2};
+        JSONArray[] datas = {data1, data2};
+        try {
+            utills.excel.XlsUtil.write(response.getOutputStream(),file,schemes, datas);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     //读累计扣除数

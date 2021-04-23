@@ -23,12 +23,13 @@ public class SchemeDefined {
     public static Scheme SCHEME_exportSocial2;//员工停保社保单
     public static Scheme SCHEME_exportMedicare1;//员工续保医保单
     public static Scheme SCHEME_exportMedicare2;//员工停保医保单
-    public static Scheme SCHEME_BANK_CMCC1;//招行转本行
-    public static Scheme SCHEME_BANK_CMCC2;//招行转外行
-    public static Scheme SCHEME_BANK_AG1;//农行转本行
-    public static Scheme SCHEME_BANK_AG2;//农行转外行
+    public static Scheme SCHEME_BANK_CMCC1;//招行转外行
+    public static Scheme SCHEME_BANK_CMCC2;//招行转本行
+    public static Scheme SCHEME_BANK_AG1;//农行转外行
+    public static Scheme SCHEME_BANK_AG2;//农行转本行
     public static Scheme SCHEME_BANK_SPDB;//浦发
-    public static Scheme SCHEME_BANK_BOCOM;//交通
+    public static Scheme SCHEME_BANK_BOCOM1;//交通转外行
+    public static Scheme SCHEME_BANK_BOCOM2;//交通转本行
 
     static {
         //个税专项扣除-配偶信息
@@ -145,13 +146,14 @@ public class SchemeDefined {
         SCHEME_TAX1.addField(new Field(0, "", "工号", Field.NULL, 100));
         SCHEME_TAX1.addField(new Field(1, "name", "姓名", Field.STRING, 100));
         SCHEME_TAX1.addField(new Field(2, "cardType", "证件类型", Field.STRING, 100));
-        SCHEME_TAX1.addField(new Field(3, "name", "证件号码", Field.STRING, 100));
+        SCHEME_TAX1.addField(new Field(3, "cardId", "证件号码", Field.STRING, 100));
         SCHEME_TAX1.addField(new Field(4, "nation", "国籍", Field.STRING, 100));
         SCHEME_TAX1.addField(new Field(5, "sex", "性别", Field.STRING, 100));
         SCHEME_TAX1.addField(new Field(6, "birthday", "出生日期", Field.STRING, 100));
-        SCHEME_TAX1.addField(new Field(7, "", "人员状态", Field.NULL, 100));
+        SCHEME_TAX1.addField(new Field(7, "status", "人员状态", Field.STRING, 100));
         SCHEME_TAX1.addField(new Field(8, "type", "任职受雇从业类型", Field.STRING, 100));
         SCHEME_TAX1.addField(new Field(9, "phone", "手机号码", Field.STRING, 160));
+        SCHEME_TAX1.addField(new Field(9, "entry", "从业日期", Field.STRING, 160));
 
         //员工新增社保单
         SCHEME_exportSocial1 = new Scheme();
@@ -193,7 +195,7 @@ public class SchemeDefined {
         SCHEME_exportMedicare2.addField(new Field(3, "changeDate", "变更日期", Field.STRING, 100));
         SCHEME_exportMedicare2.addField(new Field(4, "changeReason", "变更原因", Field.STRING, 100));
 
-        //招行转本行
+        //招行转外行
         SCHEME_BANK_CMCC1 = new Scheme();
         SCHEME_BANK_CMCC1.addField(new Field(1, "paid", "金额上限", Field.FLOAT, 100));
         SCHEME_BANK_CMCC1.addField(new Field(7, "cardNo", "收方账号", Field.STRING, 300));
@@ -202,29 +204,33 @@ public class SchemeDefined {
         SCHEME_BANK_CMCC1.addField(new Field(11, "bankNo", "收方行行号", Field.STRING, 100));
         SCHEME_BANK_CMCC1.addField(new Field(13, "comments", "附言", Field.STRING, 100));
 
-        //招行转外行行
+        //招行转本行
         SCHEME_BANK_CMCC2 = new Scheme();
         SCHEME_BANK_CMCC2.addField(new Field(0, "paid", "金额", Field.FLOAT, 100));
         SCHEME_BANK_CMCC2.addField(new Field(1, "cardNo", "卡号", Field.STRING, 300));
         SCHEME_BANK_CMCC2.addField(new Field(2, "name", "姓名", Field.STRING, 300));
-        SCHEME_BANK_CMCC2.addField(new Field(3, "comments", "备注", Field.STRING, 300));
-
-        //农行转本行
-        SCHEME_BANK_AG1 = new Scheme();
-        SCHEME_BANK_AG1.addField(new Field(1, "cardNo", "卡号", Field.STRING, 100));
-        SCHEME_BANK_AG1.addField(new Field(2, "name", "姓名", Field.STRING, 100));
-        SCHEME_BANK_AG1.addField(new Field(3, "bank1", "开户银行(行别)", Field.STRING, 300));
-        SCHEME_BANK_AG1.addField(new Field(4, "bankNo", "大额行号", Field.STRING, 300));
-        SCHEME_BANK_AG1.addField(new Field(5, "bank2", "开户行支行名称",Field.STRING, 100));
-        SCHEME_BANK_AG1.addField(new Field(6, "paid", "实发", Field.FLOAT, 100));
-        SCHEME_BANK_AG1.addField(new Field(7, "comments", "项目", Field.STRING, 100));
+        SCHEME_BANK_CMCC2.addField(new Field(3, "bank1", "开户行", Field.STRING, 300));
+        SCHEME_BANK_CMCC2.addField(new Field(4, "bank2", "开户地", Field.STRING, 300));
+        SCHEME_BANK_CMCC2.addField(new Field(5, "comments", "汇款备注", Field.STRING, 300));
 
         //农行转外行
+        SCHEME_BANK_AG1 = new Scheme();
+        SCHEME_BANK_AG1.addField(new Field(0, "", "编号", Field.NULL, 100));
+        SCHEME_BANK_AG1.addField(new Field(1, "cardNo", "收款方账号", Field.STRING, 100));
+        SCHEME_BANK_AG1.addField(new Field(2, "name", "收款方户名", Field.STRING, 300));
+        SCHEME_BANK_AG1.addField(new Field(3, "bank1", "开户银行（行别）", Field.STRING, 300));
+        SCHEME_BANK_AG1.addField(new Field(4, "bankNo", "开户行大额行号",Field.STRING, 100));
+        SCHEME_BANK_AG1.addField(new Field(5, "bank2", "开户行支行名称", Field.STRING, 100));
+        SCHEME_BANK_AG1.addField(new Field(6, "paid", "金额", Field.FLOAT, 100));
+        SCHEME_BANK_AG1.addField(new Field(7, "comments", "备注（附言）", Field.STRING, 100));
+
+        //农行转本行
         SCHEME_BANK_AG2 = new Scheme();
-        SCHEME_BANK_AG2.addField(new Field(1, "cardNo", "卡号", Field.STRING, 100));
-        SCHEME_BANK_AG2.addField(new Field(2, "name", "姓名", Field.STRING, 300));
+        SCHEME_BANK_AG1.addField(new Field(0, "", "编号", Field.NULL, 100));
+        SCHEME_BANK_AG2.addField(new Field(1, "cardNo", "收款方账号", Field.STRING, 100));
+        SCHEME_BANK_AG2.addField(new Field(2, "name", "收款方户名", Field.STRING, 300));
         SCHEME_BANK_AG2.addField(new Field(3, "paid", "金额", Field.FLOAT, 300));
-        SCHEME_BANK_AG2.addField(new Field(4, "comments", "备注", Field.STRING, 300));
+        SCHEME_BANK_AG2.addField(new Field(4, "comments", "备注（附言）", Field.STRING, 300));
 
         //浦发银行
         SCHEME_BANK_SPDB = new Scheme();
@@ -234,12 +240,20 @@ public class SchemeDefined {
         SCHEME_BANK_SPDB.addField(new Field(3, "code", "第三方编号", Field.STRING, 300));
         SCHEME_BANK_SPDB.addField(new Field(4, "comments", "摘要", Field.STRING, 100));
 
-        //交通银行
-        SCHEME_BANK_BOCOM = new Scheme();
-        SCHEME_BANK_BOCOM.addField(new Field(0, "cardNo", "卡号", Field.STRING, 300));
-        SCHEME_BANK_BOCOM.addField(new Field(1, "name", "姓名", Field.STRING, 100));
-        SCHEME_BANK_BOCOM.addField(new Field(2, "paid", "实发", Field.FLOAT, 300));
-        SCHEME_BANK_BOCOM.addField(new Field(3, "comments", "项目", Field.STRING, 300));
+        //交通银行转外行
+        SCHEME_BANK_BOCOM1 = new Scheme();
+        SCHEME_BANK_BOCOM1.addField(new Field(0, "cardNo", "收款卡号", Field.STRING, 300));
+        SCHEME_BANK_BOCOM1.addField(new Field(1, "name", "收款户名", Field.STRING, 100));
+        SCHEME_BANK_BOCOM1.addField(new Field(2, "paid", "收款金额", Field.FLOAT, 300));
+        SCHEME_BANK_BOCOM1.addField(new Field(3, "comments", "摘要信息", Field.STRING, 300));
+        SCHEME_BANK_BOCOM1.addField(new Field(4, "type", "是否境内非居民", Field.STRING, 300));
+
+        //交通银行转本行
+        SCHEME_BANK_BOCOM2 = new Scheme();
+        SCHEME_BANK_BOCOM2.addField(new Field(0, "cardNo", "收款卡号", Field.STRING, 300));
+        SCHEME_BANK_BOCOM2.addField(new Field(1, "name", "收款户名", Field.STRING, 100));
+        SCHEME_BANK_BOCOM2.addField(new Field(2, "paid", "收款金额", Field.FLOAT, 300));
+        SCHEME_BANK_BOCOM2.addField(new Field(3, "comments", "摘要信息", Field.STRING, 300));
 
     }
 }

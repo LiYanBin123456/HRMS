@@ -520,15 +520,15 @@ var columns_confirm  = [[
 var columns_deduct  = [[
     {field:'name', title: '姓名',width:80},
     {field:'cardId', title: '身份证号',width:170},
+    {field:'deduct1', title: '子女教育',width:120},
+    {field:'deduct2', title: '赡养老人',width:120},
+    {field:'deduct3', title: '继续教育',width:120},
+    {field:'deduct4', title: '大病医疗',width:120},
+    {field:'deduct5', title: '住房贷款利息',width:120},
+    {field:'deduct6', title: '住房租金',width:120},
     {field:'income', title: '累计收入额',width:120},
     {field:'free', title: '累计减免扣除',width:120},
     {field:'prepaid', title: '累计已预缴税额',width:120},
-    {field:'deduct1', title: '累计子女教育',width:120},
-    {field:'deduct2', title: '累计赡养老人',width:120},
-    {field:'deduct3', title: '累计继续教育',width:120},
-    {field:'deduct4', title: '累计大病医疗',width:120},
-    {field:'deduct5', title: '累计住房贷款利息',width:120},
-    {field:'deduct6', title: '累计住房租金',width:120},
     {field:'deduct', title: '累计扣除总额',width:120},
     {title: '操作', toolbar: '#bar_deduct'}
 ]];
