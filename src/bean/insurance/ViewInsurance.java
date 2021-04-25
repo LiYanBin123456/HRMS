@@ -11,6 +11,23 @@ public class ViewInsurance extends Insurance{
     private String phone;//电话号码
     private Date entry;//入职时间
     private String cname;//合作单位名称
+    private long did;//派遣方单位id
+
+
+    public ViewInsurance() {
+    }
+
+    public ViewInsurance(long eid, String city, byte category, String code, float base, byte baseType, float v1, float v2, Date date, byte status, String reason, String name, String cardId, byte household, String address, String phone, Date entry, String cname, long did) {
+        super(eid, city, category, code, base, baseType, v1, v2, date, status, reason);
+        this.name = name;
+        this.cardId = cardId;
+        this.household = household;
+        this.address = address;
+        this.phone = phone;
+        this.entry = entry;
+        this.cname = cname;
+        this.did = did;
+    }
 
     public String getCname() {
         return cname;
@@ -66,6 +83,14 @@ public class ViewInsurance extends Insurance{
 
     public void setEntry(Date entry) {
         this.entry = entry;
+    }
+
+    public long getDid() {
+        return did;
+    }
+
+    public void setDid(long did) {
+        this.did = did;
     }
 
 }

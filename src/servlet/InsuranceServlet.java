@@ -1,6 +1,7 @@
 package servlet;
 
 
+import bean.admin.Account;
 import bean.insurance.Insurance;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -106,6 +107,9 @@ public class InsuranceServlet extends HttpServlet {
     //获取列表
     private String getList(Connection conn, HttpServletRequest request) {
         QueryParameter parameter =JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
+        Account user = (Account) request.getSession().getAttribute("account");
+
+        parameter.addCondition("did", "=", user.getRid());
         DaoQueryListResult result = InsuranceDao.getList(conn,parameter);
         return JSONObject.toJSONString(result);
     }

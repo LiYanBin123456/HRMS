@@ -73,11 +73,11 @@ public class DetailService2 {
         ViewSettlement2 vs = (ViewSettlement2) Settlement2Dao.get(conn, sid).data;
         Serve serve = (Serve) ServeDao.get(conn, vs.getCcid()).data;
         byte payer = serve.getPayer();//0 派遣单位发放工资  1 合作客户发放工资
-        if (payer == 1) {//合作客户发放工资  单价=公司单价-员工单价
-            vs.setPrice(vs.getPrice()-details.get(0).getPrice());
-            Settlement2 settlement2 = vs;
-            Settlement2Dao.update(conn,settlement2);
-        }
+//        if (payer == 1) {//合作客户发放工资  单价=公司单价-员工单价
+//            vs.setPrice(vs.getPrice()-details.get(0).getPrice());
+//            Settlement2 settlement2 = vs;
+//            Settlement2Dao.update(conn,settlement2);
+//        }
 
         for(Detail2 detail:details){
             QueryConditions conditions = new QueryConditions();

@@ -698,8 +698,8 @@ public class Detail1 extends Detail {
                     this.medicare2=base*v2;//单位医疗保险
                     break;
                 case Insurance.CATEGORY4://大病保险
-                    this.disease1 = v1;//个人大病
-                    this.disease2 = v2;//单位大病
+                    this.disease1 = base*v1;//个人大病
+                    this.disease2 = base*v2;//单位大病
                     break;
                 case Insurance.CATEGORY5://生育保险
                     this.birth = base*v2;//单位大病生育保险
@@ -715,82 +715,82 @@ public class Detail1 extends Detail {
         }
     }
 
-    /**
-     * 计算医保
-     * @param setting 员工设置
-     * @param ruleMedicare  所属地方的医保
-     * @return
-     */
-    public void calculateMedicare(EnsureSetting setting, RuleMedicare ruleMedicare){
-        int SettingM = setting.getSettingM();//员工医保设置
-        float base = 0;
-        switch (SettingM) {
-            case 0://最低标准
-                base = ruleMedicare.getBase();
-                break;
-            case 1://不缴纳
-                base = 0;
-                break;
-            case 2://自定义基数
-                base = setting.getBaseM();
-                break;
-        }
-        byte medicare = setting.getMedicare();//要计算的医保类别
-        if((medicare&((byte)1)) != 0){
-            this.medicare1 = base*(ruleMedicare.getPer2());//个人医疗
-            this.medicare2 =base*(ruleMedicare.getPer1());//单位医疗
-        }
-        if((medicare&((byte)2)) != 0){
-            this.disease1 = ruleMedicare.getFin2();//个人大病
-            this.disease2 = ruleMedicare.getFin1();//单位大病
-        }
-        if((medicare&((byte)4)) != 0){
-            this.birth = base*(ruleMedicare.getPer3());//单位生育
-        }
-    }
-
-    /**
-     * 计算社保
-     * @param setting
-     * @param ruleSocial
-     */
-    public void calculateSocial(EnsureSetting setting,RuleSocial ruleSocial){
-        float base = 0;
-        switch (setting.getSettingS()){
-            case 0://最低标准
-                base = ruleSocial.getBase();
-                break;
-            case 1://不缴纳
-                base=0;
-                break;
-            case 2://自定义工资
-                base=setting.getBaseS();//自定义的基数
-                break;
-        }
-
-        byte social = setting.getSocial();//要计算的社保类别
-        if((social&((byte)1)) != 0){
-            this.pension1=base*(ruleSocial.getPer2());//个人养老
-            this.pension2=base*(ruleSocial.getPer1());//单位养老
-        }
-        if((social&((byte)2)) != 0){
-            this.unemployment1=base*(ruleSocial.getPer5());//个人失业
-            this.unemployment2=base*(ruleSocial.getPer4());//单位失业
-        }
-        if((social&((byte)4)) != 0) {
-            this.injury = base * (setting.getPerInjury())+ruleSocial.getExtra();//单位工伤
-        }
-    }
-
-    /**
-     * 计算公积金（计算结果通过工资明细带回）
-     * @param setting 医社保设置
-     */
-    public void calcFund(EnsureSetting setting) {
-        float fund = setting.getBaseFund()*setting.getPerFund();
-        this.fund1 = fund;//个人公积金
-        this.fund2 = fund;//单位公积金
-    }
+//    /**
+//     * 计算医保
+//     * @param setting 员工设置
+//     * @param ruleMedicare  所属地方的医保
+//     * @return
+//     */
+//    public void calculateMedicare(EnsureSetting setting, RuleMedicare ruleMedicare){
+//        int SettingM = setting.getSettingM();//员工医保设置
+//        float base = 0;
+//        switch (SettingM) {
+//            case 0://最低标准
+//                base = ruleMedicare.getBase();
+//                break;
+//            case 1://不缴纳
+//                base = 0;
+//                break;
+//            case 2://自定义基数
+//                base = setting.getBaseM();
+//                break;
+//        }
+//        byte medicare = setting.getMedicare();//要计算的医保类别
+//        if((medicare&((byte)1)) != 0){
+//            this.medicare1 = base*(ruleMedicare.getPer2());//个人医疗
+//            this.medicare2 =base*(ruleMedicare.getPer1());//单位医疗
+//        }
+//        if((medicare&((byte)2)) != 0){
+//            this.disease1 = ruleMedicare.getFin2();//个人大病
+//            this.disease2 = ruleMedicare.getFin1();//单位大病
+//        }
+//        if((medicare&((byte)4)) != 0){
+//            this.birth = base*(ruleMedicare.getPer3());//单位生育
+//        }
+//    }
+//
+//    /**
+//     * 计算社保
+//     * @param setting
+//     * @param ruleSocial
+//     */
+//    public void calculateSocial(EnsureSetting setting,RuleSocial ruleSocial){
+//        float base = 0;
+//        switch (setting.getSettingS()){
+//            case 0://最低标准
+//                base = ruleSocial.getBase();
+//                break;
+//            case 1://不缴纳
+//                base=0;
+//                break;
+//            case 2://自定义工资
+//                base=setting.getBaseS();//自定义的基数
+//                break;
+//        }
+//
+//        byte social = setting.getSocial();//要计算的社保类别
+//        if((social&((byte)1)) != 0){
+//            this.pension1=base*(ruleSocial.getPer2());//个人养老
+//            this.pension2=base*(ruleSocial.getPer1());//单位养老
+//        }
+//        if((social&((byte)2)) != 0){
+//            this.unemployment1=base*(ruleSocial.getPer5());//个人失业
+//            this.unemployment2=base*(ruleSocial.getPer4());//单位失业
+//        }
+//        if((social&((byte)4)) != 0) {
+//            this.injury = base * (setting.getPerInjury())+ruleSocial.getExtra();//单位工伤
+//        }
+//    }
+//
+//    /**
+//     * 计算公积金（计算结果通过工资明细带回）
+//     * @param setting 医社保设置
+//     */
+//    public void calcFund(EnsureSetting setting) {
+//        float fund = setting.getBaseFund()*setting.getPerFund();
+//        this.fund1 = fund;//个人公积金
+//        this.fund2 = fund;//单位公积金
+//    }
 
 
 

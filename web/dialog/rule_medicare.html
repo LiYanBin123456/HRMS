@@ -77,9 +77,9 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
-                <span class="x-red">*</span>基数(元)</label>
+                <span class="x-red">*</span>医疗基数(元)</label>
             <div class="layui-input-block">
-                <input type="number" name="base" autocomplete="off" class="layui-input">
+                <input type="number" name="base1" autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -96,6 +96,27 @@
                 <input type="number" name="per2" autocomplete="off" class="layui-input">
             </div>
         </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>生育基数(元)</label>
+            <div class="layui-input-block">
+                <input type="number" name="base2" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>生育比例(%)</label>
+            <div class="layui-input-block">
+                <input type="number" name="per3" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>大病基数(元)</label>
+            <div class="layui-input-block">
+                <input type="number" name="base3" autocomplete="off" class="layui-input">
+            </div>
+        </div>
          <div class="layui-form-item">
             <label class="layui-form-label">
                 <span class="x-red">*</span>大病单位(元)</label>
@@ -110,13 +131,7 @@
                 <input type="number" name="fin2" autocomplete="off" class="layui-input">
             </div>
         </div>
-        <div class="layui-form-item">
-            <label class="layui-form-label">
-                <span class="x-red">*</span>生育比例(%)</label>
-            <div class="layui-input-block">
-                <input type="number" name="per3" autocomplete="off" class="layui-input">
-            </div>
-        </div>
+
         <div class="layui-form-item" >
             <div class="layui-input-block">
                 <button type="button" class="layui-btn " onclick="save()">保存</button>
@@ -130,6 +145,8 @@
 <script src="../layui/extend/city-picker/city-picker.data.js"></script>
 <script src="../js/city.js"></script>
 <script src="../js/fieldSet.js"></script>
+<script src="../js/queryParam.js"></script>
+<script src="../js/date.js"></script>
 <script>
     var op = "insert";
     var form;//表单对象
@@ -163,9 +180,9 @@
         var param = $.query.get("medicare");
         if (param) {
             var medicare = JSON.parse(param);
-            rule_medicare.start = dateUtil.format_date(rule_medicare.start);
-            form.val('form_medicare', rule_medicare);
-            var city = getCityText2(rule_medicare.city);
+            medicare.start = dateUtil.format_date(medicare.start);
+            form.val('form_medicare', medicare);
+            var city = getCityText2(medicare.city);
             cityPicker.setValue(city);
             op = "update";
         }

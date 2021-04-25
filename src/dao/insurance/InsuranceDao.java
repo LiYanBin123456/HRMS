@@ -121,7 +121,7 @@ public class InsuranceDao {
             float base1 = 0;//医保基数
             switch (settingM) {//根据医保设置获取医保基数
                 case 0://最低基数
-                    base1 = ruleMedicare.getBase();
+                    //base1 = ruleMedicare.getBase();
                     break;
                 case 1://不缴纳
                     base1 = 0;
@@ -160,7 +160,7 @@ public class InsuranceDao {
             byte settingS=setting.getSettingS();//社保设置
             switch (settingS){
                 case 0://最低基数
-                    base3 = ruleSocial.getBase();
+                    //base3 = ruleSocial.getBase();
                     break;
                 case 1://不缴纳
                     base3 = 0;

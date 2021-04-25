@@ -419,7 +419,7 @@ public class Salary2 {
         float base = 0;
         switch (SettingM) {
             case 0://最低标准
-                base = ruleMedicare.getBase();
+                //base = ruleMedicare.getBase();
                 break;
             case 1://不缴纳
                 base = 0;
@@ -457,7 +457,7 @@ public class Salary2 {
         float base = 0;
         switch (setting.getSettingS()){
             case 0://最低标准
-                base = ruleSocial.getBase();
+                //base = ruleSocial.getBase();
                 break;
             case 1://不缴纳
                 base=0;

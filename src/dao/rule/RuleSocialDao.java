@@ -38,8 +38,8 @@ public class RuleSocialDao {
      * @return 更新结果，格式："{success:true,msg:"",effects:1}"
      */
     public static DaoUpdateResult update(Connection conn, RuleSocial rule) {
-        String sql = "update rule_social set city=?, start=?, base=?, per1=?, per2=?, per3=?, extra=?, per4=?, per5=? where id=?";
-        Object[] params = {rule.getCity(), rule.getStart(), rule.getBase(), rule.getPer1(), rule.getPer2(), rule.getPer3(), rule.getExtra(), rule.getPer4(), rule.getPer5(), rule.getId()};
+        String sql = "update rule_social set city=?, start=?, base1=?,base2=?,base3=?, per1=?, per2=?, per3=?, extra=?, per4=?, per5=? where id=?";
+        Object[] params = {rule.getCity(), rule.getStart(), rule.getBase1(),rule.getBase2(),rule.getBase3(), rule.getPer1(), rule.getPer2(), rule.getPer3(), rule.getExtra(), rule.getPer4(), rule.getPer5(), rule.getId()};
         return DbUtil.update(conn, sql, params);
     }
 
@@ -50,8 +50,8 @@ public class RuleSocialDao {
      * @return 更新结果，格式："{success:true,msg:"",effects:1}"
      */
     public static DaoUpdateResult insert(Connection conn, RuleSocial rule) {
-        String sql = "insert into rule_social (city , start, base, per1, per2, per3, extra, per4, per5) values (?,?,?,?,?,?,?,?,?)";
-        Object[] params = {rule.getCity(), rule.getStart(), rule.getBase(), rule.getPer1(), rule.getPer2(), rule.getPer3(), rule.getExtra(), rule.getPer4(), rule.getPer5()};
+        String sql = "insert into rule_social (city , start, base1,base2,base3, per1, per2, per3, extra, per4, per5) values (?,?,?,?,?,?,?,?,?,?,?)";
+        Object[] params = {rule.getCity(), rule.getStart(), rule.getBase1(),rule.getBase2(),rule.getBase3(), rule.getPer1(), rule.getPer2(), rule.getPer3(), rule.getExtra(), rule.getPer4(), rule.getPer5()};
         return DbUtil.update(conn, sql, params);
     }
 

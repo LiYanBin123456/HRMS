@@ -36,12 +36,14 @@ var columns_dispatch_loss = [[
 var columns_medicare = [[
     {field:'city', title: '所属城市',width:130,templet:function (d) {return getCityText2(d.city)}},
     {field:'start', title: '生效时间',width:90,templet:function (d) {return dateUtil.format_date(d.start)}},
-    {field:'base', title: '基数(元)',width:80},
+    {field:'base1', title: '医疗基数(元)',width:80},
     {field:'per1', title: '单位医疗',width:100,templet:function (d) {return format_percent(d.per1)}},
     {field:'per2', title: '个人医疗',width:100,templet:function (d) {return format_percent(d.per2)}},
+    {field:'base2', title: '生育基数(元)',width:80},
+    {field:'per3', title: '单位生育',width:100,templet:function (d) {return format_percent(d.per3)}},
+    {field:'base3', title: '大病基数(元)',width:80},
     {field:'fin1', title: '单位大病(元)',width:100},
     {field:'fin2', title: '个人大病(元)',width:105},
-    {field:'per3', title: '单位生育',width:100,templet:function (d) {return format_percent(d.per3)}},
     {fixed: 'right', title: '操作', toolbar: '#bar_medicare'}
 ]];
 
@@ -49,11 +51,13 @@ var columns_medicare = [[
 var columns_social = [[
     {field:'city', title: '所属城市',width:130,templet:function (d) {return getCityText2(d.city)}},
     {field:'start', title: '生效时间',width:90,templet:function (d) {return dateUtil.format_date(d.start)}},
-    {field:'base', title: '基数(元)',width:80},
+    {field:'base1', title: '养老基数(元)',width:80},
     {field:'per1', title: '单位养老',width:100,templet:function (d) {return format_percent(d.per1)}},
     {field:'per2', title: '个人养老',width:100,templet:function (d) {return format_percent(d.per2)}},
+    {field:'base2', title: '工伤基数(元)',width:80},
     {field:'per3', title: '单位工伤',width:100,templet:function (d) {return format_percent(d.per3)}},
     {field:'extra', title: '工伤补充(元)',width:105},
+    {field:'base3', title: '失业基数(元)',width:80},
     {field:'per4', title: '单位失业',width:100,templet:function (d) {return format_percent(d.per4)}},
     {field:'per5', title: '个人失业',width:100,templet:function (d) {return format_percent(d.per5)}},
     {fixed: 'right', title: '操作', toolbar: '#bar_social'}

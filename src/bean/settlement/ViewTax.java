@@ -4,6 +4,7 @@ public class ViewTax {
     private long id;//结算单明细id
     private long sid;//结算单id
     private long eid;//员工id
+    private long did;//派遣方id
     private String name;//员工姓名
     private String cardId;//员工身份证号码
     private String month;//结算单所属月份
@@ -23,10 +24,11 @@ public class ViewTax {
     public ViewTax() {
     }
 
-    public ViewTax(long id, long sid, long eid, String name, String cardId, String month, float payable, float pension1, float medicare1, float unemployment1, float disease1, float fund1, float deduct1, float deduct2, float deduct3, float deduct4, float deduct5, float deduct6) {
+    public ViewTax(long id, long sid, long eid, long did, String name, String cardId, String month, float payable, float pension1, float medicare1, float unemployment1, float disease1, float fund1, float deduct1, float deduct2, float deduct3, float deduct4, float deduct5, float deduct6) {
         this.id = id;
         this.sid = sid;
         this.eid = eid;
+        this.did = did;
         this.name = name;
         this.cardId = cardId;
         this.month = month;
@@ -42,6 +44,14 @@ public class ViewTax {
         this.deduct4 = deduct4;
         this.deduct5 = deduct5;
         this.deduct6 = deduct6;
+    }
+
+    public long getDid() {
+        return did;
+    }
+
+    public void setDid(long did) {
+        this.did = did;
     }
 
     public long getId() {

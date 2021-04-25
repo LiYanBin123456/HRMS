@@ -110,9 +110,9 @@ public class EmployeeServlet extends HttpServlet {
             case "deleteDeduct"://删除个税设置
                 result = deleteDeduct(conn,request);
                 break;
-            case "readBase"://读取基数
-                result = readBase(conn, request);
-                break;
+//            case "readBase"://读取基数
+//                result = readBase(conn, request);
+//                break;
         }
         ConnUtil.closeConnection(conn);
 
@@ -211,6 +211,17 @@ public class EmployeeServlet extends HttpServlet {
     private String getDeducts(Connection conn, HttpServletRequest request) {
         DaoQueryListResult res;
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
+        HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("account");
+        if(user.getRole()==1){//派遣方管理员
+            if(user.isAdmin()) {
+                parameter.addCondition("did", "=", user.getRid());
+            }else{
+                parameter.addCondition("aid", "=", user.getId());
+            }
+        }else if(user.getRole() == 2) {//合作方管理员
+            parameter.addCondition("cid","=",user.getRid());
+        }
         res = DeductService.getList(conn, parameter);
         return  JSONObject.toJSONString(res);
     }
@@ -347,15 +358,15 @@ public class EmployeeServlet extends HttpServlet {
 
 
 
-    //读取社保医保基数
-    private String readBase(Connection conn, HttpServletRequest request) {
-        long sid = Long.parseLong(request.getParameter("sid"));//结算单id
-        String[] eids = request.getParameterValues("eids[]");
-        String start = request.getParameter("start");
-        String end = request.getParameter("end");
-        String result = EmployeeService.readBase(start,end,eids,sid,conn);
-        return result;
-    }
+//    //读取社保医保基数
+//    private String readBase(Connection conn, HttpServletRequest request) {
+//        long sid = Long.parseLong(request.getParameter("sid"));//结算单id
+//        String[] eids = request.getParameterValues("eids[]");
+//        String start = request.getParameter("start");
+//        String end = request.getParameter("end");
+//        String result = EmployeeService.readBase(start,end,eids,sid,conn);
+//        return result;
+//    }
 }
 
 

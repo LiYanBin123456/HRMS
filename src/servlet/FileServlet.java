@@ -937,17 +937,20 @@ public class FileServlet extends HttpServlet {
         String cid = vs.getCcid();//获取合同的id
         Serve serve = (Serve) ServeDao.get(conn, cid).data;
         byte payer = serve.getPayer();//0 派遣单位发放工资  1 合作客户发放工资
-        //公司的单价
+        //公司的单价，如果是合作方发工资则该单价是差价
         float price = vs.getPrice();
 
-        if (payer == 1) {//合作客户发放工资  单价=公司单价-员工单价
-            price = price - details.get(0).getPrice();
-        }
         for (ViewDetail2 d : details) {//计算汇款明细，就是合作方客户需要给派遣方汇款多少钱
            d.setSum(d.total(price));
-           d.setPrice1(vs.getPrice());//公司单价
-           d.setPrice2(d.getPrice());//个人单价
-           d.setPrice3(vs.getPrice()-d.getPrice());//差价
+           if(payer==1){//合作单位发工资
+               d.setPrice1(vs.getPrice()+d.getPrice());//公司单价
+               d.setPrice2(d.getPrice());//个人单价
+               d.setPrice3(vs.getPrice());//差价
+           }else {//派遣方单位发工资
+               d.setPrice1(vs.getPrice());//公司单价
+               d.setPrice2(d.getPrice());//个人单价
+               d.setPrice3(vs.getPrice()-d.getPrice());//差价
+           }
         }
 
         //文件名

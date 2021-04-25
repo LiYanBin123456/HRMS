@@ -119,6 +119,7 @@ public class Settlement2 extends Settlement {
             summary=hours*difference;
             extra=0;
             traffic=0;
+            this.price = difference;//将差值作为该结算的价格用作前台展示
         }
     }
 }

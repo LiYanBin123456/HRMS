@@ -29,15 +29,15 @@
             </form>
             <form class="layui-form layui-hide" lay-filter="form_baseS" name="form_baseS">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">缴纳基数</label>
-                    <div class="layui-input-inline" style="width: 130px;">
-                        <input type="number" name="base" autocomplete="off" class="layui-input" value="0">
-                    </div>
-                    <div class="layui-input-inline" style="width: 300px;">
-                        &emsp;
-                        <input type="radio" lay-filter="baseTypeS" name="baseType" value="0" title="最低标准" checked>
-                        <input type="radio" lay-filter="baseTypeS" name="baseType" value="1" title="自定义基数">
-                    </div>
+                    <!--<label class="layui-form-label">缴纳基数</label>-->
+                    <!--<div class="layui-input-inline" style="width: 130px;">-->
+                    <!--<input type="number" name="base" autocomplete="off" class="layui-input" value="0">-->
+                    <!--</div>-->
+                    <!--<div class="layui-input-inline" style="width: 300px;">-->
+                    <!--&emsp;-->
+                    <!--<input type="radio" lay-filter="baseTypeS" name="baseType" value="0" title="最低标准" checked>-->
+                    <!--<input type="radio" lay-filter="baseTypeS" name="baseType" value="1" title="自定义基数">-->
+                    <!--</div>-->
                 </div>
             </form>
             <form class="layui-form layui-hide" lay-filter="form_social1">
@@ -45,6 +45,12 @@
                     <label class="layui-form-label">养老保险</label>
                     <div class="layui-input-inline" style="width: 100px;">
                         <input type="checkbox" lay-skin="primary" lay-filter="buyS1" name="buy">
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="s1">
+                        <label class="layui-form-label">基数</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="base" autocomplete="off" class="layui-input" >
+                        </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s1">
                         <label class="layui-form-label">单位比例</label>
@@ -67,6 +73,12 @@
                         <input type="checkbox" lay-skin="primary" lay-filter="buyS2" name="buy">
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s2">
+                        <label class="layui-form-label">基数</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="base" autocomplete="off" class="layui-input " >
+                        </div>
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="s2">
                         <label class="layui-form-label">单位比例</label>
                         <div class="layui-input-inline" style="width: 80px;">
                             <input type="number" name="v2" autocomplete="off" class="layui-input">
@@ -75,7 +87,7 @@
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s2">
                         <label class="layui-form-label">补充金额</label>
                         <div class="layui-input-inline" style="width: 80px;">
-                            <input type="number" name="v1" autocomplete="off" class="layui-input">
+                            <input type="number" name="v1" autocomplete="off" class="layui-input ">
                         </div>
                     </div>
                 </div>
@@ -85,6 +97,12 @@
                     <label class="layui-form-label">失业保险</label>
                     <div class="layui-input-inline" style="width: 100px;">
                         <input type="checkbox" lay-skin="primary" lay-filter="buyS3" name="buy">
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="s3">
+                        <label class="layui-form-label">基数</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="base" autocomplete="off" class="layui-input " >
+                        </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s3">
                         <label class="layui-form-label">单位比例</label>
@@ -112,15 +130,15 @@
             </form>
             <form class="layui-form layui-hide" lay-filter="form_baseM" name="form_baseM">
                 <div class="layui-form-item">
-                    <label class="layui-form-label">缴纳基数</label>
-                    <div class="layui-input-inline" style="width: 130px;">
-                        <input type="number" name="base" autocomplete="off" class="layui-input">
-                    </div>
-                    <div class="layui-input-inline" style="width: 300px;">
-                        &emsp;
-                        <input type="radio" lay-filter="baseTypeM" name="baseType" value="0" title="最低标准" checked>
-                        <input type="radio" lay-filter="baseTypeM" name="baseType" value="1" title="自定义基数">
-                    </div>
+                    <!--<label class="layui-form-label">缴纳基数</label>-->
+                    <!--<div class="layui-input-inline" style="width: 130px;">-->
+                    <!--<input type="number" name="base" autocomplete="off" class="layui-input">-->
+                    <!--</div>-->
+                    <!--<div class="layui-input-inline" style="width: 300px;">-->
+                    <!--&emsp;-->
+                    <!--<input type="radio" lay-filter="baseTypeM" name="baseType" value="0" title="最低标准" checked>-->
+                    <!--<input type="radio" lay-filter="baseTypeM" name="baseType" value="1" title="自定义基数">-->
+                    <!--</div>-->
                 </div>
             </form>
             <form class="layui-form layui-hide" lay-filter="form_medical1">
@@ -128,6 +146,12 @@
                     <label class="layui-form-label">医疗保险</label>
                     <div class="layui-input-inline" style="width: 100px;">
                         <input type="checkbox" lay-skin="primary" lay-filter="buyM1" name="buy">
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="m1">
+                        <label class="layui-form-label">基数</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="base" autocomplete="off" class="layui-input " >
+                        </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="m1">
                         <label class="layui-form-label">单位比例</label>
@@ -150,13 +174,19 @@
                         <input type="checkbox" lay-skin="primary" lay-filter="buyM2" name="buy">
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="m2">
-                        <label class="layui-form-label">单位金额</label>
+                        <label class="layui-form-label">基数</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="base" autocomplete="off" class="layui-input " >
+                        </div>
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="m2">
+                        <label class="layui-form-label">单位比例</label>
                         <div class="layui-input-inline" style="width: 80px;">
                             <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="m2">
-                        <label class="layui-form-label">个人金额</label>
+                        <label class="layui-form-label">个人比例</label>
                         <div class="layui-input-inline" style="width: 80px;">
                             <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
@@ -168,6 +198,12 @@
                     <label class="layui-form-label">生育保险</label>
                     <div class="layui-input-inline" style="width: 100px;">
                         <input type="checkbox" lay-skin="primary" lay-filter="buyM3" name="buy">
+                    </div>
+                    <div class="layui-input-inline layui-hide" style="width: 220px;" name="m3">
+                        <label class="layui-form-label">基数</label>
+                        <div class="layui-input-inline" style="width: 80px;">
+                            <input type="number" name="base" autocomplete="off" class="layui-input " >
+                        </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="m3">
                         <label class="layui-form-label">单位比例</label>
@@ -331,7 +367,7 @@
         layform.on('checkbox(buyM1)', function(data){
             if(data.elem.checked){
                 $("[name=m1]").removeClass("layui-hide");
-                var ins = {buy:true,v1:rule_medical.per2,v2:rule_medical.per1};
+                var ins = {buy:true,base:rule_medical.base1,v1:rule_medical.per2,v2:rule_medical.per1};
                 layform.val('form_medical1',ins);
             }else{
                 $("[name=m1]").addClass("layui-hide");
@@ -340,7 +376,7 @@
         layform.on('checkbox(buyM2)', function(data){
             if(data.elem.checked){
                 $("[name=m2]").removeClass("layui-hide");
-                var ins = {buy:true,v1:rule_medical.fin2,v2:rule_medical.fin1};
+                var ins = {buy:true,base:rule_medical.base3,v1:rule_medical.fin2,v2:rule_medical.fin1};
                 layform.val('form_medical2',ins);
             }else{
                 $("[name=m2]").addClass("layui-hide");
@@ -349,7 +385,7 @@
         layform.on('checkbox(buyM3)', function(data){
             if(data.elem.checked){
                 $("[name=m3]").removeClass("layui-hide");
-                var ins = {buy:true,v1:0,v2:rule_medical.per3};
+                var ins = {buy:true,base:rule_medical.base2,v1:0,v2:rule_medical.per3};
                 layform.val('form_medical3',ins);
             }else{
                 $("[name=m3]").addClass("layui-hide");
@@ -358,7 +394,7 @@
         layform.on('checkbox(buyS1)', function(data){
             if(data.elem.checked){
                 $("[name=s1]").removeClass("layui-hide");
-                var ins = {buy:true,v1:rule_social.per2,v2:rule_social.per1};
+                var ins = {buy:true,base:rule_social.base1,v1:rule_social.per2,v2:rule_social.per1};
                 layform.val('form_social1',ins);
             }else{
                 $("[name=s1]").addClass("layui-hide");
@@ -367,7 +403,7 @@
         layform.on('checkbox(buyS2)', function(data){
             if(data.elem.checked){
                 $("[name=s2]").removeClass("layui-hide");
-                var ins = {buy:true,v1:rule_social.extra,v2:rule_social.per3};
+                var ins = {buy:true,base:rule_social.base2,v1:rule_social.extra,v2:rule_social.per3};
                 layform.val('form_social2',ins);
             }else{
                 $("[name=s2]").addClass("layui-hide");
@@ -376,7 +412,7 @@
         layform.on('checkbox(buyS3)', function(data){
             if(data.elem.checked){
                 $("[name=s3]").removeClass("layui-hide");
-                var ins = {buy:true,v1:rule_social.per5,v2:rule_social.per4};
+                var ins = {buy:true,base:rule_social.base3,v1:rule_social.per5,v2:rule_social.per4};
                 layform.val('form_social3',ins);
             }else{
                 $("[name=s3]").addClass("layui-hide");
@@ -551,16 +587,15 @@
                 return;
             }
             var baseS = layform.val("form_baseS");
-            if(baseS.base < rule_social.base){
-                layer.alert("社保缴纳基数不得低于最低标准"+rule_social.base);
-                return;
-            }
+//            if(baseS.base < rule_social.base){
+//                layer.alert("社保缴纳基数不得低于最低标准"+rule_social.base);
+//                return;
+//            }
             var social1 = layform.val("form_social1");
             if(social1.buy == "on"){
                 //social1.eid = eid;
                 social1.city = city;
                 social1.category = 0;
-                social1.base = baseS.base;
                 social1.baseType = baseS.baseType;
                 if(op[0] == "insert") {
                     social1.status = 1;
@@ -580,7 +615,6 @@
                 //social2.eid = eid;
                 social2.city = city;
                 social2.category = 1;
-                social2.base = baseS.base;
                 social2.baseType = baseS.baseType;
                 if(op[1] == "insert") {
                     social2.status = 1;
@@ -600,7 +634,6 @@
                 //social3.eid = eid;
                 social3.city = city;
                 social3.category = 2;
-                social3.base = baseS.base;
                 social3.baseType = baseS.baseType;
                 if(op[2] == "insert") {
                     social3.status = 1;
@@ -625,7 +658,6 @@
                 //medical1.eid = eid;
                 medical1.city = city;
                 medical1.category = 3;
-                medical1.base = baseM.base;
                 medical1.baseType = baseM.baseType;
                 if(op[3] == "insert") {
                     medical1.status = 1;
@@ -645,7 +677,6 @@
                 //medical2.eid = eid;
                 medical2.city = city;
                 medical2.category = 4;
-                medical2.base = baseM.base;
                 medical2.baseType = baseM.baseType;
                 if(op[4] == "insert") {
                     medical2.status = 1;
@@ -665,7 +696,6 @@
                 //medical3.eid = eid;
                 medical3.city = city;
                 medical3.category = 5;
-                medical3.base = baseM.base;
                 medical3.baseType = baseM.baseType;
                 if(op[5] == "insert") {
                     medical3.status = 1;
@@ -748,7 +778,6 @@
         if(social1.buy == "on"){
             social1.city = city;
             social1.category = 0;
-            social1.base = baseS.base;
             social1.baseType = baseS.baseType;
             if(op[0] == "insert") {
                 social1.status = 1;
@@ -768,7 +797,6 @@
             //social2.eid = eid;
             social2.city = city;
             social2.category = 1;
-            social2.base = baseS.base;
             social2.baseType = baseS.baseType;
             if(op[1] == "insert") {
                 social2.status = 1;
@@ -788,7 +816,6 @@
             //social3.eid = eid;
             social3.city = city;
             social3.category = 2;
-            social3.base = baseS.base;
             social3.baseType = baseS.baseType;
             if(op[2] == "insert") {
                 social3.status = 1;
@@ -817,7 +844,6 @@
             //medical1.eid = eid;
             medical1.city = city;
             medical1.category = 3;
-            medical1.base = baseM.base;
             medical1.baseType = baseM.baseType;
             if(op[3] == "insert") {
                 medical1.status = 1;
@@ -837,7 +863,6 @@
             //medical2.eid = eid;
             medical2.city = city;
             medical2.category = 4;
-            medical2.base = baseM.base;
             medical2.baseType = baseM.baseType;
             if(op[4] == "insert") {
                 medical2.status = 1;
@@ -857,7 +882,6 @@
             //medical3.eid = eid;
             medical3.city = city;
             medical3.category = 5;
-            medical3.base = baseM.base;
             medical3.baseType = baseM.baseType;
             if(op[5] == "insert") {
                 medical3.status = 1;

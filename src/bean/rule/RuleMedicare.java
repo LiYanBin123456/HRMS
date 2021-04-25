@@ -8,7 +8,9 @@ public class RuleMedicare extends Rule{
 
     private float per1;//医疗单位比例
     private float per2;//医疗个人比例
-    private float base;//基数
+    private float base1;//医疗基数
+    private float base2;//生育基数
+    private float base3;//大病基数
     private float per3;//生育单位比例
     private float fin1;//大病单位
     private float fin2;//大病个人
@@ -16,11 +18,13 @@ public class RuleMedicare extends Rule{
     public RuleMedicare() {
     }
 
-    public RuleMedicare(long id, String city, Date start, float per1, float per2, float base, float per3, float fin1, float fin2) {
+    public RuleMedicare(long id, String city, Date start, float per1, float per2, float base1, float base2, float base3, float per3, float fin1, float fin2) {
         super(id, city, start);
         this.per1 = per1;
         this.per2 = per2;
-        this.base = base;
+        this.base1 = base1;
+        this.base2 = base2;
+        this.base3 = base3;
         this.per3 = per3;
         this.fin1 = fin1;
         this.fin2 = fin2;
@@ -40,14 +44,6 @@ public class RuleMedicare extends Rule{
 
     public void setPer2(float per2) {
         this.per2 = per2;
-    }
-
-    public float getBase() {
-        return base;
-    }
-
-    public void setBase(float base) {
-        this.base = base;
     }
 
     public float getPer3() {
@@ -74,15 +70,27 @@ public class RuleMedicare extends Rule{
         this.fin2 = fin2;
     }
 
-    @Override
-    public String toString() {
-        return "RuleMedicare{" +
-                "per1=" + per1 +
-                ", per2=" + per2 +
-                ", base=" + base +
-                ", per3=" + per3 +
-                ", fin1=" + fin1 +
-                ", fin2=" + fin2 +
-                '}';
+    public float getBase1() {
+        return base1;
+    }
+
+    public void setBase1(float base1) {
+        this.base1 = base1;
+    }
+
+    public float getBase2() {
+        return base2;
+    }
+
+    public void setBase2(float base2) {
+        this.base2 = base2;
+    }
+
+    public float getBase3() {
+        return base3;
+    }
+
+    public void setBase3(float base3) {
+        this.base3 = base3;
     }
 }

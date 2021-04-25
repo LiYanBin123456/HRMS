@@ -1,5 +1,6 @@
 package servlet;
 
+import bean.admin.Account;
 import bean.log.Transaction;
 import com.alibaba.fastjson.JSONObject;
 import dao.TransactionDao;
@@ -14,6 +15,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
@@ -52,7 +54,12 @@ public class FinanceServlet extends HttpServlet {
 
     private String getTaxs(Connection conn, HttpServletRequest request) {
         QueryParameter param = JSONObject.parseObject(request.getParameter("param"),QueryParameter.class);
+        HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("account");
+        param.addCondition("did","=",user.getRid());
+
         DaoQueryListResult result = FinanceDao.getTaxs(conn,param);
+
         return JSONObject.toJSONString(result);
     }
 

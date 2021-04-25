@@ -47,8 +47,8 @@ public class RuleMedicareDao {
      * @return 更新结果，格式："{success:true,msg:"",effects:1}"
      */
     public static DaoUpdateResult update(Connection conn, RuleMedicare rule) {
-        String sql = "update rule_medicare set city=?, start=?, base=?, per1=?, per2=?, per3=?, fin1=?, fin2=? where id=?";
-        Object[] params = {rule.getCity(), rule.getStart(), rule.getBase(), rule.getPer1(), rule.getPer2(), rule.getPer3(), rule.getFin1(), rule.getFin2(), rule.getId()};
+        String sql = "update rule_medicare set city=?, start=?, base1=?,base2=?,base3=?, per1=?, per2=?, per3=?, fin1=?, fin2=? where id=?";
+        Object[] params = {rule.getCity(), rule.getStart(), rule.getBase1(),rule.getBase2(),rule.getBase3(), rule.getPer1(), rule.getPer2(), rule.getPer3(), rule.getFin1(), rule.getFin2(), rule.getId()};
         return DbUtil.update(conn, sql, params);
     }
 
@@ -59,8 +59,8 @@ public class RuleMedicareDao {
      * @return 更新结果，格式："{success:true,msg:"",effects:1}"
      */
     public static DaoUpdateResult insert(Connection conn, RuleMedicare rule) {
-        String sql = "insert into rule_medicare (city , start, base, per1, per2, per3, fin1, fin2) values (?,?,?,?,?,?,?,?)";
-        Object[] params = {rule.getCity(), rule.getStart(), rule.getBase(), rule.getPer1(), rule.getPer2(), rule.getPer3(), rule.getFin1(), rule.getFin2()};
+        String sql = "insert into rule_medicare (city , start, base1, base2, base3, per1, per2, per3, fin1, fin2) values (?,?,?,?,?,?,?,?,?,?)";
+        Object[] params = {rule.getCity(), rule.getStart(), rule.getBase1(),rule.getBase2(),rule.getBase3(), rule.getPer1(), rule.getPer2(), rule.getPer3(), rule.getFin1(), rule.getFin2()};
         return DbUtil.insert(conn, sql, params);
     }
 

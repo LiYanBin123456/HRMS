@@ -373,140 +373,140 @@ public class SettlementService1 {
     }
 
     //社保补缴
-    public static DaoUpdateResult fillup(String start, String end, long sid,List<JSONObject> employees, Connection conn) {
-        /**
-         * 1、获取前台传过来的员工数据（包含员工id、医保基数、社保基数）
-         * 2、获取所有员工结算单正常明细
-         * 3、获取所有员工的社保设置
-         * 4、获取所有员工的医保和社保规则
-         * 5、根据月份算出员工的医保和社保
-         * 6、算出个人和单位社保合计置于正常结算单明细
-         * 7、批量插入补缴明细
-         * 8、批量修改正常结算单明细
-         */
-        DaoUpdateResult res1 = new DaoUpdateResult();
-        ConnUtil.closeAutoCommit(conn);
-
-        String ids = "";
-        for(JSONObject object:employees){
-            ids += (object.getLong("id")+",");
-        }
-        ids = ids.substring(0,ids.length()-1);
-
-        //获取所有员工正常的结算单明细，后面计算完补差的数值后放到核收补减中
-        QueryParameter p1 = new QueryParameter();
-        p1.addCondition("eid","in",ids);
-        p1.addCondition("sid","=",sid);
-        p1.addCondition("status","=",0);
-        List<ViewDetail1> details11 = (List<ViewDetail1>) Detail1Dao.getList(conn,p1).rows;
-
-        //获取所有员工的社保设置
-        QueryParameter p2 = new QueryParameter();
-        p2.addCondition("eid","in",ids);
-        List<EnsureSetting> settings = (List<EnsureSetting>) SettingDao.getList(conn,p2).rows;
-
-        //获取所有地市的医保和社保规则,使用缓冲机制保存相关地市的医保规则和社保规则
-        HashMap<String, RuleMedicare> medicares = new HashMap<>();
-        HashMap<String, RuleSocial> socials = new HashMap<>();
-
-        int year = Integer.parseInt(start.split("-")[0]);//年
-        int month1 = Integer.parseInt(start.split("-")[1]);//起始月
-        int month2 = Integer.parseInt(end.split("-")[1]);//结束月
-
-        for(EnsureSetting s:settings){
-            String city = s.getCity();//员工所处地市
-            Date date = DateUtil.parse(year+"-12-31","yyyy-MM-dd");
-            //获取该地市的医保规则
-            RuleMedicare medicare = medicares.get(city);
-            if (medicare == null) {
-                medicare = (RuleMedicare) RuleMedicareDao.get(conn, city, date).data;
-                if (medicare == null) {
-                    res1.success = false;
-                    res1.msg = String.format("请确认%s的医保规则是否存在", city);
-                    return res1;
-                }
-                medicares.put(city, medicare);
-            }
-            RuleSocial social = socials.get(city);
-            if (social == null) {
-                social = (RuleSocial) RuleSocialDao.get(conn, city, date).data;
-                if (social == null) {
-                    res1.success = false;
-                    res1.msg = String.format("请确认%s的社保规则是否存在", city);
-                    return res1;
-                }
-                socials.put(city, social);
-            }
-        }
-
-        List<Detail1> detail_append = new ArrayList<>();//添加补缴明细的集合
-        List<ViewDetail1> detail_update = new ArrayList<>();//添加正常明细的集合
-
-        for(JSONObject object:employees){
-            long eid = object.getLong("id");
-            float baseM = object.getFloat("baseM");
-            float baseS = object.getFloat("baseS");
-
-            //获取该员工正常的结算单明细
-            ViewDetail1 detail = CollectionUtil.getElement(details11,"eid",eid);
-            if(detail == null){
-                res1.msg = String.format("不存在%s的工资明细，无法补缴",object.getString("name"));
-                return res1;
-            }
-
-            EnsureSetting setting = CollectionUtil.getElement(settings,"eid",eid);//获取员工社保设置
-            if(setting==null){//员工设置为空
-                res1.msg = String.format("请先完善%s的社保设置",object.getString("name"));
-               return res1;
-            }
-            //设置医保社保为自定义基数
-            setting.setSettingM((byte) 2);
-            setting.setBaseM(baseM);
-            setting.setSettingS((byte) 2);
-            setting.setBaseS(baseS);
-
-            RuleMedicare medicare = medicares.get(setting.getCity());
-            RuleSocial social = socials.get(setting.getCity());
-
-            float sum1=0;//个人累计社保合计
-            float sum2=0;//单位累计社保合计
-            for(int month=month1; month<=month2;month++) {
-                Detail1 d = new Detail1();
-                d.setSid(sid);
-                d.setEid(eid);
-                d.setStatus(Detail1.STATUS_REPLENISH);//补缴
-                d.setComments1(month+"月份个人社保补缴");
-                d.setComments2(month+"月份单位社保补缴");
-
-                d.calculateMedicare(setting,medicare);//根据员工设置计算医保
-                d.calculateSocial(setting,social);//根据员工设置计算社保
-
-                detail_append.add(d);
-
-                sum1 += d.getTotalPerson();//个人社保合计
-                sum2 +=d.getTotalDepartment();//单位社保合计
-            }
-            detail.setExtra1(detail.getExtra1()-sum1);  //将个人社保合计赋值给该员工正常结算单明细的单位核收补减，正数
-            detail.setComments1("个人社保补缴合计");
-            detail.setExtra2(detail.getExtra2()+sum2); //将单位社保合计赋值给该员工正常结算单明细的单位核收补减，正数
-            detail.setComments2("单位社保补缴合计");
-            detail_update.add(detail);//添加进正常明细集合
-
-        }
-
-        //批量插入补缴明细
-        res1 = Detail1Dao.importDetails(conn,detail_append);
-
-        //批量修改正常明细
-        DaoUpdateResult res2= Detail1Dao.update(conn,detail_update);
-        if(!res1.success || !res2.success){
-            ConnUtil.rollback(conn);
-            res1.msg ="数据库操作错误";
-            return res1;
-        }
-        ConnUtil.commit(conn);
-        return res1;
-    }
+//    public static DaoUpdateResult fillup(String start, String end, long sid,List<JSONObject> employees, Connection conn) {
+//        /**
+//         * 1、获取前台传过来的员工数据（包含员工id、医保基数、社保基数）
+//         * 2、获取所有员工结算单正常明细
+//         * 3、获取所有员工的社保设置
+//         * 4、获取所有员工的医保和社保规则
+//         * 5、根据月份算出员工的医保和社保
+//         * 6、算出个人和单位社保合计置于正常结算单明细
+//         * 7、批量插入补缴明细
+//         * 8、批量修改正常结算单明细
+//         */
+//        DaoUpdateResult res1 = new DaoUpdateResult();
+//        ConnUtil.closeAutoCommit(conn);
+//
+//        String ids = "";
+//        for(JSONObject object:employees){
+//            ids += (object.getLong("id")+",");
+//        }
+//        ids = ids.substring(0,ids.length()-1);
+//
+//        //获取所有员工正常的结算单明细，后面计算完补差的数值后放到核收补减中
+//        QueryParameter p1 = new QueryParameter();
+//        p1.addCondition("eid","in",ids);
+//        p1.addCondition("sid","=",sid);
+//        p1.addCondition("status","=",0);
+//        List<ViewDetail1> details11 = (List<ViewDetail1>) Detail1Dao.getList(conn,p1).rows;
+//
+//        //获取所有员工的社保设置
+//        QueryParameter p2 = new QueryParameter();
+//        p2.addCondition("eid","in",ids);
+//        List<EnsureSetting> settings = (List<EnsureSetting>) SettingDao.getList(conn,p2).rows;
+//
+//        //获取所有地市的医保和社保规则,使用缓冲机制保存相关地市的医保规则和社保规则
+//        HashMap<String, RuleMedicare> medicares = new HashMap<>();
+//        HashMap<String, RuleSocial> socials = new HashMap<>();
+//
+//        int year = Integer.parseInt(start.split("-")[0]);//年
+//        int month1 = Integer.parseInt(start.split("-")[1]);//起始月
+//        int month2 = Integer.parseInt(end.split("-")[1]);//结束月
+//
+//        for(EnsureSetting s:settings){
+//            String city = s.getCity();//员工所处地市
+//            Date date = DateUtil.parse(year+"-12-31","yyyy-MM-dd");
+//            //获取该地市的医保规则
+//            RuleMedicare medicare = medicares.get(city);
+//            if (medicare == null) {
+//                medicare = (RuleMedicare) RuleMedicareDao.get(conn, city, date).data;
+//                if (medicare == null) {
+//                    res1.success = false;
+//                    res1.msg = String.format("请确认%s的医保规则是否存在", city);
+//                    return res1;
+//                }
+//                medicares.put(city, medicare);
+//            }
+//            RuleSocial social = socials.get(city);
+//            if (social == null) {
+//                social = (RuleSocial) RuleSocialDao.get(conn, city, date).data;
+//                if (social == null) {
+//                    res1.success = false;
+//                    res1.msg = String.format("请确认%s的社保规则是否存在", city);
+//                    return res1;
+//                }
+//                socials.put(city, social);
+//            }
+//        }
+//
+//        List<Detail1> detail_append = new ArrayList<>();//添加补缴明细的集合
+//        List<ViewDetail1> detail_update = new ArrayList<>();//添加正常明细的集合
+//
+//        for(JSONObject object:employees){
+//            long eid = object.getLong("id");
+//            float baseM = object.getFloat("baseM");
+//            float baseS = object.getFloat("baseS");
+//
+//            //获取该员工正常的结算单明细
+//            ViewDetail1 detail = CollectionUtil.getElement(details11,"eid",eid);
+//            if(detail == null){
+//                res1.msg = String.format("不存在%s的工资明细，无法补缴",object.getString("name"));
+//                return res1;
+//            }
+//
+//            EnsureSetting setting = CollectionUtil.getElement(settings,"eid",eid);//获取员工社保设置
+//            if(setting==null){//员工设置为空
+//                res1.msg = String.format("请先完善%s的社保设置",object.getString("name"));
+//               return res1;
+//            }
+//            //设置医保社保为自定义基数
+//            setting.setSettingM((byte) 2);
+//            setting.setBaseM(baseM);
+//            setting.setSettingS((byte) 2);
+//            setting.setBaseS(baseS);
+//
+//            RuleMedicare medicare = medicares.get(setting.getCity());
+//            RuleSocial social = socials.get(setting.getCity());
+//
+//            float sum1=0;//个人累计社保合计
+//            float sum2=0;//单位累计社保合计
+//            for(int month=month1; month<=month2;month++) {
+//                Detail1 d = new Detail1();
+//                d.setSid(sid);
+//                d.setEid(eid);
+//                d.setStatus(Detail1.STATUS_REPLENISH);//补缴
+//                d.setComments1(month+"月份个人社保补缴");
+//                d.setComments2(month+"月份单位社保补缴");
+//
+//                d.calculateMedicare(setting,medicare);//根据员工设置计算医保
+//                d.calculateSocial(setting,social);//根据员工设置计算社保
+//
+//                detail_append.add(d);
+//
+//                sum1 += d.getTotalPerson();//个人社保合计
+//                sum2 +=d.getTotalDepartment();//单位社保合计
+//            }
+//            detail.setExtra1(detail.getExtra1()-sum1);  //将个人社保合计赋值给该员工正常结算单明细的单位核收补减，正数
+//            detail.setComments1("个人社保补缴合计");
+//            detail.setExtra2(detail.getExtra2()+sum2); //将单位社保合计赋值给该员工正常结算单明细的单位核收补减，正数
+//            detail.setComments2("单位社保补缴合计");
+//            detail_update.add(detail);//添加进正常明细集合
+//
+//        }
+//
+//        //批量插入补缴明细
+//        res1 = Detail1Dao.importDetails(conn,detail_append);
+//
+//        //批量修改正常明细
+//        DaoUpdateResult res2= Detail1Dao.update(conn,detail_update);
+//        if(!res1.success || !res2.success){
+//            ConnUtil.rollback(conn);
+//            res1.msg ="数据库操作错误";
+//            return res1;
+//        }
+//        ConnUtil.commit(conn);
+//        return res1;
+//    }
 
     //社保补差
     public static DaoUpdateResult makeup(Connection conn, List<Employee> employees, String start, String end, long sid) {

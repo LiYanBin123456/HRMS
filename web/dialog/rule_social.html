@@ -76,9 +76,9 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
-                <span class="x-red">*</span>基数(元)</label>
+                <span class="x-red">*</span>养老基数(元)</label>
             <div class="layui-input-block">
-                <input type="number" name="base" autocomplete="off" placeholder="" class="layui-input">
+                <input type="number" name="base1" autocomplete="off" placeholder="" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -97,6 +97,13 @@
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">
+                <span class="x-red">*</span>工伤基数(元)</label>
+            <div class="layui-input-block">
+                <input type="number" name="base2" autocomplete="off" placeholder="" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
                 <span class="x-red">*</span>单位工伤(%)</label>
             <div class="layui-input-block">
                 <input type="number" name="per3" autocomplete="off" class="layui-input">
@@ -107,6 +114,13 @@
                 <span class="x-red">*</span>工伤补充(元)</label>
             <div class="layui-input-block">
                 <input type="number" name="extra" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red">*</span>失业基数(元)</label>
+            <div class="layui-input-block">
+                <input type="number" name="base3" autocomplete="off" placeholder="" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
@@ -136,6 +150,8 @@
 <script src="../layui/extend/city-picker/city-picker.data.js"></script>
 <script src="../js/city.js"></script>
 <script src="../js/fieldSet.js"></script>
+<script src="../js/queryParam.js"></script>
+<script src="../js/date.js"></script>
 <script>
     var op = "insert";
     var form;//表单对象
@@ -168,9 +184,9 @@
         var param = $.query.get("social");
         if (param) {
             var social = JSON.parse(param);
-            rule_social.start = dateUtil.format_date(rule_social.start);
-            form.val('form_social', rule_social);
-            var city = getCityText2(rule_social.city);
+            social.start = dateUtil.format_date(social.start);
+            form.val('form_social', social);
+            var city = getCityText2(social.city);
             cityPicker.setValue(city);
             op = "update";
         }

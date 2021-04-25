@@ -71,9 +71,9 @@ public class SettlementServlet extends HttpServlet {
             case "confirmDetails2"://确认商业保险替换
                 result = confirmDetails2(conn, request);
                 break;
-            case "fillup"://补缴
-                result = fillup(conn, request);
-                break;
+//            case "fillup"://补缴
+//                result = fillup(conn, request);
+//                break;
             case "makeup"://补差
                 result = makeup(conn, request);
                 break;
@@ -396,14 +396,14 @@ public class SettlementServlet extends HttpServlet {
     }
 
     //补缴
-    private String fillup(Connection conn, HttpServletRequest request) {
-        String start = request.getParameter("start");//起始月份
-        String end = request.getParameter("end");//结束月份
-        long sid = Long.parseLong(request.getParameter("sid"));//结算单id
-        List<JSONObject> employees = JSONArray.parseArray(request.getParameter("employees"),JSONObject.class);
-        DaoUpdateResult result = SettlementService1.fillup(start,end,sid,employees,conn);
-        return JSONObject.toJSONString(result);
-    }
+//    private String fillup(Connection conn, HttpServletRequest request) {
+//        String start = request.getParameter("start");//起始月份
+//        String end = request.getParameter("end");//结束月份
+//        long sid = Long.parseLong(request.getParameter("sid"));//结算单id
+//        List<JSONObject> employees = JSONArray.parseArray(request.getParameter("employees"),JSONObject.class);
+//        DaoUpdateResult result = SettlementService1.fillup(start,end,sid,employees,conn);
+//        return JSONObject.toJSONString(result);
+//    }
 
     //补差
     private String makeup(Connection conn, HttpServletRequest request) {
