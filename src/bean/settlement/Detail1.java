@@ -679,34 +679,34 @@ public class Detail1 extends Detail {
     public void calcInsurance(List<Insurance> insurances){
         for(Insurance i:insurances){
             float base = i.getBase();//基数
-            float v1 = i.getV1();//个人比例或者金额
-            float v2 = i.getV2();//单位比例或者金额
+            float v1 = i.getV1();//个人比例
+            float v2 = i.getV2();//单位比例
             switch (i.getCategory()){
                 case Insurance.CATEGORY0:////养老保险
-                    this.pension1 = base*v1;//个人养老保险
-                    this.pension2 = base*v2;//单位养老保险
+                    this.pension1 = base*v1/100;//个人养老保险
+                    this.pension2 = base*v2/100;//单位养老保险
                     break;
                 case Insurance.CATEGORY1://工伤保险
-                    this.injury = base*v2+v1;//工伤保险
+                    this.injury = base*v2/100+v1;//工伤保险
                     break;
                 case Insurance.CATEGORY2://失业保险
-                    this.unemployment1 = base*v1;//个人失业保险
-                    this.unemployment2 = base*v2;//单位失业保险
+                    this.unemployment1 = base*v1/100;//个人失业保险
+                    this.unemployment2 = base*v2/100;//单位失业保险
                     break;
                 case Insurance.CATEGORY3://医疗保险
-                    this.medicare1=base*v1;//个人医疗保险
-                    this.medicare2=base*v2;//单位医疗保险
+                    this.medicare1=base*v1/100;//个人医疗保险
+                    this.medicare2=base*v2/100;//单位医疗保险
                     break;
                 case Insurance.CATEGORY4://大病保险
-                    this.disease1 = base*v1;//个人大病
-                    this.disease2 = base*v2;//单位大病
+                    this.disease1 = base*v1/100;//个人大病
+                    this.disease2 = base*v2/100;//单位大病
                     break;
                 case Insurance.CATEGORY5://生育保险
-                    this.birth = base*v2;//单位大病生育保险
+                    this.birth = base*v2/100;//单位大病生育保险
                     break;
                 case Insurance.CATEGORY6://公积金
-                    this.fund1 =base*v1;//单位和个人公积金比例一致
-                    this.fund2 =base*v1;
+                    this.fund1 =base*v1/100;//单位和个人公积金比例一致
+                    this.fund2 =base*v1/100;
                     break;
                 case Insurance.CATEGORY7://商业保险
                     this.f20 =base;//商业保险金额

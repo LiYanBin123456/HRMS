@@ -941,15 +941,16 @@ public class FileServlet extends HttpServlet {
         float price = vs.getPrice();
 
         for (ViewDetail2 d : details) {//计算汇款明细，就是合作方客户需要给派遣方汇款多少钱
-           d.setSum(d.total(price));
            if(payer==1){//合作单位发工资
                d.setPrice1(vs.getPrice()+d.getPrice());//公司单价
                d.setPrice2(d.getPrice());//个人单价
                d.setPrice3(vs.getPrice());//差价
+               d.setSum(d.total2(price));
            }else {//派遣方单位发工资
                d.setPrice1(vs.getPrice());//公司单价
                d.setPrice2(d.getPrice());//个人单价
                d.setPrice3(vs.getPrice()-d.getPrice());//差价
+               d.setSum(d.total(price));
            }
         }
 

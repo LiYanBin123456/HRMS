@@ -226,12 +226,25 @@ public class ClientServlet extends HttpServlet {
     private String getAllocating(Connection conn,HttpServletRequest request) {
         DaoQueryListResult res = new DaoQueryListResult();
         QueryParameter parameter = new QueryParameter();
-        parameter.addCondition("aid","=",0);
+        parameter.addCondition("type","=",0);//合作客户
+        HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("account");
         byte category= Byte.parseByte(request.getParameter("category"));
         if(category==0){//派遣方客户
+            if(!user.isAdmin()) {
+                parameter.addCondition("aid", "=", user.getId());
+            }
             res = DispatchService.getList(conn,parameter);
         }else if(category==1){//合作单位客户
+            if(user.isAdmin()) {
+                parameter.addCondition("did", "=", user.getRid());
+            }else {
+                parameter.addCondition("aid", "=", user.getId());
+            }
             res = CooperationService.getList(conn,parameter);
+        }else {
+            //供应商客户
+            parameter.addCondition("did","=",user.getRid());
         }
         return JSONObject.toJSONString(res);
     }
@@ -243,6 +256,7 @@ public class ClientServlet extends HttpServlet {
         long aid = Long.parseLong(request.getParameter("aid"));
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("aid","=",aid);
+        parameter.addCondition("type","=",0);//合作客户
         if(category==0){//派遣方客户
             res = DispatchService.getList(conn,parameter);
         }else if(category==1){//合作单位客户

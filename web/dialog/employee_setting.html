@@ -53,13 +53,13 @@
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s1">
-                        <label class="layui-form-label">单位比例</label>
+                        <label class="layui-form-label">单位比例(%)</label>
                         <div class="layui-input-inline" style="width: 80px;">
                             <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s1">
-                        <label class="layui-form-label">个人比例</label>
+                        <label class="layui-form-label">个人比例(%)</label>
                         <div class="layui-input-inline" style="width: 80px;">
                             <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
@@ -79,7 +79,7 @@
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s2">
-                        <label class="layui-form-label">单位比例</label>
+                        <label class="layui-form-label">单位比例(%)</label>
                         <div class="layui-input-inline" style="width: 80px;">
                             <input type="number" name="v2" autocomplete="off" class="layui-input">
                         </div>
@@ -105,13 +105,13 @@
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s3">
-                        <label class="layui-form-label">单位比例</label>
+                        <label class="layui-form-label">单位比例(%)</label>
                         <div class="layui-input-inline" style="width: 80px;">
                             <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="s3">
-                        <label class="layui-form-label">个人比例</label>
+                        <label class="layui-form-label">个人比例(%)</label>
                         <div class="layui-input-inline" style="width: 80px;">
                             <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
@@ -154,13 +154,13 @@
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="m1">
-                        <label class="layui-form-label">单位比例</label>
+                        <label class="layui-form-label">单位比例(%)</label>
                         <div class="layui-input-inline" style="width: 80px;">
                             <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="m1">
-                        <label class="layui-form-label">个人比例</label>
+                        <label class="layui-form-label">个人比例(%)</label>
                         <div class="layui-input-inline" style="width: 80px;">
                             <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
@@ -180,13 +180,13 @@
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="m2">
-                        <label class="layui-form-label">单位比例</label>
+                        <label class="layui-form-label">单位比例(%)</label>
                         <div class="layui-input-inline" style="width: 80px;">
                             <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="m2">
-                        <label class="layui-form-label">个人比例</label>
+                        <label class="layui-form-label">个人比例(%)</label>
                         <div class="layui-input-inline" style="width: 80px;">
                             <input type="number" name="v1" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
@@ -206,7 +206,7 @@
                         </div>
                     </div>
                     <div class="layui-input-inline layui-hide" style="width: 220px;" name="m3">
-                        <label class="layui-form-label">单位比例</label>
+                        <label class="layui-form-label">单位比例(%)</label>
                         <div class="layui-input-inline" style="width: 80px;">
                             <input type="number" name="v2" autocomplete="off" class="layui-input layui-disabled" disabled>
                         </div>
@@ -229,7 +229,7 @@
                     <div class="layui-input-inline" style="width: 100px;">
                         <input type="number" name="base" autocomplete="off" class="layui-input">
                     </div>
-                    <label class="layui-form-label">缴纳比例</label>
+                    <label class="layui-form-label">缴纳比例(%)</label>
                     <div class="layui-input-inline" style="width: 100px;">
                         <input type="number" name="v1" autocomplete="off" class="layui-input">
                     </div>
@@ -439,7 +439,7 @@
             webInterface.rule.getLast({city:city,category:2,async:webInterface.SYNC,success:function (result) {
                 rule_fund = result.data;
                 var range1 = stringUtil.format("{0}-{1}",rule_fund.min,rule_fund.max);
-                var range2 = stringUtil.format("{0}-{1}",rule_fund.per1,rule_fund.per2);
+                var range2 = stringUtil.format("{0}-{1}",rule_fund.per1+"%",rule_fund.per2+"%");
                 $("[name=form_fund] [name=base]").attr("placeholder","基数"+range1);
                 $("[name=form_fund] [name=v1]").attr("placeholder","比例"+range2);
             }});

@@ -145,11 +145,19 @@ public class Detail2 extends Detail {
     }
 
     /**
-     * 小时工本期收入
+     * 派遣单位发工本期收入
      * @return
      */
     public float total(float price){
         return hours*price-insurance-utilities-accommodation-food+other1+other2;
+    }
+
+    /**
+     * 合作单位小时工本期收入
+     * @return
+     */
+    public float total2(float price){
+        return hours*price;
     }
 
     @Override

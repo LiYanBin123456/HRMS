@@ -42,8 +42,8 @@ var columns_medicare = [[
     {field:'base2', title: '生育基数(元)',width:80},
     {field:'per3', title: '单位生育',width:100,templet:function (d) {return format_percent(d.per3)}},
     {field:'base3', title: '大病基数(元)',width:80},
-    {field:'fin1', title: '单位大病(元)',width:100},
-    {field:'fin2', title: '个人大病(元)',width:105},
+    {field:'fin1', title: '单位大病',width:100,templet:function (d) {return format_percent(d.per3)}},
+    {field:'fin2', title: '个人大病',width:105,templet:function (d) {return format_percent(d.per3)}},
     {fixed: 'right', title: '操作', toolbar: '#bar_medicare'}
 ]];
 

@@ -277,7 +277,6 @@ public class FileService {
             e.printStackTrace();
         }
     }
-
     //导出农行
     public static void exportBank2(Connection conn, long sid, HttpServletResponse response, String file) throws UnsupportedEncodingException {
 
@@ -393,9 +392,7 @@ public class FileService {
             }
         }
         XlsUtil.write(response.getOutputStream(),"","浦发银行",SchemeDefined.SCHEME_BANK_SPDB, data);
-
     }
-
     //导出交通
     public static void exportBank4(Connection conn, long sid, HttpServletResponse response, String file) throws IOException {
         //获取结算单视图
