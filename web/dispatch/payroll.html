@@ -57,7 +57,9 @@
     <script type="text/html" id="bar_settlement">
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="showDetail"><i class="layui-icon "></i>明细</a>
         <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="export"><i class="layui-icon "></i>导出</a>
+        {{# if((d.status==4)){ }}
         <a class="layui-btn layui-btn-normal layui-btn-xs" id = "payroll" lay-event="payroll"><i class="layui-icon "></i> 发放</a>
+        {{# } }}
     </script>
     <script src="../js/fieldSet.js"></script>
     <script src="../js/interface.js"></script>

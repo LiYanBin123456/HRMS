@@ -283,10 +283,16 @@
 
             //打开添加对话框
             function showInsertDlg() {
-                var content = "../dialog/settlement.html?category="+category;
-                if(category == 1){
-                    content += ("&type="+type);
+                var content
+                if (category==3){//特殊结算单
+                     content = "../dialog/settlement3.html";
+                }else {
+                    content = "../dialog/settlement.html?category="+category;
+                    if(category == 1){
+                        content += ("&type="+type);
+                    }
                 }
+
                 layer.open({
                     title:"添加",
                     type: 2,
@@ -407,13 +413,17 @@
             }
             //删除结算单
             function del(settlement) {
-                layer.confirm('确定删除'+settlement.name+":"+dateUtil.format_date(settlement.month)+'的结算单', {icon: 3, title:'删除'}, function(index){
-                    webInterface.settlement.delete({id:settlement.id,category:category,success:function () {
-                        layer.close(index);
-                        getSettlements();
-                        layer.msg('删除成功');
-                    }});
-                });
+                if (settlement.status!=0){
+                    layer.msg('非编辑状态校的结算单不允许删除');
+                }else {
+                    layer.confirm('确定删除'+settlement.name+":"+dateUtil.format_date(settlement.month)+'的结算单', {icon: 3, title:'删除'}, function(index){
+                        webInterface.settlement.delete({id:settlement.id,category:category,success:function () {
+                            layer.close(index);
+                            getSettlements();
+                            layer.msg('删除成功');
+                        }});
+                    });
+                }
             }
 
         </script>

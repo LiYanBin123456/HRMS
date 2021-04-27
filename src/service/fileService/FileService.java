@@ -260,12 +260,17 @@ public class FileService {
                 o.put("bank2","");
             }
 
-            String bankName = p.getBank1()==null?"":p.getBank1();
-            if(bankName.equals("招商银行")){//招行转本行
-                data2.add(o);
-            }else {//招行转外行
+            if(p!=null){//个人工资卡存在
+                String bankName = p.getBank1()==null?"":p.getBank1();
+                if(bankName.equals("招商银行")){//招行转本行
+                    data2.add(o);
+                }else {//招行转外行
+                    data1.add(o);
+                }
+            }else {//不存在直接放在外行
                 data1.add(o);
             }
+
 
         }
 
@@ -328,10 +333,14 @@ public class FileService {
                 o.put("bank2","");
             }
 
-            String bankName = p.getBank1()==null?"":p.getBank1();
-            if(bankName.equals("农业银行")){//交行转本行
-                data2.add(o);
-            }else {//交行转外行
+            if(p!=null){//个人工资卡存在
+                String bankName = p.getBank1()==null?"":p.getBank1();
+                if(bankName.equals("农业银行")){//转本行
+                    data2.add(o);
+                }else {//招行转外行
+                    data1.add(o);
+                }
+            }else {//不存在直接放在外行
                 data1.add(o);
             }
         }
@@ -399,7 +408,7 @@ public class FileService {
         ViewSettlement1 vs = (ViewSettlement1) Settlement1Dao.get(conn,sid).data;
 
         //报表名称
-        String fileName = vs.getName()+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM-dd"))+"工资报表(招商银行)";
+        String fileName = vs.getName()+(vs.getMonth()==null?"":DateUtil.format(vs.getMonth(),"yyyy-MM-dd"))+"工资报表(交通银行)";
         fileName = new String(fileName.getBytes(),"iso-8859-1");
         response.setContentType("APPLICATION/OCTET-STREAM");
         response.addHeader("Content-Disposition", "attachment;filename=\""
@@ -444,10 +453,14 @@ public class FileService {
                 o.put("bank2","");
             }
 
-            String bankName = p.getBank1()==null?"":p.getBank1();
-            if(bankName.equals("交通银行")){//交行转本行
-                data2.add(o);
-            }else {//交行转外行
+            if(p!=null){//个人工资卡存在
+                String bankName = p.getBank1()==null?"":p.getBank1();
+                if(bankName.equals("交通银行")){//转本行
+                    data2.add(o);
+                }else {//招行转外行
+                    data1.add(o);
+                }
+            }else {//不存在直接放在外行
                 data1.add(o);
             }
         }

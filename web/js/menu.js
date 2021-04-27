@@ -76,7 +76,7 @@ var menuItems_dispatch = [
     {title:"商业保险",id:"0,234881024",icon:"&#xe63c",children:
         [
             {id:"0,33554432",   title:"保险产品",href:"products.html",icon:"&#xe602"},
-            {id:"0,67108864",   title:"参保单",href:"settlements3.html",icon:"&#xe602"},
+            {id:"0,67108864",   title:"参保单",href:"settlements.html?category=3",icon:"&#xe602"},
             {id:"0,134217728",   title:"人员管理",href:"insureds0.html?type=0",icon:"&#xe602"},
         ]
     },

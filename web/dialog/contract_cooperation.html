@@ -180,6 +180,7 @@
 <script src="../js/fieldSet.js"></script>
 <script src="../js/date.js"></script>
 <script src="../layui/layui.js"></script>
+<script src="../js/queryParam.js"></script>
 <script>
 
     var serve;
@@ -189,7 +190,7 @@
     var element;
     var laydate;
     var contract;
-
+    var param_query_product = new QueryParam();
     loadLayuiModule();
 
     function loadLayuiModule() {
@@ -301,6 +302,7 @@
                 $("[name=c4]").removeClass("layui-hide");
                 $("#title").text("单价");
                 $("#unit").text("元/人/月");
+                initProduct();
                 break;
 
         };
@@ -358,7 +360,7 @@
     }
 
     function initProduct(){
-        webInterface.product.getList({success:function(result){
+        webInterface.product.getList({param:param_query_product,success:function(result){
             var products = result.rows;
             var select_product = $("#select_product");
             select_product.append("<option value='-2' disabled hidden>选择商业保险</option>");

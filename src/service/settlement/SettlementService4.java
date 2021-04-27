@@ -256,6 +256,7 @@ public class SettlementService4 {
          */
         Settlement4 settlement = (Settlement4) Settlement4Dao.get(conn, id).data;
         settlement.setMonth(month);
+        settlement.setStatus((byte) 0);
 
         //关闭自动提交
         ConnUtil.closeAutoCommit(conn);

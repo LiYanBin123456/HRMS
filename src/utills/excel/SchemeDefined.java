@@ -153,7 +153,7 @@ public class SchemeDefined {
         SCHEME_TAX1.addField(new Field(7, "status", "人员状态", Field.STRING, 100));
         SCHEME_TAX1.addField(new Field(8, "type", "任职受雇从业类型", Field.STRING, 100));
         SCHEME_TAX1.addField(new Field(9, "phone", "手机号码", Field.STRING, 160));
-        SCHEME_TAX1.addField(new Field(9, "entry", "从业日期", Field.STRING, 160));
+        SCHEME_TAX1.addField(new Field(10, "entry", "从业日期", Field.STRING, 160));
 
         //员工新增社保单
         SCHEME_exportSocial1 = new Scheme();

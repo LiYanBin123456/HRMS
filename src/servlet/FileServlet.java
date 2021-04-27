@@ -393,8 +393,13 @@ public class FileServlet extends HttpServlet {
                 filename = "employee.xls";
                 break;
             case 8://员工合同模板
-                folder = "/excelFile";
+                folder = "excelFile";
                 filename = "EmployeeContract.xls";
+                break;
+            case 9://商业保险员工模板
+                folder = "excelFile";
+                filename = "EmployeeInsured.xls";
+                break;
         }
         String fileName = String.format("%s/%s/%s",root,folder,filename);
         return new File(fileName);
@@ -402,8 +407,8 @@ public class FileServlet extends HttpServlet {
 
     //下载
     private void download(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        byte category = Byte.parseByte(request.getParameter("category"));
-        String id = request.getParameter("id");
+        byte category = Byte.parseByte(request.getParameter("category"));//类别
+        String id = request.getParameter("id");//合同的id
 
         File file = getFile(category,id,request.getServletContext().getRealPath("/"));
 
@@ -414,7 +419,7 @@ public class FileServlet extends HttpServlet {
         FileInputStream fis = new FileInputStream(file);
         BufferedInputStream bis = new BufferedInputStream(fis);
 
-        int size=0;
+        int size;
         byte[] buff = new byte[1024];
         while ((size=bis.read(buff))!=-1) {
             os.write(buff, 0, size);

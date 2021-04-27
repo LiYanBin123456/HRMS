@@ -154,9 +154,9 @@ public class SettlementServlet extends HttpServlet {
             case 2://小时工结算单
                 result = SettlementService2.saveSettlement(conn,sid);
                 break;
-           /* case 2://商业保险结算单
-                result =Settlement3Service.calculate(conn,sid);
-                break;*/
+            case 3://商业保险结算单
+                result =SettlementService3.calculate(conn,sid);
+                break;
             case 4://特殊结算单
                 result = SettlementService4.calSettlement(conn,sid);
                 break;

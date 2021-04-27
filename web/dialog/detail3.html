@@ -186,7 +186,7 @@
                         for (var i in member){
                             details[i] = {"eid":member[i].id,"sid":sid};
                         }
-                        webInterface.settlement.importDetails({sid:sid,details:details,category:3,success:function () {
+                        webInterface.settlement.importDetails({sid:sid,details:JSON.stringify(details),category:3,success:function () {
                             layer.msg("添加成功")
                             getDetails();
                         }});
@@ -257,7 +257,7 @@
                         replaced.push({"eid":members2[i].id});
                     }
 
-                    webInterface.settlement.replaceDetails({members1:members1,members2:replaced,success:function () {
+                    webInterface.settlement.replaceDetails({member1:members1,member2:replaced,success:function () {
                         layer.msg("替换成功")
                         getDetails();
                     }});
@@ -316,7 +316,7 @@
                         layer.msg("只有拟换下状态的才可以确认");
                         return;
                     }
-                    ids1.push(details[i].id);
+                    ids1.push(details[i].eid);
                     ids2.push(details[i].uid);
                 }
 

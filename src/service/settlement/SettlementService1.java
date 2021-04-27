@@ -319,13 +319,14 @@ public class SettlementService1 {
     //另存为
     public static DaoUpdateResult saveAs(Connection conn, long id, Date month) {
         /**流程
-         * 1、查询出结算单，修改结算月份
+         * 1、查询出结算单，修改结算月份,修改结算单状态为编辑
          * 2、插入结算单，返回主键id
          * 3、根据原来结算单id查询出所有的结算单明细
          * 4、修改结算单明细中的结算单id
          */
         Settlement1 settlement = (Settlement1) Settlement1Dao.get(conn, id).data;
         settlement.setMonth(month);
+        settlement.setStatus((byte) 0);
 
         //关闭自动提交
         ConnUtil.closeAutoCommit(conn);
@@ -363,11 +364,20 @@ public class SettlementService1 {
         ViewContractCooperation viewContractCooperation = (ViewContractCooperation) ContractDao.getViewContractCoop(conn,settlement.getCcid()).data;
         QueryParameter parm = new QueryParameter();
         parm.addCondition("sid","=",sid);
-        //该结算单中的所有明细
-        List<ViewDetail1> viewDetail1s = (List<ViewDetail1>) Detail1Dao.getList(conn,parm).rows;
+        parm.addCondition("status","=",Detail1.STATUS_NORMAL);
 
+        //该结算单中的所有补发状态的明细
+        List<ViewDetail1> viewDetails1 = (List<ViewDetail1>) Detail1Dao.getList(conn,parm).rows;
+        QueryParameter parm2 = new QueryParameter();
+        parm2.addCondition("sid","=",sid);
+        parm2.addCondition("status","=",Detail1.STATUS_MAKEUP);
+        //该结算单中的所有正常状态的明细
+        List<ViewDetail1> viewDetails2 = (List<ViewDetail1>) Detail1Dao.getList(conn,parm2).rows;
+
+        //合并两个集合
+        viewDetails1.addAll(viewDetails2);
         //计算结算单
-        settlement.calc(viewContractCooperation,viewDetail1s);
+        settlement.calc(viewContractCooperation,viewDetails1);
 
         return Settlement1Dao.update(conn,settlement);
     }

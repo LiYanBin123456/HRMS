@@ -1145,6 +1145,50 @@ var webInterface = {
         },
     },
 
+    insured:{
+        url:url_base+"/insured",
+        /**
+         * 获取参保列表
+         * @param param 查询参数
+         * @param success
+         * @param fail
+         */
+        getList:function(param) {
+            param.url = this.url;
+            param.data = {op: "getList", param:JSON.stringify(param.param)};
+            webInterface.access(param);
+        },
+
+        insert:function(param) {
+            param.url = this.url;
+            param.data = {op: "insert", insured:JSON.stringify(param.insured)};
+            webInterface.access(param);
+        },
+
+        insertBatch:function(param) {
+            param.url = this.url;
+            param.data = {op: "insertBatch", insureds:param.insureds};
+            webInterface.access(param);
+        },
+
+        update:function(param) {
+            param.url = this.url;
+            param.data = {op: "update", insured:JSON.stringify(param.insured)};
+            webInterface.access(param);
+        },
+
+        delete:function(param) {
+            param.url = this.url;
+            param.data = {op: "delete", id:param.id};
+            webInterface.access(param);
+        },
+        get:function(param) {
+            param.url = this.url;
+            param.data = {op: "get", id:param.id};
+            webInterface.access(param);
+        }
+    },
+
     product:{
         url:url_base+"/product",
         /**

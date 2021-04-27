@@ -125,7 +125,7 @@
             }
 
             function getInsureds() {
-                iInsured.getList(param_query,function (result) {
+                webInterface.insured.getList({param:param_query,success:function (result) {
                     table.reload('tbl_insured', {
                         data:result.rows
                     });
@@ -145,11 +145,12 @@
                             }
                         }
                     });
-                });
+                }});
             }
 
             //打开详情对话框
             function showDetailDlg(insured) {
+                console.log(insured)
                 var content = "../dialog/insured.html?insured="+encodeURI(JSON.stringify(insured));
                 layer.open({
                     title:"参保人员详情",
@@ -173,13 +174,11 @@
                     content: content,
                     btn: ['添加', '关闭']
                     ,yes: function(index, layero){
-                      var emploeess = window["layui-layer-iframe" + index].callbackData();
-                      iInsured.insertBatch(emploeess,function () {
+                      var insureds = window["layui-layer-iframe" + index].callbackData();
+                      webInterface.insured.insertBatch({insureds:insureds,success:function () {
                             layer.close(index);
                             layer.msg("导入成功");
-                        },function (res) {
-                          layer.msg(res.msg);
-                      })
+                        }});
                     },btn2: function(index, layero){
                         layer.close(index);
                     }
@@ -204,16 +203,16 @@
             //删除
             function del(insured) {
                 layer.confirm("确定删除"+insured.name, {icon: 3, title:'删除人员'}, function(index){
-                    iInsured.delete(insured.id,function () {
+                    webInterface.insured.delete({id:insured.id,success:function () {
                         layer.close(index);
                         getInsureds();
                         layer.msg('删除成功');
-                    });
+                    }});
                 });
             }
 
             function download() {
-                var url = "/verify/file?op=download&category=7";
+                var url = "/verify/file?op=download&category=9";
                 var form = $('<form method="POST"></form>');
                 form.attr('action', url);
                 form.appendTo($('body'));

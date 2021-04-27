@@ -57,9 +57,10 @@
             </select>
         </div>
     </div>
+
     <div class="layui-form-item">
         <label class="layui-form-label"><span class="x-red">*</span>选择合同</label>
-        <div class="layui-input-inline" >
+        <div class="layui-input-inline">
             <input type="text" name="ccid" class="layui-input" readonly>
         </div>
     </div>
@@ -123,6 +124,15 @@
                 form.on('select(employee_category)', function(data){
                     settlement.employee_category = data.value;
                 });
+            }
+
+            if (category!=3){//商业保险产品
+                $("#product_price").addClass("layui-hide");
+                $("#select_product").addClass("layui-hide");
+
+            }
+            if (category==3){
+                $("#contract").addcss("layui-hide");
             }
 
             laydate.render({

@@ -1,32 +1,16 @@
 package service.settlement;
 
-import bean.admin.Account;
-import bean.contract.Contract;
-import bean.contract.Serve;
-import bean.employee.Employee;
-import bean.employee.ViewEmployee;
-import bean.log.Log;
-import bean.settlement.Detail1;
 import bean.settlement.Detail3;
 import bean.settlement.Settlement3;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import dao.LogDao;
-import dao.admin.AccountDao;
-import dao.contract.ContractDao;
-import dao.contract.ServeDao;
-import dao.employee.EmployeeDao;
-import dao.settlement.Detail1Dao;
 import dao.settlement.Detail3Dao;
-import dao.settlement.Settlement2Dao;
 import dao.settlement.Settlement3Dao;
-import database.*;
-
-import javax.sound.midi.Soundbank;
+import database.ConnUtil;
+import database.DaoQueryListResult;
+import database.DaoUpdateResult;
+import database.QueryParameter;
 import java.sql.Connection;
 import java.util.Date;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SettlementService3 {
@@ -186,14 +170,14 @@ public class SettlementService3 {
         return LogDao.getList(conn,id,parameter);
     }
 
-    /*public static DaoUpdateResult calculate(Connection conn, long sid) {
+    public static DaoUpdateResult calculate(Connection conn, long sid) {
         Settlement3 settlement = (Settlement3) Settlement3Dao.get(conn,sid).data;
         QueryParameter param = new QueryParameter();
         param.addCondition("sid","=",sid);
-        param.addCondition("status","=",1);//
+        param.addCondition("status","=",2);
         List<Detail3> details = (List<Detail3>) Detail3Dao.getList(conn,param).rows;
         settlement.setAmount(details.size());
         settlement.setSummary(settlement.getPrice()*settlement.getAmount());
         return Settlement3Dao.update(conn,settlement);
-    }*/
+    }
 }

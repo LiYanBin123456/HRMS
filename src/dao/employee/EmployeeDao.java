@@ -88,7 +88,7 @@ public class EmployeeDao {
 
     //雇用
     public static DaoUpdateResult employ(Connection conn, long id,byte category) {
-        String sql = "update employee set type=? where id=?";
+        String sql = String.format("update employee set  cid = %S ,type=? where id=?",null);
         Object []params = {category,id};
         return  DbUtil.update(conn,sql,params);
     }

@@ -86,6 +86,7 @@ public class SettlementService2 {
 
         Settlement2 settlement2 = (Settlement2) Settlement2Dao.get(conn, id).data;
         settlement2.setMonth(month);
+        settlement2.setStatus((byte) 0);
 
         DaoUpdateResult result = Settlement2Dao.insert(conn, settlement2);
         long sid = (long) result.extra;

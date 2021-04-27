@@ -93,27 +93,31 @@
                             node1.find("[name=time]").text(dateUtil.format_date(log.time));
                             node1.find("[name=operator]").text(log.operator);
                             $("#submit").append(node1);
-                            ;
-                        case "初审":
+                            break;
+                        case "初审通过":
                             var node2 = $("#template [name=log]").clone();
                             node2.find("[name=time]").text(dateUtil.format_date(log.time));
                             node2.find("[name=operator]").text(log.operator);
                             $("#check1").append(node2);
-                        case "终审":
+                            break;
+                        case "终审通过":
                             var node3 = $("#template [name=log]").clone();
                             node3.find("[name=time]").text(dateUtil.format_date(log.time));
                             node3.find("[name=operator]").text(log.operator);
                             $("#check2").append(node3);
+                            break;
                         case "扣款":
                             var node4 = $("#template [name=log]").clone();
                             node4.find("[name=time]").text(dateUtil.format_date(log.time));
                             node4.find("[name=operator]").text(log.operator);
                             $("#deduct").append(node4);
+                            break;
                         case "发放":
                             var node5 = $("#template [name=log]").clone();
                             node5.find("[name=time]").text(dateUtil.format_date(log.time));
                             node5.find("[name=operator]").text(log.operator);
                             $("#put").append(node5);
+                            break;
                     }
                 }
             }

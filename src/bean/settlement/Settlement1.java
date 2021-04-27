@@ -186,9 +186,7 @@ public class Settlement1 extends Settlement {
                 this.fund += detail.getFund1();
                 this.extra += detail.getExtra1();
             }
-
         }
-
         //计算管理费和税费
         int type = contract.getStype();//合同服务项目中的类型
         int category = contract.getCategory();//合同服务项目中的结算方式
@@ -206,7 +204,7 @@ public class Settlement1 extends Settlement {
                     }
                 }else if(category==1){//按比例收取的结算方式
                     //此时服务项目中value为比例所以需要转成小数
-                    this.manage = (salary+social+medicare+fund+buss+extra)*(value/100);//管理费 = （应发总额+单位五险一金）*比例（从服务项目中的比例）
+                    this.manage = this.isNeedCalcInsurance()?(salary+social+medicare+fund+buss+extra)*(value/100):0;//管理费 = （应发总额+单位五险一金）*比例（从服务项目中的比例）
                     this.tax = 0;
                 }else {//按外包整体核算方式，暂时没有
 

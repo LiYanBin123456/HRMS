@@ -49,9 +49,12 @@ public class DetailService3 {
             d.setStatus(Detail3.STATUS_REPLACING_UP);
         }
 
-        for(Detail3 d:member1){
+        for(int i =0;i<member1.size();i++){
+            Detail3 d = member1.get(i);
             d.setStatus(Detail3.STATUS_REPLACING_DOWN);//修改状态为替换下
+            d.setUid(member2.get(i).getEid());//替换人员的id
         }
+
 
         ConnUtil.closeAutoCommit(conn);
         DaoUpdateResult res1 = Detail3Dao.importDetails(conn,member2);

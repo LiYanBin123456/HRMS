@@ -1,7 +1,5 @@
 package dao.insurance;
 
-import bean.employee.Employee;
-import bean.employee.ViewEmployee;
 import bean.insurance.Insured;
 import database.*;
 
@@ -37,5 +35,23 @@ public class InsuredDao {
             param.addCondition("name","like",param.conditions.extra);
         }
         return DbUtil.getList(conn,"insured",param,Insured.class);
+    }
+
+    public static DaoQueryResult get(Connection conn, QueryConditions conditions) {
+        return DbUtil.get(conn,"insured",conditions,Insured.class);
+    }
+
+    public static DaoUpdateResult insertBatch(Connection conn, List<Insured> is) {
+        String sql = "insert insured (cid,cardId,name,place,post,category) values (?,?,?,?,?,?)";
+        Object [][]params = new Object[is.size()][];
+        for (int i = 0; i < is.size(); i++) {
+            //需要判断外键是否为0，为0就需要转换成null
+            String cid = is.get(i).getCid()==0?null:String.valueOf(is.get(i).getCid());
+
+            params[i] = new Object[]{cid,is.get(i).getCardId(),is.get(i).getName(),is.get(i).getPlace(),
+                    is.get(i).getPost(),is.get(i).getCategory()
+            };
+        }
+        return DbUtil.insertBatch(conn,sql,params);
     }
 }

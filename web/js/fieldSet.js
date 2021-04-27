@@ -248,7 +248,7 @@ var columns_settlement1  = [[
     {field:'tax', title: '税费',width:70},
     {field:'summary', title: '总额',width:80},
     {field:'comments', title: '备注',width:100,edit: 'text'},
-    {title:'操作', toolbar: '#bar_settlement',width:200,fixed:"right"}
+    {title:'操作', toolbar: '#bar_settlement',width:200,fixed:"right",templet:function (d) {}}
 ]];
 
 
@@ -487,12 +487,9 @@ var columns_detail3  = [[
 
 //特殊结算单明细字段集合
 var columns_detail4  = [[
-    {field:'cardId', title: '身份证号',width:160},
-    {field:'name', title: '姓名',width:80},
-    {field:'amount', title: '金额',width:80,edit: 'text'},
-    {field:'tax', title: '税费',width:100},
-    {field:'paid', title: '实发',width:100},
-    {fixed: 'right', title: '操作', toolbar: '#bar_detail'}
+    {field:'time', title: '时间',width:160,templet:function (d) {return dateUtil.format_dateTime(d.time)}},
+    {field:'money', title: '金额',width:160},
+    {field:'comments', title: '备注',width:200},
 ]];
 
 
@@ -878,7 +875,7 @@ function format_status_detail3(status) {
             return "拟换下";
             break;
         case -2:
-            return "替换";
+            return "已替换";
             break;
     }
     return str;

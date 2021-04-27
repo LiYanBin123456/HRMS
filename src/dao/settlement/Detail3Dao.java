@@ -23,10 +23,10 @@ public class Detail3Dao {
     }
 
     public static DaoUpdateResult importDetails(Connection conn, List<Detail3> details){
-        String sql = "insert detail3 (sid,eid,status) values (?,?,?)";
+        String sql = "insert detail3 (sid,eid,status,uid) values (?,?,?,?)";
         Object [][]params = new Object[details.size()][];
         for (int i = 0; i < details.size(); i++) {
-            params[i] = new Object[]{details.get(i).getSid(),details.get(i).getEid(),details.get(i).getStatus()};
+            params[i] = new Object[]{details.get(i).getSid(),details.get(i).getEid(),details.get(i).getStatus(),details.get(i).getUid()};
         }
         return DbUtil.insertBatch(conn,sql,params);
     }
@@ -48,7 +48,7 @@ public class Detail3Dao {
      * @return
      */
     public static DaoUpdateResult confirm(Connection conn, byte status, String[] ids, byte day) {
-        String sql = "update detail3 set day=?,status=? where id = ?";
+        String sql = "update detail3 set day=?,status=? where eid = ?";
         Object [][]params = new Object[ids.length][];
         for (int i = 0; i < ids.length; i++) {
             params[i] = new Object[]{day,status,ids[i]};

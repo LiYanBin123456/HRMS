@@ -4,10 +4,8 @@ import bean.admin.Account;
 import bean.employee.Employee;
 import bean.insurance.Insured;
 import com.alibaba.fastjson.JSONObject;
-import database.ConnUtil;
-import database.DaoQueryListResult;
-import database.DaoUpdateResult;
-import database.QueryParameter;
+import dao.insurance.InsuredDao;
+import database.*;
 import service.employee.EmployeeService;
 import service.insurance.InsuredService;
 
@@ -20,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.util.List;
 
 @WebServlet(name = "InsuredServlet",urlPatterns = "/verify/insured")
 public class InsuredServlet extends HttpServlet {
@@ -37,11 +36,17 @@ public class InsuredServlet extends HttpServlet {
             case "insert"://添加
                 result = insert(conn, request);
                 break;
+            case "insertBatch"://批量
+                result = insertBatch(conn, request);
+                break;
             case "delete"://删除员工
                 result = delete(conn, request);
                 break;
             case "update"://修改
                 result = update(conn, request);
+                break;
+            case "get"://获取
+                result = get(conn, request);
                 break;
         }
         ConnUtil.closeConnection(conn);
@@ -54,6 +59,14 @@ public class InsuredServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+    }
+
+    //获取
+    private String get(Connection conn, HttpServletRequest request) {
+        long id = Long.parseLong((request.getParameter("id")));
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("id","=",id);
+        return JSONObject.toJSONString(InsuredDao.get(conn,conditions));
     }
 
     //插入员工信息
@@ -75,6 +88,27 @@ public class InsuredServlet extends HttpServlet {
         return InsuredService.insert(conn, insured);
     }
 
+    //插入员工信息
+    private String insertBatch(Connection conn, HttpServletRequest request) {
+//        HttpSession session = request.getSession();
+        /*Account user = (Account) session.getAttribute("account");
+        if(user.getRole() == Account.ROLE_COOPERATION) {
+            Insured insured = JSONObject.parseObject(request.getParameter("insured"), Insured.class);
+            insured.setCid(user.getId());
+            return InsuredService.insert(conn, insured);
+        }
+        return "";*/
+       List<Insured> insureds = JSONObject.parseArray(request.getParameter("insureds"), Insured.class);
+//        Account user = (Account) session.getAttribute("account");
+//        if(user.getRole() == Account.ROLE_COOPERATION) {
+//            for(Insured insured:insureds){
+//                insured.setCid(user.getId());
+//            }
+//        }
+        //insured.setCid(2);
+        return JSONObject.toJSONString(InsuredDao.insertBatch(conn,insureds));
+    }
+
     //删除
     private String delete(Connection conn, HttpServletRequest request) {
         long id = Long.parseLong((request.getParameter("id")));
@@ -92,5 +126,7 @@ public class InsuredServlet extends HttpServlet {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         return InsuredService.getList(conn,parameter);
     }
+
+
 
 }
