@@ -1,8 +1,10 @@
 package service.admin;
 
 import bean.admin.Account;
+import bean.client.Dispatch;
 import com.alibaba.fastjson.JSONObject;
 import dao.admin.AccountDao;
+import dao.client.DispatchDao;
 import database.*;
 
 import javax.servlet.http.HttpSession;
@@ -60,5 +62,15 @@ public class AccountService {
 
     public static DaoUpdateResult permit(Connection conn, long id,long permission) {
         return AccountDao.permit(conn,id,permission);
+    }
+
+    public static DaoQueryResult getAdmin(Connection conn, Account account) {
+        return AccountDao.get(conn,account);
+    }
+
+    public static DaoUpdateResult insertAccount(Connection conn, Account account) {
+        Dispatch dispatch = (Dispatch) DispatchDao.get(conn,account.getRid()).data;
+
+        return null;
     }
 }

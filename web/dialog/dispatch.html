@@ -146,9 +146,15 @@
             </form>
         </div>
         <div class="layui-tab-item" >
-            <form lay-filter="element_add" class="layui-form">
+            <form lay-filter="form_account" class="layui-form">
                 <input type='hidden' name='id'/>
                 <input type='hidden' name='cid'/>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label">
+                        <span class="x-red">*</span>昵称</label>
+                    <div class="layui-input-inline">
+                        <input type="text"  name="nickname" required=""  placeholder="" autocomplete="off" class="layui-input"></div>
+                </div>
                 <div class="layui-form-item">
                     <label  class="layui-form-label">
                         <span class="x-red">*</span>登录账号</label>
@@ -162,9 +168,25 @@
                         <input type="text"  name="password" required=""  placeholder="" autocomplete="off" class="layui-input"></div>
                 </div>
                 <div class="layui-form-item" style="text-align: center" >
-                    <button type="submit" lay-submit lay-filter="submit_finance" class="layui-btn" >保存</button>
+                    <button type="submit" lay-submit lay-filter="submit_user" class="layui-btn" >保存</button>
                     <button  class="layui-btn" onclick="cancel()" >取消</button>
                 </div>
+            </form>
+        </div>
+        <div class="layui-tab-item dialog-content">
+            <form lay-filter="form_permission" class="layui-form">
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>角色</legend>
+                </fieldset>
+                <form lay-filter="form_role" class="layui-form">
+                    <input type="radio" lay-filter="role" name="role" value="0,0" title="客服" checked>
+                    <input type="radio" lay-filter="role" name="role" value="524288,0" title="管理员">
+                </form>
+                <fieldset class="layui-elem-field layui-field-title">
+                    <legend>权限分配</legend>
+                </fieldset>
+                <div id="permission"></div>
+                <button type="button" class="layui-btn" onclick="savePermission()">保存</button>
             </form>
         </div>
     </div>
@@ -173,21 +195,31 @@
 <script src="../js/jquery.min.js"></script>
 <script src="../js/jquery.params.js"></script>
 <script src="../js/interface.js"></script>
+<script src="../js/fieldSet.js"></script>
+<script src="../js/menu.js"></script>
 <script>
     var form;//表单对象
     var editer;
     var element;
     var dispatch;
     var finance;
-
+    var account={role:1,rid:0};
+    var tree;
     loadLayuiModule();
 
     function loadLayuiModule() {
-        layui.use(['form', 'layedit','element'], function () {
+        layui.use(['form', 'layedit','element','tree'], function () {
             form = layui.form;
             layedit = layui.layedit;
             element = layui.element;
             editer = layedit.build('content'); //建立编辑器
+            tree = layui.tree;
+            var inst1 = tree.render({
+                elem: '#permission',  //绑定元素
+                id:'tree_permission',
+                showCheckbox:true,
+                data: menuItems_dispatch
+            });
             initPage();
             getDispatch();
         });
@@ -203,7 +235,10 @@
                     getFinance();//获取合同服务项目
                     break;
                 case 2:
-                    getUser();//获取账号信息
+                    getAccount();//获取账号信息
+                    break;
+                case 3://业务
+                    initData();
                     break;
 
             }
@@ -214,6 +249,10 @@
         });
         form.on('submit(submit_finance)', function(data){
             saveFinance(data.field);
+            return false;
+        });
+        form.on('submit(submit_user)', function(data){
+            saveAccount(data.field);
             return false;
         });
     }
@@ -239,18 +278,6 @@
             }});
         }
     }
-
-    function getUser() {
-        if(dispatch && dispatch.id) {
-            webInterface.client.getFinance({id:dispatch.id,category:0, success:function (result) {
-                if(result.data) {
-                    finance = result.data;
-                    form.val('form_finance', finance);
-                }
-            }});
-        }
-    }
-
     function saveDispatch() {
         var data = form.val('form_dispatch');
         if(data.name == ""){
@@ -299,8 +326,6 @@
         }
         dispatch = data;
     }
-
-
     function saveFinance() {
         if(!dispatch || !dispatch.id ){
             layer.msg("请先保存派遣单位基本信息");
@@ -346,11 +371,112 @@
         }
         finance = data;
     }
+
+    function getAccount() {
+        if(dispatch && dispatch.id) {
+            account.role=1;
+            account.rid=dispatch.id;
+            //获取权限是派遣方管理员且rid是派遣方的id的管理员
+            webInterface.account.getAdmin({account:account, success:function (result) {
+                if(result.data) {
+                    account =result.data;
+                    form.val('form_account', account);
+                }
+            }});
+        }
+    }
+    function saveAccount() {
+        if(!dispatch || !dispatch.id ){
+            layer.msg("请先保存派遣单位基本信息");
+            return;
+        }
+        var data = form.val('form_account');
+        if(data.username == ""){
+            layer.msg("请填写账号");
+            return;
+        }
+        if(data.password == ""){
+            layer.msg("请填写密码");
+            return;
+        }
+        data.cid = dispatch.id;
+        if (account) {
+            webInterface.account.update({account:data,success:function (result) {
+                layer.msg("修改成功");
+            }});
+        } else {
+            data.role=1;
+            data.rid=dispatch.id;
+            webInterface.account.insertAdmin({account:data, success:function (result) {
+                layer.msg("添加成功");
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+                window.parent.location.reload();
+            }});
+        }
+        account = data;
+    }
+
     function cancel(){
         var index = parent.layer.getFrameIndex(window.name);
         parent.layer.close(index);
     }
 
+
+    function initData() {
+        account = JSON.parse($.query.get("account"));
+        var permission = account.permissionString;
+        if(bit_test(permission,"524288,0")){
+            form.val('form_role',{role:"524288,0"});
+        }else{
+            form.val('form_role',{role:"0,0"});
+        }
+
+        var checkeds = [];
+        for(var i in menuItems_dispatch){
+            var item = menuItems_dispatch[i];
+            var children = item.children;
+            if(children){
+                for(var j in children) {
+                    var child = children[j];
+                    if(bit_test(child.id ,permission)){
+                        checkeds.push(child.id);
+                    }
+                }
+            }else{
+                if(bit_test(item.id ,permission)){
+                    checkeds.push(item.id);
+                }
+            }
+        }
+        tree.setChecked("tree_permission",checkeds);
+    }
+
+    function savePermission() {
+        var items = tree.getChecked('tree_permission');
+        var permit = 0;
+        for(var i in items){
+            var subItems = items[i].children
+            if(subItems){
+                for(var j in subItems){
+                    permit += calc(subItems[j].id);
+                }
+            }else {
+                permit += calc(items[i].id);
+            }
+        }
+        var data = form.val('form_role');
+        permit += calc(data.role);
+
+        webInterface.account.permit({id:account.id,permit:permit,success:function (result) {
+            layer.msg("权限分配成功！");// 获得frame索引
+            var index = parent.layer.getFrameIndex(window.name);
+            //关闭当前frame
+            parent.layer.close(index);
+            //修改成功后刷新父界面
+            window.parent.location.reload();
+        }});
+    }
 
 </script>
 

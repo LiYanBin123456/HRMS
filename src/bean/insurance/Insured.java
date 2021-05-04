@@ -10,6 +10,19 @@ public class Insured {
     private String post;//工作岗位
     private byte category;//职业类别
 
+    public Insured() {
+    }
+
+    public Insured(long id, long cid, String cardId, String name, String place, String post, byte category) {
+        this.id = id;
+        this.cid = cid;
+        this.cardId = cardId;
+        this.name = name;
+        this.place = place;
+        this.post = post;
+        this.category = category;
+    }
+
     public long getId() {
         return id;
     }

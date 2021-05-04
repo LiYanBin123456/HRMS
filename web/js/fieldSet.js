@@ -331,7 +331,7 @@ var columns_settlement20  = [[
 
 //商业保险结算单字段集合
 var columns_settlement3  = [[
-    {field:'cname', title: '用工企业',fixed:"left"},
+    {field:'name', title: '用工企业',fixed:"left"},
     {field:'month', title: '月份',width:100,templet:function (d) {return dateUtil.format_month(d.month)}},
     {field:'pname', title: '保险产品',width:180},
     {field:'price', title: '单价',width:80},
@@ -566,6 +566,7 @@ var columns_tax  = [[
 var columns_insured0 = [[
     {field:'cardId', title: '身份证号',width:170},
     {field:'name', title: '姓名',width:80},
+    {field:'cname', title: '工作单位',width:200},
     {field:'place', title: '工作地点',width:120},
     {field:'post', title: '工作岗位',width:120},
     {field:'category', title: '职业类别',width:120,templet:function (d) {return format_product_allow(d.category)}},
@@ -708,9 +709,9 @@ var category_employee = [
     {value:0,text:"内部员工"},
     {value:1,text:"派遣"},
     {value:2,text:"外包"},
-    {value:3,text:"小时工"},
-    {value:4,text:"代缴工资"},
-    {value:5,text:"代缴社保"}
+    {value:3,text:"代发工资"},
+    {value:4,text:"代缴社保"},
+    {value:5,text:"小时工"}
 ];
 
 var household_employee = [

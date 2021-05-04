@@ -192,7 +192,7 @@
     var contract;
     var param_query_product = new QueryParam();
     loadLayuiModule();
-
+    var products;
     function loadLayuiModule() {
         layui.use(['form', 'layedit', 'jquery', 'upload','element','laydate'], function () {
             form = layui.form;
@@ -302,7 +302,9 @@
                 $("[name=c4]").removeClass("layui-hide");
                 $("#title").text("单价");
                 $("#unit").text("元/人/月");
-                initProduct();
+                if (products==null||products=="undefined"){
+                    initProduct();
+                }
                 break;
 
         };
@@ -361,9 +363,9 @@
 
     function initProduct(){
         webInterface.product.getList({param:param_query_product,success:function(result){
-            var products = result.rows;
+            products = result.rows;
             var select_product = $("#select_product");
-            select_product.append("<option value='-2' disabled hidden>选择商业保险</option>");
+            select_product.append("<option value='-2' disabled hidden selected>选择商业保险</option>");
             for(var i in products){
                 var product = products[i];
                 var option1 = $("<option>").val(product.id).text(product.name);

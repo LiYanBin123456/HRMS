@@ -58,6 +58,9 @@ public class InsuranceServlet extends HttpServlet {
             case "check"://校对参保单
                 result = check(conn,request);
                 break;
+            case "checkErr"://校对异常参保单
+                result = checkErr(conn,request);
+                break;
         }
         ConnUtil.closeConnection(conn);
         PrintWriter out = response.getWriter();
@@ -92,6 +95,37 @@ public class InsuranceServlet extends HttpServlet {
             case 4://校对公积金
                 data = XlsUtil.read(is,SchemeDefined.SCHEME_FUND,1);
                 result = InsuranceService.checkFund(conn,data);
+                break;
+        }
+        return  JSONObject.toJSONString(result);
+    }
+
+    //校对异常参保单
+    private String checkErr(Connection conn, HttpServletRequest request) throws IOException, ServletException {
+        DaoUpdateResult result=null;
+        byte type = Byte.parseByte(request.getParameter("status"));//判断校对的类型 0养老 1工伤 2失业 3医疗 4工伤
+        Part part = request.getPart("file");
+        InputStream is=null;
+        JSONArray data;
+        try {//获取part中的文件，读取数据
+            is = part.getInputStream();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        switch (type){
+            case 0://校对养老
+            case 1://校对社保
+            case 2://校对社保
+                data = XlsUtil.read(is, SchemeDefined.SCHEME_SOCIAL,1);
+                result = InsuranceService.checkErrSocial(conn,data,type);
+                break;
+            case 3://校对医保
+                data = XlsUtil.read(is,SchemeDefined.SCHEME_MEDICAL,1);
+                result = InsuranceService.checkErrMedicare(conn,data);
+                break;
+            case 4://校对公积金
+                data = XlsUtil.read(is,SchemeDefined.SCHEME_FUND,1);
+                result = InsuranceService.checkErrFund(conn,data);
                 break;
         }
         return  JSONObject.toJSONString(result);

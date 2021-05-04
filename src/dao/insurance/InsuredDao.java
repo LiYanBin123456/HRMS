@@ -1,6 +1,7 @@
 package dao.insurance;
 
 import bean.insurance.Insured;
+import bean.insurance.ViewInsured;
 import database.*;
 
 import java.sql.Connection;
@@ -34,7 +35,7 @@ public class InsuredDao {
         if(param.conditions.extra!=null && !param.conditions.extra.isEmpty()) {
             param.addCondition("name","like",param.conditions.extra);
         }
-        return DbUtil.getList(conn,"insured",param,Insured.class);
+        return DbUtil.getList(conn,"view_insured",param,ViewInsured.class);
     }
 
     public static DaoQueryResult get(Connection conn, QueryConditions conditions) {

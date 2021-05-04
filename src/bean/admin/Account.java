@@ -78,6 +78,7 @@ public class Account {
     public long getPermission() {
         return permission;
     }
+
     public String getPermissionString(){
         return String.format("%d,%d",permission>>32,permission&0xffffffffL);
     }

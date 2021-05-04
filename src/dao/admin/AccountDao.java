@@ -30,6 +30,14 @@ public class AccountDao {
         return DbUtil.get(conn,"account",conditions,Account.class);
     }
 
+    //根据用户角色和rid来查询
+    public static DaoQueryResult get(Connection conn, Account account) {
+        QueryConditions conditions = new QueryConditions();
+        conditions.add("role","=",account.getRole());
+        conditions.add("rid","=",account.getRid());
+        return DbUtil.get(conn,"account",conditions,Account.class);
+    }
+
     public static DaoUpdateResult update(Connection conn, Account a) {
         String sql = "update account set nickname=?,username=?,password=? where id=?";
         Object []params = {a.getNickname(),a.getUsername(),a.getPassword(),a.getId()};
@@ -55,4 +63,6 @@ public class AccountDao {
         //调用DbUtil封装的update方法
         return DbUtil.update(conn,sql,params);
     }
+
+
 }

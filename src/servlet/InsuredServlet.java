@@ -90,22 +90,12 @@ public class InsuredServlet extends HttpServlet {
 
     //插入员工信息
     private String insertBatch(Connection conn, HttpServletRequest request) {
-//        HttpSession session = request.getSession();
-        /*Account user = (Account) session.getAttribute("account");
-        if(user.getRole() == Account.ROLE_COOPERATION) {
-            Insured insured = JSONObject.parseObject(request.getParameter("insured"), Insured.class);
-            insured.setCid(user.getId());
-            return InsuredService.insert(conn, insured);
+        List<Insured> insureds = null;
+        try {
+            insureds = JSONObject.parseArray(request.getParameter("insureds"), Insured.class);
+        } catch (Exception e) {
+            return DaoResult.fail("数据格式错误，请仔细核对");
         }
-        return "";*/
-       List<Insured> insureds = JSONObject.parseArray(request.getParameter("insureds"), Insured.class);
-//        Account user = (Account) session.getAttribute("account");
-//        if(user.getRole() == Account.ROLE_COOPERATION) {
-//            for(Insured insured:insureds){
-//                insured.setCid(user.getId());
-//            }
-//        }
-        //insured.setCid(2);
         return JSONObject.toJSONString(InsuredDao.insertBatch(conn,insureds));
     }
 

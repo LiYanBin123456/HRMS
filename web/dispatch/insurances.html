@@ -26,6 +26,12 @@
             .searchboxs{
                 width:230px;
             }
+            body .demo-class .layui-layer-btn1{
+                border-color: #FF5722;
+                background-color: #FF5722;
+                color: #fff9ec;
+            }
+
         </style>
     </head>
 
@@ -34,8 +40,8 @@
             <div class="layui-input-inline" >
                 <select lay-filter="filter_category" >
                     <option value="0">养老保险</option>
-                    <option value="1">失业保险</option>
-                    <option value="2">工伤保险</option>
+                    <option value="1">工伤保险</option>
+                    <option value="2">失业保险</option>
                     <option value="3">医疗保险</option>
                     <option value="4">生育保险</option>
                     <option value="5">大病保险</option>
@@ -71,6 +77,7 @@
         <!--顶部工具栏-->
 
         <button class="layui-btn layui-btn-sm" style="display: none" id="checkSocial"><i class="layui-icon "></i> 校对</button>
+        <button class="layui-btn layui-btn-sm" style="display: none" id="checkErrSocial"><i class="layui-icon "></i> 校对异常</button>
         <div class="layui-hide" id="top_bar">
             <button class="layui-btn layui-btn-sm" lay-event="add"><i class="layui-icon "></i> 添加</button>
             <button class="layui-btn layui-btn-sm" lay-event="export0" onclick="exportSocial1()"><i class="layui-icon "></i> 导出新增</button>
@@ -105,6 +112,7 @@
                 var element = layui.element;
                 var laypage = layui.laypage;
                 var upload = layui.upload;
+                var upload2 = layui.upload;
                 var form = layui.form;
 
                 upload.render({
@@ -129,7 +137,7 @@
                     }
                 });
 
-                upload.render({
+                upload2.render({
                     elem: '#checkSocial' //绑定元素
                     , url: '/verify/insurance' //上传接口
                     , accept: 'file'
@@ -140,7 +148,30 @@
                     }
                     , done: function (res) {
                         if (res.success){
-                            employees = JSON.stringify(res.data);
+                            layer.msg("校对成功");
+                            initPage();
+                        }else {
+                            layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                        }
+                    }
+                    , error: function () {
+                        //请求异常回调
+                        layer.msg("xls文件不符合要求，请下载模板再重新填写");
+                    }
+                });
+
+                upload.render({
+                    elem: '#checkErrSocial' //绑定元素
+                    , url: '/verify/insurance' //上传接口
+                    , accept: 'file'
+                    , exts: 'xls'
+                    , acceptMime: '.xls'
+                    ,before: function(file){
+                        this.data={op:"checkErr",status:status}
+                    }
+                    , done: function (res) {
+                        if (res.success){
+                            layer.msg("校对成功");
                             initPage();
                         }else {
                             layer.msg("xls文件不符合要求，请下载模板再重新填写");
@@ -236,15 +267,20 @@
                 function checkSocial() {
                     layer.open({
                         title:"选择需要校对的项目",
+                        skin:'demo-class',
                         type: 2,
                         area: ['30%', '50%'],
                         content: "../dialog/selectSocial.html",
-                        btn: ['校对', '关闭']
+                        btn: ['校对', '校对异常','关闭']
                         ,yes: function(index, layero){
                             status = window["layui-layer-iframe" + index].callbackData();
                             layer.close(index);
                             $("#checkSocial").click();
                         },btn2: function(index, layero){
+                            status = window["layui-layer-iframe" + index].callbackData();
+                            layer.close(index);
+                            $("#checkErrSocial").click();
+                        },btn3: function(index, layero){
                             layer.close(index);
                         }
                     });

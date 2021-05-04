@@ -55,6 +55,7 @@
             var form;//分页对象
             var layer;//弹出窗口
             var element;
+            var introduce;//保险产品实体
             var param_query = new QueryParam();
             param_query.setOrder("name",false);
             param_query.setPagination(1,10);
@@ -105,7 +106,7 @@
                             showDetailDlg(data);
                             break;
                         case "introduce":
-                            showIntroduceDlg();
+                            showIntroduceDlg(data);
                             break;
                         case "del":
                             del(data);
@@ -165,8 +166,8 @@
             }
 
             //打开产品介绍对话框
-            function showIntroduceDlg() {
-                var content = "../dialog/introduce_product.html";
+            function showIntroduceDlg(data) {
+                var content = "../dialog/introduce_product.html?product="+encodeURIComponent(JSON.stringify(data));
                 layer.open({
                     title:"产品介绍",
                     type: 2,

@@ -2,6 +2,7 @@ package servlet;
 
 import bean.admin.Account;
 import com.alibaba.fastjson.JSONObject;
+import dao.admin.AccountDao;
 import database.*;
 import service.admin.AccountService;
 
@@ -44,8 +45,14 @@ public class AccountServlet extends HttpServlet {
             case "insert"://添加账号
                 result = insert(conn,request);
                 break;
+            case "insertAdmin"://添加管理员账号
+                result = insertAdmin(conn,request);
+                break;
             case "get"://获取账号详情
                 result = get(conn,request);
+                break;
+            case "getAdmin"://获取管理员账号账号详情
+                result = getAdmin(conn,request);
                 break;
             case "update"://修改账号
                 result = update(conn,request);
@@ -102,12 +109,25 @@ public class AccountServlet extends HttpServlet {
         return AccountService.insert(conn,account,request.getSession());
     }
 
+    //插入管理员账号
+    private String insertAdmin(Connection conn, HttpServletRequest request) {
+        Account account =JSONObject.parseObject(request.getParameter("account"),Account.class);
+        AccountService.insertAccount(conn,account);
+        return JSONObject.toJSONString(AccountDao.insert(conn,account));
+    }
+
     //获取账号详情
     private String get(Connection conn, HttpServletRequest request) {
         HttpSession session = request.getSession();
 
         Account user = (Account) session.getAttribute("account");
         return AccountService.get(conn,user.getId());
+    }
+
+    //获取管理员账号详情
+    private String getAdmin(Connection conn, HttpServletRequest request) {
+        Account account = JSONObject.parseObject(request.getParameter("account"),Account.class);
+        return JSONObject.toJSONString(AccountService.getAdmin(conn,account));
     }
 
     //修改账号
