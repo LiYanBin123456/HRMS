@@ -12,6 +12,7 @@ import bean.rule.RuleSocial;
 import bean.settlement.Detail1;
 import bean.settlement.Settlement1;
 import bean.settlement.ViewDetail1;
+import bean.settlement.ViewSettlement1;
 import com.alibaba.fastjson.JSONObject;
 import dao.client.CooperationDao;
 import dao.client.MapSalaryDao;
@@ -102,6 +103,17 @@ public class DetailService1 {
          */
         //获取结算单和明细（只有正常或补发的才需要计算，补缴和补差的已经并入正常的核收补减中去了。同时一个结算单不可能正常和补发并存）
         Settlement1 settlement = (Settlement1) Settlement1Dao.get(conn, sid).data;//获取结算单
+        QueryParameter parameter =new QueryParameter();
+        parameter.conditions.add("cid","=",settlement.getCid());
+        parameter.conditions.add("did","=",settlement.getDid());
+        parameter.conditions.add("type","=",settlement.getType());
+        parameter.conditions.add("month","=",settlement.getMonth());
+        List<ViewSettlement1> settlement1s = (List<ViewSettlement1>) Settlement1Dao.getList(conn,parameter).rows;
+        boolean flag =true;//是否是第一次发工资；
+        if(settlement1s.size()>1){//数据库中该类型的结算单大于一条
+           flag=false;
+        }
+
         QueryParameter param = new QueryParameter();
         param.conditions.add("sid", "=", sid);
         param.conditions.add("status", "=",settlement.isNeedCalcInsurance()|| settlement.getType()==Settlement1.TYPE_3?Detail1.STATUS_NORMAL:Detail1.STATUS_MAKEUP);
@@ -153,8 +165,9 @@ public class DetailService1 {
                 if(deduct == null){
                     return DaoResult.fail(String.format("请完善员工[%d]的个税专项扣除",d.getEid()));
                 }
+                //如果不是第一次发工资，且存在当月的已经发放的工资，个人专项扣除应回撤
                 //如果是补发，且存在当月的已正常发放的工资，个人专项扣除应回撤，否则的逻辑如下，是否正确？
-                if(!settlement.isNeedCalcInsurance()&&settlement.getType() != Settlement1.TYPE_3){
+                if(!flag&&settlement.getType() != Settlement1.TYPE_3){
                     QueryParameter p4 = new QueryParameter();
                     p4.addCondition("eid", "=", d.getEid());
                     p4.addCondition("month", "=",month2);

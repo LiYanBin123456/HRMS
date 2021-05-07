@@ -1,7 +1,4 @@
 package bean.insurance;
-
-
-
 //参保单视图
 public class ViewInsured extends Insured{
     private String cname;//合作单位名称
@@ -9,8 +6,8 @@ public class ViewInsured extends Insured{
     public ViewInsured() {
     }
 
-    public ViewInsured(long id, long cid, String cardId, String name, String place, String post, byte category, String cname) {
-        super(id, cid, cardId, name, place, post, category);
+    public ViewInsured(long id, long cid, long did, String cardId, String name, String place, String post, byte category, String cname) {
+        super(id, cid, did, cardId, name, place, post, category);
         this.cname = cname;
     }
 

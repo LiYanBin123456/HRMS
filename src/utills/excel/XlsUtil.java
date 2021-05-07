@@ -76,6 +76,7 @@ public class XlsUtil {
             is.close();
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
         return data;
     }

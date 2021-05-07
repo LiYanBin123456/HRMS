@@ -11,10 +11,7 @@ import bean.log.Log;
 import bean.log.Transaction;
 import bean.rule.RuleMedicare;
 import bean.rule.RuleSocial;
-import bean.settlement.Detail1;
-import bean.settlement.Settlement;
-import bean.settlement.Settlement1;
-import bean.settlement.ViewDetail1;
+import bean.settlement.*;
 import com.alibaba.fastjson.JSONObject;
 import dao.LogDao;
 import dao.client.FinanceDao;
@@ -237,7 +234,7 @@ public class SettlementService1 {
     public static DaoUpdateResult payroll(Connection conn, long sid, Account account) {
         /**流程
          * 1、修改结算单状态为发放
-         * 2、判断是否为补发
+         * 2、判断是否是这个月第一次发放工资
          * 2、获取结算单明细并且修改员工个税专项扣除中的累计收入，累计已预缴税额，累计减免
          * 3、插入日志
          */
@@ -255,6 +252,16 @@ public class SettlementService1 {
 
 
         Settlement1 settlement = (Settlement1) Settlement1Dao.get(conn,sid).data;
+        QueryParameter param =new QueryParameter();
+        param.conditions.add("cid","=",settlement.getCid());
+        param.conditions.add("did","=",settlement.getDid());
+        param.conditions.add("type","=",settlement.getType());
+        param.conditions.add("month","=",settlement.getMonth());
+        List<ViewSettlement1> settlement1s = (List<ViewSettlement1>) Settlement1Dao.getList(conn,param).rows;
+        boolean flag =true;//是否是第一次发工资；
+        if(settlement1s.size()>1){//数据库中该类型的结算单大于一条,则设为false
+            flag=false;
+        }
         for (Detail1 detail:details){
             float deducts;
             Deduct deduct1 = getDeduct(deductList,detail.getEid());
@@ -263,22 +270,16 @@ public class SettlementService1 {
                 deduct1.setIncome(deduct1.getIncome()+detail.getPayable());
                 //累计已预缴税额=累计已预缴税额+个税
                 deduct1.setPrepaid(deduct1.getPrepaid()+detail.getTax());
-
             }else{//不存在于该集合中
-
                 //去数据库中找到该员工的个税专项扣除
                 Deduct deduct = (Deduct) DeductDao.get(conn,detail.getEid()).data;
-
                 //累计收入=累计收入+当月应发；
                 deduct.setIncome(deduct.getIncome()+detail.getPayable());
-
                 //累计已预缴税额=累计已预缴税额+个税
                 deduct.setPrepaid(deduct.getPrepaid()+detail.getTax());
-
-                if(settlement.isNeedCalcInsurance()) {//如果需要计算社保，就需要累加累计减免和累加个税专项扣除
+                if(flag) {//如果需要计算社保，就需要累加累计减免和累加个税专项扣除
                     //累计减免=累计减免+5000；
                     deduct.setFree(deduct.getFree()+5000);
-
                     //将该月的个税专项扣除总额累加
                     deducts=deduct.getDeduct()+deduct.getDeduct1()+deduct.getDeduct2()+deduct.getDeduct3()+deduct.getDeduct4()+deduct.getDeduct5()+deduct.getDeduct6();
                     deduct.setDeduct(deducts);
@@ -289,7 +290,6 @@ public class SettlementService1 {
 
         //批量修改个税信息
         DaoUpdateResult result1 = DeductDao.updateDeducts(conn,deductList);
-
         //封装log信息
         String operator = account.getNickname()+"("+account.getId()+")";
         String content = "发放";

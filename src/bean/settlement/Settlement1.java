@@ -238,8 +238,9 @@ public class Settlement1 extends Settlement {
      * 单独计算每个员工的管理费和个税
      * @param contract 合同
      * @param detail 员工明细
+     * @param flag 是否计算管理费
      */
-    public void calcManageAndTax(ViewContractCooperation contract, ViewDetail1 detail) {
+    public void calcManageAndTax(ViewContractCooperation contract, ViewDetail1 detail,boolean flag) {
         int type = contract.getStype();//合同服务项目中的类型
         int category = contract.getCategory();//合同服务项目中的结算方式
         int invoice = contract.getInvoice();//合同基础信息中的发票类型
@@ -251,7 +252,7 @@ public class Settlement1 extends Settlement {
         switch (type){
             case 0://劳务派遣
                 if(category==0){//按人数收取的结算方式
-                    manage=val;//管理费=管理费
+                    manage =flag?val:0;
                     if(invoice==0){//增值税专用发票（全额）
                         //getTaxDueOfDepartment（）计算派遣单位应税额=基本工资+自定义工资+单位五险一金+单位核收补减+商业保险费
                         //税费=（派遣单位应税额+管理费-国家减免(国家减免暂时没用)）*比例
@@ -260,7 +261,7 @@ public class Settlement1 extends Settlement {
                 }else if(category==1){//按比例收取的结算方式
                     //getTaxDueOfDepartment（）计算派遣单位应税额=基本工资+自定义工资+单位五险一金+单位核收补减+商业保险费
                     //管理费 = （派遣单位应税额-国家减免(国家减免暂时没用)）*比例（从服务项目中的比例）
-                    manage +=  (detail.getTaxDueOfDepartment()-free)*(val/100);
+                    manage =(detail.getTaxDueOfDepartment()-free)*(val/100);
                     tax=0;
                 }else {//按外包整体核算方式
 

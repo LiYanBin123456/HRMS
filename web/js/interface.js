@@ -8,7 +8,27 @@ var webInterface = {
     POST:"post",
     SYNC:false,
     ASYNC:true,
-    
+    count:{//获取员工和客户总数的接口，无需登录验证
+       url:"/count",
+        /**
+         * 获取所有员工的总数
+         * @param param
+         */
+       getEmployees:function (param) {
+           param.url=this.url;
+           param.data = {op: "getEmployees", param:JSON.stringify(param.param)};
+           webInterface.access(param);
+       },
+        /**
+         * 获取所有客户的总数
+         * @param param
+         */
+       getClients:function (param) {
+           param.url=this.url;
+           param.data = {op: "getClients", param:JSON.stringify(param.param)};
+           webInterface.access(param);
+       }
+    },
     account:{
         url:url_base+"/account",
         /**
@@ -55,6 +75,11 @@ var webInterface = {
             param.data = {op: "insert",account:JSON.stringify(param.account)};
             webInterface.access(param);
         },
+        insertAdmin:function(param) {
+            param.url = this.url;
+            param.data = {op: "insertAdmin",account:JSON.stringify(param.account)};
+            webInterface.access(param);
+        },
         /**
          * 删除账号
          * @param id 账号id
@@ -75,6 +100,17 @@ var webInterface = {
         get:function(param) {
             param.url = this.url;
             param.data = {op:"get"};
+            webInterface.access(param);
+        },
+        /**
+         * 获取账号详情
+         * @param id 账号id
+         * @param success
+         * @param fail
+         */
+        getAdmin:function(param) {
+            param.url = this.url;
+            param.data = {op:"getAdmin",account:JSON.stringify(param.account)};
             webInterface.access(param);
         },
         /**
@@ -1083,6 +1119,19 @@ var webInterface = {
         },
 
         /**
+         * 校对异常参保单
+         * @param insurance 将校对的异常名单册导入后台
+         * @param category 0-社保 1-医保 2-公积金
+         * @param success
+         * @param fail
+         */
+        checkErr:function(param) {
+            param.url = this.url;
+            param.data = {op: "checkErr", insurance:JSON.stringify(param.insurance),category:param.category};
+            webInterface.access(param);
+        },
+
+        /**
          * 删除参保单
          * @param id 员工id
          * @param category 0-社保 1-医保 2-公积金
@@ -1539,3 +1588,5 @@ var webInterface = {
     }
 
 }
+
+

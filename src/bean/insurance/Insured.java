@@ -4,6 +4,7 @@ package bean.insurance;
 public class Insured {
     private long id;
     private long cid;//合作单位id
+    private long did;//派遣单位id
     private String  cardId;//身份证号
     private String name;//姓名
     private String place;//工作地点
@@ -29,6 +30,25 @@ public class Insured {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public Insured(long id, long cid, long did, String cardId, String name, String place, String post, byte category) {
+        this.id = id;
+        this.cid = cid;
+        this.did = did;
+        this.cardId = cardId;
+        this.name = name;
+        this.place = place;
+        this.post = post;
+        this.category = category;
+    }
+
+    public long getDid() {
+        return did;
+    }
+
+    public void setDid(long did) {
+        this.did = did;
     }
 
     public long getCid() {

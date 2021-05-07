@@ -72,19 +72,10 @@ public class InsuredServlet extends HttpServlet {
     //插入员工信息
     private String insert(Connection conn, HttpServletRequest request) {
         HttpSession session = request.getSession();
-        /*Account user = (Account) session.getAttribute("account");
-        if(user.getRole() == Account.ROLE_COOPERATION) {
-            Insured insured = JSONObject.parseObject(request.getParameter("insured"), Insured.class);
-            insured.setCid(user.getId());
-            return InsuredService.insert(conn, insured);
-        }
-        return "";*/
         Insured insured = JSONObject.parseObject(request.getParameter("insured"), Insured.class);
         Account user = (Account) session.getAttribute("account");
-        if(user.getRole() == Account.ROLE_COOPERATION) {
-            insured.setCid(user.getId());
-        }
-        //insured.setCid(2);
+        insured.setDid(user.getRid());
+
         return InsuredService.insert(conn, insured);
     }
 
@@ -93,6 +84,11 @@ public class InsuredServlet extends HttpServlet {
         List<Insured> insureds = null;
         try {
             insureds = JSONObject.parseArray(request.getParameter("insureds"), Insured.class);
+            HttpSession session = request.getSession();
+            Account user = (Account) session.getAttribute("account");
+            for(Insured i:insureds){
+                i.setDid(user.getRid());
+            }
         } catch (Exception e) {
             return DaoResult.fail("数据格式错误，请仔细核对");
         }
@@ -114,6 +110,13 @@ public class InsuredServlet extends HttpServlet {
     //获取员工列表
     private String getList(Connection conn, HttpServletRequest request) {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
+        HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("account");
+        if(user.getRole()==1){//派遣方管理员
+          parameter.addCondition("did", "=", user.getRid());
+        }else if(user.getRole() == 2) {//合作方管理员
+            parameter.addCondition("cid","=",user.getRid());
+        }
         return InsuredService.getList(conn,parameter);
     }
 
