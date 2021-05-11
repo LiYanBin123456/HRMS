@@ -107,8 +107,13 @@
         webInterface.account.get({success:function (result) {
             var account = result.data;
             $("#loginName").html(account.nickname);
-            var html = loadMenuCooperation(account.permission);
+            var html = loadMenuCooperation(account.permissionString);
             $("#nav").html(html);
+            webInterface.client.get({id:account.rid,category:1,success:function (result) {
+                var coop = result.data;
+                sessionStorage.setItem('coop_name',coop.name);
+                sessionStorage.setItem('coop_id',coop.id);
+            }});
         }});
     }
 

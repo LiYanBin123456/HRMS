@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>员工工资卡</title>
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+</head>
+<body>
+    <form lay-filter="form_salary_card" class="layui-form">
+        <input type="hidden" name="eid">
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>发卡行</label>
+            <div class="layui-input-inline">
+                <select name="bank1" required>
+                    <option value="">请选择发卡行</option>
+                    <option value="工商银行">工商银行</option>
+                    <option value="建设银行">建设银行</option>
+                    <option value="农业银行">农业银行</option>
+                    <option value="交通银行">交通银行</option>
+                    <option value="招商银行">招商银行</option>
+                    <option value="浦发银行">浦发银行</option>
+                    <option value="其他银行">其他银行</option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>开户行</label>
+            <div class="layui-input-inline">
+                <input type="text" name="bank2" required="" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>行号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="bankNo" required="" autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><span class="x-red">*</span>账号</label>
+            <div class="layui-input-inline">
+                <input type="text" name="cardNo" required="" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <button type="button" class="layui-btn layui-btn-fluid" lay-submit lay-filter="saveCard">保存</button>
+    </form>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.params.js"></script>
+<script src="../js/interface.js"></script>
+<script src="../js/xadmin.js"></script>
+<script>
+    layui.use(['form'], function () {
+        eid = $.query.get("eid");
+        var op = 'insert';//更新还是新增
+        var layform = layui.form;
+
+        initPage();
+
+        function initPage() {
+            layform.on('submit(saveCard)', function (data) {
+                saveCard(data.field);
+            });
+            getCard();
+        }
+
+        function getCard() {
+            webInterface.employee.getCard({id:eid,success:function (result) {
+                var card = result.data;
+                if(card){
+                    op = 'update';
+                    layform.val('form_salary_card',card);
+                }
+            }});
+        }
+
+        function saveCard(card) {
+            if(op == "update"){
+                webInterface.employee.updateCard({payCard:card,success:function (res) {
+                    layer.msg("保存成功");
+                }});
+            }else {
+                card.eid = eid;
+                webInterface.employee.insertCard({payCard:card,success:function (res) {
+                    op = "update";
+                    layform.val('form_salary_card',card);
+                    layer.msg("保存成功");
+                }});
+            }
+        }
+    });
+</script>
+
+</html>

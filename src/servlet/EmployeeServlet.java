@@ -1,9 +1,11 @@
 package servlet;
 
 import bean.admin.Account;
+import bean.client.Cooperation;
 import bean.employee.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import dao.client.CooperationDao;
 import database.*;
 import service.employee.*;
 import utills.DateUtil;
@@ -133,7 +135,17 @@ public class EmployeeServlet extends HttpServlet {
     private String insert(Connection conn, HttpServletRequest request) {
         Employee employee = JSONObject.parseObject(request.getParameter("employee"), Employee.class);
         Account user = (Account) request.getSession().getAttribute("account");
-        employee.setDid(user.getRid());
+        if(user.getRole()==Account.ROLE_DISPATCH){
+            employee.setDid(user.getRid());
+        }else if(user.getRole()==Account.ROLE_COOPERATION){
+            //获取派遣单位的id
+            QueryConditions conditions = new QueryConditions();
+            conditions.add("id","=",user.getRid());
+            Cooperation cooperation = (Cooperation) CooperationDao.get(conn,conditions).data;
+            employee.setCid(user.getRid());
+            employee.setDid(cooperation.getDid());
+        }
+
         return EmployeeService.insert(conn, employee);
     }
 
@@ -269,7 +281,7 @@ public class EmployeeServlet extends HttpServlet {
                     }else{
                         parameter.addCondition("aid", "=", user.getId());
                     }
-                }else if(user.getRole() == 2) {//合作方管理员
+                }else if(user.getRole() == 2) {//合作方管理员，获取派遣到该单位的员工
                     parameter.addCondition("cid","=",user.getRid());
                 }
                 break;
@@ -327,10 +339,20 @@ public class EmployeeServlet extends HttpServlet {
 
         HttpSession session = request.getSession();
         Account user = (Account) session.getAttribute("account");
-        for(Employee e:employees){
-            e.setDid(user.getRid());
+        if(user.getRole()==Account.ROLE_DISPATCH){
+            for(Employee e:employees){
+                e.setDid(user.getRid());
+            }
+        }else if(user.getRole()==Account.ROLE_COOPERATION){//合作单位
+            //获取派遣单位的id（did）
+            QueryConditions conditions = new QueryConditions();
+            conditions.add("id","=",user.getRid());
+            Cooperation coop = (Cooperation) CooperationDao.get(conn,conditions).data;
+            for(Employee e:employees){
+                e.setDid(coop.getDid());
+                e.setCid(user.getRid());
+            }
         }
-
         return EmployeeService.insertBatch(conn,employees,extras,cards);
     }
 

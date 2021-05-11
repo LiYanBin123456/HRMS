@@ -1,103 +1,668 @@
-<!doctype html>
-<html class="x-admin-sm">
-<head>
-    <meta charset="UTF-8">
-    <title>JOB人力资源服务系统</title>
-    <meta name="renderer" content="webkit|ie-comp|ie-stand">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
-    <meta http-equiv="Cache-Control" content="no-siteapp" />
-    <link rel="stylesheet" href="./css/font.css">
-    <link rel="stylesheet" href="./css/xadmin.css">
-    <!-- <link rel="stylesheet" href="./css/theme5.css"> -->
-    <script src="./lib/layui/layui.js" charset="utf-8"></script>
-    <script type="text/javascript" src="./js/xadmin.js"></script>
-    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
-    <!--[if lt IE 9]>
-    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
-    <style>
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>首页--柴桑区杰博人力资源产业园</title>
+    <script src="js/jquery.min.js"></script>
+    <script src="layui/layui.js"></script>
+    <script src="js/interface.js"></script>
+    <script src="js/fieldSet.js"></script>
+    <script src="js/jquery.params.js"></script>
+    <script src="js/queryParam.js"></script>
+    <script src="js/date.js"></script>
+    <style >
+        body{
+            background-color:lightgrey;
+            background-image:url("img/bg.jpg");
+            background-size: 100%;
+        }
+        a{
+            text-decoration:none;
+        }
+        a{
+            color:inherit;
+        }
+        #apps{
+            width:800px;
+            margin: 130px auto;
+        }
+        #apps>caption{
+            text-align:center;
+            font-size:24px;
+            font-color:orange;
+        }
+        #apps td{
+            width:160px;
+            height:110px;
+            border:0px solid grey;
+        }
+        #apps td img{
+            width: 100%;
+            height: 100%;
+            margin-left: 0px;
+        }
+        .logo:hover{
+            transform: scale(1.4,1.4);
+        }
+        .dlg{
+            position: fixed;
+            top:0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+            display: none;
+        }
         .content{
-            background:url(images/intro_bg.jpg) no-repeat center;
-            background-size: cover;
-            overflow: hidden;
+            width: 600px;
+            height: 540px;
+            margin: 100px auto;
+            border-radius: 10px;
+            background-color:#f8f8f8;
         }
-        .center{
-            margin: 50px auto 0 auto;
-            background:url(images/intro2.png) no-repeat center;
-            height: 600px;
-            width: 900px;
-            /*background-size: 100% 100%;*/
-            padding: 40px;
-            border-radius: 4px;
-            /* overflow-x: hidden; */
-            box-sizing: border-box;
-            position: relative;
+        .banner{
+            background-color: #4b72a4;
+            color: white;
+            line-height: 13px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
         }
-        .data1{
-            height: 50px;
-            width: 145px;
-            margin-left: 37%;
-            margin-top: 15.3%;
-            font-size: 21px;
-            color: #585858;
-            border: 0 none;
+        .btnClose{
+            border-radius: 10px;
+            float: right;
+            margin-top: 7px;
+            margin-right: 7px;
+            height: 20px;
+            width: 21px;
+            background:url("img/btnClose.png") no-repeat center;
+            /*margin-top: -28px;*/
+            /*margin-left: 553px;*/
+            /*position: absolute;*/
+        }
+        .main{
+            padding: 10px;
+        }
+        .dlgTitle{
+            color: white;
+            line-height: 35px;
+            border-radius: 10px 10px 0 0;
+        }
+        .banner img{
+            width: 580px;
+        }
+        .item{
+            padding-top: 10px;
+            padding-bottom: 10px;
+            border-radius: 10px;
+            background-color: white;
+        }
+        .logo{
+            float:left;
+            width: 40px;
+            height: 40px;
+        }
+        .title{
+            margin: 0;
+            font-family: 微软雅黑;
+            font-weight: bold;
+            font-size: 16px;
+            color: #4b72a4;
+            padding-left: 50px;
+        }
+        .desc{
+            margin: 0;
+            font-size: 12px;
+            padding-left: 50px;
+        }
+        .content2{
+            width: 600px;
+            height: 520px;
+            margin: 100px auto;
+            border-radius: 10px;
+            background-color:#f8f8f8;
+        }
+        .item2{
+            padding-top: 30px;
+            padding-bottom: 10px;
+            border-radius: 10px;
+            background-color: white;
+        }
+        .p1{
+            margin-top: 7px;
+            margin-left: 111px;
+            font-size: 35px;
+            color: red;
             position: absolute;
         }
-        .data2{
-            height: 50px;
-            width: 145px;
-            margin-left: 60%;
-            margin-top: 15.3%;
-            color: #585858;
-            font-size: 21px;
-            border: 0 none;
+        .p2{
+            margin-top: 7px;
+            margin-left: 400px;
+            font-size: 35px;
+            color: red;
             position: absolute;
         }
-        .btn1{
-            height: 50px;
-            width: 145px;
-            background:url(images/btn1.png) no-repeat center;
-            margin-left: 25%;
-            margin-top: 55%;
-            border: 0 none;
-            color: #31b7f6;
-            position: absolute;
+        .content3{
+            width: 600px;
+            height: 510px;
+            margin: 100px auto;
+            border-radius: 10px;
+            background-color:#f8f8f8;
         }
-        .btn2{
-            height: 42px;
-            width: 145px;
-            background:url(images/btn2.png) no-repeat center;
-            margin-left: 50%;
-            margin-top: 55%;
-            border: 0 none;
-            color: #f6f6f6;
-            position: absolute;
+        .item3{
+            padding-top: 25px;
+            padding-bottom: 15px;
+            border-radius: 10px;
+            background-color: white;
+        }
+        .content4{
+            width: 600px;
+            height: 510px;
+            margin: 100px auto;
+            border-radius: 10px;
+            background-color:#f8f8f8;
+        }
+        .item4{
+            padding-top: 30px;
+            padding-bottom: 15px;
+            border-radius: 10px;
+            background-color: white;
+        }
+        .item5{
+            padding-top: 30px;
+            padding-bottom: 20px;
+            border-radius: 10px;
+            background-color: white;
+        }
+        .content6{
+            width: 600px;
+            height: 500px;
+            margin: 100px auto;
+            border-radius: 10px;
+            background-color:#f8f8f8;
+        }
+        .item6{
+            padding-top: 20px;
+            padding-bottom: 10px;
+            border-radius: 10px;
+            background-color: white;
+        }
+        .item7{
+            padding-top: 15px;
+            padding-bottom: 15px;
+            border-radius: 10px;
+            background-color: white;
+        }
+        .content8{
+            width: 775px;
+            height: 570px;
+            margin: 100px auto;
+            border-radius: 10px;
+            background-color:#f8f8f8;
+        }
+        .op{
+            width: 240px;
+            margin: 15px auto;
+        }
+        .btn{
+            display: inline-block;
+            width: 80px;
+            height: 30px;
+            text-align: center;
+            line-height: 30px;
+            border: 1px solid #4b72a4;
+            border-radius: 12px;
+        }
+        .btn:first-child{
+            margin-right: 50px;
+        }
+        .btn:last-child{
+            background-color: #4b72a4;
+            color: white;
         }
     </style>
 </head>
-<body class="content">
-<div class="center">
-    <span class="data1" id="data1"></span>
-    <span class="data2" id="data2"></span>
-    <button class="btn1" >联系我们</button>
-    <button class="btn2" ><a href="http://39.103.135.238/login.html">开始使用</a></button>
+<body>
+<table id="apps">
+    <tr>
+        <td></td>
+        <td></td>
+        <td><img class="logo" onclick="showDialog('dlg1')" src="img/pic1.png" alt=""></td>
+        <td></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><img class="logo" onclick="showDialog('dlg2')" src="img/pic2.png" alt=""></td>
+        <td></td>
+        <td><img class="logo" onclick="showDialog('dlg3')" src="img/pic3.png" alt=""></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td><img class="logo" onclick="showDialog('dlg4')" src="img/pic4.png" alt=""></td>
+        <td></td>
+        <td><img src="img/center.png" alt=""></td>
+        <td></td>
+        <td><a href="#"><img class="logo" onclick="showDialog('dlg5')" src="img/pic5.png" alt=""></a></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><a href="#" ><img class="logo" onclick="showDialog('dlg6')" src="img/pic6.png" alt=""></a></td>
+        <td></td>
+        <td><a href="#" ><img class="logo" onclick="showDialog('dlg7')" src="img/pic7.png" alt=""></a></td>
+        <td></td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td><a href="#" ><img class="logo" onclick="showDialog('dlg8')" src="img/pic8.png" alt=""></a></td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+<div id="dlg1" class="dlg">
+    <div class="content">
+        <div class="banner">
+            <span class="dlgTitle">Job直聘</span>
+            <button class="btnClose" onclick="closeDialog('dlg1')"></button>
+        </div>
+        <div class="main">
+            <div class="banner">
+                <img src="img/Job直聘弹框/job直聘.png" alt="">
+            </div>
+            <table>
+                <tr>
+                    <img src="img/Job直聘弹框/数字.png" alt="" style="width: 580px;height: 77px">
+                </tr>
+                <tr>
+                    <td class="item" style="width:50%">
+                        <img src="img/Job直聘弹框/视频.png" alt="" class="logo">
+                        <p class="title">视频面试</p>
+                        <p class="desc">面试不受地域和时间的限制，随时随地发起面试邀请，提高招聘效率。</p>
+                    </td>
+                    <td class="item" style="width:50%">
+                        <img src="img/Job直聘弹框/电子合同申请.png" alt="" class="logo">
+                        <p class="title">电子简历</p>
+                        <p class="desc">在线生成电子简历，实时更新、一键投送。 </p>
+                    </td>
+                </tr>
+                <td class="item">
+                    <img src="img/Job直聘弹框/匹配.png" alt="" class="logo">
+                    <p class="title">能岗匹配</p>
+                    <p class="desc">根据个人求职意向，自动匹配符合要求的岗位，精准推送。</p>
+                </td>
+                <td class="item">
+                    <img src="img/Job直聘弹框/及时沟通.png" alt="" class="logo">
+                    <p class="title">及时沟通</p>
+                    <p class="desc">打开小程序，发现感兴趣的岗位或应聘者，随时沟通。</p>
+                </td>
+                </tr>
+                <tr>
+                    <td class="item">
+                        <img src="img/Job直聘弹框/语音.png" alt="" class="logo">
+                        <p class="title">语音消息</p>
+                        <p class="desc">打字太慢？对方不在线？语音消息帮您即时送达。</p>
+                    </td>
+                    <td class="item">
+                        <img src="img/Job直聘弹框/shuju.png" alt="" class="logo">
+                        <p class="title">大数据分析</p>
+                        <p class="desc">按区域、行业、年龄段、求职意向、招聘岗位等多维度进行数据统计和归类，给政府和第三方机构提供数据支撑。</p>
+                    </td>
+                </tr>
+            </table>
+            <div class="tip">
+                <img src="img/Job直聘弹框/优惠政策.png" alt="">符合要求的应聘者享受就业及培训等相关优惠政策
+            </div>
+            <div class="op">
+                <button class="btn" href="#">联系我们</button>
+                <button class="btn" ><a href="http://www.jobzhipin.com">现在去用</a></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dlg2" class="dlg">
+    <div class="content2">
+        <div class="banner">
+            <span class="dlgTitle">人力资源服务系统</span>
+            <button class="btnClose" onclick="closeDialog('dlg2')"></button>
+        </div>
+        <div class="main">
+            <div class="banner">
+                <img src="img/人力资源服务系统/rlzyfwxt.png" alt="">
+            </div>
+            <table>
+                <tr>
+                    <p class="p1" id="data1"></p>
+                    <p class="p2" id="data2"></p>
+                    <img src="img/人力资源服务系统/数字.png" alt="" style="width: 580px;height: 77px">
+                </tr>
+                <tr>
+                    <td class="item2" style="width:50%">
+                        <img src="img/人力资源服务系统/订单.png" alt="" class="logo">
+                        <p class="desc">客户订单线上结算，根据项目合同，自动生成结算规则。</p>
+                    </td>
+                    <td class="item2" style="width:50%">
+                        <img src="img/人力资源服务系统/工资.png" alt="" class="logo">
+                        <p class="desc">量身定做工资模板，可随时变更、自动同步工资条。</p>
+                    </td>
+                </tr>
+                <td class="item2">
+                    <img src="img/人力资源服务系统/社保.png" alt="" class="logo">
+                    <p class="desc">智能匹配社保、人力成本，一手掌握。</p>
+                </td>
+                <td class="item2">
+                    <img src="img/人力资源服务系统/补差.png" alt="" class="logo">
+                    <p class="desc">支持社保补差、补缴、灵活调动、花名册及参保名册自动校对，让漏参无处可逃。</p>
+                </td>
+                </tr>
+                <tr>
+                    <td class="item2">
+                        <img src="img/人力资源服务系统/个税.png" alt="" class="logo">
+                        <p class="desc">月度数次发薪自动计算个税，支持新个税累计算法。</p>
+                    </td>
+                    <td class="item2">
+                        <img src="img/人力资源服务系统/提醒.png" alt="" class="logo">
+                        <p class="desc">智能提醒：参保逾期、结算逾期、合同到期等即时提醒，避免遗漏，出错。</p>
+                    </td>
+                </tr>
+            </table>
+            <div class="op">
+                <button class="btn" href="#">联系我们</button>
+                <button class="btn" ><a href="http://39.103.135.238/login.html">现在去用</a></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dlg3" class="dlg">
+    <div class="content3">
+        <div class="banner">
+            <span class="dlgTitle">人力管理服务系统</span>
+            <button class="btnClose" onclick="closeDialog('dlg3')"></button>
+        </div>
+        <div class="main">
+            <div class="banner">
+                <img src="img/人力资源管理系统/rlziyuanguanlixitong.png" alt="">
+            </div>
+            <table>
+                <tr>
+                    <td class="item3" style="width:50%">
+                        <img src="img/人力资源管理系统/图层 17.png" alt="" class="logo">
+                        <p class="desc">劳动力信息通过手机终端扫描采集，简单、高效、准确。</p>
+                    </td>
+                    <td class="item3" style="width:50%">
+                        <img src="img/人力资源管理系统/图层 18.png" alt="" class="logo">
+                        <p class="desc">对信息进行归类、优化、并实现共享，避免重复采集。</p>
+                    </td>
+                </tr>
+                <td class="item3">
+                    <img src="img/人力资源管理系统/图层 19.png" alt="" class="logo">
+                    <p class="desc">无缝对接政府就业系统平台，实现数据同步导入。</p>
+                </td>
+                <td class="item3">
+                    <img src="img/人力资源管理系统/图层 20.png" alt="" class="logo">
+                    <p class="desc">在线填报培训意向，精准培训，享受培训优惠政策。</p>
+                </td>
+                </tr>
+                <tr>
+                    <td class="item3">
+                        <img src="img/人力资源管理系统/图层 21.png" alt="" class="logo">
+                        <p class="desc">实名认证、信息双向反馈，就业资金落实到个人，过程可追溯，降低监察风险。</p>
+                    </td>
+                    <td class="item3">
+                        <img src="img/人力资源管理系统/图层 22.png" alt="" class="logo">
+                        <p class="desc">对辖区内人力资源机构和劳动力情况一目了然、动态管控。</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="item3">
+                        <img src="img/人力资源管理系统/图层 23.png" alt="" class="logo">
+                        <p class="desc">数据上报、年检、年审线上审批。</p>
+                    </td>
+                </tr>
+            </table>
+            <div class="op">
+                <button class="btn" href="#">联系我们</button>
+                <button class="btn" ><a href="">现在去用</a></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dlg4" class="dlg">
+    <div class="content4">
+        <div class="banner">
+            <span class="dlgTitle">电子合同</span>
+            <button class="btnClose" onclick="closeDialog('dlg4')"></button>
+        </div>
+        <div class="main">
+            <div class="banner">
+                <img src="img/电子合同/dzhh.png" alt="">
+            </div>
+            <table>
+                <tr>
+                    <td class="item4" style="width:50%">
+                        <img src="img/电子合同/linghuoguanli.png" alt="" class="logo">
+                        <p class="title">灵活部署</p>
+                        <p class="desc">提供业界最最灵活丰富的系统部署方案，保证用户可控性和隐私性。</p>
+                    </td>
+                    <td class="item4" style="width:50%">
+                        <img src="img/电子合同/sifa.png" alt="" class="logo">
+                        <p class="title">司法保障</p>
+                        <p class="desc">联合公证处、仲裁委、司法鉴定权威部门，打造安全无忧的司法保障体系。</p>
+                    </td>
+                </tr>
+                <td class="item4">
+                    <img src="img/电子合同/shibiesudukuai.png" alt="" class="logo">
+                    <p class="title">签约速度快</p>
+                    <p class="desc">3分钟线上签发合同，操作便捷，高效协同。</p>
+                </td>
+                <td class="item4">
+                    <img src="img/电子合同/anquan.png" alt="" class="logo">
+                    <p class="title">安全系数高</p>
+                    <p class="desc">合同管理全流程电子化，区块链证据保全、碎片化加密存储。</p>
+                </td>
+                </tr>
+                <tr>
+                    <td class="item4">
+                        <img src="img/电子合同/jiangdichengben.png" alt="" class="logo">
+                        <p class="title">使用成本低</p>
+                        <p class="desc">无需快递、不占仓储空间，省95%的运营成本。</p>
+                    </td>
+                </tr>
+            </table>
+            <div class="op">
+                <button class="btn" href="#">联系我们</button>
+                <button class="btn" href="#">现在去用</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dlg5" class="dlg">
+    <div class="content4">
+        <div class="banner">
+            <span class="dlgTitle">灵活用工</span>
+            <button class="btnClose" onclick="closeDialog('dlg5')"></button>
+        </div>
+        <div class="main">
+            <div class="banner">
+                <img src="img/灵活用工/linghuoyogngong.png" alt="">
+            </div>
+            <table>
+                <tr>
+                    <td class="item5" style="width:100%">
+                        <img src="img/灵活用工/jiesuan.png" alt="" class="logo">
+                        <p class="title">惠结算</p>
+                        <p class="desc">有效平衡工作与生活、更容易获得不同类型的工作、获得更丰富的经验。</p>
+                    </td>
+                </tr>
+                <td class="item5">
+                    <img src="img/灵活用工/leixing.png" alt="" class="logo">
+                    <p class="title">惠结候选人选择多元化用工的原因</p>
+                    <p class="desc">3分钟线上签发合同，操作便捷，高效协同。</p>
+                </td>
+                </tr>
+                <tr>
+                    <td class="item5">
+                        <img src="img/灵活用工/fangan.png" alt="" class="logo">
+                        <p class="title">所解决的问题</p>
+                        <p class="desc">调整人员结构、降低人力成本；没有编制增加用人灵活性；降低用人风险；解决女性三期问题；季节性人员、需求变化大；非核心岗位人员
+                            流动频繁招聘压力大。</p>
+                    </td>
+                </tr>
+            </table>
+            <div class="op">
+                <button class="btn" href="#">联系我们</button>
+                <button class="btn" ><a href="http://www.xbbpo.com/shxbhr/bk_20318493.html">现在去用</a></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dlg6" class="dlg">
+    <div class="content6">
+        <div class="banner">
+            <span class="dlgTitle">产业园赋能</span>
+            <button class="btnClose" onclick="closeDialog('dlg6')"></button>
+        </div>
+        <div class="main">
+            <div class="banner">
+                <img src="img/产业园赋能/cyyfn.png" alt="">
+            </div>
+            <table>
+                <tr>
+                    <td class="item6" style="width:50%">
+                        <img src="img/产业园赋能/linecar.png" alt="" class="logo">
+                        <p class="desc">为吸引人才、服务人才，柴桑区按照政府、企业合作建的模式，高标准规划建设了柴桑区人力资源服务产业园。</p>
+                    </td>
+                    <td class="item6" style="width:50%">
+                        <img src="img/产业园赋能/fugai.png" alt="" class="logo">
+                        <p class="desc">产业园以公共就业服务、高层次人才服务、社会保障服务、创业孵化服务、人力资源综合服务等功能为一体，以“立足柴桑区，服务全九江
+                            ，辐射江西省”为发展愿景。</p>
+                    </td>
+                </tr>
+                <td class="item6">
+                    <img src="img/产业园赋能/sf.png" alt="" class="logo">
+                    <p class="desc">园区功能齐全、服务配套，建有展示区、会议室、培训室、办公区。</p>
+                </td>
+                <td class="item6">
+                    <img src="img/产业园赋能/sqw.png" alt="" class="logo">
+                    <p class="desc">园区引进九江杰博为运营机构，通过“职畅云互联网+人力资源服务平台”的“赋能、利他”创新型招商合作模式，推动园区发展。</p>
+                </td>
+                </tr>
+                <tr>
+                    <td class="item6">
+                        <img src="img/产业园赋能/sfe.png" alt="" class="logo">
+                        <p class="desc">引才奖励：针对引进的不同层次人才，制定了相对应的配套政策，在落户、个税、住房补贴、奖励、项目孵化、专项基金扶持、创新基金、
+                            大师工作站等全方位的鼓励和支持企业引进高层次人才。</p>
+                    </td>
+                    <td class="item6">
+                        <img src="img/产业园赋能/dc.png" alt="" class="logo">
+                        <p class="desc">孵化人力资源小微企业：整合人力资源服务资源，孵化人力资源服务小微企业，扶持本土化人力资源服务企业发展壮大。发起成立九江市柴
+                            桑区人力资源服务产业协会，带动九江市柴桑区人力资源服务产业协同发展。</p>
+                    </td>
+                </tr>
+            </table>
+            <div class="op">
+                <button class="btn" href="#">联系我们</button>
+                <button class="btn" href="#">现在去用</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dlg7" class="dlg">
+    <div class="content">
+        <div class="banner">
+            <span class="dlgTitle">用工保</span>
+            <button class="btnClose" onclick="closeDialog('dlg7')"></button>
+        </div>
+        <div class="main">
+            <div class="banner">
+                <img src="img/用工保/yongogngbao.png" alt="">
+            </div>
+            <table>
+                <tr>
+                    <td class="item7" style="width:50%">
+                        <img src="img/用工保/hefachaxun.png" alt="" class="logo">
+                        <p class="title">合法合规</p>
+                        <p class="desc">按照银保监会的规定，公司推广网站已在银保监会备案，所有流程合法合规。</p>
+                    </td>
+                    <td class="item7" style="width:50%">
+                        <img src="img/用工保/short.png" alt="" class="logo">
+                        <p class="title">方案多元化</p>
+                        <p class="desc">九种方案，企业根据自身需求量身选择。</p>
+                    </td>
+                </tr>
+                <td class="item7">
+                    <img src="img/用工保/baoxian.png" alt="" class="logo">
+                    <p class="title">低保费、高保额</p>
+                    <p class="desc">以平台为载体和保险公司合作，形成规模效应，降低保险公司风险和企业成本。形成共赢。</p>
+                </td>
+                <td class="item7">
+                    <img src="img/用工保/peifu.png" alt="" class="logo">
+                    <p class="title">承保方式</p>
+                    <p class="desc">月单、当天参保，次日凌晨生效，可随时增员、替换。</p>
+                </td>
+                </tr>
+                <tr>
+                    <td class="item7">
+                        <img src="img/用工保/nianling.png" alt="" class="logo">
+                        <p class="title">承保年龄跨度大</p>
+                        <p class="desc">16-70岁均可参保，解决退休返聘人员、实习学生的用工风险。</p>
+                    </td>
+                    <td class="item7">
+                        <img src="img/用工保/service.png" alt="" class="logo">
+                        <p class="title">赔付快</p>
+                        <p class="desc">4-60个工作日赔付到位。</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="item7">
+                        <img src="img/用工保/kuozhan.png" alt="" class="logo">
+                        <p class="title">承保特别扩展</p>
+                        <p class="desc">承保时间范围扩展至保险期间内全天24小时，而不论是否在工作期间。</p>
+                    </td>
+                    <td class="item7">
+                        <img src="img/用工保/diyu.png" alt="" class="logo">
+                        <p class="title">承保工作地域</p>
+                        <p class="desc">全国。异地工伤全国治，不受参保地和工伤发生地的限制。</p>
+                    </td>
+                </tr>
+            </table>
+            <div class="op">
+                <button class="btn" href="#">联系我们</button>
+                <button class="btn" ><a href="http://custom.bznins.com/product/sinosigup/toProductPage/555468549972430848"style='text-decoration:none;'>现在去用
+                </a></button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="dlg8" class="dlg">
+    <div class="content8">
+        <div class="banner">
+            <span class="dlgTitle">其他服务</span>
+            <button class="btnClose" onclick="closeDialog('dlg8')"></button>
+        </div>
+        <div class="main">
+            <img src="img/qita.png" alt="">
+            <div class="op">
+                <button class="btn" href="#">联系我们</button>
+                <button class="btn" href="#">现在去用</button>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
-<script src="js/jquery.min.js"></script>
-<script src="layui/layui.js"></script>
-<script src="js/interface.js"></script>
-<script src="js/fieldSet.js"></script>
-<script src="js/jquery.params.js"></script>
-<script src="js/queryParam.js"></script>
-<script src="js/date.js"></script>
 <script>
     var param_query = new QueryParam();
     var layer;
     $(function () {
         loadLayuiModule();
     });
+    function showDialog(str) {
+        obj=document.getElementById(str);
+        obj.style.display='block';
+    }
+    function closeDialog(str) {
+        document.getElementById(str).style.display='none';
+    }
     function loadLayuiModule() {
         layui.use(['layer'], function() {
             layer = layui.layer;
@@ -105,12 +670,12 @@
         webInterface.count.getEmployees({param:param_query,success:function (result) {
             var total = result.total;
             console.log("人数"+total);
-            $("#data2").text(total+"人");
+            $("#data2").text(total);
         }});
         webInterface.count.getClients({param:param_query,success:function (result) {
             var total = result.total;
             console.log("单位"+total);
-            $("#data1").text(total+"家");
+            $("#data1").text(total);
         }});
     }
 </script>

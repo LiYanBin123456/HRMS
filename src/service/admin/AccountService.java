@@ -2,6 +2,7 @@ package service.admin;
 
 import bean.admin.Account;
 import bean.client.Dispatch;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import dao.admin.AccountDao;
 import dao.client.DispatchDao;
@@ -68,9 +69,12 @@ public class AccountService {
         return AccountDao.get(conn,account);
     }
 
-    public static DaoUpdateResult insertAccount(Connection conn, Account account) {
-        Dispatch dispatch = (Dispatch) DispatchDao.get(conn,account.getRid()).data;
-
-        return null;
+    public static String insertAccount(Connection conn, Account account) {
+        DaoExistResult res1 = AccountDao.isExist(conn,account.getUsername());
+        if(res1.exist){
+            return DaoResult.fail("该账号已经存在");
+        }
+        DaoUpdateResult result = AccountDao.insert(conn,account);
+        return JSONObject.toJSONString(result);
     }
 }

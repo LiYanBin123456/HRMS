@@ -3,7 +3,7 @@
 
     <head>
         <meta charset="UTF-8">
-        <title></title>
+        <title>劳务派遣结算单审核</title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
@@ -12,48 +12,50 @@
         <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
         <script src="../layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
-        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
-        <!--[if lt IE 9]>
-          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-        <![endif]-->
-        <style>
-            .searchbox{
-                margin-left:100px;
-                display:inline;
-                width:300px;
-            }
-        </style>
     </head>
 
     <body class="layui-layout-body">
-        <!--顶部工具栏-->
-        <div class="layui-hide" id="top_bar_audit">
-            <form class="layui-form ">
-                <div class="layui-input-inline">
-                         <div class="layui-inline"><input type="radio" name="se" value="待审核" title="待审核" checked></div>
-                         <div class="layui-inline searchbox"><input type="radio" name="se" value="全部" title="全部" ></div>
-                </div>
-            </form>
+        <form class="layui-form " style="display: inline">
+            <div class="layui-input-inline">
+                     <input type="radio" name="status" value="0" title="待审核" lay-filter="status" checked="checked" >
+                     <input type="radio" name="status" value="1" title="全部" lay-filter="status" >
+            </div>
+        </form>
+        <div id="container">
+        <table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>
         </div>
-        <table id="tbl_audit" lay-filter="filter_tb_audit"></table>
         <div class="layui-table-page" id="pager"></div>
 
         <!--行内工具栏-->
-        <script type="text/html" id="bar_audit2">
+        <script type="text/html" id="bar_settlement">
             <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>明细</a>
-            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="log"><i class="layui-icon layui-icon-edit"></i>审核</a>
+            {{#  if((level==0 && d.status==1)||(level==1 && d.status==2)){ }}
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="check"><i class="layui-icon layui-icon-edit"></i>审核</a>
+            {{#  } }}
         </script>
         <script src="../js/fieldSet.js"></script>
         <script src="../js/interface.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.params.js"></script>
+        <script src="../js/queryParam.js"></script>
+        <script src="../js/date.js"></script>
+        <script src="../js/string.js"></script>
         <script>
+            var category = $.query.get("category");//普通/小时工/商业保险/特殊结算单
+            var level = $.query.get("level");//初审或终审
+            var status = level==0?1:2;//查询的状态条件
             var table;//数据表格对象
             var laypage;//分页对象
             var form;//分页对象
             var layer;//弹出窗口
             var element;
             var param_query = new QueryParam();
-            param_query.setOrder("date",false);
+            if(category == 1) {
+                var type = $.query.get("type");//普通结算单中的劳务派遣/劳务外包/代发工资/代缴社保
+                param_query.addCondition("type", "=", type);
+            }
+            param_query.addCondition("status","=",status);//添加获取类型为派遣的结算单条件
+            param_query.setOrder("id",false);
             param_query.setPagination(1,10);
             $(function () {
                 loadLayuiModule();
@@ -70,77 +72,134 @@
                 });
             }
 
+
+
             function initPage() {
                 initTable();
+                form.on('radio(status)', function(data){
+                    switchStatus(Number(data.value));
+                });
+            }
+
+            function switchStatus(value) {
+                $("#container").empty();
+                $("#container").append('<table id="tbl_settlement" lay-filter="filter_tb_settlement"></table>');
+
+                if(value == 0){
+                    param_query.addCondition("status","=",status);
+                }else{
+                    param_query.removeCondition("status")
+                }
+                initTable()
             }
 
             function initTable() {
-                //初始化分页
-                laypage.render({
-                    elem: 'pager'
-                    ,count: 10 //数据总数
-                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
-                    ,jump: function(obj,first){
-                        //首次不执行
-                        if(!first){
-                            param_query.pagination.page = obj.curr;
-                            param_query.pagination.size = obj.limit;
-                            getAudits();
-                        }
-                    }
-                });
-
+                var cols = columns_settlement1;
+                switch(category){
+                    case 2:
+                        cols = columns_settlement2;
+                        break;
+                    case 3:
+                        cols = columns_settlement3;
+                        break;
+                    case 4:
+                        cols = columns_settlement4;
+                        break;
+                }
                 //初始化数据表格
                 table.render({
-                    elem: '#tbl_audit',
-                    toolbar: '#top_bar_audit', //开启头部工具栏，并为其绑定左侧模板
-
-                    title: '列表',
-                    cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_settlement1,
-                    id: 'tbl_audit'
+                    elem: '#tbl_settlement', //开启头部工具栏，并为其绑定左侧模板
+                    cols: cols,
+                    limit: 200,
+                    id: 'tbl_settlement'
                 });
 
                 //行内工具栏事件响应
-                table.on('tool(filter_tb_audit;)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
-                    var data = obj.data; //获得当前行数据
+                table.on('tool(filter_tb_settlement)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                    var settlement = obj.data; //获得当前行数据
                     switch (obj.event){
                         case "detail":
-                            showDetailDlg();
+                            showDetailDlg(settlement);
                             break;
-                        case "log":
-                            showLogDlg();
+                        case "check":
+                            check(settlement);
                             break;
                     }
                 });
-
                 //顶部工具栏事件处理
-
-
-                getAudits();
+                getSettlements();
             }
 
-            function getAudits() {
-                var result = {total:100,rows:[{month:"2020-06",sort:"",money:"5000",state:"申报中"},{month:"2020-06",sort:"",money:"12000",state:"已审核"}]};
-                table.reload('tbl_audit', {
-                    data:result.rows
-                });
+            function getSettlements() {
+                webInterface.settlement.getList({param:param_query,category:category,success:function (result) {
+                    table.reload('tbl_settlement', {
+                        data:result.rows
+                    });
+                    //初始化分页
+                    laypage.render({
+                        elem: 'pager'
+                        ,curr:param_query.pagination.page
+                        ,count: result.total //数据总数
+                        ,limit: param_query.pagination.size
+                        ,limits: [10, 20, 50, 100, 200]
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                        ,jump: function(obj,first){
+                            //首次不执行
+                            if(!first){
+                                param_query.setPagination(obj.curr,obj.limit);
+                                getSettlements();
+                            }
+                        }
+                    });
+                }});
             }
 
-            //模糊查找
 
             //打开明细对话框
-            function showDetailDlg() {
-                var content = "../dialog/detail.html";
+            function showDetailDlg(settlement) {
+                var url = "../dialog/detail1.html";
+                switch(category){
+                    case 2:
+                        url = "../dialog/detail2.html";
+                        break;
+                    case 3:
+                        url = "../dialog/detail3.html";
+                        break;
+                    case 4:
+                        url = "../dialog/detail4.html";
+                        break;
+                }
+                var content = url+"?settlement="+encodeURIComponent(JSON.stringify(settlement));
                 layer.open({
                     title:"明细",
                     type: 2,
-                    area: ['1200px', '600px'],
+                    area: ['90%', '90%'],
                     content: content
                 });
             }
 
-
+            //审核
+            function check(settlement) {
+                var content = "../dialog/check.html";
+                layer.open({
+                    title:"审核 ["+settlement.name+dateUtil.format_month(settlement.month)+"]",
+                    type: 2,
+                    area: ['300px', '300px'],
+                    content: content,
+                    btn: ['提交', '取消']
+                    ,yes: function(index, layero){
+                        var result = window["layui-layer-iframe" + index].callbackData();
+                        layer.close(index);
+                        webInterface.settlement.check({category:category,id:settlement.id,level:level,pass:result.pass,reason:result.reason,success:function () {
+                            layer.close(index);
+                            getSettlements();
+                            layer.msg('审核成功');
+                        }});
+                    },btn2: function(index, layero){
+                        layer.close(index);
+                    }
+                });
+            }
         </script>
     </body>
 </html>

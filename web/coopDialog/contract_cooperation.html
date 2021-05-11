@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>合作客户合同</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8"/>
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+        .preview_contact{
+            display: block;
+            width: 600px;
+            height: 300px;
+        }
+    </style>
+</head>
+<body>
+<div class="layui-tab layui-tab-brief" lay-filter="tab_contracts">
+    <ul class="layui-tab-title">
+        <li class="layui-this">基础信息</li>
+        <li>服务项目</li>
+        <li>复印件</li>
+    </ul>
+    <div class="layui-tab-content">
+        <div class="layui-tab-item layui-show">
+            <form lay-filter="form_contract" class="layui-form">
+                <input type='hidden' name='id'/>
+                <input type='hidden' name='bid'/>
+                <input type='hidden' name='type'/>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">合作客户</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" class="layui-input" readonly disabled>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>合同生效时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="start" required="" id="contract_cooperation_start" placeholder=""  autocomplete="off"
+                               class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>合同到期时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="end" required="" id="contract_cooperation_end" placeholder=""  autocomplete="off"
+                               class="layui-input"></div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>发票类型</label>
+                    <div class="layui-input-inline">
+                        <select name="invoice" lay-filter="invoices" lay-verify="required">
+                            <option value="0">增值税专用发票（全额）</option>
+                            <option value="1">增值税专用发票（差额）</option>
+                            <option value="2">增值税普通发票（全额）</option>
+                            <option value="3">增值税普通发票（差额）</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item" name ="r1">
+                    <label class="layui-form-label">税费比例</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="per" required="" placeholder="%" autocomplete="off" class="layui-input"></div>
+                    <label>%</label>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">
+                        <span class="x-red">*</span>开票项目</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="project" required="" autocomplete="off" class="layui-input"></div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <textarea name="comments" placeholder="请输入内容" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item" style="text-align: center" >
+                    <button type="button" class="layui-btn " onclick="saveContract()" >保存</button>
+                </div>
+            </form>
+        </div>
+        <div class="layui-tab-item">
+            <form lay-filter="form_service" class="layui-form">
+                <input type='hidden' name='cid' />
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span class="x-red">*</span>服务项目</label>
+                    <div class="layui-input-inline">
+                        <select name="type" lay-filter="service">
+                            <option value="0">劳务外包派遣</option>
+                            <option value="1">人事服务代理</option>
+                            <option value="2">小时工</option>
+                            <option value="3">商业保险</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item" name="c1">
+                    <label class="layui-form-label">工资发放日</label>
+                    <div class="layui-inline">
+                        <input type="text" name="payment" required="" placeholder="工资发放日" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item" name="c1">
+                    <label class="layui-form-label">结算日</label>
+                    <div class="layui-inline">
+                        <input type="text" name="settlement" required="" placeholder="结算日" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item" name="c1">
+                    <label class="layui-form-label">回款日</label>
+                    <div class="layui-inline">
+                        <input type="text" name="receipt" required="" placeholder="回款日" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item" name="c1">
+                    <label class="layui-form-label">结算方式</label>
+                    <div class="layui-input-inline">
+                        <select name="category" lay-filter="category" lay-verify="required">
+                            <option value="0">按人数收取</option>
+                            <option value="1">按费用总额比例</option>
+                            <option value="2">外包整体核算</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-hide" name="c3">
+                    <label class="layui-form-label">工资发放</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="payer" value="0" title="派遣单位" checked>
+                        <input type="radio" name="payer" value="1" title="合作单位">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-hide" name="c4">
+                    <label class="layui-form-label">保险产品</label>
+                    <div class="layui-input-inline">
+                        <select name="pid" id="select_product" lay-filter="filter_product" lay-verify="required"></select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label" id="title">管理费</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="value" required="" placeholder="" autocomplete="off" class="layui-input">
+                    </div>
+                    <label id="unit">元</label>
+                </div>
+                <div class="layui-form-item" style="text-align: center" >
+                    <button type="button" class="layui-btn " onclick="saveService()">保存</button>
+                </div>
+            </form>
+        </div>
+        <div class="layui-tab-item">
+            <form class="layui-form" >
+                <div id="container_contract" class="layui-form-item layui-form-text">
+                    <embed id="preview_contact" class="preview_contact">
+                </div>
+                <div class="layui-form-item" style="text-align: center">
+                    <button type="button" class="layui-btn" id="btn_upload"><i class="layui-icon">&#xe67c;</i>上传pdf</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.params.js"></script>
+<script src="../js/interface.js"></script>
+<script src="../js/fieldSet.js"></script>
+<script src="../js/date.js"></script>
+<script src="../layui/layui.js"></script>
+<script src="../js/queryParam.js"></script>
+<script>
+
+    var serve;
+    var form;//表单对象
+    var editer;
+    var upload;
+    var element;
+    var laydate;
+    var contract;
+    var param_query_product = new QueryParam();
+    loadLayuiModule();
+    var products;
+    function loadLayuiModule() {
+        layui.use(['form', 'layedit', 'jquery', 'upload','element','laydate'], function () {
+            form = layui.form;
+            layedit = layui.layedit;
+            editer = layedit.build('content'); //建立编辑器
+            upload = layui.upload;
+            element = layui.element;
+            laydate = layui.laydate;
+            upload.render({
+                elem: '#btn_upload' //绑定元素
+                , url: '/verify/file' //上传接口
+                , accept: 'file'
+                , exts: 'pdf'
+                , acceptMime: '.pdf'
+                ,before: function(obj,file,id){
+                    obj.preview(function(index, file, result){
+                        $('#preview_contact').attr('src', "../images/PDF.png"); //图片链接（base64）
+                    });
+                    this.data={op:"upload",category:2,id:contract.id}
+                    layer.msg("正在上传");
+                }
+                , done: function (res) {
+                    //直接修改src无法刷新，只能重新操作dom
+                    var src = "../accessory/contract2/"+contract.id+".pdf";
+                    $('#preview_contact').parent().empty();
+                    $('#container_contract').append("<embed id='preview_contact' class='preview_contact' src='"+src+"'></embed>");
+
+                    layer.msg("上传成功");
+                }
+                , error: function () {
+                    //请求异常回调
+                }
+            });
+            laydate.render({
+                elem: '#contract_cooperation_start'
+            });
+            laydate.render({
+                elem: '#contract_cooperation_end'
+            });
+            initPage();
+            getService();
+            //initCooperation();
+            //initProduct();
+        });
+    }
+
+    function initPage() {
+        contract = JSON.parse($.query.get("contract"));
+        contract.start = dateUtil.format_date(contract.start);
+        contract.end = dateUtil.format_date(contract.end);
+        form.val('form_contract', contract);
+        layedit.setContent(editer, contract.content, false);
+        webInterface.file.exist({category:2,id:contract.id,success:function (result) {
+            if(result.exist){
+                var src = "../accessory/contract2/"+contract.id+".pdf";
+                $('#preview_contact').attr('src', src); //图片预览
+            }else {
+                $("#preview_contact").text("合同附件不存在，请上传");
+            }
+        }});
+
+        form.on('select(service)', function(data){
+            showContent(Number(data.value));
+        });
+
+        form.on('select(category)', function(data){
+            showCategory(Number(data.value));
+        });
+
+        form.on('select(invoices)', function(data){
+            var  invoices = data.value;
+            if(invoices == 0){
+                $("[name=r1]").removeClass("layui-hide");
+            }else{
+                $("[name=r1]").addClass("layui-hide");
+            }
+        });
+    }
+
+    //根据服务项目显示相应的内容
+    function showContent(type) {
+        switch(type){
+            case 0:
+                $("[name=c1]").removeClass("layui-hide");
+                $("[name=c3]").addClass("layui-hide");
+                $("[name=c4]").addClass("layui-hide");
+                $("#title").text("服务费");
+                $("#unit").text("元/人/月");
+                break;
+            case 1:
+                $("[name=c1]").addClass("layui-hide");
+                $("[name=c3]").addClass("layui-hide");
+                $("[name=c4]").addClass("layui-hide");
+                $("#title").text("代理服务费");
+                $("#unit").text("元/人/月");
+                break;
+            case 2:
+                $("[name=c1]").addClass("layui-hide");
+                $("[name=c3]").removeClass("layui-hide");
+                $("[name=c4]").addClass("layui-hide");
+                $("#title").text("单价");
+                $("#unit").text("元/小时");
+                break;
+            case 3:
+                $("[name=c1]").addClass("layui-hide");
+                $("[name=c3]").addClass("layui-hide");
+                $("[name=c4]").removeClass("layui-hide");
+                $("#title").text("单价");
+                $("#unit").text("元/人/月");
+                if (products==null||products=="undefined"){
+                    initProduct();
+                }
+                break;
+
+        };
+    }
+
+    //根据劳务外包派遣的结算方式显示相应的内容
+    function showCategory(category) {
+        switch(category){
+            case 0:
+                $("#title").text("单价");
+                $("#unit").text("元/人/月");
+                break;
+            case 1:
+                $("#title").text("比例");
+                $("#unit").text("%");
+                break;
+            case 2:
+                $("#title").text("比例");
+                $("#unit").text("%");
+                break;
+
+        };
+    }
+
+    function getService () {
+        if(contract && contract.id) {
+            webInterface.contract.getService({id:contract.id, success:function (result) {
+                if(result.data){
+                    serve = result.data;
+                    form.val('form_service', serve);
+                    showContent(serve.type);
+                    showCategory(serve.category);
+                }
+            }});
+        }
+    }
+
+    function initCooperation() {
+        webInterface.client.getList({category:1,success:function(result){
+            var cooperations = result.rows;
+            var select_cooperation = $("#select_cooperation");
+            select_cooperation.append("<option value='-2' disabled hidden>选择合作客户</option>");
+            for(var i in cooperations){
+                var cooperation = cooperations[i];
+                if (cooperation.type == 0) {
+                    var option = $("<option>").val(cooperation.id).text(cooperation.name);
+                }
+                if(contract && contract.bid == cooperation.id){
+                    $(option).prop("selected",true);
+                }
+                select_cooperation.append(option);
+            }
+            form.render('select', 'form_contract');
+        }});
+    }
+
+    function initProduct(){
+        webInterface.product.getList({param:param_query_product,success:function(result){
+            products = result.rows;
+            var select_product = $("#select_product");
+            select_product.append("<option value='-2' disabled hidden selected>选择商业保险</option>");
+            for(var i in products){
+                var product = products[i];
+                var option1 = $("<option>").val(product.id).text(product.name);
+                if(serve && serve.pid == product.id){
+                    $(option1).prop("selected",true);
+                }
+                select_product.append(option1);
+            }
+            form.render('select', 'form_service');
+        }});
+    }
+
+    function download(){
+        webInterface.file.exist({category:2,id:contract.id,success:function (result) {
+            if(!result.exist){
+                layer.msg("附件不存在或已删除");
+                return;
+            }
+
+            var url = "/verify/file?op=downloadContract&id="+contract.id;
+            var form = $('<form method="POST"></form>');
+            form.attr('action', url);
+            form.appendTo($('body'));
+            form.submit();
+            form.remove();
+        }});
+    }
+
+    function saveContract() {
+        contract = form.val('form_contract');
+        console.log("contract:"+contract);
+        if(contract.id) {
+            webInterface.contract.update({contract:contract,success:function (result) {
+                layer.msg("修改成功");
+            }});
+        } else {
+            webInterface.contract.insert({contract:contract, success:function (result) {
+                layer.alert("添加成功", {icon: 6});
+                contract.id = result.extra;
+                form.val('form_contract',contract);
+            }});
+        }
+    }
+
+    function saveService() {
+        if(!contract || !contract.id ){
+            layer.msg("请先保存合同基本信息");
+            return;
+        }
+        var data = form.val('form_service');
+        data.cid = contract.id;
+        if (serve) {
+            webInterface.contract.updateService({contract:data,success:function (result) {
+                layer.msg("修改成功");
+            }});
+        } else {
+            webInterface.contract.insertService({contract:data, success:function (result) {
+                layer.msg("添加成功");
+            }});
+        }
+        serve = data;
+    }
+</script>
+
+</html>

@@ -11,7 +11,6 @@ import java.sql.Connection;
 public class ContractService {
     public static DaoQueryListResult getList(Connection conn, QueryParameter parameter, String type, Account user) {
 
-
         return ContractDao.getList(conn,parameter,type,user);
     }
 

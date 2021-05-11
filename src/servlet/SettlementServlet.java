@@ -2,10 +2,12 @@ package servlet;
 
 
 import bean.admin.Account;
+import bean.client.Cooperation;
 import bean.employee.Employee;
 import bean.settlement.*;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import dao.client.CooperationDao;
 import dao.settlement.*;
 import database.*;
 import service.settlement.*;
@@ -40,6 +42,9 @@ public class SettlementServlet extends HttpServlet {
         switch (op) {
             case "getList"://获取所有客户清单
                 result = getList(conn, request);
+                break;
+            case "getEmployeeDetail"://获取该员工的工资清单
+                result = getEmployeeDetail(conn, request);
                 break;
             case "insert"://添加
                 result = insert(conn, request);
@@ -115,6 +120,14 @@ public class SettlementServlet extends HttpServlet {
         out.flush();
         out.close();
 
+    }
+    //获取列表
+    private String getEmployeeDetail(Connection conn, HttpServletRequest request) {
+        String cardId = request.getParameter("cardId");
+        QueryParameter param = JSONObject.parseObject(request.getParameter("param"),QueryParameter.class);
+        param.addCondition("cardId","=",cardId);
+        DaoQueryListResult result =Detail1Dao.getList(conn,param);
+        return JSONObject.toJSONString(result);
     }
 
     /*//修改普通结算单额外信息
@@ -334,7 +347,18 @@ public class SettlementServlet extends HttpServlet {
         long id = Long.parseLong(request.getParameter("id"));//结算单id
         DaoUpdateResult result = null;
         HttpSession session = request.getSession();
-        long did = ((Account) session.getAttribute("account")).getRid();//当前操作的管理员所属公司id
+        Account account = (Account) session.getAttribute("account");
+        long did=0;//派遣单位id
+        long cid=0;//合作单位id
+        if(account.getRole()==Account.ROLE_DISPATCH){
+            did=account.getRid();
+        }else if(account.getRole()==Account.ROLE_COOPERATION){//合作单位
+            //获取派遣单位的id（did）
+            QueryConditions conditions = new QueryConditions();
+            conditions.add("id","=",account.getRid());
+            Cooperation coop = (Cooperation) CooperationDao.get(conn,conditions).data;
+            did=coop.getDid();
+        }
         try {
             switch (category){
                 case 1://普通结算单

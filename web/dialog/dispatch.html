@@ -175,13 +175,12 @@
         </div>
         <div class="layui-tab-item dialog-content">
             <form lay-filter="form_permission" class="layui-form">
-                <fieldset class="layui-elem-field layui-field-title">
-                    <legend>角色</legend>
-                </fieldset>
-                <form lay-filter="form_role" class="layui-form">
-                    <input type="radio" lay-filter="role" name="role" value="0,0" title="客服" checked>
-                    <input type="radio" lay-filter="role" name="role" value="524288,0" title="管理员">
-                </form>
+                <!--<fieldset class="layui-elem-field layui-field-title">-->
+                    <!--<legend>角色</legend>-->
+                <!--</fieldset>-->
+                <!--<form lay-filter="form_role" class="layui-form">-->
+                    <!--<input type="radio" lay-filter="role" name="role" value="524288,0" title="管理员" checked>-->
+                <!--</form>-->
                 <fieldset class="layui-elem-field layui-field-title">
                     <legend>权限分配</legend>
                 </fieldset>
@@ -205,6 +204,7 @@
     var finance;
     var account={role:1,rid:0};
     var tree;
+    var op="insert";//默认管理员账号未插入状态
     loadLayuiModule();
 
     function loadLayuiModule() {
@@ -256,7 +256,6 @@
             return false;
         });
     }
-
     function getDispatch() {
         var id = $.query.get("id");
         if(id){
@@ -267,7 +266,6 @@
             }});
         }
     }
-
     function getFinance() {
         if(dispatch && dispatch.id) {
             webInterface.client.getFinance({id:dispatch.id,category:0, success:function (result) {
@@ -371,7 +369,6 @@
         }
         finance = data;
     }
-
     function getAccount() {
         if(dispatch && dispatch.id) {
             account.role=1;
@@ -381,6 +378,7 @@
                 if(result.data) {
                     account =result.data;
                     form.val('form_account', account);
+                    op="update";
                 }
             }});
         }
@@ -400,7 +398,7 @@
             return;
         }
         data.cid = dispatch.id;
-        if (account) {
+        if (op == "update") {
             webInterface.account.update({account:data,success:function (result) {
                 layer.msg("修改成功");
             }});
@@ -416,22 +414,19 @@
         }
         account = data;
     }
-
     function cancel(){
         var index = parent.layer.getFrameIndex(window.name);
         parent.layer.close(index);
     }
-
-
     function initData() {
-        account = JSON.parse($.query.get("account"));
+//        account = JSON.parse($.query.get("account"));
+        getAccount();
         var permission = account.permissionString;
-        if(bit_test(permission,"524288,0")){
-            form.val('form_role',{role:"524288,0"});
-        }else{
-            form.val('form_role',{role:"0,0"});
-        }
-
+//        if(bit_test(permission,"524288,0")){
+//            form.val('form_role',{role:"524288,0"});
+//        }else{
+//            form.val('form_role',{role:"0,0"});
+//        }
         var checkeds = [];
         for(var i in menuItems_dispatch){
             var item = menuItems_dispatch[i];
@@ -451,7 +446,6 @@
         }
         tree.setChecked("tree_permission",checkeds);
     }
-
     function savePermission() {
         var items = tree.getChecked('tree_permission');
         var permit = 0;
@@ -465,8 +459,8 @@
                 permit += calc(items[i].id);
             }
         }
-        var data = form.val('form_role');
-        permit += calc(data.role);
+//        var data = form.val('form_role');
+        permit += calc("524288,0");
 
         webInterface.account.permit({id:account.id,permit:permit,success:function (result) {
             layer.msg("权限分配成功！");// 获得frame索引

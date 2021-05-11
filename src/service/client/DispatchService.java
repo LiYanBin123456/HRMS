@@ -26,16 +26,16 @@ public class DispatchService {
 
     public static String insert(Connection conn, Dispatch dispatch) {
         ConnUtil.closeAutoCommit(conn);
-        Account account = new Account();
-        account.setUsername(dispatch.getNickname());
-        account.setNickname(dispatch.getNickname());
-        account.setRole(Account.ROLE_DISPATCH);
-        account.setPassword(dispatch.getPhone());
-        account.setRid(dispatch.getId());
-        account.setPermission(2251832025939967L);
+//        Account account = new Account();
+//        account.setUsername(dispatch.getNickname());
+//        account.setNickname(dispatch.getNickname());
+//        account.setRole(Account.ROLE_DISPATCH);
+//        account.setPassword(dispatch.getPhone());
+//        account.setRid(dispatch.getId());
+//        account.setPermission(2251832025939967L);
         DaoUpdateResult res1 = DispatchDao.insert(conn,dispatch);
-        DaoUpdateResult res2 = AccountDao.insert(conn,account);
-        if(res1.success && res2.success){
+//        DaoUpdateResult res2 = AccountDao.insert(conn,account);
+        if(res1.success){
             ConnUtil.commit(conn);
             return JSONObject.toJSONString(res1);
         }else{

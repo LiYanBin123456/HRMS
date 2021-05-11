@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>员工附加信息</title>
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <script type="text/javascript" src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+    <style>
+        .headImg{
+            width: 240px;
+            height: 305px;
+            border: 1px solid grey;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form lay-filter="form_extra" class="layui-form layui-row">
+        <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <input type="hidden" name="eid">
+            <div class="layui-form-item">
+                <label class="layui-form-label">档案编号</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="rid" required="" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">毕业学校</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="school" required="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">毕业专业</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="major" required="" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">户口性质</label>
+                <div class="layui-input-inline">
+                    <select name="household">
+                        <option value=""></option>
+                        <option value="0">外地城镇</option>
+                        <option value="1">本地城镇</option>
+                        <option value="2">外地农村</option>
+                        <option value="3">城镇</option>
+                        <option value="4">农村</option>
+                        <option value="5">港澳台</option>
+                        <option value="6">外籍</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">户籍地址</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="address" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">离职时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="date1" name="date1" class="layui-input layui-disabled" disabled>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">退休时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="date2" name="date2" class="layui-input layui-disabled" disabled>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">离职原因</label>
+                <div class="layui-input-inline">
+                    <input type="hidden" name="reason">
+                    <input type="text" name="reasonText" class="layui-input layui-disabled" disabled>
+                </div>
+            </div>
+            <button type="button" class="layui-btn layui-btn-fluid" lay-submit lay-filter="saveExtra">保存</button>
+        </div>
+        <div class="layui-col-xs6 layui-col-sm6 layui-col-md6">
+            <div class="layui-form-item" >
+                <div class="layui-input-block">
+                    <img id="headImg" alt="请上传照片" class="headImg">
+                </div>
+            </div>
+            <div class="layui-form-item" >
+                <div class="layui-input-block">
+                    <button type="button" class="layui-btn" id="btn_upload">上传照片</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</body>
+<script src="../js/jquery.min.js"></script>
+<script src="../js/jquery.params.js"></script>
+<script src="../js/interface.js"></script>
+<script src="../js/xadmin.js"></script>
+<script src="../js/date.js"></script>
+<script src="../js/fieldSet.js"></script>
+<script>
+    layui.use(['form', 'upload'], function () {
+        eid = $.query.get("eid");
+        var op = 'insert';//更新还是新增
+        var layform = layui.form;
+        var upload = layui.upload;
+        upload.render({
+            elem: '#btn_upload' //绑定元素
+            , url: '/verify/file' //上传接口
+            , accept: 'file'
+            , exts: 'jpg'
+            , acceptMime: '.jpg'
+            ,before: function(obj,file,id){
+                obj.preview(function(index, file, result){
+                    $('#headImg').attr('src', result); //图片预览
+                });
+                this.data={op:"upload",category:0,id:employee.id}
+            }
+            , done: function (res) {
+                layer.msg(res.success?"上传成功":"上传失败");
+            }
+            , error: function () {
+                //请求异常回调
+            }
+        });
+
+        initPage();
+
+        function initPage() {
+            layform.on('submit(saveExtra)', function (data) {
+                saveExtra(data.field);
+            });
+            getExtra();
+        }
+
+        function getExtra() {
+            webInterface.employee.getExtra({id:eid,success:function (result) {
+                var extra = result.data;
+                if(extra) {
+                    op = 'update';
+                    showExtra(extra);
+                }
+            }});
+
+            function showExtra(extra) {
+                extra.date1 = dateUtil.format_date(extra.date1);
+                extra.date2 = dateUtil.format_date(extra.date2);
+                extra.reasonText = array_value2text(reason_employee,extra.reason);
+                layform.val('form_extra', extra);
+
+                var src = "../accessory/headImg/"+eid+".jpg?t="+Math.random();
+                $('#headImg').attr('src', src); //图片预览
+            }
+        }
+
+        function saveExtra(extra) {
+            if(op == "update"){
+                webInterface.employee.updateExtra({extra:extra,success:function (res) {
+                    layer.msg("保存成功");
+                }});
+            }else{
+                extra.eid = eid;
+                webInterface.employee.insertExtra({extra:extra,success:function (res) {
+                    op = "update";
+                    layform.val('form_extra',extra);
+                    layer.msg("保存成功");
+                }});
+            }
+        }
+    });
+</script>
+
+</html>

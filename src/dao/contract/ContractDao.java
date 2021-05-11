@@ -19,7 +19,7 @@ public class ContractDao {
         if(user.isAdmin()) {
             parameter.addCondition("aid", "=", user.getRid());
         }else {
-            parameter.addCondition("admin", "=", user.getId());
+            parameter.addCondition("aid", "=", user.getId());
         }
         if(parameter.conditions.extra!=null && !parameter.conditions.extra.isEmpty()) {
             parameter.addCondition("concat(name,comments)","like",parameter.conditions.extra);

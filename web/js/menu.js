@@ -96,47 +96,51 @@ var menuItems_dispatch = [
  * 合作方菜单项
  */
 var menuItems_cooperation = [
-    {id:"0,3",title:"员工管理",icon:"&#xe770",children:
+    {id:"0,7",title:"信息管理",icon:"&#xe66f",children:
         [
-            {id:"0,1",   title:"员工管理",href:"employees1.html",icon:"&#xe602"},
-            {id:"0,2",   title:"合同管理",href:"contracts_employee.html",icon:"&#xe602"}
+            {id:"0,1",   title:"单位信息",href:"cooperations.html",icon:"&#xe602"},
+            {id:"0,4",   title:"合同管理",href:"contracts_cooperation.html",icon:"&#xe602"}
         ]
     },
-    {id:"0,12",title:"劳务派遣",icon:"&#xe6a7",children:
+    {id:"0,120",title:"员工管理",icon:"&#xe770",children:
         [
-            {id:"0,4",   title:"结算单",href:"settlements.html",icon:"&#xe602"},
-            {id:"0,8",   title:"汇总统计",href:"check.html",icon:"&#xe602"},
+            {id:"0,16",   title:"派遣员工",href:"employees2.html",icon:"&#xe602"},
+            {id:"0,64",   title:"合同管理",href:"contracts_employee.html",icon:"&#xe602"}
         ]
     },
-    {id:"0,48",title:"劳务外包",icon:"&#xe6a7",children:
+    {id:"0,896",title:"劳务派遣",icon:"&#xe63c",children:
         [
-            {id:"0,16",   title:"结算单",href:"settlements12.html",icon:"&#xe602"},
-            {id:"0,32",   title:"汇总统计",href:"check12.html",icon:"&#xe602"},
+            {id:"0,128",   title:"结算",href:"settlements.html?category=1&type=1",icon:"&#xe602"},
+            {id:"0,256",   title:"初审",href:"check.html?category=1&level=0&type=1",icon:"&#xe602"}
         ]
     },
-    {id:"0,192",title:"代发工资",icon:"&#xe6a7",children:
+    {id:"0,7168",title:"劳务外包",icon:"&#xe63c",children:
         [
-            {id:"0,64",   title:"结算单",href:"settlements13.html",icon:"&#xe602"},
-            {id:"0,128",   title:"汇总统计",href:"check13.html",icon:"&#xe602"},
+            {id:"0,1024",   title:"结算",href:"settlements.html?category=1&type=2",icon:"&#xe602"},
+            {id:"0,2048",   title:"初审",href:"check.html?category=1&level=0&type=2",icon:"&#xe602"}
         ]
     },
-    {id:"0,768",title:"代缴社保",icon:"&#xe6a7",children:
+    {id:"0,57344",title:"代发工资",icon:"&#xe63c",children:
         [
-            {id:"0,256",   title:"结算单",href:"settlements14.html",icon:"&#xe602"},
-            {id:"0,512",   title:"汇总统计",href:"check14.html",icon:"&#xe602"},
+            {id:"0,8192",   title:"结算",href:"settlements.html?category=1&type=3",icon:"&#xe602"},
+            {id:"0,16384",   title:"初审",href:"check.html?category=1&level=0&type=3",icon:"&#xe602"}
         ]
     },
-    {id:"0,3072",title:"小时工",icon:"&#xe6a7",children:
+    {title:"代缴社保",id:"0,458752",icon:"&#xe63c",children:
         [
-            {id:"0,1024",   title:"结算单",href:"settlements2.html",icon:"&#xe602"},
-            {id:"0,2048",   title:"汇总统计",href:"check2.html",icon:"&#xe602"},
+            {id:"0,65536",   title:"结算",href:"settlements.html?category=1&type=4",icon:"&#xe602"},
+            {id:"0,131072",   title:"初审",href:"check.html?category=1&level=0&type=4",icon:"&#xe602"}
         ]
     },
-    {title:"商业保险",id:"0,28672",icon:"&#xe6a7",children:
+    {title:"小时工",id:"0,3670016",icon:"&#xe63c",children:
         [
-            {id:"0,4096",   title:"结算单",href:"settlements3.html",icon:"&#xe602"},
-            {id:"0,8192",   title:"新参/替换",href:"../dialog/detail3.html",icon:"&#xe602"},
-            {id:"0,16384",   title:"汇总统计",href:"check2.html",icon:"&#xe602"},
+            {id:"0,524288",   title:"结算",href:"settlements.html?category=2",icon:"&#xe602"},
+            {id:"0,1048576",   title:"初审",href:"check.html?category=2&level=0",icon:"&#xe602"}
+        ]
+    },
+    {title:"商业保险",id:"0,234881024",icon:"&#xe63c",children:
+        [
+            {id:"0,33554432",   title:"保险产品",href:"products.html",icon:"&#xe602"}
         ]
     }
 ];

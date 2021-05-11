@@ -787,7 +787,21 @@ var webInterface = {
             param.data = {op: "getList", param:JSON.stringify(param.param),category:param.category};
             webInterface.access(param);
         },
-        
+
+        /**
+         * 获取结算单列表
+         * @param param 查询列表
+         * @param category 0-普通结算单 1-小时工结算单 2-商业保险结算单
+         * @param success
+         * @param fail
+         */
+        getEmployeeDetail:function(param) {
+            param.url = this.url;
+            param.data = {op: "getEmployeeDetail", param:JSON.stringify(param.param),cardId:param.cardId};
+            webInterface.access(param);
+        },
+
+
         /**
          * 添加结算单
          * @param settlement 结算单信息

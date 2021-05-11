@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>客户信息</title>
+        <meta name="renderer" content="webkit">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+        <link rel="stylesheet" href="../css/font.css">
+        <link rel="stylesheet" href="../css/xadmin.css">
+        <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+        <script src="../layui/layui.js" charset="utf-8"></script>
+        <script type="text/javascript" src="../js/xadmin.js"></script>
+        <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+        <!--[if lt IE 9]>
+          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <style>
+            .searchbox{
+                margin-left:100px;
+                display:inline;
+                width:300px;
+            }
+            .searchboxs{
+                margin-left:550px;
+                display:inline;
+                width:300px;
+            }
+            .distance{
+                margin-left:20px;
+            }
+            .layui-table-page{text-align: center;}
+        </style>
+    </head>
+
+    <body class="layui-layout-body">
+        <!--顶部工具栏-->
+        <div class="layui-hide" id="top_bar_cooperation">
+            <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon layui-icon-addition"></i> 添加</button>
+            <form style="display: inline" >
+                <div class="layui-input-inline">
+                    <input name="keyword" class="layui-input" placeholder="请输入要查找的合作客户">
+                </div>
+                <button class="layui-btn layui-btn-normal layui-btn-sm distance " lay-submit="" lay-filter="search"><i class="layui-icon layui-icon-search"></i>搜索</button>
+
+            </form>
+        </div>
+        <!--不能并入表格工具栏，否则切换时会自动刷新，无法保持原有选择-->
+        <form class="layui-form">
+            <input type="radio" name="type" value="0" title="合作中" lay-filter="type" checked>
+            <input type="radio" name="type" value="1" title="潜在" lay-filter="type" >
+            <input type="radio" name="type" value="2" title="流失" lay-filter="type" >
+        </form>
+         <div id="container">
+           <table id="tbl_cooperation" lay-filter="filter_tb_cooperation"></table>
+         </div>
+        <div class="layui-table-page" id="pager"></div>
+
+        <!--行内工具栏-->
+        <script type="text/html" id="bar_cooperation">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="addContract"><i class="layui-icon layui-icon-edit"></i>添加合同</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="updateType1"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+        </script>
+        <script type="text/html" id="bar_potential">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="updateType2"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="updateType3"><i class="layui-icon layui-icon-edit"></i> 合作</a>
+        </script>
+        <script type="text/html" id="bar_loss">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="updateType3"><i class="layui-icon layui-icon-edit"></i> 合作</a>
+        </script>
+        <script src="../js/fieldSet.js"></script>
+        <script src="../js/interface.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.params.js"></script>
+        <script src="../js/queryParam.js"></script>
+
+        <script>
+            var type = 0;//记录是显示合作客户，潜在客户还是流失客户
+            var table;//数据表格对象
+            var laypage;//分页对象
+            var form;//分页对象
+            var layer;//弹出窗口
+            var element;
+            var param_query = new QueryParam();
+            param_query.setOrder("id",false);
+            param_query.setPagination(1,10);
+            param_query.addCondition("type","=",0);
+
+            $(function () {
+                loadLayuiModule();
+            });
+
+            function loadLayuiModule() {
+                layui.use(['table','form','element','layer','laypage'], function() {
+                    table = layui.table;
+                    layer = layui.layer;
+                    element = layui.element;
+                    laypage = layui.laypage;
+                    form = layui.form;
+                    initPage();
+                });
+            }
+
+            function initPage() {
+                form.on('submit(search)', function (data) {
+                    var keyword = data.field.keyword;
+                    param_query.addKeyword(keyword);
+                    getCooperations(true);
+                    return false; //阻止表单跳转
+                });
+
+                form.on('radio(type)', function(data){
+                    type = Number(data.value);
+                    initTable();
+                    getCooperations(false);
+                });
+                initTable();
+                getCooperations(false);
+            }
+
+            function initTable() {
+                var cols;
+                var top_bar;
+                switch(Number(type)){
+                    case 0://合作中客户
+                        cols = columns_cooperation_partner;
+                        top_bar = '#top_bar_cooperation';
+                        break;
+                    case 1://潜在客户
+                        cols = columns_cooperation_potential;
+                        top_bar = '#top_bar_cooperation';
+                        break;
+                    case 2://流失客户
+                        cols = columns_cooperation_loss;
+                        top_bar = '#top_bar_cooperation';
+                        break;
+                }
+               /* $("input[name=type]").prop("checked","false");
+                $("input[name=type][value="+type+"]").prop("checked","true");
+                form.render();*/
+
+                //初始化数据表格
+                table.render({
+                    elem: '#tbl_cooperation',
+                    toolbar: top_bar, //开启头部工具栏，并为其绑定左侧模板
+
+                    title: '合作客户列表',
+                    cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                    cols: cols,
+                    limit: 200,
+                    id: 'tbl_cooperation'
+                });
+
+                //行内工具栏事件响应
+                table.on('tool(filter_tb_cooperation)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                    var data = obj.data; //获得当前行数据
+                    switch (obj.event){
+                        case "detail":
+                            showDetailDlg(data);
+                            break;
+                        case "addContract":
+                            addContract(data);
+                            break;
+                        case "updateType1":
+                            updateType(data,1);
+                            break;
+                        case "updateType2":
+                            updateType(data,2);
+                            break;
+                        case "updateType3":
+                            updateType(data,0);
+                            break;
+                    }
+                });
+
+                //顶部工具栏事件处理
+                table.on('toolbar(filter_tb_cooperation)', function(obj){
+                    switch(obj.event){
+                        case 'insert':
+                            showInsertDlg();
+                            break;
+                        case 'search':
+                            search();
+                            break;
+                    };
+                });
+            }
+
+            function getCooperations(reserve) {
+                param_query.addCondition('type','=',type);
+                webInterface.client.getList({param:param_query,category:1,success:function (result) {
+                    table.reload('tbl_cooperation', {
+                        data:result.rows,
+                        reserve:reserve
+                    });
+                    //初始化分页
+                    laypage.render({
+                        elem: 'pager'
+                        ,curr:param_query.pagination.page
+                        ,count: result.total //数据总数
+                        ,limit: param_query.pagination.size
+                        ,limits: [10, 20, 50, 100, 200]
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                        ,jump: function(obj,first){
+                            //首次不执行
+                            if(!first){
+                                param_query.setPagination(obj.curr,obj.limit);
+                                getCooperations(true);
+                            }
+                        }
+                    });
+                }});
+            }
+
+
+            //打开详情对话框
+            function showDetailDlg(cooperation) {
+                var content = "../dialog/cooperation.html?cooperation="+encodeURIComponent(JSON.stringify(cooperation));
+                layer.open({
+                    title:"详情合作客户",
+                    type: 2,
+                    area: ['60%', '90%'],
+                    content: content,
+                    cancel:function (index) {
+                        layer.close(index);
+                        getCooperations();
+                    }
+                });
+            }
+
+            //打开添加对话框
+            function showInsertDlg() {
+                var cooperation = {type:type,category:1};
+                var content = "../dialog/cooperation.html?cooperation="+encodeURIComponent(JSON.stringify(cooperation));
+                layer.open({
+                    title:"添加合作客户",
+                    type: 2,
+                    area: ['60%', '90%'],
+                    content: content,
+                    cancel:function (index) {
+                        layer.close(index);
+                        getCooperations();
+                    }
+                });
+            }
+
+
+            //打开合同对话框
+            function addContract(cooperation) {
+                var contract = {bid:cooperation.id,name:cooperation.name,type:"B"};
+                var content = "../dialog/contract_cooperation.html?contract="+encodeURIComponent(JSON.stringify(contract));
+                layer.open({
+                    title:'合同-'+contract.name,
+                    type: 2,
+                    area: ['60%', '90%'],
+                    content: content,
+                    cancel:function (index) {
+                        layer.close(index);
+                        getCooperations();
+                    }
+                });
+            }
+
+            //修改为合作客户类型（合作/潜在/流失）
+           function updateType(c,type){
+               var msg;
+               switch (type) {
+                   case 0:
+                       msg = "确定调整为合作客户?";
+                       break;
+                   case 1:
+                       msg = "确定调整为潛在客户?";
+                       break;
+                   case 2:
+                       msg = "确定调整为流失客户?";
+                       break;
+               }
+               layer.confirm(msg, {icon: 3, title:'修改为合作客户'}, function(index) {
+                   webInterface.client.updateType({id:c.id, category:1, type:type, success:function () {
+                       layer.close(index);
+                       getCooperations();
+                       layer.msg('修改成功');
+                   }});
+               });
+           }
+        </script>
+    </body>
+</html>

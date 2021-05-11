@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+<head>
+    <meta charset="UTF-8">
+    <title>普通结算单明细</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8" />
+    <link rel="stylesheet" href="../css/font.css">
+    <link rel="stylesheet" href="../css/xadmin.css">
+    <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="../layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../js/xadmin.js"></script>
+</head>
+
+<body class="layui-layout-body">
+    <div class="dialog-content">
+        <!--顶部工具栏-->
+        <button class="layui-btn layui-btn-sm" style="display: none" id="import"><i class="layui-icon "></i> 导入</button>
+        <div class="layui-hide" id="top_bar_detail">
+            <button class="layui-btn layui-btn-sm" lay-event="insert"><i class="layui-icon "></i> 添加</button>
+            <button class="layui-btn layui-btn-sm" lay-event="fillup"><i class="layui-icon "></i> 社保补缴</button>
+            <button class="layui-btn layui-btn-sm" lay-event="makeup"><i class="layui-icon "></i> 社保补差</button>
+            <button class="layui-btn layui-btn-sm" lay-event="" onclick="exports()" ><i class="layui-icon " ></i> 导出</button>
+            <button class="layui-btn layui-btn-sm" lay-event="import"><i class="layui-icon "></i> 导入</button>
+            <button class="layui-btn layui-btn-sm" lay-event="" onclick="download()"><i class="layui-icon "></i> 下载模板</button>
+            <button class="layui-btn layui-btn-sm" lay-event="" onclick="updateDetail()"><i class="layui-icon "></i> 保存</button>
+            <button class="layui-btn layui-btn-sm" lay-event="" onclick="calcDetail()"><i class="layui-icon "></i> 计算</button>
+        </div>
+        <form class="layui-form" style="display: inline">
+            <div class="layui-input-inline">
+                <input type="radio" name="mode" title="录入" value="0" lay-filter="mode" checked="checked">
+                <input type="radio" name="mode" title="完整" value="1" lay-filter="mode" >
+            </div>
+        </form>
+        <div id="container">
+            <table id="tbl_detail" lay-filter="filter_tb_detail"></table>
+        </div>
+        <div class="layui-table-page" id="pager"></div>
+
+        <!--行内工具栏-->
+        <script type="text/html" id="bar_detail">
+            <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i> 删除</a>
+        </script>
+    </div>
+    <script src="../js/fieldSet.js"></script>
+    <script src="../js/interface.js"></script>
+    <script src="../js/jquery.params.js"></script>
+    <script src="../js/queryParam.js"></script>
+    <script src="../js/date.js"></script>
+    <script>
+        var table;//数据表格对象
+        var laypage;//分页对象
+        var form;//分页对象
+        var layer;//弹出窗口
+        var element;
+        var param_query = new QueryParam();
+        param_query.setPagination(1,10);
+        param_query.setOrder("id",false);
+
+        var settlement = JSON.parse($.query.get("settlement"));//结算单id
+        var sid = settlement.id;//合作单位id
+        var cid = settlement.cid;//合作单位id
+        var type = settlement.type;//结算单类型 1 派遣 2外包 3代缴工资 4代缴社保
+        var month = dateUtil.format_month(settlement.month)+"-01";//结算单月份
+        $(function () {
+            loadLayuiModule();
+        });
+
+        function loadLayuiModule() {
+            layui.use(['table','form','element','upload','layer','laypage'], function() {
+                table = layui.table;
+                layer = layui.layer;
+                element = layui.element;
+                laypage = layui.laypage;
+                form = layui.form;
+                initPage();
+            });
+        }
+
+        function initPage() {
+            form.on('radio(mode)', function(data){
+                switchMode(data.value);
+            });
+            initTable(0);
+        }
+
+        function switchMode(mode) {
+            $("#container").empty();
+            $("#container").append('<table id="tbl_detail" lay-filter="filter_tb_detail"></table>');
+
+            initTable(mode)
+        }
+
+        function initTable(mode) {
+            var cols = mode==0?getColumnsInput(cid):getColumnsfull(cid);
+            //初始化数据表格
+            table.render({
+                elem: '#tbl_detail',
+                toolbar: '#top_bar_detail', //开启头部工具栏，并为其绑定左侧模板
+                title: '列表',
+                cols: cols,
+                limit: 200,
+                id: 'tbl_detail'
+            });
+
+            //行内工具栏事件响应
+            table.on('tool(filter_tb_detail)', function(obj){ //注：tool 是工具条事件名，filter_tb_notice是table原始容器的属性lay-filter="对应的值"
+                var detail = obj.data; //获得当前行数据
+                switch (obj.event){
+                    case "del":
+                        del(detail);
+                        break;
+                }
+            });
+
+            //单元格编辑
+            table.on('edit(filter_tb_detail)', function(obj){
+                var value = obj.value //得到修改后的值
+                ,data = obj.data //得到所在行所有键值
+                ,field = obj.field; //得到字段
+                layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+              });
+
+            //顶部工具栏事件处理
+            table.on('toolbar(filter_tb_detail)', function(obj){
+                switch(obj.event){
+                    case 'insert':
+                        showInsertDlg();//添加
+                        break;
+                    case 'fillup'://社保补缴
+                        showFillUpDlg();
+                        break;
+                    case 'makeup'://社保补差
+                        showMakeupDlg();
+                        break;
+                    case 'import'://导入
+                        showImportDlg();
+                        break;
+            };
+            });
+            getDetails();
+      }
+
+        //修改结算单明细
+        function  updateDetail() {
+            var details = layui.table.cache.tbl_detail;
+            var msg = "确定要保存所编辑的明细数据吗？";
+            var title = "保存明细";
+            layer.confirm(msg, {icon: 3, title:title}, function(index){
+                webInterface.settlement.updateDetails({details:details,category:1,success:function () {
+                    layer.close(index);
+                    layer.msg("修改成功");
+                    getDetails();
+                }});
+            });
+        };
+
+
+        //保存结算单明细并且计算
+        function  calcDetail() {
+            var msg = "自动计算社保、医保和个税等，确认要计算吗？";
+            var title = "工资计算";
+            layer.confirm(msg, {icon: 3, title:title}, function(index){
+                webInterface.settlement.calcDetail({sid:sid,cid:cid,category:1,success:function () {
+                    layer.close(index);
+                    layer.msg("保存成功");
+                    getDetails();
+                }});
+            });
+        };
+
+        //获取明细
+        function getDetails() {
+            webInterface.settlement.getDetails({param:param_query,sid:sid,category:1,success:function (result) {
+                table.reload('tbl_detail', {
+                    data:result.rows
+                });
+                //初始化分页
+                laypage.render({
+                    elem: 'pager'
+                    ,curr:param_query.pagination.page
+                    ,count: result.total //数据总数
+                    ,limit: param_query.pagination.size
+                    ,limits: [10, 20, 50, 100, 200]
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                    ,jump: function(obj,first){
+                        //首次不执行
+                        if(!first){
+                            param_query.setPagination(obj.curr,obj.limit);
+                            getDetails();
+                        }
+                    }
+                });
+            }});
+        }
+
+        //核对导入的数据
+        function showImportDlg() {
+            var content = "importDetails1.html?&cid="+cid+"&month="+month;
+            layer.open({
+                title:"核对明细",
+                type: 2,
+                area: ['95%', '95%'],
+                content: content,
+                btn: ['添加', '关闭']
+                ,yes: function(index, layero){
+                    var details = window["layui-layer-iframe" + index].callbackData();
+                    webInterface.settlement.importDetails({sid:sid,details:details,category:1,success:function () {
+                        layer.close(index);
+                        layer.msg("导入成功");
+                        getDetails();
+                    }});
+                },btn2: function(index, layero){
+                    layer.close(index);
+                }
+            });
+        }
+
+        //打开添加明细对话框
+        function showInsertDlg() {
+            //查询除出该单位，类型外派员工，状态在职的员工列表，用工性质派遣或者外包
+            var param = new QueryParam();
+            param.addCondition("category","=",type);//type:普通结算单类型（1-派遣；2-外包；3-代发工资；4-代缴社保）category：外派员工性质：（1-派遣；2-外包；3-代发工资；4-代缴社保；5-小时工)
+            param.addCondition("cid","=",cid);
+            param.addCondition("type","=",1);
+            param.addCondition("status","=",0);
+
+            var content = "member.html?param="+encodeURIComponent(JSON.stringify(param));
+            layer.open({
+                title:"添加明细",
+                type: 2,
+                area: ['80%', '80%'],
+                content: content,
+                btn: ['添加', '关闭']
+                ,yes: function(index, layero){
+                    var member = window["layui-layer-iframe" + index].callbackData();
+                    layer.close(index);
+                    var  details = new Array(member.length)
+                    for (var i in member){
+                        details[i] = {"eid":member[i].id};
+                    }
+                    webInterface.settlement.importDetails({sid:sid,details:JSON.stringify(details),category:1,success:function () {
+                        getDetails();
+                        layer.msg("添加成功")
+                    }});
+                },btn2: function(index, layero){
+                    layer.close(index);
+                }
+            });
+        }
+
+        //打开社保补缴对话框
+        function showFillUpDlg() {
+            var content = "fillup.html?cid="+cid+"&sid="+sid;
+            layer.open({
+                title:"社保补缴",
+                type: 2,
+                area: ['95%', '95%'],
+                content: content
+            });
+        }
+
+        //打开社保补差对话框
+        function showMakeupDlg() {
+            var content = "makeup.html?sid="+sid+"&cid="+cid+"&type="+type;
+            layer.open({
+                title:"社保补差",
+                type: 2,
+                area: ['800px', '500px'],
+                content: content
+            });
+        }
+
+        //删除结算单明细
+        function del(detail) {
+            layer.confirm('确定删除'+detail.name+"的结算单明细吗", {icon: 3, title:'删除'}, function(index){
+                webInterface.settlement.deleteDetail({id:detail.id,category:1,success:function () {
+                    layer.close(index);
+                    getDetails();
+                    layer.msg('删除成功');
+                }});
+            });
+        }
+
+        //获取结算单明细录入字段
+        function getColumnsInput(cid) {
+            var columns_detail1_input =[[
+                {field:'cardId', title: '身份证号',width:160},
+                {field:'name', title: '姓名',width:80},
+                {field:'base', title: '基本工资',width:80,edit: 'text'}
+            ]];
+            //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
+            webInterface.client.selectSalaryDefineByMoth({id:cid,month:month,success:function (result) {
+                if(result.data!=null&&result.data.items.length>0){
+                    mapSalary = result.data;
+                    var items = mapSalary.items;
+                    var salary_items_defined = items.split(";");
+                    for (var i in salary_items_defined) {
+                        var item = salary_items_defined[i];
+                        var v = item.split(',');
+                        columns_detail1_input[0].push({field:'f'+Number(Number(i)+1), title: v[0],width:80,edit: 'text'}) ;
+                    }
+                }
+                //数组添加结束后，加上最后一条操作数据
+                columns_detail1_input[0].push({field:'free', title: '国家减免',width:80,edit: 'text'});
+                columns_detail1_input[0].push({field:'extra1', title: '补收核减（个人）',width:100,edit: 'text'});
+                columns_detail1_input[0].push({field:'extra2', title: '补收核减（单位）',width:100,edit: 'text'});
+                columns_detail1_input[0].push({field:'comments1', title: '个人备注',width:100,edit: 'text'});
+                columns_detail1_input[0].push({field:'comments2', title: '单位备注',width:100,edit: 'text'});
+                columns_detail1_input[0].push({field:'status', title: '类型',width:80,templet:function (d) {return array_value2text(type_settlement,d.status)}});
+                columns_detail1_input[0].push({fixed: 'right', title: '操作', toolbar: '#bar_detail'});
+            }});
+            return columns_detail1_input;
+        }
+
+        //获取结算单明细完整字段
+        function getColumnsfull(cid) {
+            var columns_detail1_full  = [[
+                {field:'cardId', title: '身份证号',width:160},
+                {field:'name', title: '姓名',width:80},
+                {field:'base', title: '基本工资',width:80}
+            ]];
+            //显示自定义项，此处应该从后台获取,以分号分隔自定义项，以逗号分隔名称和类型（0-加项；1-减项）
+            webInterface.client.selectSalaryDefineByMoth({id:cid,month:month,success:function (result) {
+                if (result.data!=null&&result.data.items.length>0){
+                    mapSalary = result.data;
+                        var items = mapSalary.items;
+                        var salary_items_defined = items.split(";");
+                        for (var i in salary_items_defined) {
+                            var item = salary_items_defined[i];
+                            var v = item.split(',');
+                            columns_detail1_full[0].push({field:'f'+Number(Number(i)+1), title: v[0],width:80,edit: 'text'}) ;
+                        }
+                }
+                //添加完自定义项后将应发和实发放在后面
+                columns_detail1_full[0].push({field:'pension1', title: '个人养老',width:80});
+                columns_detail1_full[0].push({field:'medicare1', title: '个人医疗',width:80});
+                columns_detail1_full[0].push({field:'unemployment1', title: '个人失业',width:80});
+                columns_detail1_full[0].push({field:'disease1', title: '个人大病',width:80});
+                columns_detail1_full[0].push({field:'fund1', title: '个人公积金',width:80});
+                columns_detail1_full[0].push({field:'pension2', title: '单位养老',width:80});
+                columns_detail1_full[0].push({field:'medicare2', title: '单位医疗',width:80});
+                columns_detail1_full[0].push({field:'unemployment2', title: '单位失业',width:80});
+                columns_detail1_full[0].push({field:'injury', title: '单位工伤',width:80});
+                columns_detail1_full[0].push({field:'disease2', title: '单位大病',width:80});
+                columns_detail1_full[0].push( {field:'birth', title: '单位生育',width:80});
+                columns_detail1_full[0].push( {field:'fund2', title: '单位公积金',width:80});
+                columns_detail1_full[0].push({field:'free', title: '国家减免',width:80});
+                columns_detail1_full[0].push({field:'extra1', title: '补收核减（个人）',width:100});
+                columns_detail1_full[0].push({field:'extra2', title: '补收核减（单位）',width:100});
+                columns_detail1_full[0].push({field:'payable', title: '应发',width:80});
+                columns_detail1_full[0].push({field:'tax', title: '个税',width:80});
+                columns_detail1_full[0].push({field:'paid', title: '实发',width:80});
+                columns_detail1_full[0].push({field:'comments1', title: '个人备注',width:100});
+                columns_detail1_full[0].push({field:'comments2', title: '单位备注',width:100});
+                columns_detail1_full[0].push({field:'status', title: '类型',width:80,templet:function (d) {return array_value2text(type_settlement,d.status)}});
+                columns_detail1_full[0].push({fixed: 'right', title: '操作', toolbar: '#bar_detail'});
+            }});
+             return columns_detail1_full;
+        }
+
+        //导出
+        function exports(){
+            var url = "/verify/file?op=exportDetail1&sid="+sid+"&cid="+cid+"&month="+month;
+            var form = $('<form method="POST"></form>');
+            form.attr('action', url);
+            form.appendTo($('body'));
+            form.submit();
+            form.remove();
+        }
+
+        //下载模板
+        function download() {
+            var url = "/verify/file?op=downloadTemplateDetail1&cid="+cid+"&sid="+sid+"&month="+month;
+            var form = $('<form method="POST"></form>');
+            form.attr('action', url);
+            form.appendTo($('body'));
+            form.submit();
+            form.remove();
+        }
+    </script>
+</body>
+</html>

@@ -49,7 +49,7 @@
             var layer;//弹出窗口
             var element;
             var param_query = new QueryParam();
-            param_query.setOrder("date",false);
+            param_query.setOrder("id",false);
             param_query.setPagination(1,10);
             $(function () {
                 loadLayuiModule();
@@ -90,7 +90,7 @@
 
                     title: '列表',
                     cellMinWidth: 80, //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                    cols: columns_account2,
+                    cols: columns_account,
                     limit: 50,
                     id: 'tbl_account'
                 });
@@ -121,11 +121,29 @@
             }
 
             function getAccounts() {
-                var result = {total:100,rows:[{ID:"stuff001",name:"赵斌",password:"123456"},{ID:"stuff002",name:"李晓刚",password:"123456"}]};
-                table.reload('tbl_account', {
-                    data:result.rows
-                });
+                webInterface.account.getList({param:param_query,success:function (result) {
+                    table.reload('tbl_account', {
+                        data:result.rows
+                    });
+                    //初始化分页
+                    laypage.render({
+                        elem: 'pager'
+                        ,curr:param_query.pagination.page
+                        ,count: result.total //数据总数
+                        ,limit: param_query.pagination.size
+                        ,limits: [10, 20, 50, 100, 200]
+                        ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh']
+                        ,jump: function(obj,first){
+                            //首次不执行
+                            if(!first){
+                                param_query.setPagination(obj.curr,obj.limit);
+                                getAccounts();
+                            }
+                        }
+                    });
+                }});
             }
+
 
 
             //打开编辑对话框

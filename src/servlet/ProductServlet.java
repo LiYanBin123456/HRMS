@@ -1,8 +1,12 @@
 package servlet;
 
 import bean.admin.Account;
+import bean.client.Cooperation;
+import bean.client.Dispatch;
 import bean.insurance.Product;
 import com.alibaba.fastjson.JSONObject;
+import dao.client.CooperationDao;
+import dao.client.DispatchDao;
 import database.*;
 import service.product.ProductService;
 
@@ -90,7 +94,15 @@ public class ProductServlet extends HttpServlet {
         QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
         HttpSession session = request.getSession();
         Account user = (Account) session.getAttribute("account");
-        parameter.addCondition("did","=",user.getRid());
+        if(user.getRole()==Account.ROLE_DISPATCH){
+            parameter.addCondition("did","=",user.getRid());
+        }else if(user.getRole()==Account.ROLE_COOPERATION){//合作单位需要先获取到所属派遣单位的id
+            QueryConditions conditions = new QueryConditions();
+            conditions.add("id","=",user.getRid());
+            Cooperation cooperation = (Cooperation) CooperationDao.get(conn,conditions).data;
+            parameter.addCondition("did","=",cooperation.getDid());
+        }
+
         DaoQueryListResult res = ProductService.getList(conn,parameter);
         return JSONObject.toJSONString(res);
     }

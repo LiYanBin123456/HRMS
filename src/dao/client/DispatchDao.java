@@ -37,6 +37,19 @@ public class DispatchDao {
         return DbUtil.update(conn,sql,params);
     }
 
+    /**
+     * 修改派遣单位管理员
+     * @param conn
+     * @param id 派遣单位id
+     * @param aid 管理员id
+     * @return
+     */
+    public static DaoUpdateResult updateAdmin(Connection conn, long id,long aid){
+        String sql = "update dispatch set aid=? where id=?";
+        Object []params = {aid,id};
+        //调用DbUtil封装的update方法
+        return DbUtil.update(conn,sql,params);
+    }
 
     public static DaoUpdateResult insert(Connection conn, Dispatch c) {
         String sql = "insert into dispatch (aid,rid,name,nickname,address,contact,phone,wx,qq,mail,intro,type) values (?,?,?,?,?,?,?,?,?,?,?,?)";

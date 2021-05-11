@@ -116,6 +116,7 @@
 <script src="../layui/extend/city-picker/city-picker.data.js"></script>
 <script src="../js/city.js"></script>
 <script src="../js/fieldSet.js"></script>
+<script src="../js/date.js"></script>
 <script>
     var op = "insert";
     var form;//表单对象
@@ -148,7 +149,7 @@
     function initData() {
         var param = $.query.get("fund");
         if (param) {
-            var fund = JSON.parse(param);
+            var rule_fund = JSON.parse(param);
             rule_fund.start = dateUtil.format_date(rule_fund.start);
             form.val('form_fund', rule_fund);
             var city = getCityText2(rule_fund.city);

@@ -1,6 +1,7 @@
 package servlet;
 
 import bean.admin.Account;
+import bean.client.Cooperation;
 import bean.client.MapSalary;
 import bean.contract.Serve;
 import bean.contract.ViewContractCooperation;
@@ -11,16 +12,14 @@ import bean.settlement.*;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import dao.client.CooperationDao;
 import dao.client.FinanceDao;
 import dao.client.MapSalaryDao;
 import dao.contract.ContractDao;
 import dao.contract.ServeDao;
 import dao.employee.EmployeeDao;
 import dao.settlement.*;
-import database.ConnUtil;
-import database.DaoQueryListResult;
-import database.DaoUpdateResult;
-import database.QueryParameter;
+import database.*;
 import jxl.Workbook;
 import jxl.read.biff.BiffException;
 import jxl.write.*;
@@ -490,7 +489,15 @@ public class FileServlet extends HttpServlet {
         //根据条件找到派遣到该单位的员工列表，条件有cid，did，类型为外派或者派遣员工，用工性质不是小时工，在职
         QueryParameter parameter = new QueryParameter();
         parameter.addCondition("cid","=",cid);
-        parameter.addCondition("did","=",user.getRid());
+        if(user.getRole()==Account.ROLE_DISPATCH){
+            parameter.addCondition("did","=",user.getRid());
+        }else if(user.getRole()==Account.ROLE_COOPERATION){//合作单位
+            //获取派遣单位的id（did）
+            QueryConditions conditions = new QueryConditions();
+            conditions.add("id","=",user.getRid());
+            Cooperation coop = (Cooperation) CooperationDao.get(conn,conditions).data;
+            parameter.addCondition("did","=",coop.getDid());
+        }
         parameter.addCondition("type","=",1);
         parameter.addCondition("category","=",category);
         parameter.addCondition("status","=",0);

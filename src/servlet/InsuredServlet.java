@@ -120,6 +120,4 @@ public class InsuredServlet extends HttpServlet {
         return InsuredService.getList(conn,parameter);
     }
 
-
-
 }

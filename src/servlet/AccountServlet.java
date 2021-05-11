@@ -92,6 +92,8 @@ public class AccountServlet extends HttpServlet {
         Account user = (Account) session.getAttribute("account");
         parameter.addCondition("role","=",user.getRole());
         parameter.addCondition("rid","=",user.getRid());
+        //不能查询出自己
+        parameter.addCondition("id","!=",user.getId());
         DaoQueryListResult res = AccountService.getList(conn,parameter);
         return JSONObject.toJSONString(res);
     }
@@ -112,14 +114,12 @@ public class AccountServlet extends HttpServlet {
     //插入管理员账号
     private String insertAdmin(Connection conn, HttpServletRequest request) {
         Account account =JSONObject.parseObject(request.getParameter("account"),Account.class);
-        AccountService.insertAccount(conn,account);
-        return JSONObject.toJSONString(AccountDao.insert(conn,account));
+        return AccountService.insertAccount(conn,account);
     }
 
     //获取账号详情
     private String get(Connection conn, HttpServletRequest request) {
         HttpSession session = request.getSession();
-
         Account user = (Account) session.getAttribute("account");
         return AccountService.get(conn,user.getId());
     }
