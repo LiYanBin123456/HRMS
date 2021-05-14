@@ -248,6 +248,7 @@ var columns_settlement1  = [[
     {field:'tax', title: '税费',width:70},
     {field:'summary', title: '总额',width:80},
     {field:'comments', title: '备注',width:100,edit: 'text'},
+    {field:'flag', title: '来源',width:100,edit: 'text',templet:function (d) { return array_value2text(flag_settlement,d.flag) }},
     {title:'操作', toolbar: '#bar_settlement',width:200,fixed:"right",templet:function (d) {}}
 ]];
 
@@ -314,6 +315,7 @@ var columns_settlement2  = [[
     {field:'traffic', title: '交通费',width:70},
     {field:'extra', title: '附加',width:70},
     {field:'summary', title: '总额',width:80},
+    {field:'flag', title: '来源',width:100,edit: 'text',templet:function (d) { return array_value2text(flag_settlement,d.flag) }},
     {title: '操作', toolbar: '#bar_settlement',width:200,fixed:"right"}
 ]];
 
@@ -487,9 +489,11 @@ var columns_detail3  = [[
 
 //特殊结算单明细字段集合
 var columns_detail4  = [[
-    {field:'time', title: '时间',width:160,templet:function (d) {return dateUtil.format_dateTime(d.time)}},
-    {field:'money', title: '金额',width:160},
-    {field:'comments', title: '备注',width:200},
+    {field:'name', title: '姓名',width:160},
+    {field:'cardId', title: '身份证号',width:160},
+    {field:'amount', title: '金额',width:200,edit: 'text'},
+    {field:'tax', title: '个税',width:200},
+    {field:'paid', title: '实发',width:200}
 ]];
 
 
@@ -834,6 +838,11 @@ var permissions_dispatch = [
     {value:8, text:"客户管理"}
 ];
 
+var flag_settlement = [
+    {value:0, text:"派遣方录入"},
+    {value:1, text:"合作方录入"}
+];
+
 //----------------------------------------------------------------字段格式化-----------------------
 
 
@@ -887,7 +896,6 @@ function format_settlement_status(status) {
     var html = "<label onmousemove='showStatus("+status+")'>"+text+"</label>";
     return html;
 }
-
 /**
  * 在数组中根据指定值转换为文本
  * @param {array} arr 数组

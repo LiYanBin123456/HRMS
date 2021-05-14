@@ -69,12 +69,25 @@ public class AccountService {
         return AccountDao.get(conn,account);
     }
 
-    public static String insertAccount(Connection conn, Account account) {
+    public static String insertAdmin(Connection conn, Account account) {
         DaoExistResult res1 = AccountDao.isExist(conn,account.getUsername());
         if(res1.exist){
             return DaoResult.fail("该账号已经存在");
         }
-        DaoUpdateResult result = AccountDao.insert(conn,account);
-        return JSONObject.toJSONString(result);
+        DaoUpdateResult res2 = AccountDao.insert(conn,account);
+        if(account.getRole()==1){
+            ConnUtil.closeAutoCommit(conn);
+            //修改该派遣单位的管理员
+            DaoUpdateResult res3=DispatchDao.updateAdmin(conn,account.getRid(), (Long) res2.extra);
+            if(res2.success && res3.success){
+                ConnUtil.commit(conn);
+                return JSONObject.toJSONString(res2);
+            }else {
+                ConnUtil.rollback(conn);
+                return DaoResult.fail("数据库操作错误");
+            }
+        }else {
+            return JSONObject.toJSONString(res2);
+        }
     }
 }

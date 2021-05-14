@@ -276,9 +276,9 @@ public class EmployeeServlet extends HttpServlet {
                 break;
             case 1://派遣员工
                 if(user.getRole()==1){//派遣方管理员
-                    if(user.isAdmin()) {
+                    if(user.isAdmin()) {//管理员
                         parameter.addCondition("did", "=", user.getRid());
-                    }else{
+                    }else{//客服
                         parameter.addCondition("aid", "=", user.getId());
                     }
                 }else if(user.getRole() == 2) {//合作方管理员，获取派遣到该单位的员工

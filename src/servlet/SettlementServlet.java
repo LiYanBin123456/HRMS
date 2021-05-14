@@ -220,28 +220,43 @@ public class SettlementServlet extends HttpServlet {
         DaoUpdateResult result = null;
         HttpSession session = request.getSession();
         //获取管理员所属的公司id
-        long rid = ((Account) session.getAttribute("account")).getRid();
+        long did = 0;//派遣单位id
+        byte flag = 0;
+        Account user = ((Account) session.getAttribute("account"));
+        if(user.getRole()==Account.ROLE_DISPATCH){
+            did=user.getRid();
+            flag = 0;
+        }else if(user.getRole()==Account.ROLE_COOPERATION){
+            //获取派遣单位的id
+            QueryConditions conditions = new QueryConditions();
+            conditions.add("id","=",user.getRid());
+            Cooperation cooperation = (Cooperation) CooperationDao.get(conn,conditions).data;
+            did=cooperation.getDid();
+            flag = 1;
+        }
         switch (category){
             case 1://普通结算单
                 Settlement1 settlement1 = JSONObject.parseObject(request.getParameter("settlement"), Settlement1.class);
-                settlement1.setDid(rid);
+                settlement1.setDid(did);
+                settlement1.setFlag(flag);
                 settlement1.setNeedCalculateSocial(needCalculateSocial);
                 result = SettlementService1.insert(conn,settlement1,needDetail);
                 break;
             case 2://小时工结算单
                 Settlement2 settlement2 = JSONObject.parseObject(request.getParameter("settlement"), Settlement2.class);
-                settlement2.setDid(rid);
+                settlement2.setDid(did);
+                settlement2.setFlag(flag);
                 result = SettlementService2.insert(conn,settlement2,needDetail);
                 break;
             case 3://商业保险结算单
                 Settlement3 settlement3 = JSONObject.parseObject(request.getParameter("settlement"), Settlement3.class);
-                settlement3.setDid(rid);
+                settlement3.setDid(did);
                 result = SettlementService3.insert(conn,settlement3,needDetail);
                 break;
             case 4:
                 Settlement4 settlement4 = JSONObject.parseObject(request.getParameter("settlement"), Settlement4.class);
                 byte employee_category= Byte.parseByte(request.getParameter("employee_category"));
-                settlement4.setDid(rid);
+                settlement4.setDid(did);
                 result = SettlementService4.insert(conn,settlement4,needDetail,employee_category);
         }
         return JSONObject.toJSONString(result);

@@ -20,7 +20,7 @@ public class Settlement {
     private Date month;//月份
     private byte status;
 
-    private byte flag;
+    private byte flag;//来源 0 派遣单位创建  1合作单位创建
 
     public Settlement() {
     }
@@ -100,6 +100,7 @@ public class Settlement {
             flag = (byte)Bit.reset(flag,0);
         }
     }
+
     public String getCcid() {
         return ccid;
     }
@@ -108,12 +109,10 @@ public class Settlement {
         this.ccid = ccid;
     }
 
-
     //判断是否需要计算五险一金，补发工资和代发工资不需要计算五险一金
     public boolean isNeedCalcInsurance(){
         return Bit.test(flag,0);
     }
-
 
     @Override
     public String toString() {

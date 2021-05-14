@@ -15,16 +15,10 @@ import java.util.List;
 
 public class ContractDao {
     //根据查询条件获取合同列表，用视图查找
-    public static DaoQueryListResult getList(Connection conn, QueryParameter parameter, String type, Account user) {
-        if(user.isAdmin()) {
-            parameter.addCondition("aid", "=", user.getRid());
-        }else {
-            parameter.addCondition("aid", "=", user.getId());
-        }
+    public static DaoQueryListResult getList(Connection conn, QueryParameter parameter, String type) {
         if(parameter.conditions.extra!=null && !parameter.conditions.extra.isEmpty()) {
             parameter.addCondition("concat(name,comments)","like",parameter.conditions.extra);
         }
-
         DaoQueryListResult res = null;
         switch(type){
             case "A"://获取平台和所有派遣方的合同

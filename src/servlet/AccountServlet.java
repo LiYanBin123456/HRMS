@@ -114,7 +114,7 @@ public class AccountServlet extends HttpServlet {
     //插入管理员账号
     private String insertAdmin(Connection conn, HttpServletRequest request) {
         Account account =JSONObject.parseObject(request.getParameter("account"),Account.class);
-        return AccountService.insertAccount(conn,account);
+        return AccountService.insertAdmin(conn,account);
     }
 
     //获取账号详情

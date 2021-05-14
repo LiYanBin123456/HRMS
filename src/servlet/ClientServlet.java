@@ -202,9 +202,9 @@ public class ClientServlet extends HttpServlet {
         Account user = (Account) session.getAttribute("account");
         byte category= Byte.parseByte(request.getParameter("category"));
         if(category==0){//派遣单位客户
-            if(!user.isAdmin()) {
-                parameter.addCondition("aid", "=", user.getId());
-            }
+//            if(!user.isAdmin()) {
+//                parameter.addCondition("aid", "=", user.getId());
+//            }
             res = DispatchService.getList(conn,parameter);
         }else if(category==1){//合作单位客户
             if(user.isAdmin()) {

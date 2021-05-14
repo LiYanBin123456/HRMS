@@ -10,8 +10,20 @@ import java.sql.Connection;
 
 public class ContractService {
     public static DaoQueryListResult getList(Connection conn, QueryParameter parameter, String type, Account user) {
-
-        return ContractDao.getList(conn,parameter,type,user);
+        if(user.getRole()==Account.ROLE_DISPATCH){
+            if(user.isAdmin()) {
+                parameter.addCondition("aid", "=", user.getRid());
+            }else {
+                parameter.addCondition("admin", "=", user.getId());
+            }
+        }else if(user.getRole()==Account.ROLE_COOPERATION ) {
+            if(type.equals("B")){
+                parameter.addCondition("bid", "=", user.getRid());
+            }else if(type.equals("C")){
+                parameter.addCondition("aid", "=", user.getRid());
+            }
+        }
+        return ContractDao.getList(conn,parameter,type);
     }
 
     public static DaoQueryResult getLast(Connection conn, long id,String type) {

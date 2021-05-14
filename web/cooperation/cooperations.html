@@ -48,10 +48,8 @@
             </form>
         </div>
         <!--不能并入表格工具栏，否则切换时会自动刷新，无法保持原有选择-->
-        <form class="layui-form">
+        <form class="layui-form" class="layui-hide">
             <input type="radio" name="type" value="0" title="合作中" lay-filter="type" checked>
-            <input type="radio" name="type" value="1" title="潜在" lay-filter="type" >
-            <input type="radio" name="type" value="2" title="流失" lay-filter="type" >
         </form>
          <div id="container">
            <table id="tbl_cooperation" lay-filter="filter_tb_cooperation"></table>
@@ -193,9 +191,9 @@
 
             function getCooperations(reserve) {
                 param_query.addCondition('type','=',type);
-                webInterface.client.getList({param:param_query,category:1,success:function (result) {
+                webInterface.client.get({id:sessionStorage.getItem("coop_id"),category:1,success:function (result) {
                     table.reload('tbl_cooperation', {
-                        data:result.rows,
+                        data:[result.data],
                         reserve:reserve
                     });
                     //初始化分页
@@ -220,7 +218,7 @@
 
             //打开详情对话框
             function showDetailDlg(cooperation) {
-                var content = "../dialog/cooperation.html?cooperation="+encodeURIComponent(JSON.stringify(cooperation));
+                var content = "../coopDialog/cooperation.html?cooperation="+encodeURIComponent(JSON.stringify(cooperation));
                 layer.open({
                     title:"详情合作客户",
                     type: 2,

@@ -102,13 +102,13 @@
     $(function () {
         getLoginInfo();
     });
-
     function getLoginInfo() {
         webInterface.account.get({success:function (result) {
             var account = result.data;
             $("#loginName").html(account.nickname);
             var html = loadMenuDispatch(account.permissionString);
             $("#nav").html(html);
+            sessionStorage.setItem("permission",account.permissionString);
         }});
     }
 

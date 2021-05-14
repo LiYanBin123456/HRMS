@@ -141,13 +141,7 @@
     }
 
     function initPermission() {
-//        account = JSON.parse($.query.get("account"));
         var permission = account.permissionString;
-//        if(bit_test(permission,"524288,0")){
-//            form.val('form_role',{role:"524288,0"});
-//        }else{
-//            form.val('form_role',{role:"0,0"});
-//        }
         var checkeds = [];
         for(var i in menuItems_dispatch){
             var item = menuItems_dispatch[i];

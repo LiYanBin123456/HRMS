@@ -1,5 +1,7 @@
 package bean.settlement;
 
+import java.util.Date;
+
 public class ViewDetail4 extends Detail4 {
     private String cardId;//员工身份证号
     private String name;//员工姓名
@@ -7,16 +9,26 @@ public class ViewDetail4 extends Detail4 {
     private float manage;//管理费
     private float tax2;//税费
     private float sum;//总额
+    private Date month;//月份
     public ViewDetail4() {
     }
 
-    public ViewDetail4(long id, long sid, long eid, float amount, float tax, float paid, String cardId, String name, float manage, float tax2, float sum) {
+    public ViewDetail4(long id, long sid, long eid, float amount, float tax, float paid, String cardId, String name, float manage, float tax2, float sum, Date month) {
         super(id, sid, eid, amount, tax, paid);
         this.cardId = cardId;
         this.name = name;
         this.manage = manage;
         this.tax2 = tax2;
         this.sum = sum;
+        this.month = month;
+    }
+
+    public Date getMonth() {
+        return month;
+    }
+
+    public void setMonth(Date month) {
+        this.month = month;
     }
 
     public float getManage() {
