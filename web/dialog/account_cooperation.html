@@ -48,7 +48,7 @@
                     <div class="layui-form-item">
                         <label  class="layui-form-label"></label>
                         <button class="layui-btn" lay-filter="add" lay-submit="" onclick="save()">保存</button></div>
-                </form>               
+                </form>
             </div>
             <div class="layui-tab-item">
                 <form lay-filter="form_permission" class="layui-form">
@@ -76,9 +76,9 @@
 <script>
     var op = "insert";
     var form;//表单对象
-    var table;
     var account;
     var tree;
+    var menuItems_owner = [];//登录用户的功能项
     $(function () {
                 loadLayuiModule();
             });
@@ -90,17 +90,52 @@
             element = layui.element;
             editer = layedit.build('content'); //建立编辑器
             tree = layui.tree;
-            var inst1 = tree.render({
-                elem: '#permission',  //绑定元素
-                id:'tree_permission',
-                showCheckbox:true,
-                data: menuItems_cooperation
-            });
-            initData();
-            initPermission();
+            initTree();
         });
     }
 
+    function initTree() {
+        var admin;
+        webInterface.account.get({success:function (result) {
+            admin=result.data;
+            var permission = admin.permissionString;
+//            if(bit_test(permission,"524288,0")){
+//                form.val('form_role',{role:"524288,0"});
+//            }else{
+//                form.val('form_role',{role:"0,0"});
+//            }
+            for(var i in menuItems_dispatch){
+                var item = menuItems_dispatch[i];
+                var children = item.children;
+                if(children){
+                    var subItems = [];
+                    for(var j in children) {
+                        var child = children[j];
+                        if(bit_test(child.id ,permission)){
+                            subItems.push(child);
+                        }
+                    }
+                    //如果存在选中的二级功能项则将选中的二级功能项作为当前一级功能项的子项，并添加一级功能项
+                    if (subItems.length > 0){
+                        item.children = subItems;
+                        menuItems_owner.push(item);
+                    }
+                }else{
+                    //添加一级功能项
+                    if(bit_test(item.id ,permission)){
+                        menuItems_owner.push(item);
+                    }
+                }
+                var inst1 = tree.render({
+                    elem: '#permission',  //绑定元素
+                    id:'tree_permission',
+                    showCheckbox:true,
+                    data: menuItems_owner
+                });
+                initData();
+            }}});
+
+    }
 
 
 
@@ -110,6 +145,7 @@
             account = JSON.parse(param);
             form.val('form_account', account);
             op = "update";
+            initPermission();
         }
     }
 
@@ -175,8 +211,7 @@
             }
         }
 //        var data = form.val('form_role');
-        permit += calc("524288,0");
-
+//permit += calc("524288,0");
         webInterface.account.permit({id:account.id,permit:permit,success:function (result) {
             layer.msg("权限分配成功！");// 获得frame索引
             var index = parent.layer.getFrameIndex(window.name);
