@@ -12,16 +12,307 @@
         <script type="text/javascript" src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
         <script src="../layui/layui.js" charset="utf-8"></script>
         <script type="text/javascript" src="../js/xadmin.js"></script>
+        <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+        <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+        <script src="../js/fieldSet.js"></script>
+        <script src="../js/interface.js"></script>
+        <script src="../js/jquery.min.js"></script>
+        <script src="../js/jquery.params.js"></script>
+        <script src="../js/queryParam.js"></script>
+        <script src="../js/CollectionUtil.js"></script>
+        <script src="../js/date.js"></script>
         <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
         <!--[if lt IE 9]>
-          <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-          <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
+        <style>
+            .panel{
+                width: 48%;
+                height: 335px;
+                margin: 10px 10px 10px 10px;
+                border:1px solid #369;
+                border-radius:5px;
+                box-shadow: 0px -2px 5px rgba(26, 23, 23, 0.7);
+            }
+        </style>
+        <script type="text/html" id="bar_contract_employee">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+        </script>
+        <script type="text/html" id="bar_contract_client">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+        </script>
+        <script type="text/html" id="bar_notice">
+            <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail"><i class="layui-icon layui-icon-edit"></i>详情</a>
+        </script>
     </head>
 
     <body class="layui-layout-body">
-            我的桌面，设计中
+    <div class="layui-row layui-col-space15 ">
+        <div class="layui-col-md6 panel layui-tab layui-tab-brief">
+            <div class="layui-panel">
+                <ul class="layui-tab-title">
+                    <li>客户合同到期提醒</li>
+                    <li style="float: right" onclick="moreClient()">更多>>>></li>
+                </ul>
+                <table id="tbl_client" lay-filter="filter_tb_client"></table>
+            </div>
+        </div>
+        <div class="layui-col-md6 panel">
+            <div class="layui-panel">
+                <ul class="layui-tab-title">
+                    <li>通知公告</li>
+                    <li style="float: right" onclick="moreNotice()">更多>>>></li>
+                </ul>
+                <table id="tbl_notice" lay-filter="filter_tb_notice"></table>
+            </div>
+        </div>
+    </div>
+    <div class="layui-row layui-col-space15 ">
+        <div class="layui-col-md6 panel">
+            <div class="layui-panel">
+                <ul class="layui-tab-title">
+                    <li>员工合同到期提醒</li>
+                    <li style="float: right" onclick="moreEmployee()">更多>>>></li>
+                </ul>
+                <table id="tbl_employee_contract" lay-filter="filter_tb_employee"></table>
+            </div>
+        </div>
+        <div class="layui-col-md6 panel">
+            <div class="layui-panel">
+                <ul class="layui-tab-title">
+                    <li>员工参保提醒</li>
+                    <li style="float: right">更多>>>></li>
+                </ul>
+                <table id="tbl_employee_insurance" lay-filter="filter_tb_insurance"></table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var table;//数据表格对象
+        var laypage;//分页对象
+        var form;//分页对象
+        var layer;//弹出窗口
+        var element;
+        var param_query = new QueryParam();
+        param_query.setPagination(1,5);
+        $(function () {
+            loadLayuiModule();
+        });
+        function loadLayuiModule() {
+            layui.use(['table','form','element','layer','laypage'], function() {
+                table = layui.table;
+                layer = layui.layer;
+                element = layui.element;
+                laypage = layui.laypage;
+                form = layui.form;
+                initPage();
+            });
+        }
+        function initPage() {
+                //初始化数据表格
+                table.render({
+                    elem: '#tbl_client',
+                    cols: columns_contract_client,
+                    limit: 200,
+                    id: 'tbl_client'
+                });
+                table.render({
+                 elem: '#tbl_notice',
+                 cols: columns_notice,
+                 limit: 200,
+                 id: 'tbl_notice'
+                });
+             table.render({
+                 elem: '#tbl_employee_contract',
+                 cols: columns_contract_employee2,
+                 limit: 200,
+                 id: 'tbl_employee_contract'
+             });
+//             table.render({
+//                 elem: '#tbl_employee_insurance',
+//                 cols: columns_contract_client,
+//                 limit: 200,
+//                 id: 'tbl_employee_insurance'
+//             });
+            table.on('tool(filter_tb_client)', function(obj){
+                var data = obj.data;
+                switch (obj.event){
+                    case "detail":
+                        showClientDlg(data);
+                        break;
+                }
+            });
+            table.on('tool(filter_tb_employee)', function(obj){
+                var data = obj.data;
+                switch (obj.event){
+                    case "detail":
+                        showEmployeeDlg(data);
+                        break;
+                }
+            });
+            table.on('tool(filter_tb_notice)', function(obj){
+                var data = obj.data;
+                switch (obj.event){
+                    case "detail":
+                       showNoticeDlg(data);
+                        break;
+                }
+            });
+                getClientContracts();
+                getNotices();
+                getEmployeeContracts();
+                //getInsurances();
+            }
+
+        function getClientContracts() {
+                param_query.setOrder("end",true);
+                webInterface.contract.getExpireContract({param:param_query,type:"B",success:function (result) {
+                    table.reload('tbl_client', {
+                        data:result.rows
+                    });
+                    //初始化分页
+                    laypage.render({
+                        elem: 'pager',
+                        curr:param_query.pagination.page,
+                        count: result.total, //数据总数
+                        limit: param_query.pagination.size,
+                        limits: [10, 20, 50, 100, 200],
+                        layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip'],
+                        jump: function(obj,first){
+                            //首次不执行
+                            if(!first){
+                                param_query.setPagination(obj.curr,obj.limit);
+                                getClientContracts();
+                            }
+                        }
+                    });
+                }});
+        }
+
+        function getNotices() {
+            param_query.setOrder("id",false);
+            webInterface.notice.getList({param:param_query,success:function (result) {
+                table.reload('tbl_notice', {
+                    data:result.rows
+                });
+                //初始化分页
+                laypage.render({
+                    elem: 'pager'
+                    ,curr: param_query.pagination.page
+                    ,count: result.total //数据总数
+                    ,limit: param_query.pagination.size
+                    ,limits: [10, 20, 50, 100, 200]
+                    ,layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip']
+                    ,jump: function(obj,first){
+                        //首次不执行
+                        if(!first){
+                            param_query.setPagination(obj.curr,obj.limit);
+                            getNotices();
+                        }
+                    }
+                });
+            }});
+        }
+
+        function getEmployeeContracts() {
+            param_query.setOrder("end",true);
+            webInterface.contract.getExpireContract({param:param_query,type:"C",success:function (result) {
+                table.reload('tbl_employee_contract', {
+                    data:result.rows
+                });
+                //初始化分页
+                laypage.render({
+                    elem: 'pager',
+                    curr:param_query.pagination.page,
+                    count: result.total, //数据总数
+                    limit: param_query.pagination.size,
+                    limits: [10, 20, 50, 100, 200],
+                    layout: ['count', 'prev', 'page', 'next', 'limit', 'refresh', 'skip'],
+                    jump: function(obj,first){
+                        //首次不执行
+                        if(!first){
+                            param_query.setPagination(obj.curr,obj.limit);
+                            getEmployeeContracts();
+                        }
+                    }
+                });
+            }});
+        }
+
+        //打开客户合同详情对话框
+        function showClientDlg(contract) {
+            var content = "../dialog/contract_cooperation.html?contract="+encodeURIComponent(JSON.stringify(contract));
+            layer.open({
+                title:'客户合同-'+contract.name,
+                type: 2,
+                area: ['60%', '90%'],
+                content: content,
+                cancel:function (index) {
+                    layer.close(index);
+                    getContracts();
+                }
+            });
+        }
+        //打开员工合同详情对话框
+        function showEmployeeDlg(contract) {
+            var content = "../dialog/contract_employee.html?contract="+encodeURIComponent(JSON.stringify(contract));
+            layer.open({
+                title:'员工合同-'+contract.name,
+                type: 2,
+                area: ['60%', '90%'],
+                content: content,
+                cancel:function (index) {
+                    layer.close(index);
+                    getContracts();
+                }
+            });
+        }
+        //打开公告详情对话框
+        function showNoticeDlg(notice) {
+            var content = "../dialog/notice.html?notice="+encodeURIComponent(JSON.stringify(notice));
+            layer.open({
+                title:"公告详情",
+                type: 2,
+                area: ['70%','90%'],
+                content: content
+            });
+        }
+
+        //客户合同弹出框
+        function moreClient() {
+            var content = "../dialog/showMoreClientContract.html";
+            layer.open({
+                title:"客户合同到期",
+                type: 2,
+                area: ['98%', '98%'],
+                content: content
+            });
+        }
+        //通知公告弹出框
+        function moreNotice() {
+            var content = "../admin/notices.html";
+            layer.open({
+                title:"通知公告",
+                type: 2,
+                area: ['98%', '98%'],
+                content: content
+            });
+        }
+        //员工合同弹出框
+        function moreEmployee() {
+            var content = "../dialog/showMoreEmployeeContract.html";
+            layer.open({
+                title:"员工合同到期",
+                type: 2,
+                area: ['98%', '98%'],
+                content: content
+            });
+        }
+        //参保信息合同弹出框
+        function moreInsurance() {
+
+        }
+    </script>
     </body>
-    <script src="../js/fieldSet.js"></script>
-    <script src="../js/interface.js"></script>
+
 </html>

@@ -358,6 +358,12 @@ var webInterface = {
             param.data = {op: "getList", param:JSON.stringify(param.param),type:param.type};
             webInterface.access(param);
         },
+        getExpireContract:function(param) {
+            param.url = this.url;
+            param.data = {op: "getExpireContract", param:JSON.stringify(param.param),type:param.type};
+            webInterface.access(param);
+        },
+
         /**
          * 获取最新合同
          * @param id 该客户id

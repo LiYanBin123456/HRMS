@@ -50,4 +50,16 @@ public class DateUtil {
         return d1.getYear()==d2.getYear() && d1.getMonth()==d2.getMonth() && d1.getDate()==d2.getDate();
     }
 
+    /**
+     * 获取指定日期间隔N个月后的日期
+     * @param startTime 指定日期
+     * @param interval  间隔月数
+     * @return
+     */
+    public static Date getExpireTime(Date startTime,int interval){
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startTime);
+        calendar.add(Calendar.MONTH, interval);//得到间隔几个月的日期
+        return  calendar.getTime();
+    }
 }

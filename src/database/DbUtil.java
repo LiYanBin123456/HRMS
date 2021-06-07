@@ -5,6 +5,8 @@ import org.apache.commons.dbutils.handlers.*;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class DbUtil {
@@ -109,6 +111,58 @@ public class DbUtil {
         String condition = param.conditions.toString();
         sql1 += condition;
         sql2 += condition;
+        //是否需要排序
+        if(param.order.need){
+            sql1 += (" order by "+param.order.field);
+            sql1 += param.order.direction?" asc":" desc";
+        }
+
+        //是否需要分页
+        if(param.pagination.need){
+            //page第几页   size每页大小
+            sql1 += String.format(" limit %d,%d",(param.pagination.page-1)*param.pagination.size,param.pagination.size);
+        }
+
+        QueryRunner qr = new QueryRunner();
+        DaoQueryListResult result = new DaoQueryListResult();
+        try {
+            Object[] values = param.conditions.extraValues().toArray();
+            result.success = true;
+            result.rows = qr.query(conn, sql1, new BeanListHandler<>(c), values);
+            if(param.pagination.need) {
+                result.total = qr.query(conn, sql2, new ScalarHandler<Long>(), values);
+            }
+        }catch (SQLException e){
+            result.success = false;
+            result.msg = "数据库操作错误";
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 查询规定日期的数据
+     * @param conn
+     * @param table 数据库表名称
+     * @param expire 查询字段名称
+     * @param startTime 起始时间
+     * @param endTime 终止时间
+     * @param param
+     * @param c
+     * @return
+     */
+    public static DaoQueryListResult getExpireList(Connection conn, String table, String expire, Date startTime,Date endTime, QueryParameter param, Class c){
+        String sql1 = String.format("select * from %s where ",table);
+        String sql2 = String.format("select count(*) from %s where ",table);
+
+        String condition = param.conditions.toString();
+        sql1 += condition;
+        sql2 += condition;
+        //加上between语法
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        sql1 += String.format(" and %s between '%s' and '%s'",expire,formatter.format(startTime),formatter.format(endTime));
+        sql2 += String.format(" and %s between '%s' and '%s'",expire,formatter.format(startTime),formatter.format(endTime));
+
         //是否需要排序
         if(param.order.need){
             sql1 += (" order by "+param.order.field);

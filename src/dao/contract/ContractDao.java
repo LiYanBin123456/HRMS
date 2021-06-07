@@ -11,6 +11,7 @@ import utills.CreateGetNextId;
 import javax.servlet.http.HttpSession;
 import javax.sound.midi.Soundbank;
 import java.sql.Connection;
+import java.util.Date;
 import java.util.List;
 
 public class ContractDao {
@@ -29,6 +30,25 @@ public class ContractDao {
                 break;
             case "C"://获取该派遣方与之员工的合同
                 res= DbUtil.getList(conn,"view_contract_employee",parameter, ViewContractEmployee.class);
+                break;
+        }
+        return res;
+    }
+
+    public static DaoQueryListResult getExpireContract(Connection conn, Date startTime, Date endTime, QueryParameter parameter, String type) {
+        if(parameter.conditions.extra!=null && !parameter.conditions.extra.isEmpty()) {
+            parameter.addCondition("concat(name,comments)","like",parameter.conditions.extra);
+        }
+        DaoQueryListResult res = null;
+        switch(type){
+            case "A"://获取平台和所有派遣方的合同
+                res= DbUtil.getExpireList(conn,"view_contract_dispatch","end",startTime,endTime,parameter, ViewContractDispatch.class);
+                break;
+            case "B"://获取该派遣方与之合作单位的合同
+                res= DbUtil.getExpireList(conn,"view_contract_cooperation","end",startTime,endTime,parameter, ViewContractCooperation.class);
+                break;
+            case "C"://获取该派遣方与之员工的合同
+                res= DbUtil.getExpireList(conn,"view_contract_employee","end",startTime,endTime,parameter, ViewContractEmployee.class);
                 break;
         }
         return res;

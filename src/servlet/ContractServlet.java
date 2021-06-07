@@ -44,6 +44,9 @@ public class ContractServlet extends HttpServlet {
             case "getLast"://获取最新合同
                 result = getLast(conn,request);
                 break;
+            case "getExpireContract"://获取指定日期到期的合同
+                result = getExpireContract(conn,request);
+                break;
             case "getList"://获取合同列表
                 result = getList(conn,request);
                 break;
@@ -149,6 +152,16 @@ public class ContractServlet extends HttpServlet {
         HttpSession session = request.getSession();
         Account user = (Account) session.getAttribute("account");
         DaoQueryListResult res = ContractService.getList(conn,parameter,type,user);
+        return JSONObject.toJSONString(res);
+    }
+
+    //获取指定日期到期的合同
+    private String getExpireContract(Connection conn, HttpServletRequest request) {
+        QueryParameter parameter = JSONObject.parseObject(request.getParameter("param"), QueryParameter.class);
+        String type=request.getParameter("type");
+        HttpSession session = request.getSession();
+        Account user = (Account) session.getAttribute("account");
+        DaoQueryListResult res = ContractService.getExpireContract(conn,parameter,type,user,3);
         return JSONObject.toJSONString(res);
     }
 

@@ -79,7 +79,7 @@ var columns_notice = [[
     {field:'title', title: '主题'},
     {field:'publisher', title: '发布人',width:100},
     {field:'date', title: '发布时间',width:130,templet:function (d) {return dateUtil.format_date(d.date)}},
-    {fixed: 'right', title: '操作', toolbar: '#bar_notice',width:200}
+    {fixed: 'right', title: '操作', toolbar: '#bar_notice',width:100}
 ]];
 
 //账号管理字段集合
@@ -164,6 +164,15 @@ var columns_contract_cooperation = [[
     {fixed:'right', title: '操作', toolbar: '#bar_contract',width:200}
 ]];
 
+//合作单位客户合同字段集合
+var columns_contract_client = [[
+    {field:'name', title: '合作客户',width:150},
+    {field:'start', title: '生效时间',width:130,templet:function (d) {return dateUtil.format_date(d.start)}},
+    {field:'end', title: '到期时间',width:130,templet:function (d) {return dateUtil.format_date(d.end)}},
+    {field:'comments', title: '备注',width:120},
+    {fixed:'right', title: '操作', toolbar: '#bar_contract_client',width:100}
+]];
+
 //员工合同字段集合
 var columns_contract_employee  = [[
     {field:'cardId', title: '身份证号码'},
@@ -172,6 +181,14 @@ var columns_contract_employee  = [[
     {field:'end', title: '到期时间',width:100,templet:function (d) {return dateUtil.format_date(d.end)}},
     {field:'times', title: '签订次数',width:80},
     { title: '操作', toolbar: '#bar_contract',width:200}
+]];
+var columns_contract_employee2  = [[
+    {field:'cardId', title: '身份证号码',width:150},
+    {field:'name', title: '姓名',width:100},
+    {field:'start', title: '生效时间',width:100,templet:function (d) {return dateUtil.format_date(d.start)}},
+    {field:'end', title: '到期时间',width:100,templet:function (d) {return dateUtil.format_date(d.end)}},
+    {field:'times', title: '签订次数',width:80},
+    { title: '操作', toolbar: '#bar_contract_employee',width:100}
 ]];
 
 //内部员工管理字段集合
@@ -668,6 +685,12 @@ var columns_account2  = [[
     {fixed: 'right', title: '操作', toolbar: '#bar_account',width:200}
 ]];
 
+var columns_client_contract=[
+    {field:'name', title: '公司名称'},
+    {field:'contract', title: '客户名称',width:200},
+    {field:'date', title: '到期日期',width:200},
+    {fixed: 'right', title: '操作', toolbar: '#bar_account',width:200}
+]
 //----------------------------------------------------------------数据集合-----------------------
 var categorys_cooperation = [
     {value:0,text:"政府部门"},
